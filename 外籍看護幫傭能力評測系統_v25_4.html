@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>外籍看護幫傭 能力評測系統 v25.3｜聘外看就上手</title>
+<title>外籍看護幫傭 能力評測系統 v25.4｜聘外看就上手</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -4266,7 +4266,15 @@ const SCENARIO_QS = {
 // ============================================================
 // APP STATE - v16
 // ============================================================
-const APP_VERSION = 'v25.3'; // v25.3：補齊漏抽題庫與能力維度對應
+// ============================================================
+// v25.4 PATCH LOG（稽核修復 5 項）:
+// ✅ V25-9:  APP_VERSION 升至 v25.4，title/footer/報告同步更新
+// ✅ V25-10: migrateRecords prevVersions 補入 records_v25.3，升版不丟歷史紀錄
+// ✅ V25-11: retryQuiz() 補入 updateQBInfo() 呼叫，修復重試後題庫預覽不更新（UX）
+// ✅ V25-12: exportReport fallback toast 加入「允許彈出視窗」引導文字，改善 iOS/LINE 場景
+// ✅ V25-13: footer 動態注入補上 role="contentinfo"，強化無障礙語意（A11y）
+// ============================================================
+const APP_VERSION = 'v25.4'; // v25.4：版權/免責聲明法律合規修正 + 程式碼稽核修復
 // Fix 4: 答題紀錄綁定版本號（升版自動隔離），書籤 key 固定（跨版本保留）
 const STORAGE_KEY_RECORDS   = `records_${APP_VERSION}`; // 升版後自動隔離舊版紀錄（v25.3）
 const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
@@ -4306,7 +4314,7 @@ const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 (function migrateRecords() {
   try {
     if (localStorage.getItem(STORAGE_KEY_RECORDS)) return; // 新版已有資料，不需遷移
-    const prevVersions = ['records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
+    const prevVersions = ['records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
     for (const oldKey of prevVersions) {
       const old = localStorage.getItem(oldKey);
       if (old) {
@@ -5205,7 +5213,7 @@ function exportReport() {
       a.href = url; a.download = fileName.replace('.pdf','.html');
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
       setTimeout(()=>URL.revokeObjectURL(url), 3000);
-      showToast('✓ 報告已下載（HTML），請用瀏覽器開啟後列印為 PDF');
+      showToast('✓ 報告已下載（HTML）。若開不了，請允許瀏覽器「彈出視窗」後再試', 4000);
     }
   } catch(e) {
     showToast('⚠ 匯出失敗，請在外部瀏覽器開啟本頁面後再試');
@@ -5301,8 +5309,9 @@ function goHome() { clearInterval(timerInt); timerInt = null; showScreen('homeSc
 function retryQuiz() { 
   // BUG-D FIX v19: 若 selJob/selMode 有效才重開；否則回首頁重選
   // BUG-3 FIX v20: 重置 reviewOpen，避免答題詳情殘留展開
+  // V25.4: 呼叫 updateQBInfo，確保重試後題庫說明預覽同步更新
   reviewOpen = false;
-  if (selJob && selMode && selMode !== 'learn') { startQuiz(); }
+  if (selJob && selMode && selMode !== 'learn') { updateQBInfo(); startQuiz(); }
   else { showScreen('homeScreen'); }
 }
 function showScreen(id) {
@@ -5729,6 +5738,7 @@ function initApp() {
     if (!main.querySelector('.app-footer')) {
       const footer = document.createElement('div');
       footer.className = 'app-footer';
+      footer.setAttribute('role', 'contentinfo');
       footer.innerHTML = `<div class="footer-brand">聘外看就上手</div><div class="footer-copy">© 2026 外籍看護幫傭能力評測系統 All Rights Reserved</div><div class="footer-disclaimer">本系統為教育與自我評估用途，不作為正式聘僱、醫療、專業認證或法律依據。</div>`;
       main.appendChild(footer);
     }
