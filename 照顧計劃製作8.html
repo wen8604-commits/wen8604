@@ -1,0 +1,3660 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>照顧計劃製作 Care Plan Maker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* ── 色彩識別（沿用暖調，提高對比與精緻度）── */
+  --bg: #efe9dc;
+  --bg-2: #e7dfcd;
+  --panel: #fbfaf6;
+  --panel-2: #ffffff;
+  --ink: #1b1710;
+  --ink-soft: #4a4236;
+  --muted: #7a7065;
+  --accent: #b04621;
+  --accent-d: #93381a;
+  --accent2: #265040;
+  --accent2-d: #1c3e31;
+  --accent3: #426577;
+  --line: #d8d0bd;
+  --line-soft: #e7e0cf;
+  --soft: #ece5d4;
+  --soft-2: #f3eee1;
+  --warn: #bd7320;
+  --ok: #3a7055;
+
+  /* ── 層次陰影 ── */
+  --shadow-sm: 0 1px 2px rgba(40,28,12,.05), 0 1px 3px rgba(40,28,12,.04);
+  --shadow: 0 4px 14px rgba(40,28,12,.07), 0 1px 3px rgba(40,28,12,.05);
+  --shadow-lg: 0 14px 40px rgba(40,28,12,.12), 0 4px 12px rgba(40,28,12,.06);
+  --ring: 0 0 0 3px rgba(38,80,64,.14);
+
+  /* ── 間距尺度 ── */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-7: 32px; --sp-8: 40px;
+
+  /* ── 圓角尺度 ── */
+  --r-sm: 9px;
+  --r: 14px;
+  --r-lg: 20px;
+
+  /* ── 流體字級（手機→桌機自動縮放）── */
+  --fs-xs:  clamp(.68rem, .66rem + .12vw, .76rem);
+  --fs-sm:  clamp(.78rem, .75rem + .18vw, .9rem);
+  --fs-md:  clamp(.9rem, .87rem + .2vw, 1rem);
+  --fs-lg:  clamp(1.05rem, 1rem + .4vw, 1.28rem);
+  --fs-xl:  clamp(1.2rem, 1.05rem + .9vw, 1.7rem);
+
+  --tap: 46px; /* 觸控最小目標 */
+  --maxw: 1080px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans TC', sans-serif;
+  background:
+    radial-gradient(1200px 600px at 100% -10%, rgba(38,80,64,.05), transparent 60%),
+    radial-gradient(900px 500px at -10% 110%, rgba(176,70,33,.045), transparent 55%),
+    var(--bg);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "palt" 1;
+}
+
+/* ── Header ── */
+header {
+  background:
+    linear-gradient(135deg, rgba(30,60,46,.96) 0%, rgba(38,80,64,.96) 52%, rgba(29,56,72,.96) 100%);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  backdrop-filter: saturate(140%) blur(8px);
+  color: #fff;
+  padding: clamp(12px, 1.4vw, 18px) clamp(16px, 3vw, 32px);
+  padding-top: calc(clamp(12px, 1.4vw, 18px) + env(safe-area-inset-top));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 6px 24px rgba(0,0,0,.16);
+}
+
+.hd-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+
+header h1 {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(1.05rem, .95rem + .6vw, 1.32rem);
+  font-weight: 700;
+  letter-spacing: .4px;
+  line-height: 1.25;
+}
+
+.hd-sub {
+  font-size: clamp(.6rem, .55rem + .15vw, .7rem);
+  opacity: .55;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.lang-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.lang-bar button {
+  background: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.18);
+  padding: 8px 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: .75rem;
+  font-family: inherit;
+  font-weight: 500;
+  transition: all .2s;
+  letter-spacing: .3px;
+  min-height: 38px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lang-bar button:hover { background: rgba(255,255,255,.18); transform: translateY(-1px); }
+
+.lang-bar button.active {
+  background: #fff;
+  color: var(--accent2);
+  font-weight: 700;
+  border-color: transparent;
+  box-shadow: 0 3px 12px rgba(0,0,0,.2);
+}
+
+/* ── Layout ── */
+.wrap {
+  max-width: var(--maxw);
+  margin: clamp(18px, 3vw, 32px) auto;
+  padding: 0 clamp(14px, 3vw, 28px);
+}
+
+/* ── Step Cards ── */
+.card {
+  position: relative;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: clamp(18px, 2.4vw, 28px) clamp(16px, 2.6vw, 30px);
+  box-shadow: var(--shadow);
+  margin-bottom: clamp(12px, 1.6vw, 18px);
+  opacity: 0;
+  animation: fadeUp .45s ease forwards;
+  transition: box-shadow .25s ease, transform .25s ease;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  border-radius: var(--r-lg) var(--r-lg) 0 0;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3) 60%, transparent);
+  opacity: .55;
+}
+
+@media (hover: hover) {
+  .card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+}
+
+.card:nth-child(1) { animation-delay: .05s; }
+.card:nth-child(2) { animation-delay: .12s; }
+.card:nth-child(3) { animation-delay: .19s; }
+.card:nth-child(4) { animation-delay: .26s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .card { opacity: 1 !important; }
+}
+
+.sec-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: clamp(16px, 2vw, 22px);
+  padding-bottom: 14px;
+  border-bottom: 1.5px solid var(--line-soft);
+}
+
+.sec-num {
+  width: 34px; height: 34px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, var(--accent2), var(--accent2-d));
+  color: #fff;
+  font-family: 'Noto Serif TC', serif;
+  font-size: .92rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 3px 8px rgba(38,80,64,.28);
+}
+
+.sec-head h2 {
+  font-family: 'Noto Serif TC', serif;
+  font-size: var(--fs-md);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.35;
+  letter-spacing: .2px;
+}
+
+/* ── Form Elements ── */
+label {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--muted);
+  margin: 16px 0 6px;
+  font-weight: 700;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+}
+
+label:first-of-type { margin-top: 0; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  min-height: var(--tap);
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--panel-2);
+  font-size: 16px; /* 防止 iOS 聚焦自動放大 */
+  color: var(--ink);
+  font-family: inherit;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+input::placeholder, textarea::placeholder { color: #a89c8a; }
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7065' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+input:hover, select:hover, textarea:hover { border-color: #c4baa3; }
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--accent2);
+  box-shadow: var(--ring);
+  background: #fff;
+}
+
+textarea { resize: vertical; min-height: 84px; line-height: 1.6; }
+
+.row3 { display: grid; gap: 14px; grid-template-columns: 2fr 1fr 1fr; }
+.row2 { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+
+@media(max-width: 640px) {
+  .row3, .row2 { grid-template-columns: 1fr; }
+}
+
+/* ── Condition Chips ── */
+.chips { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 10px; }
+
+.chip {
+  border: 1.5px solid var(--line);
+  background: var(--panel-2);
+  padding: 9px 16px;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: .82rem;
+  transition: all .16s ease;
+  user-select: none;
+  line-height: 1.3;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: hover) {
+  .chip:hover { border-color: var(--accent2); color: var(--accent2); background: rgba(38,80,64,.05); transform: translateY(-1px); }
+}
+.chip:active { transform: scale(.97); }
+
+.chip.on {
+  background: linear-gradient(145deg, var(--accent2), var(--accent2-d));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(38,80,64,.3);
+}
+
+/* ── Medication Management ── */
+.med-list { display: flex; flex-direction: column; gap: 10px; }
+
+.med-row {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1.2fr auto;
+  gap: 8px;
+  align-items: center;
+  background: var(--soft);
+  border-radius: 10px;
+  padding: 12px 14px;
+  animation: fadeUp .3s ease;
+}
+
+@media(max-width: 600px) {
+  .med-row { grid-template-columns: 1fr 1fr; }
+  .med-row .del-btn { grid-column: 1 / -1; justify-self: end; }
+}
+
+.med-row input {
+  background: #fff;
+  font-size: .85rem;
+  padding: 8px 11px;
+}
+
+.del-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line);
+  background: #fff;
+  color: var(--muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .85rem;
+  transition: .15s;
+  flex-shrink: 0;
+}
+
+.del-btn:hover { background: #fde8e0; border-color: var(--accent); color: var(--accent); }
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1.5px dashed var(--line);
+  border-radius: 10px;
+  background: none;
+  color: var(--accent2);
+  font-size: .84rem;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.add-btn:hover { border-color: var(--accent2); background: rgba(42,82,64,.05); }
+
+/* ── Contact Cards ── */
+.contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width: 600px) { .contact-wrap { grid-template-columns: 1fr; } }
+
+.contact-card {
+  background: var(--soft);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+.contact-type {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.contact-card input {
+  background: #fff;
+  font-size: .88rem;
+  padding: 9px 11px;
+}
+
+.contact-card label { margin-top: 10px; }
+.contact-card label:first-of-type { margin-top: 0; }
+
+/* ── Action Bar ── */
+.action-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: clamp(18px, 2.4vw, 26px);
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  min-height: var(--tap);
+  border-radius: var(--r-sm);
+  border: none;
+  cursor: pointer;
+  font-size: .92rem;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: .3px;
+  transition: transform .18s ease, box-shadow .2s ease, filter .2s ease, border-color .2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:focus-visible { outline: none; box-shadow: var(--ring); }
+
+.btn-primary {
+  background: linear-gradient(145deg, var(--accent2), var(--accent2-d));
+  color: #fff;
+  flex: 1;
+  min-width: 200px;
+  box-shadow: 0 6px 18px rgba(38,80,64,.32);
+}
+
+@media (hover: hover) {
+  .btn-primary:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(38,80,64,.36);
+  }
+}
+
+.btn-primary:active { transform: translateY(0) scale(.99); }
+
+.btn-primary:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+  transform: none;
+  filter: grayscale(.2);
+}
+
+.btn-ghost {
+  background: var(--panel-2);
+  color: var(--ink-soft);
+  border: 1.5px solid var(--line);
+}
+
+@media (hover: hover) {
+  .btn-ghost:hover { border-color: var(--muted); color: var(--ink); background: var(--soft-2); }
+}
+
+.btn-print {
+  background: linear-gradient(145deg, var(--accent), var(--accent-d));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(176,70,33,.28);
+}
+
+@media (hover: hover) {
+  .btn-print:hover { filter: brightness(1.07); transform: translateY(-2px); }
+}
+
+/* ── Output / Care Plan ── */
+.plan-wrap {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 30px 32px;
+  margin-top: 20px;
+  box-shadow: var(--shadow);
+  animation: fadeUp .4s ease;
+}
+
+@media(max-width: 600px) { .plan-wrap { padding: 20px 18px; } }
+
+.plan-hd {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--soft);
+}
+
+.plan-hd h3 {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.25rem;
+  color: var(--accent2);
+  font-weight: 700;
+}
+
+.date-chip {
+  font-size: .75rem;
+  color: var(--muted);
+  background: var(--soft);
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.info-cell {
+  background: var(--soft);
+  border-radius: 10px;
+  padding: 13px 15px;
+}
+
+.info-cell .lbl {
+  font-size: .67rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.info-cell .val {
+  font-size: .9rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+/* AI section */
+.ai-box {
+  background: linear-gradient(135deg, rgba(42,82,64,.07) 0%, rgba(74,110,132,.07) 100%);
+  border: 1.5px solid rgba(42,82,64,.2);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin: 16px 0;
+}
+
+.ai-lbl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--accent2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.ai-dot {
+  width: 8px; height: 8px;
+  background: var(--accent2);
+  border-radius: 50%;
+}
+
+.ai-dot.live {
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(.7); }
+}
+
+.ai-text {
+  font-size: .88rem;
+  line-height: 1.85;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+
+/* Plan blocks */
+.plan-sec-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: .95rem;
+  color: var(--accent2);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 22px 0 12px;
+}
+
+.plan-sec-title::before {
+  content: '';
+  width: 4px; height: 18px;
+  background: var(--accent2);
+  border-radius: 2px;
+}
+
+.cond-block {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.cond-block-head {
+  background: var(--soft);
+  padding: 10px 16px;
+  font-size: .87rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cond-block-head .dot {
+  width: 8px; height: 8px;
+  background: var(--accent2);
+  border-radius: 50%;
+}
+
+.cond-block-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.cond-block-body .col {
+  padding: 13px 16px;
+  font-size: .86rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.cond-block-body .col.zh { border-right: 1px solid var(--line); }
+.cond-block-body .col.sec { color: var(--muted); }
+
+@media(max-width: 560px) {
+  .cond-block-body { grid-template-columns: 1fr; }
+  .cond-block-body .col.zh { border-right: none; border-bottom: 1px solid var(--line); }
+}
+
+/* Med plan list */
+.med-plan-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.med-plan-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--soft);
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-size: .87rem;
+}
+
+.med-icon { font-size: 1rem; }
+
+/* Emg contacts plan */
+.emg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media(max-width: 500px) { .emg-grid { grid-template-columns: 1fr; } }
+
+/* Notes */
+.notes-box {
+  background: #fffae8;
+  border: 1px solid #e8d88a;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: .87rem;
+  line-height: 1.75;
+}
+
+.disclaimer {
+  font-size: .73rem;
+  color: var(--muted);
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  line-height: 1.65;
+}
+
+/* Loading */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 20px;
+  gap: 16px;
+  color: var(--muted);
+  font-size: .88rem;
+}
+
+.spinner {
+  width: 38px; height: 38px;
+  border: 3px solid var(--soft);
+  border-top-color: var(--accent2);
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Output actions */
+.out-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: .73rem;
+  padding: 24px 20px;
+}
+
+/* ── Print Modal ── */
+.print-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,16,8,.55);
+  backdrop-filter: blur(4px);
+  z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+.print-modal {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 30px;
+  max-width: 480px; width: 100%;
+  box-shadow: 0 20px 60px rgba(20,16,8,.25);
+  animation: slideUp .25s ease;
+}
+@keyframes slideUp { from{transform:translateY(20px);opacity:0} to{transform:translateY(0);opacity:1} }
+
+.print-modal-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 16px;
+  border-bottom: 1.5px solid var(--soft);
+}
+
+.print-section-label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.print-option-group {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.print-opt {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 500;
+  background: #fff;
+  transition: all .15s;
+  user-select: none;
+}
+.print-opt:hover { border-color: var(--accent2); color: var(--accent2); }
+.print-opt.on { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+.print-opt input[type=checkbox] { display:none; }
+
+.print-size-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 18px;
+}
+
+.print-size-btn {
+  padding: 10px 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 600;
+  background: #fff;
+  text-align: center;
+  transition: all .15s;
+  font-family: inherit;
+}
+.print-size-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.print-size-btn.on { background: var(--accent2); color:#fff; border-color:var(--accent2); }
+
+.print-orient-row {
+  display: flex; gap: 8px; margin-bottom: 22px;
+}
+.print-orient-btn {
+  flex:1; padding: 10px;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 600;
+  background: #fff;
+  text-align: center;
+  transition: all .15s;
+  font-family: inherit;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.print-orient-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.print-orient-btn.on { background: var(--accent2); color:#fff; border-color:var(--accent2); }
+
+.print-modal-actions {
+  display: flex; gap: 10px;
+}
+.print-modal-actions .btn { flex:1; font-size: .88rem; padding: 12px; }
+
+/* ════════════════════════════════════════════════
+   專業跨裝置響應式層 (Desktop / Tablet / Mobile)
+   ════════════════════════════════════════════════ */
+
+/* 自訂捲軸（桌機，更精緻） */
+@media (pointer: fine) {
+  * { scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; border: 2px solid transparent; background-clip: content-box; }
+  *::-webkit-scrollbar-thumb:hover { background: var(--muted); background-clip: content-box; }
+}
+
+/* 鍵盤可及性：清晰焦點環 */
+a:focus-visible, button:focus-visible, .chip:focus-visible,
+[tabindex]:focus-visible { outline: none; box-shadow: var(--ring); border-radius: 8px; }
+
+/* ── 大桌機 (≥1280px)：更寬鬆的閱讀版面 ── */
+@media (min-width: 1280px) {
+  .wrap { max-width: 1160px; }
+  .card { padding: 30px 36px; }
+  .sec-head h2 { font-size: 1.08rem; }
+}
+
+/* ── 平板 (641px–1024px)：平衡雙欄與舒適觸控 ── */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .wrap { max-width: 760px; padding: 0 22px; }
+  .row3 { grid-template-columns: 1.6fr 1fr 1fr; }
+  .info-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important; }
+  .chip { padding: 10px 17px; font-size: .85rem; }
+}
+
+/* 平板直向：聯絡卡與用藥列改單欄較好讀 */
+@media (min-width: 641px) and (max-width: 820px) and (orientation: portrait) {
+  .contact-wrap { grid-template-columns: 1fr; }
+}
+
+/* ── 手機 (≤640px)：單欄、緊湊、固定底部操作列 ── */
+@media (max-width: 640px) {
+  body { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
+
+  header { gap: 10px; }
+  .hd-sub { letter-spacing: 1.5px; }
+  .lang-bar { width: 100%; }
+  .lang-bar button { flex: 1; min-width: 0; padding: 9px 8px; text-align: center; }
+
+  .card {
+    border-radius: var(--r);
+    padding: 18px 16px;
+  }
+  .sec-head { gap: 10px; margin-bottom: 16px; }
+  .sec-num { width: 30px; height: 30px; font-size: .82rem; border-radius: 9px; }
+
+  .info-grid { grid-template-columns: 1fr 1fr !important; gap: 8px; }
+  .med-row { grid-template-columns: 1fr 1fr; }
+  .med-row .del-btn { grid-column: 1 / -1; justify-self: end; }
+
+  /* 主要操作列固定在底部，隨手好按 */
+  .action-bar {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    margin: 0;
+    padding: 12px 14px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(251,250,246,0), var(--panel) 22%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--line-soft);
+    z-index: 90;
+    gap: 10px;
+  }
+  .btn { padding: 14px 16px; font-size: .9rem; }
+  .btn-primary { min-width: 0; flex: 2; }
+  .btn-ghost { flex: 1; }
+  .plan-wrap { padding: 20px 16px; border-radius: var(--r); }
+}
+
+/* 極窄機 (≤380px)：再緊一點，避免擁擠 */
+@media (max-width: 380px) {
+  .info-grid { grid-template-columns: 1fr !important; }
+  header h1 { font-size: 1rem; }
+  .chip { font-size: .8rem; padding: 8px 13px; }
+}
+
+/* 觸控裝置：移除 hover 殘留、加大可點區 */
+@media (hover: none) {
+  .btn:active { transform: scale(.98); }
+  .chip, .btn, .lang-bar button, select { touch-action: manipulation; }
+}
+
+/* 橫向矮螢幕（手機橫放）：標題列不黏頂避免佔空間 */
+@media (max-height: 460px) and (orientation: landscape) {
+  header { position: static; }
+}
+
+/* ── Print Layout ── */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; padding: 0 !important; font-size: 10pt; color: #111; }
+  header, .no-print, footer, #formArea, .out-actions, .print-modal-overlay, .view-toggle-bar { display: none !important; }
+  .wrap { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }
+  #output { padding: 0 !important; }
+
+  .plan-wrap {
+    box-shadow: none !important; border: none !important;
+    padding: 0 !important; margin: 0 !important;
+    animation: none !important;
+  }
+
+  /* Print header bar */
+  .print-doc-header {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 10pt;
+    margin-bottom: 14pt;
+    border-bottom: 2pt solid #2a5240;
+  }
+  .print-doc-header h2 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 14pt; color: #2a5240; font-weight: 700; margin: 0;
+  }
+  .print-doc-header .print-meta {
+    font-size: 8pt; color: #888; text-align: right; line-height: 1.6;
+  }
+
+  /* Section titles */
+  .plan-sec-title {
+    font-size: 9pt !important; margin: 10pt 0 6pt !important;
+    color: #2a5240 !important;
+    border-bottom: 1pt solid #ccc;
+    padding-bottom: 3pt;
+  }
+  .plan-sec-title::before { background: #2a5240 !important; height: 12pt !important; }
+
+  /* Info grid */
+  .info-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 6pt !important; margin-bottom: 10pt !important;
+  }
+  .info-cell {
+    background: #f4f5f2 !important;
+    border-radius: 5pt !important;
+    padding: 7pt 9pt !important;
+    border: 0.5pt solid #ddd !important;
+    break-inside: avoid;
+  }
+  .info-cell .lbl {
+    font-size: 6.5pt !important; color: #777 !important;
+    letter-spacing: .3pt; margin-bottom: 3pt !important;
+  }
+  .info-cell .val { font-size: 9pt !important; font-weight: 600 !important; }
+
+  /* Schedule strip */
+  .print-schedule-strip {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 6pt;
+    background: #f4f5f2 !important;
+    border-radius: 6pt !important;
+    padding: 9pt 11pt !important;
+    font-size: 8.5pt !important;
+    margin-bottom: 6pt;
+    border: 0.5pt solid #ddd !important;
+  }
+  .print-schedule-strip .sch-slot {
+    display: flex; align-items: center; gap: 4pt;
+    padding: 3pt 8pt;
+    background: #fff; border-radius: 20pt;
+    border: 0.5pt solid #ccc;
+  }
+  .print-schedule-strip .sch-time { font-weight: 700; }
+
+  /* AI box */
+  .ai-box {
+    background: #f0f4f0 !important;
+    border: 0.5pt solid #a5c4a5 !important;
+    border-radius: 6pt !important;
+    padding: 10pt 12pt !important;
+    margin: 8pt 0 !important;
+    break-inside: avoid;
+  }
+  .ai-lbl { font-size: 7pt !important; margin-bottom: 6pt !important; }
+  .ai-text { font-size: 8.5pt !important; line-height: 1.7 !important; }
+
+  /* Vital signs table */
+  .print-vital-table {
+    width: 100%; border-collapse: collapse;
+    margin-bottom: 10pt;
+    font-size: 9pt;
+  }
+  .print-vital-table th {
+    background: #2a5240 !important; color: #fff !important;
+    padding: 5pt 8pt; font-size: 8pt; text-align: left; font-weight: 600;
+  }
+  .print-vital-table td {
+    padding: 5pt 8pt; border-bottom: 0.5pt solid #e0e0e0;
+    vertical-align: middle;
+  }
+  .print-vital-table tr:nth-child(even) td { background: #f7f7f5 !important; }
+
+  /* Cond blocks */
+  .cond-block {
+    break-inside: avoid;
+    border: 0.5pt solid #ccc !important;
+    border-radius: 5pt !important;
+    margin-bottom: 7pt !important;
+    overflow: hidden;
+  }
+  .cond-block-head {
+    background: #eef2ee !important;
+    padding: 6pt 10pt !important;
+    font-size: 8.5pt !important; font-weight: 700 !important;
+  }
+  .cond-block-body { display: grid !important; grid-template-columns: 1fr 1fr !important; }
+  .cond-block-body .col { padding: 7pt 10pt !important; font-size: 8pt !important; line-height: 1.65 !important; white-space: pre-wrap !important; }
+  .cond-block-body .col.zh { border-right: 0.5pt solid #ddd !important; }
+
+  /* Med items */
+  .med-plan-list { display: flex !important; flex-wrap: wrap !important; gap: 5pt !important; margin-bottom: 10pt !important; }
+  .med-plan-item {
+    background: #f0f4f0 !important;
+    border: 0.5pt solid #a5c4a5 !important;
+    border-radius: 4pt !important;
+    padding: 5pt 10pt !important;
+    font-size: 8.5pt !important;
+  }
+
+  /* Emergency contacts */
+  .emg-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6pt !important; }
+
+  /* Notes */
+  .notes-box {
+    background: #fffce0 !important;
+    border: 0.5pt solid #d4c060 !important;
+    border-radius: 5pt !important;
+    padding: 9pt 11pt !important;
+    font-size: 8.5pt !important;
+  }
+
+  /* Med check rows */
+  .med-check-row {
+    background: #f0f4f0 !important;
+    border: 0.5pt solid #a5c4a5 !important;
+    border-radius: 4pt !important;
+    padding: 5pt 10pt !important;
+    font-size: 8.5pt !important;
+  }
+  .med-checkbox { display: none !important; }
+  .med-progress { display: none !important; }
+
+  /* Disclaimer */
+  .disclaimer {
+    font-size: 7pt !important; color: #999 !important;
+    margin-top: 12pt !important; padding-top: 8pt !important;
+    border-top: 0.5pt solid #ddd !important;
+  }
+
+  /* plan-hd */
+  .plan-hd { margin-bottom: 10pt !important; padding-bottom: 8pt !important; border-bottom: 1pt solid #ddd !important; }
+  .plan-hd h3 { font-size: 13pt !important; }
+  .date-chip { font-size: 8pt !important; }
+
+  /* Hide elements not needed in print based on user selection */
+  body.print-no-ai .ai-box { display: none !important; }
+  body.print-no-vital .print-vital-section { display: none !important; }
+  body.print-no-contacts .emg-grid, body.print-no-contacts .plan-sec-title.emg-title { display: none !important; }
+  body.print-no-schedule .print-schedule-section { display: none !important; }
+  body.print-no-care .cond-block, body.print-no-care .plan-sec-title.care-title { display: none !important; }
+  body.print-no-clean .plan-sec-title.clean-title, body.print-no-clean .med-plan-list.clean-list, body.print-no-clean .clean-note-box { display: none !important; }
+
+  /* Force full view in print */
+  .plan-wrap.compact .ai-box { display: block !important; }
+  .plan-wrap.compact .cond-block-body .col.sec { display: block !important; }
+  .plan-wrap.compact .cond-block-body { grid-template-columns: 1fr 1fr !important; }
+  .plan-wrap.compact .cond-block-body .col.zh { border-right: 0.5pt solid #ddd !important; }
+  .plan-wrap.compact .print-vital-section { display: block !important; }
+  .plan-wrap.compact .notes-box { display: block !important; }
+
+  /* Paper sizes — handled via JS @page injection (see executePrint) */
+
+  @page { margin: 15mm 15mm 12mm; }
+  @page:first { margin-top: 12mm; }
+
+  /* 【優化三】列印時隱藏過敏翻譯提示框，避免「翻譯中…」狀態被印出 */
+  #allergyTransBox { display: none !important; }
+}
+/* ── Schedule Grid ── */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+@media(max-width: 600px) {
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.sch-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: var(--soft);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.sch-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.sch-body { flex: 1; }
+
+.sch-body label {
+  margin: 0 0 4px;
+  font-size: .67rem;
+}
+
+.sch-body input[type="time"] {
+  padding: 7px 10px;
+  font-size: .9rem;
+  background: #fff;
+}
+
+/* activity chips use same .chip class */
+
+/* ── Schedule strip screen style ── */
+.print-schedule-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.print-schedule-strip .sch-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 4px 11px;
+  font-size: .84rem;
+  line-height: 1.4;
+}
+.print-schedule-strip .sch-time { font-weight: 700; color: var(--accent2); }
+
+/* ── Vital Sign Chips ── */
+.vital-select-label {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.vital-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+@media(max-width: 600px) {
+  .vital-chips { grid-template-columns: repeat(2, 1fr); }
+}
+
+.vital-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 14px 10px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  cursor: pointer;
+  transition: all .18s;
+  user-select: none;
+  text-align: center;
+}
+
+.vital-chip:hover {
+  border-color: var(--accent3);
+  background: rgba(74,110,132,.05);
+  transform: translateY(-1px);
+}
+
+.vital-chip.on {
+  border-color: var(--accent3);
+  background: linear-gradient(135deg, rgba(74,110,132,.12) 0%, rgba(42,82,64,.08) 100%);
+  box-shadow: 0 2px 12px rgba(74,110,132,.22);
+}
+
+.vital-chip.on .vital-chip-icon {
+  transform: scale(1.15);
+}
+
+.vital-chip-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  transition: transform .2s;
+}
+
+.vital-chip-label {
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.vital-chip.on .vital-chip-label {
+  color: var(--accent3);
+}
+
+/* check mark on selected chip */
+.vital-chip.on::after {
+  content: '✓';
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: .65rem;
+  color: var(--accent3);
+  font-weight: 700;
+}
+.vital-chip { position: relative; }
+
+/* ── Vital Inputs (shown after selection) ── */
+.vital-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1.5px solid var(--soft);
+}
+
+@media(max-width: 600px) {
+  .vital-inputs { grid-template-columns: repeat(2, 1fr); }
+}
+
+.vital-field {
+  background: var(--soft);
+  border-radius: 12px;
+  padding: 12px 13px;
+  animation: fadeUp .25s ease;
+}
+
+.vital-field-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.vital-field-icon { font-size: 1rem; line-height: 1; flex-shrink: 0; }
+
+.vital-unit {
+  margin-left: auto;
+  font-size: .67rem;
+  color: var(--muted);
+  font-weight: 600;
+  background: var(--line);
+  padding: 2px 7px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.vital-field input {
+  background: #fff;
+  font-size: .92rem;
+  padding: 9px 11px;
+  font-weight: 500;
+}
+
+/* ── Vital Tip Box ── */
+.vital-tip {
+  margin-top: 10px;
+  background: #fffbee;
+  border: 1.5px solid #e8d070;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.vital-tip-toggle {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  cursor: pointer;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #8a6a00;
+  letter-spacing: .3px;
+  user-select: none;
+  background: #fff8d6;
+  border-bottom: 1px solid transparent;
+  transition: background .15s;
+}
+
+.vital-tip-toggle:hover { background: #fff1b0; }
+
+.vital-tip-toggle.open {
+  border-bottom-color: #e8d070;
+}
+
+.vital-tip-arrow {
+  margin-left: auto;
+  font-size: .65rem;
+  transition: transform .2s;
+  display: inline-block;
+}
+.vital-tip-toggle.open .vital-tip-arrow { transform: rotate(180deg); }
+
+.vital-tip-body {
+  display: none;
+  padding: 10px 12px;
+  font-size: .76rem;
+  line-height: 1.9;
+  color: #5a4800;
+}
+
+.vital-tip-body.show { display: block; }
+
+.vital-tip-body ul {
+  padding-left: 14px;
+  margin: 0;
+}
+
+.vital-tip-body li { margin-bottom: 2px; }
+
+.vital-tip-body .tip-warn {
+  display: inline-block;
+  background: #ffe4b5;
+  border: 1px solid #e8b800;
+  border-radius: 6px;
+  padding: 3px 9px;
+  font-size: .73rem;
+  font-weight: 700;
+  color: #8a4800;
+  margin-top: 6px;
+}
+
+/* ── Normal Range Reference Box ── */
+.vital-normal {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: #edf7f0;
+  border: 1.5px solid #a8d5b5;
+  border-radius: 9px;
+  margin: 8px 0 6px;
+  overflow: hidden;
+  font-size: .73rem;
+}
+
+.vital-normal-icon {
+  background: #2a5240;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 9px;
+  font-size: .78rem;
+  flex-shrink: 0;
+}
+
+.vital-normal-body {
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.vital-normal-zh {
+  font-weight: 700;
+  color: #1a4a2e;
+  line-height: 1.4;
+}
+
+.vital-normal-lang {
+  color: #3a7055;
+  line-height: 1.4;
+  font-size: .68rem;
+}
+
+/* highlight ranges in normal box */
+.vital-normal-zh b, .vital-normal-lang b {
+  color: #2a5240;
+  background: rgba(42,82,64,.1);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+/* ── View Mode Toggle (精簡/詳細) ── */
+.view-toggle-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--soft);
+  border: 1.5px solid var(--line);
+  border-radius: 30px;
+  padding: 5px 6px 5px 14px;
+  width: fit-content;
+  margin-bottom: 18px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  user-select: none;
+}
+.view-toggle-bar .toggle-label { white-space: nowrap; }
+.view-mode-switch {
+  display: flex;
+  background: var(--line-soft);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+}
+.view-mode-btn {
+  padding: 5px 14px;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-size: .76rem;
+  font-weight: 600;
+  font-family: inherit;
+  background: none;
+  color: var(--muted);
+  transition: all .18s;
+  -webkit-tap-highlight-color: transparent;
+}
+.view-mode-btn.active {
+  background: var(--panel-2);
+  color: var(--accent2);
+  box-shadow: 0 2px 6px rgba(0,0,0,.1);
+}
+
+/* 精簡模式：隱藏AI建議與詳細照顧區塊 */
+.plan-wrap.compact .ai-box { display: none; }
+.plan-wrap.compact .cond-block-body .col.sec { display: none; }
+.plan-wrap.compact .cond-block-body { grid-template-columns: 1fr; }
+.plan-wrap.compact .cond-block-body .col.zh { border-right: none; }
+.plan-wrap.compact .print-vital-section { display: none; }
+.plan-wrap.compact .notes-box { display: none; }
+
+/* ── Med Checkbox (藥物已給藥勾選) ── */
+.med-check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--soft);
+  padding: 10px 14px;
+  border-radius: 9px;
+  font-size: .87rem;
+  transition: background .15s;
+}
+.med-check-row.checked {
+  background: #e8f5ee;
+  border: 1px solid #a8d5b8;
+}
+.med-check-row.checked .med-name {
+  text-decoration: line-through;
+  color: var(--muted);
+}
+.med-checkbox {
+  width: 20px; height: 20px;
+  border: 2px solid var(--line);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all .15s;
+  background: #fff;
+  font-size: .75rem;
+}
+.med-checkbox.checked {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: #fff;
+}
+
+/* Med section header with progress */
+.med-sec-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.med-progress {
+  font-size: .72rem;
+  color: var(--muted);
+  background: var(--soft);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+.med-progress.all-done {
+  background: #e8f5ee;
+  color: var(--ok);
+}
+
+/* ── Auto-Save Indicator ── */
+.save-indicator {
+  position: fixed;
+  bottom: calc(72px + env(safe-area-inset-bottom));
+  right: 16px;
+  background: var(--accent2);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  z-index: 200;
+  opacity: 0;
+  transition: opacity .4s ease;
+  pointer-events: none;
+  box-shadow: 0 2px 10px rgba(38,80,64,.3);
+}
+.save-indicator.show { opacity: 1; }
+
+@media (max-width: 640px) {
+  .save-indicator { bottom: calc(108px + env(safe-area-inset-bottom)); }
+}
+@media print { .save-indicator { display: none !important; } }
+</style>
+</head>
+<body>
+
+<div id="saveIndicator" class="save-indicator no-print">✓ 已自動儲存</div>
+
+<header>
+  <div class="hd-left">
+    <h1 id="appTitle">外籍看護照顧計劃製作</h1>
+    <span class="hd-sub" id="appSub">Care Plan Maker for Foreign Caregivers</span>
+  </div>
+  <div class="lang-bar">
+    <button data-l="id" class="active">中 / Indonesia</button>
+    <button data-l="en">中 / English</button>
+    <button data-l="vi">中 / Tiếng Việt</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div id="formArea" class="no-print">
+
+    <!-- ① 基本資料 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">1</div>
+        <h2 id="t_basic">受照顧者基本資料 / Patient Information</h2>
+      </div>
+      <div class="row3">
+        <div><label id="l_name">姓名 / Name</label><input id="f_name" placeholder="王○○"></div>
+        <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120"></div>
+        <div>
+          <label id="l_sex">性別 / Gender</label>
+          <select id="f_sex"></select>
+        </div>
+      </div>
+      <div class="row2" style="margin-top:0">
+        <div>
+          <label id="l_mob">行動能力 / Mobility</label>
+          <select id="f_mob"></select>
+        </div>
+        <div>
+          <label id="l_cog">認知狀況 / Cognition</label>
+          <select id="f_cog"></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 家庭環境與生活安排 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">2</div>
+        <h2 id="t_living">家庭環境與生活安排 / Living Arrangement</h2>
+      </div>
+
+      <!-- 家人同住 / 外食 -->
+      <div class="row2">
+        <div>
+          <label id="l_cohabit">家人是否同住 / Family Co-living</label>
+          <select id="f_cohabit"></select>
+        </div>
+        <div>
+          <label id="l_eatout">飲食來源 / Meal Source</label>
+          <select id="f_eatout"></select>
+        </div>
+      </div>
+
+      <!-- 居住環境備註 -->
+      <label id="l_env_note">居住環境說明 / Home Environment Notes</label>
+      <input id="f_env_note" placeholder="例：有電梯、有門檻、住2樓無電梯">
+
+      <!-- 作息時間 -->
+      <div style="margin-top:18px;padding-top:14px;border-top:1.5px solid var(--soft)">
+        <div style="font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px" id="l_schedule_hd">每日作息規劃 / Daily Schedule</div>
+        <div class="schedule-grid">
+          <div class="sch-item">
+            <span class="sch-icon">🌅</span>
+            <div class="sch-body">
+              <label id="l_wake">起床時間 / Wake Up</label>
+              <input id="f_wake" type="time" value="06:30">
+            </div>
+          </div>
+          <div class="sch-item">
+            <span class="sch-icon">🍳</span>
+            <div class="sch-body">
+              <label id="l_breakfast">早餐時間 / Breakfast</label>
+              <input id="f_breakfast" type="time" value="07:30">
+            </div>
+          </div>
+          <div class="sch-item">
+            <span class="sch-icon">🌞</span>
+            <div class="sch-body">
+              <label id="l_lunch">午餐時間 / Lunch</label>
+              <input id="f_lunch" type="time" value="12:00">
+            </div>
+          </div>
+          <div class="sch-item">
+            <span class="sch-icon">😴</span>
+            <div class="sch-body">
+              <label id="l_nap">午休時間 / Afternoon Rest</label>
+              <input id="f_nap" type="time" value="13:00">
+            </div>
+          </div>
+          <div class="sch-item">
+            <span class="sch-icon">🍽</span>
+            <div class="sch-body">
+              <label id="l_dinner">晚餐時間 / Dinner</label>
+              <input id="f_dinner" type="time" value="18:00">
+            </div>
+          </div>
+          <div class="sch-item">
+            <span class="sch-icon">🌙</span>
+            <div class="sch-body">
+              <label id="l_bedtime">就寢時間 / Bedtime</label>
+              <input id="f_bedtime" type="time" value="21:30">
+            </div>
+          </div>
+        </div>
+
+        <!-- 活動安排 -->
+        <label id="l_activity" style="margin-top:14px">日間活動安排 / Daytime Activities</label>
+        <div class="chips" id="actChips"></div>
+
+        <!-- 作息備註 -->
+        <label id="l_sch_note" style="margin-top:14px">作息特殊備註 / Schedule Notes</label>
+        <textarea id="f_sch_note" placeholder="例：週二有復健門診、下午3點服藥、夜間需觀察翻身"></textarea>
+      </div>
+    </div>
+
+    <!-- ③ 健康狀況 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">3</div>
+        <h2 id="t_cond">身體狀況 / Health Conditions</h2>
+      </div>
+      <label id="l_condL">健康狀況（可複選）</label>
+      <div class="chips" id="condChips"></div>
+      <label id="l_diet" style="margin-top:16px">飲食型態 / Diet</label>
+      <select id="f_diet"></select>
+      <label id="l_allergy">過敏 / 禁忌 / Alergi / Allergies</label>
+      <input id="f_allergy" placeholder="例：盤尼西林、海鮮（輸入後自動翻譯）" oninput="scheduleAllergyTranslate()">
+      <div id="allergyTransBox" style="display:none;margin-top:6px;background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.85rem;color:var(--ink-soft);line-height:1.7"></div>
+      <label id="l_note">特殊注意事項 / Special Notes</label>
+      <textarea id="f_note" placeholder="例如：夜間易躁動、有過褥瘡史"></textarea>
+    </div>
+
+    <!-- ④ 生命徵象監測（固定照顧計劃項目，非每日記錄表） -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">4</div>
+        <h2 id="t_vital">生命徵象監測 / Vital Signs</h2>
+      </div>
+
+      <!-- Step 1: 勾選需定期監測的生命徵象（固定照顧計劃項目，非每日記錄表） -->
+      <div class="vital-select-label" id="l_vital_select">請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目，非每日數值記錄）/ Select vital signs to monitor regularly</div>
+      <div class="vital-chips" id="vitalChips">
+        <div class="vital-chip" data-key="bp" onclick="toggleVital('bp')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('bp')}">
+          <span class="vital-chip-icon">🩸</span>
+          <span class="vital-chip-label" id="vc_bp">血壓 BP</span>
+        </div>
+        <div class="vital-chip" data-key="pulse" onclick="toggleVital('pulse')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('pulse')}">
+          <span class="vital-chip-icon">💓</span>
+          <span class="vital-chip-label" id="vc_pulse">脈搏 Pulse</span>
+        </div>
+        <div class="vital-chip" data-key="temp" onclick="toggleVital('temp')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('temp')}">
+          <span class="vital-chip-icon">🌡</span>
+          <span class="vital-chip-label" id="vc_temp">體溫 Temp</span>
+        </div>
+        <div class="vital-chip" data-key="spo2" onclick="toggleVital('spo2')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('spo2')}">
+          <span class="vital-chip-icon">💨</span>
+          <span class="vital-chip-label" id="vc_spo2">血氧 SpO₂</span>
+        </div>
+        <div class="vital-chip" data-key="resp" onclick="toggleVital('resp')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('resp')}">
+          <span class="vital-chip-icon">🌬</span>
+          <span class="vital-chip-label" id="vc_resp">呼吸 Resp</span>
+        </div>
+        <div class="vital-chip" data-key="sugar" onclick="toggleVital('sugar')" tabindex="0" role="button" aria-pressed="false" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleVital('sugar')}">
+          <span class="vital-chip-icon">🍬</span>
+          <span class="vital-chip-label" id="vc_sugar">血糖 Sugar</span>
+        </div>
+      </div>
+
+      <!-- Step 2: 勾選後顯示該項目的正常範圍與量測注意事項（參考資訊，不輸入數值） -->
+      <div class="vital-inputs" id="vitalInputs">
+        <div class="vital-field" id="vf_bp" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">🩸</span><label id="l_bp" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">血壓 / Blood Pressure</label><span class="vital-unit">mmHg</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：收縮壓 <b>90–139 mmHg</b>，舒張壓 <b>60–89 mmHg</b></div>
+              <div class="vital-normal-lang" id="vn_bp_lang">Normal: Systolic <b>90–139</b> / Diastolic <b>60–89 mmHg</b></div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li>量測前<b>靜坐休息5分鐘</b>，勿說話或活動</li>
+                <li>手臂自然放平，袖帶綁在<b>肘關節上2 cm</b>，鬆緊以塞入兩指為準</li>
+                <li>手臂應與心臟同高；袖帶不可綁在有輸液或動靜脈廔管的手臂</li>
+                <li>飯後、運動後、泡澡後<b>30分鐘內</b>不宜量測</li>
+                <li>左右手各量一次，記錄<b>數值較高側</b>作為基準</li>
+              </ul>
+              <span class="tip-warn">⚠ 收縮壓 &gt;160 或 &lt;90 mmHg 請立即通報家屬</span>
+            </div>
+          </div>
+        </div>
+        <div class="vital-field" id="vf_pulse" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">💓</span><label id="l_pulse" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">脈搏 / Pulse</label><span class="vital-unit">次/min</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：<b>60–100 次/分</b></div>
+              <div class="vital-normal-lang" id="vn_pulse_lang">Normal: <b>60–100 beats/min</b></div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li>量測前<b>靜坐休息5分鐘</b></li>
+                <li>以食指、中指輕壓<b>手腕橈動脈</b>（拇指側內側），勿使用拇指</li>
+                <li>完整計數<b>1分鐘</b>，同時注意節律是否<b>規則</b></li>
+                <li>若使用血壓計，機器同步顯示脈搏時以機器數值為準</li>
+              </ul>
+              <span class="tip-warn">⚠ 脈搏 &lt;50 或 &gt;120 次/分，或節律不規則，請立即通報</span>
+            </div>
+          </div>
+        </div>
+        <div class="vital-field" id="vf_temp" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">🌡</span><label id="l_temp" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">體溫 / Temperature</label><span class="vital-unit">°C</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：腋溫 <b>36.1–37.2°C</b>，耳溫 <b>35.8–37.8°C</b></div>
+              <div class="vital-normal-lang" id="vn_temp_lang">Normal: Axillary <b>36.1–37.2°C</b> / Ear <b>35.8–37.8°C</b></div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li><b>腋溫：</b>擦乾腋窩汗水，夾緊體溫計量<b>7分鐘</b>，正常 36.1–37.2°C</li>
+                <li><b>耳溫：</b>輕拉耳廓<b>向後上方</b>使耳道伸直，探頭對準耳膜，正常 35.8–37.8°C</li>
+                <li><b>額溫：</b>距額頭2–3 cm平掃，避免有汗水或帽子</li>
+                <li>飯後、運動後、泡澡後<b>30分鐘內</b>不宜量測</li>
+              </ul>
+              <span class="tip-warn">⚠ ≥38°C 為發燒、&lt;35°C 為低體溫，請立即通報家屬</span>
+            </div>
+          </div>
+        </div>
+        <div class="vital-field" id="vf_spo2" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">💨</span><label id="l_spo2" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">血氧 / SpO₂</label><span class="vital-unit">%</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：<b>95–100 %</b>（&lt;95% 需密切觀察）</div>
+              <div class="vital-normal-lang" id="vn_spo2_lang">Normal: <b>95–100 %</b> (&lt;95% needs close monitoring)</div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li>夾在<b>食指或中指</b>，指甲朝上；指甲<b>不可塗深色指甲油</b></li>
+                <li>手指過冷時先搓熱，或用溫毛巾敷後再測</li>
+                <li>量測時手指<b>保持靜止不動</b>，等待數值穩定（約10秒）再讀數</li>
+                <li>剛量完血壓或穿刺側的手指暫時不用</li>
+              </ul>
+              <span class="tip-warn">⚠ SpO₂ &lt;95% 需密切觀察；&lt;90% 請立即叫救護車</span>
+            </div>
+          </div>
+        </div>
+        <div class="vital-field" id="vf_resp" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">🌬</span><label id="l_resp" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">呼吸 / Resp. Rate</label><span class="vital-unit">次/min</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：<b>12–20 次/分</b>（老人可至 25）</div>
+              <div class="vital-normal-lang" id="vn_resp_lang">Normal: <b>12–20 breaths/min</b> (elderly up to 25)</div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li><b>勿告知</b>受照顧者正在量測呼吸（避免刻意改變呼吸頻率）</li>
+                <li>觀察<b>胸腹部起伏</b>，一起一伏算一次，計數<b>1分鐘</b></li>
+                <li>注意呼吸是否費力、有無喘鳴聲、呼吸深淺是否均勻</li>
+                <li>可在量完脈搏後繼續觀察呼吸（被照顧者以為還在測脈搏）</li>
+              </ul>
+              <span class="tip-warn">⚠ 呼吸 &lt;10 或 &gt;30 次/分，或呼吸困難費力，請立即通報</span>
+            </div>
+          </div>
+        </div>
+        <div class="vital-field" id="vf_sugar" style="display:none">
+          <div class="vital-field-header"><span class="vital-field-icon">🍬</span><label id="l_sugar" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">血糖 / Blood Sugar</label><span class="vital-unit">mg/dL</span></div>
+          <div class="vital-normal">
+            <div class="vital-normal-icon">✓</div>
+            <div class="vital-normal-body">
+              <div class="vital-normal-zh">正常範圍：空腹 <b>70–100 mg/dL</b>，飯後2h <b>&lt;140 mg/dL</b></div>
+              <div class="vital-normal-lang" id="vn_sugar_lang">Normal: Fasting <b>70–100</b> / Post-meal 2h <b>&lt;140 mg/dL</b></div>
+            </div>
+          </div>
+          <div class="vital-tip">
+            <div class="vital-tip-toggle" onclick="toggleTip(this)">
+              ⚠ 量測注意事項 <span class="vital-tip-arrow">▼</span>
+            </div>
+            <div class="vital-tip-body">
+              <ul>
+                <li>以酒精棉片擦拭指尖，<b>待完全乾燥</b>後再穿刺（酒精殘留影響數值）</li>
+                <li>穿刺指尖<b>側面</b>（非正中），輪替不同手指，避免慣用手拇指</li>
+                <li>第一滴血擦掉，用<b>第二滴血</b>測試；不可擠壓手指（組織液稀釋影響準確性）</li>
+                <li>記錄量測<b>時間點</b>（飯前 / 飯後2小時），並記入血糖記錄表</li>
+                <li>試紙注意<b>有效期限</b>及開瓶日期，存放於乾燥陰涼處</li>
+              </ul>
+              <span class="tip-warn">⚠ 血糖 &lt;70 mg/dL 低血糖（緊急處置）；&gt;300 mg/dL 高血糖（立即通報就醫）</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="vitalNoteWrap" style="display:none;margin-top:4px">
+        <label id="l_vital_note" style="margin-top:14px">監測備註 / Monitoring Notes</label>
+        <textarea id="f_vital_note" placeholder="例：每日早晚各量一次血壓、飯前測血糖、由家屬協助記錄"></textarea>
+      </div>
+    </div>
+
+    <!-- ⑤ 緊急聯絡 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">5</div>
+        <h2 id="t_emg">緊急聯絡人 / Emergency Contacts</h2>
+      </div>
+      <div class="contact-wrap">
+        <div class="contact-card">
+          <div class="contact-type" id="ct_fam">👨‍👩‍👧 家屬 / Family</div>
+          <label id="l_fn">姓名 / Name</label>
+          <input id="f_fn" placeholder="家屬姓名">
+          <label id="l_frel">關係 / Relation</label>
+          <input id="f_frel" placeholder="例：兒子、女兒">
+          <label id="l_ftel">電話 / Phone</label>
+          <input id="f_ftel" type="tel" placeholder="0912-345-678">
+        </div>
+        <div class="contact-card">
+          <div class="contact-type" id="ct_doc">🏥 醫療 / Medical</div>
+          <label id="l_dn">主治醫師 / Doctor</label>
+          <input id="f_dn" placeholder="醫師姓名">
+          <label id="l_dhosp">醫院/診所 / Hospital</label>
+          <input id="f_dhosp" placeholder="例：台大醫院">
+          <label id="l_dtel">電話 / Phone</label>
+          <input id="f_dtel" type="tel" placeholder="02-2312-3456">
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑥ 打掃清潔注意事項 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num">6</div>
+        <h2 id="t_clean">打掃清潔注意事項 / Housekeeping & Cleaning Notes</h2>
+      </div>
+      <label id="l_clean_hd" style="margin-top:0">清潔照護注意項目（可複選）/ Select applicable items</label>
+      <div class="chips" id="cleanChips"></div>
+      <label id="l_clean_note" style="margin-top:16px">清潔特殊說明 / Additional Cleaning Instructions</label>
+      <textarea id="f_clean_note" placeholder="例：病患過敏漂白水，請改用稀釋酒精消毒；浴室需每日清潔，地板保持乾燥防跌倒。"></textarea>
+    </div>
+
+    <!-- Action bar -->
+    <div class="action-bar">
+      <button class="btn btn-primary" id="genBtn" onclick="generatePlan()">
+        <span>✦</span>
+        <span id="genTxt">產生照顧計劃 / Generate Care Plan</span>
+      </button>
+      <button class="btn btn-ghost" onclick="clearAll()" id="clearBtn">🗑 清除</button>
+    </div>
+
+  </div>
+
+  <div id="output"></div>
+</div>
+
+<footer id="foot">資料僅儲存於本裝置 · Data stored on this device only · Dữ liệu chỉ lưu trên thiết bị này<br><span style="font-size:.7rem;opacity:.75;letter-spacing:.5px">© 2026 照顧計劃製作 All Rights Reserved</span></footer>
+
+<!-- Print Modal — 放在 <script> 前，確保 printSectionOpts 元素在 addEventListener 前已存在於 DOM -->
+<div id="printModalOverlay" class="print-modal-overlay" style="display:none" onclick="if(event.target===this)closePrintModal()">
+  <div class="print-modal">
+    <div class="print-modal-title">
+      <span>🖨</span> 列印選項 / Print Options
+    </div>
+
+    <div class="print-section-label">列印內容 / Include Sections</div>
+    <div class="print-option-group" id="printSectionOpts">
+      <label class="print-opt on" data-class="print-no-schedule"><input type="checkbox" checked> 🏠 作息</label>
+      <label class="print-opt on" data-class="print-no-vital"><input type="checkbox" checked> 📊 生命徵象監測</label>
+      <label class="print-opt on" data-class="print-no-care"><input type="checkbox" checked> 🩺 照顧重點</label>
+      <label class="print-opt on" data-class="print-no-clean"><input type="checkbox" checked> 🧹 清潔注意</label>
+      <label class="print-opt on" data-class="print-no-contacts"><input type="checkbox" checked> 📞 緊急聯絡</label>
+    </div>
+
+    <div class="print-section-label">紙張大小 / Paper Size</div>
+    <div class="print-size-row">
+      <button class="print-size-btn on" onclick="setPrintSize('a4',this)">A4 (210×297mm)</button>
+      <button class="print-size-btn" onclick="setPrintSize('letter',this)">Letter (8.5×11")</button>
+    </div>
+
+    <div class="print-section-label">列印方向 / Orientation</div>
+    <div class="print-orient-row">
+      <button class="print-orient-btn on" onclick="setPrintOrient('portrait',this)">
+        <svg width="14" height="18" viewBox="0 0 14 18" fill="none"><rect x="1" y="1" width="12" height="16" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        直向 Portrait
+      </button>
+      <button class="print-orient-btn" onclick="setPrintOrient('landscape',this)">
+        <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><rect x="1" y="1" width="16" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5"/></svg>
+        橫向 Landscape
+      </button>
+    </div>
+
+    <div class="print-modal-actions">
+      <button class="btn btn-print" onclick="executePrint()">🖨 確認列印 / Print</button>
+      <button class="btn btn-ghost" onclick="closePrintModal()">取消 / Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* ========================================================
+   LocalStorage Persistence — Auto-Save / Auto-Restore
+   Saves all form state; restores on page load.
+   Clears on clearAll() call.
+======================================================== */
+const LS_KEY = "carePlanDraft_v1";
+
+/* Debounced save — writes at most once per second */
+let _saveTimer = null;
+function scheduleSave() {
+  clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(saveToStorage, 800);
+}
+
+function saveToStorage() {
+  try {
+    const TEXT_FIELDS = [
+      "f_name","f_age","f_sex","f_mob","f_cog","f_diet",
+      "f_allergy","f_note",
+      "f_cohabit","f_eatout","f_env_note","f_sch_note",
+      "f_wake","f_breakfast","f_lunch","f_nap","f_dinner","f_bedtime",
+      "f_fn","f_frel","f_ftel","f_dn","f_dhosp","f_dtel",
+      "f_vital_note","f_clean_note" // 移除了 f_bp, f_pulse 等不存在的 input
+    ];
+    const fieldValues = {};
+    TEXT_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) fieldValues[id] = el.value;
+    });
+    const draft = {
+      lang,
+      fieldValues,
+      selected:      [...selected],
+      actSelected:   [...actSelected],
+      cleanSelected: [...cleanSelected],
+      vitalSelected: [...vitalSelected],
+      savedAt: Date.now()
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(draft));
+    showSaveIndicator();
+  } catch(e) {
+    console.warn("[AutoSave] Failed:", e);
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return false;
+    const draft = JSON.parse(raw);
+    if (!draft || !draft.fieldValues) return false;
+
+    /* 1. 先恢復語系 */
+    if (draft.lang) {
+      lang = draft.lang;
+      document.querySelectorAll(".lang-bar button").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.l === lang);
+      });
+    }
+
+    /* 2. 關鍵修復：在賦值之前，先根據當前語系建立好 Select 的 Options
+          （下拉選單的 <option> 是動態建立的，必須先存在才能成功寫入 el.value） */
+    buildSelects();
+
+    /* 3. 恢復文字與下拉選單的值 */
+    Object.entries(draft.fieldValues).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+
+    /* 4. 恢復 Chips 狀態 */
+    if (draft.selected)      draft.selected.forEach(k => selected.add(k));
+    if (draft.actSelected)   draft.actSelected.forEach(k => actSelected.add(k));
+    if (draft.cleanSelected) draft.cleanSelected.forEach(k => cleanSelected.add(k));
+    if (draft.vitalSelected) draft.vitalSelected.forEach(k => vitalSelected.add(k));
+
+    /* Meds card removed — ignore any stale meds in storage */
+
+    return true;
+  } catch(e) {
+    console.warn("[AutoSave] Load failed:", e);
+    return false;
+  }
+}
+
+function showSaveIndicator() {
+  const el = document.getElementById("saveIndicator");
+  if (!el) return;
+  el.classList.add("show");
+  clearTimeout(el._hideTimer);
+  el._hideTimer = setTimeout(() => el.classList.remove("show"), 1800);
+}
+
+/* Attach input listeners for auto-save after DOM is ready */
+function attachAutoSaveListeners() {
+  const fields = document.querySelectorAll("input, select, textarea");
+  fields.forEach(el => el.addEventListener("change", scheduleSave));
+  /* For text inputs, also listen on input event for faster save */
+  document.querySelectorAll("input[type=text], input[type=number], input[type=tel], input[type=time], textarea")
+    .forEach(el => el.addEventListener("input", scheduleSave));
+}
+
+/* ========================================================
+   Language — default to Indonesian (first button is active)
+======================================================== */
+let lang = "id";
+const vitalSelected = new Set(); /* declared early — used in clearAll */
+
+/* ========================================================
+   Language Dictionary
+======================================================== */
+const L = {
+  id: {
+    title: "外籍看護照顧計劃製作",
+    sub: "Pembuat Rencana Perawatan",
+    t_basic: "受照顧者基本資料 / Data Pasien",
+    t_living: "家庭環境與生活安排 / Lingkungan & Jadwal",
+    t_cond:  "身體狀況 / Kondisi Kesehatan",
+    t_med:   "藥物管理 / Manajemen Obat",
+    t_emg:   "緊急聯絡人 / Kontak Darurat",
+    l_name:  "姓名 / Nama", l_age: "年齡 / Usia", l_sex: "性別 / Jenis Kelamin",
+    l_mob:   "行動能力 / Mobilitas", l_cog: "認知狀況 / Kognisi",
+    l_condL: "健康狀況（可複選）/ Kondisi Kesehatan",
+    l_diet:  "飲食型態 / Pola Makan",
+    l_cohabit: "家人是否同住 / Tinggal bersama keluarga",
+    l_eatout:  "飲食來源 / Sumber Makanan",
+    l_env_note:"居住環境說明 / Keterangan Lingkungan",
+    l_schedule_hd:"每日作息規劃 / Jadwal Harian",
+    l_wake:    "起床時間 / Bangun",
+    l_breakfast:"早餐時間 / Sarapan",
+    l_lunch:   "午餐時間 / Makan Siang",
+    l_nap:     "午休時間 / Istirahat Siang",
+    l_dinner:  "晚餐時間 / Makan Malam",
+    l_bedtime: "就寢時間 / Tidur",
+    l_activity:"日間活動安排 / Aktivitas Harian",
+    l_sch_note:"作息特殊備註 / Catatan Jadwal",
+    l_allergy: "過敏 / 禁忌 / Alergi / Allergies",
+    l_note:  "特殊注意事項 / Catatan Khusus",
+    ct_fam:  "👨‍👩‍👧 家屬 / Keluarga", ct_doc: "🏥 醫療 / Medis",
+    l_fn: "姓名 / Nama", l_frel: "關係 / Hubungan", l_ftel: "電話 / Telepon",
+    l_dn: "主治醫師 / Dokter", l_dhosp: "醫院/診所 / Rumah Sakit", l_dtel: "電話 / Telepon",
+    genTxt: "產生照顧計劃 / Buat Rencana Perawatan",
+    clearBtn: "🗑 清除",
+    t_vital: "生命徵象監測 / Tanda-Tanda Vital",
+    l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (次/min)", l_temp:"體溫 / Suhu (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (次/min)", l_sugar:"血糖 / Gula Darah (mg/dL)",
+    l_vital_note:"監測備註 / Catatan Pemantauan",
+    vc_bp:"血壓 BP", vc_pulse:"脈搏 Nadi", vc_temp:"體溫 Suhu", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Napas", vc_sugar:"血糖 Gula",
+    l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Pilih tanda vital untuk dipantau rutin",
+    vn_bp_lang: "Normal: Sistolik <b>90–139</b> / Diastolik <b>60–89 mmHg</b>",
+    vn_pulse_lang: "Normal: <b>60–100 kali/menit</b>",
+    vn_temp_lang: "Normal: Ketiak <b>36,1–37,2°C</b> / Telinga <b>35,8–37,8°C</b>",
+    vn_spo2_lang: "Normal: <b>95–100 %</b> (&lt;95% perlu dipantau ketat)",
+    vn_resp_lang: "Normal: <b>12–20 napas/menit</b> (lansia hingga 25)",
+    vn_sugar_lang: "Normal: Puasa <b>70–100</b> / 2 jam setelah makan <b>&lt;140 mg/dL</b>",
+    foot: "資料僅儲存於本裝置 · 雙語翻譯由 Google 翻譯提供 · Data hanya di perangkat ini",
+    planTitle: "照顧計劃 / Rencana Perawatan",
+    printBtn: "🖨 列印 / Cetak",
+    closeBtn: "關閉 / Tutup",
+    loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nMenerjemahkan dengan Google Translate & menyusun rencana perawatan…",
+    aiLabel: "AI 個人化照顧建議 / Saran Perawatan AI",
+    secCare: "照顧重點 / Poin Perawatan",
+    secMed: "藥物清單 / Daftar Obat",
+    secEmg: "緊急聯絡 / Kontak Darurat",
+    secNote: "特殊注意 / Catatan Khusus",
+    secLang: "Bahasa Indonesia",
+    medPh1: "藥名 / Nama Obat", medPh2: "劑量 / Dosis", medPh3: "頻次 / Frekuensi",
+    disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nRencana ini dibuat berdasarkan data yang dimasukkan; perawatan aktual harus mengikuti instruksi tenaga medis.",
+    t_clean: "打掃清潔注意事項 / Catatan Kebersihan",
+    l_clean_hd: "清潔照護注意項目（可複選）/ Pilih item yang berlaku",
+    l_clean_note: "清潔特殊說明 / Instruksi Kebersihan Tambahan"
+  },
+  en: {
+    title: "外籍看護照顧計劃製作",
+    sub: "Care Plan Maker for Foreign Caregivers",
+    t_basic: "受照顧者基本資料 / Patient Information",
+    t_living: "家庭環境與生活安排 / Living Arrangement",
+    t_cond:  "身體狀況 / Health Conditions",
+    t_med:   "藥物管理 / Medication Management",
+    t_emg:   "緊急聯絡人 / Emergency Contacts",
+    l_name:  "姓名 / Name", l_age: "年齡 / Age", l_sex: "性別 / Gender",
+    l_mob:   "行動能力 / Mobility", l_cog: "認知狀況 / Cognition",
+    l_condL: "健康狀況（可複選）/ Health Conditions",
+    l_diet:  "飲食型態 / Diet",
+    l_cohabit: "家人是否同住 / Family Co-living",
+    l_eatout:  "飲食來源 / Meal Source",
+    l_env_note:"居住環境說明 / Home Environment Notes",
+    l_schedule_hd:"每日作息規劃 / Daily Schedule",
+    l_wake:    "起床時間 / Wake Up",
+    l_breakfast:"早餐時間 / Breakfast",
+    l_lunch:   "午餐時間 / Lunch",
+    l_nap:     "午休時間 / Afternoon Rest",
+    l_dinner:  "晚餐時間 / Dinner",
+    l_bedtime: "就寢時間 / Bedtime",
+    l_activity:"日間活動安排 / Daytime Activities",
+    l_sch_note:"作息特殊備註 / Schedule Notes",
+    l_allergy: "過敏 / 禁忌 / Allergies",
+    l_note:  "特殊注意事項 / Special Notes",
+    ct_fam:  "👨‍👩‍👧 家屬 / Family", ct_doc: "🏥 醫療 / Medical",
+    l_fn: "姓名 / Name", l_frel: "關係 / Relationship", l_ftel: "電話 / Phone",
+    l_dn: "主治醫師 / Doctor", l_dhosp: "醫院/診所 / Hospital", l_dtel: "電話 / Phone",
+    genTxt: "產生照顧計劃 / Generate Care Plan",
+    clearBtn: "🗑 Reset",
+    t_vital: "生命徵象監測 / Vital Signs",
+    l_bp:"血壓 / Blood Pressure (mmHg)", l_pulse:"脈搏 / Pulse (次/min)", l_temp:"體溫 / Temperature (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Resp. Rate (次/min)", l_sugar:"血糖 / Blood Sugar (mg/dL)",
+    l_vital_note:"監測備註 / Monitoring Notes",
+    vc_bp:"血壓 BP", vc_pulse:"脈搏 Pulse", vc_temp:"體溫 Temp", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Resp", vc_sugar:"血糖 Sugar",
+    l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Select vital signs to monitor regularly",
+    vn_bp_lang: "Normal: Systolic <b>90–139</b> / Diastolic <b>60–89 mmHg</b>",
+    vn_pulse_lang: "Normal: <b>60–100 beats/min</b>",
+    vn_temp_lang: "Normal: Axillary <b>36.1–37.2°C</b> / Ear <b>35.8–37.8°C</b>",
+    vn_spo2_lang: "Normal: <b>95–100 %</b> (&lt;95% needs close monitoring)",
+    vn_resp_lang: "Normal: <b>12–20 breaths/min</b> (elderly up to 25)",
+    vn_sugar_lang: "Normal: Fasting <b>70–100</b> / Post-meal 2h <b>&lt;140 mg/dL</b>",
+    foot: "資料僅儲存於本裝置 · Bilingual translation powered by Google Translate · Data stored on this device only",
+    planTitle: "照顧計劃 / Care Plan",
+    printBtn: "🖨 列印 / Print",
+    closeBtn: "關閉 / Close",
+    loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nTranslating (Google Translate) & generating care plan, please wait…",
+    aiLabel: "AI 個人化照顧建議 / AI Personalized Care Recommendations",
+    secCare: "照顧重點 / Care Points",
+    secMed: "藥物清單 / Medication List",
+    secEmg: "緊急聯絡 / Emergency Contacts",
+    secNote: "特殊注意 / Special Notes",
+    secLang: "English",
+    medPh1: "藥名 / Drug Name", medPh2: "劑量 / Dose", medPh3: "頻次 / Frequency",
+    disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nThis plan is generated based on input data; actual care must follow medical professionals' instructions.",
+    t_clean: "打掃清潔注意事項 / Housekeeping & Cleaning Notes",
+    l_clean_hd: "清潔照護注意項目（可複選）/ Select applicable items",
+    l_clean_note: "清潔特殊說明 / Additional Cleaning Instructions"
+  },
+  vi: {
+    title: "外籍看護照顧計劃製作",
+    sub: "Công Cụ Lập Kế Hoạch Chăm Sóc",
+    t_basic: "受照顧者基本資料 / Thông Tin Bệnh Nhân",
+    t_living: "家庭環境與生活安排 / Môi Trường & Sinh Hoạt",
+    t_cond:  "身體狀況 / Tình Trạng Sức Khỏe",
+    t_med:   "藥物管理 / Quản Lý Thuốc",
+    t_emg:   "緊急聯絡人 / Liên Lạc Khẩn Cấp",
+    l_name:  "姓名 / Họ Tên", l_age: "年齡 / Tuổi", l_sex: "性別 / Giới Tính",
+    l_mob:   "行動能力 / Vận Động", l_cog: "認知狀況 / Nhận Thức",
+    l_condL: "健康狀況（可複選）/ Tình Trạng Sức Khỏe",
+    l_diet:  "飲食型態 / Chế Độ Ăn",
+    l_cohabit: "家人是否同住 / Gia đình cùng sống",
+    l_eatout:  "飲食來源 / Nguồn Thức Ăn",
+    l_env_note:"居住環境說明 / Ghi Chú Môi Trường",
+    l_schedule_hd:"每日作息規劃 / Lịch Sinh Hoạt Hàng Ngày",
+    l_wake:    "起床時間 / Thức Dậy",
+    l_breakfast:"早餐時間 / Ăn Sáng",
+    l_lunch:   "午餐時間 / Ăn Trưa",
+    l_nap:     "午休時間 / Nghỉ Trưa",
+    l_dinner:  "晚餐時間 / Ăn Tối",
+    l_bedtime: "就寢時間 / Đi Ngủ",
+    l_activity:"日間活動安排 / Hoạt Động Ban Ngày",
+    l_sch_note:"作息特殊備註 / Ghi Chú Lịch",
+    l_allergy: "過敏 / 禁忌 / Dị Ứng",
+    l_note:  "特殊注意事項 / Ghi Chú Đặc Biệt",
+    ct_fam:  "👨‍👩‍👧 家屬 / Gia Đình", ct_doc: "🏥 醫療 / Y Tế",
+    l_fn: "姓名 / Họ Tên", l_frel: "關係 / Quan Hệ", l_ftel: "電話 / Điện Thoại",
+    l_dn: "主治醫師 / Bác Sĩ", l_dhosp: "醫院/診所 / Bệnh Viện", l_dtel: "電話 / Điện Thoại",
+    genTxt: "產生照顧計劃 / Tạo Kế Hoạch Chăm Sóc",
+    clearBtn: "🗑 Xóa",
+    t_vital: "生命徵象監測 / Dấu Hiệu Sinh Tồn",
+    l_bp:"血壓 / Huyết Áp (mmHg)", l_pulse:"脈搏 / Mạch (次/min)", l_temp:"體溫 / Nhiệt Độ (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Nhịp Thở (次/min)", l_sugar:"血糖 / Đường Huyết (mg/dL)",
+    l_vital_note:"監測備註 / Ghi Chú Theo Dõi",
+    vc_bp:"血壓 Huyết Áp", vc_pulse:"脈搏 Mạch", vc_temp:"體溫 Nhiệt Độ", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Nhịp Thở", vc_sugar:"血糖 Đường Huyết",
+    l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Chọn dấu hiệu sinh tồn cần theo dõi định kỳ",
+    vn_bp_lang: "Bình thường: Tâm thu <b>90–139</b> / Tâm trương <b>60–89 mmHg</b>",
+    vn_pulse_lang: "Bình thường: <b>60–100 lần/phút</b>",
+    vn_temp_lang: "Bình thường: Nách <b>36,1–37,2°C</b> / Tai <b>35,8–37,8°C</b>",
+    vn_spo2_lang: "Bình thường: <b>95–100 %</b> (&lt;95% cần theo dõi chặt chẽ)",
+    vn_resp_lang: "Bình thường: <b>12–20 lần/phút</b> (người cao tuổi đến 25)",
+    vn_sugar_lang: "Bình thường: Nhịn đói <b>70–100</b> / Sau ăn 2h <b>&lt;140 mg/dL</b>",
+    foot: "資料僅儲存於本裝置 · Dịch song ngữ bởi Google Dịch · Dữ liệu chỉ lưu trên thiết bị này",
+    planTitle: "照顧計劃 / Kế Hoạch Chăm Sóc",
+    printBtn: "🖨 列印 / In",
+    closeBtn: "關閉 / Đóng",
+    loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nĐang dịch (Google Dịch) & tạo kế hoạch chăm sóc…",
+    aiLabel: "AI 個人化照顧建議 / Khuyến Nghị Chăm Sóc AI",
+    secCare: "照顧重點 / Điểm Chăm Sóc",
+    secMed: "藥物清單 / Danh Sách Thuốc",
+    secEmg: "緊急聯絡 / Liên Lạc Khẩn Cấp",
+    secNote: "特殊注意 / Ghi Chú",
+    secLang: "Tiếng Việt",
+    medPh1: "藥名 / Tên Thuốc", medPh2: "劑量 / Liều", medPh3: "頻次 / Tần Suất",
+    disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nKế hoạch được tạo từ dữ liệu nhập; chăm sóc thực tế phải tuân theo hướng dẫn y tế.",
+    t_clean: "打掃清潔注意事項 / Ghi Chú Vệ Sinh",
+    l_clean_hd: "清潔照護注意項目（可複選）/ Chọn mục áp dụng",
+    l_clean_note: "清潔特殊說明 / Hướng Dẫn Vệ Sinh Bổ Sung"
+  }
+};
+
+/* ========================================================
+   Select Options (bilingual)
+======================================================== */
+const OPTS = {
+  sex: [
+    { v:"m",  zh:"男", id:"Laki-laki",    en:"Male",   vi:"Nam" },
+    { v:"f",  zh:"女", id:"Perempuan",    en:"Female", vi:"Nữ" }
+  ],
+  cohabit: [
+    { v:"yes_all",  zh:"家人全天同住",   id:"Keluarga ada seharian",      en:"Family lives in (all day)",  vi:"Gia đình ở cùng cả ngày" },
+    { v:"yes_part", zh:"家人部分時間在",  id:"Keluarga ada sebagian waktu", en:"Family present part-time",   vi:"Gia đình ở một phần ngày" },
+    { v:"no",       zh:"獨居（僅看護）",  id:"Tinggal sendiri (+ ART)",     en:"Lives alone (caregiver only)",vi:"Sống một mình (+ người chăm)"},
+    { v:"facility", zh:"住宿型機構",      id:"Panti / fasilitas",           en:"Residential facility",       vi:"Nhà dưỡng lão" }
+  ],
+  eatout: [
+    { v:"homecook",  zh:"家人自煮",       id:"Masak sendiri di rumah",   en:"Home-cooked by family",    vi:"Gia đình nấu tại nhà" },
+    { v:"caregiver", zh:"看護料理",       id:"Dimasak oleh ART",         en:"Cooked by caregiver",      vi:"Người chăm sóc nấu" },
+    { v:"delivery",  zh:"訂購外送餐",     id:"Pesan makanan delivery",   en:"Meal delivery service",    vi:"Đặt cơm giao tận nhà" },
+    { v:"eatout",    zh:"外食為主",       id:"Makan di luar",            en:"Mostly eating out",        vi:"Chủ yếu ăn ngoài" },
+    { v:"mix",       zh:"自煮與外食混合", id:"Campuran masak & beli",    en:"Mix of home & outside",    vi:"Kết hợp nấu và mua" }
+  ],
+  mob: [
+    { v:"indep", zh:"可自行行走",          id:"Bisa Berjalan",           en:"Can Walk Independently",  vi:"Đi được" },
+    { v:"cane",  zh:"需助行器/拐杖",       id:"Perlu Alat Bantu",        en:"Needs Walking Aid",       vi:"Cần dụng cụ hỗ trợ" },
+    { v:"hemi",  zh:"中風偏癱（單側無力）", id:"Hemiplegia (satu sisi)",  en:"Hemiplegia (one-sided)",  vi:"Liệt nửa người" },
+    { v:"quad",  zh:"四肢癱瘓／全癱",      id:"Quadriplegia / Lumpuh",   en:"Quadriplegia / Full Paralysis", vi:"Liệt tứ chi / Toàn thân" },
+    { v:"wheel", zh:"輪椅",               id:"Kursi Roda",              en:"Wheelchair",              vi:"Xe lăn" },
+    { v:"bed",   zh:"臥床",               id:"Di Ranjang",              en:"Bedridden",               vi:"Nằm giường" }
+  ],
+  cog: [
+    { v:"normal",   zh:"正常",    id:"Normal",             en:"Normal",          vi:"Bình thường" },
+    { v:"mild",     zh:"輕度退化", id:"Penurunan Ringan",   en:"Mild Decline",    vi:"Suy giảm nhẹ" },
+    { v:"dementia", zh:"失智",    id:"Demensia",           en:"Dementia",        vi:"Sa sút trí tuệ" }
+  ],
+  diet: [
+    { v:"normal",   zh:"一般飲食",   id:"Makan Biasa",        en:"Regular Diet",      vi:"Ăn thường" },
+    { v:"soft",     zh:"軟質飲食",   id:"Makanan Lunak",      en:"Soft Diet",         vi:"Thức ăn mềm" },
+    { v:"puree",    zh:"流質/管灌",  id:"Cair / Selang",      en:"Liquid / Tube Feed",vi:"Lỏng / Ống" },
+    { v:"diabetic", zh:"糖尿病飲食", id:"Diet Diabetes",      en:"Diabetic Diet",     vi:"Ăn tiểu đường" },
+    { v:"lowsalt",  zh:"低鹽飲食",   id:"Rendah Garam",       en:"Low-Salt Diet",     vi:"Ít muối" }
+  ]
+};
+
+/* ========================================================
+   Health Conditions + Care Advice
+======================================================== */
+const CONDS = [
+  {k:"hypertension", zh:"高血壓", id:"Hipertensi", en:"Hypertension", vi:"Cao huyết áp",
+   adv:{
+    zh:`【量測】每日早晚固定時間（起床後、就寢前）量血壓並記錄數值與日期；若收縮壓持續＞160或＜90mmHg立即通報家屬。
+【藥物】按時給降壓藥，切勿自行停藥或補服；若忘記服藥超過2小時，先詢問家屬再決定。
+【飲食】低鹽（每日≦5g）、少油少糖；避免濃茶、咖啡、酒精；多蔬菜水果。
+【日常】避免情緒激動、大聲爭吵；起身時動作緩慢（三段式：躺→坐→站各停30秒）；冬天注意保暖，避免突然冷熱刺激。
+【警示徵象】突然劇烈頭痛、視力模糊、口齒不清、單側無力→立即叫救護車。`,
+    id:`【Pengukuran】Ukur tekanan darah pagi dan malam pada waktu tetap; catat nilai dan tanggal; laporkan jika sistolik >160 atau <90 mmHg.
+【Obat】Berikan obat tepat waktu, jangan hentikan sendiri; konsultasi keluarga jika terlambat >2 jam.
+【Makan】Rendah garam (≤5g/hari), rendah lemak dan gula; hindari teh kental, kopi, alkohol.
+【Sehari-hari】Hindari emosi berlebihan; bangun perlahan (berbaring→duduk→berdiri, tahan 30 detik); jaga kehangatan di musim dingin.
+【Tanda Bahaya】Sakit kepala mendadak parah, penglihatan kabur, bicara tidak jelas, lemas satu sisi → segera panggil ambulans.`,
+    en:`【Monitoring】Measure BP morning and evening at fixed times; record values and dates; report if systolic >160 or <90 mmHg.
+【Medication】Give antihypertensives on schedule; never stop without advice; consult family if >2 hours late.
+【Diet】Low-salt (≤5g/day), low fat and sugar; avoid strong tea, coffee, alcohol.
+【Daily Care】Avoid agitation; rise slowly (3-stage: lie→sit→stand, pause 30 sec each); keep warm in cold weather.
+【Warning Signs】Sudden severe headache, blurred vision, slurred speech, one-sided weakness → call ambulance immediately.`,
+    vi:`【Đo lường】Đo huyết áp sáng và tối; ghi số liệu và ngày; báo ngay nếu HA tâm thu >160 hoặc <90.
+【Thuốc】Cho uống thuốc đúng giờ; không tự ý dừng; hỏi gia đình nếu trễ >2 giờ.
+【Ăn uống】Ít muối (≤5g/ngày), ít chất béo và đường; tránh trà đặc, cà phê, rượu.
+【Sinh hoạt】Tránh kích động; đứng dậy chậm (nằm→ngồi→đứng, dừng 30 giây); giữ ấm mùa lạnh.
+【Dấu hiệu nguy hiểm】Đau đầu đột ngột, mờ mắt, nói lắp, tê liệt một bên → gọi cấp cứu ngay.`}},
+
+  {k:"diabetes", zh:"糖尿病", id:"Diabetes", en:"Diabetes", vi:"Tiểu đường",
+   adv:{
+    zh:`【血糖監測】依醫囑時間（通常飯前/飯後2小時）監測血糖並記錄；血糖＜70mg/dL→低血糖緊急處理；血糖＞300mg/dL→通報就醫。
+【低血糖應對】症狀：冒汗、手抖、面色蒼白、意識不清。處理：意識清醒時給予15g糖（3顆方糖/半杯果汁），15分鐘後再量測；若意識不清勿強行餵食，立即叫救護車。
+【飲食控制】定時定量，每餐均衡（主食、蛋白質、蔬菜）；避免甜食、含糖飲料、精緻澱粉；若進食量減少須同步調整胰島素劑量（需與醫師確認）。
+【足部護理】每日沐浴後檢查雙腳：有無傷口、水泡、皮膚變色；穿合腳棉質襪子與寬鬆鞋；不可赤腳行走。
+【藥物注射】胰島素注射部位輪替（腹部、大腿、手臂），記錄注射時間與部位；藥物冷藏保存（2-8°C）。`,
+    id:`【Monitor Gula】Ukur gula darah sesuai jadwal dokter; catat; <70 mg/dL = hipoglikemia darurat; >300 mg/dL = lapor ke dokter.
+【Hipoglikemia】Gejala: berkeringat, gemetar, pucat, bingung. Jika sadar: beri 15g gula (3 kubus/setengah gelas jus), ukur ulang 15 menit kemudian. Jika tidak sadar: jangan paksa makan, segera panggil ambulans.
+【Diet】Makan teratur dan porsi seimbang; hindari makanan manis, minuman bergula, karbohidrat olahan.
+【Perawatan Kaki】Periksa kaki setiap hari setelah mandi: luka, lecet, perubahan warna; pakai kaus kaki katun dan sepatu longgar; jangan jalan tanpa alas.
+【Injeksi Insulin】Rotasi lokasi suntikan (perut, paha, lengan); catat waktu dan lokasi; simpan obat di kulkas 2-8°C.`,
+    en:`【Blood Sugar】Monitor per doctor's schedule; record values; <70 mg/dL = hypoglycemia emergency; >300 mg/dL = seek medical care.
+【Hypoglycemia Response】Symptoms: sweating, trembling, pallor, confusion. If conscious: give 15g sugar (3 cubes/half glass juice), recheck in 15 min. If unconscious: don't force feed, call ambulance.
+【Diet】Regular fixed-time meals with balanced portions; avoid sweets, sugary drinks, refined carbs.
+【Foot Care】Inspect both feet daily after bathing: wounds, blisters, discoloration; wear cotton socks and loose shoes; no barefoot walking.
+【Insulin Injection】Rotate injection sites (abdomen, thigh, arm); log time and site; refrigerate medication at 2-8°C.`,
+    vi:`【Đường huyết】Đo theo lịch bác sĩ; ghi chép; <70 mg/dL = xử lý hạ đường khẩn; >300 mg/dL = báo bác sĩ.
+【Hạ đường huyết】Triệu chứng: mồ hôi, run, tái mặt, lơ mơ. Còn tỉnh: cho 15g đường (3 viên/nửa ly nước trái cây), đo lại sau 15 phút. Mất ý thức: không ép ăn, gọi cấp cứu ngay.
+【Ăn uống】Ăn đúng giờ, đều đặn; tránh đồ ngọt, nước có đường, tinh bột tinh chế.
+【Chăm sóc bàn chân】Kiểm tra hai bàn chân mỗi ngày sau tắm; đi vớ bông và giày rộng; không đi chân trần.
+【Tiêm insulin】Luân chuyển vị trí tiêm; ghi chép thời gian và vị trí; bảo quản thuốc tủ lạnh 2-8°C.`}},
+
+  {k:"stroke", zh:"中風後（一般）", id:"Pasca Stroke (Umum)", en:"Post-Stroke (General)", vi:"Sau đột quỵ (Chung)",
+   adv:{
+    zh:`【日常照顧】協助患者自患側穿脫衣物（從患側開始穿、健側先脫），培養剩餘功能；鼓勵健側代償動作。
+【進食安全】採半坐臥位（床頭抬高30-45度）或坐正；食物置於健側；使用增稠劑調整食物濃稠度（遵醫囑）；進食後維持坐姿30分鐘，觀察有無嗆咳。
+【復健配合】依醫師或治療師指示執行被動/主動關節運動；每日2-3次，每次各關節活動5-10下；記錄患者反應與耐受度。
+【皮膚觀察】定時翻身（每2小時）；檢查患側皮膚有無壓紅、破皮；保持乾爽清潔。
+【警示徵象】突然口齒不清加重、患側症狀惡化、嚴重頭痛、意識改變→立即就醫。`,
+    id:`【Perawatan Harian】Bantu pasien mengenakan/melepas pakaian mulai dari sisi lemah (pakai dari sisi lemah, lepas dari sisi kuat).
+【Keamanan Makan】Posisi setengah duduk (kepala tempat tidur 30-45°); letakkan makanan di sisi kuat; gunakan pengental jika perlu; duduk 30 menit setelah makan.
+【Rehabilitasi】Lakukan latihan sendi aktif/pasif 2-3 kali/hari sesuai instruksi; catat respons pasien.
+【Kulit】Ubah posisi setiap 2 jam; periksa kulit sisi lemah; jaga kering dan bersih.
+【Tanda Bahaya】Bicara memburuk tiba-tiba, gejala sisi lemah memburuk, sakit kepala parah → segera ke dokter.`,
+    en:`【Daily Care】Help patient dress/undress starting from affected side (put on affected side first, remove strong side first).
+【Eating Safety】Semi-reclined position (30-45° head elevation); food on strong side; use thickeners if prescribed; remain seated 30 min after meals.
+【Rehab】Perform active/passive joint exercises 2-3 times/day per therapist; record patient response and tolerance.
+【Skin】Reposition every 2 hours; check affected side for skin redness; keep dry and clean.
+【Warning Signs】Sudden worsening of speech, worsening of affected-side symptoms, severe headache → seek medical care immediately.`,
+    vi:`【Chăm sóc】Giúp mặc/cởi quần áo bắt đầu từ bên yếu (mặc bên yếu trước, cởi bên mạnh trước).
+【Ăn uống an toàn】Tư thế nửa ngồi (đầu giường 30-45°); đặt thức ăn bên lành; dùng chất làm đặc nếu cần; ngồi 30 phút sau ăn.
+【Phục hồi】Tập vận động khớp 2-3 lần/ngày theo hướng dẫn; ghi chép phản ứng bệnh nhân.
+【Da】Xoay trở mỗi 2 giờ; kiểm tra da bên yếu; giữ khô và sạch.
+【Dấu hiệu nguy hiểm】Nói xấu hơn đột ngột, triệu chứng bên yếu nặng hơn, đau đầu dữ dội → đi cấp cứu ngay.`}},
+
+  {k:"hemiplegia", zh:"中風偏癱（單側癱瘓）", id:"Hemiplegia (Satu Sisi)", en:"Hemiplegia (One-Sided Paralysis)", vi:"Liệt nửa người do đột quỵ",
+   adv:{
+    zh:`【移位技巧】健側在下原則：翻身時先翻向健側；從床到輪椅先將輪椅置於健側約45度角，以健手握扶手協助支撐。移位過程全程看護陪同，防止跌倒。
+【患側保護】患側手臂使用懸吊帶或手臂支撐架防止肩關節脫位；患側腳踝保持中立位，使用踝足矯形器（AFO）預防足下垂；行走時注意患側腳踩穩，避免拖行。
+【穿脫衣物】穿衣：先穿患側衣袖/褲管→再穿健側；脫衣：先脫健側→後脫患側。穿有魔鬼氈的鞋子，避免綁帶鞋。
+【日常活動訓練】鼓勵患者用健側嘗試ADL（自我進食、翻身）；患側給予刺激（輕拍、按摩）防止忽略患側；職能治療師指示的自助輔具（湯匙、衣物鉤）應配合使用。
+【沐浴照護】坐式淋浴椅或浴盆椅；先洗健側再洗患側；地面放置防滑墊；看護全程守候不得離開浴室。
+【警示】患側突然失去所有感覺或痙攣加劇→立即通報醫師。`,
+    id:`【Teknik Pindah】Prinsip sisi kuat di bawah: balik ke sisi kuat dulu; dari tempat tidur ke kursi roda, letakkan kursi di sisi kuat sudut 45°, gunakan tangan kuat untuk berpegangan. Pendamping harus selalu ada.
+【Lindungi Sisi Lemah】Gunakan sling untuk lengan sisi lemah mencegah dislokasi bahu; jaga posisi netral pergelangan kaki dengan AFO mencegah drop foot; saat berjalan pastikan kaki sisi lemah menapak kuat.
+【Berpakaian】Memakai: mulai dari lengan/kaki sisi lemah → sisi kuat; melepas: sisi kuat dulu → sisi lemah. Pakai sepatu velcro.
+【Latihan ADL】Dorong pasien untuk menggunakan sisi kuat dalam aktivitas sehari-hari; berikan stimulasi sisi lemah (tepukan ringan, pijat) mencegah neglect; gunakan alat bantu sesuai anjuran terapis.
+【Mandi】Kursi mandi duduk; cuci sisi kuat dulu lalu sisi lemah; pasang keset anti-slip; pendamping harus selalu ada di kamar mandi.
+【Peringatan】Sisi lemah tiba-tiba kehilangan semua sensasi atau spasme meningkat → lapor dokter segera.`,
+    en:`【Transfer Technique】Strong-side-down principle: turn toward strong side first; bed-to-wheelchair: chair at 45° on strong side, use strong hand for support. Caregiver must be present throughout.
+【Protect Affected Side】Use arm sling or support to prevent shoulder dislocation; keep ankle in neutral with AFO to prevent foot drop; ensure affected foot plants firmly when walking.
+【Dressing】Put on: affected sleeve/pant leg first → then strong side; remove: strong side first → affected side last. Use velcro shoes.
+【ADL Training】Encourage patient to attempt ADLs with strong side; stimulate affected side (gentle tapping, massage) to prevent neglect; use OT-recommended adaptive equipment.
+【Bathing】Use shower chair or tub bench; wash strong side first then affected; use non-slip mat; caregiver must stay in bathroom throughout.
+【Warning】Sudden complete loss of sensation on affected side or worsening spasm → report to doctor immediately.`,
+    vi:`【Kỹ thuật di chuyển】Nguyên tắc bên mạnh ở dưới: lăn về bên mạnh trước; từ giường sang xe lăn: đặt xe ở bên mạnh 45°, dùng tay mạnh để bám. Người chăm sóc phải luôn có mặt.
+【Bảo vệ bên yếu】Dùng đai treo tay tránh trật khớp vai; giữ cổ chân trung tính với AFO tránh bàn chân rũ; khi đi đảm bảo bàn chân bên yếu tiếp đất chắc chắn.
+【Mặc quần áo】Mặc: bắt đầu từ tay/ống quần bên yếu → bên mạnh; cởi: bên mạnh trước → bên yếu sau. Dùng giày dán velcro.
+【Tập ADL】Khuyến khích bệnh nhân tự làm bằng tay mạnh; kích thích bên yếu (vỗ nhẹ, xoa bóp) để tránh bỏ quên; dùng dụng cụ thích nghi theo hướng dẫn trị liệu.
+【Tắm rửa】Dùng ghế tắm; rửa bên mạnh trước rồi bên yếu; trải thảm chống trượt; người chăm sóc không được rời phòng tắm.
+【Cảnh báo】Bên yếu đột ngột mất hoàn toàn cảm giác hoặc co cứng tăng → báo bác sĩ ngay.`}},
+
+  {k:"quadriplegia", zh:"四肢癱瘓／全癱", id:"Quadriplegia / Lumpuh Total", en:"Quadriplegia / Full Paralysis", vi:"Liệt tứ chi / Toàn thân",
+   adv:{
+    zh:`【呼吸管理】全癱患者（尤其C1-C4頸髓損傷）可能需呼吸器輔助；觀察呼吸頻率、有無呼吸費力；定時協助胸腔擴張（深呼吸運動）；備妥抽痰設備（若有醫囑）。
+【體位管理】每2小時翻身一次（仰→右→仰→左交替），使用翻身枕固定；臥床時保持各關節中立位；使用氣墊床或減壓床墊防壓瘡；每次翻身後記錄皮膚狀況。
+【自主神經反射異常（AD）】C6以上損傷患者特有，症狀：突然嚴重高血壓、頭痛、皮膚發紅潮熱、大量流汗。處理：立即坐起（若可）、查找並移除刺激源（如膀胱脹滿、糞便嵌頓、衣物過緊）→若無法緩解立即叫救護車。
+【排泄照護】膀胱管理（導尿管或間歇導尿）：保持清潔、記錄尿量及顏色；腸道管理：依醫囑執行腸道訓練、使用浣腸或栓劑；記錄排便日期與性狀。
+【肢體照護】每日被動關節運動（各關節屈伸10下）防攣縮；使用手腳矯形器（夜間）；定期由物理治療師評估肌張力。
+【心理支持】全癱患者情緒壓力大，照顧者給予耐心陪伴；用眼神確認與回應；與家屬保持溝通，反映患者情緒變化。`,
+    id:`【Manajemen Napas】Pasien quadriplegia (terutama C1-C4) mungkin butuh ventilator; pantau frekuensi napas dan tanda sesak; bantu ekspansi dada secara berkala; siapkan peralatan suction jika diperlukan.
+【Posisi】Ubah posisi setiap 2 jam (terlentang→kanan→terlentang→kiri); gunakan bantal penyangga; posisi sendi netral; gunakan kasur anti-dekubitus; catat kondisi kulit setiap kali.
+【Disrefleksia Otonom (AD)】Khusus cedera C6 ke atas: gejala tekanan darah sangat tinggi tiba-tiba, sakit kepala, kulit merah, banyak keringat. Tindakan: segera dudukkan (jika bisa), cari dan hilangkan penyebab (kandung kemih penuh, sembelit, pakaian ketat) → jika tidak membaik panggil ambulans.
+【Eliminasi】Manajemen kandung kemih (kateter): jaga kebersihan, catat volume dan warna urin; manajemen usus: lakukan program usus sesuai instruksi dokter; catat tanggal dan karakteristik BAB.
+【Anggota Tubuh】Latihan sendi pasif harian (10 kali per sendi) mencegah kontraktur; gunakan orthosis tangan/kaki; evaluasi tonus otot rutin oleh fisioterapis.
+【Dukungan Psikologis】Pasien menghadapi tekanan emosional besar; berikan pendampingan sabar; konfirmasi dengan kontak mata; komunikasikan perubahan emosi pasien ke keluarga.`,
+    en:`【Breathing】Quadriplegic patients (especially C1-C4 SCI) may need ventilator; monitor breathing rate and signs of distress; assist chest expansion exercises; have suction equipment ready if prescribed.
+【Positioning】Reposition every 2 hours (supine→right→supine→left); use positioning pillows; maintain neutral joint positions; use pressure-relief mattress; record skin condition each turn.
+【Autonomic Dysreflexia (AD)】For injuries C6 and above: sudden severe hypertension, headache, skin flushing, heavy sweating. Action: sit up immediately (if possible), find and remove trigger (full bladder, impacted stool, tight clothing) → if unresolved call ambulance.
+【Elimination】Bladder management (catheter): keep clean, record urine volume and color; bowel program per doctor's orders; record date and stool characteristics.
+【Limb Care】Daily passive range-of-motion exercises (10 reps per joint) to prevent contractures; use hand/foot orthoses overnight; regular tone assessment by physiotherapist.
+【Emotional Support】Patient faces enormous emotional stress; give patient companionship; use eye contact to confirm and respond; communicate emotional changes to family.`,
+    vi:`【Hô hấp】Bệnh nhân liệt tứ chi (đặc biệt C1-C4) có thể cần máy thở; theo dõi nhịp thở và dấu hiệu khó thở; hỗ trợ mở rộng lồng ngực; có thiết bị hút đờm nếu cần.
+【Tư thế】Xoay trở mỗi 2 giờ (nằm ngửa→phải→ngửa→trái); dùng gối đỡ; giữ khớp ở tư thế trung tính; dùng đệm giảm áp; ghi da mỗi lần xoay.
+【Phản xạ thần kinh tự chủ (AD)】Tổn thương C6 trở lên: huyết áp tăng vọt đột ngột, đau đầu, da đỏ bừng, đổ mồ hôi nhiều. Xử lý: ngồi dậy ngay (nếu được), tìm và loại bỏ nguyên nhân (bàng quang đầy, táo bón, quần áo chật) → không cải thiện: gọi cấp cứu.
+【Bài tiết】Quản lý bàng quang (ống thông): giữ sạch, ghi lượng và màu nước tiểu; chương trình đại tràng theo y lệnh; ghi ngày và tính chất phân.
+【Chăm sóc chi】Tập vận động thụ động hàng ngày (10 lần/khớp) tránh co rút; dùng nẹp chỉnh hình; đánh giá trương lực cơ định kỳ.
+【Hỗ trợ tâm lý】Bệnh nhân chịu áp lực tinh thần lớn; đồng hành kiên nhẫn; dùng ánh mắt xác nhận và phản hồi; thông báo thay đổi cảm xúc cho gia đình.`}},
+
+  {k:"aphasia", zh:"失語症", id:"Afasia", en:"Aphasia", vi:"Mất ngôn ngữ (Aphasia)",
+   adv:{
+    zh:`【溝通方式】說話時面對患者、語速放慢、一次一個問題；使用簡短句子（「你要水嗎？」而非「你想喝一點水嗎，還是要別的？」）；允許足夠等待時間，不催促、不代替患者發言。
+【輔助溝通工具】準備溝通板（圖片+文字：疼痛、廁所、水、食物、冷、熱等）；使用「是/否」手勢或卡片確認需求；若患者可書寫，提供紙筆或白板；語言治療師建議的APP或溝通輔具要配合使用。
+【照顧者注意事項】表達式失語（聽得懂但說不出來）：語速慢但不需要大聲說；接受性失語（說不出也聽不懂）：配合肢體動作、手勢、表情；混合型：兩者兼用。勿因患者無法回應就減少溝通，需每日主動與患者互動。
+【情緒支持】失語症患者容易沮喪、焦慮；給予正向鼓勵，稱讚每一次進步；出現哭泣或暴怒時，安撫語氣輕聲說「我知道，我在這裡」。
+【安全照護】確認患者理解指令再執行操作；沐浴、移位前口頭說明動作（「我現在要幫你翻身了」），給予心理準備。
+【語言復健】配合語言治療師的練習（口腔運動、發音練習）；每日15-30分鐘；若患者抗拒，尊重休息，隔時再試。`,
+    id:`【Cara Berkomunikasi】Hadap pasien saat bicara, berbicara pelan, satu pertanyaan sekali; gunakan kalimat pendek ("Mau minum air?"); berikan waktu tunggu yang cukup, jangan terburu-buru atau menjawab untuk pasien.
+【Alat Bantu Komunikasi】Siapkan papan komunikasi (gambar + teks: sakit, toilet, air, makan, dingin, panas); gunakan gestur atau kartu Ya/Tidak; jika pasien bisa menulis, sediakan kertas/papan tulis.
+【Perhatian Pengasuh】Afasia ekspresif (mengerti tapi sulit bicara): bicara pelan, tidak perlu keras; afasia reseptif: gunakan gestur, ekspresi wajah; jangan kurangi komunikasi meski pasien tidak merespons.
+【Dukungan Emosional】Pasien afasia mudah frustrasi dan cemas; berikan pujian untuk setiap kemajuan; saat menangis atau marah: tenangkan dengan suara lembut.
+【Keamanan】Konfirmasi pemahaman sebelum melakukan tindakan; jelaskan setiap prosedur sebelum dilakukan.
+【Rehabilitasi Bahasa】Ikuti program latihan dari terapis bicara; 15-30 menit per hari; hargai jika pasien kelelahan, coba lagi nanti.`,
+    en:`【Communication Method】Face patient when speaking; speak slowly; ask one question at a time; use short sentences ("Do you want water?"); allow enough waiting time without rushing or answering for patient.
+【Augmentative Communication】Prepare communication board (pictures + text: pain, toilet, water, food, cold, hot); use yes/no gestures or cards; provide paper/whiteboard if patient can write; use AAC devices as recommended by speech therapist.
+【Caregiver Notes】Expressive aphasia (understands but can't speak): speak slowly, not loudly; receptive aphasia (can't understand): use gestures and facial expressions; don't reduce communication just because patient can't respond.
+【Emotional Support】Aphasia patients are prone to frustration and anxiety; give positive encouragement for every progress; when patient cries or becomes angry: say gently "I know, I'm here."
+【Safe Care】Confirm patient understands instructions before proceeding; verbally explain each action before doing it ("I'm going to help you turn over now").
+【Language Rehab】Follow speech therapist's exercises; 15-30 min/day; respect patient's fatigue and try again later.`,
+    vi:`【Cách giao tiếp】Nhìn vào mặt bệnh nhân khi nói; nói chậm; hỏi từng câu một; dùng câu ngắn ("Bạn muốn uống nước không?"); cho đủ thời gian chờ, không nói thay bệnh nhân.
+【Công cụ giao tiếp hỗ trợ】Chuẩn bị bảng giao tiếp (hình + chữ: đau, nhà vệ sinh, nước, ăn, lạnh, nóng); dùng cử chỉ hoặc thẻ Có/Không; cung cấp giấy/bảng trắng nếu bệnh nhân viết được.
+【Lưu ý người chăm sóc】Mất ngôn ngữ biểu đạt (hiểu nhưng không nói được): nói chậm, không cần to; mất ngôn ngữ tiếp nhận: dùng cử chỉ và nét mặt; không giảm giao tiếp dù bệnh nhân không phản hồi.
+【Hỗ trợ cảm xúc】Bệnh nhân dễ nản lòng và lo âu; khen ngợi mỗi tiến bộ; khi khóc hoặc nổi giận: nói nhẹ nhàng "Tôi hiểu, tôi đây."
+【Chăm sóc an toàn】Xác nhận bệnh nhân hiểu trước khi thực hiện; giải thích từng động tác trước khi làm.
+【Phục hồi ngôn ngữ】Theo chương trình của nhà trị liệu ngôn ngữ; 15-30 phút/ngày; tôn trọng nếu mệt mỏi và thử lại sau.`}},
+
+  {k:"dementia", zh:"失智症", id:"Demensia", en:"Dementia", vi:"Sa sút trí tuệ",
+   adv:{
+    zh:`【環境安全】環境簡單無雜物；門窗加裝警示鈴或門鎖（防走失）；瓦斯爐旁加裝瓦斯自動切斷閥；浴室放防滑墊、馬桶加扶手；危險物品（刀具、藥物、清潔劑）上鎖收藏。
+【作息規律】每日固定時間起床、用餐、活動、就寢；避免突然改變環境或作息；保留有意義的日常活動（折毛巾、排扣子）維持認知功能。
+【溝通技巧】使用簡短、正向語句；不糾正錯誤記憶（不說「那是假的」）；遊走或躁動時轉移注意力（帶去另一房間、給喜歡的物品）。
+【行為問題】夜間錯亂（日落症候群）：白天增加活動量、傍晚減少刺激；重複行為：耐心回應，不責備；拒絕照顧：提供選擇而非命令（「要先洗臉還是先刷牙？」）。
+【安全識別】隨身佩戴寫有姓名、地址、聯絡電話的識別卡或手環；登記GPS追蹤設備（如有）。
+【照顧者自照】記錄行為日誌，交班時清楚說明；若照顧者感到身心疲憊，主動告知家屬尋求支援。`,
+    id:`【Keamanan Lingkungan】Lingkungan sederhana dan rapi; alarm/kunci di pintu jendela (cegah kabur); detektor gas otomatis; keset anti-slip kamar mandi; kunci benda berbahaya.
+【Rutinitas】Waktu bangun, makan, aktivitas, tidur tetap setiap hari; hindari perubahan mendadak; pertahankan aktivitas bermakna untuk fungsi kognitif.
+【Teknik Komunikasi】Kalimat pendek dan positif; jangan koreksi ingatan yang salah; alihkan perhatian saat gelisah.
+【Masalah Perilaku】Kebingungan malam (sundowning): tambah aktivitas siang, kurangi stimulasi sore; perilaku berulang: respons sabar; penolakan perawatan: berikan pilihan ("Cuci muka dulu atau sikat gigi dulu?").
+【Identitas】Kenakan kartu identitas/gelang dengan nama, alamat, nomor telepon; daftarkan GPS jika ada.
+【Perawatan Diri Pengasuh】Catat jurnal perilaku; informasikan keluarga jika kelelahan.`,
+    en:`【Environmental Safety】Keep space simple and uncluttered; door/window alarms or locks (prevent wandering); automatic gas shutoff; bathroom non-slip mat; lock up dangerous items.
+【Routine】Fixed daily schedule for rising, meals, activities, and sleep; avoid sudden environment changes; maintain meaningful daily activities for cognitive stimulation.
+【Communication】Use short positive sentences; don't correct false memories; redirect when agitated (move to another room, give a favorite item).
+【Behavioral Issues】Nighttime confusion (sundowning): increase daytime activity, reduce evening stimulation; repetitive behavior: respond patiently; care refusal: offer choices rather than commands.
+【Identification】Wear ID card/bracelet with name, address, and contact number; register GPS tracker if available.
+【Caregiver Self-Care】Keep behavioral log; inform family when exhausted.`,
+    vi:`【An toàn môi trường】Giữ không gian đơn giản; chuông/khóa cửa sổ cửa ra vào (ngừa đi lạc); van gas tự ngắt; thảm chống trượt nhà tắm; khóa đồ nguy hiểm.
+【Sinh hoạt đều đặn】Lịch cố định mỗi ngày; tránh thay đổi đột ngột; duy trì hoạt động có ý nghĩa.
+【Giao tiếp】Câu ngắn, tích cực; không sửa ký ức sai; chuyển hướng chú ý khi kích động.
+【Vấn đề hành vi】Rối loạn đêm (sundowning): tăng hoạt động ban ngày, giảm kích thích chiều tối; hành vi lặp: phản hồi kiên nhẫn; từ chối chăm sóc: đưa ra lựa chọn.
+【Nhận dạng】Đeo thẻ/vòng tay ghi tên, địa chỉ, số điện thoại; đăng ký GPS nếu có.
+【Tự chăm sóc người chăm】Ghi nhật ký hành vi; báo gia đình khi mệt mỏi.`}},
+
+  {k:"pressure", zh:"壓瘡風險", id:"Risiko Luka Tekan", en:"Pressure Sore Risk", vi:"Nguy cơ loét tỳ đè",
+   adv:{
+    zh:`【翻身計劃】每2小時翻身一次（記錄時間：_:_翻向右側 → _:_翻向仰臥 → _:_翻向左側）；使用翻身枕/楔形枕固定姿勢；輪椅患者每30分鐘減壓（撐起臀部10秒或傾斜椅背）。
+【皮膚評估】每次翻身時檢查骨突部位：薦骨、尾骨、髖骨、腳跟、腳踝、肘部、肩胛骨；出現持續紅、破皮、有水泡或組織壞死→立即通報護理師並記錄。
+【皮膚護理】保持皮膚乾爽：失禁後立即清洗、擦乾、塗保護霜（如氧化鋅軟膏）；避免按摩骨突紅色部位（會加重傷害）；使用透氣防壓瘡敷料（遵醫囑）。
+【床墊設備】氣墊床交替充氣型最佳；定期檢查氣墊充氣是否正常；床單保持乾爽無皺摺。
+【營養】充足蛋白質（每日1.2-1.5g/kg體重）、維生素C和鋅有助傷口癒合；觀察食慾與進食量，若不足通報營養師。`,
+    id:`【Jadwal Balik Posisi】Ubah posisi setiap 2 jam (catat waktu); gunakan bantal penyangga; pasien kursi roda: angkat pantat 10 detik setiap 30 menit.
+【Penilaian Kulit】Periksa tonjolan tulang setiap kali mengubah posisi; kemerahan menetap, lecet, lepuhan, atau jaringan mati → lapor perawat segera dan dokumentasikan.
+【Perawatan Kulit】Jaga kulit kering: bersihkan segera setelah inkontinensia, oleskan krim pelindung; hindari memijat area tulang yang memerah; gunakan balutan anti-dekubitus sesuai anjuran.
+【Kasur】Kasur udara alternating paling baik; periksa tekanan kasur secara berkala; sprei tetap kering dan bebas kerutan.
+【Nutrisi】Protein cukup (1,2-1,5g/kg/hari), vitamin C dan zinc membantu penyembuhan; pantau nafsu makan, lapor ahli gizi jika tidak mencukupi.`,
+    en:`【Repositioning Schedule】Reposition every 2 hours (record times); use positioning pillows; wheelchair patients: relieve pressure every 30 min (push-ups 10 sec or tilt backrest).
+【Skin Assessment】Check bony prominences each turn: sacrum, coccyx, hips, heels, ankles, elbows, scapulae; persistent redness, skin breakdown, blisters, or tissue death → report to nurse immediately and document.
+【Skin Care】Keep skin dry: clean immediately after incontinence, apply barrier cream (zinc oxide); do not massage reddened bony prominences; use pressure-relief dressings per orders.
+【Mattress】Alternating air mattress is best; check inflation regularly; keep sheets dry and wrinkle-free.
+【Nutrition】Adequate protein (1.2-1.5g/kg/day), vitamin C and zinc support healing; monitor appetite; report to dietitian if intake is insufficient.`,
+    vi:`【Lịch xoay trở】Mỗi 2 giờ (ghi thời gian); dùng gối đỡ; bệnh nhân xe lăn: nâng mông 10 giây mỗi 30 phút.
+【Đánh giá da】Kiểm tra chỗ xương lồi mỗi lần xoay; đỏ kéo dài, trầy da, bóng nước, hoại tử → báo y tá ngay và ghi chép.
+【Chăm sóc da】Giữ da khô: làm sạch ngay sau tiểu tiện, thoa kem bảo vệ (kẽm oxit); không xoa bóp chỗ đỏ; dùng băng chống loét theo y lệnh.
+【Đệm】Đệm hơi xen kẽ là tốt nhất; kiểm tra bơm định kỳ; ga trải giường khô và không nhăn.
+【Dinh dưỡng】Đủ protein (1,2-1,5g/kg/ngày), vitamin C và kẽm hỗ trợ lành vết thương; theo dõi ăn uống; báo dinh dưỡng nếu không đủ.`}},
+
+  {k:"ngt", zh:"🟡 鼻胃管 (NG Tube)", id:"🟡 Selang NGT", en:"🟡 Nasogastric Tube (NGT)", vi:"🟡 Ống Thông Dạ Dày (NG)",
+   adv:{
+    zh:`【灌食前確認】每次灌食前必須確認管路位置：抽取胃液確認pH≦5（酸性），或以注射器打入20ml空氣後聽診左上腹聲音；若無法確認位置，禁止灌食並立即通報護理師。
+【患者姿勢】灌食全程保持半坐臥位：床頭抬高≥30度（理想45度）；灌食後維持此姿勢至少30分鐘，預防嗆咳與逆流。
+【灌食速度與量】採重力滴注（不可用力推）；每次灌食量依醫囑（通常200-400ml）；速度過快可能導致嘔吐、腹脹或吸入性肺炎。灌食間隔依醫囑（通常每4-6小時一次）。
+【管路維護】每班清潔鼻孔及管路外端；更換固定膠布（若鬆脫或沾污）；確認管路刻度標記未移位；管路每隔4-6週由護理師更換，請記錄更換日期。
+【觀察重點】灌食後觀察30分鐘：有無嘔吐、腹脹、呼吸急促、臉色發白；若出現劇烈咳嗽或嗆咳，立即停止灌食並讓患者側臥。
+【警示徵象】管路滑出或刻度改變、胃液呈咖啡色或大量血性→立即停止灌食並通報醫護；疑似誤入肺部（患者呼吸困難加劇）→叫救護車。`,
+    id:`【Konfirmasi Sebelum Makan】Setiap kali sebelum pemberian makan: aspirasi cairan lambung (pH≤5) atau injeksi 20ml udara dan auskultasi kiri atas perut; jika posisi tidak bisa dikonfirmasi, jangan beri makan—lapor perawat segera.
+【Posisi Pasien】Posisi setengah duduk selama pemberian makan (kepala ≥30°, idealnya 45°); pertahankan minimal 30 menit setelah selesai untuk mencegah aspirasi.
+【Kecepatan & Volume】Gunakan gravitasi (jangan didorong); volume sesuai instruksi dokter (biasanya 200-400ml/kali); terlalu cepat menyebabkan muntah, kembung, atau pneumonia aspirasi.
+【Perawatan Selang】Bersihkan lubang hidung dan ujung luar selang setiap shift; ganti plester jika longgar atau kotor; periksa tanda skala belum bergeser; selang diganti setiap 4-6 minggu oleh perawat—catat tanggalnya.
+【Pemantauan】Amati 30 menit setelah makan: muntah, kembung, napas cepat, wajah pucat; batuk keras atau tersedak → hentikan dan baringkan ke sisi.
+【Tanda Bahaya】Selang keluar atau skala bergeser, cairan lambung kecoklatan/berdarah → hentikan dan lapor; napas makin sesak (diduga masuk paru) → panggil ambulans.`,
+    en:`【Pre-Feed Verification】Before every feeding: aspirate stomach fluid (pH≤5) or inject 20ml air and auscultate left upper abdomen; if position cannot be confirmed, do NOT feed—report to nurse immediately.
+【Patient Position】Semi-reclined at ≥30° (ideally 45°) throughout feeding; maintain for at least 30 minutes after to prevent aspiration.
+【Rate & Volume】Use gravity drip only (never force-push); volume per doctor's orders (usually 200-400ml/feed); too fast risks vomiting, distension, or aspiration pneumonia.
+【Tube Maintenance】Clean nostril and outer tube end each shift; replace tape if loose or soiled; confirm position markings are unchanged; tube replaced every 4-6 weeks by nurse—record date.
+【Monitoring】Watch 30 min post-feed: vomiting, distension, rapid breathing, pallor; severe coughing/choking → stop and turn patient on side.
+【Warning Signs】Tube displaced or marking changed, brown/bloody aspirate → stop and report; increasing respiratory distress (suspected pulmonary entry) → call ambulance.`,
+    vi:`【Xác nhận trước khi cho ăn】Trước mỗi lần bơm thức ăn: hút dịch dạ dày (pH≤5) hoặc bơm 20ml khí và nghe vùng bụng trên trái; nếu không xác nhận được vị trí → KHÔNG cho ăn, báo y tá ngay.
+【Tư thế bệnh nhân】Đầu giường ≥30° (lý tưởng 45°) trong suốt quá trình cho ăn; duy trì ít nhất 30 phút sau khi xong để tránh sặc.
+【Tốc độ & lượng】Nhỏ giọt bằng trọng lực (không đẩy mạnh); lượng theo y lệnh (thường 200-400ml/lần); quá nhanh gây nôn, chướng bụng, viêm phổi hít.
+【Chăm sóc ống】Vệ sinh lỗ mũi và đầu ngoài ống mỗi ca; thay băng dính nếu lỏng hoặc bẩn; kiểm tra vạch đánh dấu chưa di chuyển; ống thay mỗi 4-6 tuần bởi y tá—ghi ngày.
+【Theo dõi】Quan sát 30 phút sau cho ăn: nôn, chướng, thở nhanh, tái mặt; ho mạnh/sặc → dừng và nghiêng bệnh nhân sang một bên.
+【Dấu hiệu nguy hiểm】Ống bị tuột hoặc vạch thay đổi, dịch hút có màu nâu/máu → dừng và báo ngay; khó thở tăng (nghi vào phổi) → gọi cấp cứu.`}},
+
+  {k:"foley", zh:"🔵 尿道導尿管 (Foley)", id:"🔵 Kateter Urin (Foley)", en:"🔵 Urinary Catheter (Foley)", vi:"🔵 Ống Thông Tiểu (Foley)",
+   adv:{
+    zh:`【集尿袋管理】集尿袋必須隨時保持低於膀胱位置（避免尿液逆流造成感染）；移位、起身或搬運時務必夾管，防止逆流；集尿袋不可置於地板上；每次清空後記錄尿量與時間。
+【尿道口清潔】每日至少一次（沐浴時）清潔尿道口：從尿道口向外清潔，勿來回擦拭；使用溫水或醫囑消毒液；女性患者由前往後；清潔後輕輕擦乾，勿用力摩擦。
+【管路固定】男性：固定於大腿內側或下腹；女性：固定於大腿內側；確保導管有適當彎曲弧度，避免拉扯傷害尿道；每班檢查固定膠布是否鬆脫。
+【尿液觀察】每班記錄尿量（正常成人每小時≥0.5ml/kg）；觀察顏色：正常淡黃色，若出現深色、混濁、血尿、有沉澱物→通報醫護；觀察有無異味、發燒、恥骨上方疼痛（泌尿道感染徵象）。
+【預防感染】保持引流管通暢，避免扭折；不可隨意打開密閉系統（集尿袋與管路連接處）；多補充水分（依醫囑）；更換導尿管日期由護理師決定，請記錄。
+【警示徵象】超過4小時無尿（可能阻塞）、出現發燒（>38°C）、患者訴說強烈疼痛或灼熱感、尿液呈鮮紅血色→立即通報醫護。`,
+    id:`【Manajemen Kantong Urin】Kantong urin harus selalu lebih rendah dari kandung kemih (cegah refluks); klem selang saat memindahkan pasien; jangan letakkan di lantai; catat volume dan waktu setiap pengosongan.
+【Perawatan Lubang Uretra】Minimal sekali sehari (saat mandi): bersihkan dari lubang ke luar, jangan bolak-balik; gunakan air hangat atau disinfektan sesuai instruksi; perempuan dari depan ke belakang; keringkan lembut setelah itu.
+【Fiksasi Selang】Pria: fiksasi di paha bagian dalam atau bawah perut; wanita: di paha bagian dalam; pastikan selang melengkung dengan baik (tidak tertarik); periksa plester setiap shift.
+【Pemantauan Urin】Catat volume per shift (normal ≥0,5ml/kg/jam); warna: kuning muda normal; gelap, keruh, hematuria, sedimen → lapor; amati bau, demam, nyeri suprapubik (tanda ISK).
+【Pencegahan Infeksi】Jaga aliran lancar, hindari tekukan; jangan buka sistem tertutup; perbanyak asupan cairan (sesuai anjuran); tanggal penggantian kateter ditentukan perawat—catat.
+【Tanda Bahaya】Tidak ada urin >4 jam (mungkin tersumbat), demam >38°C, nyeri/panas hebat, urin merah cerah → lapor segera.`,
+    en:`【Drainage Bag Management】Bag must always be below bladder level (prevents backflow infection); clamp during transfers; never place on the floor; record volume and time at each emptying.
+【Urethral Meatus Care】At least once daily (during bathing): clean from meatus outward, no back-and-forth; use warm water or prescribed antiseptic; females: front to back; pat dry gently.
+【Tube Securing】Male: secure to inner thigh or lower abdomen; female: inner thigh; ensure natural loop to avoid urethral traction; check tape every shift.
+【Urine Observation】Record output each shift (normal adult ≥0.5ml/kg/hr); normal color is light yellow; dark, cloudy, hematuria, sediment → report; note odor, fever, suprapubic pain (UTI signs).
+【Infection Prevention】Keep drainage unobstructed; never open the closed drainage system; encourage fluid intake (per orders); catheter replacement date determined by nurse—document.
+【Warning Signs】No urine >4 hours (possible obstruction), fever >38°C, severe pain/burning, bright red urine → report to nurse immediately.`,
+    vi:`【Quản lý túi nước tiểu】Túi phải luôn thấp hơn bàng quang (tránh trào ngược); kẹp ống khi di chuyển bệnh nhân; không đặt trên sàn; ghi lượng và thời gian mỗi lần đổ.
+【Vệ sinh lỗ niệu đạo】Ít nhất một lần/ngày (khi tắm): lau từ lỗ ra ngoài, không lau qua lại; dùng nước ấm hoặc dung dịch sát khuẩn theo y lệnh; phụ nữ: từ trước ra sau; lau khô nhẹ nhàng.
+【Cố định ống】Nam: cố định ở mặt trong đùi hoặc bụng dưới; nữ: mặt trong đùi; đảm bảo ống có đoạn cong tự nhiên, không kéo căng; kiểm tra băng dính mỗi ca.
+【Theo dõi nước tiểu】Ghi lượng mỗi ca (bình thường ≥0,5ml/kg/giờ); màu vàng nhạt là bình thường; sẫm màu, đục, có máu, cặn → báo; chú ý mùi, sốt, đau vùng mu (dấu hiệu nhiễm trùng tiểu).
+【Phòng nhiễm trùng】Giữ dòng chảy thông; không mở hệ thống kín; uống đủ nước (theo y lệnh); ngày thay ống do y tá quyết định—ghi lại.
+【Dấu hiệu nguy hiểm】Không có nước tiểu >4 giờ (có thể tắc), sốt >38°C, đau/rát mạnh, nước tiểu đỏ tươi → báo y tá ngay.`}},
+
+  {k:"trach", zh:"🔴 氣切管 (Tracheostomy)", id:"🔴 Trakeostomi", en:"🔴 Tracheostomy Tube", vi:"🔴 Mở Khí Quản",
+   adv:{
+    zh:`【緊急準備】床邊必須隨時備妥：同型號備用氣切管一支、開口器/擴張器、抽痰設備（抽痰管、抽吸機）、氧氣、手電筒。氣切管意外滑脫屬緊急狀況，立即叫救護車並嘗試暫時以乾淨布蓋住氣切口維持通道。
+【抽痰照護】抽痰指徵：呼吸有痰音、患者無法有效咳嗽、血氧下降。抽痰前先給100%氧氣30秒；抽痰管選擇不超過氣切管內徑的一半；插入時不施壓，退出時才施壓轉動；每次抽痰時間≦15秒；操作全程無菌技術。
+【氣切口護理】每日更換氣切紗布（若沾濕或污染隨時更換）；清潔氣切口周圍皮膚（觀察有無紅腫、肉芽組織、分泌物異常）；內管每日取出清潔（依廠牌而異），用生理食鹽水沖洗後晾乾回置；固定帶鬆緊度：可伸入一到兩根手指為宜。
+【濕化與霧化】氣切患者喪失鼻腔濕化功能，需使用人工鼻（HME）或霧化器；定時補充水分；觀察痰液性狀（正常為白色稀薄，若變黃綠黏稠可能感染）。
+【觀察重點】每班記錄：呼吸頻率、血氧（SpO₂）、痰液量與性狀、氣切口狀況；若血氧<90%、呼吸費力或有喘鳴音→立即通報。
+【警示徵象】氣切管滑脫、呼吸道完全阻塞（無法抽痰也無法通氣）、大量出血→立即叫救護車。`,
+    id:`【Persiapan Darurat】Di samping tempat tidur selalu sediakan: selang trakeostomi cadangan (ukuran sama), dilator/obturator, peralatan suction, oksigen, senter. Selang trakeostomi yang lepas = darurat → panggil ambulans; tutup sementara lubang dengan kain bersih.
+【Perawatan Suction】Indikasi: suara napas berbunyi, pasien tidak bisa batuk efektif, SpO₂ turun. Sebelum suction: beri O₂ 100% selama 30 detik; gunakan kateter suction ≤ ½ diameter dalam selang; masukkan tanpa tekanan, hisap saat ditarik sambil diputar; ≤15 detik per tindakan; teknik steril penuh.
+【Perawatan Stoma】Ganti kasa trakeostomi setiap hari (segera jika basah/kotor); bersihkan kulit sekitar stoma (amati kemerahan, granulasi, sekret abnormal); bersihkan kanul dalam setiap hari—bilas dengan saline, keringkan, pasang kembali; tali pengikat: bisa dimasukkan 1-2 jari.
+【Humidifikasi】Pasien trakeostomi kehilangan fungsi humidifikasi hidung; gunakan HME (artificial nose) atau nebulizer; cukupi cairan; amati sputum (normal putih encer; kuning-hijau kental = kemungkinan infeksi).
+【Pemantauan】Catat per shift: frekuensi napas, SpO₂, volume & karakter sputum, kondisi stoma; SpO₂ <90%, napas sulit, atau stridor → lapor segera.
+【Tanda Bahaya】Selang lepas, sumbatan total (tidak bisa suction/ventilasi), perdarahan masif → panggil ambulans segera.`,
+    en:`【Emergency Preparedness】Keep at bedside at all times: spare tracheostomy tube (same size), obturator/dilator, suction equipment, oxygen, flashlight. Accidental decannulation = emergency → call ambulance; temporarily cover stoma with clean cloth.
+【Suctioning】Indications: audible secretions, ineffective cough, falling SpO₂. Pre-suction: 100% oxygen for 30 seconds; catheter ≤ half the inner diameter; insert without suction, apply suction while rotating on withdrawal; ≤15 seconds per pass; strict sterile technique.
+【Stoma Care】Change tracheostomy dressing daily (immediately if wet/soiled); clean skin around stoma (check for redness, granulation, abnormal discharge); clean inner cannula daily—rinse with saline, dry, replace; tie/band tightness: 1-2 fingers should fit underneath.
+【Humidification】Tracheostomy bypasses nasal humidification; use HME (heat-moisture exchanger) or nebulizer; ensure adequate hydration; monitor secretions (normal: white and thin; yellow-green and thick = possible infection).
+【Monitoring】Record each shift: respiratory rate, SpO₂, secretion volume/character, stoma condition; SpO₂ <90%, respiratory distress, or stridor → report immediately.
+【Warning Signs】Tube dislodgement, complete airway obstruction (cannot suction or ventilate), massive bleeding → call ambulance immediately.`,
+    vi:`【Chuẩn bị khẩn cấp】Luôn để cạnh giường: ống khí quản dự phòng (cùng cỡ), dụng cụ hút đờm, oxy, đèn pin. Ống bị tuột = khẩn cấp → gọi cấp cứu; tạm thời che lỗ bằng vải sạch.
+【Hút đờm】Chỉ định: nghe tiếng đờm, bệnh nhân không ho được, SpO₂ giảm. Trước khi hút: oxy 100% trong 30 giây; catheter ≤ nửa đường kính trong của ống; đưa vào không hút, hút khi kéo ra đồng thời xoay; ≤15 giây/lần; kỹ thuật vô khuẩn.
+【Chăm sóc lỗ mở】Thay gạc mỗi ngày (ngay khi ướt/bẩn); làm sạch da xung quanh (theo dõi đỏ, hạt thịt dư, dịch bất thường); vệ sinh ống trong mỗi ngày—rửa saline, lau khô, lắp lại; dây buộc: nhét vừa 1-2 ngón tay.
+【Làm ẩm】Bệnh nhân khí quản mất chức năng làm ẩm của mũi; dùng HME hoặc máy khí dung; đảm bảo đủ nước; theo dõi đờm (bình thường: trắng loãng; vàng xanh đặc = có thể nhiễm trùng).
+【Theo dõi】Ghi mỗi ca: nhịp thở, SpO₂, lượng/tính chất đờm, tình trạng lỗ mở; SpO₂ <90%, khó thở, thở rít → báo ngay.
+【Dấu hiệu nguy hiểm】Ống tuột, tắc hoàn toàn đường thở (không hút được, không thở được), chảy máu nhiều → gọi cấp cứu ngay.`}},
+
+  {k:"picc", zh:"🟣 PICC／中心靜脈導管", id:"🟣 PICC / Kateter Vena Sentral", en:"🟣 PICC / Central Venous Catheter", vi:"🟣 PICC / Catheter Tĩnh Mạch Trung Tâm",
+   adv:{
+    zh:`【基本認識】PICC（周邊置入中心靜脈導管）通常置於上臂靜脈，管尖位於上腔靜脈。用於長期輸液、化療、全靜脈營養（TPN）、抗生素注射。任何操作均需嚴格無菌技術。
+【日常觀察】每班檢查穿刺部位：有無紅腫、滲液、疼痛、溫熱感（感染徵象）；確認導管外露刻度是否與記錄相符（有無滑入或滑出）；觀察手臂有無腫脹（可能血栓）；每班確認固定膠布（透明貼膜）完整性。
+【導管維護（由護理師執行）】沖管：每次輸液前後以10ml生理食鹽水脈衝式沖管（推三秒、停三秒）；封管：最後用100U/ml肝素生理食鹽水（或依醫囑）正壓封管；敷料更換：每7天更換透明貼膜（若弄濕或鬆脫立即更換）；輸液管路每24-72小時更換（依醫囑）。
+【照顧者注意事項】不可自行沖管、拔管或操作輸液速率；確保患者手臂活動不過度（避免導管打折）；沐浴時使用防水套包覆穿刺部位；若導管意外拔出，立即壓迫穿刺點並通報。
+【警示徵象】穿刺部位出現明顯紅腫熱痛→感染；患者出現發燒、寒顫→可能導管相關血流感染（CLABSI），立即通報；手臂突然腫脹伴疼痛→可能血栓；輸液無法注入或回抽困難→可能阻塞，通報護理師。`,
+    id:`【Pemahaman Dasar】PICC (kateter vena sentral perifer) biasanya dipasang di vena lengan atas, ujung di vena kava superior. Digunakan untuk infus jangka panjang, kemoterapi, TPN, antibiotik. Semua tindakan harus menggunakan teknik steril ketat.
+【Pemantauan Harian】Periksa lokasi insersi setiap shift: kemerahan, cairan, nyeri, hangat (tanda infeksi); konfirmasi panjang selang yang terlihat sesuai catatan (tidak masuk/keluar); amati bengkak lengan (kemungkinan trombosis); periksa keutuhan balutan transparan.
+【Perawatan Kateter (oleh perawat)】Flush: 10ml saline pulsed sebelum dan sesudah infus; heparin lock sesuai instruksi; ganti balutan transparan setiap 7 hari (segera jika basah/longgar); ganti set infus setiap 24-72 jam.
+【Catatan untuk Pengasuh】Jangan flush, cabut, atau ubah kecepatan infus sendiri; hindari gerakan lengan berlebihan; tutup area insersi dengan pelindung anti-air saat mandi; jika selang tercabut tidak sengaja → tekan dan lapor segera.
+【Tanda Bahaya】Kemerahan/bengkak/panas nyata → infeksi; demam + menggigil → kemungkinan CLABSI, lapor segera; lengan tiba-tiba bengkak + nyeri → trombosis; tidak bisa infus atau sulit aspirasi → tersumbat, lapor perawat.`,
+    en:`【Basic Understanding】PICC (peripherally inserted central catheter) is usually placed in the upper arm vein, tip at the superior vena cava. Used for long-term IV, chemotherapy, TPN, or antibiotics. All procedures require strict sterile technique.
+【Daily Monitoring】Check insertion site each shift: redness, discharge, pain, warmth (infection signs); confirm external catheter length matches record (not migrated in/out); check arm for swelling (possible thrombosis); inspect transparent dressing integrity.
+【Catheter Maintenance (nurse-performed)】Flushing: 10ml pulsed saline before and after infusion; heparin lock per orders; transparent dressing changed every 7 days (immediately if wet/loose); IV tubing changed every 24-72 hours per orders.
+【Caregiver Responsibilities】Do NOT flush, remove, or adjust infusion rates; avoid excessive arm movement; cover insertion site with waterproof wrap during bathing; if catheter accidentally pulled out → apply pressure and report immediately.
+【Warning Signs】Obvious redness/swelling/warmth → infection; fever + chills → possible CLABSI (bloodstream infection), report immediately; sudden arm swelling with pain → thrombosis; infusion will not flow or aspiration difficult → possible occlusion, report to nurse.`,
+    vi:`【Hiểu cơ bản】PICC (catheter tĩnh mạch trung tâm qua ngoại vi) thường đặt ở tĩnh mạch cánh tay trên, đầu ống ở tĩnh mạch chủ trên. Dùng cho truyền dịch lâu dài, hóa trị, TPN, kháng sinh. Mọi thao tác phải đảm bảo vô khuẩn tuyệt đối.
+【Theo dõi hàng ngày】Kiểm tra vị trí chèn mỗi ca: đỏ, dịch, đau, nóng (dấu hiệu nhiễm trùng); xác nhận chiều dài ống ngoài khớp với ghi chú (chưa dịch chuyển vào/ra); theo dõi phù cánh tay (có thể huyết khối); kiểm tra băng dính trong suốt.
+【Bảo trì catheter (do y tá thực hiện)】Bơm rửa: 10ml saline xung trước và sau truyền; heparin lock theo y lệnh; thay băng trong suốt mỗi 7 ngày (ngay nếu ướt/lỏng); thay dây truyền mỗi 24-72 giờ.
+【Nhiệm vụ người chăm sóc】KHÔNG tự bơm rửa, rút ống hoặc điều chỉnh tốc độ truyền; tránh cử động tay quá mức; che vị trí chèn bằng túi chống thấm khi tắm; nếu ống bị kéo ra ngoài ý muốn → ấn chặt và báo ngay.
+【Dấu hiệu nguy hiểm】Đỏ/phù/nóng rõ ràng → nhiễm trùng; sốt + ớn lạnh → có thể CLABSI, báo ngay; cánh tay đột ngột phù và đau → huyết khối; không truyền được hoặc khó hút → tắc, báo y tá.`}},
+
+  {k:"peg", zh:"🟠 胃造瘻管 (PEG/胃管)", id:"🟠 Gastrostomi (PEG)", en:"🟠 Gastrostomy Tube (PEG)", vi:"🟠 Mở Thông Dạ Dày (PEG)",
+   adv:{
+    zh:`【管路確認】每次灌食前確認胃造瘻管位置：輕輕拉管有阻力（代表固定盤在位）；抽取胃液確認；觀察造口周圍皮膚狀況；注意管路外露長度是否與記錄相符。
+【灌食照護】患者採半坐臥位（床頭抬高≥30度）；灌食前先抽取胃殘餘量（若>200ml或依醫囑標準，暫停灌食並通報）；灌食速度：重力滴注（100-300ml/次，依醫囑）；每次灌食前後以30-60ml溫開水沖管，避免阻塞；灌食後維持抬高姿勢30-60分鐘。
+【造口皮膚護理】每日清潔造口周圍皮膚：以溫水或生理食鹽水清潔，由內向外圓形擦拭；擦乾後觀察：有無紅腫、肉芽組織增生、滲液、皮膚破損；若有黃白色分泌物或異味可能感染→通報護理師；造口周圍皮膚保持乾爽（使用造口粉或保護膜，遵醫囑）。
+【管路旋轉】每日將胃造瘻管旋轉一圈（360度），預防管路與組織沾黏；輕輕前後移動管路（0.5-1cm）確認活動度；操作時以一手固定造口周圍皮膚。
+【觀察與記錄】每班記錄：灌食量、殘餘量、造口外觀、患者反應（腹脹/噁心/嘔吐）；若管路完全滑脫，立即用乾淨紗布蓋住造口（防止關閉）並立即通報就醫（PEG造口可在數小時內自然關閉）。
+【警示徵象】造口大量滲液或出血、周圍皮膚嚴重感染、管路斷裂、患者出現腹膜炎症狀（腹部劇烈疼痛、僵硬）→立即叫救護車。`,
+    id:`【Konfirmasi Selang】Sebelum setiap pemberian makan: tarik selang perlahan (ada resistansi = piringan internal terpasang); aspirasi cairan lambung; amati kulit sekitar stoma; konfirmasi panjang luar sesuai catatan.
+【Pemberian Makan】Posisi setengah duduk (≥30°); aspirasi residu lambung (>200ml atau sesuai instruksi → tunda dan lapor); kecepatan: gravitasi (100-300ml/kali); bilas 30-60ml air hangat sebelum dan sesudah makan; pertahankan posisi 30-60 menit setelah makan.
+【Perawatan Kulit Stoma】Bersihkan sekitar stoma harian: air hangat atau saline, usap melingkar dari dalam ke luar; keringkan dan amati: kemerahan, granulasi, cairan, lecet; sekret kuning-putih atau bau → kemungkinan infeksi, lapor; jaga kulit kering (gunakan powder/film pelindung stoma sesuai anjuran).
+【Rotasi Selang】Putar selang satu putaran penuh (360°) setiap hari untuk mencegah perlengketan; gerakkan maju-mundur 0,5-1cm; tahan kulit sekitar stoma dengan satu tangan.
+【Dokumentasi】Catat per shift: volume yang diberikan, residu, tampilan stoma, respons pasien (kembung/mual/muntah); jika selang lepas total → tutup stoma dengan kasa bersih dan segera ke rumah sakit (stoma PEG bisa menutup dalam beberapa jam).
+【Tanda Bahaya】Cairan/darah banyak dari stoma, infeksi kulit parah, selang putus, gejala peritonitis (nyeri perut hebat, kaku) → panggil ambulans.`,
+    en:`【Tube Verification】Before each feeding: gently tug tube (resistance = internal disc in place); aspirate gastric fluid; inspect stoma skin; confirm external length matches record.
+【Feeding Care】Semi-reclined position (≥30°); check gastric residual before feeding (>200ml or per threshold → hold and report); rate: gravity drip (100-300ml/feed); flush with 30-60ml warm water before and after each feed to prevent clogging; maintain upright position 30-60 min post-feeding.
+【Stoma Skin Care】Clean stoma area daily: warm water or saline, circular motion from center outward; dry and inspect: redness, granulation, discharge, skin breakdown; yellow-white secretion or odor → possible infection, report to nurse; keep skin dry (use stoma powder/barrier film per orders).
+【Tube Rotation】Rotate tube one full turn (360°) daily to prevent tissue adhesion; gently move tube in and out 0.5-1cm; stabilize surrounding skin with one hand.
+【Documentation】Record each shift: feeding volume, residual, stoma appearance, patient response (distension/nausea/vomiting); if tube fully dislodges → cover stoma with clean gauze and seek medical care immediately (PEG stoma can close within hours).
+【Warning Signs】Heavy discharge/bleeding from stoma, severe skin infection, tube rupture, signs of peritonitis (severe abdominal pain, rigidity) → call ambulance immediately.`,
+    vi:`【Xác nhận ống】Trước mỗi lần cho ăn: kéo nhẹ ống (có sức cản = đĩa trong đang cố định); hút dịch dạ dày; kiểm tra da quanh lỗ mở; xác nhận chiều dài ngoài khớp với ghi chú.
+【Cho ăn】Tư thế nửa ngồi (≥30°); kiểm tra lượng dư dạ dày (>200ml hoặc theo ngưỡng → dừng và báo); tốc độ: nhỏ giọt trọng lực (100-300ml/lần); bơm 30-60ml nước ấm trước và sau mỗi lần cho ăn để tránh tắc; giữ tư thế 30-60 phút sau khi cho ăn.
+【Chăm sóc da lỗ mở】Vệ sinh quanh lỗ mở hàng ngày: nước ấm hoặc saline, lau vòng tròn từ trong ra ngoài; lau khô và quan sát: đỏ, hạt thịt dư, dịch, trầy da; dịch vàng-trắng hoặc có mùi → có thể nhiễm trùng, báo y tá; giữ da khô (dùng bột/màng bảo vệ stoma theo y lệnh).
+【Xoay ống】Xoay ống một vòng tròn đầy (360°) mỗi ngày để tránh dính vào mô; nhẹ nhàng đẩy vào kéo ra 0,5-1cm; giữ da xung quanh bằng một tay.
+【Ghi chép】Ghi mỗi ca: lượng cho ăn, lượng dư, hình thái lỗ mở, phản ứng bệnh nhân (chướng/buồn nôn/nôn); nếu ống bị tuột hoàn toàn → che lỗ bằng gạc sạch và đến bệnh viện ngay (lỗ PEG có thể tự đóng trong vài giờ).
+【Dấu hiệu nguy hiểm】Dịch/máu nhiều từ lỗ mở, nhiễm trùng da nặng, ống gãy, triệu chứng viêm phúc mạc (đau bụng dữ dội, cứng bụng) → gọi cấp cứu ngay.`}},
+
+  {k:"fall", zh:"跌倒風險", id:"Risiko Jatuh", en:"Fall Risk", vi:"Nguy cơ té ngã",
+   adv:{
+    zh:`【環境預防】地面保持乾燥無雜物；浴室安裝扶手（馬桶旁、淋浴間）；使用防滑地墊；走道夜間留小夜燈（30-50cm高度）；床欄放下時務必有人陪伴。
+【起身技巧（三段式）】①躺姿撐坐10秒→②坐在床邊雙腳踏地等30秒→③緩緩站起；任何一步感到頭暈立即停止，重新回到前一姿勢。
+【鞋襪選擇】穿有後跟帶的防滑鞋或包頭拖鞋；避免穿拖鞋（無後跟）、光腳或穿襪子行走。
+【高風險時段】夜間如廁（夜間跌倒最常見）：床邊放置便盆或尿壺；起床前先開燈；如廁時全程陪同。
+【輔助工具】確認助行器/拐杖/輪椅正確使用；定期檢查腳墊是否磨損；輪椅剎車確認鎖緊後再移位。
+【藥物注意】服用利尿劑、安眠藥、降壓藥者跌倒風險更高，應加強夜間巡視（每2小時）。`,
+    id:`【Pencegahan Lingkungan】Lantai kering bebas hambatan; pasang pegangan di toilet dan kamar mandi; keset anti-slip; lampu malam di lorong; selalu ada yang menemani saat pagar tempat tidur diturunkan.
+【Teknik Berdiri (3 Tahap)】①Berbaring→duduk, tunggu 10 detik →②Duduk di tepi tempat tidur, kaki di lantai, tunggu 30 detik →③Perlahan berdiri. Pusing di tahap manapun → berhenti dan kembali ke posisi sebelumnya.
+【Sepatu】Pakai sepatu anti-slip dengan tali belakang atau sandal tertutup; hindari sandal terbuka, kaki telanjang, atau hanya kaus kaki.
+【Waktu Berisiko Tinggi】Ke toilet malam hari (jatuh tersering): sediakan pispot di sisi tempat tidur; nyalakan lampu dulu; dampingi sepenuhnya.
+【Alat Bantu】Pastikan penggunaan alat bantu yang benar; periksa karet alas walker berkala; kunci rem kursi roda sebelum pindah.
+【Obat】Pasien yang minum diuretik, obat tidur, atau obat tekanan darah memiliki risiko jatuh lebih tinggi → tingkatkan patroli malam.`,
+    en:`【Environmental Prevention】Keep floors dry and clear; install grab bars at toilet and shower; use non-slip mats; night lights in hallways (30-50cm height); always accompany when bed rails are down.
+【Rising Technique (3-Stage)】①Lie to sit, wait 10 sec → ②Sit at bed edge with feet on floor, wait 30 sec → ③Slowly stand up. If dizzy at any stage, stop and return to previous position.
+【Footwear】Wear non-slip shoes with heel straps or enclosed slippers; avoid backless slippers, bare feet, or walking in socks only.
+【High-Risk Times】Nighttime bathroom trips (most common fall situation): keep bedside commode/urinal; turn on light first; accompany throughout.
+【Assistive Devices】Ensure correct use of walker/cane/wheelchair; check rubber tips for wear regularly; confirm wheelchair brakes locked before transfers.
+【Medications】Diuretics, sleeping pills, and antihypertensives increase fall risk → increase nighttime checks (every 2 hours).`,
+    vi:`【Phòng ngừa môi trường】Sàn khô, không có vật cản; lắp tay vịn toilet và phòng tắm; thảm chống trượt; đèn ngủ hành lang; luôn có người khi hạ thanh chắn giường.
+【Kỹ thuật đứng dậy (3 bước)】①Nằm→ngồi, đợi 10 giây →②Ngồi ở mép giường, chân chạm đất, đợi 30 giây →③Đứng dậy từ từ. Chóng mặt ở bất kỳ bước nào → dừng lại và trở về tư thế trước.
+【Giày dép】Mang giày chống trượt có dây gót hoặc dép bít đầu; tránh dép lê, đi chân trần hoặc chỉ mang vớ.
+【Thời điểm nguy hiểm】Đi vệ sinh ban đêm (hay té ngã nhất): để bô cạnh giường; bật đèn trước; đi cùng suốt quá trình.
+【Dụng cụ hỗ trợ】Đảm bảo sử dụng khung đi/gậy/xe lăn đúng cách; kiểm tra đế cao su định kỳ; khóa phanh xe lăn trước khi di chuyển.
+【Thuốc】Lợi tiểu, thuốc ngủ, thuốc hạ áp làm tăng nguy cơ té → tăng kiểm tra ban đêm (mỗi 2 giờ).`}},
+
+  {k:"heart", zh:"心臟疾病", id:"Penyakit Jantung", en:"Heart Disease", vi:"Bệnh tim",
+   adv:{
+    zh:`【活動管理】依醫師指示訂定活動限制；避免劇烈運動、長時間屏氣（排便時不可用力，必要時使用軟便劑）；活動後若出現呼吸急促、心跳加速→立即停止活動休息。
+【觀察重點】每日量測體重（同一時間、穿同樣衣物）；體重3天內增加超過2kg→可能水腫，通報醫師；觀察腿部水腫（按壓小腿後有無凹痕）；觀察嘴唇和指甲是否有發紫情形。
+【飲食與水分】限鹽（每日＜3g）；限水（依醫囑，通常每日1-1.5L）；記錄每日液體攝取量（包括飯、湯、水果等含水量）。
+【服藥管理】心臟藥物（心臟節律藥、抗凝血劑、利尿劑）務必按時服用；服用抗凝血劑者注意有無異常出血（牙齦出血、大便黑色、皮膚瘀青）。
+【緊急情況】出現以下任一症狀立即叫救護車：胸痛/胸悶、左肩/下巴放射性疼痛、突然嚴重呼吸困難、心跳不規則感、意識不清。`,
+    id:`【Manajemen Aktivitas】Ikuti batasan aktivitas sesuai instruksi dokter; hindari olahraga berat dan mengedan (gunakan pelembut feses jika perlu); setelah aktivitas jika muncul sesak dan jantung berdebar → hentikan dan istirahat.
+【Pemantauan】Timbang berat badan setiap hari (waktu & pakaian sama); berat naik >2kg dalam 3 hari → kemungkinan edema, lapor dokter; amati bengkak kaki (tekan betis, apakah ada lekukan); periksa bibir dan kuku apakah kebiruan.
+【Diet & Cairan】Garam <3g/hari; batasi cairan (biasanya 1-1,5L/hari sesuai dokter); catat asupan cairan harian (termasuk nasi, sup, buah).
+【Obat】Obat jantung harus diminum tepat waktu; yang minum antikoagulan: amati perdarahan abnormal (gusi berdarah, BAB hitam, memar).
+【Darurat】Panggil ambulans segera untuk: nyeri/sesak dada, nyeri menjalar ke bahu kiri/rahang, sesak berat mendadak, jantung berdebar tidak teratur, kehilangan kesadaran.`,
+    en:`【Activity Management】Follow doctor's activity restrictions; avoid strenuous exertion and Valsalva (straining at stool — use stool softeners if needed); if post-activity shortness of breath or palpitations → stop and rest.
+【Monitoring】Weigh daily (same time, same clothing); weight gain >2kg in 3 days → possible edema, report to doctor; check for leg edema (press calf, look for indentation); check lips and nails for cyanosis.
+【Diet & Fluids】Salt <3g/day; restrict fluids per doctor (usually 1-1.5L/day); record daily fluid intake (including rice, soup, fruit water content).
+【Medications】Heart medications must be taken on time; for those on anticoagulants: watch for unusual bleeding (gum bleeding, black stools, easy bruising).
+【Emergency】Call ambulance immediately for: chest pain/tightness, radiating pain to left shoulder/jaw, sudden severe breathlessness, irregular heartbeat, loss of consciousness.`,
+    vi:`【Quản lý hoạt động】Tuân theo giới hạn hoạt động của bác sĩ; tránh gắng sức và rặn (dùng thuốc làm mềm phân nếu cần); sau vận động nếu khó thở hoặc đánh trống ngực → dừng và nghỉ.
+【Theo dõi】Cân hàng ngày (cùng giờ, cùng quần áo); tăng >2kg trong 3 ngày → có thể phù, báo bác sĩ; kiểm tra phù chân (ấn bắp chân xem có lõm không); xem môi và móng tay có tím không.
+【Ăn uống & Nước】Muối <3g/ngày; hạn chế nước theo y lệnh (thường 1-1,5L/ngày); ghi lượng nước uống vào mỗi ngày.
+【Thuốc】Thuốc tim uống đúng giờ; người dùng thuốc chống đông: theo dõi chảy máu bất thường (nướu, phân đen, bầm tím).
+【Khẩn cấp】Gọi cấp cứu ngay nếu: đau/tức ngực, đau lan vai trái/hàm, khó thở đột ngột nặng, tim đập không đều, mất ý thức.`}},
+
+  {k:"rehab", zh:"復健訓練", id:"Rehabilitasi", en:"Rehabilitation", vi:"Phục hồi chức năng",
+   adv:{
+    zh:`【執行原則】依物理治療師(PT)/職能治療師(OT)/語言治療師(ST)的書面指示執行；不可自行增減動作或強度；若患者抱怨疼痛（超過VAS 4分），暫停並記錄。
+【關節活動運動（ROM）】被動運動：照顧者協助各關節緩慢活動（各10下，勿超過正常活動範圍）；主動運動：鼓勵患者自行完成，照顧者從旁協助穩定。上午、下午各一次，每次15-20分鐘。
+【功能性訓練】練習床上翻身、坐起；練習坐姿平衡（坐在床邊，手不撐床）；練習站立（扶平行桿或牆壁）；步行訓練：注意患者步態，確認腳踩穩後再移重心。
+【記錄項目】每日記錄：執行項目、重複次數、患者耐受度（好/尚可/差）、有無疼痛、特殊狀況（如拒絕、疲倦中止）。
+【注意事項】運動後充分休息；觀察患者臉色（是否過度發紅/蒼白）、呼吸（是否急促）、有無頭暈。`,
+    id:`【Prinsip Pelaksanaan】Ikuti instruksi tertulis dari PT/OT/ST; jangan ubah gerakan atau intensitas sendiri; jika pasien mengeluh nyeri >VAS 4, hentikan dan catat.
+【Latihan ROM】Pasif: bantu gerakan sendi perlahan (10 kali, tidak melebihi rentang normal); aktif: dorong pasien melakukan sendiri, bantu stabilisasi. Pagi dan sore, masing-masing 15-20 menit.
+【Latihan Fungsional】Berguling di tempat tidur, duduk; latihan keseimbangan duduk; latihan berdiri (pegang palang atau dinding); latihan berjalan: perhatikan gaya berjalan.
+【Dokumentasi】Catat harian: item yang dilakukan, jumlah repetisi, toleransi pasien (baik/cukup/buruk), nyeri, kejadian khusus.
+【Perhatian】Istirahat cukup setelah latihan; amati wajah (merah/pucat berlebihan), napas (sesak), pusing.`,
+    en:`【Implementation Principles】Follow written instructions from PT/OT/ST exactly; do not modify exercises independently; if patient reports pain >VAS 4, stop and document.
+【ROM Exercises】Passive: slowly move each joint (10 reps, within normal range); active: encourage patient to move independently with caregiver providing stability. Morning and afternoon, 15-20 minutes each session.
+【Functional Training】Bed rolling and sitting up; sitting balance practice; standing practice (holding parallel bars or wall); walking training: watch gait carefully, confirm foot placement before weight shift.
+【Documentation】Record daily: exercises performed, repetitions, patient tolerance (good/fair/poor), pain, special events (refusal, early termination).
+【Cautions】Rest adequately after exercise; monitor face (excessive flushing/pallor), breathing (rapid), dizziness.`,
+    vi:`【Nguyên tắc thực hiện】Theo đúng hướng dẫn bằng văn bản của PT/OT/ST; không tự thay đổi bài tập; đau >VAS 4 → dừng và ghi chép.
+【Bài tập vận động khớp】Thụ động: từ từ vận động từng khớp (10 lần, trong phạm vi bình thường); chủ động: khuyến khích bệnh nhân tự làm, người chăm giúp ổn định. Sáng và chiều, 15-20 phút mỗi lần.
+【Tập chức năng】Lật trên giường, ngồi dậy; tập cân bằng tư thế ngồi; tập đứng (vịn xà song song hoặc tường); tập đi: quan sát dáng đi, đảm bảo bàn chân đặt chắc trước khi chuyển trọng tâm.
+【Ghi chép】Ghi hàng ngày: bài tập thực hiện, số lần, khả năng chịu đựng (tốt/trung bình/kém), đau, sự kiện đặc biệt.
+【Lưu ý】Nghỉ đủ sau tập; theo dõi mặt (đỏ/tái quá mức), thở (nhanh), chóng mặt.`}},
+
+  {k:"pressure_ulcer", zh:"🔴 褥瘡注意事項（壓傷預防與護理）", id:"🔴 Pencegahan & Perawatan Luka Tekan (Dekubitus)", en:"🔴 Pressure Ulcer Prevention & Care", vi:"🔴 Phòng Ngừa & Chăm Sóc Loét Tỳ Đè (Nằm Lâu)",
+   adv:{
+    zh:`【預防翻身】每2小時協助翻身一次（夜間至少每3-4小時）；使用氣墊床或減壓墊分散壓力；避免局部皮膚長時間受壓；建立翻身時間表並確實執行。
+【皮膚觀察】每日洗澡或擦澡時檢查全身皮膚，特別注意骨突部位：薦骨（臀部）、足跟、肩胛骨、後腦杓、手肘、腳踝；發現皮膚持續發紅（壓後不褪色）或皮膚破損，立即通報護理師。
+【皮膚清潔與保護】保持皮膚清潔乾燥；失禁者每次大小便後立即清潔，使用隔離乳（護膚霜）保護皮膚；全身塗抹保濕乳液維持彈性；不可在骨突部位按摩（可能加重組織傷害）。
+【擺位技巧】採30度側臥（非90度側躺，避免大轉子受壓）；使用枕頭支撐背部、膝蓋及足踝；坐輪椅時每15-30分鐘提醒移動臀部或自行抬臀10秒減壓；確保足跟懸空（使用毛巾或泡棉墊）。
+【傷口護理】若已出現皮膚破損或傷口，不可自行處理，立即通報護理師；記錄傷口位置、大小（cm）、顏色、深度及滲液情形，並拍照存證；按醫囑更換敷料（不可自行打開傷口敷料）。
+【營養與水分】確保充足蛋白質（促進皮膚修復）；建議每日蛋白質攝取量1.2-1.5g/kg體重；補充維生素C（促進膠原蛋白合成）；確保足夠水分（每日1500-2000ml，依醫囑）。
+【記錄與交班】每班記錄翻身時間與體位（左側/右側/平躺），確認交班記錄完整；若發現新壓傷，立即拍照、通報家屬與護理師，不可延誤。`,
+    id:`【Alih Posisi (Miring)】Ubah posisi setiap 2 jam (malam minimal 3-4 jam); gunakan kasur angin atau bantalan anti-tekanan; hindari tekanan lama pada satu area kulit; buat jadwal alih posisi dan laksanakan secara konsisten.
+【Pemeriksaan Kulit】Periksa seluruh kulit setiap hari saat mandi/lap, terutama tonjolan tulang: sakrum (bokong), tumit, tulang belikat, belakang kepala, siku, pergelangan kaki; laporkan segera jika kulit merah terus (tidak hilang setelah tekanan dilepas) atau ada lecet.
+【Perawatan & Perlindungan Kulit】Jaga kulit bersih dan kering; bersihkan segera setelah inkontinensia dan gunakan krim pelindung/barrier; oleskan pelembab ke seluruh tubuh; JANGAN pijat tonjolan tulang (dapat memperburuk kerusakan jaringan).
+【Teknik Posisi】Miring 30° (bukan 90°, hindari tekanan pada trokanter besar); gunakan bantal untuk menopang punggung, lutut, dan pergelangan kaki; di kursi roda setiap 15-30 menit geser atau angkat bokong 10 detik; pastikan tumit menggantung (gunakan handuk atau bantal kecil).
+【Perawatan Luka】Jika ada lecet atau luka, JANGAN tangani sendiri — lapor perawat segera; catat lokasi, ukuran (cm), warna, kedalaman, dan cairan luka, serta foto; ganti perban sesuai instruksi (jangan buka perban sendiri).
+【Nutrisi & Cairan】Pastikan asupan protein cukup (1,2-1,5g/kg BB/hari) untuk pemulihan kulit; suplemen vitamin C untuk sintesis kolagen; pastikan hidrasi cukup (1500-2000ml/hari sesuai instruksi dokter).
+【Dokumentasi & Operan】Catat waktu dan posisi setiap alih posisi di setiap shift; jika ditemukan luka tekan baru, foto, lapor keluarga dan perawat segera — jangan tunda.`,
+    en:`【Repositioning】Reposition every 2 hours (at least every 3-4 hours at night); use an air mattress or pressure-relieving pad to distribute pressure; avoid prolonged pressure on any single skin area; maintain a repositioning log and follow it consistently.
+【Skin Assessment】Inspect all skin daily during bathing/sponge bath, focusing on bony prominences: sacrum (buttocks), heels, shoulder blades, back of head, elbows, ankles; report immediately if skin stays red after pressure is removed (non-blanchable redness) or any skin breakdown appears.
+【Skin Cleansing & Protection】Keep skin clean and dry; cleanse immediately after any incontinence episode and apply a skin barrier cream; apply moisturizer to the whole body; do NOT massage over bony prominences (can worsen tissue damage).
+【Positioning Technique】Use 30° side-lying (not 90°, to avoid pressure on the greater trochanter); support back, knees, and ankles with pillows; in a wheelchair, shift or lift buttocks every 15-30 minutes for 10 seconds to relieve pressure; keep heels off the mattress surface (use a towel or foam pad).
+【Wound Care】If any skin breakdown or wound appears, do NOT treat independently — notify nurse immediately; document location, size (cm), color, depth, and drainage, and photograph the wound; dressings are changed per orders only (do not open wound dressings yourself).
+【Nutrition & Fluids】Ensure adequate protein intake (1.2-1.5g/kg body weight/day) to support skin healing; supplement with vitamin C to promote collagen synthesis; maintain adequate fluid intake (1500-2000ml/day per orders).
+【Documentation & Handover】Record repositioning time and position (left side/right side/supine) every shift; if a new pressure injury is discovered, photograph it and report to family and nurse immediately — do not delay.`,
+    vi:`【Xoay trở】Xoay trở mỗi 2 giờ (ban đêm ít nhất mỗi 3-4 giờ); dùng đệm hơi hoặc đệm giảm áp; tránh để da chịu áp lực lâu ở một vị trí; lập lịch xoay trở và thực hiện nghiêm túc.
+【Kiểm tra da】Kiểm tra toàn thân mỗi ngày khi tắm/lau, đặc biệt vùng xương lồi: xương cùng (mông), gót chân, bả vai, sau đầu, khuỷu tay, mắt cá chân; báo y tá ngay nếu da đỏ kéo dài (không phai sau khi bỏ tay) hoặc có trầy da.
+【Vệ sinh & bảo vệ da】Giữ da sạch và khô; vệ sinh ngay sau khi tiểu/đại tiện không tự chủ, dùng kem bảo vệ da (barrier cream); thoa kem dưỡng ẩm toàn thân; KHÔNG xoa bóp vùng xương lồi (có thể làm tổn thương mô nặng hơn).
+【Kỹ thuật đặt tư thế】Nằm nghiêng 30° (không phải 90°, tránh đè lên mấu chuyển lớn); dùng gối đỡ lưng, đầu gối và mắt cá; trên xe lăn mỗi 15-30 phút dịch chuyển hoặc nhấc mông 10 giây; đảm bảo gót chân không chạm bề mặt giường (dùng khăn hoặc mút).
+【Chăm sóc vết thương】Nếu có trầy da hoặc vết loét, KHÔNG tự xử lý — báo y tá ngay; ghi lại vị trí, kích thước (cm), màu sắc, độ sâu và dịch tiết, chụp ảnh lưu; thay băng theo y lệnh (không tự mở băng).
+【Dinh dưỡng & nước】Đảm bảo đủ protein (1,2-1,5g/kg thể trọng/ngày) để phục hồi da; bổ sung vitamin C hỗ trợ tổng hợp collagen; duy trì đủ nước (1500-2000ml/ngày theo y lệnh).
+【Ghi chép & bàn giao】Ghi thời gian và tư thế xoay trở (nghiêng trái/phải/nằm ngửa) mỗi ca; nếu phát hiện vết loét mới, chụp ảnh và báo gia đình cùng y tá ngay — không được chậm trễ.`}}
+];
+
+/* ========================================================
+   Cleaning / Housekeeping Items
+======================================================== */
+const CLEAN_ITEMS = [
+  {k:"floor_dry",  zh:"地板保持乾燥防滑",   id:"Lantai kering anti-licin",        en:"Keep floors dry & non-slip",       vi:"Giữ sàn khô chống trượt"},
+  {k:"no_bleach",  zh:"避免使用漂白水（敏感）",id:"Hindari pemutih (sensitif)",     en:"Avoid bleach (patient sensitive)", vi:"Tránh dùng nước Javel (mẫn cảm)"},
+  {k:"alcohol",    zh:"使用稀釋酒精75%消毒", id:"Gunakan alkohol 75% encer",       en:"Use 75% diluted alcohol to disinfect",vi:"Dùng cồn 75% pha loãng để khử trùng"},
+  {k:"ventilate",  zh:"清潔後充分通風換氣",  id:"Ventilasi setelah bersih-bersih", en:"Ventilate room after cleaning",     vi:"Thông gió phòng sau khi dọn dẹp"},
+  {k:"bath_daily", zh:"浴室每日清潔消毒",    id:"Bersihkan kamar mandi tiap hari", en:"Disinfect bathroom daily",          vi:"Vệ sinh phòng tắm mỗi ngày"},
+  {k:"toilet_care",zh:"馬桶每日清潔除臭",    id:"Bersihkan WC setiap hari",        en:"Clean & deodorize toilet daily",    vi:"Vệ sinh bồn cầu mỗi ngày"},
+  {k:"bed_sheet",  zh:"床單每週換洗（失禁者每日）",id:"Ganti sprei mingguan (inkontinensia: harian)",en:"Change sheets weekly (incontinence: daily)",vi:"Thay ga tuần/ngày (tiểu không tự chủ)"},
+  {k:"patient_area",zh:"病患活動區域每日清掃",id:"Bersihkan area pasien setiap hari",en:"Clean patient's area daily",        vi:"Quét dọn khu vực bệnh nhân mỗi ngày"},
+  {k:"chem_lock",  zh:"清潔劑/化學品上鎖存放",id:"Simpan bahan kimia terkunci",     en:"Lock away cleaning chemicals",     vi:"Khóa cất hóa chất vệ sinh"},
+  {k:"mop_dry",    zh:"拖地後確認地板乾燥再讓病患行動",id:"Pastikan lantai kering sebelum pasien berjalan",en:"Ensure floor dry before patient walks",vi:"Đảm bảo sàn khô trước khi bệnh nhân đi lại"},
+  {k:"gloves",     zh:"清潔時戴手套（感染控制）",id:"Pakai sarung tangan saat membersihkan",en:"Wear gloves when cleaning (infection control)",vi:"Đeo găng tay khi dọn dẹp (kiểm soát nhiễm trùng)"},
+  {k:"waste",      zh:"感染性廢棄物分類處理",  id:"Buang sampah infeksius secara terpisah",en:"Separate disposal of infectious waste",vi:"Xử lý rác thải nhiễm khuẩn riêng biệt"},
+  {k:"air_purify", zh:"定期更換空氣清淨機濾網",id:"Ganti filter air purifier secara berkala",en:"Replace air purifier filters regularly",vi:"Thay bộ lọc máy lọc không khí định kỳ"},
+  {k:"pet",        zh:"避免貓狗進入病患臥室",  id:"Cegah hewan peliharaan masuk kamar pasien",en:"Keep pets out of patient's bedroom",vi:"Không cho thú cưng vào phòng bệnh nhân"},
+  {k:"noise",      zh:"清潔時注意不打擾病患休息",id:"Jangan mengganggu istirahat pasien saat bersih-bersih",en:"Clean without disturbing patient's rest",vi:"Dọn dẹp không ảnh hưởng đến giấc ngủ của bệnh nhân"},
+];
+
+const cleanSelected = new Set();
+const selected = new Set();
+const actSelected = new Set();
+
+/* ── Vital Info (moved to module scope — was recreated inside generatePlan on every call) ── */
+const VITAL_INFO = {
+  bp:    { icon:"🩸", zh:"血壓 BP",   range:"正常 90–139 / 60–89 mmHg" },
+  pulse: { icon:"💓", zh:"脈搏 Pulse", range:"正常 60–100 次/分" },
+  temp:  { icon:"🌡", zh:"體溫 Temp",  range:"正常腋溫 36.1–37.2°C" },
+  spo2:  { icon:"💨", zh:"血氧 SpO₂",  range:"正常 95–100 %" },
+  resp:  { icon:"🌬", zh:"呼吸 Resp",  range:"正常 12–20 次/分" },
+  sugar: { icon:"🍬", zh:"血糖 Sugar", range:"正常空腹 70–100 mg/dL" }
+};
+
+/* ─────────────────────────────────────────────────────────
+   XSS-safe HTML escape (use for ALL user-input before
+   injecting into innerHTML)
+───────────────────────────────────────────────────────── */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+const ACTS = [
+  {k:"walk",     zh:"戶外散步",   id:"Jalan-jalan",           en:"Outdoor Walk",       vi:"Đi dạo ngoài trời"},
+  {k:"exercise", zh:"體操/運動",  id:"Senam/Olahraga",        en:"Exercise/Gymnastics", vi:"Thể dục"},
+  {k:"rehab_act",zh:"復健訓練",   id:"Latihan Rehabilitasi",  en:"Rehab Exercise",     vi:"Tập phục hồi"},
+  {k:"read",     zh:"閱讀/看報",  id:"Membaca",               en:"Reading",            vi:"Đọc sách/báo"},
+  {k:"tv",       zh:"看電視",     id:"Nonton TV",             en:"Watch TV",           vi:"Xem tivi"},
+  {k:"social",   zh:"社交互動",   id:"Interaksi sosial",      en:"Social Interaction", vi:"Giao lưu xã hội"},
+  {k:"music",    zh:"音樂/歌唱",  id:"Musik/Menyanyi",        en:"Music/Singing",      vi:"Âm nhạc/Hát"},
+  {k:"craft",    zh:"手工藝/繪畫",id:"Kerajinan/Melukis",     en:"Crafts/Drawing",     vi:"Thủ công/Vẽ"},
+  {k:"bath",     zh:"沐浴護理",   id:"Mandi/Perawatan",       en:"Bathing/Grooming",   vi:"Tắm/Vệ sinh"},
+  {k:"nap",      zh:"午休",       id:"Tidur siang",           en:"Afternoon Nap",      vi:"Nghỉ trưa"},
+];
+
+/* ========================================================
+   Schedule Slot Bilingual Labels
+======================================================== */
+const SLOT_LABELS = {
+  wake:      { zh:"起床",  id:"Bangun",       en:"Wake Up",   vi:"Thức Dậy"  },
+  breakfast: { zh:"早餐",  id:"Sarapan",      en:"Breakfast", vi:"Ăn Sáng"   },
+  lunch:     { zh:"午餐",  id:"Makan Siang",  en:"Lunch",     vi:"Ăn Trưa"   },
+  nap:       { zh:"午休",  id:"Istirahat",    en:"Nap",       vi:"Nghỉ Trưa" },
+  dinner:    { zh:"晚餐",  id:"Makan Malam",  en:"Dinner",    vi:"Ăn Tối"    },
+  bedtime:   { zh:"就寢",  id:"Tidur",        en:"Bedtime",   vi:"Đi Ngủ"    },
+};
+const ACT_LBL    = { zh:"日間活動", id:"Aktivitas",       en:"Activities", vi:"Hoạt Động"  };
+const LIVING_LBL = {
+  cohabit: { zh:"同住狀況", id:"Tinggal bersama", en:"Co-living",    vi:"Cùng sống"   },
+  eatout:  { zh:"飲食來源", id:"Sumber Makanan",  en:"Meal Source",  vi:"Nguồn Ăn"    },
+  env:     { zh:"居住環境", id:"Lingkungan",      en:"Home Env.",    vi:"Môi Trường"  },
+  schNote: { zh:"作息備註", id:"Catatan Jadwal",  en:"Sched. Notes", vi:"Ghi Chú Lịch"},
+};
+
+/* ========================================================
+   Init Selects (bilingual options)
+======================================================== */
+function buildSelects() {
+  ["sex","cohabit","eatout","mob","cog","diet"].forEach(key => {
+    const el = document.getElementById("f_" + key);
+    const curVal = el.value;
+    el.innerHTML = "";
+    OPTS[key].forEach(o => {
+      const opt = document.createElement("option");
+      opt.value = o.v;
+      opt.textContent = o.zh + " / " + o[lang];
+      el.appendChild(opt);
+    });
+    if (curVal) el.value = curVal;
+  });
+}
+
+/* ========================================================
+   Chips
+======================================================== */
+/* Helper: make a chip keyboard-accessible */
+function makeChipAccessible(el, isOn) {
+  el.setAttribute("tabindex", "0");
+  el.setAttribute("role", "button");
+  el.setAttribute("aria-pressed", isOn ? "true" : "false");
+  el.addEventListener("keydown", e => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); el.click(); }
+  });
+}
+
+function renderChips() {
+  const box = document.getElementById("condChips");
+  box.innerHTML = "";
+  CONDS.forEach(c => {
+    const isOn = selected.has(c.k);
+    const d = document.createElement("div");
+    d.className = "chip" + (isOn ? " on" : "");
+    d.textContent = c.zh + " / " + c[lang];
+    makeChipAccessible(d, isOn);
+    d.onclick = () => {
+      selected.has(c.k) ? selected.delete(c.k) : selected.add(c.k);
+      d.classList.toggle("on");
+      d.setAttribute("aria-pressed", selected.has(c.k) ? "true" : "false");
+      scheduleSave();
+    };
+    box.appendChild(d);
+  });
+}
+
+function renderCleanChips() {
+  const box = document.getElementById("cleanChips");
+  if (!box) return;
+  box.innerHTML = "";
+  CLEAN_ITEMS.forEach(c => {
+    const isOn = cleanSelected.has(c.k);
+    const d = document.createElement("div");
+    d.className = "chip" + (isOn ? " on" : "");
+    d.textContent = c.zh + " / " + c[lang];
+    makeChipAccessible(d, isOn);
+    d.onclick = () => {
+      cleanSelected.has(c.k) ? cleanSelected.delete(c.k) : cleanSelected.add(c.k);
+      d.classList.toggle("on");
+      d.setAttribute("aria-pressed", cleanSelected.has(c.k) ? "true" : "false");
+      scheduleSave();
+    };
+    box.appendChild(d);
+  });
+}
+
+function renderActChips() {
+  const box = document.getElementById("actChips");
+  if (!box) return;
+  box.innerHTML = "";
+  ACTS.forEach(a => {
+    const isOn = actSelected.has(a.k);
+    const d = document.createElement("div");
+    d.className = "chip" + (isOn ? " on" : "");
+    d.textContent = a.zh + " / " + a[lang];
+    makeChipAccessible(d, isOn);
+    d.onclick = () => {
+      actSelected.has(a.k) ? actSelected.delete(a.k) : actSelected.add(a.k);
+      d.classList.toggle("on");
+      d.setAttribute("aria-pressed", actSelected.has(a.k) ? "true" : "false");
+      scheduleSave();
+    };
+    box.appendChild(d);
+  });
+}
+
+
+/* ========================================================
+   Apply Language
+======================================================== */
+function applyLang() {
+  const t = L[lang];
+  const ids = [
+    "t_basic","t_living","t_cond","t_vital","t_emg",
+    "l_name","l_age","l_sex","l_mob","l_cog","l_condL","l_diet",
+    "l_cohabit","l_eatout","l_env_note","l_schedule_hd",
+    "l_wake","l_breakfast","l_lunch","l_nap","l_dinner","l_bedtime",
+    "l_activity","l_sch_note",
+    "l_allergy","l_note","ct_fam","ct_doc",
+    "l_bp","l_pulse","l_temp","l_spo2","l_resp","l_sugar","l_vital_note",
+    "vc_bp","vc_pulse","vc_temp","vc_spo2","vc_resp","vc_sugar","l_vital_select",
+    "l_fn","l_frel","l_ftel","l_dn","l_dhosp","l_dtel",
+    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note"
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && t[id] !== undefined) {
+      /* l_vital_select 含有 <b> 標籤，需用 innerHTML */
+      if (id === "l_vital_select") el.innerHTML = t[id];
+      else el.textContent = t[id];
+    }
+  });
+  // appTitle / appSub use different dict keys
+  document.getElementById("appTitle").textContent = t.title;
+  document.getElementById("appSub").textContent   = t.sub;
+  // Normal range bilingual rows (innerHTML for <b> tags)
+  ["bp","pulse","temp","spo2","resp","sugar"].forEach(key => {
+    const el = document.getElementById("vn_" + key + "_lang");
+    if (el && t["vn_" + key + "_lang"]) el.innerHTML = t["vn_" + key + "_lang"];
+  });
+  buildSelects();
+  renderChips();
+  renderActChips();
+  renderCleanChips();
+}
+
+/* Language switcher */
+document.querySelectorAll(".lang-bar button").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".lang-bar button").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    lang = btn.dataset.l;
+    applyLang();
+    doAllergyTranslate(); /* refresh allergy translation for new language */
+    scheduleSave(); /* persist language preference */
+  };
+});
+
+/* ========================================================
+   Translate Free-Text Fields via Google Translate
+   (bilingual display — 雙語並陳)
+======================================================== */
+
+/* 【優化二】翻譯快取 — 避免重複呼叫 API，降低被 Google 封鎖 IP 的風險 */
+const _translationCache = new Map();
+
+/* 【優化一】全域變數：監測翻譯服務是否遭到阻擋或逾時 */
+let _isTranslationBlocked = false;
+
+/* 單一欄位翻譯（加入 Timeout、Fallback 與 Cache 機制） */
+async function _gtField(text, tl) {
+  if (!text || text.trim() === "") return "";
+
+  const cacheKey = `${tl}_${text}`;
+  // 【快取命中】直接回傳，不發送 API 請求
+  if (_translationCache.has(cacheKey)) {
+    return _translationCache.get(cacheKey);
+  }
+
+  // 防呆：防止 URL 長度超出 GET 限制 (擷取前 1000 個字元)
+  const safeText = text.length > 1000 ? text.substring(0, 1000) + "..." : text;
+  const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-TW&tl=${tl}&dt=t&q=${encodeURIComponent(safeText)}`;
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000); // 縮短至 4 秒提升體驗
+
+  try {
+    const resp = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+
+    if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
+    const data = await resp.json();
+    const result = Array.isArray(data[0])
+      ? data[0].map(seg => (seg && seg[0]) || "").join("")
+      : text;
+
+    // 【快取儲存】將成功翻譯的結果存入 Map，下次直接取用
+    _translationCache.set(cacheKey, result);
+    _isTranslationBlocked = false; // 成功則恢復狀態
+    return result;
+  } catch (e) {
+    clearTimeout(timeoutId);
+    console.warn("[Translate] API Timeout or Blocked, fallback to original text.");
+    _isTranslationBlocked = true; // 標記為阻擋或失敗
+    return text; // 網路斷線或超時，保留原文
+  }
+}
+
+/* 批次翻譯所有需要翻譯的欄位（平行執行，速度快） */
+async function translateFreeText(fields, targetLang) {
+  /* 只取有內容的欄位（排除空字串與「無」） */
+  const toTranslate = Object.fromEntries(
+    Object.entries(fields).filter(([, v]) => v && v.trim() && v !== "無")
+  );
+  if (!Object.keys(toTranslate).length) return {};
+
+  /* lang 代碼直接對應 Google Translate 語系代碼 */
+  const tlMap = { id: "id", en: "en", vi: "vi" };
+  const tl = tlMap[targetLang] || "en";
+
+  try {
+    /* 改用 for...of 迴圈循序請求，並加入延遲，避免觸發 Google 429 阻擋 */
+    const entries = Object.entries(toTranslate);
+    const results = [];
+    for (let i = 0; i < entries.length; i++) {
+      const [key, val] = entries[i];
+      const translated = await _gtField(val, tl);
+      results.push([key, translated]);
+
+      // 如果不是最後一個請求，稍微暫停 250 毫秒
+      if (i < entries.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 250));
+      }
+    }
+    return Object.fromEntries(results);
+  } catch (e) {
+    console.warn("Google Translate failed:", e);
+    return {};
+  }
+}
+
+/* ========================================================
+   Allergy Google Translate (auto-translate on input)
+======================================================== */
+let _allergyTransTimer = null;
+function scheduleAllergyTranslate() {
+  clearTimeout(_allergyTransTimer);
+  _allergyTransTimer = setTimeout(doAllergyTranslate, 1000);
+  scheduleSave();
+}
+
+async function doAllergyTranslate() {
+  const input = document.getElementById("f_allergy");
+  const box   = document.getElementById("allergyTransBox");
+  if (!input || !box) return;
+  const text = input.value.trim();
+
+  if (!text || text === "無") {
+    box.style.display = "none";
+    box.innerHTML = ""; // 確保徹底清空
+    return;
+  }
+
+  const tlMap = { id: "id", en: "en", vi: "vi" };
+  const tl = tlMap[lang] || "en";
+
+  box.style.display = "block";
+  box.innerHTML = "<span style='color:var(--muted);font-size:.8rem'>翻譯中… / Translating…</span>";
+
+  const translated = await _gtField(text, tl);
+  // 加入防呆：如果翻譯結果等於原文，就不需要顯示「Google翻譯」的框框
+  if (translated && translated !== text && translated !== "無") {
+    box.innerHTML = "<span style='font-size:.7rem;color:var(--muted);letter-spacing:.4px;text-transform:uppercase;font-weight:700'>Google 翻譯 / Translation</span><br>" + escapeHtml(translated);
+  } else {
+    box.style.display = "none";
+  }
+}
+
+/* ========================================================
+   Safe Select Helper — 防止 selectedOptions[0] 為 undefined
+======================================================== */
+function getSelectTextSafe(id) {
+  const el = document.getElementById(id);
+  return (el && el.selectedOptions.length > 0)
+    ? escapeHtml(el.selectedOptions[0].text)
+    : "—";
+}
+
+/* ========================================================
+   Generate Plan
+======================================================== */
+async function generatePlan() {
+  const t = L[lang];
+  const genBtn = document.getElementById("genBtn");
+
+  /* ── 防呆驗證 / Input Validation ── */
+  const nameInput = document.getElementById("f_name").value.trim();
+  const ageInputStr = document.getElementById("f_age").value.trim();
+
+  if (!nameInput) {
+    const nameAlerts = {
+      id: "請輸入受照顧者姓名。\nSilakan masukkan nama pasien.",
+      en: "請輸入受照顧者姓名。\nPlease enter the patient's name.",
+      vi: "請輸入受照顧者姓名。\nVui lòng nhập tên bệnh nhân."
+    };
+    alert(nameAlerts[lang] || nameAlerts.en);
+    document.getElementById("f_name").focus();
+    return;
+  }
+  if (ageInputStr !== "") {
+    const ageRawCheck = parseInt(ageInputStr, 10);
+    if (isNaN(ageRawCheck) || ageRawCheck < 0 || ageRawCheck > 120) {
+      const ageAlerts = {
+        id: "請輸入合理的年齡（0–120 歲）。\nMasukkan usia yang valid (0–120).",
+        en: "請輸入合理的年齡（0–120 歲）。\nPlease enter a valid age (0–120).",
+        vi: "請輸入合理的年齡（0–120 歲）。\nVui lòng nhập tuổi hợp lệ (0–120)."
+      };
+      alert(ageAlerts[lang] || ageAlerts.en);
+      document.getElementById("f_age").focus();
+      return;
+    }
+  }
+
+  genBtn.disabled = true;
+
+  /* ── Collect data ── */
+  const name  = escapeHtml(document.getElementById("f_name").value.trim()  || "—");
+  const age   = escapeHtml(ageInputStr ? ageInputStr : "—");
+  const sex   = getSelectTextSafe("f_sex");
+  const mob   = getSelectTextSafe("f_mob");
+  const cog   = getSelectTextSafe("f_cog");
+  const diet  = getSelectTextSafe("f_diet");
+  /* 讓會經過 biText/biBlock 的欄位保持原始字串，避免雙重轉義 */
+  const allergy = document.getElementById("f_allergy").value.trim() || "無";
+  const note  = document.getElementById("f_note").value.trim()   || "";
+
+  /* ── Living Arrangement ── */
+  const cohabit   = getSelectTextSafe("f_cohabit");
+  const eatout    = getSelectTextSafe("f_eatout");
+  const envNote   = document.getElementById("f_env_note").value.trim();
+  const wake      = escapeHtml(document.getElementById("f_wake").value || "未定");
+  const breakfast = escapeHtml(document.getElementById("f_breakfast").value || "未定");
+  const lunch     = escapeHtml(document.getElementById("f_lunch").value || "未定");
+  const nap       = escapeHtml(document.getElementById("f_nap").value || "未定");
+  const dinner    = escapeHtml(document.getElementById("f_dinner").value || "未定");
+  const bedtime   = escapeHtml(document.getElementById("f_bedtime").value || "未定");
+  const schNote   = document.getElementById("f_sch_note").value.trim();
+  const activeActs = ACTS.filter(a => actSelected.has(a.k));
+  const fn    = document.getElementById("f_fn").value.trim();
+  const frel  = document.getElementById("f_frel").value.trim();
+  const ftel  = document.getElementById("f_ftel").value.trim();
+  const dn    = document.getElementById("f_dn").value.trim();
+  const dhosp = document.getElementById("f_dhosp").value.trim();
+  const dtel  = document.getElementById("f_dtel").value.trim();
+  const d = new Date();
+  const today = `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+  /* Sanitized contact versions for HTML injection */
+  const fn_s = escapeHtml(fn), frel_s = escapeHtml(frel), ftel_s = escapeHtml(ftel);
+  const dn_s = escapeHtml(dn), dhosp_s = escapeHtml(dhosp), dtel_s = escapeHtml(dtel);
+
+  /* ── Vital Signs (定期監測計劃項目) ── */
+  const monitoredVitals = Object.keys(VITAL_INFO).filter(k => vitalSelected.has(k));
+  const vitalNote  = document.getElementById("f_vital_note").value.trim();
+
+  const selConds = CONDS.filter(c => selected.has(c.k));
+  const activeMeds = []; /* 藥物卡片已移除 */
+  const activeClean = CLEAN_ITEMS.filter(c => cleanSelected.has(c.k));
+  const cleanNote = document.getElementById("f_clean_note").value.trim();
+
+  /* Pre-escape free-text fields used in HTML
+     Note: biText() and biBlock() call escapeHtml() internally.
+     We only need the raw values for boolean truthiness checks. */
+
+  /* ── Show loading ── */
+  document.getElementById("output").innerHTML = `
+    <div class="plan-wrap">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <span style="white-space:pre-line;text-align:center">${t.loading}</span>
+      </div>
+    </div>`;
+  /* 捲動只在最終渲染完成後執行一次，避免畫面兩次抖動 */
+
+  /* ── Translate free-text inputs (bilingual) ── */
+  _isTranslationBlocked = false; // 每次產生前重置翻譯狀態
+  const _rawAllergy = document.getElementById("f_allergy").value.trim();
+  const _trans = await translateFreeText({
+    allergy:   _rawAllergy && _rawAllergy !== "無" ? _rawAllergy : "",
+    envNote,
+    schNote,
+    vitalNote,
+    cleanNote,
+    note
+  }, lang);
+
+  /* 【優化一】如果翻譯被阻擋，顯示提示訊息 */
+  const transWarningHtml = _isTranslationBlocked
+    ? `<div class="notes-box" style="background:#fff3e8; color:#b04621; border-color:#e8c08a; margin-bottom:15px;">
+        ⚠ 提示：目前翻譯服務請求過於頻繁，部分自訂內容將暫時以中文顯示，請稍後再試。
+      </div>`
+    : "";
+
+  /* Helper: render a bilingual inline text (zh / lang) */
+  function biText(zhRaw, key) {
+    const zh = escapeHtml(zhRaw).replace(/\n/g, "<br>");
+    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
+    if (!zh) return "";
+    if (!tr || tr === zh) return zh;
+    return `${zh} <span style="color:var(--muted);font-size:.88em">/ ${tr}</span>`;
+  }
+  /* Helper: bilingual block (zh 左 / lang 右) for notes boxes */
+  function biBlock(zhRaw, key, boxStyle) {
+    const zh = escapeHtml(zhRaw).replace(/\n/g, "<br>");
+    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
+    if (!zh) return "";
+    if (!tr || tr === zh) return `<div class="notes-box" style="${boxStyle||''}">${zh}</div>`;
+    return `<div class="cond-block" style="margin-bottom:0"><div class="cond-block-body"><div class="col zh">${zh}</div><div class="col sec">${tr}</div></div></div>`;
+  }
+
+  /* ── AI Generation removed (不使用 API，改用 Google 翻譯) ── */
+  const aiHtml = "";
+
+  /* ── Standard care blocks ── */
+  let blocksHtml = "";
+  if (selConds.length > 0) {
+    selConds.forEach(c => {
+      blocksHtml += `
+        <div class="cond-block">
+          <div class="cond-block-head"><span class="dot"></span>${c.zh} / ${c[lang]}</div>
+          <div class="cond-block-body">
+            <div class="col zh">${c.adv.zh}</div>
+            <div class="col sec">${c.adv[lang]}</div>
+          </div>
+        </div>`;
+    });
+  } else {
+    blocksHtml = `<p style="color:var(--muted);font-size:.85rem;padding:8px 0">尚未選擇健康狀況 / No conditions selected</p>`;
+  }
+
+  /* Med section removed */
+
+  /* ── Cleaning section ── */
+  let cleanHtml = "";
+  if (activeClean.length > 0 || cleanNote) {
+    let items = activeClean.map(c =>
+      `<div class="med-plan-item">
+        <span class="med-icon">🧹</span>
+        <span>${c.zh} <span style="color:var(--muted);font-size:.82rem">/ ${c[lang]}</span></span>
+      </div>`
+    ).join("");
+    cleanHtml = `
+      <div class="plan-sec-title clean-title">🧹 打掃清潔注意事項 / Cleaning &amp; Hygiene Notes</div>
+      <div class="med-plan-list clean-list">${items}</div>
+      ${cleanNote ? `<div class="notes-box clean-note-box" style="margin-top:10px;background:#f0f8f0;border-color:#b8d8b8">${biText(cleanNote, "cleanNote")}</div>` : ""}`;  }
+
+  /* ── Emergency contacts ── */
+  let emgHtml = "";
+  if (fn || dn) {
+    let cards = "";
+    // 過濾電話：只允許數字、加號與減號，防禦惡意字元導致 tel: 解析失敗
+    const safeTel = (raw) => escapeHtml(raw.replace(/[^\d\+\-]/g, ''));
+
+    if (fn)  cards += `<div class="info-cell"><div class="lbl">${frel_s || '家屬'}</div><div class="val">${fn_s}${ftel ? `<br><a href="tel:${safeTel(ftel)}" style="color:var(--accent2)">${ftel_s}</a>` : ""}</div></div>`;
+    if (dn)  cards += `<div class="info-cell"><div class="lbl">醫師 / Doctor</div><div class="val">${dn_s}${dhosp ? " · " + dhosp_s : ""}${dtel ? `<br><a href="tel:${safeTel(dtel)}" style="color:var(--accent2)">${dtel_s}</a>` : ""}</div></div>`;
+    emgHtml = `
+      <div class="plan-sec-title emg-title">${t.secEmg}</div>
+      <div class="emg-grid">${cards}</div>`;
+  }
+
+  /* ── Special notes ── */
+  let noteHtml = "";
+  if (note) {
+    noteHtml = `
+      <div class="plan-sec-title">${t.secNote}</div>
+      ${biBlock(note, "note", "")}`;
+  }
+
+  /* ── Allergy badge ── */
+  const allergyCell = (allergy && allergy !== "無")
+    ? `<div class="info-cell" style="background:#fff3e8;border:1px solid #e8c08a"><div class="lbl">⚠ 過敏/禁忌</div><div class="val" style="color:var(--warn)">${biText(allergy, "allergy")}</div></div>`
+    : "";
+
+  /* MedCheckHtml removed */
+
+  /* ── Render ── */
+  document.getElementById("output").innerHTML = `
+    <div class="out-actions no-print">
+      <button class="btn btn-print" onclick="openPrintModal()">${t.printBtn}</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('output').innerHTML='';document.getElementById('genBtn').disabled=false">${t.closeBtn}</button>
+    </div>
+    <div class="view-toggle-bar no-print">
+      <span class="toggle-label">顯示模式</span>
+      <div class="view-mode-switch">
+        <button class="view-mode-btn" id="vmBtn_compact" onclick="setViewMode('compact')">精簡</button>
+        <button class="view-mode-btn active" id="vmBtn_full" onclick="setViewMode('full')">詳細</button>
+      </div>
+    </div>
+    <div class="plan-wrap" id="planDoc">
+      <div class="print-doc-header" style="display:none">
+        <h2>照顧計劃書 · Care Plan</h2>
+        <div class="print-meta">${name}・${age}歲・${sex}<br>${today}</div>
+      </div>
+      <div class="plan-hd">
+        <h3>${t.planTitle}</h3>
+        <span class="date-chip">${today}</span>
+      </div>
+      ${transWarningHtml}
+      <div class="info-grid">
+        <div class="info-cell"><div class="lbl">${t.l_name}</div><div class="val">${name} · ${sex}</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${age} 歲</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_mob}</div><div class="val">${mob}</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_cog}</div><div class="val">${cog}</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_diet}</div><div class="val">${diet}</div></div>
+        ${allergyCell}
+      </div>
+      <div class="print-schedule-section">
+        <div class="plan-sec-title">🏠 家庭環境與作息 / Living &amp; Schedule</div>
+        <div class="info-grid" style="margin-bottom:10px">
+          <div class="info-cell"><div class="lbl">${LIVING_LBL.cohabit.zh} / ${LIVING_LBL.cohabit[lang]}</div><div class="val">${cohabit}</div></div>
+          <div class="info-cell"><div class="lbl">${LIVING_LBL.eatout.zh} / ${LIVING_LBL.eatout[lang]}</div><div class="val">${eatout}</div></div>
+          ${envNote ? `<div class="info-cell"><div class="lbl">${LIVING_LBL.env.zh} / ${LIVING_LBL.env[lang]}</div><div class="val">${biText(envNote, "envNote")}</div></div>` : ""}
+        </div>
+        <div class="print-schedule-strip" style="background:var(--soft);border-radius:11px;padding:14px 16px;margin-bottom:6px;font-size:.86rem;line-height:2">
+          <span class="sch-slot">🌅 ${SLOT_LABELS.wake.zh} / ${SLOT_LABELS.wake[lang]} <span class="sch-time">${wake}</span></span>
+          <span class="sch-slot">🍳 ${SLOT_LABELS.breakfast.zh} / ${SLOT_LABELS.breakfast[lang]} <span class="sch-time">${breakfast}</span></span>
+          <span class="sch-slot">🌞 ${SLOT_LABELS.lunch.zh} / ${SLOT_LABELS.lunch[lang]} <span class="sch-time">${lunch}</span></span>
+          <span class="sch-slot">😴 ${SLOT_LABELS.nap.zh} / ${SLOT_LABELS.nap[lang]} <span class="sch-time">${nap}</span></span>
+          <span class="sch-slot">🍽 ${SLOT_LABELS.dinner.zh} / ${SLOT_LABELS.dinner[lang]} <span class="sch-time">${dinner}</span></span>
+          <span class="sch-slot">🌙 ${SLOT_LABELS.bedtime.zh} / ${SLOT_LABELS.bedtime[lang]} <span class="sch-time">${bedtime}</span></span>
+          ${activeActs.length ? `<span class="sch-slot">🎯 ${ACT_LBL.zh} / ${ACT_LBL[lang]}: ${activeActs.map(a=>`${escapeHtml(a.zh)} / ${escapeHtml(a[lang])}`).join("、")}</span>` : ""}
+          ${schNote ? `<span class="sch-slot">📝 ${LIVING_LBL.schNote.zh} / ${LIVING_LBL.schNote[lang]}: ${biText(schNote, "schNote")}</span>` : ""}
+        </div>
+      </div>
+      ${aiHtml}
+      ${(monitoredVitals.length || vitalNote) ? `
+      <div class="print-vital-section">
+        <div class="plan-sec-title vital-sec-title">📊 生命徵象監測項目 / Vital Signs to Monitor</div>
+        <div class="info-grid" style="margin-bottom:18px">
+          ${monitoredVitals.map(k => `<div class="info-cell"><div class="lbl">${VITAL_INFO[k].icon} ${VITAL_INFO[k].zh}</div><div class="val" style="font-size:.92rem">需定期監測</div><div class="lbl" style="margin-top:4px;font-size:.62rem;color:#3a7055">${VITAL_INFO[k].range}</div></div>`).join("")}
+          ${vitalNote ? `<div class="info-cell" style="grid-column:1/-1"><div class="lbl">備註 Note</div><div class="val">${biText(vitalNote, "vitalNote")}</div></div>` : ""}
+        </div>
+      </div>` : ""}
+      <div class="plan-sec-title care-title">${t.secCare} (中文 · ${t.secLang})</div>
+      ${blocksHtml}
+      ${cleanHtml}
+      ${emgHtml}
+      ${noteHtml}
+      <p class="disclaimer">${t.disclaimer}</p>
+    </div>`;
+
+  document.getElementById("output").scrollIntoView({ behavior: "smooth" });
+  genBtn.disabled = false;
+}
+
+/* ========================================================
+   View Mode Toggle (精簡/詳細)
+======================================================== */
+function setViewMode(mode) {
+  const plan = document.getElementById("planDoc");
+  if (!plan) return;
+  if (mode === "compact") {
+    plan.classList.add("compact");
+    document.getElementById("vmBtn_compact").classList.add("active");
+    document.getElementById("vmBtn_full").classList.remove("active");
+  } else {
+    plan.classList.remove("compact");
+    document.getElementById("vmBtn_full").classList.add("active");
+    document.getElementById("vmBtn_compact").classList.remove("active");
+  }
+}
+
+/* ========================================================
+   Med Checkbox — 藥物卡片已移除，相關函式一併清除
+   (toggleMedCheck / updateMedProgress / _medChecked / _medTotal
+    已刪除，避免維護負擔與記憶體佔用)
+======================================================== */
+
+/* ========================================================
+   Clear
+======================================================== */
+function clearAll() {
+  const clearConfirm = {
+    id: "確定要清除所有資料？\nApakah Anda yakin ingin menghapus semua data?",
+    en: "確定要清除所有資料？\nAre you sure you want to reset all fields?",
+    vi: "確定要清除所有資料？\nBạn có chắc muốn xóa tất cả dữ liệu không?"
+  };
+  if (!confirm(clearConfirm[lang] || clearConfirm.en)) return;
+
+  // 【修復漏洞一】中斷尚未執行的自動儲存與翻譯計時器，防止競態條件
+  clearTimeout(_saveTimer);
+  clearTimeout(_allergyTransTimer);
+
+  localStorage.removeItem(LS_KEY);
+  ["f_name","f_age","f_allergy","f_note","f_fn","f_frel","f_ftel","f_dn","f_dhosp","f_dtel",
+   "f_vital_note","f_env_note","f_sch_note","f_clean_note"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = "";
+  });
+  // reset time fields to defaults
+  const timeDefaults = {f_wake:"06:30",f_breakfast:"07:30",f_lunch:"12:00",f_nap:"13:00",f_dinner:"18:00",f_bedtime:"21:30"};
+  Object.entries(timeDefaults).forEach(([id,val]) => { const el=document.getElementById(id); if(el) el.value=val; });
+  // Bug Fix: reset all <select> elements to first option (were previously not reset)
+  ["f_sex","f_mob","f_cog","f_diet","f_cohabit","f_eatout"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.selectedIndex = 0;
+  });
+  selected.clear();
+  actSelected.clear();
+  cleanSelected.clear();
+  vitalSelected.clear();
+  document.querySelectorAll(".vital-chip").forEach(c => {
+    c.classList.remove("on");
+    c.setAttribute("aria-pressed", "false");
+  });
+  document.querySelectorAll(".vital-field").forEach(f => f.style.display = "none");
+  document.getElementById("vitalInputs").style.borderTop = "none";
+  document.getElementById("vitalNoteWrap").style.display = "none";
+  // 【優化】已移除不再使用的 medList DOM 參照（藥物卡片功能已刪除）
+  document.getElementById("output").innerHTML = "";
+  const _atb = document.getElementById("allergyTransBox"); if (_atb) { _atb.style.display="none"; _atb.innerHTML=""; }
+  document.getElementById("genBtn").disabled = false;
+  renderChips();
+  renderActChips();
+  renderCleanChips();
+}
+
+/* ========================================================
+   Vital Sign Tip Toggle
+======================================================== */
+function toggleTip(toggle) {
+  toggle.classList.toggle("open");
+  const body = toggle.nextElementSibling;
+  body.classList.toggle("show");
+}
+
+/* ========================================================
+   Vital Sign Chip Toggle
+======================================================== */
+
+function toggleVital(key) {
+  const chip = document.querySelector(`.vital-chip[data-key="${key}"]`);
+  const field = document.getElementById("vf_" + key);
+  // Note: f_bp, f_pulse, etc. input elements no longer exist (vital fields are display-only).
+  // The input variable was removed to eliminate dead-code references.
+
+  if (vitalSelected.has(key)) {
+    vitalSelected.delete(key);
+    chip.classList.remove("on");
+    chip.setAttribute("aria-pressed", "false");
+    field.style.display = "none";
+  } else {
+    vitalSelected.add(key);
+    chip.classList.add("on");
+    chip.setAttribute("aria-pressed", "true");
+    field.style.display = "block";
+  }
+
+  // Show/hide notes & inputs wrapper
+  const anySelected = vitalSelected.size > 0;
+  const inputsWrap = document.getElementById("vitalInputs");
+  const noteWrap = document.getElementById("vitalNoteWrap");
+  inputsWrap.style.borderTop = anySelected ? "" : "none";
+  noteWrap.style.display = anySelected ? "block" : "none";
+  scheduleSave();
+}
+
+/* ========================================================
+   Print Modal
+======================================================== */
+let _printSize = "a4";
+let _printOrient = "portrait";
+
+function openPrintModal() {
+  document.getElementById("printModalOverlay").style.display = "flex";
+}
+
+function closePrintModal() {
+  document.getElementById("printModalOverlay").style.display = "none";
+}
+
+/* Close print modal on Escape key */
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Escape") {
+    const modal = document.getElementById("printModalOverlay");
+    if (modal && modal.style.display !== "none") {
+      closePrintModal();
+    }
+  }
+});
+
+function setPrintSize(size, btn) {
+  _printSize = size;
+  document.querySelectorAll(".print-size-btn").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+}
+
+function setPrintOrient(orient, btn) {
+  _printOrient = orient;
+  document.querySelectorAll(".print-orient-btn").forEach(b => b.classList.remove("on"));
+  btn.classList.add("on");
+}
+
+// Toggle section opts — delegated click on the container
+document.getElementById("printSectionOpts").addEventListener("click", function(e) {
+  const opt = e.target.closest(".print-opt");
+  if (!opt) return;
+  /* 避免 label 內部 checkbox 的 click 事件導致雙重 toggle */
+  if (e.target.tagName === "INPUT") return;
+  opt.classList.toggle("on");
+  const cb = opt.querySelector("input[type=checkbox]");
+  if (cb) cb.checked = opt.classList.contains("on");
+});
+
+function executePrint() {
+  /* 視覺回饋：按鈕暫時顯示「準備列印中…」，防止使用者重複點按 */
+  const printBtn = document.querySelector(".print-modal-actions .btn-print");
+  if (printBtn) {
+    printBtn.disabled = true;
+    printBtn.textContent = "⏳ 準備列印中… / Preparing…";
+    setTimeout(() => {
+      printBtn.disabled = false;
+      printBtn.textContent = "🖨 確認列印 / Print";
+    }, 2500);
+  }
+
+  const body = document.body;
+
+  // Remove previous print classes
+  body.className = body.className
+    .replace(/\bprint-[a-z-]+\b/g, "").trim();
+
+  // Paper size — inject @page rule into a dedicated style tag
+  let pageStyle = document.getElementById("_printPageStyle");
+  if (!pageStyle) {
+    pageStyle = document.createElement("style");
+    pageStyle.id = "_printPageStyle";
+    document.head.appendChild(pageStyle);
+  }
+  const sizeVal = (_printSize === "letter" ? "letter" : "A4") +
+                  (_printOrient === "landscape" ? " landscape" : " portrait");
+  pageStyle.textContent = `@page { size: ${sizeVal}; margin: 15mm 15mm 12mm; }`;
+
+  if (_printOrient === "landscape") body.classList.add("print-landscape");
+
+  // Sections: if a chip is OFF, add the hide class
+  document.querySelectorAll(".print-opt").forEach(opt => {
+    const cls = opt.dataset.class;
+    if (cls && !opt.classList.contains("on")) {
+      body.classList.add(cls);
+    }
+  });
+
+  closePrintModal();
+
+  // 定義清理函式
+  const cleanupPrint = () => {
+    body.className = body.className.replace(/\bprint-[a-z-]+\b/g, "").trim();
+    if (pageStyle) pageStyle.textContent = "";
+    window.removeEventListener("afterprint", cleanupPrint);
+  };
+
+  // 監聽列印結束事件 (相容現代瀏覽器)
+  window.addEventListener("afterprint", cleanupPrint);
+
+  // 【優化二】確保 CSS 渲染完畢的最佳實踐（使用雙層 requestAnimationFrame）
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      window.print();
+      // 針對不支援 afterprint 的老舊瀏覽器做保底清理 (10秒後)
+      setTimeout(cleanupPrint, 10000);
+    });
+  });
+}
+
+/* ========================================================
+   Boot
+======================================================== */
+
+/* Restore draft first (before applyLang so chips render correctly) */
+const _restored = loadFromStorage();
+
+/* applyLang 負責翻譯文字標籤、buildSelects、renderChips。
+   有存檔時，loadFromStorage 已呼叫過 buildSelects() 並寫入 el.value；
+   applyLang 內的 buildSelects() 會再執行一次，但 buildSelects() 內部
+   已有 curVal 保留邏輯（先讀舊值，重建後再寫回），故不會洗掉已恢復的值。 */
+applyLang();
+
+/* After applyLang renders chips, mark the restored ones visually */
+if (_restored) {
+  /* Vital chips */
+  vitalSelected.forEach(k => {
+    const chip = document.querySelector(`.vital-chip[data-key="${k}"]`);
+    const field = document.getElementById("vf_" + k);
+    if (chip) chip.classList.add("on");
+    if (field) field.style.display = "block";
+  });
+  if (vitalSelected.size > 0) {
+    const inputsWrap = document.getElementById("vitalInputs");
+    const noteWrap = document.getElementById("vitalNoteWrap");
+    if (inputsWrap) inputsWrap.style.borderTop = "";
+    if (noteWrap) noteWrap.style.display = "block";
+  }
+
+  /* Med card removed — nothing to reset */
+}
+
+/* Attach auto-save listeners after full render */
+attachAutoSaveListeners();
+</script>
+
+</body>
+</html>
