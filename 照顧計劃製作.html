@@ -1960,7 +1960,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   <div id="output"></div>
 </div>
 
-<footer id="foot">資料僅儲存於本裝置 · Data stored on this device only · Dữ liệu chỉ lưu trên thiết bị này<br><span style="font-size:.7rem;opacity:.75;letter-spacing:.5px">© 2026 照顧計劃製作 All Rights Reserved</span></footer>
+<footer><span id="foot">資料僅儲存於本裝置 · Data stored on this device only · Dữ liệu chỉ lưu trên thiết bị này</span><br><span style="font-size:.7rem;opacity:.75;letter-spacing:.5px">© 2026 照顧計劃製作 All Rights Reserved</span></footer>
 
 <!-- Print Modal — 放在 <script> 前，確保 printSectionOpts 元素在 addEventListener 前已存在於 DOM -->
 <div id="printModalOverlay" class="print-modal-overlay" style="display:none" onclick="if(event.target===this)closePrintModal()">
@@ -2058,7 +2058,8 @@ function loadFromStorage() {
     if (!draft || !draft.fieldValues) return false;
 
     /* 1. 先恢復語系 */
-    if (draft.lang) {
+    const VALID_LANGS = new Set(["id", "en", "vi"]);
+    if (draft.lang && VALID_LANGS.has(draft.lang)) {
       lang = draft.lang;
       document.querySelectorAll(".lang-bar button").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.l === lang);
@@ -2779,7 +2780,119 @@ const CONDS = [
 【Kỹ thuật đặt tư thế】Nằm nghiêng 30° (không phải 90°, tránh đè lên mấu chuyển lớn); dùng gối đỡ lưng, đầu gối và mắt cá; trên xe lăn mỗi 15-30 phút dịch chuyển hoặc nhấc mông 10 giây; đảm bảo gót chân không chạm bề mặt giường (dùng khăn hoặc mút).
 【Chăm sóc vết thương】Nếu có trầy da hoặc vết loét, KHÔNG tự xử lý — báo y tá ngay; ghi lại vị trí, kích thước (cm), màu sắc, độ sâu và dịch tiết, chụp ảnh lưu; thay băng theo y lệnh (không tự mở băng).
 【Dinh dưỡng & nước】Đảm bảo đủ protein (1,2-1,5g/kg thể trọng/ngày) để phục hồi da; bổ sung vitamin C hỗ trợ tổng hợp collagen; duy trì đủ nước (1500-2000ml/ngày theo y lệnh).
-【Ghi chép & bàn giao】Ghi thời gian và tư thế xoay trở (nghiêng trái/phải/nằm ngửa) mỗi ca; nếu phát hiện vết loét mới, chụp ảnh và báo gia đình cùng y tá ngay — không được chậm trễ.`}}
+【Ghi chép & bàn giao】Ghi thời gian và tư thế xoay trở (nghiêng trái/phải/nằm ngửa) mỗi ca; nếu phát hiện vết loét mới, chụp ảnh và báo gia đình cùng y tá ngay — không được chậm trễ.`}},
+
+  {k:"dialysis", zh:"🩺 洗腎（血液透析）", id:"Hemodialisis (Cuci Darah)", en:"Hemodialysis / Dialysis Care", vi:"Chạy Thận Nhân Tạo",
+   adv:{
+    zh:`【透析日安排】透析日通常每週2-3次，配合排定時間協助患者準時抵達洗腎中心；透析前確認患者已進食（避免低血糖），但勿飲用過量液體；透析後患者常感疲倦，安排返家後充分休息，避免安排高強度活動。
+【廔管（瘻管/人工血管）照護】每日觸摸廔管（動靜脈廔管）確認震顫感（血管顫動）是否正常；廔管手臂禁止：量血壓、抽血、靜脈注射、穿戴手錶或緊身衣物、長時間受壓（如側躺壓住廔管側）；穿刺部位若出現腫脹、滲血、發熱、疼痛或震顫消失→立即告知家屬並就醫。中心靜脈導管（Perm Cath）：保持貼膜乾燥完整，洗澡時用防水貼保護；導管出口皮膚每日觀察有無紅腫感染。
+【水分與飲食管制】嚴格限水（透析間期通常每日＜1000-1500ml，依醫師指示）；記錄每日液體攝入量（含粥、湯、水果含水量）；低鉀飲食：避免高鉀食物（香蕉、柳橙、番茄、馬鈴薯、巧克力）；低磷飲食：避免高磷食物（可樂、奶製品、堅果、動物內臟）；限鹽（每日＜3g）減少口渴感；禁止使用低鈉鹽（含大量鉀）；若患者有過多攝取水分的傾向，協助轉移注意力，如嚼口香糖、含冰塊小口入口（需計入水量）。
+【透析後觀察重點】觀察穿刺點有無持續滲血（正常可加壓止血）；透析後常見頭暈、低血壓：協助患者緩慢起身（三段式），若頭暈明顯讓患者平躺並通報；觀察有無肌肉抽筋（透析中或後常見，提高下肢並輕柔按摩，嚴重時通報）；體重應在透析後接近「乾體重」（醫師設定目標值），若體重異常偏高通報醫師。
+【緊急警示徵象】以下情況立即叫救護車或送醫：廔管震顫完全消失（廔管阻塞）、廔管出血不止、胸痛、嚴重呼吸困難（可能肺水腫）、意識改變、抽搐、血鉀過高症狀（肌肉無力、心跳不規則）。
+【日常皮膚與血糖照護】透析患者皮膚常乾癢，每日洗澡後塗抹低敏保濕乳液（廔管穿刺點除外）；若合併糖尿病，透析前後均需監測血糖，透析過程中血糖可能下降，備好糖果或葡萄糖錠應急。
+【心理與社會支持】規律洗腎對患者是身心負擔，提供耐心陪伴；鼓勵患者遵從飲食限制，勿強迫但需清楚說明原因；每次透析當日若患者情緒特別低落或焦慮，告知家屬或醫療團隊。`,
+    id:`【Jadwal Dialisis】Biasanya 2-3 kali seminggu; bantu pasien tiba tepat waktu di pusat hemodialisis; pastikan pasien sudah makan (hindari hipoglikemia) tapi jangan minum terlalu banyak cairan; setelah dialisis pasien biasanya kelelahan — sediakan waktu istirahat yang cukup.
+【Perawatan Akses Vaskuler (Fistula/Cimino & Kateter)】Setiap hari raba fistula AV untuk merasakan getaran (thrill) — jika tidak terasa segera lapor; DILARANG pada lengan fistula: ukur tensi, ambil darah, suntik infus, pakai jam tangan atau pakaian ketat, tidur menekan lengan fistula; jika ada bengkak, merembes darah, panas, nyeri, atau getaran hilang → segera lapor keluarga dan pergi ke dokter; Kateter Vena Sentral (Perm Cath): jaga balutan tetap kering, lindungi dengan penutup kedap air saat mandi; amati kulit di sekitar keluar kateter setiap hari.
+【Pembatasan Cairan & Diet】Batasi cairan ketat (biasanya ＜1000-1500ml/hari sesuai dokter); catat asupan cairan harian (termasuk bubur, sup, buah); hindari makanan tinggi kalium (pisang, jeruk, tomat, kentang, coklat); hindari makanan tinggi fosfor (minuman cola, susu, kacang-kacangan, jeroan); batasi garam (＜3g/hari); JANGAN gunakan garam rendah sodium (mengandung kalium tinggi); jika pasien cenderung minum berlebihan, alihkan perhatian (kunyah permen karet, isap es batu kecil — hitung ke cairan).
+【Observasi Pasca Dialisis】Amati titik tusukan: perdarahan ringan normal (tekan untuk menghentikan); pusing dan tekanan darah rendah umum pasca dialisis — bantu berdiri perlahan (3 tahap), jika pusing hebat baringkan dan lapor; kram otot (umum selama/setelah dialisis): angkat kaki, pijat lembut; jika berat → lapor; berat badan setelah dialisis harus mendekati "berat kering" (target dokter); laporkan jika berat badan terlalu tinggi.
+【Tanda Bahaya — Panggil Ambulans Segera】Getaran fistula benar-benar hilang (sumbatan), perdarahan fistula tidak berhenti, nyeri dada, sesak napas berat (kemungkinan edema paru), perubahan kesadaran, kejang, gejala kalium tinggi (kelemahan otot, jantung tidak teratur).
+【Perawatan Kulit & Gula Darah】Kulit pasien dialisis sering gatal dan kering — oleskan losion pelembab hipoalergenik setelah mandi (hindari area tusukan fistula); jika juga diabetes: periksa gula darah sebelum dan sesudah dialisis; siapkan permen atau tablet glukosa untuk darurat.
+【Dukungan Psikologis】Jadwal cuci darah rutin adalah beban fisik dan mental; berikan pendampingan sabar; dorong kepatuhan diet dengan penjelasan — jangan paksa; pada hari dialisis jika pasien tampak sangat tertekan atau cemas, informasikan ke keluarga atau tim medis.`,
+    en:`【Dialysis Day Schedule】Dialysis is usually scheduled 2-3 times per week; assist patient to arrive at the dialysis center on time; ensure patient has eaten before dialysis (to prevent hypoglycemia) but has not consumed excess fluids; after dialysis patients are often fatigued — arrange adequate rest and avoid strenuous activities.
+【Vascular Access Care (AV Fistula / Graft & Catheter)】Check the AV fistula daily by touching it to feel the thrill (vibration) — report to family if thrill is absent; on the fistula arm, NEVER: measure blood pressure, draw blood, give injections, wear watches or tight clothing, or lie with pressure on that arm; if you notice swelling, bleeding, warmth, pain, or loss of thrill at the puncture site → notify family and seek medical care immediately; Central Venous Catheter (Perm Cath): keep dressing dry and intact; cover with waterproof dressing during bathing; inspect catheter exit site skin daily for redness or infection.
+【Fluid & Dietary Restrictions】Strictly limit fluid intake (usually ＜1000-1500ml/day per doctor's orders); record all daily fluid intake (including porridge, soup, and water content of fruits); low-potassium diet: avoid high-potassium foods (bananas, oranges, tomatoes, potatoes, chocolate); low-phosphorus diet: avoid high-phosphorus foods (cola, dairy products, nuts, organ meats); limit salt (＜3g/day) to reduce thirst; do NOT use "low-sodium salt" substitutes (contain high potassium); if patient tends to over-consume fluids, use distraction strategies (chewing gum, small ice chips counted toward fluid allowance).
+【Post-Dialysis Monitoring】Check puncture site for continued bleeding (minor oozing is normal — apply pressure); post-dialysis dizziness and low blood pressure are common — assist patient to rise slowly (3-stage), if severe dizziness have patient lie down and notify; muscle cramps (common during/after dialysis): elevate legs, gentle massage, report if severe; post-dialysis weight should be near the patient's "dry weight" (doctor-set target); report if weight remains abnormally high.
+【Emergency Warning Signs — Call Ambulance Immediately】Complete disappearance of fistula thrill (clot/blockage), uncontrolled fistula bleeding, chest pain, severe breathlessness (possible pulmonary edema), altered consciousness, seizures, symptoms of hyperkalemia (muscle weakness, irregular heartbeat).
+【Skin & Blood Sugar Care】Dialysis patients often have dry, itchy skin — apply hypoallergenic moisturizer daily after bathing (avoid fistula puncture site); if patient also has diabetes: monitor blood sugar before and after each dialysis session; blood sugar may drop during dialysis — keep candy or glucose tablets on hand for emergencies.
+【Psychological & Social Support】Regular dialysis is a significant physical and emotional burden; offer patient patience and companionship; encourage dietary compliance with clear explanations rather than force; on dialysis days, if the patient seems especially depressed or anxious, inform family or the care team.`,
+    vi:`【Lịch lọc máu】Thường 2-3 lần/tuần; hỗ trợ bệnh nhân đến trung tâm lọc máu đúng giờ; đảm bảo bệnh nhân đã ăn trước khi lọc (tránh hạ đường huyết) nhưng không uống quá nhiều nước; sau lọc bệnh nhân thường mệt — sắp xếp nghỉ ngơi đầy đủ, tránh hoạt động nặng.
+【Chăm sóc đường vào mạch máu (Fistula AV & Catheter)】Mỗi ngày sờ vào fistula AV để cảm nhận rung (thrill) — báo ngay nếu không còn rung; tay fistula TUYỆT ĐỐI KHÔNG: đo huyết áp, lấy máu, tiêm truyền, đeo đồng hồ hoặc quần áo chật, nằm đè lên; nếu thấy sưng, chảy máu, nóng, đau hoặc mất rung tại vị trí chọc kim → báo gia đình và đến cơ sở y tế ngay; Catheter tĩnh mạch trung tâm (Perm Cath): giữ băng khô và nguyên vẹn, dùng miếng chống thấm khi tắm; kiểm tra da quanh vị trí catheter mỗi ngày.
+【Hạn chế dịch & chế độ ăn】Hạn chế nước nghiêm ngặt (thường ＜1000-1500ml/ngày theo chỉ định); ghi lượng nước uống hàng ngày (gồm cháo, súp, nước trong trái cây); ít kali: tránh thực phẩm giàu kali (chuối, cam, cà chua, khoai tây, sô-cô-la); ít phốt-pho: tránh (nước cola, sữa, hạt, nội tạng); hạn chế muối (＜3g/ngày); KHÔNG dùng muối thay thế ít natri (chứa nhiều kali); nếu bệnh nhân có xu hướng uống quá nhiều, dùng cách đánh lạc hướng (nhai kẹo cao su, ngậm viên đá nhỏ — tính vào lượng nước).
+【Theo dõi sau lọc máu】Kiểm tra điểm chọc kim có tiếp tục chảy máu không (ít là bình thường — ấn để cầm); chóng mặt và huyết áp thấp sau lọc là phổ biến — hỗ trợ đứng dậy chậm (3 bước), chóng mặt nặng thì để nằm và báo ngay; chuột rút cơ (thường gặp trong/sau lọc): nâng chân, xoa nhẹ, báo nếu nặng; cân nặng sau lọc phải gần "cân khô" (mục tiêu bác sĩ); báo nếu cân nặng vẫn cao bất thường.
+【Dấu hiệu khẩn cấp — Gọi cấp cứu ngay】Mất hoàn toàn rung fistula (tắc nghẽn), chảy máu fistula không cầm, đau ngực, khó thở nặng (có thể phù phổi), thay đổi ý thức, co giật, triệu chứng tăng kali máu (yếu cơ, tim đập không đều).
+【Chăm sóc da & đường huyết】Da bệnh nhân lọc máu thường khô và ngứa — thoa kem dưỡng ẩm ít gây dị ứng sau tắm mỗi ngày (tránh vị trí chọc fistula); nếu kèm tiểu đường: đo đường huyết trước và sau mỗi lần lọc; đường huyết có thể giảm trong lọc — chuẩn bị kẹo hoặc viên glucose.
+【Hỗ trợ tâm lý & xã hội】Lọc máu thường xuyên là gánh nặng thể chất và tinh thần; đồng hành kiên nhẫn; khuyến khích tuân thủ chế độ ăn bằng giải thích rõ ràng, không ép buộc; ngày lọc máu nếu bệnh nhân đặc biệt buồn bã hay lo lắng, báo gia đình hoặc đội y tế.`}},
+
+  {k:"limb_disability", zh:"肢體障礙（截肢／義肢）", id:"Disabilitas Anggota Tubuh (Amputasi/Prostesis)", en:"Limb Disability (Amputation / Prosthesis)", vi:"Khuyết tật chi (Cắt cụt / Chân tay giả)",
+   adv:{
+    zh:`【殘肢照護】每日沐浴後檢查殘肢末端及皮膚皺褶處：有無發紅、水泡、破皮、異味；以溫水輕柔清洗殘肢（勿泡水），使用中性肥皂；完全擦乾（包括皺褶處）後再套入義肢或殘肢套；避免在殘肢上塗抹乳液（影響義肢接合套的附著力，除非醫師特別指示）。
+【義肢使用與保管】每次穿戴義肢前確認殘肢套（接合套）無異物、翻折；按醫師或義肢師指示的穿戴時長循序增加（新義肢初期每日2-4小時，逐漸增加）；脫下義肢後將義肢放置平穩處防止跌落損壞；義肢接合套每日以溫水肥皂清洗並晾乾，勿使用漂白劑。
+【預防跌倒】義肢使用者平衡能力較弱，務必遵守跌倒預防原則：穿著義肢時確認已穩固鎖緊再站立；脫除義肢期間借助助行器、輪椅或拐杖行動；浴室、廁所安裝扶手，使用防滑地墊。
+【殘肢體積管理】殘肢體積會因水腫或萎縮而變化（早晨體積通常較大），若義肢過鬆或過緊，調整殘肢套層數（殘肢套增加1層可補償約3mm體積），並通報義肢師評估。
+【循環與復健】抬高殘肢（靜止時）有助消水腫；依物理治療師指示執行殘肢強化訓練（阻力運動）及平衡訓練；觀察殘肢皮膚顏色（發紫或蒼白→循環問題，通報醫師）。
+【心理支持與日常生活協助】截肢者在義肢尚未完全適應前可能有幻肢痛（感覺截肢部位仍有疼痛），此為正常神經反應，需通報醫師處理；協助日常生活時優先訓練殘存肢體功能，鼓勵患者提高自理能力；勿過度代勞，依患者意願提供協助。`,
+    id:`【Perawatan Tunggul】Periksa ujung tunggul dan lipatan kulit setiap hari setelah mandi: kemerahan, lecet, luka, bau; bersihkan dengan air hangat dan sabun netral (jangan direndam); keringkan sepenuhnya (termasuk lipatan) sebelum memakai prostesis atau kaus tunggul; hindari losion pada tunggul (kecuali atas petunjuk dokter/prostetis, karena dapat mempengaruhi adhesi soket).
+【Penggunaan & Penyimpanan Prostesis】Sebelum memakai, pastikan kaus soket bersih dan tidak terlipat; ikuti jadwal pemakaian dari dokter/prostetis (prostesis baru: mulai 2-4 jam/hari, tambah bertahap); lepas prostesis, simpan di tempat stabil agar tidak jatuh rusak; cuci kaus soket dengan sabun air hangat setiap hari, keringkan, jangan gunakan pemutih.
+【Pencegahan Jatuh】Pengguna prostesis keseimbangannya lebih lemah: pastikan prostesis terkunci kuat sebelum berdiri; saat tidak memakai prostesis gunakan walker/kursi roda/tongkat; pasang pegangan di kamar mandi & toilet, gunakan keset anti-slip.
+【Manajemen Volume Tunggul】Volume tunggul berubah karena edema atau atrofi (biasanya lebih besar di pagi hari); jika prostesis terlalu longgar/ketat, sesuaikan lapisan kaus tunggul, laporkan ke prostetis untuk evaluasi.
+【Sirkulasi & Rehabilitasi】Tinggikan tunggul saat istirahat untuk mengurangi edema; ikuti latihan penguatan tunggul dan keseimbangan sesuai instruksi fisioterapis; amati warna kulit tunggul (ungu atau pucat → masalah sirkulasi, lapor dokter).
+【Dukungan Psikologis & ADL】Nyeri fantom (rasa nyeri pada anggota yang sudah diamputasi) adalah respons saraf normal, laporkan ke dokter untuk penanganan; bantu ADL dengan prioritas melatih fungsi yang masih ada; dorong kemandirian pasien, bantu sesuai keinginan pasien.`,
+    en:`【Residual Limb Care】Inspect the residual limb tip and skin folds daily after bathing: redness, blisters, abrasions, odor; clean gently with warm water and mild soap (do not soak); dry completely (including folds) before donning the prosthesis or liner; avoid applying lotion to the residual limb unless specifically instructed (lotion can affect liner adhesion and prosthetic fit).
+【Prosthesis Use & Storage】Before donning, check that the liner/socket is free of debris and not folded; increase wearing time gradually per prosthetist's instructions (new prosthesis: start with 2-4 hours/day, increase progressively); when removed, store prosthesis in a stable position to prevent falls and damage; wash the liner daily with warm soapy water and air dry; do not use bleach.
+【Fall Prevention】Prosthesis users have reduced balance: ensure the prosthesis is securely locked before standing; when the prosthesis is removed, use a walker, wheelchair, or crutches; install grab bars in bathroom and toilet; use non-slip mats.
+【Residual Limb Volume Management】Limb volume changes with edema or atrophy (typically larger in the morning); if the prosthesis feels too loose or too tight, adjust liner sock plies (1 ply ≈ 3mm compensation) and notify the prosthetist for reassessment.
+【Circulation & Rehabilitation】Elevate residual limb at rest to reduce edema; perform limb-strengthening and balance exercises per physiotherapist's instructions; observe skin color (purple or pale → circulation problem, report to doctor).
+【Psychological Support & ADL】Phantom limb pain (pain sensation in the amputated area) is a normal neurological response — report to doctor for management; when assisting with ADL, prioritize training residual function; encourage independence and offer help according to the patient's wishes.`,
+    vi:`【Chăm sóc mỏm cụt】Kiểm tra đầu mỏm cụt và các nếp gấp da hàng ngày sau tắm: đỏ, bọng nước, trầy da, mùi; làm sạch nhẹ nhàng bằng nước ấm và xà phòng nhẹ (không ngâm nước); lau khô hoàn toàn (kể cả nếp gấp) trước khi mang chân tay giả hoặc tất lót; tránh thoa kem dưỡng lên mỏm cụt (trừ khi có chỉ định, vì ảnh hưởng độ bám của socket).
+【Sử dụng & Bảo quản chân tay giả】Trước khi mang, kiểm tra tất lót/socket sạch và không bị gấp; tăng dần thời gian đeo theo hướng dẫn của kỹ thuật viên chỉnh hình (mới: bắt đầu 2-4 giờ/ngày, tăng dần); khi tháo ra, đặt chân tay giả ở nơi ổn định để tránh rơi vỡ; giặt tất lót hàng ngày bằng nước ấm và xà phòng, phơi khô, không dùng nước Javel.
+【Phòng ngừa té ngã】Người dùng chân tay giả có thăng bằng kém hơn: đảm bảo khớp khóa chắc chắn trước khi đứng; khi không mang chân tay giả, dùng khung đi/xe lăn/nạng; lắp tay vịn phòng tắm và toilet; trải thảm chống trượt.
+【Quản lý thể tích mỏm cụt】Thể tích mỏm cụt thay đổi do phù hoặc teo (thường to hơn buổi sáng); nếu chân tay giả quá lỏng hoặc chặt, điều chỉnh số lớp tất lót và báo kỹ thuật viên đánh giá lại.
+【Tuần hoàn & Phục hồi】Nâng cao mỏm cụt khi nghỉ để giảm phù; thực hiện bài tập tăng cường cơ và thăng bằng theo hướng dẫn; theo dõi màu da mỏm cụt (tím hoặc nhợt → vấn đề tuần hoàn, báo bác sĩ).
+【Hỗ trợ tâm lý & Sinh hoạt】Đau chi ma (cảm giác đau ở chi đã cắt) là phản ứng thần kinh bình thường — báo bác sĩ để xử lý; khi hỗ trợ sinh hoạt, ưu tiên rèn luyện chức năng còn lại; khuyến khích tự lập và hỗ trợ theo ý muốn bệnh nhân.`}},
+
+  {k:"visual_impairment", zh:"視覺障礙（全盲／弱視）", id:"Gangguan Penglihatan (Buta Total/Low Vision)", en:"Visual Impairment (Blind / Low Vision)", vi:"Khiếm thị (Mù hoàn toàn / Nhìn kém)",
+   adv:{
+    zh:`【環境安全佈置】保持環境整齊固定，物品擺放位置不可隨意更動（患者依賴空間記憶）；移除走道雜物、突出物（低矮桌角、電線）；所有房門保持全開或全關，避免半開；地面不使用紋樣複雜的地毯（避免辨識困難）；採光充足（弱視者需良好照明，但避免強烈眩光）；浴室、廁所、床鋪等常用設施使用觸覺標記（凸點貼紙、不同材質地墊）協助辨位。
+【引導技巧（人導法）】引導時讓患者握住照顧者的上臂（肘關節上方），照顧者走在前方半步；進入新環境時，口頭說明環境佈局（「前方3步是桌子，右邊是椅子」）；上樓時告知「上樓梯」，下樓時告知「下樓梯」，到達梯首/梯尾時停一步讓患者感受；推門/開門時說明方向（推/拉、左/右）。
+【日常生活協助】用餐：以鐘錶方位介紹食物位置（「飯在6點、菜在12點、湯在3點」）；使用對比色餐具（深色碗盤配淺色桌巾）；服藥：藥物使用觸覺標記或點字標籤分類，按時以口頭確認核對再給藥；梳洗：固定個人用品位置，每次使用後歸回原位；不可替患者「代勞」所有事，保留其自主能力。
+【溝通原則】直接以患者名字打招呼（勿悄然走近），說話前先表明身份；描述事物時用具體方位詞（勿說「那個」、「這裡」）；離開時告知患者，勿悄然離去；勿以「請看這裡」、「看我」等視覺引導指令溝通。
+【輔助設備確認】確認白手杖/導盲杖位置固定、隨手可取；若使用導盲犬，確保環境允許導盲犬進入；視需要協助使用放大鏡、語音手機或語音藥物提醒設備。
+【警示徵象】眼睛突然紅腫、分泌物增加、劇烈眼痛或患者反映視力突然更差→立即通報家屬並就醫。`,
+    id:`【Pengaturan Lingkungan Aman】Jaga lingkungan rapi dan konsisten — jangan pindahkan benda sembarangan (pasien mengandalkan memori spasial); singkirkan hambatan di lorong (sudut meja rendah, kabel); semua pintu penuh terbuka atau penuh tertutup, jangan setengah; pencahayaan cukup untuk low vision (hindari silau kuat); gunakan penanda taktil (stiker timbul, alas berbeda tekstur) di toilet, kamar mandi, dan tempat tidur.
+【Teknik Panduan (Sighted Guide)】Biarkan pasien memegang lengan atas pendamping (di atas siku), pendamping setengah langkah di depan; saat memasuki lingkungan baru, jelaskan tata letak secara verbal; saat naik tangga: beritahu "naik tangga", berhenti sebentar di anak tangga pertama; saat membuka pintu: jelaskan arah (dorong/tarik, kiri/kanan).
+【Bantuan ADL】Makan: jelaskan posisi makanan dengan arah jam ("nasi di posisi jam 6, lauk di jam 12, sup di jam 3"); gunakan peralatan makan kontras warna; obat: gunakan label braille atau penanda taktil, konfirmasi verbal sebelum pemberian; toilet: posisi benda pribadi selalu tetap, kembalikan ke tempat asal setelah digunakan.
+【Prinsip Komunikasi】Sapa dengan nama (jangan mendekat diam-diam); perkenalkan diri sebelum berbicara; gunakan kata posisi konkret (jangan "itu/di sini"); beritahu saat akan pergi; jangan gunakan instruksi visual ("lihat ini", "lihat saya").
+【Peralatan Bantu】Pastikan tongkat putih/tongkat pemandu ada di tempat tetap dan mudah dijangkau; jika menggunakan anjing pemandu, pastikan lingkungan mengizinkan; bantu penggunaan kaca pembesar, ponsel suara, atau pengingat obat suara.
+【Tanda Bahaya】Mata tiba-tiba merah/bengkak, sekret meningkat, nyeri mata hebat, atau pasien melaporkan penglihatan tiba-tiba lebih buruk → lapor keluarga dan segera ke dokter.`,
+    en:`【Safe Environment Setup】Keep the environment tidy and consistent — do not move objects without telling the patient (they rely on spatial memory); remove obstacles from walkways (low table corners, cables); keep all doors fully open or fully closed, never half-open; ensure adequate lighting for low-vision patients (avoid strong glare); use tactile markers (raised-dot stickers, different-texture mats) at toilet, bathroom, and bedside for orientation.
+【Sighted Guide Technique】Have the patient hold the caregiver's upper arm (above elbow), with the caregiver half a step ahead; when entering a new space, verbally describe the layout ("table 3 steps ahead, chair to the right"); announce "going up stairs" or "going down stairs" and pause at the first step; explain door direction (push/pull, left/right) before opening.
+【ADL Assistance】Meals: describe food positions by clock face ("rice at 6 o'clock, vegetables at 12, soup at 3"); use high-contrast tableware; medications: use braille or tactile labels to distinguish medications, verbally confirm before giving; personal items: always return to fixed positions after use; do not do everything for the patient — preserve their remaining independence.
+【Communication Principles】Always greet by name (never approach silently); introduce yourself before speaking; use concrete directional words (never "that" or "here" without a reference); always announce when you are leaving; never use visual cues such as "look here" or "watch me."
+【Assistive Devices】Ensure white cane is stored in a fixed, easily accessible location; if a guide dog is used, confirm the environment permits it; assist with magnifiers, talking mobile phones, or voice-reminder medication devices as needed.
+【Warning Signs】Sudden redness or swelling of the eye, increased discharge, severe eye pain, or patient reports sudden vision worsening → notify family and seek medical attention immediately.`,
+    vi:`【Thiết lập môi trường an toàn】Giữ môi trường gọn gàng và nhất quán — không di chuyển đồ vật tùy tiện (bệnh nhân dựa vào trí nhớ không gian); loại bỏ chướng ngại vật trên lối đi (góc bàn thấp, dây điện); cửa phải mở hoàn toàn hoặc đóng hoàn toàn, không được hé; ánh sáng đủ cho người nhìn kém (tránh chói mắt mạnh); dùng nhãn xúc giác (miếng dán nổi, thảm khác chất liệu) tại toilet, phòng tắm, và giường để định hướng.
+【Kỹ thuật dẫn đường】Để bệnh nhân nắm tay trên của người chăm sóc (trên khuỷu), người chăm đi trước nửa bước; khi vào không gian mới, mô tả bằng lời ("bàn cách 3 bước, ghế bên phải"); thông báo "đi lên cầu thang" hoặc "đi xuống cầu thang" và dừng ở bậc đầu tiên; giải thích hướng cửa (đẩy/kéo, trái/phải) trước khi mở.
+【Hỗ trợ sinh hoạt】Bữa ăn: mô tả vị trí thức ăn theo mặt đồng hồ ("cơm ở vị trí 6 giờ, thức ăn ở 12, súp ở 3"); dùng đồ ăn tương phản màu sắc; thuốc: dùng nhãn chữ nổi hoặc nhãn xúc giác, xác nhận bằng lời trước khi đưa; đồ dùng cá nhân: luôn trả về đúng chỗ sau khi dùng; không làm tất cả thay bệnh nhân — giữ lại khả năng tự lập của họ.
+【Nguyên tắc giao tiếp】Luôn chào bằng tên (không tiếp cận im lặng); tự giới thiệu trước khi nói; dùng từ chỉ hướng cụ thể (không nói "cái đó" hay "ở đây" chung chung); luôn thông báo khi sắp rời đi; không dùng tín hiệu thị giác như "nhìn đây" hay "nhìn tôi".
+【Thiết bị hỗ trợ】Đảm bảo gậy trắng/gậy hướng dẫn ở nơi cố định, dễ lấy; nếu dùng chó dẫn đường, xác nhận môi trường cho phép; hỗ trợ sử dụng kính lúp, điện thoại nói, hoặc thiết bị nhắc thuốc bằng giọng nói.
+【Dấu hiệu nguy hiểm】Mắt đột ngột đỏ/sưng, tăng tiết dịch, đau mắt dữ dội, hoặc bệnh nhân báo thị lực đột ngột xấu hơn → báo gia đình và đến cơ sở y tế ngay.`}},
+
+  {k:"hearing_impairment", zh:"聽覺障礙（全聾／重聽）", id:"Gangguan Pendengaran (Tuli Total/Kurang Dengar)", en:"Hearing Impairment (Deaf / Hard of Hearing)", vi:"Khiếm thính (Điếc / Nghe kém)",
+   adv:{
+    zh:`【溝通技巧】與聽障者溝通前先以視覺方式吸引注意（輕觸肩膀、在視野內揮手）；說話時面對患者，確保臉部及嘴型清晰可見（切勿背對說話或遮住嘴巴）；語速放慢，字句清晰；若患者有殘餘聽力，靠近健耳側說話，音量適度提高（但不必大聲喊叫，避免失真）；必要時使用紙筆、書寫板或手機打字輔助溝通；學習患者常用的手語手勢或常用語手勢（如「吃飯」、「喝水」、「廁所」、「不舒服」）。
+【助聽器照護】每日使用前確認助聽器電池電量；定期以軟布擦拭外殼，清除耳垢；耳模（earmold）每日以溫水清洗並完全晾乾後再使用（耳模切勿泡水）；夜間將助聽器放入乾燥盒（除濕）；若出現刺耳嘯叫聲，確認助聽器是否正確插入耳內、與耳模是否密合；提醒患者洗頭/淋浴前取下助聽器（防水機型除外）。
+【人工電子耳（CI）注意】人工電子耳患者禁止接受MRI（或需特殊程序），就醫前須告知醫護人員；體外裝置（音訊處理器）防水需求依品牌而定，淋浴前確認；保護頭部，避免激烈碰撞。
+【緊急警示系統】確認住家安裝視覺化警示設備（門鈴閃光、煙霧偵測器閃光燈）；夜間急需喚醒患者時，使用床震式振動器或手電筒照射；告知患者緊急聯絡方式（視訊電話或文字簡訊優先）。
+【日常生活安全】聽障者無法聽到背後車聲或危險聲響，外出時需視覺掃描周圍環境；確認患者了解無法聽到來電，設定手機震動或閃光提醒；就醫時主動協助溝通（筆記或口頭轉述）。
+【心理與社交支持】聽障者可能因溝通困難產生孤立感，照顧者應保持耐心，不表現出不耐煩；不可在患者視線外討論其病情；鼓勵患者保持既有社交，協助安排聽障友善活動。`,
+    id:`【Teknik Komunikasi】Sebelum berbicara, tarik perhatian secara visual (sentuh bahu ringan, lambaikan tangan di bidang pandang); berbicara menghadap pasien, pastikan wajah dan bibir terlihat jelas (jangan berbicara membelakangi atau menutup mulut); bicara pelan dan jelas; untuk sisa pendengaran, dekati sisi telinga yang lebih baik, naikkan volume sedikit (tidak perlu berteriak); gunakan kertas/tulis atau ketik di ponsel jika perlu; pelajari isyarat tangan dasar yang sering digunakan pasien ("makan", "minum", "toilet", "tidak enak badan").
+【Perawatan Alat Bantu Dengar】Periksa baterai sebelum digunakan; lap casing dengan kain lembut; cuci earmold dengan air hangat setiap hari dan keringkan sepenuhnya (jangan rendam); simpan di kotak pengering semalam; jika ada suara siulan (feedback), periksa apakah alat terpasang dengan benar; ingatkan pasien lepas alat bantu dengar sebelum mandi (kecuali model tahan air).
+【Implan Koklea (CI)】Pasien CI dilarang menjalani MRI standar (atau butuh prosedur khusus) — beritahu dokter; pelindung kepala bagian luar (prosesor) tergantung merek untuk ketahanan air, konfirmasi sebelum mandi; lindungi kepala dari benturan keras.
+【Sistem Peringatan Darurat】Pastikan rumah dilengkapi alarm visual (bel pintu lampu, detektor asap lampu kilat); untuk membangunkan pasien malam hari, gunakan vibrator getar tempat tidur atau senter; beritahu pasien cara komunikasi darurat (video call atau SMS).
+【Keselamatan Sehari-hari】Penyandang gangguan dengar tidak bisa mendengar kendaraan atau suara bahaya dari belakang, bantu dengan pemindaian visual saat keluar; pastikan ponsel dalam mode getar/lampu; bantu komunikasi saat kunjungan medis.
+【Dukungan Psikologis & Sosial】Gangguan komunikasi bisa menyebabkan isolasi; bersabar dan tidak tampakkan frustrasi; jangan mendiskusikan kondisi pasien di luar jangkauan pandang mereka; dorong interaksi sosial dan kegiatan ramah tuli.`,
+    en:`【Communication Techniques】Before speaking, attract attention visually (gentle shoulder touch, wave in field of vision); always face the patient directly so lips and facial expressions are clearly visible (never speak with your back turned or while covering your mouth); speak slowly and clearly; for patients with residual hearing, position yourself near the better ear and raise volume moderately (shouting distorts sound); use paper and pen, whiteboard, or phone text when needed; learn basic sign gestures or common signals used by the patient ("eat," "drink," "toilet," "pain/discomfort").
+【Hearing Aid Care】Check battery before each use; wipe housing with a soft cloth to remove earwax; clean earmold daily with warm water, dry completely before reinserting (never submerge); store in a drying/dehumidifying box overnight; if a whistling feedback sound occurs, check if the hearing aid is fully seated in the ear and the earmold fits properly; remind patient to remove hearing aids before washing hair/showering (unless waterproof rated).
+【Cochlear Implant (CI) Precautions】CI patients cannot undergo standard MRI (or require special protocols) — always inform medical staff before any procedure; waterproofing of the external sound processor depends on brand — confirm before showering; protect head from strong impacts.
+【Emergency Alert Systems】Confirm the home has visual alert devices (flashing doorbell, strobe smoke detector); to wake the patient at night, use a bed-shaker vibrator or flashlight; ensure patient knows emergency communication methods (video call or text message preferred).
+【Daily Life Safety】Hearing-impaired persons cannot hear vehicles or hazards from behind — assist with visual scanning of surroundings when outdoors; ensure phone is set to vibrate and flash; proactively assist with communication during medical visits (written notes or verbal relay).
+【Psychological & Social Support】Communication barriers can cause feelings of isolation — remain patient and avoid showing frustration; never discuss the patient's condition out of their line of sight; encourage existing social connections and help arrange hearing-friendly activities.`,
+    vi:`【Kỹ thuật giao tiếp】Trước khi nói, thu hút sự chú ý bằng thị giác (chạm nhẹ vai, vẫy tay trong tầm nhìn); luôn quay mặt về phía bệnh nhân để môi và biểu cảm khuôn mặt nhìn rõ (không bao giờ quay lưng hoặc che miệng khi nói); nói chậm và rõ; với người còn nghe được một phần, đứng gần tai tốt hơn và tăng âm lượng vừa phải (không hét vì méo âm); dùng giấy bút, bảng viết hoặc nhắn tin điện thoại khi cần; học các ký hiệu tay cơ bản mà bệnh nhân thường dùng ("ăn", "uống", "nhà vệ sinh", "khó chịu").
+【Chăm sóc máy trợ thính】Kiểm tra pin trước khi dùng; lau vỏ máy bằng vải mềm; rửa earmold bằng nước ấm hàng ngày, phơi khô hoàn toàn trước khi đeo lại (không ngâm nước); cất trong hộp làm khô qua đêm; nếu có tiếng rít (feedback), kiểm tra máy có được lắp đúng và earmold có khít không; nhắc bệnh nhân tháo máy trước khi gội đầu/tắm (trừ loại chống nước).
+【Cấy ghép ốc tai (CI)】Bệnh nhân CI không thể chụp MRI thông thường (hoặc cần quy trình đặc biệt) — luôn thông báo nhân viên y tế trước khi làm thủ thuật; khả năng chống nước của bộ xử lý âm bên ngoài phụ thuộc thương hiệu — xác nhận trước khi tắm; bảo vệ đầu tránh va đập mạnh.
+【Hệ thống cảnh báo khẩn cấp】Đảm bảo nhà có thiết bị cảnh báo thị giác (chuông cửa đèn nháy, đầu báo khói đèn nhấp nháy); để đánh thức bệnh nhân ban đêm, dùng thiết bị rung giường hoặc đèn pin; đảm bảo bệnh nhân biết cách liên lạc khẩn cấp (gọi video hoặc nhắn tin ưu tiên).
+【An toàn sinh hoạt】Người khiếm thính không nghe được xe hoặc tiếng nguy hiểm từ phía sau — hỗ trợ quan sát bằng mắt khi ra ngoài; đảm bảo điện thoại bật rung và đèn nháy; chủ động hỗ trợ giao tiếp khi khám bệnh (ghi chú hoặc truyền đạt bằng lời).
+【Hỗ trợ tâm lý & Xã hội】Rào cản giao tiếp có thể gây cảm giác cô lập — kiên nhẫn và không bộc lộ sự bực bội; không thảo luận về tình trạng bệnh nhân ngoài tầm nhìn của họ; khuyến khích duy trì các mối quan hệ xã hội và hỗ trợ tham gia các hoạt động thân thiện với người khiếm thính.`}}
 ];
 
 /* ========================================================
@@ -3043,6 +3156,11 @@ async function _gtField(text, tl) {
       : text;
 
     // 【快取儲存】將成功翻譯的結果存入 Map，下次直接取用
+    // 【防爆】快取上限 200 筆，超過時清除最舊的一半
+    if (_translationCache.size >= 200) {
+      const keysToDelete = [..._translationCache.keys()].slice(0, 100);
+      keysToDelete.forEach(k => _translationCache.delete(k));
+    }
     _translationCache.set(cacheKey, result);
     _isTranslationBlocked = false; // 成功則恢復狀態
     return result;
@@ -3094,7 +3212,7 @@ let _allergyTransTimer = null;
 function scheduleAllergyTranslate() {
   clearTimeout(_allergyTransTimer);
   _allergyTransTimer = setTimeout(doAllergyTranslate, 1000);
-  scheduleSave();
+  /* scheduleSave() is handled by attachAutoSaveListeners (avoids double-debounce) */
 }
 
 async function doAllergyTranslate() {
@@ -3171,7 +3289,7 @@ async function generatePlan() {
 
   genBtn.disabled = true;
 
-  /* ── Collect data ── */
+  try {
   const name  = escapeHtml(document.getElementById("f_name").value.trim()  || "—");
   const age   = escapeHtml(ageInputStr ? ageInputStr : "—");
   const sex   = getSelectTextSafe("f_sex");
@@ -3211,7 +3329,6 @@ async function generatePlan() {
   const vitalNote  = document.getElementById("f_vital_note").value.trim();
 
   const selConds = CONDS.filter(c => selected.has(c.k));
-  const activeMeds = []; /* 藥物卡片已移除 */
   const activeClean = CLEAN_ITEMS.filter(c => cleanSelected.has(c.k));
   const cleanNote = document.getElementById("f_clean_note").value.trim();
 
@@ -3274,18 +3391,16 @@ async function generatePlan() {
     selConds.forEach(c => {
       blocksHtml += `
         <div class="cond-block">
-          <div class="cond-block-head"><span class="dot"></span>${c.zh} / ${c[lang]}</div>
+          <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)} / ${escapeHtml(c[lang])}</div>
           <div class="cond-block-body">
-            <div class="col zh">${c.adv.zh}</div>
-            <div class="col sec">${c.adv[lang]}</div>
+            <div class="col zh">${escapeHtml(c.adv.zh)}</div>
+            <div class="col sec">${escapeHtml(c.adv[lang])}</div>
           </div>
         </div>`;
     });
   } else {
     blocksHtml = `<p style="color:var(--muted);font-size:.85rem;padding:8px 0">尚未選擇健康狀況 / No conditions selected</p>`;
   }
-
-  /* Med section removed */
 
   /* ── Cleaning section ── */
   let cleanHtml = "";
@@ -3346,7 +3461,7 @@ async function generatePlan() {
     <div class="plan-wrap" id="planDoc">
       <div class="print-doc-header" style="display:none">
         <h2>照顧計劃書 · Care Plan</h2>
-        <div class="print-meta">${name}・${age}歲・${sex}<br>${today}</div>
+        <div class="print-meta">${name}・${ageInputStr ? age + "歲" : ""}・${sex}<br>${today}</div>
       </div>
       <div class="plan-hd">
         <h3>${t.planTitle}</h3>
@@ -3355,7 +3470,7 @@ async function generatePlan() {
       ${transWarningHtml}
       <div class="info-grid">
         <div class="info-cell"><div class="lbl">${t.l_name}</div><div class="val">${name} · ${sex}</div></div>
-        <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${age} 歲</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${ageInputStr ? age + " 歲" : "—"}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_mob}</div><div class="val">${mob}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_cog}</div><div class="val">${cog}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_diet}</div><div class="val">${diet}</div></div>
@@ -3397,7 +3512,15 @@ async function generatePlan() {
     </div>`;
 
   document.getElementById("output").scrollIntoView({ behavior: "smooth" });
-  genBtn.disabled = false;
+  } catch(err) {
+    console.error("[generatePlan] Error:", err);
+    document.getElementById("output").innerHTML = `
+      <div class="notes-box" style="background:#fff3e8;color:#b04621;border-color:#e8c08a">
+        ⚠ 產生照顧計劃時發生錯誤，請重新嘗試。/ An error occurred. Please try again.
+      </div>`;
+  } finally {
+    genBtn.disabled = false;
+  }
 }
 
 /* ========================================================
@@ -3461,8 +3584,10 @@ function clearAll() {
     c.setAttribute("aria-pressed", "false");
   });
   document.querySelectorAll(".vital-field").forEach(f => f.style.display = "none");
-  document.getElementById("vitalInputs").style.borderTop = "none";
-  document.getElementById("vitalNoteWrap").style.display = "none";
+  const _vi = document.getElementById("vitalInputs");
+  if (_vi) _vi.style.borderTop = "none";
+  const _vnw = document.getElementById("vitalNoteWrap");
+  if (_vnw) _vnw.style.display = "none";
   // 【優化】已移除不再使用的 medList DOM 參照（藥物卡片功能已刪除）
   document.getElementById("output").innerHTML = "";
   const _atb = document.getElementById("allergyTransBox"); if (_atb) { _atb.style.display="none"; _atb.innerHTML=""; }
