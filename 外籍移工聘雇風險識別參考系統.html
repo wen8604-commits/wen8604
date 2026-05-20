@@ -7,13 +7,12 @@
 <meta name="theme-color" content="#0a0e1a">
 <meta name="robots" content="index, follow">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<!-- Content Security Policy：防止 XSS / 注入 / 第三方資源污染 -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://gs.jurieo.com/gemini/fonts-googleapis; font-src 'self' https://gs.jurieo.com/gemini/fonts-gstatic data:; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
 <title>外籍移工聘雇風險識別參考系統 v6.0</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-googleapis">
+<link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-gstatic" crossorigin>
+<link href="https://gs.jurieo.com/gemini/fonts-googleapis/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #0a0e1a;
@@ -855,7 +854,7 @@
     flex-direction: column;
     align-items: center;
     gap: 3px;
-    padding: 6px 8px;
+    padding: 6px 4px;
     border: none;
     background: transparent;
     color: var(--text3);
@@ -864,11 +863,12 @@
     cursor: pointer;
     border-radius: 10px;
     transition: all 0.2s;
-    min-width: 48px;
+    min-width: 44px;
     min-height: 48px;
     justify-content: center;
+    flex: 1;
   }
-  .mobile-nav-btn .nav-icon { font-size: 1.2rem; }
+  .mobile-nav-btn .nav-icon { font-size: 1.1rem; }
   .mobile-nav-btn.active { color: var(--accent2); }
   .mobile-nav-btn.active .nav-icon { filter: drop-shadow(0 0 6px rgba(96,165,250,0.7)); }
 
@@ -903,7 +903,6 @@
     .modal-overlay { align-items: flex-end; padding: 0; }
     .law-table { font-size: 0.75rem; }
     .law-table th, .law-table td { padding: 8px 10px; }
-    /* hide罰則 column on mobile */
     .law-table th:last-child, .law-table td:last-child { display: none; }
     .section-title { font-size: 1.1rem; }
     .header-inner { height: 56px; }
@@ -917,7 +916,6 @@
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
-  /* ─── ACCESSIBILITY ─── */
   .check-item:focus-visible,
   .tab-btn:focus-visible,
   .btn:focus-visible,
@@ -926,10 +924,8 @@
     outline-offset: 2px;
   }
 
-  /* Smooth scroll */
   html { scroll-behavior: smooth; }
 
-  /* Better tap targets */
   @media (pointer: coarse) {
     .check-item { min-height: 48px; }
     .tab-btn { min-height: 36px; }
@@ -940,7 +936,6 @@
 </head>
 <body>
 
-<!-- HEADER -->
 <header>
   <div class="header-inner">
     <div class="logo">
@@ -950,49 +945,47 @@
         <div class="logo-sub">風險識別參考系統 v6.0</div>
       </div>
     </div>
-    <div class="header-tabs">
-      <button class="tab-btn active" data-page="dashboard">📊 總覽</button>
-      <button class="tab-btn" data-page="analyzer">🔍 風險評估</button>
-      <button class="tab-btn" data-page="fraud">🚨 風險案例</button>
-      <button class="tab-btn" data-page="law">⚖️ 法律查詢</button>
-      <button class="tab-btn" data-page="contacts">📞 求助管道</button>
-      <button class="tab-btn" data-page="report">📋 評估報告</button>
-      <button class="tab-btn" data-page="tactics">🎭 議價手法</button>
+    <div class="header-tabs" role="tablist" aria-label="主要功能導覽">
+      <button class="tab-btn active" data-page="dashboard" role="tab" aria-label="總覽頁面">📊 總覽</button>
+      <button class="tab-btn" data-page="analyzer" role="tab" aria-label="風險評估頁面">🔍 風險評估</button>
+      <button class="tab-btn" data-page="fraud" role="tab" aria-label="爭議情境案例頁面">🚨 風險案例</button>
+      <button class="tab-btn" data-page="law" role="tab" aria-label="法律查詢頁面">⚖️ 法律查詢</button>
+      <button class="tab-btn" data-page="contacts" role="tab" aria-label="求助管道頁面">📞 求助管道</button>
+      <button class="tab-btn" data-page="report" role="tab" aria-label="評估報告頁面">📋 評估報告</button>
+      <button class="tab-btn" data-page="tactics" role="tab" aria-label="議價手法識別頁面">🎭 議價手法</button>
     </div>
     <div class="header-badge pulse">⚠ 風險訊號提示</div>
   </div>
 </header>
 
-<!-- MOBILE BOTTOM NAV -->
-<nav class="mobile-nav" id="mobileNav">
+<nav class="mobile-nav" id="mobileNav" aria-label="行動裝置底部導覽">
   <div class="mobile-nav-inner">
-    <button class="mobile-nav-btn active" id="mnav-dashboard" data-page="dashboard">
-      <span class="nav-icon">📊</span>總覽
+    <button class="mobile-nav-btn active" id="mnav-dashboard" data-page="dashboard" aria-label="總覽">
+      <span class="nav-icon" aria-hidden="true">📊</span>總覽
     </button>
-    <button class="mobile-nav-btn" id="mnav-analyzer" data-page="analyzer">
-      <span class="nav-icon">🔍</span>評估
+    <button class="mobile-nav-btn" id="mnav-analyzer" data-page="analyzer" aria-label="風險評估">
+      <span class="nav-icon" aria-hidden="true">🔍</span>評估
     </button>
-    <button class="mobile-nav-btn" id="mnav-fraud" data-page="fraud">
-      <span class="nav-icon">🚨</span>案例
+    <button class="mobile-nav-btn" id="mnav-fraud" data-page="fraud" aria-label="爭議情境案例">
+      <span class="nav-icon" aria-hidden="true">🚨</span>案例
     </button>
-    <button class="mobile-nav-btn" id="mnav-law" data-page="law">
-      <span class="nav-icon">⚖️</span>法規
+    <button class="mobile-nav-btn" id="mnav-law" data-page="law" aria-label="法規查詢">
+      <span class="nav-icon" aria-hidden="true">⚖️</span>法規
     </button>
-    <button class="mobile-nav-btn" id="mnav-contacts" data-page="contacts">
-      <span class="nav-icon">📞</span>求助
+    <button class="mobile-nav-btn" id="mnav-contacts" data-page="contacts" aria-label="求助管道">
+      <span class="nav-icon" aria-hidden="true">📞</span>求助
     </button>
-    <button class="mobile-nav-btn" id="mnav-report" data-page="report">
-      <span class="nav-icon">📋</span>報告
+    <button class="mobile-nav-btn" id="mnav-report" data-page="report" aria-label="評估報告">
+      <span class="nav-icon" aria-hidden="true">📋</span>報告
     </button>
-    <button class="mobile-nav-btn" id="mnav-tactics" data-page="tactics">
-      <span class="nav-icon">🎭</span>議價
+    <button class="mobile-nav-btn" id="mnav-tactics" data-page="tactics" aria-label="議價手法識別">
+      <span class="nav-icon" aria-hidden="true">🎭</span>議價
     </button>
   </div>
 </nav>
 
 <div class="app">
 
-  <!-- ══ PAGE 1: DASHBOARD ══ -->
   <div id="page-dashboard" class="page active fade-up">
     <div class="hero">
       <div class="hero-tag">🇹🇼 台灣外籍移工聘雇保護平台</div>
@@ -1036,7 +1029,6 @@
       </div>
     </div>
 
-    <!-- COPYRIGHT FOOTER -->
     <div style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);text-align:center;">
       <div style="display:inline-flex;align-items:center;gap:10px;padding:10px 24px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.15);border-radius:30px;">
         <span style="font-size:1rem;">🛡️</span>
@@ -1047,7 +1039,6 @@
     </div>
   </div>
 
-  <!-- ══ PAGE 2: RISK ANALYZER ══ -->
   <div id="page-analyzer" class="page fade-up">
     <div class="section-title"><span>🔍</span> 仲介風險評估系統</div>
 
@@ -1064,17 +1055,15 @@
       <div>請依您與仲介的實際互動如實勾選。<strong>紅色項目</strong>為高度風險訊號，項目越多系統提示風險越高，建議審慎評估並進一步查證；本評估結果不構成法律判斷。</div>
     </div>
 
-    <!-- 重大風險指標橫幅 -->
     <div id="criticalBanner" style="display:none;align-items:flex-start;gap:12px;padding:14px 18px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:14px;margin-bottom:1.2rem;animation:pulse-glow 1.5s infinite;">
       <span style="font-size:1.4rem;flex-shrink:0;">⛔</span>
       <div>
         <div style="font-weight:900;color:#fca5a5;font-size:0.95rem;margin-bottom:4px;">系統偵測到多項重大異常風險訊號，建議提高警覺並進一步查證</div>
-        <div style="font-size:0.8rem;color:var(--danger2);">已觸發重大風險指標：<strong id="criticalTriggerList"></strong></div>
+        <div style="font-size:0.8rem;color:var(--danger2);">已觸 triggered 重大風險指標：<strong id="criticalTriggerList"></strong></div>
         <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">無照仲介、介紹未經許可工作之外國人、現金不開收據、代管移工薪資為四項重大風險指標。若任一項出現，系統風險模型將提示為高度警示等級（屬統計模型推估，非法律認定，亦不具行政調查或司法判斷效力）。</div>
       </div>
     </div>
 
-    <!-- 計分模型說明（多維加權，可動態調整） -->
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:0.6rem;align-items:center;">
       <div style="padding:5px 14px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:20px;font-size:0.72rem;color:var(--accent2);">📐 <strong>多維加權模型</strong>　維度：資格・契約・金流・證件・透明度</div>
       <div style="padding:5px 14px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.4);border-radius:20px;font-size:0.72rem;color:#fca5a5;">⛔ 重大風險指標 = <strong>系統提示高度警示</strong><span style="opacity:0.7;">（非法律認定）</span></div>
@@ -1088,24 +1077,20 @@
 
     <div class="analyzer-grid">
       <div>
-        <!-- GROUP 1 -->
         <div class="card" style="margin-bottom:1rem;">
           <div class="card-title">🔴 高風險紅旗訊號</div>
           <div id="danger-checks"></div>
         </div>
-        <!-- GROUP 2 -->
         <div class="card" style="margin-bottom:1rem;">
           <div class="card-title">🟡 費用與合約警示</div>
           <div id="warn-checks"></div>
         </div>
-        <!-- GROUP 3 -->
         <div class="card">
           <div class="card-title">🟢 合規確認項目</div>
           <div id="ok-checks"></div>
         </div>
       </div>
 
-      <!-- SCORE PANEL -->
       <div class="risk-score-wrap">
         <div class="card">
           <div class="card-title">📊 即時風險指數</div>
@@ -1155,7 +1140,6 @@
           </div>
         </div>
 
-        <!-- QUICK ACTIONS -->
         <div class="card" style="margin-top:1rem;">
           <div class="card-title">⚡ 緊急求助</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
@@ -1186,28 +1170,31 @@
     </div>
   </div>
 
-  <!-- ══ PAGE 3: FRAUD CATALOG ══ -->
   <div id="page-fraud" class="page fade-up">
-    <div class="section-title"><span>🚨</span> 常見異常風險案例資料庫</div>
+    <div class="section-title"><span>🚨</span> 常見爭議情境案例庫</div>
+
+    <div style="margin-bottom:1rem;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:12px 16px;display:flex;gap:12px;align-items:flex-start;">
+      <span style="font-size:1.2rem;">📚</span>
+      <div style="font-size:0.82rem;color:var(--text2);line-height:1.6;">以下案例均為<strong>模擬教育示意情境</strong>，旨在提升雇主風險識別能力。所有情境均屬假設性敘述，<strong>不指涉任何真實個人、公司或機構</strong>，亦不代表任何行政或司法之違法認定。<br>本系統僅依使用者輸入與公開資訊進行風險提示，<strong>不代表任何行政機關、司法機關或法院之認定。</strong></div>
+    </div>
 
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
-      <input class="search-input" type="text" placeholder="搜尋風險案例、常見話術或關鍵詞..." data-search="fraud">
+      <input class="search-input" type="text" placeholder="搜尋爭議情境、常見話術或關鍵詞..." data-search="fraud">
     </div>
 
     <div class="filter-tabs">
       <button class="filter-btn active" data-scope="fraud" data-fraud-filter="all">全部</button>
-      <button class="filter-btn" data-scope="fraud" data-fraud-filter="extreme">🔴 極高風險</button>
-      <button class="filter-btn" data-scope="fraud" data-fraud-filter="high">🟠 高風險</button>
-      <button class="filter-btn" data-scope="fraud" data-fraud-filter="med">🟡 中風險</button>
-      <button class="filter-btn" data-scope="fraud" data-fraud-filter="broker">仲介相關案例</button>
-      <button class="filter-btn" data-scope="fraud" data-fraud-filter="worker">常見話術</button>
+      <button class="filter-btn" data-scope="fraud" data-fraud-filter="extreme">🔴 高警示訊號</button>
+      <button class="filter-btn" data-scope="fraud" data-fraud-filter="high">🟠 高度注意</button>
+      <button class="filter-btn" data-scope="fraud" data-fraud-filter="med">🟡 注意觀察</button>
+      <button class="filter-btn" data-scope="fraud" data-fraud-filter="broker">仲介相關情境</button>
+      <button class="filter-btn" data-scope="fraud" data-fraud-filter="worker">常見溝通話術</button>
     </div>
 
     <div class="fraud-grid" id="fraudGrid"></div>
   </div>
 
-  <!-- ══ PAGE 4: LAW ══ -->
   <div id="page-law" class="page fade-up">
     <div class="section-title"><span>⚖️</span> 法律條文快速查詢</div>
 
@@ -1257,7 +1244,6 @@
     </div>
   </div>
 
-  <!-- ══ PAGE 5: CONTACTS ══ -->
   <div id="page-contacts" class="page fade-up">
     <div class="section-title"><span>📞</span> 重要求助管道</div>
 
@@ -1269,7 +1255,6 @@
     <div class="contact-grid" id="contactGrid"></div>
   </div>
 
-  <!-- ══ PAGE 6: REPORT ══ -->
   <div id="page-report" class="page fade-up">
     <div class="section-title"><span>📋</span> 聘雇風險評估報告</div>
 
@@ -1310,12 +1295,10 @@
       <button class="btn btn-ghost" data-cmd="print">🖨️ 列印報告</button>
     </div>
 
-    <!-- 免責聲明 + 資料來源 -->
     <div class="report-section" style="margin-top:1.5rem;border-color:rgba(100,116,139,0.2);">
       <div class="report-title" style="color:var(--text3);">📌 免責聲明與資料來源</div>
       <div style="font-size:0.78rem;color:var(--text3);line-height:1.8;">
 
-        <!-- 強免責聲明 -->
         <div style="padding:12px 14px;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.18);border-radius:10px;margin-bottom:10px;color:var(--text2);">
           <div style="font-weight:700;color:#fca5a5;margin-bottom:6px;">⚠️ 重要免責聲明</div>
           <p style="margin-bottom:6px;">本平台內容僅供<strong>教育、風險識別與資訊參考</strong>用途，<strong>不代表</strong>對任何個人、公司或機構之違法認定、事實指控或信用評價。</p>
@@ -1323,7 +1306,6 @@
           <p style="margin-bottom:0;">本系統<strong>不具有行政調查權、司法認定權或事實查核能力</strong>。如有具體個案疑慮，請諮詢專業律師，或撥打法律扶助基金會 <strong style="color:var(--accent2);">(02)412-8518</strong> 申請免費法律諮詢。</p>
         </div>
 
-        <!-- 資料來源 -->
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:10px;">
           <div style="padding:10px 12px;background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.15);border-radius:8px;">
             🏛️ <strong style="color:var(--accent2);">勞動部</strong><br>
@@ -1351,7 +1333,6 @@
           </div>
         </div>
 
-        <!-- 資料更新時間 -->
         <div style="padding:8px 12px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;">
           <div>📅 <strong style="color:#6ee7b7;">資料最後更新</strong>：<span id="lastUpdated" style="color:var(--text);">2026/05/18</span>　｜　🏷️ 模型版本：v6.0</div>
           <div style="color:var(--text3);font-size:0.72rem;">法規來源：全國法規資料庫、勞動部、內政部移民署</div>
@@ -1360,9 +1341,8 @@
       </div>
     </div>
 
-  </div><!-- /page-report -->
+  </div>
 
-  <!-- ══ PAGE: TACTICS ══ -->
   <div id="page-tactics" class="page fade-up">
     <div class="tactics-hero">
       <div class="hero-tag" style="border-color:rgba(168,85,247,0.4);color:#d8b4fe;">🎭 Negotiation Tactics · 27種劇本</div>
@@ -1404,26 +1384,23 @@
     </div>
     <div class="tac-count">顯示 <span id="tacVisible">27</span> / 27 種手法</div>
 
-    <div class="tac-grid" id="tacGrid">
-      <!-- rendered by JS -->
-    </div>
+    <div class="tac-grid" id="tacGrid"></div>
     <div class="tac-empty" id="tacEmpty" style="display:none">🔍 無符合條件的手法，請調整篩選條件</div>
-  </div><!-- /page-tactics -->
+  </div>
 
-</div><!-- /app -->
+</div>
 
-<!-- ══ FOOTER ══ -->
 <footer style="background:linear-gradient(180deg, transparent 0%, rgba(13,27,46,0.6) 100%); border-top:1px solid var(--border); padding:2rem 1.2rem 1.5rem; margin-top:2rem;">
   <div style="max-width:1100px; margin:0 auto; font-size:0.78rem; line-height:1.85; color:var(--text3);">
 
     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1.5rem; margin-bottom:1.2rem;">
       <div>
         <div style="font-weight:700; color:var(--text2); margin-bottom:6px;">🛡️ 關於本系統</div>
-        <p style="margin:0;">外籍移工聘雇<strong>風險識別參考</strong>系統。以公開法規與政府公告資料為基礎，協助雇主辨識常見異常風險訊號。本系統<strong>不具有行政調查權、司法認定權或事實查核能力</strong>。</p>
+        <p style="margin:0;">外籍移工聘雇<strong>風險識別參考</strong>系統。以公開法規與政府公告資料為基礎，協助雇主辨識常見異常風險訊號。本系統<strong>不具有行政調查權、司法認定權或事實查核能力</strong>。<br><span style="font-size:0.8rem;color:var(--warn2);">本系統僅依使用者輸入與公開資訊進行風險提示，不代表任何行政機關、司法機關或法院之認定。</span></p>
       </div>
       <div>
         <div style="font-weight:700; color:var(--text2); margin-bottom:6px;">📚 主要資料來源</div>
-        <p style="margin:0;">勞動部、內政部移民署、全國法規資料庫、消費者保護會。所有法條、費用與政策資訊以官方最新公告為準。</p>
+        <p style="margin:0;">勞動部、內政部移民署、全國法規資料庫、消費者保護會。所有法條、費用與政策資訊以官方最新公告為準。<strong style="color:var(--warn2);">法規可能因修法變動，請以主管機關公告為準，本系統不保證即時同步。</strong><br><span style="font-size:0.78rem;color:var(--text3);">資料最後更新：2026-05 ｜ 來源：全國法規資料庫</span></p>
       </div>
     </div>
 
@@ -1441,7 +1418,6 @@
   </div>
 </footer>
 
-<!-- FRAUD DETAIL MODAL -->
 <div class="modal-overlay" id="fraudModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="modal">
     <div class="modal-header">
@@ -1460,13 +1436,6 @@
 // ═══════════════════════════════════════════
 //  DATA
 // ═══════════════════════════════════════════
-
-// ─────────────────────────────────────────────
-//  多維加權風險指標模型 (Weighted Multi-Dimensional Risk Indicator Model)
-//  - 每項指標獨立權重，可依政策修法、實務統計動態調整
-//  - 權重數值非法律量刑，僅為系統推估參考
-//  - critical=true 為重大風險指標（觸發後系統提示高度警示）
-// ─────────────────────────────────────────────
 const checkData = {
   danger: [
     { id:'d1', label:'仲介無法出示有效許可證字號', risk:'high', weight:40, critical:true,  category:'資格' },
@@ -1497,7 +1466,6 @@ const checkData = {
   ]
 };
 
-// 模型中繼資料：呈現於說明區，提示使用者權重屬於可動態調整之推估
 const MODEL_META = {
   version: 'v6.0',
   lastUpdated: '2026/05/18',
@@ -1507,17 +1475,17 @@ const MODEL_META = {
 
 const fraudData = [
   {
-    num:1, title:'超收費用案例', type:'broker', sev:'extreme',
-    sevLabel:'🔴 極高風險',
-    op:'引進費超過每月薪資，巧立名目如「行政費」、「文件費」等額外收取',
+    num:1, title:'超收費用情境', type:'broker', sev:'extreme',
+    sevLabel:'🔴 高警示訊號',
+    op:'引引進費超過每月薪資，巧立名目如「行政費」、「文件費」等額外收取',
     how:'總費用超過5萬元；拒絕提供明細；費用種類繁多',
     loss:'額外損失3-10萬元',
     law:'消費者保護法第17條、就業服務法第68條',
     action:['索取完整書面費用明細', '超收部分可要求退還', '向1955檢舉超收行為', '保留所有收款憑證']
   },
   {
-    num:2, title:'預付陷阱案例', type:'broker', sev:'extreme',
-    sevLabel:'🔴 極高風險',
+    num:2, title:'預付陷阱情境', type:'broker', sev:'extreme',
+    sevLabel:'🔴 高警示訊號',
     op:'要求預付2-3年服務費，以「早鳥優惠」或「名額有限」為由製造緊迫感',
     how:'強調限時折扣；催促馬上決定；優惠金額特別大',
     loss:'預付1-3萬元難以追回，仲介倒閉後無從求償',
@@ -1525,8 +1493,8 @@ const fraudData = [
     action:['服務費應按月收取', '最多只能預收3個月', '拒絕年付或多年預付', '若已付款立即向消保官申訴']
   },
   {
-    num:3, title:'履歷造假案例', type:'broker', sev:'high',
-    sevLabel:'🟠 高風險',
+    num:3, title:'履歷造假情境', type:'broker', sev:'high',
+    sevLabel:'🟠 高度注意',
     op:'虛構照護經驗、偽造專業證照、假冒前雇主評價',
     how:'不給前雇主電話；拒絕讓看護實際操作測試；履歷無法核實',
     loss:'聘到不合格看護，被照顧者面臨照護風險',
@@ -1534,8 +1502,8 @@ const fraudData = [
     action:['要求前雇主聯絡電話', '進行實際照護技能測試', '錄影存證測試過程', '發現造假立即要求免費更換']
   },
   {
-    num:4, title:'更換循環案例', type:'broker', sev:'high',
-    sevLabel:'🟠 高風險',
+    num:4, title:'頻繁更換情境', type:'broker', sev:'high',
+    sevLabel:'🟠 高度注意',
     op:'故意派遣有問題的看護，誘使雇主頻繁要求更換，每次收取更換費',
     how:'半年內換3次以上；每次更換都要額外付費；新看護問題更多',
     loss:'一年多花2-6萬元更換費',
@@ -1543,8 +1511,8 @@ const fraudData = [
     action:['合約應載明3-6個月免費更換', '記錄每次更換原因與日期', '超出免費更換次數後再協商費用', '拒付不合理更換費用']
   },
   {
-    num:5, title:'非法工作媒介案例', type:'broker', sev:'extreme',
-    sevLabel:'🔴 極高風險',
+    num:5, title:'工作許可爭議情境', type:'broker', sev:'extreme',
+    sevLabel:'🔴 高警示訊號',
     op:'安排未持有合法工作許可之外籍人士（未經許可工作），以低價吸引雇主，聲稱「熟悉台灣環境」',
     how:'價格特別便宜（比正常低30%以上）；不給看居留證正本；催促快決定',
     loss:'雇主依違法情節，可能處罰鍰、廢止許可，外籍人士遭強制遣返',
@@ -1552,8 +1520,8 @@ const fraudData = [
     action:['必看居留證及工作許可正本', '向內政部移民署查詢證件真偽', '主動舉報可減免雇主責任', '絕對不能心存僥倖']
   },
   {
-    num:6, title:'契約陷阱案例', type:'broker', sev:'high',
-    sevLabel:'🟠 高風險',
+    num:6, title:'契約爭議情境', type:'broker', sev:'high',
+    sevLabel:'🟠 高度注意',
     op:'合約使用模糊條款如「費用視情況調整」，隱藏對雇主不利的條件，不給審閱時間',
     how:'催促馬上簽約；不給帶回家看；字體極小；條款語焉不詳',
     loss:'被迫接受不合理條件，事後難以維權',
@@ -1561,8 +1529,8 @@ const fraudData = [
     action:['堅持要求至少3天審閱期', '請法律專業人士協助審閱', '要求仲介解釋每條條款', '不理解不簽，不滿意不簽']
   },
   {
-    num:7, title:'空窗期控制案例', type:'broker', sev:'med',
-    sevLabel:'🟡 中風險',
+    num:7, title:'空窗期情境', type:'broker', sev:'med',
+    sevLabel:'🟡 注意觀察',
     op:'故意拖延引進時間，製造照顧空窗，逼迫雇主支付加急費用',
     how:'超過3個月還沒入台；理由不斷改變；開始要求「加急費」',
     loss:'照顧中斷，另付1-3萬元加急費',
@@ -1570,8 +1538,8 @@ const fraudData = [
     action:['合約載明預計入台日期', '超期要求書面說明', '可主張債務不履行解約', '解約後可向勞動部申訴']
   },
   {
-    num:8, title:'無照經營案例', type:'broker', sev:'extreme',
-    sevLabel:'🔴 極高風險',
+    num:8, title:'未查得許可資訊情境', type:'broker', sev:'extreme',
+    sevLabel:'🔴 高警示訊號',
     op:'假冒合法仲介名義，使用合法公司名稱但實際無許可證，或許可證已過期',
     how:'查無許可證字號；網址或地址查不到實體辦公室；費用特別便宜',
     loss:'所有費用血本無歸，法律求償困難',
@@ -1579,8 +1547,8 @@ const fraudData = [
     action:['在勞動部官網查詢許可證有效性', '確認實體辦公地址', '拒絕與無照業者簽約', '舉報無照經營仲介']
   },
   {
-    num:9, title:'扣押證件案例', type:'broker', sev:'extreme',
-    sevLabel:'🔴 極高風險',
+    num:9, title:'扣押證件情境', type:'broker', sev:'extreme',
+    sevLabel:'🔴 高警示訊號',
     op:'要求雇主協助保管看護護照或居留證，聲稱「防止逃跑」',
     how:'仲介建議保管護照；說這是一般做法；或主動提出代為保管',
     loss:'雇主依違法情節可能面臨罰鍰、廢止許可，嚴重者涉及刑事責任',
@@ -1589,7 +1557,7 @@ const fraudData = [
   },
   {
     num:10, title:'情感綁架話術（看護）', type:'worker', sev:'med',
-    sevLabel:'🟡 中風險',
+    sevLabel:'🟡 注意觀察',
     op:'看護以「在台灣沒有其他人了」、「我把您家人當自己家人」等話術建立依賴關係，再提出各種要求',
     how:'不斷強調情感連結；要求不在勞動條件範圍內的待遇；抱怨家人不理解她',
     loss:'雇主情感綁架後難以拒絕不合理要求',
@@ -1598,7 +1566,7 @@ const fraudData = [
   },
   {
     num:11, title:'威脅離開話術（看護）', type:'worker', sev:'med',
-    sevLabel:'🟡 中風險',
+    sevLabel:'🟡 注意觀察',
     op:'看護威脅「不加薪就離開」或「我要跟仲介說換人」，在被照顧者情況特殊時趁機要挾',
     how:'突然提出加薪要求；以照顧不穩定來威脅；趁家屬焦慮時發難',
     loss:'被迫接受超出合約的薪資或待遇',
@@ -1607,12 +1575,12 @@ const fraudData = [
   },
   {
     num:12, title:'非法仲介話術（看護）', type:'worker', sev:'high',
-    sevLabel:'🟠 高風險',
+    sevLabel:'🟠 高度注意',
     op:'看護表示朋友也要來工作，要求雇主幫忙引薦或私下簽約，繞過正規仲介程序',
     how:'「我朋友很厲害，你可以直接請她」；說可以省仲介費；要求私下金錢往來',
     loss:'雇主觸犯就業服務法，依違法情節可能面臨罰鍰或廢止許可',
     law:'就業服務法第45條',
-    action:['明確拒絕，「我不能這樣做」', '通知原仲介有此情況', '若對方再次提出留下記錄', '絕對不能私下安排非法仲介']
+    action:['明確拒絕，「我不能這樣做」', '通知原仲介有此情況', '若對方再次提出留留下紀錄', '絕對不能私下安排非法仲介']
   }
 ];
 
@@ -1638,40 +1606,56 @@ const contactData = [
   { icon:'⚖️', bg:'rgba(16,185,129,0.12)', color:'#6ee7b7', name:'法律扶助基金會', type:'免費法律諮詢', phone:'(02)412-8518', desc:'提供符合條件民眾免費法律諮詢及訴訟扶助，無力負擔律師費者可申請法律扶助', tags:['免費','訴訟扶助','符合條件申請'] },
   { icon:'🏛️', bg:'rgba(139,92,246,0.12)', color:'#c4b5fd', name:'勞動部勞工局', type:'政府 仲介監管', phone:'02-8590-2567', desc:'檢舉仲介超收費用、查詢仲介許可證有效性、申訴仲介違規行為，地方縣市亦有各自勞工局', tags:['許可證查詢','違規檢舉','勞資爭議'] },
   { icon:'🚨', bg:'rgba(245,158,11,0.12)', color:'#fde68a', name:'警察局報案', type:'緊急 24小時', phone:'110', desc:'遭受威脅恐嚇、財產不法侵害或人身安全受威脅時，立即撥打報案，並可申請筆錄作為後續訴訟證據', tags:['緊急','威脅恐嚇','人身安全'] },
-  { icon:'🏥', bg:'rgba(236,72,153,0.12)', color:'#f9a8d4', name:'家庭暴力防治專線', type:'社福 24小時', phone:'113', desc:'家中照護出現人身安全問題、移工遭雇主或家屬不當對待等狀況，24小時轉介處理', tags:['24小時','人身安全','緊急庇護'] },
+  { icon:'👑', bg:'rgba(236,72,153,0.12)', color:'#f9a8d4', name:'家庭暴力防治專線', type:'社福 24小時', phone:'113', desc:'家中照護出現人身安全問題、移工遭雇主或家屬不當對待等狀況，24小時轉介處理', tags:['24小時','人身安全','緊急庇護'] },
 ];
 
-// ═══════════════════════════════════════════
-//  STATE
-// ═══════════════════════════════════════════
+const tacticsData = [
+  { id:1,  risk:'low',  cat:'日常補貼', title:'不會煮飯索取外食費', scenario:'以技能缺失為由，要求雇主改給現金取代供膳', motivation:'將雇主「供膳義務」轉化為現金補貼，實際目的多為爭取生活自由度與自主選擇。', legal:'低。雇主法定義務為提供伙食或膳食費，可以實物（餐食）履行，無需給付現金。', law:['就業服務法第46條','雇傭契約約定'], counter:['面試時確認烹飪技能，合約明載供膳方式（實物或現金）','若選擇現金，應固定金額並在薪資條列明，避免不斷追加','建立供膳日誌佐證已履行義務'] },
+  { id:2,  risk:'med',  cat:'日常補貼', title:'醫院伙食不合胃口要求日領補貼', scenario:'住院照護期間，以飲食不適為由要求每日300元現金補貼', motivation:'利用醫院照護辛勞，將不適應轉化為變相津貼，300元高於市場一般餐費標準，具過度索求特徵。', legal:'中。若成慣例，可能被認定為經常性給予，日後難以取消，且成為其他移工比較基準。', law:['民法第482條（雇傭契約）'], counter:['由雇主外送或購買，避免現金給付成慣例','提供定額餐券（而非現金），並在收據標明「非經常性」','若確要補貼，一次性給予慰勞金，而非日常化現金'] },
+  { id:3,  risk:'low',  cat:'日常補貼', title:'醫院期間另收洗衣費', scenario:'將照護中的洗衣工作拆解，主張應另外收費', motivation:'將工作內容拆解化，針對特定勞務額外收費，反映工作範疇認知差異。', legal:'低。洗衣屬基本照護範疇，合約若有明列則依約處理，若無明列仍屬一般照護工作。', law:['雇傭契約約定'], counter:['合約明列「照護工作包含基本清潔事務（含病患衣物清洗）」','使用醫院自助洗衣，由雇主支付投幣費（保留收據），避免轉為現金','避免接受口頭協議，任何額外給付一律書面化'] },
+  { id:4,  risk:'high', cat:'薪酬轉嫁', title:'要求「實拿」薪資不付雜費', scenario:'要求雇主吸收健保費、服務費等原應由移工負擔的法定扣除額', motivation:'違反勞動法令之代扣原則，若雇主同意將承擔法律風險，且實際支出遠超帳面薪資。', legal:'高。健保費、服務費有法定分擔比例，雇主代為負擔屬違法給付，可能導致健保局追繳及稅務問題。', law:['全民健康保險法','就業服務法第68條','私立就業服務機構收費標準'], counter:['堅持按法定比例扣款，提供清晰薪資條逐項說明','若移工抗拒，請仲介介入說明法律規定','保存所有薪資給付明細與轉帳紀錄至少5年'] },
+  { id:5,  risk:'med',  cat:'薪酬轉嫁', title:'轉中階後要求加薪並免除服務費', scenario:'取得中階移工資格後，以市場行情為由要求加薪並主張免除仲介服務費', motivation:'中階移工具備留台年資優勢，藉供需失衡進行跳槽威脅，反映議價籌碼轉移。', legal:'中。加薪屬雙方協商範疇，無法律強制；服務費免除需仲介同意，單方主張無效。', law:['就業服務法第46條','私立就業服務機構許可及管理辦法'], counter:['評估長期留任價值，可提供階梯式加薪方案，但須簽署留任承諾書','服務費調整應由三方（雇主、移工、仲介）書面協議','若決定加薪，明確說明這是留任獎勵非市場行情'] },
+  { id:6,  risk:'med',  cat:'福利勒索', title:'要求雇主負擔個人非職業傷病醫療費', scenario:'非因工作造成的疾病或傷害，要求雇主全額負擔醫療費用', motivation:'非因工受傷之醫療費法律上由移工自理，此要求屬情感或財務勒索，測試雇主底線。', legal:'中。若非職業災害，醫療費由移工自理；若雇主主動承諾全額負擔，可能形成慣例且無法收回。', law:['勞工保險條例','全民健康保險法','職業災害勞工保護法'], counter:['協助申請勞保、健保理賠，但不承諾全額負擔','可提供墊付後按月扣款方案（簽署還款協議）','協助申請外籍勞工醫療補助（各縣市政府有提供）','區分職業災害與一般疾病，依法辦理'] },
+  { id:7,  risk:'low',  cat:'福利勒索', title:'要求雇主支付返鄉機票費', scenario:'以各種理由要求合約期內回國，並要求雇主支付來回機票', motivation:'利用雇主怕麻煩心態，將自願回國轉為雇主責任，屬市場供需失衡下的極端要求。', legal:'低。合約期內回國屬請假行為，交通費用依合約約定，無法定義務要求雇主支付。', law:['雇傭契約約定'], counter:['合約明載「返鄉假期間交通費用由移工自理」','若願意補貼機票作為激勵，書面化為服務年資獎勵非義務','拒絕前說明合約依據，由仲介出面溝通'] },
+  { id:8,  risk:'high', cat:'進階隱性', title:'身體不適藉口減少勞務', scenario:'頻繁表示腰痛、頭痛，以此拒絕特定照護工作（如抱病人、協助沐浴）', motivation:'利用雇主對長輩安全的重視，要求減少勞務或另聘時薪看護分擔，舉證困難度極高。', legal:'高。長期累積恐導致職災認定爭議；雇主若強迫帶病工作反可能面臨法律責任。', law:['職業災害勞工保護法','就業服務法第46條'], counter:['陪同至大型醫院檢查，確認醫囑是否需休養','要求正式診斷證明，記錄所有健康異常報告','若無醫囑支持，以書面提醒工作義務，抄送仲介存查','安裝監視器（需告知移工）以維護雙方權益'] },
+  { id:9,  risk:'med',  cat:'進階隱性', title:'轉換權勒索威脅申訴', scenario:'無故要求同意轉換雇主，否則威脅向1955投訴或向勞政單位檢舉', motivation:'利用雇主不願進入申訴程序（空窗期長）的弱點，強迫讓步。', legal:'中。不實檢舉可主張妨礙名譽或誣告；但自保前提是平時合法合規，文件完整。', law:['就業服務法第59條（轉換規定）','刑法第169條（誣告罪）'], counter:['全程錄音錄影留存勞務正常之證據','平時確保完全遵守勞動法規，保存薪資給付證明','必要時請仲介更換人員，主動掌握節奏','若遭不實檢舉，積極配合調查並提出完整證據'] },
+  { id:10, risk:'high', cat:'進階隱性', title:'同儕比較法製造薪資焦慮', scenario:'展示社群媒體影片，稱友人薪資實拿3萬以上，要求比照辦理', motivation:'透過極端案例造成雇主焦慮，利用資訊不對稱製造相對剝奪感，實為誇大宣傳。', legal:'高（管理層面）。若雇主因此提高薪資，可能被其他移工比照要求，引發連鎖效應。', law:['勞動部外籍移工薪資公告'], counter:['提供勞動部正式薪資公告數據，重申合約精神','強調自家優勢（工作環境、家庭氛圍、穩定性）','不隨社群媒體資訊起舞，要求提供具體可核實的薪資憑據'] },
+  { id:11, risk:'med',  cat:'進階隱性', title:'假性借貸以情感建立債務', scenario:'宣稱家鄉發生天災或父母手術，要求預支半年薪資', motivation:'以債務建立情感連結，若雇主拒絕則以情緒低落為由消極怠工，部分為真實需求。', legal:'中。多次預支將導致薪資結算複雜化，且移工若後續轉換雇主，追討困難。', law:['民法第346條（消費借貸）'], counter:['不建議直接預支，可協助聯繫家鄉相關救助機構核實','若必須借款，簽署正式還款協議並按月扣款','由仲介介入核實緊急程度，避免單方面被情感操弄'] },
+  { id:12, risk:'high', cat:'進階隱性', title:'軟性怠工逼迫讓步', scenario:'工作時全程滑手機，對病人呼喚反應遲鈍，直到獲得獎金才暫時恢復', motivation:'被動攻擊型策略，透過降低服務品質逼迫讓步，但不正面衝突，舉證困難。', legal:'高。此行為可能導致被照顧者安全風險；若有事故，雇主可能連帶受責。', law:['民法第227條（不完全給付）','就業服務法第59條'], counter:['建立明確的工作日程表與工作日誌，雙方簽認','定期與仲介進行三方會談，保留書面紀錄','記錄工作表現不佳之具體事實，必要時啟動合約終止程序','安裝監視器（需事先告知）作為客觀紀錄'] },
+  { id:13, risk:'med',  cat:'進階隱性', title:'挑撥孤立製造家庭矛盾', scenario:'在病人面前表現良好，對家屬態度惡劣，使家屬內部產生分歧', motivation:'利用長輩依賴心作擋箭牌，透過製造家庭矛盾來鞏固自身地位，屬高度操控性行為。', legal:'中。此行為難以舉證，but若長輩長輩因此不願接受家屬管理，可能對照護品質造成嚴重影響。', law:['雇傭契約約定'], counter:['家屬間保持溝通暢通，建立統一管理窗口','安裝監視器（需告知）以維護雙方權益','定期單獨詢問長輩實際感受，排除看護在場影響','若情況嚴重，通報仲介並啟動更換程序'] },
+  { id:14, risk:'med',  cat:'情緒勒索', title:'家鄉急事要求預支薪資', scenario:'宣稱家鄉有急事（天災、醫療）需匯款，要求預支薪資或借款', motivation:'利用人道同情心理進行財務試探，部分為真實需求，但亦有慣性借貸不還之案例。', legal:'中。多次預支將導致薪資結算複雜化，且若移工後續轉換雇主，追討困難。', law:['民法第346條','就業服務法第57條'], counter:['透過仲介協助核實急事真實性（可要求相關文件）','若同意借款，必須簽署還款協議並按月固定扣款','避免多次預支形成慣例，嚴格執行一次性原則'] },
+  { id:15, risk:'med',  cat:'情緒勒索', title:'威脅以「想家不適應」離職', scenario:'以思鄉或不適應為由威脅離職，實際目的為要求加薪或減少工作量', motivation:'利用雇主怕麻煩與重新招聘成本進行籌碼施壓，多發生於試用期後三個月內。', legal:'中。移工若強行離職，雇主可主張違約賠償，但實際執行困難。', law:['就業服務法第59條','民法第438條（違約損害賠償）'], counter:['先了解真實訴求，評估工作表現是否值得讓步','必要時協助轉介而非被動妥協，避免開啟不良先例','告知違約後果（需負擔機票費、賠償費等），由仲介出面說明'] },
+  { id:16, risk:'med',  cat:'情緒勒索', title:'以照顧難度索取辛苦費', scenario:'抱怨被照顧者難以相處或失智狀況加重，暗示需要額外「辛苦費」', motivation:'將工作難度差異轉化為額外報酬理由，若無契約依據屬情緒性勒索。', legal:'中。若被照顧者確有特殊照護需求（重度失智、暴力傾向），部分要求具合理性。', law:['雇傭契約約定','民法第483條（給付報酬）'], counter:['客觀評估照護難度，若確實超出一般範疇，可協商一次性慰勞金','記錄所有溝通過程（錄音或書面），避免事後爭議','若同意補貼，以書面載明「一次性、非經常性」'] },
+  { id:17, risk:'high', cat:'情緒勒索', title:'頻繁稱病拒絕就醫', scenario:'頻繁表示不舒服要求減少工作，但拒絕接受醫療檢查', motivation:'拒絕就醫使雇主無從判斷真偽，可能為規避工作之策略，長期累積恐導致職災認定爭議。', legal:'高。若雇主強迫帶病工作後發生職災，可能面臨法律責任。', law:['職業災害勞工保護法','就業服務法第46條'], counter:['明確要求正式就醫並取得診斷證明，否則視為正常工作能力','陪同就醫，確認醫囑內容，依醫囑調整工作','記錄所有「稱病」紀錄（日期、主訴症狀）作為爭議證據'] },
+  { id:18, risk:'high', cat:'契約漏洞', title:'主張國定假日應放假索取補休費', scenario:'以勞基法國定假日規定為由，要求補休或加班費', motivation:'外籍家庭看護工不適用勞基法，移工援引錯誤法律依據要求不當利益。', legal:'高。此為法律認知錯誤，但若雇主不了解而被迫給付，將形成先例且難以取消。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）','勞動基準法第84-1條'], counter:['明確告知外籍看護不適用勞基法，國定假日由契約約定','在契約中明確載明工作時間與休假安排','提供勞動部官方說明文件，以白紙黑字回應'] },
+  { id:19, risk:'high', cat:'契約漏洞', title:'以工時難認定要求加班費', scenario:'主張實際工時超過約定，要求按小時計算加班補貼', motivation:'家庭看護工作特性導致待命時間與實際工時界線模糊，移工可能誇大工時要求補償。', legal:'高。若雇主無工時記錄，在爭議時處於舉證不利地位。', law:['就業服務法第46條','民法第482條'], counter:['建立每日工作日誌雙方簽認，明確區分工作時間、待命時間、休息時間','使用Line或書面每日確認工作項目','爭議前先諮詢1955或律師，了解外籍看護特殊工時規定'] },
+  { id:20, risk:'high', cat:'契約漏洞', title:'製造離職理由索取資遣費', scenario:'以不適任或環境不合為由主動要求終止契約，並要求預告工資或資遣費', motivation:'部分移工利用合約終止規定，主動製造離職理由，騙取費用後轉換至更好的雇主。', legal:'高。外籍移工終止契約涉及複雜法律程序，不當終止雇主也可能面臨罰鍰。', law:['就業服務法第59條','就業服務法第62條（廢止聘僱許可）'], counter:['保留工作表現不佳之完整證據（日誌、錄影、書面溝通）','了解依就服法辦理終止契約的正確程序','若確需終止，諮詢仲介或律師，確保流程合法'] },
+  { id:21, risk:'low',  cat:'契約漏洞', title:'要求雇主負擔技能培訓費', scenario:'要求雇主支付語言課程、看護技能考照費，以提升服務品質為由', motivation:'將個人職業發展成本轉嫁雇主，法律上雇主無此義務，屬變換福利要求。', legal:'低。無法律義務，但若雇主主動同意，需書面約定返還條款。', law:['民法第482條（雇傭契約）'], counter:['明確告知此非雇主法定義務','若願意支持，簽署培訓費用返還協議（如提前離職須返還比例費用）','可作為附條件福利（服務滿N年後無需返還）'] },
+  { id:22, risk:'med',  cat:'集體施壓', title:'串聯其他看護集體要求調薪', scenario:'透過同鄉網絡或Line群組，聯合其他外籍看護向各自雇主同步施壓', motivation:'透過集體行動提升個人議價能力，反映移工意識抬頭與資訊流通加速。', legal:'中。雖非法定工會行為，但集體信息協調若涉及脅迫，可能觸及相關法律。', law:['勞資爭議處理法','刑法第304條（強制罪）'], counter:['保持個別溝通管道暢通，了解移工訴求','透過仲介掌握移工動態，避免訊息延遲造成被動','若確認集體行動，向勞政單位諮詢，必要時尋求協助'] },
+  { id:23, risk:'high', cat:'集體施壓', title:'威脅檢舉雇主違法作為談判籌碼', scenario:'以向勞工局、1955投訴為威脅，要求雇主在薪資、工時上讓步', motivation:'即使雇主無違法，勞動檢查程序本身即造成困擾，此手法屬極端施壓策略。', legal:'高。不實檢舉可追究誣告責任，但過程消耗大量時間，前提是平時合規。', law:['刑法第169條（誣告罪）','就業服務法第73條'], counter:['平時確實遵守所有勞動法規，保存完整文件','若遭威脅，保持冷靜，書面回應並告知將如實配合調查','若確認不實檢舉，在調查結束後可追究誣告責任'] },
+  { id:24, risk:'med',  cat:'集體施壓', title:'透過仲介施壓暗示換人', scenario:'部分仲介為賺取轉介費，配合移工向雇主施壓，暗示不答應條件就幫移工換雇主', motivation:'部分仲介與移工利益共謀，形成三方博弈，雇主在資訊上處於弱勢。', legal:'中。此類仲介行為可能違反仲介業管理規定，雇主可向主管機關舉報。', law:['私立就業服務機構許可及管理辦法第38條','就業服務法第34條'], counter:['選擇信譽良好的仲介並建立長期合作關係','若發現仲介角色異常，向勞動部或地方勞政單位反映','更換仲介前了解相關費用與程序，掌握主動權'] },
+  { id:25, risk:'med',  cat:'資訊不對稱', title:'聲稱其他家庭條件更好要求比照', scenario:'透過同儕比較製造相對剝奪感，要求薪資或福利比照辦理', motivation:'移工對市場行情掌握度提升，以資訊優勢製造談判壓力，資訊可能為真實或誇大。', legal:'中。若輕易妥協，可能引發連鎖比較，且無明確標準的讓步將成為不斷妥協的開端。', law:['勞動部外籍移工薪資公告'], counter:['定期了解官方薪資行情，以數據回應','強調自家優勢（穩定、安全、工作環境、人際關係）','理性評估而非盲目跟隨，可邀請仲介協助說明市場實際狀況'] },
+  { id:26, risk:'high', cat:'資訊不對稱', title:'誤導雇主引用不存在的法律規定', scenario:'以「法律規定必須...」為由要求不當權益，但所引用的法律條文並不適用', motivation:'利用雇主對勞動法令不熟悉，以錯誤法律解釋爭取利益，屬惡意欺瞞行為。', legal:'高（管理層面）。雇主若因此讓步，損失難以追回，且形成事實先例。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）'], counter:['不輕信單方面說法，要求提供法條出處','遇爭議時主動諮詢1955、勞政單位或律師','雇主應主動學習外籍看護相關基礎法規'] },
+  { id:27, risk:'high', cat:'資訊不對稱', title:'隱瞞健康狀況或技能限制', scenario:'面試時刻意隱瞞健康問題或工作能力不足，入職後才逐漸暴露', motivation:'為順利入職而提供不實資訊，入職後雇主因投入招聘成本面臨沉沒成本困境。', legal:'高。屬詐欺性締約行為，可依法撤銷契約，但舉證極為困難，訴訟成本高。', law:['民法第92條（詐欺撤銷）','就業服務法第57條（雇主查核義務）'], counter:['面試時詳細詢問健康狀況，並要求提供近期健康檢查報告','試用期密切觀察工作表現，建立詳細紀錄','發現隱瞞後，蒐集完整證據，諮詢律師依法解除契約'] }
+];
 
 let checkedItems = {};
 let fraudFilter = 'all';
 let lawFilter = 'all';
 let currentFraud = null;
 
-// ═══════════════════════════════════════════
-//  NAVIGATION
-// ═══════════════════════════════════════════
-
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
-  // Desktop tabs
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const map = { dashboard:0, analyzer:1, fraud:2, law:3, contacts:4, report:5, tactics:6 };
   document.querySelectorAll('.tab-btn')[map[id]]?.classList.add('active');
-  // Mobile nav
   document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
   const mBtn = document.getElementById('mnav-' + id);
   if (mBtn) mBtn.classList.add('active');
   if (id === 'report') generateReport();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
-// ═══════════════════════════════════════════
-//  RISK ANALYZER
-// ═══════════════════════════════════════════
 
 function buildChecks() {
   buildGroup('danger-checks', checkData.danger, 'danger-item', 'risk-high', '高風險');
@@ -1681,6 +1665,7 @@ function buildChecks() {
 
 function buildGroup(containerId, items, cls, riskCls, riskLabel) {
   const el = document.getElementById(containerId);
+  if (!el) return;
   el.innerHTML = '';
   items.forEach(item => {
     const div = document.createElement('div');
@@ -1705,17 +1690,12 @@ function toggleCheck(id, el, cls) {
   checkedItems[id] = checked;
   el.setAttribute('aria-checked', checked ? 'true' : 'false');
   const cb = document.getElementById('cb-' + id);
-  cb.textContent = checked ? '✓' : '';
+  if (cb) cb.textContent = checked ? '✓' : '';
   updateScore();
 }
 
-// ─── 重大風險指標：由 checkData 之 critical:true 旗標動態決定 ───
-//   取代舊版硬編碼陣列，便於日後依政策修法調整指標清單
 const CRITICAL_IDS = checkData.danger.filter(i => i.critical).map(i => i.id);
 
-// ─── 加權多維風險推估 ───
-//   每項指標獨立權重（見 checkData），可動態調整
-//   分數屬統計推估，不具行政或司法認定效力
 function computeRiskScore() {
   let dangerCount = 0, warnCount = 0, okCount = 0, weightedSum = 0;
 
@@ -1724,8 +1704,6 @@ function computeRiskScore() {
   checkData.ok    .forEach(i => { if (checkedItems[i.id]) { okCount++;     weightedSum += i.weight; } });
 
   let score = Math.min(100, Math.max(0, Math.round(weightedSum)));
-
-  // 重大風險指標觸發 → 系統提示為高度警示等級（最低 85 分）
   const criticalTriggered = CRITICAL_IDS.some(id => checkedItems[id]);
   if (criticalTriggered) score = Math.max(score, 85);
 
@@ -1735,16 +1713,16 @@ function computeRiskScore() {
 function updateScore() {
   const r = computeRiskScore();
   const danger = r.dangerCount, warn = r.warnCount, ok = r.okCount, clamped = r.score;
-  const criticalTriggered = r.criticalTriggered;
 
-  // 顯示/隱藏重大風險指標橫幅
+  // 漏洞優化：從動態資料模型提取重大指標名稱，非寫死字串
   const critBanner = document.getElementById('criticalBanner');
   if (critBanner) {
     const triggeredNames = [];
-    if (checkedItems['d1']) triggeredNames.push('⛔ 仲介未出示有效許可');
-    if (checkedItems['d6']) triggeredNames.push('⛔ 介紹未經許可工作之外國人');
-    if (checkedItems['d3']) triggeredNames.push('⛔ 現金不開收據');
-    if (checkedItems['d9']) triggeredNames.push('⛔ 代管/代扣移工薪資');
+    checkData.danger.forEach(item => {
+      if (item.critical && checkedItems[item.id]) {
+        triggeredNames.push(`⛔ ${item.label.split('，')[0].split('（')[0]}`);
+      }
+    });
     if (triggeredNames.length > 0) {
       critBanner.style.display = 'flex';
       document.getElementById('criticalTriggerList').textContent = triggeredNames.join('　');
@@ -1763,7 +1741,6 @@ function updateScore() {
   document.getElementById('bar-warn').style.width = (warn / maxW * 100) + '%';
   document.getElementById('bar-ok').style.width = (ok / maxO * 100) + '%';
 
-  // gauge — r=70, circumference = 2πr ≈ 439.82
   const fill = document.getElementById('gaugeFill');
   const circumference = 2 * Math.PI * 70;
   fill.style.strokeDasharray = circumference;
@@ -1806,16 +1783,13 @@ function resetChecks() {
   updateScore();
 }
 
-// ═══════════════════════════════════════════
-//  FRAUD CATALOG
-// ═══════════════════════════════════════════
-
 function buildFraud() {
   renderFraud(fraudData);
 }
 
 function renderFraud(data) {
   const grid = document.getElementById('fraudGrid');
+  if (!grid) return;
   grid.innerHTML = '';
   data.forEach(f => {
     const sevColor = f.sev === 'extreme' ? '#fca5a5' : f.sev === 'high' ? '#fdba74' : '#fde68a';
@@ -1844,8 +1818,8 @@ function renderFraud(data) {
 
 function setFraudFilter(filter, btn) {
   fraudFilter = filter;
-  // Only reset buttons within the fraud page
-  document.querySelectorAll('[data-scope="fraud"].filter-btn').forEach(b => b.classList.remove('active'));
+  // 漏洞修復：精準抓取該區塊按鈕，避免跨頁樣式污染
+  document.querySelectorAll('#page-fraud [data-scope="fraud"].filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   applyFraudFilter();
 }
@@ -1853,7 +1827,6 @@ function setFraudFilter(filter, btn) {
 function filterFraud(query) {
   const q = query.toLowerCase();
   let filtered = fraudData;
-  // 同時套用分類篩選器（搜尋與分類可共存）
   if (fraudFilter !== 'all') {
     filtered = filtered.filter(f => f.type === fraudFilter || f.sev === fraudFilter);
   }
@@ -1873,7 +1846,6 @@ function applyFraudFilter() {
   if (fraudFilter !== 'all') {
     filtered = filtered.filter(f => f.type === fraudFilter || f.sev === fraudFilter);
   }
-  // 同時套用文字搜尋（分類篩選與搜尋可共存）
   if (q) {
     filtered = filtered.filter(f =>
       f.title.toLowerCase().includes(q) || f.op.toLowerCase().includes(q) ||
@@ -1924,16 +1896,13 @@ function closeModal() {
   document.getElementById('fraudModal').classList.remove('open');
 }
 
-// ═══════════════════════════════════════════
-//  LAW TABLE
-// ═══════════════════════════════════════════
-
 function buildLaw() {
   renderLaw(lawData);
 }
 
 function renderLaw(data) {
   const tbody = document.getElementById('lawBody');
+  if (!tbody) return;
   tbody.innerHTML = '';
   data.forEach(l => {
     const tr = document.createElement('tr');
@@ -1951,8 +1920,8 @@ function renderLaw(data) {
 
 function setLawFilter(filter, btn) {
   lawFilter = filter;
-  // Only reset buttons within the law page
-  document.querySelectorAll('[data-scope="law"].filter-btn').forEach(b => b.classList.remove('active'));
+  // 漏洞修復：精準抓取該區塊按鈕
+  document.querySelectorAll('#page-law [data-scope="law"].filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   const typeMap = { employment:'employment', consumer:'consumer', civil:'civil' };
   document.querySelectorAll('#lawBody tr').forEach(tr => {
@@ -1972,12 +1941,9 @@ function filterLaw(q) {
   });
 }
 
-// ═══════════════════════════════════════════
-//  CONTACTS
-// ═══════════════════════════════════════════
-
 function buildContacts() {
   const grid = document.getElementById('contactGrid');
+  if (!grid) return;
   grid.innerHTML = '';
   contactData.forEach(c => {
     const card = document.createElement('div');
@@ -1998,17 +1964,12 @@ function buildContacts() {
   });
 }
 
-// ═══════════════════════════════════════════
-//  REPORT
-// ═══════════════════════════════════════════
-
 function generateReport() {
   const dangerItems = [], warnItems = [], okItems = [];
   checkData.danger.forEach(i => { if (checkedItems[i.id]) dangerItems.push(i.label); });
   checkData.warn  .forEach(i => { if (checkedItems[i.id]) warnItems.push(i.label); });
   checkData.ok    .forEach(i => { if (checkedItems[i.id]) okItems.push(i.label); });
 
-  // 採用統一的加權多維推估函數
   const r = computeRiskScore();
   const score = r.score;
   const danger = r.dangerCount, warn = r.warnCount, ok = r.okCount;
@@ -2063,13 +2024,9 @@ function generateReport() {
 }
 
 function printReport() {
-  generateReport(); // 確保列印前報告內容為最新狀態
+  generateReport();
   setTimeout(() => window.print(), 150);
 }
-
-// ═══════════════════════════════════════════
-//  INIT
-// ═══════════════════════════════════════════
 
 document.addEventListener('DOMContentLoaded', () => {
   buildChecks();
@@ -2078,8 +2035,6 @@ document.addEventListener('DOMContentLoaded', () => {
   buildContacts();
   buildTactics();
 
-  // ─── 事件委派：所有互動以 data-attribute 對應，不再依賴 inline handler ───
-  // 1. 分頁切換（data-page）
   document.querySelectorAll('[data-page]').forEach(el => {
     el.addEventListener('click', () => showPage(el.dataset.page));
     if (el.style.cursor === 'pointer' || el.classList.contains('tab-btn') || el.classList.contains('mobile-nav-btn')) {
@@ -2087,17 +2042,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 2. 風險案例篩選（data-fraud-filter）
   document.querySelectorAll('[data-fraud-filter]').forEach(btn => {
     btn.addEventListener('click', () => setFraudFilter(btn.dataset.fraudFilter, btn));
   });
 
-  // 3. 法規篩選（data-law-filter）
   document.querySelectorAll('[data-law-filter]').forEach(btn => {
     btn.addEventListener('click', () => setLawFilter(btn.dataset.lawFilter, btn));
   });
 
-  // 4. 一般指令（data-cmd）
   document.body.addEventListener('click', (e) => {
     const el = e.target.closest('[data-cmd]');
     if (!el) return;
@@ -2108,13 +2060,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 5. 案例詳情按鈕（data-fraud-idx，動態渲染後委派至父容器）
   document.getElementById('fraudGrid').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-fraud-idx]');
     if (btn) openFraud(parseInt(btn.dataset.fraudIdx, 10));
   });
 
-  // 6. 搜尋輸入框（data-search）
   document.querySelectorAll('[data-search]').forEach(inp => {
     inp.addEventListener('input', (e) => {
       const target = inp.dataset.search;
@@ -2123,7 +2073,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // close modal on overlay click or Escape key
   document.getElementById('fraudModal').addEventListener('click', function(e) {
     if (e.target === this) closeModal();
   });
@@ -2131,50 +2080,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'Escape') closeModal();
   });
 
-  // 顯示資料最後更新時間於頁尾
   const lastUpd = document.getElementById('lastUpdated');
   if (lastUpd) lastUpd.textContent = MODEL_META.lastUpdated;
   const lastUpdF = document.getElementById('lastUpdatedFooter');
   if (lastUpdF) lastUpdF.textContent = MODEL_META.lastUpdated;
 
-  // Initialize gauge with correct circumference
   updateScore();
 });
 
 // ═══════════════════════════════════════════
 //  TACTICS MODULE
 // ═══════════════════════════════════════════
-
-const tacticsData = [
-  { id:1,  risk:'low',  cat:'日常補貼', title:'不會煮飯索取外食費', scenario:'以技能缺失為由，要求雇主改給現金取代供膳', motivation:'將雇主「供膳義務」轉化為現金補貼，實際目的多為爭取生活自由度與自主選擇。', legal:'低。雇主法定義務為提供伙食或膳食費，可以實物（餐食）履行，無需給付現金。', law:['就業服務法第46條','雇傭契約約定'], counter:['面試時確認烹飪技能，合約明載供膳方式（實物或現金）','若選擇現金，應固定金額並在薪資條列明，避免不斷追加','建立供膳日誌佐證已履行義務'] },
-  { id:2,  risk:'med',  cat:'日常補貼', title:'醫院伙食不合胃口要求日領補貼', scenario:'住院照護期間，以飲食不適為由要求每日300元現金補貼', motivation:'利用醫院照護辛勞，將不適應轉化為變相津貼，300元高於市場一般餐費標準，具過度索求特徵。', legal:'中。若成慣例，可能被認定為經常性給予，日後難以取消，且成為其他移工比較基準。', law:['民法第482條（雇傭契約）'], counter:['由雇主外送或購買，避免現金給付成慣例','提供定額餐券（而非現金），並在收據標明「非經常性」','若確要補貼，一次性給予慰勞金，而非日常化現金'] },
-  { id:3,  risk:'low',  cat:'日常補貼', title:'醫院期間另收洗衣費', scenario:'將照護中的洗衣工作拆解，主張應另外收費', motivation:'將工作內容拆解化，針對特定勞務額外收費，反映工作範疇認知差異。', legal:'低。洗衣屬基本照護範疇，合約若有明列則依約處理，若無明列仍屬一般照護工作。', law:['雇傭契約約定'], counter:['合約明列「照護工作包含基本清潔事務（含病患衣物清洗）」','使用醫院自助洗衣，由雇主支付投幣費（保留收據），避免轉為現金','避免接受口頭協議，任何額外給付一律書面化'] },
-  { id:4,  risk:'high', cat:'薪酬轉嫁', title:'要求「實拿」薪資不付雜費', scenario:'要求雇主吸收健保費、服務費等原應由移工負擔的法定扣除額', motivation:'違反勞動法令之代扣原則，若雇主同意將承擔法律風險，且實際支出遠超帳面薪資。', legal:'高。健保費、服務費有法定分擔比例，雇主代為負擔屬違法給付，可能導致健保局追繳及稅務問題。', law:['全民健康保險法','就業服務法第68條','私立就業服務機構收費標準'], counter:['堅持按法定比例扣款，提供清晰薪資條逐項說明','若移工抗拒，請仲介介入說明法律規定','保存所有薪資給付明細與轉帳紀錄至少5年'] },
-  { id:5,  risk:'med',  cat:'薪酬轉嫁', title:'轉中階後要求加薪並免除服務費', scenario:'取得中階移工資格後，以市場行情為由要求加薪並主張免除仲介服務費', motivation:'中階移工具備留台年資優勢，藉供需失衡進行跳槽威脅，反映議價籌碼轉移。', legal:'中。加薪屬雙方協商範疇，無法律強制；服務費免除需仲介同意，單方主張無效。', law:['就業服務法第46條','私立就業服務機構許可及管理辦法'], counter:['評估長期留任價值，可提供階梯式加薪方案，但須簽署留任承諾書','服務費調整應由三方（雇主、移工、仲介）書面協議','若決定加薪，明確說明這是留任獎勵非市場行情'] },
-  { id:6,  risk:'med',  cat:'福利勒索', title:'要求雇主負擔個人非職業傷病醫療費', scenario:'非因工作造成的疾病或傷害，要求雇主全額負擔醫療費用', motivation:'非因工受傷之醫療費法律上由移工自理，此要求屬情感或財務勒索，測試雇主底線。', legal:'中。若非職業災害，醫療費由移工自理；若雇主主動承諾全額負擔，可能形成慣例且無法收回。', law:['勞工保險條例','全民健康保險法','職業災害勞工保護法'], counter:['協助申請勞保、健保理賠，但不承諾全額負擔','可提供墊付後按月扣款方案（簽署還款協議）','協助申請外籍勞工醫療補助（各縣市政府有提供）','區分職業災害與一般疾病，依法辦理'] },
-  { id:7,  risk:'low',  cat:'福利勒索', title:'要求雇主支付返鄉機票費', scenario:'以各種理由要求合約期內回國，並要求雇主支付來回機票', motivation:'利用雇主怕麻煩心態，將自願回國轉為雇主責任，屬市場供需失衡下的極端要求。', legal:'低。合約期內回國屬請假行為，交通費用依合約約定，無法定義務要求雇主支付。', law:['雇傭契約約定'], counter:['合約明載「返鄉假期間交通費用由移工自理」','若願意補貼機票作為激勵，書面化為服務年資獎勵非義務','拒絕前說明合約依據，由仲介出面溝通'] },
-  { id:8,  risk:'high', cat:'進階隱性', title:'身體不適藉口減少勞務', scenario:'頻繁表示腰痛、頭痛，以此拒絕特定照護工作（如抱病人、協助沐浴）', motivation:'利用雇主對長輩安全的重視，要求減少勞務或另聘時薪看護分擔，舉證困難度極高。', legal:'高。長期累積恐導致職災認定爭議；雇主若強迫帶病工作反可能面臨法律責任。', law:['職業災害勞工保護法','就業服務法第46條'], counter:['陪同至大型醫院檢查，確認醫囑是否需休養','要求正式診斷證明，記錄所有健康異常報告','若無醫囑支持，以書面提醒工作義務，抄送仲介存查','安裝監視器（需告知移工）以維護雙方權益'] },
-  { id:9,  risk:'med',  cat:'進階隱性', title:'轉換權勒索威脅申訴', scenario:'無故要求同意轉換雇主，否則威脅向1955投訴或向勞政單位檢舉', motivation:'利用雇主不願進入申訴程序（空窗期長）的弱點，強迫讓步。', legal:'中。不實檢舉可主張妨礙名譽或誣告；但自保前提是平時合法合規，文件完整。', law:['就業服務法第59條（轉換規定）','刑法第169條（誣告罪）'], counter:['全程錄音錄影留存勞務正常之證據','平時確保完全遵守勞動法規，保存薪資給付證明','必要時請仲介更換人員，主動掌握節奏','若遭不實檢舉，積極配合調查並提出完整證據'] },
-  { id:10, risk:'high', cat:'進階隱性', title:'同儕比較法製造薪資焦慮', scenario:'展示社群媒體影片，稱友人薪資實拿3萬以上，要求比照辦理', motivation:'透過極端案例造成雇主焦慮，利用資訊不對稱製造相對剝奪感，實為誇大宣傳。', legal:'高（管理層面）。若雇主因此提高薪資，可能被其他移工比照要求，引發連鎖效應。', law:['勞動部外籍移工薪資公告'], counter:['提供勞動部正式薪資公告數據，重申合約精神','強調自家優勢（工作環境、家庭氛圍、穩定性）','不隨社群媒體資訊起舞，要求提供具體可核實的薪資憑據'] },
-  { id:11, risk:'med',  cat:'進階隱性', title:'假性借貸以情感建立債務', scenario:'宣稱家鄉發生天災或父母手術，要求預支半年薪資', motivation:'以債務建立情感連結，若雇主拒絕則以情緒低落為由消極怠工，部分為真實需求。', legal:'中。多次預支將導致薪資結算複雜化，且移工若後續轉換雇主，追討困難。', law:['民法第346條（消費借貸）'], counter:['不建議直接預支，可協助聯繫家鄉相關救助機構核實','若必須借款，簽署正式還款協議並按月扣款','由仲介介入核實緊急程度，避免單方面被情感操弄'] },
-  { id:12, risk:'high', cat:'進階隱性', title:'軟性怠工逼迫讓步', scenario:'工作時全程滑手機，對病人呼喚反應遲鈍，直到獲得獎金才暫時恢復', motivation:'被動攻擊型策略，透過降低服務品質逼迫讓步，但不正面衝突，舉證困難。', legal:'高。此行為可能導致被照顧者安全風險；若有事故，雇主可能連帶受責。', law:['民法第227條（不完全給付）','就業服務法第59條'], counter:['建立明確的工作日程表與工作日誌，雙方簽認','定期與仲介進行三方會談，保留書面紀錄','記錄工作表現不佳之具體事實，必要時啟動合約終止程序','安裝監視器（需事先告知）作為客觀紀錄'] },
-  { id:13, risk:'med',  cat:'進階隱性', title:'挑撥孤立製造家庭矛盾', scenario:'在病人面前表現良好，對家屬態度惡劣，使家屬內部產生分歧', motivation:'利用長輩依賴心作擋箭牌，透過製造家庭矛盾來鞏固自身地位，屬高度操控性行為。', legal:'中。此行為難以舉證，但若長輩因此不願接受家屬管理，可能對照護品質造成嚴重影響。', law:['雇傭契約約定'], counter:['家屬間保持溝通暢通，建立統一管理窗口','安裝監視器（需告知）以維護雙方權益','定期單獨詢問長輩實際感受，排除看護在場影響','若情況嚴重，通報仲介並啟動更換程序'] },
-  { id:14, risk:'med',  cat:'情緒勒索', title:'家鄉急事要求預支薪資', scenario:'宣稱家鄉有急事（天災、醫療）需匯款，要求預支薪資或借款', motivation:'利用人道同情心理進行財務試探，部分為真實需求，但亦有慣性借貸不還之案例。', legal:'中。多次預支將導致薪資結算複雜化，且若移工後續轉換雇主，追討困難。', law:['民法第346條','就業服務法第57條'], counter:['透過仲介協助核實急事真實性（可要求相關文件）','若同意借款，必須簽署還款協議並按月固定扣款','避免多次預支形成慣例，嚴格執行一次性原則'] },
-  { id:15, risk:'med',  cat:'情緒勒索', title:'威脅以「想家不適應」離職', scenario:'以思鄉或不適應為由威脅離職，實際目的為要求加薪或減少工作量', motivation:'利用雇主怕麻煩與重新招聘成本進行籌碼施壓，多發生於試用期後三個月內。', legal:'中。移工若強行離職，雇主可主張違約賠償，但實際執行困難。', law:['就業服務法第59條','民法第438條（違約損害賠償）'], counter:['先了解真實訴求，評估工作表現是否值得讓步','必要時協助轉介而非被動妥協，避免開啟不良先例','告知違約後果（需負擔機票費、賠償費等），由仲介出面說明'] },
-  { id:16, risk:'med',  cat:'情緒勒索', title:'以照顧難度索取辛苦費', scenario:'抱怨被照顧者難以相處或失智狀況加重，暗示需要額外「辛苦費」', motivation:'將工作難度差異轉化為額外報酬理由，若無契約依據屬情緒性勒索。', legal:'中。若被照顧者確有特殊照護需求（重度失智、暴力傾向），部分要求具合理性。', law:['雇傭契約約定','民法第483條（給付報酬）'], counter:['客觀評估照護難度，若確實超出一般範疇，可協商一次性慰勞金','記錄所有溝通過程（錄音或書面），避免事後爭議','若同意補貼，以書面載明「一次性、非經常性」'] },
-  { id:17, risk:'high', cat:'情緒勒索', title:'頻繁稱病拒絕就醫', scenario:'頻繁表示不舒服要求減少工作，但拒絕接受醫療檢查', motivation:'拒絕就醫使雇主無從判斷真偽，可能為規避工作之策略，長期累積恐導致職災認定爭議。', legal:'高。若雇主強迫帶病工作後發生職災，可能面臨法律責任。', law:['職業災害勞工保護法','就業服務法第46條'], counter:['明確要求正式就醫並取得診斷證明，否則視為正常工作能力','陪同就醫，確認醫囑內容，依醫囑調整工作','記錄所有「稱病」紀錄（日期、主訴症狀）作為爭議證據'] },
-  { id:18, risk:'high', cat:'契約漏洞', title:'主張國定假日應放假索取補休費', scenario:'以勞基法國定假日規定為由，要求補休或加班費', motivation:'外籍家庭看護工不適用勞基法，移工援引錯誤法律依據要求不當利益。', legal:'高。此為法律認知錯誤，但若雇主不了解而被迫給付，將形成先例且難以取消。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）','勞動基準法第84-1條'], counter:['明確告知外籍看護不適用勞基法，國定假日由契約約定','在契約中明確載明工作時間與休假安排','提供勞動部官方說明文件，以白紙黑字回應'] },
-  { id:19, risk:'high', cat:'契約漏洞', title:'以工時難認定要求加班費', scenario:'主張實際工時超過約定，要求按小時計算加班補貼', motivation:'家庭看護工作特性導致待命時間與實際工時界線模糊，移工可能誇大工時要求補償。', legal:'高。若雇主無工時記錄，在爭議時處於舉證不利地位。', law:['就業服務法第46條','民法第482條'], counter:['建立每日工作日誌雙方簽認，明確區分工作時間、待命時間、休息時間','使用Line或書面每日確認工作項目','爭議前先諮詢1955或律師，了解外籍看護特殊工時規定'] },
-  { id:20, risk:'high', cat:'契約漏洞', title:'製造離職理由索取資遣費', scenario:'以不適任或環境不合為由主動要求終止契約，並要求預告工資或資遣費', motivation:'部分移工利用合約終止規定，主動製造離職理由，騙取費用後轉換至更好的雇主。', legal:'高。外籍移工終止契約涉及複雜法律程序，不當終止雇主也可能面臨罰鍰。', law:['就業服務法第59條','就業服務法第62條（廢止聘僱許可）'], counter:['保留工作表現不佳之完整證據（日誌、錄影、書面溝通）','了解依就服法辦理終止契約的正確程序','若確需終止，諮詢仲介或律師，確保流程合法'] },
-  { id:21, risk:'low',  cat:'契約漏洞', title:'要求雇主負擔技能培訓費', scenario:'要求雇主支付語言課程、看護技能考照費，以提升服務品質為由', motivation:'將個人職業發展成本轉嫁雇主，法律上雇主無此義務，屬變相福利要求。', legal:'低。無法律義務，但若雇主主動同意，需書面約定返還條款。', law:['民法第482條（雇傭契約）'], counter:['明確告知此非雇主法定義務','若願意支持，簽署培訓費用返還協議（如提前離職須返還比例費用）','可作為附條件福利（服務滿N年後無需返還）'] },
-  { id:22, risk:'med',  cat:'集體施壓', title:'串聯其他看護集體要求調薪', scenario:'透過同鄉網絡或Line群組，聯合其他外籍看護向各自雇主同步施壓', motivation:'透過集體行動提升個人議價能力，反映移工意識抬頭與資訊流通加速。', legal:'中。雖非法定工會行為，但集體信息協調若涉及脅迫，可能觸及相關法律。', law:['勞資爭議處理法','刑法第304條（強制罪）'], counter:['保持個別溝通管道暢通，了解移工訴求','透過仲介掌握移工動態，避免訊息延遲造成被動','若確認集體行動，向勞政單位諮詢，必要時尋求協助'] },
-  { id:23, risk:'high', cat:'集體施壓', title:'威脅檢舉雇主違法作為談判籌碼', scenario:'以向勞工局、1955投訴為威脅，要求雇主在薪資、工時上讓步', motivation:'即使雇主無違法，勞動檢查程序本身即造成困擾，此手法屬極端施壓策略。', legal:'高。不實檢舉可追究誣告責任，但過程消耗大量時間，前提是平時合規。', law:['刑法第169條（誣告罪）','就業服務法第73條'], counter:['平時確實遵守所有勞動法規，保存完整文件','若遭威脅，保持冷靜，書面回應並告知將如實配合調查','若確認不實檢舉，在調查結束後可追究誣告責任'] },
-  { id:24, risk:'med',  cat:'集體施壓', title:'透過仲介施壓暗示換人', scenario:'部分仲介為賺取轉介費，配合移工向雇主施壓，暗示不答應條件就幫移工換雇主', motivation:'部分仲介與移工利益共謀，形成三方博弈，雇主在資訊上處於弱勢。', legal:'中。此類仲介行為可能違反仲介業管理規定，雇主可向主管機關舉報。', law:['私立就業服務機構許可及管理辦法第38條','就業服務法第34條'], counter:['選擇信譽良好的仲介並建立長期合作關係','若發現仲介角色異常，向勞動部或地方勞政單位反映','更換仲介前了解相關費用與程序，掌握主動權'] },
-  { id:25, risk:'med',  cat:'資訊不對稱', title:'聲稱其他家庭條件更好要求比照', scenario:'透過同儕比較製造相對剝奪感，要求薪資或福利比照辦理', motivation:'移工對市場行情掌握度提升，以資訊優勢製造談判壓力，資訊可能為真實或誇大。', legal:'中。若輕易妥協，可能引發連鎖比較，且無明確標準的讓步將成為不斷妥協的開端。', law:['勞動部外籍移工薪資公告'], counter:['定期了解官方薪資行情，以數據回應','強調自家優勢（穩定、安全、工作環境、人際關係）','理性評估而非盲目跟隨，可邀請仲介協助說明市場實際狀況'] },
-  { id:26, risk:'high', cat:'資訊不對稱', title:'誤導雇主引用不存在的法律規定', scenario:'以「法律規定必須...」為由要求不當權益，但所引用的法律條文並不適用', motivation:'利用雇主對勞動法令不熟悉，以錯誤法律解釋爭取利益，屬惡意欺瞞行為。', legal:'高（管理層面）。雇主若因此讓步，損失難以追回，且形成事實先例。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）'], counter:['不輕信單方面說法，要求提供法條出處','遇爭議時主動諮詢1955、勞政單位或律師','雇主應主動學習外籍看護相關基礎法規'] },
-  { id:27, risk:'high', cat:'資訊不對稱', title:'隱瞞健康狀況或技能限制', scenario:'面試時刻意隱瞞健康問題或工作能力不足，入職後才逐漸暴露', motivation:'為順利入職而提供不實資訊，入職後雇主因投入招聘成本面臨沉沒成本困境。', legal:'高。屬詐欺性締約行為，可依法撤銷契約，但舉證極為困難，訴訟成本高。', law:['民法第92條（詐欺撤銷）','就業服務法第57條（雇主查核義務）'], counter:['面試時詳細詢問健康狀況，並要求提供近期健康檢查報告','試用期密切觀察工作表現，建立詳細紀錄','發現隱瞞後，蒐集完整證據，諮詢律師依法解除契約'] }
-];
-
 let tacRisk = 'all', tacCat = 'all', tacOpenId = null;
 
 function buildTactics() {
@@ -2211,7 +2127,6 @@ function buildTactics() {
     grid.appendChild(slot);
   });
 
-  // filter buttons
   document.getElementById('tacSearch')?.addEventListener('input', tacApplyFilters);
   ['all','high','med','low'].forEach(r => {
     document.getElementById('trisk-'+r)?.addEventListener('click', () => tacSetRisk(r));
