@@ -9,7 +9,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://gs.jurieo.com/gemini/fonts-googleapis; font-src 'self' https://gs.jurieo.com/gemini/fonts-gstatic data:; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<title>外籍移工聘雇風險識別參考系統 v6.0</title>
+<title>外籍移工聘雇風險識別參考系統</title>
 <link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-googleapis">
 <link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-gstatic" crossorigin>
 <link href="https://gs.jurieo.com/gemini/fonts-googleapis/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
@@ -876,16 +876,26 @@
   @media print {
     header, .mobile-nav, .risk-actions, .header-badge,
     .btn-ghost, .step-wrap, .search-wrap, .filter-tabs { display: none !important; }
-    body { background: white; color: black; }
-    .app { padding: 0; }
+    
+    body { background: white !important; color: black !important; }
+    .app { padding: 0 !important; }
     .page { display: block !important; }
-    #page-dashboard, #page-analyzer, #page-fraud, #page-law, #page-contacts { display: none !important; }
+    #page-dashboard, #page-analyzer, #page-fraud, #page-law, #page-contacts, #page-tactics, #page-broker { display: none !important; }
     #page-report { display: block !important; }
-    .report-section { border: 1px solid #ccc; background: white; color: black; page-break-inside: avoid; }
-    .report-title { color: #333; }
-    .ri-text { color: #111; }
-    .ri-label { color: #555; }
-    .stat-card { border: 1px solid #ccc; background: #f9f9f9; }
+    
+    /* 強力覆蓋變數，防止印出暗色背景或隱形文字 */
+    .report-section { 
+      border: 1px solid #000 !important; 
+      background: white !important; 
+      color: black !important; 
+      page-break-inside: avoid; 
+      box-shadow: none !important;
+    }
+    .report-title { color: #000 !important; font-weight: bold !important; }
+    .ri-text { color: #111 !important; }
+    .ri-label { color: #444 !important; }
+    .stat-card { border: 1px solid #ccc !important; background: #f9f9f9 !important; color: black !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   }
 
   @media(max-width: 600px) {
@@ -942,7 +952,7 @@
       <div class="logo-icon">🛡️</div>
       <div>
         <div class="logo-text">外籍移工聘雇</div>
-        <div class="logo-sub">風險識別參考系統 v6.0</div>
+        <div class="logo-sub">風險識別參考系統</div>
       </div>
     </div>
     <div class="header-tabs" role="tablist" aria-label="主要功能導覽">
@@ -953,6 +963,7 @@
       <button class="tab-btn" data-page="contacts" role="tab" aria-label="求助管道頁面">📞 求助管道</button>
       <button class="tab-btn" data-page="report" role="tab" aria-label="評估報告頁面">📋 評估報告</button>
       <button class="tab-btn" data-page="tactics" role="tab" aria-label="議價手法識別頁面">🎭 議價手法</button>
+      <button class="tab-btn" data-page="broker" role="tab" aria-label="仲介篩選指南頁面">🏢 仲介篩選</button>
     </div>
     <div class="header-badge pulse">⚠ 風險訊號提示</div>
   </div>
@@ -980,6 +991,9 @@
     </button>
     <button class="mobile-nav-btn" id="mnav-tactics" data-page="tactics" aria-label="議價手法識別">
       <span class="nav-icon" aria-hidden="true">🎭</span>議價
+    </button>
+    <button class="mobile-nav-btn" id="mnav-broker" data-page="broker" aria-label="仲介篩選指南">
+      <span class="nav-icon" aria-hidden="true">🏢</span>仲介
     </button>
   </div>
 </nav>
@@ -1284,7 +1298,7 @@
         <div class="report-item"><span class="ri-icon">📸</span><div class="ri-text">所有合約文件拍照存證，上傳至Google Drive備份<span class="ri-label">立即執行</span></div></div>
         <div class="report-item"><span class="ri-icon">💳</span><div class="ri-text">拒絕現金付款，一律使用匯款或刷卡並保留收據<span class="ri-label">每次付款</span></div></div>
         <div class="report-item"><span class="ri-icon">📝</span><div class="ri-text">親自填寫所有日期，勿讓仲介代填，在旁簽名確認<span class="ri-label">簽約當日</span></div></div>
-        <div class="report-item"><span class="ri-icon">🗓️</span><div class="ri-text">堅持要求至少3日（法定最低）契約審閱期，不要被催促立即簽約<span class="ri-label">簽約前</span></div></div>
+        <div class="report-item"><span class="ri-icon">🗓️</span><div class="ri-text">堅持要求合理契約審閱期（一般定型化契約常見至少3日），不要被催促立即簽約<span class="ri-label">簽約前</span></div></div>
         <div class="report-item"><span class="ri-icon">📞</span><div class="ri-text">將1955、1950、(02)412-8518存入手機緊急聯絡清單<span class="ri-label">立即執行</span></div></div>
         <div class="report-item"><span class="ri-icon">🔍</span><div class="ri-text">上勞動部網站確認仲介許可證字號有效性<span class="ri-label">簽約前</span></div></div>
       </div>
@@ -1329,12 +1343,12 @@
           </div>
           <div style="padding:10px 12px;background:rgba(100,116,139,0.07);border:1px solid rgba(100,116,139,0.15);border-radius:8px;">
             ⚙️ <strong style="color:var(--text2);">模型說明</strong><br>
-            <span>多維加權模型 <strong>v6.0</strong>，權重依政策修法動態檢視。輸出為機率推估，非確定性判斷。</span>
+            <span>多維加權模型，權重依政策修法動態檢視。輸出為機率推估，非確定性判斷。</span>
           </div>
         </div>
 
         <div style="padding:8px 12px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;">
-          <div>📅 <strong style="color:#6ee7b7;">資料最後更新</strong>：<span id="lastUpdated" style="color:var(--text);">2026/05/18</span>　｜　🏷️ 模型版本：v6.0</div>
+          <div>📅 <strong style="color:#6ee7b7;">資料最後更新</strong>：<span id="lastUpdated" style="color:var(--text);">2026/05/18</span>　｜　🏷️ 模型版本</div>
           <div style="color:var(--text3);font-size:0.72rem;">法規來源：全國法規資料庫、勞動部、內政部移民署</div>
         </div>
 
@@ -1388,6 +1402,310 @@
     <div class="tac-empty" id="tacEmpty" style="display:none">🔍 無符合條件的手法，請調整篩選條件</div>
   </div>
 
+  <!-- ─── 仲介篩選指南頁面 ─── -->
+  <div id="page-broker" class="page fade-up">
+
+    <div class="tactics-hero">
+      <div class="hero-tag" style="border-color:rgba(16,185,129,0.4);color:#6ee7b7;">🏢 Broker Screening · 仲介評鑑篩選</div>
+      <h2 style="background:linear-gradient(135deg,#e2e8f0 30%,#6ee7b7 70%,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">仲介篩選重點指南</h2>
+      <p>整合評鑑驗證機制、8大辨識要點與分級管理制度，協助雇主在聘前做出明智決策。</p>
+    </div>
+
+    <div class="tactics-stat-bar">
+      <div class="tstat d"><div><div class="tstat-num">4</div><div class="tstat-label">⛔ 重大停損訊號</div></div></div>
+      <div class="tstat w"><div><div class="tstat-num">8</div><div class="tstat-label">🔍 辨識要點</div></div></div>
+      <div class="tstat s"><div><div class="tstat-num">5</div><div class="tstat-label">✅ 合規必查項目</div></div></div>
+      <div class="tstat p"><div><div class="tstat-num" style="color:#6ee7b7;">4</div><div class="tstat-label">📋 評鑑機制層次</div></div></div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- 區塊一：8大辨識要點 -->
+    <div class="section-title"><span>🔍</span> 如何辨識不良仲介？8大警示要點</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:0.9rem;margin-bottom:2rem;">
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--danger);color:white;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">⛔ 重大</span>
+          <span style="font-size:0.9rem;font-weight:700;">收費超過法定上限</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">要求支付超過法定上限的仲介費用（目前規定為第一個月薪資，約2萬至2.8萬元，請查勞動部公告）；或要求預付超過3個月服務費、分拆費用巧立名目。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第66條、第68條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--danger);color:white;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">⛔ 重大</span>
+          <span style="font-size:0.9rem;font-weight:700;">要求扣留重要證件</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">要求扣留或代管移工護照、工作許可證、居留證、存摺等重要身份與財務文件，聲稱「防止逃跑」或「方便管理」。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第5條、第67條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--danger);color:white;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">⛔ 重大</span>
+          <span style="font-size:0.9rem;font-weight:700;">無法提供有效許可證</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">收費後遲遲不安排面試或工作機會；無固定辦公地點；無法在勞動部官網查到有效許可證字號；辦公地址查不到實體。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第34條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--danger);color:white;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">⛔ 重大</span>
+          <span style="font-size:0.9rem;font-weight:700;">不提供或隱匿書面契約</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">不提供書面契約；契約條款語焉不詳或模糊；不給合理審閱時間（一般定型化契約常見至少3天）；催促馬上簽約；有空白欄位要代填。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 消費者保護法第11-1條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--warn);color:#1a1200;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">🟡 注意</span>
+          <span style="font-size:0.9rem;font-weight:700;">承諾與實際嚴重不符</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">承諾的工作內容、薪資、福利與實際情況嚴重不符；對移工詢問避重就輕；態度惡劣或有威脅恐嚇情事。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第46條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--warn);color:#1a1200;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">🟡 注意</span>
+          <span style="font-size:0.9rem;font-weight:700;">強迫簽署不合理違約金條款</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">合約中含有顯失公平的違約金條款、「費用視情況調整」等模糊條款，或強迫移工簽署限制轉換雇主的協議。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 民法第247-1條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--warn);color:#1a1200;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">🟡 注意</span>
+          <span style="font-size:0.9rem;font-weight:700;">透明度不足、資訊不對稱</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">入台超過3個月還說文件有問題；拒絕提供看護前雇主聯絡方式；服務流程不透明；客訴處理機制不健全或消極推託。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第46條</div>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--warn);border-radius:14px;padding:1.1rem;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:0.5rem;">
+          <span style="background:var(--warn);color:#1a1200;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">🟡 注意</span>
+          <span style="font-size:0.9rem;font-weight:700;">辦公場所異常</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">辦公地點不固定；無法提供合法營業證明；辦公環境簡陋；以個人名義收款而非公司帳戶；無固定聯絡電話。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第34條</div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- 區塊二：合規必查 5 項 -->
+    <div class="section-title"><span>✅</span> 聘前必做：5項合規查核</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:0.8rem;margin-bottom:2rem;">
+
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.25);border-radius:14px;padding:1rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:32px;height:32px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;flex-shrink:0;font-size:0.85rem;">1</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">許可證字號查詢</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">至勞動部官網輸入仲介許可證字號，確認有效期限與業務範圍，並比對仲介名片上的公司名稱。</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.25);border-radius:14px;padding:1rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:32px;height:32px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;flex-shrink:0;font-size:0.85rem;">2</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">書面合約逐條確認</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">取得合理審閱期（一般定型化契約常見至少3天），核查費用明細（含引進費、每月服務費、更換費等）是否符合勞動部公告標準，所有空白欄位親自填寫。</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.25);border-radius:14px;padding:1rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:32px;height:32px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;flex-shrink:0;font-size:0.85rem;">3</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">付款方式留存紀錄</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">所有費用以銀行匯款或刷卡支付，切勿大額現金交付，取得蓋有公司章的正式收據，並保存至少5年。</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.25);border-radius:14px;padding:1rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:32px;height:32px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;flex-shrink:0;font-size:0.85rem;">4</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">聯繫前雇主核實</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">要求仲介提供看護前3位雇主的聯絡方式，主動致電詢問照護能力、健康狀況與離職原因，避免履歷造假。</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.25);border-radius:14px;padding:1rem;display:flex;gap:12px;align-items:flex-start;">
+        <div style="width:32px;height:32px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:white;flex-shrink:0;font-size:0.85rem;">5</div>
+        <div>
+          <div style="font-size:0.88rem;font-weight:700;margin-bottom:4px;">查詢仲介評級紀錄</div>
+          <div style="font-size:0.78rem;color:var(--text2);line-height:1.6;">向各縣市勞工局詢問仲介過去是否有申訴紀錄、裁罰紀錄或評鑑等級，優先選擇A級或近3年無違規紀錄的業者。</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- 區塊三：費用標準速查 -->
+    <div class="section-title"><span>💰</span> 費用標準速查（依勞動部公告）</div>
+
+    <div style="overflow-x:auto;margin-bottom:2rem;">
+      <table style="width:100%;border-collapse:collapse;font-size:0.84rem;">
+        <thead>
+          <tr style="background:rgba(59,130,246,0.15);">
+            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid var(--accent);font-weight:700;color:var(--accent2);">費用項目</th>
+            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid var(--accent);font-weight:700;color:var(--accent2);">法定上限</th>
+            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid var(--accent);font-weight:700;color:var(--accent2);">風險警示值</th>
+            <th style="padding:10px 14px;text-align:left;border-bottom:2px solid var(--accent);font-weight:700;color:var(--accent2);">備注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 14px;font-weight:600;">引進費（仲介費）</td>
+            <td style="padding:10px 14px;color:var(--success2);">≤ 一個月薪資</td>
+            <td style="padding:10px 14px;color:var(--danger2);">超過 5 萬元</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">約2～2.8萬元，依基本工資調整，請查勞動部公告</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
+            <td style="padding:10px 14px;font-weight:600;">每月服務費（第一年）</td>
+            <td style="padding:10px 14px;color:var(--success2);">≤ 1,800 元/月</td>
+            <td style="padding:10px 14px;color:var(--danger2);">超過 2,500 元/月</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">第二、三年費用標準不同，請以官方公告為準</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:10px 14px;font-weight:600;">預付服務費上限</td>
+            <td style="padding:10px 14px;color:var(--success2);">≤ 3 個月</td>
+            <td style="padding:10px 14px;color:var(--danger2);">要求年付或多年預付</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">超過3個月預付屬違規，應按月收取</td>
+          </tr>
+          <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
+            <td style="padding:10px 14px;font-weight:600;">免費更換期</td>
+            <td style="padding:10px 14px;color:var(--success2);">通常3~6個月內</td>
+            <td style="padding:10px 14px;color:var(--warn2);">入台3個月內收取更換費</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">合約應明載免費更換次數與期限</td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;font-weight:600;">收費違規罰則</td>
+            <td style="padding:10px 14px;" colspan="2"><span style="color:var(--danger2);font-weight:700;">超收金額 10～20 倍罰鍰 + 廢止許可</span></td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">就業服務法第66條</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- 區塊四：評鑑驗證制度 -->
+    <div class="section-title"><span>📋</span> 仲介評鑑驗證制度</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.2rem;">
+        <div style="font-size:0.88rem;font-weight:700;color:var(--accent2);margin-bottom:0.8rem;">📄 許可證管理制度</div>
+        <ul style="list-style:none;padding:0;font-size:0.82rem;color:var(--text2);line-height:1.8;">
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;"><span style="color:var(--success);">✓</span> 須取得就業服務法規定之私立就業服務機構許可證</li>
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;"><span style="color:var(--success);">✓</span> 定期換證審查：需提交財務報告、業務紀錄</li>
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;"><span style="color:var(--success);">✓</span> 繳納營業保證金，作為違法賠償擔保</li>
+          <li style="padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;gap:8px;"><span style="color:var(--success);">✓</span> 契約須經主管機關核備，條款公平合理</li>
+          <li style="padding:5px 0;display:flex;gap:8px;"><span style="color:var(--success);">✓</span> 從業人員定期接受專業訓練取得結業證書</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:1.2rem;">
+        <div style="font-size:0.88rem;font-weight:700;color:#d8b4fe;margin-bottom:0.8rem;">⭐ 分級管理制度（A～F）</div>
+        <div style="font-size:0.82rem;color:var(--text2);line-height:1.8;">
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#6ee7b7;font-weight:700;">A 級</span><span>優等：服務品質佳、零違規，優先審核</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#93c5fd;font-weight:700;">B 級</span><span>良好：少量客訴，已妥善處理</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <span style="color:var(--warn2);font-weight:700;">C 級</span><span>待觀察：有客訴或輕微違規，加強稽查</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <span style="color:#fdba74;font-weight:700;">D 級</span><span>不良：多次違規，業務受限</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:5px 0;">
+            <span style="color:var(--danger2);font-weight:700;">F 級</span><span>極劣：重大違規，許可廢止，移送偵辦</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:1.2rem;margin-bottom:2rem;">
+      <div style="font-size:0.9rem;font-weight:700;color:var(--danger2);margin-bottom:0.8rem;">⚠️ 稽查與退場機制</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.7rem;font-size:0.82rem;color:var(--text2);">
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 勞動部與各縣市政府定期或不定期聯合稽查</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 帳冊查核、移工訪談、抽查案件</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 累犯或重大違規者廢止許可證</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 負責人一定期間內不得再申請許可</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 違規資訊公告周知，供民眾查詢</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;"><span style="color:var(--danger);margin-top:2px;">▸</span> 不法所得追繳，情節重大移送司法</div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- 區塊五：快速行動指引 -->
+    <div class="section-title"><span>🚀</span> 遇到問題怎麼辦？快速行動指引</div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:0.9rem;margin-bottom:2rem;">
+
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:14px;padding:1rem;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--danger2);margin-bottom:0.6rem;">⛔ 遇到超收費用</div>
+        <ol style="padding-left:1.2rem;font-size:0.8rem;color:var(--text2);line-height:1.8;margin:0;">
+          <li>索取完整書面費用明細，留存所有收款憑證</li>
+          <li>超收部分可依法要求退還</li>
+          <li>撥打 1955 檢舉超收行為</li>
+          <li>向縣市勞工局申訴並保留所有收據</li>
+        </ol>
+      </div>
+
+      <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:14px;padding:1rem;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--danger2);margin-bottom:0.6rem;">⛔ 仲介查無許可證</div>
+        <ol style="padding-left:1.2rem;font-size:0.8rem;color:var(--text2);line-height:1.8;margin:0;">
+          <li>立即停止一切往來和付款</li>
+          <li>在勞動部官網確認許可證有效性</li>
+          <li>向勞工局舉報無照經營仲介</li>
+          <li>已付款可向消保官或法院申請返還</li>
+        </ol>
+      </div>
+
+      <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:14px;padding:1rem;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--warn2);margin-bottom:0.6rem;">🟡 合約條款有疑慮</div>
+        <ol style="padding-left:1.2rem;font-size:0.8rem;color:var(--text2);line-height:1.8;margin:0;">
+          <li>堅持要求合理審閱期（一般定型化契約常見至少3天），帶回家細看</li>
+          <li>請法律專業人士或1955協助解讀</li>
+          <li>所有模糊條款要求仲介書面說明</li>
+          <li>不理解不簽，不滿意不簽</li>
+        </ol>
+      </div>
+
+      <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:14px;padding:1rem;">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--warn2);margin-bottom:0.6rem;">🟡 仲介拖延不入台</div>
+        <ol style="padding-left:1.2rem;font-size:0.8rem;color:var(--text2);line-height:1.8;margin:0;">
+          <li>合約應載明預計入台日期和違約條款</li>
+          <li>超期要求書面說明及時程承諾</li>
+          <li>可主張債務不履行，要求解約退款</li>
+          <li>解約後向勞動部申訴</li>
+        </ol>
+      </div>
+
+    </div>
+
+    <div style="padding:14px 18px;background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.2);border-radius:14px;display:flex;align-items:flex-start;gap:12px;margin-bottom:1rem;">
+      <span style="font-size:1.2rem;flex-shrink:0;">💡</span>
+      <div style="font-size:0.82rem;color:var(--text2);line-height:1.7;">
+        <strong style="color:var(--accent2);">善用本系統的風險評估功能：</strong>在「🔍 風險評估」頁面，依據您與仲介的實際互動情況勾選相應項目，系統將根據多維加權模型即時計算風險分數並提供建議。評估完成後可前往「📋 評估報告」查看完整分析。
+      </div>
+    </div>
+
+  </div>
+
 </div>
 
 <footer style="background:linear-gradient(180deg, transparent 0%, rgba(13,27,46,0.6) 100%); border-top:1px solid var(--border); padding:2rem 1.2rem 1.5rem; margin-top:2rem;">
@@ -1407,7 +1725,7 @@
     <div style="padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
       <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
         <span>📅 <strong style="color:var(--text2);">資料最後更新</strong>：<span id="lastUpdatedFooter" style="color:var(--accent2);">2026/05/18</span></span>
-        <span>🏷️ 模型版本：<strong style="color:var(--text2);">v6.0</strong></span>
+        <span>🏷️ 模型版本</span>
         <span>📐 多維加權模型</span>
       </div>
       <div style="color:var(--text3); font-size:0.72rem;">
@@ -1467,7 +1785,7 @@ const checkData = {
 };
 
 const MODEL_META = {
-  version: 'v6.0',
+  version: '',
   lastUpdated: '2026/05/18',
   description: '本模型採多維加權設計，權重會依法規修訂、政策公告與實務統計動態檢視調整。所有分數屬統計推估，非法律量刑或行政認定。',
   dimensions: ['資格', '契約', '金流', '證件', '透明度'],
@@ -1477,7 +1795,7 @@ const fraudData = [
   {
     num:1, title:'超收費用情境', type:'broker', sev:'extreme',
     sevLabel:'🔴 高警示訊號',
-    op:'引引進費超過每月薪資，巧立名目如「行政費」、「文件費」等額外收取',
+    op:'引進費超過每月薪資，巧立名目如「行政費」、「文件費」等額外收取',
     how:'總費用超過5萬元；拒絕提供明細；費用種類繁多',
     loss:'額外損失3-10萬元',
     law:'消費者保護法第17條、就業服務法第68條',
@@ -1526,7 +1844,7 @@ const fraudData = [
     how:'催促馬上簽約；不給帶回家看；字體極小；條款語焉不詳',
     loss:'被迫接受不合理條件，事後難以維權',
     law:'民法第74條、消費者保護法第11-1條',
-    action:['堅持要求至少3天審閱期', '請法律專業人士協助審閱', '要求仲介解釋每條條款', '不理解不簽，不滿意不簽']
+    action:['堅持要求合理審閱期（一般定型化契約常見至少3天）', '請法律專業人士協助審閱', '要求仲介解釋每條條款', '不理解不簽，不滿意不簽']
   },
   {
     num:7, title:'空窗期情境', type:'broker', sev:'med',
@@ -1553,7 +1871,7 @@ const fraudData = [
     how:'仲介建議保管護照；說這是一般做法；或主動提出代為保管',
     loss:'雇主依違法情節可能面臨罰鍰、廢止許可，嚴重者涉及刑事責任',
     law:'就業服務法第5條、第67條',
-    action:['明確拒絕任何形式的扣押', '告知移工其護照由本人保管', '若仲介施壓立即向1955檢舉', '此行為雇主是共犯，務必拒絕']
+    action:['明確拒絕任何形式的扣押', '告知移工其護照由本人保管', '若仲介施壓立即向1955檢舉', '雇主若配合此類行為，可能涉及違法責任，務必拒絕']
   },
   {
     num:10, title:'情感綁架話術（看護）', type:'worker', sev:'med',
@@ -1585,8 +1903,8 @@ const fraudData = [
 ];
 
 const lawData = [
-  { code:'消費者保護法 §11-1', type:'consumer', desc:'定型化契約審閱期規定', content:'企業經營者與消費者訂立定型化契約前，應給予消費者合理審閱期間（至少3日），不得催促立即簽約', penalty:'契約條款無效', hasPenalty:true },
-  { code:'就業服務法 §5', type:'employment', desc:'禁止扣押證件', content:'雇主或仲介不得扣押移工護照、居留證或任何身份證明文件，違者雇主亦連帶受罰', penalty:'罰鍰、停業或廢止許可', hasPenalty:true },
+  { code:'消費者保護法 §11-1', type:'consumer', desc:'定型化契約審閱期規定', content:'企業經營者與消費者訂立定型化契約前，應給予消費者合理審閱期間（一般定型化契約常見至少3日，實際期間依主管機關公告及契約類型而定），不得催促立即簽約', penalty:'契約條款無效', hasPenalty:true },
+  { code:'就業服務法 §5', type:'employment', desc:'禁止強制、扣留財物與侵害人格', content:'雇主或仲介不得非法扣押移工護照、居留證或其他身分文件；違反者可能依就業服務法相關規定（§57、§67、§72、§73 等）遭裁罰、停業或廢止許可，實際處分依具體違規態樣認定', penalty:'罰鍰、停業或廢止許可（依具體違規態樣認定）', hasPenalty:true },
   { code:'就業服務法 §34', type:'employment', desc:'仲介許可制度', content:'從事跨國人力仲介業務，應向主管機關申請設立許可，無許可經營屬違法', penalty:'10-50萬元罰鍰', hasPenalty:true },
   { code:'就業服務法 §45', type:'employment', desc:'禁止私自媒介', content:'任何人不得非法為外國人在台灣工作進行媒介，雇主不得接受非法媒介的外籍員工', penalty:'依情節處罰鍰、停業或廢止許可', hasPenalty:true },
   { code:'就業服務法 §46', type:'employment', desc:'外籍工作者工作項目限制', content:'外籍看護工只能從事符合核准工作許可的照護工作，仲介不得安排超出範圍的勞務', penalty:'撤銷許可', hasPenalty:true },
@@ -1597,7 +1915,7 @@ const lawData = [
   { code:'民法 §227', type:'civil', desc:'不完全給付', content:'仲介無法按約定時間引進看護或服務品質不符合約，雇主可主張不完全給付並請求損害賠償或解除契約', penalty:'賠償損害', hasPenalty:false },
   { code:'民法 §247-1', type:'civil', desc:'定型化契約限制', content:'按仲介預定用於同類契約的條款所訂契約，如有不合理的免責條款或限制條款，法院得宣告無效', penalty:'條款無效', hasPenalty:false },
   { code:'消費者保護法 §17', type:'consumer', desc:'主管機關公告定型化契約', content:'主管機關得公告特定行業定型化契約的應記載及不得記載事項，違反者條款無效且依法處罰', penalty:'5-50萬元罰鍰', hasPenalty:true },
-  { code:'就業服務法 §68', type:'employment', desc:'仲介費用上限授權規定', content:'主管機關（勞動部）得訂定私立就業服務機構之收費項目及金額標準（即「私立就業服務機構收費項目及金額標準」）；超收費用者，依第66條重罰', penalty:'準用第66條：超收金額10-20倍罰鍰', hasPenalty:true },
+  { code:'就業服務法 §68', type:'employment', desc:'仲介費用上限授權規定', content:'主管機關（勞動部）得訂定私立就業服務機構之收費項目及金額標準（即「私立就業服務機構收費項目及金額標準」）；超收費用者，依第66條重罰', penalty:'超收費用者，可能依就業服務法及相關收費標準規定遭處罰鍰，實際裁罰金額依主管機關認定', hasPenalty:true },
 ];
 
 const contactData = [
@@ -1622,20 +1940,20 @@ const tacticsData = [
   { id:10, risk:'high', cat:'進階隱性', title:'同儕比較法製造薪資焦慮', scenario:'展示社群媒體影片，稱友人薪資實拿3萬以上，要求比照辦理', motivation:'透過極端案例造成雇主焦慮，利用資訊不對稱製造相對剝奪感，實為誇大宣傳。', legal:'高（管理層面）。若雇主因此提高薪資，可能被其他移工比照要求，引發連鎖效應。', law:['勞動部外籍移工薪資公告'], counter:['提供勞動部正式薪資公告數據，重申合約精神','強調自家優勢（工作環境、家庭氛圍、穩定性）','不隨社群媒體資訊起舞，要求提供具體可核實的薪資憑據'] },
   { id:11, risk:'med',  cat:'進階隱性', title:'假性借貸以情感建立債務', scenario:'宣稱家鄉發生天災或父母手術，要求預支半年薪資', motivation:'以債務建立情感連結，若雇主拒絕則以情緒低落為由消極怠工，部分為真實需求。', legal:'中。多次預支將導致薪資結算複雜化，且移工若後續轉換雇主，追討困難。', law:['民法第346條（消費借貸）'], counter:['不建議直接預支，可協助聯繫家鄉相關救助機構核實','若必須借款，簽署正式還款協議並按月扣款','由仲介介入核實緊急程度，避免單方面被情感操弄'] },
   { id:12, risk:'high', cat:'進階隱性', title:'軟性怠工逼迫讓步', scenario:'工作時全程滑手機，對病人呼喚反應遲鈍，直到獲得獎金才暫時恢復', motivation:'被動攻擊型策略，透過降低服務品質逼迫讓步，但不正面衝突，舉證困難。', legal:'高。此行為可能導致被照顧者安全風險；若有事故，雇主可能連帶受責。', law:['民法第227條（不完全給付）','就業服務法第59條'], counter:['建立明確的工作日程表與工作日誌，雙方簽認','定期與仲介進行三方會談，保留書面紀錄','記錄工作表現不佳之具體事實，必要時啟動合約終止程序','安裝監視器（需事先告知）作為客觀紀錄'] },
-  { id:13, risk:'med',  cat:'進階隱性', title:'挑撥孤立製造家庭矛盾', scenario:'在病人面前表現良好，對家屬態度惡劣，使家屬內部產生分歧', motivation:'利用長輩依賴心作擋箭牌，透過製造家庭矛盾來鞏固自身地位，屬高度操控性行為。', legal:'中。此行為難以舉證，but若長輩長輩因此不願接受家屬管理，可能對照護品質造成嚴重影響。', law:['雇傭契約約定'], counter:['家屬間保持溝通暢通，建立統一管理窗口','安裝監視器（需告知）以維護雙方權益','定期單獨詢問長輩實際感受，排除看護在場影響','若情況嚴重，通報仲介並啟動更換程序'] },
+  { id:13, risk:'med',  cat:'進階隱性', title:'挑撥孤立製造家庭矛盾', scenario:'在病人面前表現良好，對家屬態度惡劣，使家屬內部產生分歧', motivation:'利用長輩依賴心作擋箭牌，透過製造家庭矛盾來鞏固自身地位，屬高度操控性行為。', legal:'中。此行為難以舉證，但若長輩因此不願接受家屬管理，可能對照護品質造成嚴重影響。', law:['雇傭契約約定'], counter:['家屬間保持溝通暢通，建立統一管理窗口','安裝監視器（需告知）以維護雙方權益','定期單獨詢問長輩實際感受，排除看護在場影響','若情況嚴重，通報仲介並啟動更換程序'] },
   { id:14, risk:'med',  cat:'情緒勒索', title:'家鄉急事要求預支薪資', scenario:'宣稱家鄉有急事（天災、醫療）需匯款，要求預支薪資或借款', motivation:'利用人道同情心理進行財務試探，部分為真實需求，但亦有慣性借貸不還之案例。', legal:'中。多次預支將導致薪資結算複雜化，且若移工後續轉換雇主，追討困難。', law:['民法第346條','就業服務法第57條'], counter:['透過仲介協助核實急事真實性（可要求相關文件）','若同意借款，必須簽署還款協議並按月固定扣款','避免多次預支形成慣例，嚴格執行一次性原則'] },
   { id:15, risk:'med',  cat:'情緒勒索', title:'威脅以「想家不適應」離職', scenario:'以思鄉或不適應為由威脅離職，實際目的為要求加薪或減少工作量', motivation:'利用雇主怕麻煩與重新招聘成本進行籌碼施壓，多發生於試用期後三個月內。', legal:'中。移工若強行離職，雇主可主張違約賠償，但實際執行困難。', law:['就業服務法第59條','民法第438條（違約損害賠償）'], counter:['先了解真實訴求，評估工作表現是否值得讓步','必要時協助轉介而非被動妥協，避免開啟不良先例','告知違約後果（需負擔機票費、賠償費等），由仲介出面說明'] },
   { id:16, risk:'med',  cat:'情緒勒索', title:'以照顧難度索取辛苦費', scenario:'抱怨被照顧者難以相處或失智狀況加重，暗示需要額外「辛苦費」', motivation:'將工作難度差異轉化為額外報酬理由，若無契約依據屬情緒性勒索。', legal:'中。若被照顧者確有特殊照護需求（重度失智、暴力傾向），部分要求具合理性。', law:['雇傭契約約定','民法第483條（給付報酬）'], counter:['客觀評估照護難度，若確實超出一般範疇，可協商一次性慰勞金','記錄所有溝通過程（錄音或書面），避免事後爭議','若同意補貼，以書面載明「一次性、非經常性」'] },
   { id:17, risk:'high', cat:'情緒勒索', title:'頻繁稱病拒絕就醫', scenario:'頻繁表示不舒服要求減少工作，但拒絕接受醫療檢查', motivation:'拒絕就醫使雇主無從判斷真偽，可能為規避工作之策略，長期累積恐導致職災認定爭議。', legal:'高。若雇主強迫帶病工作後發生職災，可能面臨法律責任。', law:['職業災害勞工保護法','就業服務法第46條'], counter:['明確要求正式就醫並取得診斷證明，否則視為正常工作能力','陪同就醫，確認醫囑內容，依醫囑調整工作','記錄所有「稱病」紀錄（日期、主訴症狀）作為爭議證據'] },
-  { id:18, risk:'high', cat:'契約漏洞', title:'主張國定假日應放假索取補休費', scenario:'以勞基法國定假日規定為由，要求補休或加班費', motivation:'外籍家庭看護工不適用勞基法，移工援引錯誤法律依據要求不當利益。', legal:'高。此為法律認知錯誤，但若雇主不了解而被迫給付，將形成先例且難以取消。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）','勞動基準法第84-1條'], counter:['明確告知外籍看護不適用勞基法，國定假日由契約約定','在契約中明確載明工作時間與休假安排','提供勞動部官方說明文件，以白紙黑字回應'] },
+  { id:18, risk:'high', cat:'契約漏洞', title:'主張國定假日應放假索取補休費', scenario:'以勞基法國定假日規定為由，要求補休或加班費', motivation:'家庭看護工作目前未全面納入《勞動基準法》適用範圍，移工援引錯誤法律依據要求不當利益。', legal:'高。此為法律認知錯誤，但若雇主不了解而被迫給付，將形成先例且難以取消。', law:['就業服務法第46條（家庭看護工作目前未全面納入勞基法適用）','勞動基準法第84-1條'], counter:['明確告知家庭看護工作目前未全面納入勞基法，國定假日由契約約定','在契約中明確載明工作時間與休假安排','提供勞動部官方說明文件，以白紙黑字回應'] },
   { id:19, risk:'high', cat:'契約漏洞', title:'以工時難認定要求加班費', scenario:'主張實際工時超過約定，要求按小時計算加班補貼', motivation:'家庭看護工作特性導致待命時間與實際工時界線模糊，移工可能誇大工時要求補償。', legal:'高。若雇主無工時記錄，在爭議時處於舉證不利地位。', law:['就業服務法第46條','民法第482條'], counter:['建立每日工作日誌雙方簽認，明確區分工作時間、待命時間、休息時間','使用Line或書面每日確認工作項目','爭議前先諮詢1955或律師，了解外籍看護特殊工時規定'] },
   { id:20, risk:'high', cat:'契約漏洞', title:'製造離職理由索取資遣費', scenario:'以不適任或環境不合為由主動要求終止契約，並要求預告工資或資遣費', motivation:'部分移工利用合約終止規定，主動製造離職理由，騙取費用後轉換至更好的雇主。', legal:'高。外籍移工終止契約涉及複雜法律程序，不當終止雇主也可能面臨罰鍰。', law:['就業服務法第59條','就業服務法第62條（廢止聘僱許可）'], counter:['保留工作表現不佳之完整證據（日誌、錄影、書面溝通）','了解依就服法辦理終止契約的正確程序','若確需終止，諮詢仲介或律師，確保流程合法'] },
   { id:21, risk:'low',  cat:'契約漏洞', title:'要求雇主負擔技能培訓費', scenario:'要求雇主支付語言課程、看護技能考照費，以提升服務品質為由', motivation:'將個人職業發展成本轉嫁雇主，法律上雇主無此義務，屬變換福利要求。', legal:'低。無法律義務，但若雇主主動同意，需書面約定返還條款。', law:['民法第482條（雇傭契約）'], counter:['明確告知此非雇主法定義務','若願意支持，簽署培訓費用返還協議（如提前離職須返還比例費用）','可作為附條件福利（服務滿N年後無需返還）'] },
   { id:22, risk:'med',  cat:'集體施壓', title:'串聯其他看護集體要求調薪', scenario:'透過同鄉網絡或Line群組，聯合其他外籍看護向各自雇主同步施壓', motivation:'透過集體行動提升個人議價能力，反映移工意識抬頭與資訊流通加速。', legal:'中。雖非法定工會行為，但集體信息協調若涉及脅迫，可能觸及相關法律。', law:['勞資爭議處理法','刑法第304條（強制罪）'], counter:['保持個別溝通管道暢通，了解移工訴求','透過仲介掌握移工動態，避免訊息延遲造成被動','若確認集體行動，向勞政單位諮詢，必要時尋求協助'] },
-  { id:23, risk:'high', cat:'集體施壓', title:'威脅檢舉雇主違法作為談判籌碼', scenario:'以向勞工局、1955投訴為威脅，要求雇主在薪資、工時上讓步', motivation:'即使雇主無違法，勞動檢查程序本身即造成困擾，此手法屬極端施壓策略。', legal:'高。不實檢舉可追究誣告責任，但過程消耗大量時間，前提是平時合規。', law:['刑法第169條（誣告罪）','就業服務法第73條'], counter:['平時確實遵守所有勞動法規，保存完整文件','若遭威脅，保持冷靜，書面回應並告知將如實配合調查','若確認不實檢舉，在調查結束後可追究誣告責任'] },
+  { id:23, risk:'high', cat:'集體施壓', title:'威脅檢舉雇主違法作為談判籌碼', scenario:'以向勞工局、1955投訴為威脅，要求雇主在薪資、工時上讓步', motivation:'即使雇主無違法，勞動檢查程序本身即造成困擾，此手法屬極端施壓策略。', legal:'高。誣告罪成立門檻極高（須明知不實且故意使他人受刑事或懲戒處分），一般勞檢檢舉難以直接構成；但若確認對方惡意虛構事實，仍可諮詢律師評估相關責任。前提是平時合規。', law:['刑法第169條（誣告罪）','就業服務法第73條'], counter:['平時確實遵守所有勞動法規，保存完整文件','若遭威脅，保持冷靜，書面回應並告知將如實配合調查','若確認對方惡意虛構事實並造成損害，可進一步諮詢律師評估是否涉及誣告、妨害名譽或民事侵權責任'] },
   { id:24, risk:'med',  cat:'集體施壓', title:'透過仲介施壓暗示換人', scenario:'部分仲介為賺取轉介費，配合移工向雇主施壓，暗示不答應條件就幫移工換雇主', motivation:'部分仲介與移工利益共謀，形成三方博弈，雇主在資訊上處於弱勢。', legal:'中。此類仲介行為可能違反仲介業管理規定，雇主可向主管機關舉報。', law:['私立就業服務機構許可及管理辦法第38條','就業服務法第34條'], counter:['選擇信譽良好的仲介並建立長期合作關係','若發現仲介角色異常，向勞動部或地方勞政單位反映','更換仲介前了解相關費用與程序，掌握主動權'] },
   { id:25, risk:'med',  cat:'資訊不對稱', title:'聲稱其他家庭條件更好要求比照', scenario:'透過同儕比較製造相對剝奪感，要求薪資或福利比照辦理', motivation:'移工對市場行情掌握度提升，以資訊優勢製造談判壓力，資訊可能為真實或誇大。', legal:'中。若輕易妥協，可能引發連鎖比較，且無明確標準的讓步將成為不斷妥協的開端。', law:['勞動部外籍移工薪資公告'], counter:['定期了解官方薪資行情，以數據回應','強調自家優勢（穩定、安全、工作環境、人際關係）','理性評估而非盲目跟隨，可邀請仲介協助說明市場實際狀況'] },
-  { id:26, risk:'high', cat:'資訊不對稱', title:'誤導雇主引用不存在的法律規定', scenario:'以「法律規定必須...」為由要求不當權益，但所引用的法律條文並不適用', motivation:'利用雇主對勞動法令不熟悉，以錯誤法律解釋爭取利益，屬惡意欺瞞行為。', legal:'高（管理層面）。雇主若因此讓步，損失難以追回，且形成事實先例。', law:['就業服務法第46條（外籍家庭看護工不適用勞基法）'], counter:['不輕信單方面說法，要求提供法條出處','遇爭議時主動諮詢1955、勞政單位或律師','雇主應主動學習外籍看護相關基礎法規'] },
+  { id:26, risk:'high', cat:'資訊不對稱', title:'誤導雇主引用不存在的法律規定', scenario:'以「法律規定必須...」為由要求不當權益，但所引用的法律條文並不適用', motivation:'利用雇主對勞動法令不熟悉，以錯誤法律解釋爭取利益，屬惡意欺瞞行為。', legal:'高（管理層面）。雇主若因此讓步，損失難以追回，且形成事實先例。', law:['就業服務法第46條（家庭看護工作目前未全面納入勞基法適用範圍）'], counter:['不輕信單方面說法，要求提供法條出處','遇爭議時主動諮詢1955、勞政單位或律師','雇主應主動學習外籍看護相關基礎法規'] },
   { id:27, risk:'high', cat:'資訊不對稱', title:'隱瞞健康狀況或技能限制', scenario:'面試時刻意隱瞞健康問題或工作能力不足，入職後才逐漸暴露', motivation:'為順利入職而提供不實資訊，入職後雇主因投入招聘成本面臨沉沒成本困境。', legal:'高。屬詐欺性締約行為，可依法撤銷契約，但舉證極為困難，訴訟成本高。', law:['民法第92條（詐欺撤銷）','就業服務法第57條（雇主查核義務）'], counter:['面試時詳細詢問健康狀況，並要求提供近期健康檢查報告','試用期密切觀察工作表現，建立詳細紀錄','發現隱瞞後，蒐集完整證據，諮詢律師依法解除契約'] }
 ];
 
@@ -1648,7 +1966,7 @@ function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const map = { dashboard:0, analyzer:1, fraud:2, law:3, contacts:4, report:5, tactics:6 };
+  const map = { dashboard:0, analyzer:1, fraud:2, law:3, contacts:4, report:5, tactics:6, broker:7 };
   document.querySelectorAll('.tab-btn')[map[id]]?.classList.add('active');
   document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
   const mBtn = document.getElementById('mnav-' + id);
@@ -2010,7 +2328,7 @@ function generateReport() {
   if (criticalTriggered) recommendations.push({ icon:'⛔', text:'系統風險模型提示為高度警示等級（屬統計推估，非法律認定）：觸發重大風險指標（無照仲介 / 介紹未經許可工作之外國人 / 現金不開收據 / 代管移工薪資），建議審慎評估往來並可撥打 1955 諮詢', label:'重大風險訊號 — 建議立即諮詢' });
   if (checkedItems['d1']) recommendations.push({ icon:'⚠️', text:'依就業服務法第 34 條，未經許可從事跨國人力仲介為違法行為。請至勞動部官網查詢業者許可證有效性', label:'務必查證' });
   if (checkedItems['d5']) recommendations.push({ icon:'🚫', text:'依就業服務法第 5、67 條，扣押移工證件屬違法行為，雇主亦負連帶責任。請明確拒絕並可向 1955 通報', label:'建議拒絕' });
-  if (checkedItems['d2']) recommendations.push({ icon:'📋', text:'堅持要求至少3日契約審閱期（消保法§11-1規定之最低限度），這是您的法定權利，拒絕被催促', label:'維護權益' });
+  if (checkedItems['d2']) recommendations.push({ icon:'📋', text:'堅持要求合理契約審閱期（一般定型化契約常見至少3日，消保法§11-1規定應給予消費者合理審閱期間），這是您的法定權利，拒絕被催促', label:'維護權益' });
   if (warn >= 2) recommendations.push({ icon:'💰', text:'費用可能超出法定上限，請對照就業服務法第68條及勞動部「私立就業服務機構收費項目及金額標準」逐項確認。引進費上限為一個月薪資（依基本工資，約2萬至2.8萬元），請查閱勞動部最新公告', label:'費用核查' });
   if (ok >= 3) recommendations.push({ icon:'✅', text:'您已完成多項合規確認，繼續保持所有文件的拍照存證', label:'持續執行' });
   if (recommendations.length === 0) recommendations.push({ icon:'💡', text:'請完成風險評估頁面的問卷後，報告將顯示針對性建議', label:'待評估' });
@@ -2205,6 +2523,7 @@ function tacSetRisk(r) {
     if (!btn) return;
     btn.className = 'tac-btn' + (x===r ? (r==='all'?' ta':r==='high'?' th':r==='med'?' tw':' tl') : '');
   });
+  // 徹底清除展開狀態與箭頭樣式
   if (tacOpenId) {
     document.getElementById(`tcard-${tacOpenId}`)?.classList.remove('tc-active');
     const p = document.getElementById(`tdetail-${tacOpenId}`);
@@ -2221,6 +2540,7 @@ function tacSetCat(c) {
     if (!btn) return;
     btn.className = 'tac-btn' + (x===c ? ' tc' : '');
   });
+  // 徹底清除展開狀態與箭頭樣式
   if (tacOpenId) {
     document.getElementById(`tcard-${tacOpenId}`)?.classList.remove('tc-active');
     const p = document.getElementById(`tdetail-${tacOpenId}`);
