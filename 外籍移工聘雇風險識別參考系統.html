@@ -87,8 +87,13 @@
     padding: 4px;
     border-radius: 12px;
     border: 1px solid var(--border);
-    flex-wrap: wrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-shrink: 1;
+    min-width: 0;
   }
+  .header-tabs::-webkit-scrollbar { display: none; }
   .tab-btn {
     padding: 6px 14px;
     border-radius: 8px;
@@ -454,7 +459,7 @@
   .tac-detail-title { font-family:'Noto Serif TC',serif; font-size:1.15rem; font-weight:900; margin-bottom:6px; }
   .tac-detail-scenario { font-size:0.83rem; color:var(--text2); font-style:italic; background:var(--surface3); border-left:3px solid #a855f7; padding:0.55rem 0.85rem; border-radius:0 8px 8px 0; line-height:1.6; }
   .tac-detail-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.9rem; }
-  @media(max-width:800px){ .tac-detail-grid{grid-template-columns:1fr;} }
+  @media(max-width:900px){ .tac-detail-grid{grid-template-columns:1fr;} }
   .tac-block { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:0.9rem; }
   .tac-block-title { font-size:0.7rem; text-transform:uppercase; letter-spacing:1px; color:var(--text3); margin-bottom:0.55rem; display:flex; align-items:center; gap:6px; }
   .tac-block p { font-size:0.82rem; color:var(--text2); line-height:1.7; }
@@ -838,57 +843,84 @@
     display: none;
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    background: #0d1b2e;
+    background: rgba(10,14,26,0.97);
     border-top: 1px solid var(--border);
-    z-index: 100;
-    padding: 6px 0 env(safe-area-inset-bottom, 6px);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+    z-index: 200;
+    padding: 4px 0 env(safe-area-inset-bottom, 6px);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
   }
   .mobile-nav-inner {
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: stretch;
   }
   .mobile-nav-btn {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
-    padding: 6px 4px;
+    gap: 2px;
+    padding: 5px 2px;
     border: none;
     background: transparent;
     color: var(--text3);
     font-family: 'Noto Sans TC', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     cursor: pointer;
     border-radius: 10px;
     transition: all 0.2s;
-    min-width: 44px;
-    min-height: 48px;
+    min-width: 0;
+    min-height: 50px;
     justify-content: center;
     flex: 1;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    position: relative;
   }
-  .mobile-nav-btn .nav-icon { font-size: 1.1rem; }
+  .mobile-nav-btn::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 24px;
+    height: 3px;
+    background: var(--accent2);
+    border-radius: 2px;
+    transition: transform 0.2s;
+  }
+  .mobile-nav-btn.active::before { transform: translateX(-50%) scaleX(1); }
+  .mobile-nav-btn .nav-icon { font-size: 1.15rem; line-height: 1; }
   .mobile-nav-btn.active { color: var(--accent2); }
   .mobile-nav-btn.active .nav-icon { filter: drop-shadow(0 0 6px rgba(96,165,250,0.7)); }
+  .mobile-nav-btn:active { transform: scale(0.92); }
+
+  /* ─── TABLET NAV (hamburger + scrollable tabs) ─── */
+  .tablet-nav-scroll {
+    display: none;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 1rem;
+    gap: 4px;
+  }
+  .tablet-nav-scroll::-webkit-scrollbar { display: none; }
 
   /* ─── PRINT STYLES ─── */
   @media print {
     header, .mobile-nav, .risk-actions, .header-badge,
     .btn-ghost, .step-wrap, .search-wrap, .filter-tabs { display: none !important; }
-    
     body { background: white !important; color: black !important; }
     .app { padding: 0 !important; }
     .page { display: block !important; }
     #page-dashboard, #page-analyzer, #page-fraud, #page-law, #page-contacts, #page-tactics, #page-broker { display: none !important; }
     #page-report { display: block !important; }
-    
-    /* 強力覆蓋變數，防止印出暗色背景或隱形文字 */
-    .report-section { 
-      border: 1px solid #000 !important; 
-      background: white !important; 
-      color: black !important; 
-      page-break-inside: avoid; 
+    .report-section {
+      border: 1px solid #000 !important;
+      background: white !important;
+      color: black !important;
+      page-break-inside: avoid;
       box-shadow: none !important;
     }
     .report-title { color: #000 !important; font-weight: bold !important; }
@@ -898,38 +930,241 @@
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   }
 
-  @media(max-width: 600px) {
-    .app { padding: 0.8rem; padding-bottom: 80px; }
+  /* ══════════════════════════════════════
+     📱 手機 — ≤ 480px (小螢幕手機)
+  ══════════════════════════════════════ */
+  @media (max-width: 480px) {
+    html { font-size: 15px; }
+    .app { padding: 0.7rem 0.7rem; padding-bottom: 70px; }
+    header { padding: 0 0.7rem; }
+    .header-inner { height: 52px; gap: 0.5rem; }
     .header-tabs { display: none; }
-    .fraud-grid { grid-template-columns: 1fr; }
+    .header-badge { display: none; }
+    .logo-icon { width: 34px; height: 34px; font-size: 16px; border-radius: 8px; }
+    .logo-text { font-size: 0.82rem; }
+    .logo-sub { font-size: 0.62rem; }
     .mobile-nav { display: block; }
+    .mobile-nav-btn { font-size: 0.52rem; }
+    .mobile-nav-btn .nav-icon { font-size: 1.05rem; }
+
+    /* Hero */
+    .hero { padding: 1.2rem 0 0.8rem; }
+    .hero-tag { font-size: 0.62rem; padding: 3px 12px; letter-spacing: 1.5px; }
+    .hero h1 { font-size: 1.45rem; line-height: 1.25; }
+    .hero p { font-size: 0.82rem; margin-bottom: 1.2rem; }
+
+    /* Stat grid — 2 columns */
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    .stat-card { padding: 1rem 0.85rem; border-radius: 12px; }
+    .stat-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .stat-val { font-size: 1.6rem; }
+    .stat-label { font-size: 0.72rem; line-height: 1.4; }
+
+    /* Cards & sections */
+    .card { padding: 1rem; border-radius: 12px; }
+    .card-title { font-size: 0.8rem; letter-spacing: 0.5px; margin-bottom: 0.9rem; }
+    .section-title { font-size: 1rem; gap: 6px; }
+    .section-title span { font-size: 1rem; }
+    .section-divider { margin: 1.2rem 0; }
+
+    /* Analyzer */
+    .analyzer-grid { grid-template-columns: 1fr; gap: 1rem; }
     .risk-score-wrap { position: static; }
-    .analyzer-grid { grid-template-columns: 1fr; }
-    .contact-grid { grid-template-columns: 1fr; }
-    .stat-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero { padding: 1.5rem 0 1rem; }
-    .hero h1 { font-size: 1.6rem; }
-    .modal { border-radius: 16px 16px 0 0; max-height: 85vh; }
-    .modal-overlay { align-items: flex-end; padding: 0; }
-    .law-table { font-size: 0.75rem; }
+    .gauge-ring-wrap { width: 130px; height: 130px; }
+    .gauge-score { font-size: 2rem; }
+    .risk-breakdown { margin-top: 0.5rem; }
+    .risk-row { padding: 6px 0; font-size: 0.78rem; }
+    .risk-row-bar { width: 60px; }
+
+    /* Steps */
+    .step-wrap { gap: 0; overflow-x: auto; padding-bottom: 4px; }
+    .step-dot { width: 28px; height: 28px; font-size: 0.7rem; }
+    .step-label { font-size: 0.58rem; }
+    .step-wrap::before { top: 14px; }
+
+    /* Check items — bigger touch targets */
+    .check-item { padding: 10px 10px; min-height: 52px; }
+    .check-box { width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0; }
+    .check-label { font-size: 0.8rem; }
+    .check-risk { font-size: 0.62rem; padding: 2px 6px; }
+
+    /* Filter & search */
+    .filter-tabs { gap: 5px; margin-bottom: 1rem; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-btn { padding: 6px 12px; font-size: 0.73rem; min-height: 36px; flex-shrink: 0; }
+    .search-input { padding: 10px 14px 10px 40px; font-size: 0.85rem; border-radius: 10px; }
+    .search-wrap { margin-bottom: 1rem; }
+
+    /* Fraud grid */
+    .fraud-grid { grid-template-columns: 1fr; }
+
+    /* Law table — horizontal scroll */
+    .law-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 12px; }
+    .law-table { font-size: 0.73rem; min-width: 500px; }
     .law-table th, .law-table td { padding: 8px 10px; }
-    .law-table th:last-child, .law-table td:last-child { display: none; }
-    .section-title { font-size: 1.1rem; }
-    .header-inner { height: 56px; }
-    .logo-text { font-size: 0.9rem; }
+
+    /* Contact grid */
+    .contact-grid { grid-template-columns: 1fr; gap: 0.8rem; }
+    .contact-card { padding: 1.1rem; }
+    .contact-phone { font-size: 1.5rem; }
+
+    /* Modal — bottom sheet */
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal { border-radius: 20px 20px 0 0; max-height: 92vh; }
+    .modal-header { padding: 1.2rem 1.2rem 1rem; }
+    .modal-body { padding: 1rem 1.2rem 1.5rem; }
+
+    /* Tac cards */
+    .tac-grid { grid-template-columns: 1fr; gap: 0.7rem; }
+    .tac-card { padding: 0.9rem; }
+    .tac-title { font-size: 0.82rem; }
+    .tac-scenario { font-size: 0.72rem; }
+    .tac-filter-row { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; gap: 0.3rem; }
+    .tac-filter-row::-webkit-scrollbar { display: none; }
+    .tac-btn { flex-shrink: 0; }
+    .tac-detail { padding: 1.1rem; }
+    .tac-detail-grid { grid-template-columns: 1fr !important; gap: 0.8rem !important; }
+
+    /* Alert banner */
+    .alert-banner { padding: 0.85rem 1rem; font-size: 0.78rem; }
+    .alert-icon { font-size: 1rem; }
+
+    /* Buttons */
+    .btn { padding: 10px 16px; font-size: 0.82rem; min-height: 46px; border-radius: 10px; }
+    .btn-sm { padding: 8px 12px; font-size: 0.74rem; min-height: 38px; }
+
+    /* Report */
+    .report-section { padding: 1.1rem; border-radius: 12px; }
+    .report-title { font-size: 0.72rem; margin-bottom: 0.8rem; }
+    .report-item { font-size: 0.78rem; padding: 7px 0; }
+
+    /* Tactics stat bar */
+    .tactics-stat-bar { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+    .tstat { padding: 0.75rem; border-radius: 10px; }
+    .tstat-num { font-size: 1.3rem; }
+    .tstat-label { font-size: 0.68rem; }
+
+    /* Tactics hero */
+    .tactics-hero h2 { font-size: 1.3rem; }
+    .tactics-hero p { font-size: 0.82rem; }
   }
 
-  @media(min-width: 601px) and (max-width: 900px) {
-    .app { padding: 1.2rem; }
+  /* ══════════════════════════════════════
+     📱 手機 — 481px ~ 600px (大螢幕手機)
+  ══════════════════════════════════════ */
+  @media (min-width: 481px) and (max-width: 600px) {
+    .app { padding: 1rem; padding-bottom: 75px; }
+    header { padding: 0 1rem; }
+    .header-inner { height: 56px; }
+    .header-tabs { display: none; }
+    .header-badge { font-size: 0.65rem; padding: 3px 8px; }
+    .logo-icon { width: 36px; height: 36px; font-size: 18px; }
+    .logo-text { font-size: 0.88rem; }
+    .mobile-nav { display: block; }
+
+    .hero { padding: 1.5rem 0 1rem; }
+    .hero h1 { font-size: 1.6rem; }
+    .hero p { font-size: 0.85rem; }
+
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 0.7rem; }
+    .analyzer-grid { grid-template-columns: 1fr; }
+    .risk-score-wrap { position: static; }
+    .fraud-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .tac-grid { grid-template-columns: 1fr; }
+
+    .filter-tabs { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-btn { flex-shrink: 0; }
+
+    .law-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .law-table { min-width: 520px; }
+
+    .modal-overlay { align-items: flex-end; padding: 0; }
+    .modal { border-radius: 20px 20px 0 0; max-height: 90vh; }
+
+    .tac-filter-row { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+    .tac-filter-row::-webkit-scrollbar { display: none; }
+    .tac-btn { flex-shrink: 0; }
+    .tac-detail-grid { grid-template-columns: 1fr !important; gap: 0.8rem !important; }
+
+    .tactics-stat-bar { grid-template-columns: repeat(2, 1fr); }
+    .check-item { min-height: 50px; }
+  }
+
+  /* ══════════════════════════════════════
+     📟 平板 — 601px ~ 900px
+  ══════════════════════════════════════ */
+  @media (min-width: 601px) and (max-width: 900px) {
+    .app { padding: 1.2rem 1.4rem; padding-bottom: 1.5rem; }
+    header { padding: 0 1.4rem; }
+    .header-inner { height: 60px; }
+    .header-tabs {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      max-width: calc(100vw - 260px);
+    }
+    .header-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn { padding: 6px 10px; font-size: 0.72rem; flex-shrink: 0; }
+    .header-badge { display: none; }
+
+    .hero { padding: 2rem 0 1.5rem; }
+    .hero h1 { font-size: 2.1rem; }
+
+    .stat-grid { grid-template-columns: repeat(3, 1fr); gap: 0.9rem; }
+    .fraud-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    .analyzer-grid { grid-template-columns: 1fr; gap: 1.2rem; }
+    .risk-score-wrap { position: static; }
+
+    .tac-grid { grid-template-columns: repeat(2, 1fr); }
+    .tac-detail-grid { grid-template-columns: 1fr !important; gap: 0.8rem !important; }
+
+    .law-table-wrap { overflow-x: auto; }
+    .law-table { font-size: 0.8rem; }
+    .law-table th:last-child, .law-table td:last-child { display: none; }
+
+    .tactics-stat-bar { grid-template-columns: repeat(4, 1fr); }
+
+    .filter-tabs { flex-wrap: wrap; }
+    .tac-filter-row { flex-wrap: wrap; }
+  }
+
+  /* ══════════════════════════════════════
+     🖥️ 小桌機 — 901px ~ 1100px
+  ══════════════════════════════════════ */
+  @media (min-width: 901px) and (max-width: 1100px) {
+    .app { padding: 1.5rem 1.8rem; }
+    .header-inner { height: 62px; }
+    .tab-btn { padding: 6px 11px; font-size: 0.75rem; }
+    .analyzer-grid { grid-template-columns: 3fr 2fr; gap: 1.4rem; }
     .stat-grid { grid-template-columns: repeat(3, 1fr); }
     .fraud-grid { grid-template-columns: repeat(2, 1fr); }
     .contact-grid { grid-template-columns: repeat(2, 1fr); }
+    .tac-grid { grid-template-columns: repeat(2, 1fr); }
+    .law-table th:last-child, .law-table td:last-child { display: table-cell; }
   }
 
+  /* ══════════════════════════════════════
+     🖥️ 大桌機 — ≥ 1101px
+  ══════════════════════════════════════ */
+  @media (min-width: 1101px) {
+    .analyzer-grid { grid-template-columns: 1fr 1fr; }
+    .tac-grid { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+    .fraud-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+    .contact-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  }
+
+  /* ══════════════════════════════════════
+     🎯 通用 — Touch / Accessibility
+  ══════════════════════════════════════ */
   .check-item:focus-visible,
   .tab-btn:focus-visible,
   .btn:focus-visible,
-  .filter-btn:focus-visible {
+  .filter-btn:focus-visible,
+  .mobile-nav-btn:focus-visible {
     outline: 2px solid var(--accent2);
     outline-offset: 2px;
   }
@@ -937,10 +1172,34 @@
   html { scroll-behavior: smooth; }
 
   @media (pointer: coarse) {
-    .check-item { min-height: 48px; }
-    .tab-btn { min-height: 36px; }
-    .filter-btn { min-height: 36px; }
-    .btn { min-height: 44px; }
+    .check-item { min-height: 50px; }
+    .tab-btn { min-height: 38px; }
+    .filter-btn { min-height: 38px; }
+    .btn { min-height: 46px; }
+    .tac-btn { min-height: 34px; padding: 6px 12px; }
+    .fraud-card { cursor: pointer; }
+  }
+
+  /* ══════════════════════════════════════
+     🔧 Law table wrapper (needed for scroll)
+  ══════════════════════════════════════ */
+  .law-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+  }
+  .law-table-wrap .law-table { min-width: 640px; }
+
+  /* ══════════════════════════════════════
+     Safe-area for notch phones
+  ══════════════════════════════════════ */
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .mobile-nav {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 4px);
+    }
+    @media (max-width: 600px) {
+      .app { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+    }
   }
 </style>
 </head>
@@ -1019,12 +1278,12 @@
       <div class="stat-card accent" style="cursor:pointer;" data-page="analyzer">
         <div class="stat-icon">🔍</div>
         <div class="stat-val" style="font-size:1.1rem;">開始評估</div>
-        <div class="stat-label">填寫20項風險評估清單，即時計算您的聘雇風險指數</div>
+        <div class="stat-label">填寫21項風險評估清單，即時計算您的聘雇風險指數</div>
       </div>
       <div class="stat-card warn" style="cursor:pointer;" data-page="fraud">
         <div class="stat-icon">🚨</div>
         <div class="stat-val" style="font-size:1.1rem;">風險案例</div>
-        <div class="stat-label">九大常見異常案例解析，附識別方式與法規依據</div>
+        <div class="stat-label">12大常見異常案例解析，附識別方式與法規依據</div>
       </div>
       <div class="stat-card success" style="cursor:pointer;" data-page="law">
         <div class="stat-icon">⚖️</div>
@@ -1073,7 +1332,7 @@
       <span style="font-size:1.4rem;flex-shrink:0;">⛔</span>
       <div>
         <div style="font-weight:900;color:#fca5a5;font-size:0.95rem;margin-bottom:4px;">系統偵測到多項重大異常風險訊號，建議提高警覺並進一步查證</div>
-        <div style="font-size:0.8rem;color:var(--danger2);">已觸 triggered 重大風險指標：<strong id="criticalTriggerList"></strong></div>
+        <div style="font-size:0.8rem;color:var(--danger2);">已觸發重大風險指標：<strong id="criticalTriggerList"></strong></div>
         <div style="font-size:0.72rem;color:var(--text3);margin-top:4px;">無照仲介、介紹未經許可工作之外國人、現金不開收據、代管移工薪資為四項重大風險指標。若任一項出現，系統風險模型將提示為高度警示等級（屬統計模型推估，非法律認定，亦不具行政調查或司法判斷效力）。</div>
       </div>
     </div>
@@ -1244,17 +1503,19 @@
     </div>
 
     <div class="card">
-      <table class="law-table" id="lawTable">
-        <thead>
-          <tr>
-            <th>法律依據</th>
-            <th>條文重點</th>
-            <th>保護內容</th>
-            <th>罰則</th>
-          </tr>
-        </thead>
-        <tbody id="lawBody"></tbody>
-      </table>
+      <div class="law-table-wrap">
+        <table class="law-table" id="lawTable">
+          <thead>
+            <tr>
+              <th>法律依據</th>
+              <th>條文重點</th>
+              <th>保護內容</th>
+              <th>罰則</th>
+            </tr>
+          </thead>
+          <tbody id="lawBody"></tbody>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -1348,7 +1609,7 @@
         </div>
 
         <div style="padding:8px 12px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.15);border-radius:8px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;">
-          <div>📅 <strong style="color:#6ee7b7;">資料最後更新</strong>：<span id="lastUpdated" style="color:var(--text);">2026/05/18</span>　｜　🏷️ 模型版本</div>
+          <div>📅 <strong style="color:#6ee7b7;">資料最後更新</strong>：<span id="lastUpdated" style="color:var(--text);">2026/05/18</span>　｜　🏷️ 模型版本 <span id="reportModelVersion" style="color:var(--accent2);"></span></div>
           <div style="color:var(--text3);font-size:0.72rem;">法規來源：全國法規資料庫、勞動部、內政部移民署</div>
         </div>
 
@@ -1386,7 +1647,7 @@
     </div>
     <div class="tac-filter-row">
       <span class="tac-filter-label">手法類別</span>
-      <button class="tac-btn tc" id="tcat-all">全部類別</button>
+      <button class="tac-btn ta" id="tcat-all">全部類別</button>
       <button class="tac-btn" id="tcat-日常補貼">日常補貼</button>
       <button class="tac-btn" id="tcat-薪酬轉嫁">薪酬轉嫁</button>
       <button class="tac-btn" id="tcat-福利勒索">福利勒索</button>
@@ -1725,7 +1986,7 @@
     <div style="padding-top:1rem; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;">
       <div style="display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
         <span>📅 <strong style="color:var(--text2);">資料最後更新</strong>：<span id="lastUpdatedFooter" style="color:var(--accent2);">2026/05/18</span></span>
-        <span>🏷️ 模型版本</span>
+        <span>🏷️ 模型版本 <span id="modelVersion" style="color:var(--accent2);">v11</span></span>
         <span>📐 多維加權模型</span>
       </div>
       <div style="color:var(--text3); font-size:0.72rem;">
@@ -1785,7 +2046,7 @@ const checkData = {
 };
 
 const MODEL_META = {
-  version: '',
+  version: 'v11',
   lastUpdated: '2026/05/18',
   description: '本模型採多維加權設計，權重會依法規修訂、政策公告與實務統計動態檢視調整。所有分數屬統計推估，非法律量刑或行政認定。',
   dimensions: ['資格', '契約', '金流', '證件', '透明度'],
@@ -2143,18 +2404,7 @@ function setFraudFilter(filter, btn) {
 }
 
 function filterFraud(query) {
-  const q = query.toLowerCase();
-  let filtered = fraudData;
-  if (fraudFilter !== 'all') {
-    filtered = filtered.filter(f => f.type === fraudFilter || f.sev === fraudFilter);
-  }
-  if (q) {
-    filtered = filtered.filter(f =>
-      f.title.toLowerCase().includes(q) || f.op.toLowerCase().includes(q) ||
-      f.how.toLowerCase().includes(q) || f.law.toLowerCase().includes(q)
-    );
-  }
-  renderFraud(filtered);
+  applyFraudFilter();
 }
 
 function applyFraudFilter() {
@@ -2303,6 +2553,9 @@ function generateReport() {
   } else if (score >= 45) {
     badge.textContent = '🟡 中度風險訊號 — 建議謹慎確認多項細節';
     badge.style.cssText = 'background:rgba(245,158,11,0.15);color:#fde68a;border:1px solid rgba(245,158,11,0.3);display:inline-block;padding:6px 20px;border-radius:20px;font-size:0.9rem;font-weight:700;margin-top:0.8rem;';
+  } else if (score >= 20) {
+    badge.textContent = '🟠 偏高風險訊號 — 建議再次確認';
+    badge.style.cssText = 'background:rgba(249,115,22,0.15);color:#fdba74;border:1px solid rgba(249,115,22,0.3);display:inline-block;padding:6px 20px;border-radius:20px;font-size:0.9rem;font-weight:700;margin-top:0.8rem;';
   } else {
     badge.textContent = '✅ 低度風險 — 大致符合合規參考';
     badge.style.cssText = 'background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);display:inline-block;padding:6px 20px;border-radius:20px;font-size:0.9rem;font-weight:700;margin-top:0.8rem;';
@@ -2402,6 +2655,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lastUpd) lastUpd.textContent = MODEL_META.lastUpdated;
   const lastUpdF = document.getElementById('lastUpdatedFooter');
   if (lastUpdF) lastUpdF.textContent = MODEL_META.lastUpdated;
+  const modelVer = document.getElementById('modelVersion');
+  if (modelVer) modelVer.textContent = MODEL_META.version;
+  const reportModelVer = document.getElementById('reportModelVersion');
+  if (reportModelVer) reportModelVer.textContent = MODEL_META.version;
 
   updateScore();
 });
@@ -2415,6 +2672,17 @@ function buildTactics() {
   const grid = document.getElementById('tacGrid');
   if (!grid) return;
   grid.innerHTML = '';
+
+  // 動態更新統計數字（確保與資料一致）
+  const cntH = tacticsData.filter(t => t.risk === 'high').length;
+  const cntM = tacticsData.filter(t => t.risk === 'med').length;
+  const cntL = tacticsData.filter(t => t.risk === 'low').length;
+  const elH = document.getElementById('tac-cnt-h');
+  const elM = document.getElementById('tac-cnt-m');
+  const elL = document.getElementById('tac-cnt-l');
+  if (elH) elH.textContent = cntH;
+  if (elM) elM.textContent = cntM;
+  if (elL) elL.textContent = cntL;
 
   tacticsData.forEach(t => {
     const card = document.createElement('div');
@@ -2505,7 +2773,7 @@ function tacToggleDetail(id) {
       </div>
     </div>`;
 
-  panel.classList.add('td-open');
+  panel。classList.add('td-open');
   document.getElementById(`tacCloseBtn-${id}`)?.addEventListener('click', e => {
     e.stopPropagation();
     card.classList.remove('tc-active');
