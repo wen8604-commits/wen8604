@@ -2165,7 +2165,7 @@ function loadFromStorage() {
     const VALID_LANGS = new Set(["zh", "id", "en", "vi"]);
     if (draft.lang && VALID_LANGS.has(draft.lang)) {
       lang = draft.lang;
-      document.querySelectorAll(".lang-bar button").forEach(btn => {
+      document.querySelectorAll(".lang-bar button[data-l]").forEach(btn => {
         btn.classList.toggle("active", btn.dataset.l === lang);
       });
     }
@@ -3506,9 +3506,9 @@ function applyLang() {
 }
 
 /* Language switcher */
-document.querySelectorAll(".lang-bar button").forEach(btn => {
+document.querySelectorAll(".lang-bar button[data-l]").forEach(btn => {
   btn.onclick = () => {
-    document.querySelectorAll(".lang-bar button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".lang-bar button[data-l]").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     lang = btn.dataset.l;
     applyLang();
@@ -4190,16 +4190,51 @@ function setViewMode(mode) {
 ======================================================== */
 
 /* ========================================================
+   Custom Confirm Modal (replaces native confirm() blocked in iframes)
+======================================================== */
+function showConfirmModal(msg, onOk) {
+  const overlay = document.getElementById("confirmModalOverlay");
+  const msgEl = document.getElementById("confirmModalMsg");
+  const okBtn = document.getElementById("confirmModalOk");
+  const cancelBtn = document.getElementById("confirmModalCancel");
+  if (!overlay) { if (onOk) onOk(); return; } // fallback: just execute
+
+  // Update button labels per language
+  const OK_LBL = { zh:"確認清除", id:"Ya, Hapus", en:"Yes, Reset", vi:"Xác nhận xóa" };
+  const CANCEL_LBL = { zh:"取消", id:"Batal", en:"Cancel", vi:"Hủy" };
+  okBtn.textContent = OK_LBL[lang] || OK_LBL.en;
+  cancelBtn.textContent = CANCEL_LBL[lang] || CANCEL_LBL.en;
+
+  msgEl.textContent = msg;
+  overlay.style.display = "flex";
+
+  function close() {
+    overlay.style.display = "none";
+    okBtn.onclick = null;
+    cancelBtn.onclick = null;
+    overlay.onclick = null;
+  }
+  okBtn.onclick = function() { close(); if (onOk) onOk(); };
+  cancelBtn.onclick = close;
+  overlay.onclick = function(e) { if (e.target === overlay) close(); };
+}
+
+/* ========================================================
    Clear
 ======================================================== */
 function clearAll() {
+  // 使用自訂 Modal 替代 confirm()（原生 confirm() 在 iframe 環境中被阻擋）
   const clearConfirm = {
-    zh: "確定要清除所有資料？",
+    zh: "確定要清除所有資料？\n此操作無法復原。",
     id: "確定要清除所有資料？\nApakah Anda yakin ingin menghapus semua data?",
     en: "確定要清除所有資料？\nAre you sure you want to reset all fields?",
     vi: "確定要清除所有資料？\nBạn có chắc muốn xóa tất cả dữ liệu không?"
   };
-  if (!confirm(clearConfirm[lang] || clearConfirm.en)) return;
+  const msg = clearConfirm[lang] || clearConfirm.en;
+  showConfirmModal(msg, function() { _doClearAll(); });
+}
+
+function _doClearAll() {
 
   // 【修復漏洞一】中斷尚未執行的自動儲存與翻譯計時器，防止競態條件
   clearTimeout(_saveTimer);
@@ -4440,6 +4475,19 @@ if (_restored) {
 /* Attach auto-save listeners after full render */
 attachAutoSaveListeners();
 </script>
+
+
+<!-- Custom Confirm Modal (replaces native confirm() which is blocked in iframes) -->
+<div id="confirmModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div id="confirmModalBox" style="background:#fff;border-radius:16px;padding:28px 28px 22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center">
+    <div style="font-size:2rem;margin-bottom:12px">🗑</div>
+    <div id="confirmModalMsg" style="font-size:.95rem;color:#1b1710;line-height:1.6;margin-bottom:22px;white-space:pre-line"></div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button id="confirmModalOk" style="flex:1;padding:11px 18px;background:linear-gradient(145deg,#b04621,#93381a);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit">確認清除</button>
+      <button id="confirmModalCancel" style="flex:1;padding:11px 18px;background:#f3eee1;color:#4a4236;border:1.5px solid #d8d0bd;border-radius:9px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit">取消</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
