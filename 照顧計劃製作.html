@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>照顧計劃製作 Care Plan Maker</title>
+<title>照顧計劃製作</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -95,22 +95,48 @@ header {
   box-shadow: 0 6px 24px rgba(0,0,0,.16);
 }
 
-.hd-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hd-left {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
 
 header h1 {
   font-family: 'Noto Serif TC', serif;
-  font-size: clamp(1.05rem, .95rem + .6vw, 1.32rem);
+  font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.9rem);
   font-weight: 700;
-  letter-spacing: .4px;
-  line-height: 1.25;
+  letter-spacing: 1px;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0,0,0,.22);
 }
 
+/* 品牌徽章：聘外看就上手 */
 .hd-sub {
-  font-size: clamp(.6rem, .55rem + .15vw, .7rem);
-  opacity: .55;
-  font-weight: 300;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  background: linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.08) 100%);
+  border: 1px solid rgba(255,255,255,.32);
+  border-radius: 30px;
+  padding: 4px 13px 4px 9px;
+  font-size: clamp(.72rem, .65rem + .25vw, .88rem);
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: #fff;
+  opacity: 1;
+  text-transform: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 2px 8px rgba(0,0,0,.12);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.hd-sub::before {
+  content: "✦";
+  font-size: .6rem;
+  opacity: .7;
+  flex-shrink: 0;
 }
 
 .lang-bar { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -879,7 +905,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   body { padding-bottom: calc(96px + env(safe-area-inset-bottom)); }
 
   header { gap: 10px; }
-  .hd-sub { letter-spacing: 1.5px; }
+  .hd-sub { letter-spacing: 1.8px; padding: 3px 10px 3px 8px; font-size: .72rem; }
   .lang-bar { width: 100%; }
   .lang-bar button { flex: 1; min-width: 0; padding: 9px 8px; text-align: center; }
 
@@ -907,6 +933,8 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
     z-index: 90;
     gap: 10px;
   }
+  /* 防止固定底部操作列遮擋最後一個輸入框 */
+  #formArea > .card:last-of-type { margin-bottom: 40px; }
   .btn { padding: 14px 16px; font-size: .9rem; }
   .btn-primary { min-width: 0; flex: 2; }
   .btn-ghost { flex: 1; }
@@ -1038,9 +1066,11 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   }
   .print-vital-table tr:nth-child(even) td { background: #f7f7f5 !important; }
 
-  /* Cond blocks */
+  /* Cond blocks — 允許在 block 與 block 之間自然分頁，
+     但每個 block 本身若能放下則避免斷裂；過長時允許斷裂以防大空白 */
   .cond-block {
     break-inside: avoid;
+    page-break-inside: avoid;
     border: 0.5pt solid #ccc !important;
     border-radius: 5pt !important;
     margin-bottom: 7pt !important;
@@ -1102,13 +1132,14 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 
   /* Hide elements not needed in print based on user selection */
   body.print-no-ai .ai-box { display: none !important; }
+  body.print-no-med .plan-sec-title.med-title, body.print-no-med .med-plan-list:not(.clean-list) { display: none !important; }
   body.print-no-vital .print-vital-section { display: none !important; }
   body.print-no-contacts .emg-grid, body.print-no-contacts .plan-sec-title.emg-title { display: none !important; }
   body.print-no-schedule .print-schedule-section { display: none !important; }
-  body.print-no-care .cond-block, body.print-no-care .plan-sec-title.care-title { display: none !important; }
+  body.print-no-care .cond-block:not(.diet-block), body.print-no-care .plan-sec-title.care-title { display: none !important; }
   body.print-no-clean .plan-sec-title.clean-title, body.print-no-clean .med-plan-list.clean-list, body.print-no-clean .clean-note-box { display: none !important; }
 
-  /* Force full view in print */
+  /* Force full view in print (override compact mode) */
   .plan-wrap.compact .ai-box { display: block !important; }
   .plan-wrap.compact .cond-block-body .col.sec { display: block !important; }
   .plan-wrap.compact .cond-block-body { grid-template-columns: 1fr 1fr !important; }
@@ -1484,7 +1515,8 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 .plan-wrap.compact .cond-block-body { grid-template-columns: 1fr; }
 .plan-wrap.compact .cond-block-body .col.zh { border-right: none; }
 .plan-wrap.compact .print-vital-section { display: none; }
-.plan-wrap.compact .notes-box { display: none; }
+/* 精簡模式只隱藏一般備註，保留警示框（過敏、翻譯失敗）可見 */
+.plan-wrap.compact .notes-box:not([style*="fff3e8"]):not([style*="f0f8f0"]) { display: none; }
 
 /* ── Med Checkbox (藥物已給藥勾選) ── */
 .med-check-row {
@@ -1574,16 +1606,20 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 <body>
 
 <div id="saveIndicator" class="save-indicator no-print">✓ 已自動儲存</div>
+<script>
+const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en:"✓ Auto-saved", vi:"✓ Đã tự động lưu" };
+</script>
 
 <header>
   <div class="hd-left">
-    <h1 id="appTitle">外籍看護照顧計劃製作</h1>
-    <span class="hd-sub" id="appSub">Care Plan Maker for Foreign Caregivers</span>
+    <h1 id="appTitle">照顧計劃製作</h1>
+    <span class="hd-sub" id="appSub">聘外看就上手</span>
   </div>
   <div class="lang-bar">
-    <button data-l="id" class="active">中 / Indonesia</button>
-    <button data-l="en">中 / English</button>
-    <button data-l="vi">中 / Tiếng Việt</button>
+    <button data-l="zh">純中文</button>
+    <button data-l="id" class="active">中文 / Indonesia</button>
+    <button data-l="en">中文 / English</button>
+    <button data-l="vi">中文 / Tiếng Việt</button>
   </div>
 </header>
 
@@ -1598,7 +1634,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
       </div>
       <div class="row3">
         <div><label id="l_name">姓名 / Name</label><input id="f_name" placeholder="王○○"></div>
-        <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120"></div>
+        <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120" step="1"></div>
         <div>
           <label id="l_sex">性別 / Gender</label>
           <select id="f_sex"></select>
@@ -1707,7 +1743,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
       <div class="chips" id="condChips"></div>
       <label id="l_diet" style="margin-top:16px">飲食型態 / Diet</label>
       <select id="f_diet"></select>
-      <label id="l_allergy">過敏 / 禁忌 / Alergi / Allergies</label>
+      <label id="l_allergy">過敏 / Alergi</label>
       <input id="f_allergy" placeholder="例：盤尼西林、海鮮（輸入後自動翻譯）" oninput="scheduleAllergyTranslate()">
       <div id="allergyTransBox" style="display:none;margin-top:6px;background:var(--soft);border-radius:8px;padding:8px 12px;font-size:.85rem;color:var(--ink-soft);line-height:1.7"></div>
       <label id="l_note">特殊注意事項 / Special Notes</label>
@@ -1778,7 +1814,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
           </div>
         </div>
         <div class="vital-field" id="vf_pulse" style="display:none">
-          <div class="vital-field-header"><span class="vital-field-icon">💓</span><label id="l_pulse" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">脈搏 / Pulse</label><span class="vital-unit">次/min</span></div>
+          <div class="vital-field-header"><span class="vital-field-icon">💓</span><label id="l_pulse" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">脈搏 / Pulse</label><span class="vital-unit" id="vu_pulse">bpm</span></div>
           <div class="vital-normal">
             <div class="vital-normal-icon">✓</div>
             <div class="vital-normal-body">
@@ -1850,7 +1886,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
           </div>
         </div>
         <div class="vital-field" id="vf_resp" style="display:none">
-          <div class="vital-field-header"><span class="vital-field-icon">🌬</span><label id="l_resp" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">呼吸 / Resp. Rate</label><span class="vital-unit">次/min</span></div>
+          <div class="vital-field-header"><span class="vital-field-icon">🌬</span><label id="l_resp" style="margin:0;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--ink);font-weight:600">呼吸 / Resp. Rate</label><span class="vital-unit" id="vu_resp">bpm</span></div>
           <div class="vital-normal">
             <div class="vital-normal-icon">✓</div>
             <div class="vital-normal-body">
@@ -1904,6 +1940,23 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
         <label id="l_vital_note" style="margin-top:14px">監測備註 / Monitoring Notes</label>
         <textarea id="f_vital_note" placeholder="例：每日早晚各量一次血壓、飯前測血糖、由家屬協助記錄"></textarea>
       </div>
+    </div>
+
+    <!-- ④.5 藥物管理 -->
+    <div class="card">
+      <div class="sec-head">
+        <div class="sec-num" style="background:linear-gradient(145deg,#b04621,#93381a)">💊</div>
+        <h2 id="t_med">藥物管理 / Medication Management</h2>
+      </div>
+      <div class="med-tip-bar" style="background:#fff8ee;border:1.5px solid #e8c07a;border-radius:10px;padding:10px 14px;font-size:.82rem;color:#8a5a00;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+        <span>💡</span>
+        <span>請填寫所有需要定期服用的藥物，資訊將顯示於照顧計劃中 / Please list all regular medications for the care plan.</span>
+      </div>
+      <div class="med-list" id="medList"></div>
+      <button class="add-btn" id="addMedBtn" onclick="addMed()">
+        <span>＋</span>
+        <span id="addMedTxt">新增藥物 / Add Medication</span>
+      </button>
     </div>
 
     <!-- ⑤ 緊急聯絡 -->
@@ -1973,7 +2026,9 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
     <div class="print-option-group" id="printSectionOpts">
       <label class="print-opt on" data-class="print-no-schedule"><input type="checkbox" checked> 🏠 作息</label>
       <label class="print-opt on" data-class="print-no-vital"><input type="checkbox" checked> 📊 生命徵象監測</label>
+      <label class="print-opt on" data-class="print-no-med"><input type="checkbox" checked> 💊 藥物清單</label>
       <label class="print-opt on" data-class="print-no-care"><input type="checkbox" checked> 🩺 照顧重點</label>
+      <label class="print-opt on" data-class="print-no-ai"><input type="checkbox" checked> 🤖 AI 建議</label>
       <label class="print-opt on" data-class="print-no-clean"><input type="checkbox" checked> 🧹 清潔注意</label>
       <label class="print-opt on" data-class="print-no-contacts"><input type="checkbox" checked> 📞 緊急聯絡</label>
     </div>
@@ -2041,6 +2096,7 @@ function saveToStorage() {
       actSelected:   [...actSelected],
       cleanSelected: [...cleanSelected],
       vitalSelected: [...vitalSelected],
+      meds:          meds.map(m=>({...m})),
       savedAt: Date.now()
     };
     localStorage.setItem(LS_KEY, JSON.stringify(draft));
@@ -2057,8 +2113,16 @@ function loadFromStorage() {
     const draft = JSON.parse(raw);
     if (!draft || !draft.fieldValues) return false;
 
+    /* 【效期檢查】草稿超過 7 天視為過期，清除後呈現空白表單
+       居家照護計劃具時效性，避免加載舊資料造成照護混亂 */
+    const DRAFT_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 天
+    if (draft.savedAt && (Date.now() - draft.savedAt) > DRAFT_TTL_MS) {
+      localStorage.removeItem(LS_KEY);
+      return false; // 過期直接宣告失效，呈現空白表單
+    }
+
     /* 1. 先恢復語系 */
-    const VALID_LANGS = new Set(["id", "en", "vi"]);
+    const VALID_LANGS = new Set(["zh", "id", "en", "vi"]);
     if (draft.lang && VALID_LANGS.has(draft.lang)) {
       lang = draft.lang;
       document.querySelectorAll(".lang-bar button").forEach(btn => {
@@ -2082,7 +2146,10 @@ function loadFromStorage() {
     if (draft.cleanSelected) draft.cleanSelected.forEach(k => cleanSelected.add(k));
     if (draft.vitalSelected) draft.vitalSelected.forEach(k => vitalSelected.add(k));
 
-    /* Meds card removed — ignore any stale meds in storage */
+    /* Restore medication list */
+    if (Array.isArray(draft.meds)) {
+      meds = draft.meds.map(m => ({...m}));
+    }
 
     return true;
   } catch(e) {
@@ -2094,6 +2161,7 @@ function loadFromStorage() {
 function showSaveIndicator() {
   const el = document.getElementById("saveIndicator");
   if (!el) return;
+  el.textContent = SAVE_IND_LBL[lang] || "✓ 已自動儲存";
   el.classList.add("show");
   clearTimeout(el._hideTimer);
   el._hideTimer = setTimeout(() => el.classList.remove("show"), 1800);
@@ -2112,15 +2180,145 @@ function attachAutoSaveListeners() {
    Language — default to Indonesian (first button is active)
 ======================================================== */
 let lang = "id";
-const vitalSelected = new Set(); /* declared early — used in clearAll */
+const vitalSelected = new Set();
+
+/* ========================================================
+   Medication Management
+======================================================== */
+let meds = []; // [{name, dose, freq}]
+
+function addMed(medData) {
+  const id = "med_" + Date.now() + "_" + Math.random().toString(36).slice(2,6);
+  const m = medData || {id, name:"", dose:"", freq:""};
+  if (!medData) { m.id = id; meds.push(m); }
+  const t = L[lang];
+  const row = document.createElement("div");
+  row.className = "med-row";
+  row.dataset.medId = m.id;
+
+  const inp1 = document.createElement("input");
+  inp1.type = "text"; inp1.placeholder = t.medPh1; inp1.value = m.name || "";
+  inp1.addEventListener("input", () => { updateMed(m.id, "name", inp1.value); scheduleSave(); });
+
+  const inp2 = document.createElement("input");
+  inp2.type = "text"; inp2.placeholder = t.medPh2; inp2.value = m.dose || "";
+  inp2.addEventListener("input", () => { updateMed(m.id, "dose", inp2.value); scheduleSave(); });
+
+  const inp3 = document.createElement("input");
+  inp3.type = "text"; inp3.placeholder = t.medPh3; inp3.value = m.freq || "";
+  inp3.addEventListener("input", () => { updateMed(m.id, "freq", inp3.value); scheduleSave(); });
+
+  const delBtn = document.createElement("button");
+  delBtn.className = "del-btn"; delBtn.title = "刪除"; delBtn.textContent = "✕";
+  delBtn.addEventListener("click", () => removeMed(m.id));
+
+  row.appendChild(inp1); row.appendChild(inp2); row.appendChild(inp3); row.appendChild(delBtn);
+  document.getElementById("medList").appendChild(row);
+  if (!medData) scheduleSave();
+}
+
+function updateMed(id, field, val) {
+  const m = meds.find(x=>x.id===id);
+  if (m) m[field] = val;
+}
+
+function removeMed(id) {
+  meds = meds.filter(x=>x.id!==id);
+  const row = document.querySelector(`.med-row[data-med-id="${id}"]`);
+  if (row) row.remove();
+  scheduleSave();
+}
+
+/* rebuildMedRows(langOnly)
+   langOnly=true  → 僅更新 placeholder 文字，保留現有 DOM 節點與焦點（語系切換專用）
+   langOnly=false → 完整清空重建（clearAll / 初始化還原時使用）
+*/
+function rebuildMedRows(langOnly) {
+  const list = document.getElementById("medList");
+  if (!list) return;
+  if (langOnly) {
+    /* 只掃描現有 input 節點，依序更新 placeholder — 不破壞焦點 */
+    const t = L[lang];
+    const rows = list.querySelectorAll(".med-row");
+    rows.forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      if (inputs[0]) inputs[0].placeholder = t.medPh1;
+      if (inputs[1]) inputs[1].placeholder = t.medPh2;
+      if (inputs[2]) inputs[2].placeholder = t.medPh3;
+    });
+    return;
+  }
+  list.innerHTML = "";
+  meds.forEach(m => addMed(m));
+} /* declared early — used in clearAll */
 
 /* ========================================================
    Language Dictionary
 ======================================================== */
 const L = {
+  zh: {
+    title: "照顧計劃製作",
+    sub: "聘外看就上手",
+    t_basic: "受照顧者基本資料",
+    t_living: "家庭環境與生活安排",
+    t_cond:  "身體狀況",
+    t_med:   "藥物管理",
+    t_emg:   "緊急聯絡人",
+    l_name:  "姓名", l_age: "年齡", l_sex: "性別",
+    l_mob:   "行動能力", l_cog: "認知狀況",
+    l_condL: "健康狀況（可複選）",
+    l_diet:  "飲食型態",
+    l_cohabit: "家人是否同住",
+    l_eatout:  "飲食來源",
+    l_env_note:"居住環境說明",
+    l_schedule_hd:"每日作息規劃",
+    l_wake:    "起床時間",
+    l_breakfast:"早餐時間",
+    l_lunch:   "午餐時間",
+    l_nap:     "午休時間",
+    l_dinner:  "晚餐時間",
+    l_bedtime: "就寢時間",
+    l_activity:"日間活動安排",
+    l_sch_note:"作息特殊備註",
+    l_allergy: "過敏",
+    l_note:  "特殊注意事項",
+    ct_fam:  "👨‍👩‍👧 家屬", ct_doc: "🏥 醫療",
+    l_fn: "姓名", l_frel: "關係", l_ftel: "電話",
+    l_dn: "主治醫師", l_dhosp: "醫院／診所", l_dtel: "電話",
+    genTxt: "產生照顧計劃",
+    clearBtn: "🗑 清除",
+    t_vital: "生命徵象監測",
+    l_bp:"血壓（mmHg）", l_pulse:"脈搏（次/分）", l_temp:"體溫（°C）",
+    l_spo2:"血氧 SpO₂（%）", l_resp:"呼吸（次/分）", l_sugar:"血糖（mg/dL）",
+    l_vital_note:"監測備註",
+    vc_bp:"血壓", vc_pulse:"脈搏", vc_temp:"體溫", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸", vc_sugar:"血糖",
+    l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目，非每日數值記錄）",
+    vn_bp_lang: "正常範圍：收縮壓 <b>90–139</b>／舒張壓 <b>60–89 mmHg</b>",
+    vn_pulse_lang: "正常範圍：<b>60–100 次/分</b>",
+    vn_temp_lang: "正常範圍：腋溫 <b>36.1–37.2°C</b>／耳溫 <b>35.8–37.8°C</b>",
+    vn_spo2_lang: "正常範圍：<b>95–100 %</b>（＜95% 需密切觀察）",
+    vn_resp_lang: "正常範圍：<b>12–20 次/分</b>（老人可至 25）",
+    vn_sugar_lang: "正常範圍：空腹 <b>70–100 mg/dL</b>，飯後 2h <b>&lt;140 mg/dL</b>",
+    foot: "資料僅儲存於本裝置",
+    planTitle: "照顧計劃",
+    printBtn: "🖨 列印",
+    closeBtn: "關閉",
+    loading: "正在產生照顧計劃，請稍候…",
+    aiLabel: "AI 個人化照顧建議",
+    secCare: "照顧重點",
+    secMed: "藥物清單",
+    secEmg: "緊急聯絡",
+    secNote: "特殊注意",
+    secLang: "中文",
+    medPh1: "藥名", medPh2: "劑量", medPh3: "頻次",
+    disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。",
+    t_clean: "打掃清潔注意事項",
+    l_clean_hd: "清潔照護注意項目（可複選）",
+    l_clean_note: "清潔特殊說明"
+  },
   id: {
-    title: "外籍看護照顧計劃製作",
-    sub: "Pembuat Rencana Perawatan",
+    title: "照顧計劃製作",
+    sub: "聘外看就上手",
     t_basic: "受照顧者基本資料 / Data Pasien",
     t_living: "家庭環境與生活安排 / Lingkungan & Jadwal",
     t_cond:  "身體狀況 / Kondisi Kesehatan",
@@ -2142,7 +2340,7 @@ const L = {
     l_bedtime: "就寢時間 / Tidur",
     l_activity:"日間活動安排 / Aktivitas Harian",
     l_sch_note:"作息特殊備註 / Catatan Jadwal",
-    l_allergy: "過敏 / 禁忌 / Alergi / Allergies",
+    l_allergy: "過敏 / Alergi",
     l_note:  "特殊注意事項 / Catatan Khusus",
     ct_fam:  "👨‍👩‍👧 家屬 / Keluarga", ct_doc: "🏥 醫療 / Medis",
     l_fn: "姓名 / Nama", l_frel: "關係 / Hubungan", l_ftel: "電話 / Telepon",
@@ -2150,16 +2348,16 @@ const L = {
     genTxt: "產生照顧計劃 / Buat Rencana Perawatan",
     clearBtn: "🗑 清除",
     t_vital: "生命徵象監測 / Tanda-Tanda Vital",
-    l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (次/min)", l_temp:"體溫 / Suhu (°C)",
-    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (次/min)", l_sugar:"血糖 / Gula Darah (mg/dL)",
+    l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (kali/mnt)", l_temp:"體溫 / Suhu (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (kali/mnt)", l_sugar:"血糖 / Gula Darah (mg/dL)",
     l_vital_note:"監測備註 / Catatan Pemantauan",
-    vc_bp:"血壓 BP", vc_pulse:"脈搏 Nadi", vc_temp:"體溫 Suhu", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Napas", vc_sugar:"血糖 Gula",
+    vc_bp:"Tek. Darah", vc_pulse:"Nadi", vc_temp:"Suhu", vc_spo2:"SpO₂", vc_resp:"Pernapasan", vc_sugar:"Gula Darah",
     l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Pilih tanda vital untuk dipantau rutin",
     vn_bp_lang: "Normal: Sistolik <b>90–139</b> / Diastolik <b>60–89 mmHg</b>",
     vn_pulse_lang: "Normal: <b>60–100 kali/menit</b>",
     vn_temp_lang: "Normal: Ketiak <b>36,1–37,2°C</b> / Telinga <b>35,8–37,8°C</b>",
     vn_spo2_lang: "Normal: <b>95–100 %</b> (&lt;95% perlu dipantau ketat)",
-    vn_resp_lang: "Normal: <b>12–20 napas/menit</b> (lansia hingga 25)",
+    vn_resp_lang: "Normal: <b>12–20 napas/menit</b> (lansia bisa mencapai 25 kali/menit adalah normal)",
     vn_sugar_lang: "Normal: Puasa <b>70–100</b> / 2 jam setelah makan <b>&lt;140 mg/dL</b>",
     foot: "資料僅儲存於本裝置 · 雙語翻譯由 Google 翻譯提供 · Data hanya di perangkat ini",
     planTitle: "照顧計劃 / Rencana Perawatan",
@@ -2179,8 +2377,8 @@ const L = {
     l_clean_note: "清潔特殊說明 / Instruksi Kebersihan Tambahan"
   },
   en: {
-    title: "外籍看護照顧計劃製作",
-    sub: "Care Plan Maker for Foreign Caregivers",
+    title: "照顧計劃製作",
+    sub: "聘外看就上手",
     t_basic: "受照顧者基本資料 / Patient Information",
     t_living: "家庭環境與生活安排 / Living Arrangement",
     t_cond:  "身體狀況 / Health Conditions",
@@ -2202,7 +2400,7 @@ const L = {
     l_bedtime: "就寢時間 / Bedtime",
     l_activity:"日間活動安排 / Daytime Activities",
     l_sch_note:"作息特殊備註 / Schedule Notes",
-    l_allergy: "過敏 / 禁忌 / Allergies",
+    l_allergy: "過敏 / Allergies",
     l_note:  "特殊注意事項 / Special Notes",
     ct_fam:  "👨‍👩‍👧 家屬 / Family", ct_doc: "🏥 醫療 / Medical",
     l_fn: "姓名 / Name", l_frel: "關係 / Relationship", l_ftel: "電話 / Phone",
@@ -2210,10 +2408,10 @@ const L = {
     genTxt: "產生照顧計劃 / Generate Care Plan",
     clearBtn: "🗑 Reset",
     t_vital: "生命徵象監測 / Vital Signs",
-    l_bp:"血壓 / Blood Pressure (mmHg)", l_pulse:"脈搏 / Pulse (次/min)", l_temp:"體溫 / Temperature (°C)",
-    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Resp. Rate (次/min)", l_sugar:"血糖 / Blood Sugar (mg/dL)",
+    l_bp:"血壓 / Blood Pressure (mmHg)", l_pulse:"脈搏 / Pulse (bpm)", l_temp:"體溫 / Temperature (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Resp. Rate (bpm)", l_sugar:"血糖 / Blood Sugar (mg/dL)",
     l_vital_note:"監測備註 / Monitoring Notes",
-    vc_bp:"血壓 BP", vc_pulse:"脈搏 Pulse", vc_temp:"體溫 Temp", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Resp", vc_sugar:"血糖 Sugar",
+    vc_bp:"Blood Pressure", vc_pulse:"Pulse", vc_temp:"Temperature", vc_spo2:"SpO₂", vc_resp:"Resp. Rate", vc_sugar:"Blood Sugar",
     l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Select vital signs to monitor regularly",
     vn_bp_lang: "Normal: Systolic <b>90–139</b> / Diastolic <b>60–89 mmHg</b>",
     vn_pulse_lang: "Normal: <b>60–100 beats/min</b>",
@@ -2239,8 +2437,8 @@ const L = {
     l_clean_note: "清潔特殊說明 / Additional Cleaning Instructions"
   },
   vi: {
-    title: "外籍看護照顧計劃製作",
-    sub: "Công Cụ Lập Kế Hoạch Chăm Sóc",
+    title: "照顧計劃製作",
+    sub: "聘外看就上手",
     t_basic: "受照顧者基本資料 / Thông Tin Bệnh Nhân",
     t_living: "家庭環境與生活安排 / Môi Trường & Sinh Hoạt",
     t_cond:  "身體狀況 / Tình Trạng Sức Khỏe",
@@ -2262,7 +2460,7 @@ const L = {
     l_bedtime: "就寢時間 / Đi Ngủ",
     l_activity:"日間活動安排 / Hoạt Động Ban Ngày",
     l_sch_note:"作息特殊備註 / Ghi Chú Lịch",
-    l_allergy: "過敏 / 禁忌 / Dị Ứng",
+    l_allergy: "過敏 / Dị Ứng",
     l_note:  "特殊注意事項 / Ghi Chú Đặc Biệt",
     ct_fam:  "👨‍👩‍👧 家屬 / Gia Đình", ct_doc: "🏥 醫療 / Y Tế",
     l_fn: "姓名 / Họ Tên", l_frel: "關係 / Quan Hệ", l_ftel: "電話 / Điện Thoại",
@@ -2270,10 +2468,10 @@ const L = {
     genTxt: "產生照顧計劃 / Tạo Kế Hoạch Chăm Sóc",
     clearBtn: "🗑 Xóa",
     t_vital: "生命徵象監測 / Dấu Hiệu Sinh Tồn",
-    l_bp:"血壓 / Huyết Áp (mmHg)", l_pulse:"脈搏 / Mạch (次/min)", l_temp:"體溫 / Nhiệt Độ (°C)",
-    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Nhịp Thở (次/min)", l_sugar:"血糖 / Đường Huyết (mg/dL)",
+    l_bp:"血壓 / Huyết Áp (mmHg)", l_pulse:"脈搏 / Mạch (lần/phút)", l_temp:"體溫 / Nhiệt Độ (°C)",
+    l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Nhịp Thở (lần/phút)", l_sugar:"血糖 / Đường Huyết (mg/dL)",
     l_vital_note:"監測備註 / Ghi Chú Theo Dõi",
-    vc_bp:"血壓 Huyết Áp", vc_pulse:"脈搏 Mạch", vc_temp:"體溫 Nhiệt Độ", vc_spo2:"血氧 SpO₂", vc_resp:"呼吸 Nhịp Thở", vc_sugar:"血糖 Đường Huyết",
+    vc_bp:"Huyết Áp", vc_pulse:"Mạch", vc_temp:"Nhiệt Độ", vc_spo2:"SpO₂", vc_resp:"Nhịp Thở", vc_sugar:"Đường Huyết",
     l_vital_select:"請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目）/ Chọn dấu hiệu sinh tồn cần theo dõi định kỳ",
     vn_bp_lang: "Bình thường: Tâm thu <b>90–139</b> / Tâm trương <b>60–89 mmHg</b>",
     vn_pulse_lang: "Bình thường: <b>60–100 lần/phút</b>",
@@ -2337,7 +2535,7 @@ const OPTS = {
   diet: [
     { v:"normal",   zh:"一般飲食",   id:"Makan Biasa",        en:"Regular Diet",      vi:"Ăn thường" },
     { v:"soft",     zh:"軟質飲食",   id:"Makanan Lunak",      en:"Soft Diet",         vi:"Thức ăn mềm" },
-    { v:"puree",    zh:"流質/管灌",  id:"Cair / Selang",      en:"Liquid / Tube Feed",vi:"Lỏng / Ống" },
+    { v:"puree",    zh:"流質/管灌",  id:"Makanan Cair / Makan via Selang (NGT)",      en:"Liquid / Tube Feed",vi:"Lỏng / Ống" },
     { v:"diabetic", zh:"糖尿病飲食", id:"Diet Diabetes",      en:"Diabetic Diet",     vi:"Ăn tiểu đường" },
     { v:"lowsalt",  zh:"低鹽飲食",   id:"Rendah Garam",       en:"Low-Salt Diet",     vi:"Ít muối" }
   ]
@@ -2354,7 +2552,7 @@ const CONDS = [
 【飲食】低鹽（每日≦5g）、少油少糖；避免濃茶、咖啡、酒精；多蔬菜水果。
 【日常】避免情緒激動、大聲爭吵；起身時動作緩慢（三段式：躺→坐→站各停30秒）；冬天注意保暖，避免突然冷熱刺激。
 【警示徵象】突然劇烈頭痛、視力模糊、口齒不清、單側無力→立即叫救護車。`,
-    id:`【Pengukuran】Ukur tekanan darah pagi dan malam pada waktu tetap; catat nilai dan tanggal; laporkan jika sistolik >160 atau <90 mmHg.
+    id:`【Pengukuran】Ukur tekanan darah pagi dan malam pada waktu tetap; catat nilai dan tanggal; Segera laporkan ke keluarga jika sistolik >160 atau <90 mmHg (Kondisi Darurat).
 【Obat】Berikan obat tepat waktu, jangan hentikan sendiri; konsultasi keluarga jika terlambat >2 jam.
 【Makan】Rendah garam (≤5g/hari), rendah lemak dan gula; hindari teh kental, kopi, alkohol.
 【Sehari-hari】Hindari emosi berlebihan; bangun perlahan (berbaring→duduk→berdiri, tahan 30 detik); jaga kehangatan di musim dingin.
@@ -2916,18 +3114,152 @@ const CLEAN_ITEMS = [
   {k:"noise",      zh:"清潔時注意不打擾病患休息",id:"Jangan mengganggu istirahat pasien saat bersih-bersih",en:"Clean without disturbing patient's rest",vi:"Dọn dẹp không ảnh hưởng đến giấc ngủ của bệnh nhân"},
 ];
 
+
+/* ========================================================
+   Diet Type Care Advice
+======================================================== */
+const DIET_ADVICE = {
+  normal: {
+    zh:`【一般飲食照顧重點】
+【飲食均衡原則】每餐搭配六大類食物（全穀雜糧、蔬菜、水果、豆魚蛋肉、乳品、油脂堅果），避免偏食；每日蔬菜至少3份、水果2份。
+【水分補充】老年人口渴感遲鈍，每日主動補充水分約1500–2000ml（除非醫師有限水醫囑）；可準備固定容量水壺作為提醒工具。
+【進食安全】確認進食時坐正（至少90度），頭微前傾；食物一口大小適中；進食速度勿過快，每口咀嚼完全再吞嚥；進食後保持坐姿30分鐘避免逆流。
+【餐點溫度】熱食確認不燙口（≤60°C）；冰涼食品依患者耐受度調整；避免極端溫度刺激。
+【觀察重點】食慾突然下降、進食量明顯減少、體重異常減輕→通報家屬並協助就醫。`,
+    id:`【Prinsip Gizi Seimbang】Setiap makan harus mencakup enam kelompok makanan (karbohidrat, sayuran, buah, protein, susu, lemak); hindari makan tidak seimbang; minimal 3 porsi sayuran dan 2 porsi buah per hari.
+【Cairan】Lansia sering tidak merasa haus; berikan sekitar 1500–2000 ml cairan per hari (kecuali ada pembatasan medis); gunakan botol berukuran tetap sebagai pengingat.
+【Keamanan Makan】Pastikan posisi duduk tegak (90°), kepala sedikit ke depan; ukuran suapan sesuai; kunyah sampai tuntas sebelum menelan; duduk 30 menit setelah makan.
+【Suhu Makanan】Makanan panas ≤60°C; sesuaikan makanan dingin dengan toleransi pasien; hindari suhu ekstrem.
+【Pantauan】Nafsu makan tiba-tiba turun, asupan berkurang, penurunan berat badan tidak wajar → lapor keluarga.`,
+    en:`【Balanced Diet Principles】Each meal should include the six food groups (grains, vegetables, fruit, protein, dairy, fats); aim for at least 3 servings of vegetables and 2 servings of fruit daily.
+【Hydration】Elderly patients often have a diminished sense of thirst; encourage 1500–2000 ml of fluid per day (unless medically restricted); use a marked water bottle as a visual reminder.
+【Eating Safety】Ensure upright seated posture (at least 90°), head slightly forward; appropriate bite sizes; chew thoroughly before swallowing; remain seated for 30 minutes after meals to prevent reflux.
+【Food Temperature】Hot foods ≤60°C; adjust cold foods to patient tolerance; avoid extreme temperatures.
+【Observations】Sudden loss of appetite, significantly reduced intake, unexplained weight loss → notify family and arrange medical review.`,
+    vi:`【Nguyên tắc dinh dưỡng cân bằng】Mỗi bữa ăn nên đủ sáu nhóm thực phẩm; tối thiểu 3 phần rau và 2 phần trái cây mỗi ngày.
+【Bổ sung nước】Người cao tuổi ít cảm giác khát; khuyến khích uống 1500–2000 ml mỗi ngày (trừ khi có chỉ định hạn chế nước); dùng bình có vạch đo làm nhắc nhở.
+【An toàn khi ăn】Ngồi thẳng (≥90°), đầu hơi ngả về trước; miếng ăn vừa phải; nhai kỹ trước khi nuốt; ngồi 30 phút sau ăn.
+【Nhiệt độ thức ăn】Đồ nóng ≤60°C; điều chỉnh đồ lạnh theo khả năng chịu đựng; tránh nhiệt độ cực đoan.
+【Quan sát】Đột ngột chán ăn, ăn giảm, sụt cân bất thường → báo gia đình.`
+  },
+  soft: {
+    zh:`【軟質飲食照顧重點】
+【適用對象】咀嚼困難（缺牙、假牙不合、牙齦疼痛）、輕度吞嚥障礙、術後恢復期患者。
+【食物選擇】選擇蒸煮至軟爛的食物：稀飯、爛飯、蒸蛋、豆腐、魚肉、嫩豆干；蔬菜需煮透至軟；水果選香蕉、木瓜、蒸蘋果等；避免纖維粗硬（筍、芹菜）、黏性強（麻糬、湯圓）、碎小顆粒（堅果、玉米粒）。
+【質地標準】食物以筷子輕壓可變形為原則（IDDSI 軟質LEVEL 5–6）；若吞嚥不佳可加增稠劑。
+【進食技巧】一口量不超過茶匙大小；每口後確認口腔內食物已清空；進食速度放慢，勿催促。
+【口腔清潔】每餐後協助漱口或口腔護理，清除殘留食物，預防吸入性肺炎；假牙者餐後取出清洗。
+【警示】進食中出現嗆咳、喉嚨異聲、呼吸困難→立即停止進食，協助取出口腔殘留食物，必要時就醫評估。`,
+    id:`【Indikasi】Untuk pasien dengan kesulitan mengunyah (gigi kurang, gigi palsu tidak cocok) atau gangguan menelan ringan.
+【Pilihan Makanan】Pilih makanan yang empuk: bubur, nasi lembek, telur kukus, tahu, ikan, tahu halus; sayuran dimasak hingga empuk; buah seperti pisang, pepaya, apel kukus; hindari serat keras (rebung, seledri), makanan lengket (ketan), partikel kecil (kacang, jagung).
+【Standar Tekstur】Makanan harus bisa diubah bentuk dengan sumpit (IDDSI Level 5-6); tambahkan pengental jika ada gangguan menelan.
+【Teknik Makan】Satu suap tidak lebih dari satu sendok teh; pastikan mulut kosong setelah tiap suap; makan perlahan, jangan buru-buru.
+【Kebersihan Mulut】Bantu berkumur atau perawatan mulut setelah makan; untuk yang pakai gigi palsu, lepas dan cuci setelah makan.
+【Peringatan】Tersedak saat makan, suara serak, sesak napas → hentikan makan, keluarkan sisa makanan dari mulut, rujuk dokter jika perlu.`,
+    en:`【Indications】For patients with chewing difficulties (missing teeth, ill-fitting dentures) or mild swallowing impairment.
+【Food Choices】Choose soft-cooked foods: congee, soft rice, steamed egg, tofu, fish, soft bean curd; vegetables cooked until tender; fruits such as banana, papaya, steamed apple; avoid tough fiber (bamboo shoots, celery), sticky foods (mochi), small particles (nuts, corn kernels).
+【Texture Standard】Food should deform under light chopstick pressure (IDDSI Soft Level 5–6); add thickener if swallowing is weak.
+【Eating Technique】One bite no larger than a teaspoon; confirm mouth is cleared after each bite; eat slowly without rushing.
+【Oral Care】Assist with rinsing or oral hygiene after each meal to prevent aspiration pneumonia; remove and clean dentures after meals.
+【Warning】Coughing/choking during eating, wet or gurgly voice, difficulty breathing → stop feeding immediately, clear mouth, seek medical evaluation if needed.`,
+    vi:`【Chỉ định】Bệnh nhân khó nhai (thiếu răng, răng giả không vừa) hoặc khó nuốt nhẹ.
+【Lựa chọn thực phẩm】Chọn thức ăn mềm: cháo, cơm nát, trứng hấp, đậu hũ, cá, tàu hũ mềm; rau nấu kỹ; trái cây như chuối, đu đủ, táo hấp; tránh xơ cứng, thức ăn dính (bánh nếp), hạt nhỏ (đậu, ngô).
+【Tiêu chuẩn質地】Thức ăn bị biến dạng khi ép nhẹ bằng đũa (IDDSI Mềm Cấp 5–6); thêm chất làm đặc nếu nuốt yếu.
+【Kỹ thuật ăn】Một miếng không lớn hơn một thìa cà phê; xác nhận miệng đã sạch sau mỗi miếng; ăn chậm, không vội.
+【Vệ sinh miệng】Hỗ trợ súc miệng hoặc vệ sinh răng miệng sau mỗi bữa; tháo và rửa răng giả sau ăn.
+【Cảnh báo】Sặc trong khi ăn, giọng khàn, khó thở → dừng ăn ngay, lấy thức ăn ra khỏi miệng, đến bác sĩ nếu cần.`
+  },
+  puree: {
+    zh:`【流質/管灌飲食照顧重點】
+【口服流質】若患者仍可口服：使用增稠劑調整液體濃稠度（遵醫囑：蜂蜜狀/布丁狀）；每次給予少量（約30-50ml），速度極慢；觀察有無嗆咳、咳嗽、呼吸變化；進食後維持坐姿至少30分鐘；食物以果汁機打成均勻泥狀，過濾顆粒。
+【鼻胃管（NGT）照護】每次灌食前確認管路位置（抽取胃液或聽診法，依護理指導操作）；床頭抬高30–45度；灌食速度依醫囑（重力式或注射器推注）；灌食量依醫囑執行（通常300–400ml/次）；灌食前後各沖水30–50ml清洗管路。
+【預防吸入性肺炎】灌食後保持抬高30–45度至少30分鐘；觀察呼吸聲、痰液顏色與量；發燒伴咳嗽→懷疑吸入性肺炎，立即就醫。
+【管路維護】每日確認固定貼布黏性與皮膚狀況；管路有無扭折；記錄每次灌食時間、量及患者反應。
+【口腔護理】即使禁食，仍需每日口腔護理2-3次（口腔棉棒清潔、保濕）；防止口腔細菌累積。`,
+    id:`【Cairan Oral】Jika masih bisa minum: gunakan pengental sesuai instruksi (konsistensi madu/puding); berikan sedikit (~30-50ml), sangat perlahan; amati batuk/tersedak, perubahan pernapasan; tetap duduk 30 menit setelah minum; haluskan makanan dengan blender dan saring partikel.
+【Perawatan NGT】Konfirmasi posisi selang sebelum tiap pemberian (aspirasi cairan lambung atau auskultasi); tinggikan kepala 30-45°; kecepatan sesuai instruksi; volume sesuai instruksi (~300-400ml/pemberian); bilas dengan 30-50ml air sebelum dan sesudah.
+【Cegah Aspirasi】Pertahankan posisi 30-45° selama minimal 30 menit setelah pemberian; amati suara napas, warna dahak; demam + batuk → curiga pneumonia aspirasi, segera ke dokter.
+【Perawatan Selang】Periksa plester dan kondisi kulit setiap hari; pastikan tidak ada tekukan; catat waktu, volume, dan respons pasien.
+【Kebersihan Mulut】Meskipun tidak makan, lakukan perawatan mulut 2-3 kali sehari (swab mulut, pelembap).`,
+    en:`【Oral Liquid】If patient can still drink: use thickeners as prescribed (honey/pudding consistency); give small amounts (~30-50ml), very slowly; observe for coughing, choking, or breathing changes; remain elevated for 30 min after; blend food smoothly and strain out particles.
+【NGT Care】Confirm tube position before each feeding (aspirate gastric fluid or auscultate per nursing instruction); elevate head 30–45°; feeding rate and volume per prescription (~300–400ml/feeding); flush with 30–50ml water before and after each feeding.
+【Aspiration Prevention】Maintain 30–45° elevation for at least 30 minutes post-feeding; monitor breath sounds, sputum color and amount; fever + cough → suspect aspiration pneumonia, seek medical care immediately.
+【Tube Maintenance】Check tape adhesion and skin condition daily; ensure no kinking; record feeding time, volume, and patient response each session.
+【Oral Care】Even if NPO, perform oral care 2–3 times daily (oral swab, moisturize) to prevent bacterial buildup.`,
+    vi:`【Chất lỏng miệng】Nếu còn uống được: dùng chất làm đặc theo chỉ định (độ sệt mật ong/pudding); cho từng ít một (~30-50ml), rất chậm; theo dõi sặc, ho, thay đổi hô hấp; giữ tư thế cao 30 phút sau ăn; xay nhuyễn thức ăn và lọc cặn.
+【Chăm sóc sonde dạ dày (NGT)】Xác nhận vị trí sonde trước mỗi lần cho ăn; nâng đầu giường 30-45°; tốc độ và lượng theo chỉ định (~300-400ml/lần); tráng sonde bằng 30-50ml nước trước và sau.
+【Phòng viêm phổi hít】Giữ đầu giường cao 30-45° ít nhất 30 phút sau ăn; theo dõi âm thở, màu đờm; sốt + ho → nghi viêm phổi hít, đến bác sĩ ngay.
+【Bảo trì sonde】Kiểm tra băng dính và da mỗi ngày; đảm bảo không bị gập; ghi chép mỗi lần.
+【Vệ sinh miệng】Dù không ăn, vệ sinh răng miệng 2-3 lần/ngày để phòng vi khuẩn tích tụ.`
+  },
+  diabetic: {
+    zh:`【糖尿病飲食照顧重點】
+【定時定量原則】三餐時間固定（早、午、晚），不可任意跳餐或大量補食；若使用胰島素，進食時間須與注射時間配合（遵醫囑）。
+【食物選擇】主食選未精製全穀（糙米、燕麥、全麥）取代白米白麵；蔬菜多樣、每餐至少1份葉菜；蛋白質優先選魚、豆腐、雞肉（去皮）；水果份量嚴格控制（每次1份，約1個拳頭大，在正餐之間吃，不空腹單獨吃）。
+【嚴格禁止】含糖飲料（含100%果汁）、精緻甜點（糕餅、糖果、冰淇淋）、油炸食品、酒精；蜂蜜、黑糖亦屬高糖食品，需嚴格限制。
+【外食注意】外食先詢問份量與烹調方式；選清蒸、水煮、滷、烤優於炸或勾芡；醬汁要求另外擺放，自行調量。
+【低血糖應急食品準備】患者身邊或床頭常備：3顆方糖、15ml蜂蜜（小包）、或半罐可樂（150ml），標示清楚，供低血糖緊急使用。
+【記錄追蹤】建議每日飲食記錄（可拍照）；就診時提供給醫師或營養師參考；與血糖記錄對照分析。`,
+    id:`【Prinsip Makan Teratur】Waktu makan tetap (pagi, siang, malam), jangan lewatkan atau makan berlebihan; jika menggunakan insulin, sesuaikan waktu makan dengan injeksi.
+【Pilihan Makanan】Pilih karbohidrat kompleks (beras merah, oatmeal, gandum utuh); sayuran beragam minimal 1 porsi hijau per makan; protein dari ikan, tahu, ayam tanpa kulit; buah dibatasi ketat (1 porsi/kali, ukuran kepalan tangan, di antara makan, bukan saat perut kosong).
+【Pantangan Ketat】Minuman manis (termasuk jus 100%), kue manis, gorengan, alkohol; madu dan gula merah juga tinggi gula, batasi ketat.
+【Makan di Luar】Tanyakan porsi dan cara masak; pilih kukus, rebus, ungkep, panggang daripada goreng; minta saus terpisah.
+【Siapkan Makanan Darurat Hipoglikemia】Selalu sediakan di samping pasien: 3 kubus gula, 15ml madu (sachet), atau setengah kaleng minuman manis (150ml).
+【Pencatatan】Catat makanan setiap hari (bisa foto); bawa saat kontrol dokter atau ahli gizi; bandingkan dengan catatan gula darah.`,
+    en:`【Fixed Meal Times】Keep breakfast, lunch, and dinner at consistent times; never skip or overcompensate; if using insulin, align meal times with injection schedule per prescription.
+【Food Choices】Choose unrefined whole grains (brown rice, oats, whole wheat) over white rice/flour; varied vegetables, at least 1 leafy green serving per meal; protein from fish, tofu, skinless chicken; fruit strictly limited (1 serving/time, fist-sized, between meals, never eaten alone on empty stomach).
+【Strictly Avoid】Sugary drinks (including 100% juice), refined sweets (pastries, candy, ice cream), fried foods, alcohol; honey and brown sugar are also high-sugar, strictly restrict.
+【Eating Out】Ask about portion sizes and cooking methods; choose steamed, boiled, braised, or grilled over fried; request sauces on the side.
+【Hypoglycemia Emergency Foods】Keep by patient at all times: 3 sugar cubes, 15ml honey (sachet), or half a can of regular soda (150ml), clearly labeled for emergency use.
+【Dietary Log】Record daily food intake (photos acceptable); bring to doctor or dietitian visits; compare with blood sugar log.`,
+    vi:`【Ăn đúng giờ】Giữ giờ ăn cố định (sáng, trưa, tối); không bỏ bữa hoặc ăn bù; nếu dùng insulin, phối hợp thời gian ăn với tiêm theo chỉ định.
+【Lựa chọn thực phẩm】Chọn ngũ cốc nguyên hạt (gạo lứt, yến mạch, lúa mì nguyên cám); rau đa dạng, ít nhất 1 phần rau xanh/bữa; đạm từ cá, đậu hũ, thịt gà bỏ da; trái cây hạn chế nghiêm (1 phần/lần, cỡ nắm tay, ăn giữa bữa, không ăn lúc đói).
+【Nghiêm cấm】Nước ngọt (kể cả nước ép 100%), bánh kẹo ngọt, đồ chiên, rượu; mật ong và đường nâu cũng cao đường, hạn chế nghiêm.
+【Ăn ngoài】Hỏi khẩu phần và cách nấu; chọn hấp, luộc, kho, nướng thay vì chiên; yêu cầu nước sốt để riêng.
+【Thức ăn khẩn cấp hạ đường huyết】Luôn để sẵn bên bệnh nhân: 3 viên đường, 15ml mật ong, hoặc nửa lon nước ngọt (150ml).
+【Ghi chép】Ghi thực phẩm hằng ngày (có thể chụp ảnh); mang theo khi khám bác sĩ/chuyên gia dinh dưỡng; đối chiếu với nhật ký đường huyết.`
+  },
+  lowsalt: {
+    zh:`【低鹽飲食照顧重點】
+【每日鈉目標】一般低鹽標準：每日食鹽攝取≦5g（相當於鈉2000mg）；心衰竭或腎臟病患者依醫囑可能更嚴格（≦3g）；1茶匙鹽≈5g，可備量匙協助控制。
+【調味料替代】以天然食材增味（薑、蒜、蔥、檸檬汁、醋、香草）取代鹽、醬油、味精；市售低鈉鹽（氯化鉀）若患者有腎臟疾病則需醫師同意；味噌、豆豉、豆瓣醬屬高鈉，須嚴格限量。
+【隱藏鹽分警示食品】加工食品（肉鬆、火腿、香腸、泡麵）、醃製食品（醬菜、泡菜）、罐頭食品、速食、外購便當；購買前查看標示「鈉含量」欄位。
+【外食技巧】要求餐廳少鹽（不加醬油）；湯類只喝料、不喝湯底；醬汁另外擺放；避免滷汁、豆腐乳、辣醬等高鈉配料。
+【腫脹監測】低鹽飲食常搭配水腫觀察：每日固定時間量體重並記錄；觀察腳踝是否腫脹；體重3天內增加超過2kg→立即通報醫師。
+【藥物注意】服用ACE抑制劑或ARB類降壓藥患者，若同時改用低鈉鹽（氯化鉀），需特別注意高血鉀風險，應事先告知醫師。`,
+    id:`【Target Natrium Harian】Standar rendah garam: asupan garam ≤5g/hari (setara natrium 2000mg); untuk gagal jantung atau penyakit ginjal, bisa lebih ketat (≤3g) sesuai instruksi dokter; 1 sendok teh garam ≈5g.
+【Pengganti Bumbu】Gunakan bahan alami (jahe, bawang, jeruk nipis, cuka, herba) sebagai pengganti garam, kecap, dan MSG; garam rendah natrium (kalium klorida) perlu persetujuan dokter jika ada penyakit ginjal; tauco, pasta kedelai, saus pedas tinggi natrium, batasi ketat.
+【Makanan Tinggi Garam Tersembunyi】Makanan olahan (abon, ham, sosis, mie instan), makanan acar, makanan kaleng, fast food; periksa label "kandungan natrium" sebelum membeli.
+【Tips Makan di Luar】Minta sedikit garam (tanpa kecap); sup: makan isinya saja, jangan minum kuahnya; minta saus terpisah; hindari kecap asin, tahu fermentasi, saus pedas.
+【Pantau Pembengkakan】Timbang badan setiap hari pada waktu yang sama; periksa apakah pergelangan kaki bengkak; berat badan naik >2kg dalam 3 hari → lapor dokter segera.
+【Perhatian Obat】Pasien yang minum ACE inhibitor atau ARB dan beralih ke garam rendah natrium (kalium klorida) berisiko hiperkalemia; konsultasikan dengan dokter terlebih dahulu.`,
+    en:`【Daily Sodium Target】Standard low-salt diet: total salt intake ≤5g/day (sodium ≤2000mg); heart failure or kidney disease patients may require stricter limits (≤3g) per doctor's orders; 1 teaspoon salt ≈5g — keep measuring spoons available.
+【Seasoning Alternatives】Use natural flavor enhancers (ginger, garlic, green onion, lemon juice, vinegar, herbs) instead of salt, soy sauce, and MSG; low-sodium salt (potassium chloride) requires doctor approval if patient has kidney disease; miso, fermented soybeans, and chili paste are high-sodium, strictly limit.
+【Hidden Salt Alert Foods】Processed meats (pork floss, ham, sausages, instant noodles), pickled foods, canned goods, fast food, takeaway meals; always check "sodium content" on labels before buying.
+【Eating Out Tips】Request restaurant to use less salt (no added soy sauce); soups: eat the solids only, don't drink the broth; request sauces on the side; avoid soy sauce, fermented tofu, and chili sauces.
+【Edema Monitoring】Low-salt diets often go with edema monitoring: weigh patient at the same time daily; check for ankle swelling; weight gain >2kg in 3 days → notify doctor immediately.
+【Medication Note】Patients on ACE inhibitors or ARBs who switch to low-sodium salt (potassium chloride) face hyperkalemia risk; inform the doctor before making any change.`,
+    vi:`【Mục tiêu natri mỗi ngày】Chế độ ít muối: ≤5g muối/ngày (natri ≤2000mg); bệnh tim hoặc thận có thể cần nghiêm hơn (≤3g); 1 thìa cà phê muối ≈5g.
+【Thay thế gia vị】Dùng nguyên liệu tự nhiên (gừng, tỏi, hành, chanh, giấm, thảo mộc) thay muối, nước tương, bột ngọt; muối ít natri (kali clorua) cần hỏi bác sĩ nếu có bệnh thận; tương, chao, sa tê nhiều natri, hạn chế nghiêm.
+【Thực phẩm ẩn muối】Thực phẩm chế biến sẵn, đồ muối chua, đồ hộp, đồ ăn nhanh; kiểm tra nhãn "hàm lượng natri" trước khi mua.
+【Mẹo ăn ngoài】Yêu cầu ít muối (không thêm nước tương); canh: chỉ ăn cái, không uống nước; yêu cầu nước chấm để riêng; tránh nước tương, chao, tương ớt.
+【Theo dõi phù】Cân mỗi ngày cùng giờ; kiểm tra mắt cá chân có sưng không; tăng >2kg trong 3 ngày → báo bác sĩ ngay.
+【Lưu ý thuốc】Bệnh nhân dùng ACE inhibitors hoặc ARBs chuyển sang muối ít natri (kali clorua) có nguy cơ tăng kali; hỏi bác sĩ trước khi thay đổi.`
+  }
+};
+
 const cleanSelected = new Set();
 const selected = new Set();
 const actSelected = new Set();
 
 /* ── Vital Info (moved to module scope — was recreated inside generatePlan on every call) ── */
 const VITAL_INFO = {
-  bp:    { icon:"🩸", zh:"血壓 BP",   range:"正常 90–139 / 60–89 mmHg" },
-  pulse: { icon:"💓", zh:"脈搏 Pulse", range:"正常 60–100 次/分" },
-  temp:  { icon:"🌡", zh:"體溫 Temp",  range:"正常腋溫 36.1–37.2°C" },
-  spo2:  { icon:"💨", zh:"血氧 SpO₂",  range:"正常 95–100 %" },
-  resp:  { icon:"🌬", zh:"呼吸 Resp",  range:"正常 12–20 次/分" },
-  sugar: { icon:"🍬", zh:"血糖 Sugar", range:"正常空腹 70–100 mg/dL" }
+  bp:    { icon:"🩸", zh:"血壓",   id:"Tekanan Darah",  en:"Blood Pressure", vi:"Huyết Áp",   range:"正常 90–139 / 60–89 mmHg" },
+  pulse: { icon:"💓", zh:"脈搏",   id:"Nadi",           en:"Pulse",          vi:"Mạch",        range:"正常 60–100 次/分" },
+  temp:  { icon:"🌡", zh:"體溫",   id:"Suhu Tubuh",     en:"Temperature",    vi:"Nhiệt Độ",    range:"正常腋溫 36.1–37.2°C" },
+  spo2:  { icon:"💨", zh:"血氧",   id:"Saturasi O₂",    en:"SpO₂",           vi:"Bão Hòa O₂",  range:"正常 95–100 %" },
+  resp:  { icon:"🌬", zh:"呼吸",   id:"Pernapasan",     en:"Resp. Rate",     vi:"Nhịp Thở",    range:"正常 12–20 次/分" },
+  sugar: { icon:"🍬", zh:"血糖",   id:"Gula Darah",     en:"Blood Sugar",    vi:"Đường Huyết", range:"正常空腹 70–100 mg/dL" }
 };
 
 /* ─────────────────────────────────────────────────────────
@@ -2986,7 +3318,7 @@ function buildSelects() {
     OPTS[key].forEach(o => {
       const opt = document.createElement("option");
       opt.value = o.v;
-      opt.textContent = o.zh + " / " + o[lang];
+      opt.textContent = lang === "zh" ? o.zh : (o.zh + " / " + o[lang]);
       el.appendChild(opt);
     });
     if (curVal) el.value = curVal;
@@ -3013,7 +3345,7 @@ function renderChips() {
     const isOn = selected.has(c.k);
     const d = document.createElement("div");
     d.className = "chip" + (isOn ? " on" : "");
-    d.textContent = c.zh + " / " + c[lang];
+    d.textContent = lang === "zh" ? c.zh : (c.zh + " / " + c[lang]);
     makeChipAccessible(d, isOn);
     d.onclick = () => {
       selected.has(c.k) ? selected.delete(c.k) : selected.add(c.k);
@@ -3033,7 +3365,7 @@ function renderCleanChips() {
     const isOn = cleanSelected.has(c.k);
     const d = document.createElement("div");
     d.className = "chip" + (isOn ? " on" : "");
-    d.textContent = c.zh + " / " + c[lang];
+    d.textContent = lang === "zh" ? c.zh : (c.zh + " / " + c[lang]);
     makeChipAccessible(d, isOn);
     d.onclick = () => {
       cleanSelected.has(c.k) ? cleanSelected.delete(c.k) : cleanSelected.add(c.k);
@@ -3053,7 +3385,7 @@ function renderActChips() {
     const isOn = actSelected.has(a.k);
     const d = document.createElement("div");
     d.className = "chip" + (isOn ? " on" : "");
-    d.textContent = a.zh + " / " + a[lang];
+    d.textContent = lang === "zh" ? a.zh : (a.zh + " / " + a[lang]);
     makeChipAccessible(d, isOn);
     d.onclick = () => {
       actSelected.has(a.k) ? actSelected.delete(a.k) : actSelected.add(a.k);
@@ -3081,7 +3413,7 @@ function applyLang() {
     "l_bp","l_pulse","l_temp","l_spo2","l_resp","l_sugar","l_vital_note",
     "vc_bp","vc_pulse","vc_temp","vc_spo2","vc_resp","vc_sugar","l_vital_select",
     "l_fn","l_frel","l_ftel","l_dn","l_dhosp","l_dtel",
-    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note"
+    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note","t_med"
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -3103,6 +3435,30 @@ function applyLang() {
   renderChips();
   renderActChips();
   renderCleanChips();
+  rebuildMedRows(true); /* 語系切換：僅更新 placeholder，保留焦點 */
+  // update addMedTxt
+  const _addMedTxt = document.getElementById("addMedTxt");
+  if (_addMedTxt) {
+    const _addMedLabels = {zh:"新增藥物", id:"Tambah Obat", en:"Add Medication", vi:"Thêm Thuốc"};
+    _addMedTxt.textContent = _addMedLabels[lang] || "新增藥物";
+  }
+  // update vital unit badges (pulse & resp have language-specific units)
+  const _vuPulse = document.getElementById("vu_pulse");
+  const _vuResp  = document.getElementById("vu_resp");
+  const _vuUnits = {zh:"次/分", id:"kali/mnt", en:"bpm", vi:"lần/phút"};
+  if (_vuPulse) _vuPulse.textContent = _vuUnits[lang] || "bpm";
+  if (_vuResp)  _vuResp.textContent  = _vuUnits[lang] || "bpm";
+  // update allergy placeholder
+  const _allergyInput = document.getElementById("f_allergy");
+  if (_allergyInput) {
+    const _allergyPh = {
+      zh:"例：盤尼西林、海鮮（輸入後自動翻譯）",
+      id:"Contoh: Penisilin, seafood (otomatis diterjemahkan)",
+      en:"e.g. Penicillin, seafood (auto-translated after typing)",
+      vi:"Ví dụ: Penicillin, hải sản (tự động dịch sau khi nhập)"
+    };
+    _allergyInput.placeholder = _allergyPh[lang] || "例：盤尼西林、海鮮（輸入後自動翻譯）";
+  }
 }
 
 /* Language switcher */
@@ -3174,6 +3530,9 @@ async function _gtField(text, tl) {
 
 /* 批次翻譯所有需要翻譯的欄位（平行執行，速度快） */
 async function translateFreeText(fields, targetLang) {
+  /* 純中文介面：跳過翻譯，直接回傳空物件（內容本身已是中文）*/
+  if (targetLang === "zh") return {};
+
   /* 只取有內容的欄位（排除空字串與「無」） */
   const toTranslate = Object.fromEntries(
     Object.entries(fields).filter(([, v]) => v && v.trim() && v !== "無")
@@ -3227,8 +3586,14 @@ async function doAllergyTranslate() {
     return;
   }
 
-  const tlMap = { id: "id", en: "en", vi: "vi" };
-  const tl = tlMap[lang] || "en";
+  const tlMap = { zh: null, id: "id", en: "en", vi: "vi" };
+  const tl = tlMap[lang];
+
+  /* 純中文介面：不需翻譯 */
+  if (!tl) {
+    box.style.display = "none";
+    return;
+  }
 
   box.style.display = "block";
   box.innerHTML = "<span style='color:var(--muted);font-size:.8rem'>翻譯中… / Translating…</span>";
@@ -3265,6 +3630,7 @@ async function generatePlan() {
 
   if (!nameInput) {
     const nameAlerts = {
+      zh: "請輸入受照顧者姓名。",
       id: "請輸入受照顧者姓名。\nSilakan masukkan nama pasien.",
       en: "請輸入受照顧者姓名。\nPlease enter the patient's name.",
       vi: "請輸入受照顧者姓名。\nVui lòng nhập tên bệnh nhân."
@@ -3277,6 +3643,7 @@ async function generatePlan() {
     const ageRawCheck = parseInt(ageInputStr, 10);
     if (isNaN(ageRawCheck) || ageRawCheck < 0 || ageRawCheck > 120) {
       const ageAlerts = {
+        zh: "請輸入合理的年齡（0–120 歲）。",
         id: "請輸入合理的年齡（0–120 歲）。\nMasukkan usia yang valid (0–120).",
         en: "請輸入合理的年齡（0–120 歲）。\nPlease enter a valid age (0–120).",
         vi: "請輸入合理的年齡（0–120 歲）。\nVui lòng nhập tuổi hợp lệ (0–120)."
@@ -3324,11 +3691,30 @@ async function generatePlan() {
   const fn_s = escapeHtml(fn), frel_s = escapeHtml(frel), ftel_s = escapeHtml(ftel);
   const dn_s = escapeHtml(dn), dhosp_s = escapeHtml(dhosp), dtel_s = escapeHtml(dtel);
 
-  /* ── Vital Signs (定期監測計劃項目) ── */
+  /* ── 年齡單位多語化 ── */
+  const AGE_UNIT = {zh:"歲", id:"thn", en:"yrs", vi:"tuổi", zh_fb:"歲"};
+  const ageUnit  = AGE_UNIT[lang] || "歲";
+  const VITAL_MONITOR_LBL = {zh:"需定期監測", id:"Perlu Dipantau Rutin", en:"Monitor Regularly", vi:"Cần Theo Dõi Định Kỳ"};
+  const vitalMonitorTxt = lang === "zh" ? "需定期監測" : ("需定期監測 / " + (VITAL_MONITOR_LBL[lang] || VITAL_MONITOR_LBL.en));
   const monitoredVitals = Object.keys(VITAL_INFO).filter(k => vitalSelected.has(k));
   const vitalNote  = document.getElementById("f_vital_note").value.trim();
 
   const selConds = CONDS.filter(c => selected.has(c.k));
+
+  /* ── 【修復】行動能力邏輯強制連動：臥床 / 四肢癱瘓時自動補入壓瘡護理 ──
+     若使用者行動能力選「臥床」或「四肢癱瘓/全癱」，但未勾選「壓瘡風險」晶片，
+     自動將 pressure（壓瘡風險）的照護指引注入，避免高風險臨床漏洞。 */
+  const _mobVal = document.getElementById("f_mob").value;
+  const _forcePresureConds = ["bed", "quad", "wheel"];
+  if (_forcePresureConds.includes(_mobVal)) {
+    const _pressureKey = "pressure"; /* CONDS 中壓瘡項目的 key */
+    if (!selected.has(_pressureKey)) {
+      const _pressureCond = CONDS.find(c => c.k === _pressureKey);
+      if (_pressureCond && !selConds.find(c => c.k === _pressureKey)) {
+        selConds.unshift(_pressureCond); /* 置頂，確保最先顯示 */
+      }
+    }
+  }
   const activeClean = CLEAN_ITEMS.filter(c => cleanSelected.has(c.k));
   const cleanNote = document.getElementById("f_clean_note").value.trim();
 
@@ -3358,61 +3744,229 @@ async function generatePlan() {
     note
   }, lang);
 
-  /* 【優化一】如果翻譯被阻擋，顯示提示訊息 */
+  const _transWarnMsg = {
+    zh:"⚠ 注意：翻譯服務暫時受限，部分內容以中文顯示。請稍後再試。",
+    id:"⚠ Catatan: Layanan terjemahan terlalu sering diminta. Sebagian konten ditampilkan dalam bahasa Mandarin. Coba lagi nanti.",
+    en:"⚠ Note: Translation service is temporarily rate-limited. Some custom content shows in Chinese. Please try again later.",
+    vi:"⚠ Lưu ý: Dịch vụ dịch thuật bị giới hạn tần suất. Một số nội dung hiển thị bằng tiếng Trung. Vui lòng thử lại sau."
+  };
   const transWarningHtml = _isTranslationBlocked
     ? `<div class="notes-box" style="background:#fff3e8; color:#b04621; border-color:#e8c08a; margin-bottom:15px;">
-        ⚠ 提示：目前翻譯服務請求過於頻繁，部分自訂內容將暫時以中文顯示，請稍後再試。
+        ${_transWarnMsg[lang]||_transWarnMsg.en}
       </div>`
     : "";
 
   /* Helper: render a bilingual inline text (zh / lang) */
   function biText(zhRaw, key) {
     const zh = escapeHtml(zhRaw).replace(/\n/g, "<br>");
-    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
     if (!zh) return "";
+    if (lang === "zh") return zh;
+    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
     if (!tr || tr === zh) return zh;
     return `${zh} <span style="color:var(--muted);font-size:.88em">/ ${tr}</span>`;
   }
   /* Helper: bilingual block (zh 左 / lang 右) for notes boxes */
   function biBlock(zhRaw, key, boxStyle) {
     const zh = escapeHtml(zhRaw).replace(/\n/g, "<br>");
-    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
     if (!zh) return "";
+    if (lang === "zh") return `<div class="notes-box" style="${boxStyle||''}">${zh}</div>`;
+    const tr = _trans[key] ? escapeHtml(_trans[key]).replace(/\n/g, "<br>") : "";
     if (!tr || tr === zh) return `<div class="notes-box" style="${boxStyle||''}">${zh}</div>`;
     return `<div class="cond-block" style="margin-bottom:0"><div class="cond-block-body"><div class="col zh">${zh}</div><div class="col sec">${tr}</div></div></div>`;
   }
 
-  /* ── AI Generation removed (不使用 API，改用 Google 翻譯) ── */
-  const aiHtml = "";
+  /* ── Smart Local AI Recommendations (based on conditions) ── */
+  let aiHtml = "";
+  {
+    const aiTips = [];
+    // Generate tips based on conditions
+    if (selected.has("hypertension") || monitoredVitals.includes("bp")) {
+      aiTips.push({zh:"🩸 血壓管理重點：每日固定時段量測並記錄，若發現持續偏高（>160）或偏低（<90 mmHg）立即通報家屬。", sec: lang==="id"?"Pantau tekanan darah secara rutin. Laporkan segera jika di atas 160 atau di bawah 90 mmHg.":lang==="vi"?"Theo dõi huyết áp thường xuyên. Báo ngay nếu trên 160 hoặc dưới 90 mmHg.":"Monitor BP daily. Report if consistently above 160 or below 90 mmHg."});
+    }
+    if (selected.has("diabetes") || monitoredVitals.includes("sugar")) {
+      aiTips.push({zh:"🍬 血糖管理重點：飯前/飯後定時檢測，注意低血糖症狀（冒冷汗、顫抖、意識不清），隨時備妥糖果或方糖。", sec: lang==="id"?"Pantau gula darah sebelum/sesudah makan. Sediakan permen untuk hipoglikemia.":lang==="vi"?"Theo dõi đường huyết trước/sau ăn. Chuẩn bị kẹo ngọt đề phòng hạ đường huyết.":"Check blood sugar before/after meals. Keep candy ready for hypoglycemia."});
+    }
+    if (selected.has("dementia")) {
+      aiTips.push({zh:"🧠 失智照顧重點：維持固定作息、熟悉環境佈置不隨意更動，與患者交流使用簡短句、耐心重複，避免爭辯或糾正。", sec: lang==="id"?"Jaga rutinitas tetap, jangan ubah lingkungan. Gunakan kalimat pendek dan sabar.":lang==="vi"?"Duy trì thói quen cố định. Dùng câu ngắn, kiên nhẫn, không tranh cãi.":"Keep routines fixed. Use short sentences, be patient, avoid arguments."});
+    }
+    if (selected.has("stroke")) {
+      aiTips.push({zh:"🫀 中風照顧重點：注意FAST症狀（臉部歪斜、手臂無力、說話困難、立即就醫），確保活動輔具到位，定期翻身防褥瘡。", sec: lang==="id"?"Waspadai gejala FAST. Balikkan posisi secara rutin untuk mencegah luka tekan.":lang==="vi"?"Chú ý triệu chứng FAST. Trở mình đều đặn để ngừa loét tỳ đè.":"Watch for FAST symptoms. Turn patient regularly to prevent pressure sores."});
+    }
+    if (selected.has("parkinson")) {
+      aiTips.push({zh:"🤝 巴金森照顧重點：藥物時間嚴格遵守（on-off現象）、地板淨空防跌、餐具使用加粗握把輔具，說話放慢耐心等待。", sec: lang==="id"?"Tepat waktu minum obat sangat penting. Singkirkan hambatan di lantai untuk mencegah jatuh.":lang==="vi"?"Đúng giờ uống thuốc rất quan trọng. Dọn dẹp sàn nhà để phòng ngã.":"Strict medication timing is critical. Clear floor obstacles to prevent falls."});
+    }
+    if (selected.has("pressure") || document.getElementById("f_mob").value === "bed") {
+      aiTips.push({zh:"🛏 臥床照顧重點：每2小時翻身一次並記錄，骨突處使用減壓墊，觀察皮膚是否有紅斑發紅，保持皮膚乾燥清潔。", sec: lang==="id"?"Balikkan posisi tiap 2 jam. Gunakan bantalan. Periksa kulit terhadap kemerahan.":lang==="vi"?"Trở mình mỗi 2 giờ. Dùng đệm giảm áp. Kiểm tra da tránh loét.":"Turn every 2 hours. Use pressure-relief pads. Check for skin redness."});
+    }
+    if (selected.has("ngt") || document.getElementById("f_diet").value === "puree") {
+      aiTips.push({zh:"🥣 管灌/流質照顧重點：餵食前確認鼻胃管位置，抬高床頭30-45度，餵食後保持半坐臥30分鐘，觀察嗆咳症狀。", sec: lang==="id"?"Pastikan posisi NGT sebelum memberi makan. Tinggikan kepala 30-45°. Pantau aspirasi.":lang==="vi"?"Kiểm tra vị trí sonde trước khi cho ăn. Nâng đầu giường 30-45°. Theo dõi sặc.":"Verify tube position before feeding. Elevate head 30-45°. Watch for aspiration."});
+    }
+
+    /* ── 認知狀況照顧建議（獨立觸發，不受健康晶片/生命徵象限制）── */
+    const _cogValAI = document.getElementById("f_cog").value;
+    if (_cogValAI === "mild") {
+      aiTips.push({
+        zh:"🧩 輕度認知退化照顧重點：提供簡單規律的日常作息，避免過多同時指令；利用記事本、白板或手機提醒輔助記憶；鼓勵益智活動（拼圖、閱讀、下棋）延緩退化；保持正向溝通，避免催促或糾正語氣。",
+        sec: lang==="id"
+          ? "Jaga rutinitas sederhana & teratur; gunakan catatan/papan tulis sebagai pengingat; dorong aktivitas kognitif (puzzle, membaca); komunikasi positif, jangan buru-buru."
+          : lang==="vi"
+          ? "Duy trì lịch sinh hoạt đơn giản, đều đặn; dùng sổ tay/bảng trắng nhắc nhở; khuyến khích hoạt động trí tuệ (ghép hình, đọc sách); giao tiếp tích cực, không vội vàng."
+          : "Maintain a simple, consistent routine; use notes/whiteboards as memory aids; encourage cognitive activities (puzzles, reading); communicate positively without rushing."
+      });
+    }
+    if (_cogValAI === "dementia" && !selected.has("dementia")) {
+      aiTips.push({
+        zh:"🧠 失智照顧重點：維持固定作息、熟悉環境佈置不隨意更動，與患者交流使用簡短句、耐心重複，避免爭辯或糾正；注意走失風險，門窗加裝安全鎖。",
+        sec: lang==="id"
+          ? "Jaga rutinitas tetap, jangan ubah lingkungan. Gunakan kalimat pendek dan sabar. Waspadai risiko keluar/hilang — pasang kunci pengaman."
+          : lang==="vi"
+          ? "Duy trì thói quen cố định, không thay đổi môi trường. Dùng câu ngắn, kiên nhẫn. Chú ý nguy cơ đi lạc — lắp khóa an toàn cửa."
+          : "Keep routines and environment unchanged. Use short sentences patiently. Watch for wandering risk — install door safety locks."
+      });
+    }
+    if (aiTips.length > 0) {
+      const aiTipsHtml = aiTips.map(tip => lang === "zh"
+        ? `<div style="border:1px solid rgba(42,82,64,.12);border-radius:9px;overflow:hidden;margin-bottom:6px;padding:10px 13px;font-size:.85rem;line-height:1.75">${tip.zh}</div>`
+        : `<div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(42,82,64,.12);border-radius:9px;overflow:hidden;margin-bottom:6px">
+          <div style="padding:10px 13px;font-size:.85rem;line-height:1.75;border-right:1px solid rgba(42,82,64,.12)">${tip.zh}</div>
+          <div style="padding:10px 13px;font-size:.83rem;line-height:1.75;color:var(--muted)">${tip.sec}</div>
+        </div>`).join("");
+      aiHtml = `
+        <div class="ai-box">
+          <div class="ai-lbl"><span class="ai-dot"></span>${t.aiLabel}</div>
+          <div class="ai-text">${aiTipsHtml}</div>
+        </div>`;
+    }
+  }
 
   /* ── Standard care blocks ── */
   let blocksHtml = "";
-  if (selConds.length > 0) {
-    selConds.forEach(c => {
-      blocksHtml += `
+
+  /* ── 認知狀況照顧指引區塊（依 f_cog 下拉值，獨立於健康狀況晶片）── */
+  const cogVal = document.getElementById("f_cog").value;
+  const COG_ADVICE = {
+    mild: {
+      zh: `【輕度認知退化照顧重點】
+【日常作息】建立並維持固定的作息時間表（起床、三餐、活動、就寢），每日重複相同流程有助維持定向感；避免臨時更動計劃，如有必要請提前告知。
+【記憶輔助】在顯眼處（床頭、餐桌旁）放置白板或記事本，記錄今日行程與重要事項；手機可設定提醒鬧鈴；協助患者使用藥盒分裝，確保按時服藥。
+【認知活動】每日安排至少一項益智活動（拼圖、閱讀、繪畫、下棋、懷舊音樂），維持大腦活躍度，延緩退化速度。
+【溝通技巧】給予指令時一次說一件事，語速放慢，等待患者理解後再進行下一步；以詢問代替糾正（「我們去吃早飯好嗎？」而非「你忘了要吃早飯！」）；多給予讚美與肯定。
+【安全注意】確認瓦斯爐、熱水器使用安全（考慮加裝瓦斯偵測器）；若有外出走失風險，協助攜帶寫有姓名與聯絡電話的識別卡。`,
+      id: `【Manajemen Kognitif Ringan】
+【Rutinitas】Buat jadwal harian tetap (bangun, makan, aktivitas, tidur); hindari perubahan mendadak — beri tahu terlebih dahulu jika perlu.
+【Bantu Memori】Papan tulis/buku catatan di tempat terlihat; alarm handphone sebagai pengingat; bantu gunakan kotak obat.
+【Aktivitas Kognitif】Minimal 1 aktivitas per hari (puzzle, membaca, melukis, catur, musik nostalgia).
+【Komunikasi】Satu instruksi per kali, bicara pelan; tanya daripada koreksi; beri pujian.
+【Keselamatan】Cek keamanan kompor & pemanas air; siapkan kartu identitas berisi nama & nomor kontak untuk keluar rumah.`,
+      en: `【Mild Cognitive Decline Care】
+【Routine】Establish a fixed daily schedule (wake, meals, activities, bedtime); avoid sudden changes — give advance notice if needed.
+【Memory Aids】Whiteboard/notebook in visible areas; phone reminders; help use pill organizer.
+【Cognitive Activities】At least 1 activity/day (puzzles, reading, drawing, chess, nostalgic music) to maintain brain activity.
+【Communication】One instruction at a time, speak slowly; ask instead of correct; praise frequently.
+【Safety】Check gas stove and water heater safety; prepare an ID card with name and contact number for outings.`,
+      vi: `【Chăm sóc suy giảm nhận thức nhẹ】
+【Lịch sinh hoạt】Duy trì lịch hằng ngày cố định (dậy, ăn, hoạt động, ngủ); tránh thay đổi đột ngột — báo trước nếu cần.
+【Hỗ trợ trí nhớ】Bảng trắng/sổ tay ở nơi dễ thấy; chuông nhắc điện thoại; hỗ trợ dùng hộp thuốc.
+【Hoạt động nhận thức】Ít nhất 1 hoạt động/ngày (ghép hình, đọc sách, vẽ, cờ, nhạc kỷ niệm).
+【Giao tiếp】Một chỉ dẫn mỗi lần, nói chậm; hỏi thay vì sửa; thường xuyên khen ngợi.
+【An toàn】Kiểm tra an toàn bếp gas; chuẩn bị thẻ tên và số điện thoại khi ra ngoài.`
+    },
+    dementia: {
+      zh: `【失智症照顧重點】
+【環境安全】移除或鎖好危險物品（刀剪、清潔劑、藥物）；門窗加裝安全鎖，防止走失；夜間開小夜燈，避免黑暗中跌倒；在廁所、臥室等常去處貼上圖示標示。
+【日常作息】固定每日流程，不隨意更動環境佈置（熟悉感有助定向）；避免同時給予多個刺激，活動一次一件。
+【溝通技巧】使用簡短、具體的句子；保持眼神接觸與溫和語調；重複詢問時耐心回應同一答案；避免爭辯、糾正或說「你忘記了」。
+【行為問題處置】若出現激動、徘徊、拒絕照護：先暫停操作，以輕柔觸摸或熟悉音樂分散注意力；記錄發生時間與可能觸發原因，通報家屬；避免在患者疲勞時進行困難的照護（如沐浴）。
+【走失預防】協助患者隨身攜帶寫有姓名、住址、聯絡人電話的識別卡；若家屬同意，可考慮使用GPS定位裝置。
+【照護者自我照顧】失智照顧壓力大，若出現疲憊或無力感，請主動告知家屬，安排喘息服務。`,
+      id: `【Perawatan Demensia】
+【Keamanan Lingkungan】Kunci/singkirkan benda berbahaya; pasang kunci keamanan di pintu & jendela; lampu malam untuk mencegah jatuh; tanda gambar di toilet dan kamar.
+【Rutinitas】Jadwal tetap, jangan ubah penataan lingkungan; satu aktivitas per kali, hindari banyak stimulus.
+【Komunikasi】Kalimat pendek dan konkret; kontak mata & nada lembut; jawab pertanyaan berulang dengan sabar; jangan berdebat atau koreksi.
+【Perilaku Bermasalah】Jika agitasi/menolak perawatan: hentikan sejenak, alihkan dengan sentuhan lembut atau musik familiar; catat waktu & pemicu; hindari perawatan sulit saat pasien lelah.
+【Pencegahan Hilang】Siapkan kartu identitas (nama, alamat, kontak); pertimbangkan GPS jika keluarga setuju.
+【Jaga Diri】Informasikan ke keluarga jika merasa kelelahan; minta layanan respite.`,
+      en: `【Dementia Care】
+【Environmental Safety】Lock/remove hazardous items; install safety locks on doors & windows; use night lights; place picture labels on toilet, bedroom, etc.
+【Routine】Fixed daily schedule; don't rearrange the environment; one activity at a time, minimize simultaneous stimuli.
+【Communication】Short, concrete sentences; eye contact and gentle tone; patiently repeat same answer; never argue or say "you forgot."
+【Behavioral Issues】If agitated or refusing care: pause, redirect with gentle touch or familiar music; note time and triggers; avoid difficult care (bathing) when patient is tired.
+【Wandering Prevention】Prepare ID card (name, address, contact); consider GPS device with family consent.
+【Caregiver Self-Care】Inform family if feeling overwhelmed; request respite care.`,
+      vi: `【Chăm sóc sa sút trí tuệ】
+【An toàn môi trường】Khóa/cất đồ nguy hiểm; lắp khóa an toàn cửa/cửa sổ; đèn ngủ; dán biển hình ở toilet, phòng ngủ.
+【Lịch sinh hoạt】Lịch cố định, không thay đổi bố trí; một hoạt động mỗi lần, tránh nhiều kích thích cùng lúc.
+【Giao tiếp】Câu ngắn, cụ thể; tiếp xúc mắt, giọng nhẹ nhàng; kiên nhẫn trả lời câu hỏi lặp lại; không tranh luận.
+【Vấn đề hành vi】Nếu kích động/từ chối chăm sóc: dừng lại, dùng xúc giác nhẹ nhàng hoặc nhạc quen thuộc để phân tán; ghi lại thời gian và nguyên nhân; tránh chăm sóc khó khi bệnh nhân mệt.
+【Phòng đi lạc】Chuẩn bị thẻ tên, địa chỉ, liên hệ; cân nhắc GPS nếu gia đình đồng ý.
+【Tự chăm sóc người chăm】Báo gia đình nếu mệt mỏi; yêu cầu dịch vụ nghỉ phép.`
+    }
+  };
+
+  const COG_GUIDE_LBL = {zh:"認知照顧指引", id:"Panduan Perawatan Kognitif", en:"Cognitive Care Guide", vi:"Hướng Dẫn Chăm Sóc Nhận Thức"};
+  const cogLbls = { mild: {zh:"輕度認知退化",id:"Penurunan Kognitif Ringan",en:"Mild Cognitive Decline",vi:"Suy giảm nhận thức nhẹ"}, dementia: {zh:"失智症",id:"Demensia",en:"Dementia",vi:"Sa sút trí tuệ"} };
+  let cogBlockHtml = "";
+  if (cogVal === "mild" || cogVal === "dementia") {
+    const ca = COG_ADVICE[cogVal];
+    const lbl = cogLbls[cogVal];
+    if (lang === "zh") {
+      cogBlockHtml = `
         <div class="cond-block">
-          <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)} / ${escapeHtml(c[lang])}</div>
-          <div class="cond-block-body">
-            <div class="col zh">${escapeHtml(c.adv.zh)}</div>
-            <div class="col sec">${escapeHtml(c.adv[lang])}</div>
+          <div class="cond-block-head"><span class="dot" style="background:#426577"></span>🧠 ${lbl.zh} — ${COG_GUIDE_LBL.zh}</div>
+          <div class="cond-block-body" style="grid-template-columns:1fr">
+            <div class="col zh" style="border-right:none">${escapeHtml(ca.zh).replace(/\n/g,"<br>")}</div>
           </div>
         </div>`;
+    } else {
+      cogBlockHtml = `
+        <div class="cond-block">
+          <div class="cond-block-head"><span class="dot" style="background:#426577"></span>🧠 ${lbl.zh} / ${lbl[lang] || lbl.en} — 認知照顧指引 / ${COG_GUIDE_LBL[lang] || COG_GUIDE_LBL.en}</div>
+          <div class="cond-block-body">
+            <div class="col zh">${escapeHtml(ca.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col sec">${escapeHtml(ca[lang]||ca.en).replace(/\n/g,"<br>")}</div>
+          </div>
+        </div>`;
+    }
+  }
+
+  if (selConds.length > 0 || cogBlockHtml) {
+    selConds.forEach(c => {
+      if (lang === "zh") {
+        blocksHtml += `
+          <div class="cond-block">
+            <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)}</div>
+            <div class="cond-block-body" style="grid-template-columns:1fr">
+              <div class="col zh" style="border-right:none">${escapeHtml(c.adv.zh).replace(/\n/g, "<br>")}</div>
+            </div>
+          </div>`;
+      } else {
+        blocksHtml += `
+          <div class="cond-block">
+            <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)} / ${escapeHtml(c[lang])}</div>
+            <div class="cond-block-body">
+              <div class="col zh">${escapeHtml(c.adv.zh).replace(/\n/g, "<br>")}</div>
+              <div class="col sec">${escapeHtml(c.adv[lang]).replace(/\n/g, "<br>")}</div>
+            </div>
+          </div>`;
+      }
     });
+    blocksHtml += cogBlockHtml;
   } else {
-    blocksHtml = `<p style="color:var(--muted);font-size:.85rem;padding:8px 0">尚未選擇健康狀況 / No conditions selected</p>`;
+    blocksHtml = `<p style="color:var(--muted);font-size:.85rem;padding:8px 0">${{zh:"尚未選擇健康狀況",id:"Belum ada kondisi dipilih",en:"No conditions selected",vi:"Chưa chọn tình trạng sức khỏe"}[lang]||"尚未選擇健康狀況"}</p>`;
   }
 
   /* ── Cleaning section ── */
   let cleanHtml = "";
+  const CLEAN_SEC_LBL = {zh:"清潔與衛生注意", id:"Catatan Kebersihan & Higiene", en:"Cleaning & Hygiene Notes", vi:"Ghi Chú Vệ Sinh"};
   if (activeClean.length > 0 || cleanNote) {
     let items = activeClean.map(c =>
       `<div class="med-plan-item">
         <span class="med-icon">🧹</span>
-        <span>${c.zh} <span style="color:var(--muted);font-size:.82rem">/ ${c[lang]}</span></span>
+        <span>${lang === "zh" ? c.zh : (c.zh + ' <span style="color:var(--muted);font-size:.82rem">/ ' + c[lang] + '</span>')}</span>
       </div>`
     ).join("");
     cleanHtml = `
-      <div class="plan-sec-title clean-title">🧹 打掃清潔注意事項 / Cleaning &amp; Hygiene Notes</div>
+      <div class="plan-sec-title clean-title">🧹 ${lang === "zh" ? "打掃清潔" : ("打掃清潔 / " + (CLEAN_SEC_LBL[lang]||CLEAN_SEC_LBL.en))}</div>
       <div class="med-plan-list clean-list">${items}</div>
       ${cleanNote ? `<div class="notes-box clean-note-box" style="margin-top:10px;background:#f0f8f0;border-color:#b8d8b8">${biText(cleanNote, "cleanNote")}</div>` : ""}`;  }
 
@@ -3420,11 +3974,13 @@ async function generatePlan() {
   let emgHtml = "";
   if (fn || dn) {
     let cards = "";
-    // 過濾電話：只允許數字、加號與減號，防禦惡意字元導致 tel: 解析失敗
+    // 過濾電話：tel: URI 只允許數字、加號（國碼）、連字號（RFC 3966）
     const safeTel = (raw) => escapeHtml(raw.replace(/[^\d\+\-]/g, ''));
 
-    if (fn)  cards += `<div class="info-cell"><div class="lbl">${frel_s || '家屬'}</div><div class="val">${fn_s}${ftel ? `<br><a href="tel:${safeTel(ftel)}" style="color:var(--accent2)">${ftel_s}</a>` : ""}</div></div>`;
-    if (dn)  cards += `<div class="info-cell"><div class="lbl">醫師 / Doctor</div><div class="val">${dn_s}${dhosp ? " · " + dhosp_s : ""}${dtel ? `<br><a href="tel:${safeTel(dtel)}" style="color:var(--accent2)">${dtel_s}</a>` : ""}</div></div>`;
+    const DOC_LBL = {zh:"醫師", id:"Dokter", en:"Doctor", vi:"Bác Sĩ"};
+    const FAM_LBL = {zh:"家屬", id:"Keluarga", en:"Family", vi:"Gia đình"};
+    if (fn)  cards += `<div class="info-cell"><div class="lbl">${frel_s || (FAM_LBL[lang]||"家屬")}</div><div class="val">${fn_s}${ftel ? `<br><a href="tel:${safeTel(ftel)}" style="color:var(--accent2)">${ftel_s}</a>` : ""}</div></div>`;
+    if (dn)  cards += `<div class="info-cell"><div class="lbl">${lang === "zh" ? "醫師" : ("醫師 / " + (DOC_LBL[lang]||DOC_LBL.en))}</div><div class="val">${dn_s}${dhosp ? " · " + dhosp_s : ""}${dtel ? `<br><a href="tel:${safeTel(dtel)}" style="color:var(--accent2)">${dtel_s}</a>` : ""}</div></div>`;
     emgHtml = `
       <div class="plan-sec-title emg-title">${t.secEmg}</div>
       <div class="emg-grid">${cards}</div>`;
@@ -3432,18 +3988,59 @@ async function generatePlan() {
 
   /* ── Special notes ── */
   let noteHtml = "";
-  if (note) {
+  const noteRaw = document.getElementById("f_note").value.trim();
+  if (noteRaw) {
     noteHtml = `
       <div class="plan-sec-title">${t.secNote}</div>
-      ${biBlock(note, "note", "")}`;
+      ${biBlock(noteRaw, "note", "")}`;
   }
 
-  /* ── Allergy badge ── */
+  const ALLERGY_LBL = {zh:"⚠ 過敏", id:"⚠ Alergi", en:"⚠ Allergies", vi:"⚠ Dị Ứng"};
   const allergyCell = (allergy && allergy !== "無")
-    ? `<div class="info-cell" style="background:#fff3e8;border:1px solid #e8c08a"><div class="lbl">⚠ 過敏/禁忌</div><div class="val" style="color:var(--warn)">${biText(allergy, "allergy")}</div></div>`
+    ? `<div class="info-cell" style="background:#fff3e8;border:1px solid #e8c08a"><div class="lbl">${ALLERGY_LBL[lang]||"⚠ 過敏"}</div><div class="val" style="color:var(--warn)">${biText(allergy, "allergy")}</div></div>`
     : "";
 
-  /* MedCheckHtml removed */
+  /* Medication list HTML */
+  const validMeds = meds.filter(m => m.name && m.name.trim());
+  let medPlanHtml = "";
+  if (validMeds.length > 0) {
+    const medItems = validMeds.map(m =>
+      `<div class="med-plan-item">
+        <span class="med-icon">💊</span>
+        <span><b>${escapeHtml(m.name)}</b>${m.dose ? ` · ${escapeHtml(m.dose)}` : ""}${m.freq ? ` · <span style="color:var(--muted)">${escapeHtml(m.freq)}</span>` : ""}</span>
+      </div>`
+    ).join("");
+    medPlanHtml = `
+      <div class="plan-sec-title med-title">💊 ${t.secMed}</div>
+      <div class="med-plan-list">${medItems}</div>`;
+  }
+
+  /* ── Diet Type Care Advice ── */
+  const dietVal = document.getElementById("f_diet").value;
+  let dietHtml = "";
+  if (dietVal && DIET_ADVICE[dietVal]) {
+    const da = DIET_ADVICE[dietVal];
+    const secDietLabels = {zh:"飲食型態照顧指引", id:"Panduan Pola Makan",en:"Diet Care Guide",vi:"Hướng Dẫn Chế Độ Ăn"};
+    const secDietZh = "飲食型態照顧指引";
+    if (lang === "zh") {
+      dietHtml = `
+        <div class="cond-block diet-block">
+          <div class="cond-block-head"><span class="dot" style="background:#bd7320"></span>🍽 ${secDietZh} — ${diet}</div>
+          <div class="cond-block-body" style="grid-template-columns:1fr">
+            <div class="col zh" style="border-right:none">${escapeHtml(da.zh).replace(/\n/g,"<br>")}</div>
+          </div>
+        </div>`;
+    } else {
+      dietHtml = `
+        <div class="cond-block diet-block">
+          <div class="cond-block-head"><span class="dot" style="background:#bd7320"></span>🍽 ${secDietZh} / ${secDietLabels[lang]||"Diet Care Guide"} — ${diet}</div>
+          <div class="cond-block-body">
+            <div class="col zh">${escapeHtml(da.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col sec">${escapeHtml(da[lang]||da.en).replace(/\n/g,"<br>")}</div>
+          </div>
+        </div>`;
+    }
+  }
 
   /* ── Render ── */
   document.getElementById("output").innerHTML = `
@@ -3452,16 +4049,16 @@ async function generatePlan() {
       <button class="btn btn-ghost" onclick="document.getElementById('output').innerHTML='';document.getElementById('genBtn').disabled=false">${t.closeBtn}</button>
     </div>
     <div class="view-toggle-bar no-print">
-      <span class="toggle-label">顯示模式</span>
+      <span class="toggle-label">${{zh:"顯示模式", id:"Mode Tampilan",en:"View Mode",vi:"Chế Độ Hiển Thị"}[lang]||"顯示模式"}</span>
       <div class="view-mode-switch">
-        <button class="view-mode-btn" id="vmBtn_compact" onclick="setViewMode('compact')">精簡</button>
-        <button class="view-mode-btn active" id="vmBtn_full" onclick="setViewMode('full')">詳細</button>
+        <button class="view-mode-btn" id="vmBtn_compact" onclick="setViewMode('compact')">${{zh:"精簡", id:"Ringkas",en:"Compact",vi:"Tóm Tắt"}[lang]||"精簡"}</button>
+        <button class="view-mode-btn active" id="vmBtn_full" onclick="setViewMode('full')">${{zh:"詳細", id:"Lengkap",en:"Detailed",vi:"Chi Tiết"}[lang]||"詳細"}</button>
       </div>
     </div>
     <div class="plan-wrap" id="planDoc">
       <div class="print-doc-header" style="display:none">
         <h2>照顧計劃書 · Care Plan</h2>
-        <div class="print-meta">${name}・${ageInputStr ? age + "歲" : ""}・${sex}<br>${today}</div>
+        <div class="print-meta">${name}・${ageInputStr ? age + ageUnit : ""}・${sex}<br>${today}</div>
       </div>
       <div class="plan-hd">
         <h3>${t.planTitle}</h3>
@@ -3470,40 +4067,42 @@ async function generatePlan() {
       ${transWarningHtml}
       <div class="info-grid">
         <div class="info-cell"><div class="lbl">${t.l_name}</div><div class="val">${name} · ${sex}</div></div>
-        <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${ageInputStr ? age + " 歲" : "—"}</div></div>
+        <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${ageInputStr ? age + " " + ageUnit : "—"}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_mob}</div><div class="val">${mob}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_cog}</div><div class="val">${cog}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_diet}</div><div class="val">${diet}</div></div>
         ${allergyCell}
       </div>
       <div class="print-schedule-section">
-        <div class="plan-sec-title">🏠 家庭環境與作息 / Living &amp; Schedule</div>
+        <div class="plan-sec-title">🏠 ${lang === "zh" ? "家庭環境與作息" : ("家庭環境與作息 / " + ({id:"Lingkungan & Jadwal",en:"Living & Schedule",vi:"Môi Trường & Sinh Hoạt"}[lang]||"Living & Schedule"))}</div>
         <div class="info-grid" style="margin-bottom:10px">
-          <div class="info-cell"><div class="lbl">${LIVING_LBL.cohabit.zh} / ${LIVING_LBL.cohabit[lang]}</div><div class="val">${cohabit}</div></div>
-          <div class="info-cell"><div class="lbl">${LIVING_LBL.eatout.zh} / ${LIVING_LBL.eatout[lang]}</div><div class="val">${eatout}</div></div>
-          ${envNote ? `<div class="info-cell"><div class="lbl">${LIVING_LBL.env.zh} / ${LIVING_LBL.env[lang]}</div><div class="val">${biText(envNote, "envNote")}</div></div>` : ""}
+          <div class="info-cell"><div class="lbl">${lang === "zh" ? LIVING_LBL.cohabit.zh : (LIVING_LBL.cohabit.zh + " / " + LIVING_LBL.cohabit[lang])}</div><div class="val">${cohabit}</div></div>
+          <div class="info-cell"><div class="lbl">${lang === "zh" ? LIVING_LBL.eatout.zh : (LIVING_LBL.eatout.zh + " / " + LIVING_LBL.eatout[lang])}</div><div class="val">${eatout}</div></div>
+          ${envNote ? `<div class="info-cell"><div class="lbl">${lang === "zh" ? LIVING_LBL.env.zh : (LIVING_LBL.env.zh + " / " + LIVING_LBL.env[lang])}</div><div class="val">${biText(envNote, "envNote")}</div></div>` : ""}
         </div>
         <div class="print-schedule-strip" style="background:var(--soft);border-radius:11px;padding:14px 16px;margin-bottom:6px;font-size:.86rem;line-height:2">
-          <span class="sch-slot">🌅 ${SLOT_LABELS.wake.zh} / ${SLOT_LABELS.wake[lang]} <span class="sch-time">${wake}</span></span>
-          <span class="sch-slot">🍳 ${SLOT_LABELS.breakfast.zh} / ${SLOT_LABELS.breakfast[lang]} <span class="sch-time">${breakfast}</span></span>
-          <span class="sch-slot">🌞 ${SLOT_LABELS.lunch.zh} / ${SLOT_LABELS.lunch[lang]} <span class="sch-time">${lunch}</span></span>
-          <span class="sch-slot">😴 ${SLOT_LABELS.nap.zh} / ${SLOT_LABELS.nap[lang]} <span class="sch-time">${nap}</span></span>
-          <span class="sch-slot">🍽 ${SLOT_LABELS.dinner.zh} / ${SLOT_LABELS.dinner[lang]} <span class="sch-time">${dinner}</span></span>
-          <span class="sch-slot">🌙 ${SLOT_LABELS.bedtime.zh} / ${SLOT_LABELS.bedtime[lang]} <span class="sch-time">${bedtime}</span></span>
-          ${activeActs.length ? `<span class="sch-slot">🎯 ${ACT_LBL.zh} / ${ACT_LBL[lang]}: ${activeActs.map(a=>`${escapeHtml(a.zh)} / ${escapeHtml(a[lang])}`).join("、")}</span>` : ""}
-          ${schNote ? `<span class="sch-slot">📝 ${LIVING_LBL.schNote.zh} / ${LIVING_LBL.schNote[lang]}: ${biText(schNote, "schNote")}</span>` : ""}
+          <span class="sch-slot">🌅 ${lang === "zh" ? SLOT_LABELS.wake.zh : (SLOT_LABELS.wake.zh + " / " + SLOT_LABELS.wake[lang])} <span class="sch-time">${wake}</span></span>
+          <span class="sch-slot">🍳 ${lang === "zh" ? SLOT_LABELS.breakfast.zh : (SLOT_LABELS.breakfast.zh + " / " + SLOT_LABELS.breakfast[lang])} <span class="sch-time">${breakfast}</span></span>
+          <span class="sch-slot">🌞 ${lang === "zh" ? SLOT_LABELS.lunch.zh : (SLOT_LABELS.lunch.zh + " / " + SLOT_LABELS.lunch[lang])} <span class="sch-time">${lunch}</span></span>
+          <span class="sch-slot">😴 ${lang === "zh" ? SLOT_LABELS.nap.zh : (SLOT_LABELS.nap.zh + " / " + SLOT_LABELS.nap[lang])} <span class="sch-time">${nap}</span></span>
+          <span class="sch-slot">🍽 ${lang === "zh" ? SLOT_LABELS.dinner.zh : (SLOT_LABELS.dinner.zh + " / " + SLOT_LABELS.dinner[lang])} <span class="sch-time">${dinner}</span></span>
+          <span class="sch-slot">🌙 ${lang === "zh" ? SLOT_LABELS.bedtime.zh : (SLOT_LABELS.bedtime.zh + " / " + SLOT_LABELS.bedtime[lang])} <span class="sch-time">${bedtime}</span></span>
+          ${activeActs.length ? `<span class="sch-slot">🎯 ${lang === "zh" ? ACT_LBL.zh : (ACT_LBL.zh + " / " + ACT_LBL[lang])}: ${activeActs.map(a => lang === "zh" ? escapeHtml(a.zh) : `${escapeHtml(a.zh)} / ${escapeHtml(a[lang])}`).join("、")}</span>` : ""}
+          ${schNote ? `<span class="sch-slot">📝 ${lang === "zh" ? LIVING_LBL.schNote.zh : (LIVING_LBL.schNote.zh + " / " + LIVING_LBL.schNote[lang])}: ${biText(schNote, "schNote")}</span>` : ""}
         </div>
       </div>
+      ${medPlanHtml}
       ${aiHtml}
       ${(monitoredVitals.length || vitalNote) ? `
       <div class="print-vital-section">
-        <div class="plan-sec-title vital-sec-title">📊 生命徵象監測項目 / Vital Signs to Monitor</div>
+        <div class="plan-sec-title vital-sec-title">📊 ${lang === "zh" ? "生命徵象" : ("生命徵象 / " + ({id:"Tanda-Tanda Vital",en:"Vital Signs to Monitor",vi:"Dấu Hiệu Sinh Tồn"}[lang]||"Vital Signs"))}</div>
         <div class="info-grid" style="margin-bottom:18px">
-          ${monitoredVitals.map(k => `<div class="info-cell"><div class="lbl">${VITAL_INFO[k].icon} ${VITAL_INFO[k].zh}</div><div class="val" style="font-size:.92rem">需定期監測</div><div class="lbl" style="margin-top:4px;font-size:.62rem;color:#3a7055">${VITAL_INFO[k].range}</div></div>`).join("")}
-          ${vitalNote ? `<div class="info-cell" style="grid-column:1/-1"><div class="lbl">備註 Note</div><div class="val">${biText(vitalNote, "vitalNote")}</div></div>` : ""}
+          ${monitoredVitals.map(k => `<div class="info-cell"><div class="lbl">${VITAL_INFO[k].icon} ${lang === "zh" ? VITAL_INFO[k].zh : (VITAL_INFO[k].zh + " / " + (VITAL_INFO[k][lang]||VITAL_INFO[k].en))}</div><div class="val" style="font-size:.92rem">${vitalMonitorTxt}</div><div class="lbl" style="margin-top:4px;font-size:.62rem;color:#3a7055">${VITAL_INFO[k].range}</div></div>`).join("")}
+          ${vitalNote ? `<div class="info-cell" style="grid-column:1/-1"><div class="lbl">${{zh:"備註",id:"Catatan",en:"Notes",vi:"Ghi Chú"}[lang]||"備註"}</div><div class="val">${biText(vitalNote, "vitalNote")}</div></div>` : ""}
         </div>
       </div>` : ""}
-      <div class="plan-sec-title care-title">${t.secCare} (中文 · ${t.secLang})</div>
+      <div class="plan-sec-title care-title">${lang === "zh" ? t.secCare : (t.secCare + " (中文 · " + t.secLang + ")")}</div>
+      ${dietHtml}
       ${blocksHtml}
       ${cleanHtml}
       ${emgHtml}
@@ -3551,6 +4150,7 @@ function setViewMode(mode) {
 ======================================================== */
 function clearAll() {
   const clearConfirm = {
+    zh: "確定要清除所有資料？",
     id: "確定要清除所有資料？\nApakah Anda yakin ingin menghapus semua data?",
     en: "確定要清除所有資料？\nAre you sure you want to reset all fields?",
     vi: "確定要清除所有資料？\nBạn có chắc muốn xóa tất cả dữ liệu không?"
@@ -3579,6 +4179,10 @@ function clearAll() {
   actSelected.clear();
   cleanSelected.clear();
   vitalSelected.clear();
+  document.querySelectorAll(".chip").forEach(c => {
+    c.classList.remove("on");
+    c.setAttribute("aria-pressed", "false");
+  });
   document.querySelectorAll(".vital-chip").forEach(c => {
     c.classList.remove("on");
     c.setAttribute("aria-pressed", "false");
@@ -3588,7 +4192,9 @@ function clearAll() {
   if (_vi) _vi.style.borderTop = "none";
   const _vnw = document.getElementById("vitalNoteWrap");
   if (_vnw) _vnw.style.display = "none";
-  // 【優化】已移除不再使用的 medList DOM 參照（藥物卡片功能已刪除）
+  // 清除藥物清單
+  meds = [];
+  document.getElementById("medList").innerHTML = "";
   document.getElementById("output").innerHTML = "";
   const _atb = document.getElementById("allergyTransBox"); if (_atb) { _atb.style.display="none"; _atb.innerHTML=""; }
   document.getElementById("genBtn").disabled = false;
@@ -3677,8 +4283,12 @@ function setPrintOrient(orient, btn) {
 document.getElementById("printSectionOpts").addEventListener("click", function(e) {
   const opt = e.target.closest(".print-opt");
   if (!opt) return;
-  /* 避免 label 內部 checkbox 的 click 事件導致雙重 toggle */
-  if (e.target.tagName === "INPUT") return;
+  /* 如果點的是 checkbox 本身：同步 .on class 至 checkbox 的 checked 狀態，避免視覺不同步 */
+  if (e.target.tagName === "INPUT") {
+    if (e.target.checked) opt.classList.add("on");
+    else opt.classList.remove("on");
+    return;
+  }
   opt.classList.toggle("on");
   const cb = opt.querySelector("input[type=checkbox]");
   if (cb) cb.checked = opt.classList.contains("on");
@@ -3686,13 +4296,17 @@ document.getElementById("printSectionOpts").addEventListener("click", function(e
 
 function executePrint() {
   /* 視覺回饋：按鈕暫時顯示「準備列印中…」，防止使用者重複點按 */
+  const PRINT_BTN_LABELS = {
+    preparing: {zh:"⏳ 準備列印中…", id:"⏳ Menyiapkan cetak…", en:"⏳ Preparing to print…", vi:"⏳ Đang chuẩn bị in…"},
+    confirm:   {zh:"🖨 確認列印",    id:"🖨 Cetak",            en:"🖨 Print",              vi:"🖨 In"}
+  };
   const printBtn = document.querySelector(".print-modal-actions .btn-print");
   if (printBtn) {
     printBtn.disabled = true;
-    printBtn.textContent = "⏳ 準備列印中… / Preparing…";
+    printBtn.textContent = PRINT_BTN_LABELS.preparing[lang] || PRINT_BTN_LABELS.preparing.en;
     setTimeout(() => {
       printBtn.disabled = false;
-      printBtn.textContent = "🖨 確認列印 / Print";
+      printBtn.textContent = PRINT_BTN_LABELS.confirm[lang] || PRINT_BTN_LABELS.confirm.en;
     }, 2500);
   }
 
@@ -3760,11 +4374,13 @@ applyLang();
 
 /* After applyLang renders chips, mark the restored ones visually */
 if (_restored) {
+  /* Rebuild med rows */
+  rebuildMedRows();
   /* Vital chips */
   vitalSelected.forEach(k => {
     const chip = document.querySelector(`.vital-chip[data-key="${k}"]`);
     const field = document.getElementById("vf_" + k);
-    if (chip) chip.classList.add("on");
+    if (chip) { chip.classList.add("on"); chip.setAttribute("aria-pressed", "true"); }
     if (field) field.style.display = "block";
   });
   if (vitalSelected.size > 0) {
