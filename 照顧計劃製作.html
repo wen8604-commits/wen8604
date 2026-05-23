@@ -95,6 +95,7 @@ header {
   box-shadow: 0 6px 24px rgba(0,0,0,.16);
 }
 
+/* ── 標題列（還原單純 flex column）── */
 .hd-left {
   display: flex;
   flex-direction: column;
@@ -109,7 +110,39 @@ header h1 {
   letter-spacing: 1px;
   line-height: 1.15;
   text-shadow: 0 2px 12px rgba(0,0,0,.22);
+  white-space: nowrap;
 }
+
+/* 清除鍵：融入 lang-bar，帶橘紅警示色調 */
+.hd-clear-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  background: rgba(200,60,30,.22);
+  border: 1px solid rgba(255,140,100,.35);
+  border-radius: 30px;
+  color: rgba(255,200,180,.92);
+  font-size: .75rem;
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: .3px;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 38px;
+  transition: background .18s, color .18s, border-color .18s, transform .15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hd-clear-btn:hover {
+  background: rgba(220,70,40,.55);
+  border-color: rgba(255,160,130,.6);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.hd-clear-btn:active { transform: scale(.97); }
+.hd-clear-btn svg { flex-shrink: 0; }
 
 /* 品牌徽章：聘外看就上手 */
 .hd-sub {
@@ -906,6 +939,7 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 
   header { gap: 10px; }
   .hd-sub { letter-spacing: 1.8px; padding: 3px 10px 3px 8px; font-size: .72rem; }
+  .hd-clear-btn { flex: 1; min-width: 0; padding: 9px 8px; justify-content: center; font-size: .75rem; }
   .lang-bar { width: 100%; }
   .lang-bar button { flex: 1; min-width: 0; padding: 9px 8px; text-align: center; }
 
@@ -1616,6 +1650,12 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
     <span class="hd-sub" id="appSub">聘外看就上手</span>
   </div>
   <div class="lang-bar">
+    <button class="hd-clear-btn" onclick="clearAll()" title="清除所有資料 / Reset all fields">
+      <svg width="12" height="12" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M2 2l9 9M11 2l-9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span id="hdClearTxt">清除</span>
+    </button>
     <button data-l="zh">純中文</button>
     <button data-l="id" class="active">中文 / Indonesia</button>
     <button data-l="en">中文 / English</button>
@@ -2314,7 +2354,8 @@ const L = {
     disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。",
     t_clean: "打掃清潔注意事項",
     l_clean_hd: "清潔照護注意項目（可複選）",
-    l_clean_note: "清潔特殊說明"
+    l_clean_note: "清潔特殊說明",
+    hdClearTxt: "清除"
   },
   id: {
     title: "照顧計劃製作",
@@ -2374,7 +2415,8 @@ const L = {
     disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nRencana ini dibuat berdasarkan data yang dimasukkan; perawatan aktual harus mengikuti instruksi tenaga medis.",
     t_clean: "打掃清潔注意事項 / Catatan Kebersihan",
     l_clean_hd: "清潔照護注意項目（可複選）/ Pilih item yang berlaku",
-    l_clean_note: "清潔特殊說明 / Instruksi Kebersihan Tambahan"
+    l_clean_note: "清潔特殊說明 / Instruksi Kebersihan Tambahan",
+    hdClearTxt: "清除 / Reset"
   },
   en: {
     title: "照顧計劃製作",
@@ -2434,7 +2476,8 @@ const L = {
     disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nThis plan is generated based on input data; actual care must follow medical professionals' instructions.",
     t_clean: "打掃清潔注意事項 / Housekeeping & Cleaning Notes",
     l_clean_hd: "清潔照護注意項目（可複選）/ Select applicable items",
-    l_clean_note: "清潔特殊說明 / Additional Cleaning Instructions"
+    l_clean_note: "清潔特殊說明 / Additional Cleaning Instructions",
+    hdClearTxt: "清除 / Reset"
   },
   vi: {
     title: "照顧計劃製作",
@@ -2494,7 +2537,8 @@ const L = {
     disclaimer: "本計劃由系統依輸入資料產生，實際照顧仍須遵照醫護人員指示。\nKế hoạch được tạo từ dữ liệu nhập; chăm sóc thực tế phải tuân theo hướng dẫn y tế.",
     t_clean: "打掃清潔注意事項 / Ghi Chú Vệ Sinh",
     l_clean_hd: "清潔照護注意項目（可複選）/ Chọn mục áp dụng",
-    l_clean_note: "清潔特殊說明 / Hướng Dẫn Vệ Sinh Bổ Sung"
+    l_clean_note: "清潔特殊說明 / Hướng Dẫn Vệ Sinh Bổ Sung",
+    hdClearTxt: "清除 / Reset"
   }
 };
 
@@ -3413,7 +3457,7 @@ function applyLang() {
     "l_bp","l_pulse","l_temp","l_spo2","l_resp","l_sugar","l_vital_note",
     "vc_bp","vc_pulse","vc_temp","vc_spo2","vc_resp","vc_sugar","l_vital_select",
     "l_fn","l_frel","l_ftel","l_dn","l_dhosp","l_dtel",
-    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note","t_med"
+    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note","t_med","hdClearTxt"
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
