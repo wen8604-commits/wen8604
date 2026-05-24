@@ -6,6 +6,8 @@
 <title>照顧計劃製作</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   /* ── 色彩識別（沿用暖調，提高對比與精緻度）── */
@@ -535,6 +537,16 @@ textarea { resize: vertical; min-height: 84px; line-height: 1.6; }
 
 @media (hover: hover) {
   .btn-print:hover { filter: brightness(1.07); transform: translateY(-2px); }
+}
+
+.btn-pdf {
+  background: linear-gradient(145deg, #2563c4, #1a4b9e);
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(37,99,196,.28);
+}
+
+@media (hover: hover) {
+  .btn-pdf:hover { filter: brightness(1.07); transform: translateY(-2px); }
 }
 
 /* ── Output / Care Plan ── */
@@ -4337,6 +4349,7 @@ async function generatePlan() {
   document.getElementById("output").innerHTML = `
     <div class="out-actions no-print">
       <button class="btn btn-print" onclick="openPrintModal()">${t.printBtn}</button>
+      <button class="btn btn-pdf" onclick="exportPDF()" id="pdfBtn">📄 ${({zh:"匯出 PDF",id:"Ekspor PDF",en:"Export PDF",vi:"Xuất PDF"}[lang]||"Export PDF")}</button>
       <button class="btn btn-ghost" onclick="document.getElementById('output').innerHTML='';document.getElementById('genBtn').disabled=false">${t.closeBtn}</button>
     </div>
     <div class="view-toggle-bar no-print">
@@ -4692,6 +4705,96 @@ function executePrint() {
       setTimeout(cleanupPrint, 10000);
     });
   });
+}
+
+/* ========================================================
+   Export PDF (html2canvas + jsPDF — works on mobile/tablet)
+======================================================== */
+async function exportPDF() {
+  const planDoc = document.getElementById("planDoc");
+  if (!planDoc) {
+    alert({zh:"請先產生照顧計劃",id:"Harap buat rencana perawatan dulu",en:"Please generate the care plan first",vi:"Vui lòng tạo kế hoạch chăm sóc trước"}[lang]||"Please generate the care plan first");
+    return;
+  }
+
+  const PDF_BTN_LABELS = {
+    preparing: {zh:"⏳ 產生中，請稍候…", id:"⏳ Sedang memproses…", en:"⏳ Generating PDF…", vi:"⏳ Đang tạo PDF…"},
+    done:      {zh:"📄 匯出 PDF",         id:"Ekspor PDF",          en:"Export PDF",        vi:"Xuất PDF"}
+  };
+  const pdfBtn = document.getElementById("pdfBtn");
+  if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.textContent = PDF_BTN_LABELS.preparing[lang] || PDF_BTN_LABELS.preparing.en; }
+
+  try {
+    // Temporarily show print header
+    const printHeader = planDoc.querySelector(".print-doc-header");
+    if (printHeader) printHeader.style.display = "block";
+
+    // Hide no-print elements inside planDoc
+    const noPrintEls = planDoc.querySelectorAll(".no-print");
+    noPrintEls.forEach(el => el.style.visibility = "hidden");
+
+    const canvas = await html2canvas(planDoc, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: "#fbfaf6",
+      windowWidth: Math.min(document.documentElement.scrollWidth, 1080),
+      onclone: function(clonedDoc) {
+        // Ensure Noto Sans fonts are applied in clone
+        const style = clonedDoc.createElement("style");
+        style.textContent = "* { font-family: 'Noto Sans TC', 'Noto Serif TC', sans-serif !important; }";
+        clonedDoc.head.appendChild(style);
+      }
+    });
+
+    // Restore
+    if (printHeader) printHeader.style.display = "none";
+    noPrintEls.forEach(el => el.style.visibility = "");
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const margin = 10; // mm
+    const contentW = pageW - margin * 2;
+
+    const imgData = canvas.toDataURL("image/jpeg", 0.92);
+    const imgW = contentW;
+    const imgH = (canvas.height * imgW) / canvas.width;
+
+    // Multi-page: slice image across pages
+    const usableH = pageH - margin * 2;
+    const totalPages = Math.ceil(imgH / usableH);
+
+    for (let i = 0; i < totalPages; i++) {
+      if (i > 0) pdf.addPage();
+      const srcY = i * usableH;
+      const sliceH = Math.min(usableH, imgH - srcY);
+      // Use a canvas slice for each page
+      const pageCanvas = document.createElement("canvas");
+      const scaleRatio = canvas.width / imgW;
+      pageCanvas.width = canvas.width;
+      pageCanvas.height = sliceH * scaleRatio;
+      const ctx = pageCanvas.getContext("2d");
+      ctx.drawImage(canvas, 0, srcY * scaleRatio, canvas.width, sliceH * scaleRatio, 0, 0, canvas.width, sliceH * scaleRatio);
+      const pageImg = pageCanvas.toDataURL("image/jpeg", 0.92);
+      pdf.addImage(pageImg, "JPEG", margin, margin, imgW, sliceH);
+    }
+
+    // File name with patient name & date
+    const nameEl = document.querySelector(".plan-hd h3");
+    const namePart = (document.getElementById("f_name")?.value.trim() || "照顧計劃").replace(/[\\/:*?"<>|]/g, "_");
+    const d = new Date();
+    const datePart = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+    pdf.save(`${namePart}_照顧計劃_${datePart}.pdf`);
+
+  } catch(err) {
+    console.error("[exportPDF]", err);
+    alert({zh:"PDF 產生失敗，請重試。",id:"Gagal membuat PDF, silakan coba lagi.",en:"Failed to generate PDF. Please try again.",vi:"Tạo PDF thất bại. Vui lòng thử lại."}[lang]||"Failed to generate PDF.");
+  } finally {
+    if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.textContent = "📄 " + (PDF_BTN_LABELS.done[lang] || PDF_BTN_LABELS.done.en); }
+  }
 }
 
 /* ========================================================
