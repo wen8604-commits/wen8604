@@ -2416,6 +2416,7 @@ const L = {
     l_dn: "主治醫師 / Dokter", l_dhosp: "醫院/診所 / Rumah Sakit", l_dtel: "電話 / Telepon",
     genTxt: "產生照顧計劃 / Buat Rencana Perawatan",
     clearBtn: "🗑 清除 / Hapus",
+    t_vital: "生命徵象監測 / Tanda-Tanda Vital",
     l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (kali/mnt)", l_temp:"體溫 / Suhu (°C)",
     l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (kali/mnt)", l_sugar:"血糖 / Gula Darah (mg/dL)",
     l_vital_note:"監測備註 / Catatan Pemantauan",
@@ -3495,6 +3496,11 @@ function escapeHtml(str) {
     .replace(/'/g, "&#39;");
 }
 
+/* 照顧計劃內文專用：escapeHtml 後將【文字】轉為粗體（去除方括號） */
+function boldFmt(str) {
+  return escapeHtml(str).replace(/【([^】]*?)】/g, '<strong>$1</strong>');
+}
+
 const ACTS = [
   {k:"walk",     zh:"戶外散步",   id:"Jalan-jalan",           en:"Outdoor Walk",       vi:"Đi dạo ngoài trời"},
   {k:"exercise", zh:"體操/運動",  id:"Senam/Olahraga",        en:"Exercise/Gymnastics", vi:"Thể dục"},
@@ -3630,8 +3636,8 @@ function renderBathNotes() {
   if (activeBath.length === 0) { wrap.style.display = "none"; wrap.innerHTML = ""; return; }
   wrap.style.display = "block";
   wrap.innerHTML = activeBath.map(c => {
-    const zhText = escapeHtml(c.note.zh);
-    const secText = lang !== "zh" ? escapeHtml(c.note[lang] || "") : "";
+    const zhText = boldFmt(c.note.zh);
+    const secText = lang !== "zh" ? boldFmt(c.note[lang] || "") : "";
     const isBilingual = lang !== "zh" && secText;
     const bodyHtml = isBilingual
       ? `<div class="vital-tip-body" style="display:none;grid-template-columns:1fr 1fr;gap:0;padding:0" data-bilingual="1">
@@ -4011,7 +4017,7 @@ async function generatePlan() {
      若使用者行動能力選「臥床」或「四肢癱瘓/全癱」，但未勾選「壓瘡風險」晶片，
      自動將 pressure（壓瘡風險）的照護指引注入，避免高風險臨床漏洞。 */
   const _mobVal = document.getElementById("f_mob").value;
-  const _forcePresureConds = ["bed", "quad"];
+  const _forcePresureConds = ["bed", "quad", "wheel", "hemi"];
   if (_forcePresureConds.includes(_mobVal)) {
     const _pressureKey = "pressure"; /* CONDS 中壓瘡項目的 key */
     if (!selected.has(_pressureKey)) {
@@ -4220,7 +4226,7 @@ async function generatePlan() {
         <div class="cond-block">
           <div class="cond-block-head"><span class="dot" style="background:#426577"></span>🧠 ${lbl.zh} — ${COG_GUIDE_LBL.zh}</div>
           <div class="cond-block-body" style="grid-template-columns:1fr">
-            <div class="col zh" style="border-right:none">${escapeHtml(ca.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col zh" style="border-right:none">${boldFmt(ca.zh).replace(/\n/g,"<br>")}</div>
           </div>
         </div>`;
     } else {
@@ -4228,8 +4234,8 @@ async function generatePlan() {
         <div class="cond-block">
           <div class="cond-block-head"><span class="dot" style="background:#426577"></span>🧠 ${lbl.zh} / ${lbl[lang] || lbl.en} — 認知照顧指引 / ${COG_GUIDE_LBL[lang] || COG_GUIDE_LBL.en}</div>
           <div class="cond-block-body">
-            <div class="col zh">${escapeHtml(ca.zh).replace(/\n/g,"<br>")}</div>
-            <div class="col sec">${escapeHtml(ca[lang]||ca.en).replace(/\n/g,"<br>")}</div>
+            <div class="col zh">${boldFmt(ca.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col sec">${boldFmt(ca[lang]||ca.en).replace(/\n/g,"<br>")}</div>
           </div>
         </div>`;
     }
@@ -4242,7 +4248,7 @@ async function generatePlan() {
           <div class="cond-block">
             <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)}</div>
             <div class="cond-block-body" style="grid-template-columns:1fr">
-              <div class="col zh" style="border-right:none">${escapeHtml(c.adv.zh).replace(/\n/g, "<br>")}</div>
+              <div class="col zh" style="border-right:none">${boldFmt(c.adv.zh).replace(/\n/g, "<br>")}</div>
             </div>
           </div>`;
       } else {
@@ -4250,8 +4256,8 @@ async function generatePlan() {
           <div class="cond-block">
             <div class="cond-block-head"><span class="dot"></span>${escapeHtml(c.zh)} / ${escapeHtml(c[lang])}</div>
             <div class="cond-block-body">
-              <div class="col zh">${escapeHtml(c.adv.zh).replace(/\n/g, "<br>")}</div>
-              <div class="col sec">${escapeHtml(c.adv[lang]).replace(/\n/g, "<br>")}</div>
+              <div class="col zh">${boldFmt(c.adv.zh).replace(/\n/g, "<br>")}</div>
+              <div class="col sec">${boldFmt(c.adv[lang]).replace(/\n/g, "<br>")}</div>
             </div>
           </div>`;
       }
@@ -4278,8 +4284,8 @@ async function generatePlan() {
     if (activeBath.length > 0) {
       const BATH_SEC_LBL = {zh:"洗澡方式與注意事項", id:"Cara Mandi & Catatan Keselamatan", en:"Bathing Method & Safety Notes", vi:"Phương Pháp Tắm & Lưu Ý"};
       const bathItems = activeBath.map(c => {
-        const zhNote = escapeHtml(c.note.zh);
-        const secNote = lang !== "zh" ? escapeHtml(c.note[lang]||"") : "";
+        const zhNote = boldFmt(c.note.zh);
+        const secNote = lang !== "zh" ? boldFmt(c.note[lang]||"") : "";
         const noteBody = (lang === "zh" || !secNote)
           ? `<div class="col zh" style="border-right:none;white-space:pre-line;font-size:.85rem">${zhNote}</div>`
           : `<div class="col zh" style="white-space:pre-line;font-size:.85rem">${zhNote}</div>
@@ -4364,7 +4370,7 @@ async function generatePlan() {
         <div class="cond-block diet-block">
           <div class="cond-block-head"><span class="dot" style="background:#bd7320"></span>🍽 ${secDietZh} — ${diet}</div>
           <div class="cond-block-body" style="grid-template-columns:1fr">
-            <div class="col zh" style="border-right:none">${escapeHtml(da.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col zh" style="border-right:none">${boldFmt(da.zh).replace(/\n/g,"<br>")}</div>
           </div>
         </div>`;
     } else {
@@ -4372,8 +4378,8 @@ async function generatePlan() {
         <div class="cond-block diet-block">
           <div class="cond-block-head"><span class="dot" style="background:#bd7320"></span>🍽 ${secDietZh} / ${secDietLabels[lang]||"Diet Care Guide"} — ${diet}</div>
           <div class="cond-block-body">
-            <div class="col zh">${escapeHtml(da.zh).replace(/\n/g,"<br>")}</div>
-            <div class="col sec">${escapeHtml(da[lang]||da.en).replace(/\n/g,"<br>")}</div>
+            <div class="col zh">${boldFmt(da.zh).replace(/\n/g,"<br>")}</div>
+            <div class="col sec">${boldFmt(da[lang]||da.en).replace(/\n/g,"<br>")}</div>
           </div>
         </div>`;
     }
@@ -4722,7 +4728,10 @@ function executePrint() {
   closePrintModal();
 
   // 定義清理函式
+  let _printCleaned = false;
   const cleanupPrint = () => {
+    if (_printCleaned) return;
+    _printCleaned = true;
     body.className = body.className.replace(/\bprint-[a-z-]+\b/g, "").trim();
     if (pageStyle) pageStyle.textContent = "";
     window.removeEventListener("afterprint", cleanupPrint);
@@ -4824,7 +4833,6 @@ async function exportPDF() {
     }
 
     // File name with patient name & date
-    const nameEl = document.querySelector(".plan-hd h3");
     const namePart = (document.getElementById("f_name")?.value.trim() || "照顧計劃").replace(/[\\/:*?"<>|]/g, "_");
     const d = new Date();
     const datePart = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
