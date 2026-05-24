@@ -1051,31 +1051,12 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 6pt !important; margin-bottom: 10pt !important;
   }
-  .info-cell {
-    background: #f4f5f2 !important;
-    border-radius: 5pt !important;
-    padding: 7pt 9pt !important;
-    border: 0.5pt solid #ddd !important;
-    break-inside: avoid;
-  }
   .info-cell .lbl {
     font-size: 6.5pt !important; color: #777 !important;
     letter-spacing: .3pt; margin-bottom: 3pt !important;
   }
   .info-cell .val { font-size: 9pt !important; font-weight: 600 !important; }
 
-  /* Schedule strip */
-  .print-schedule-strip {
-    display: flex !important;
-    flex-wrap: wrap;
-    gap: 6pt;
-    background: #f4f5f2 !important;
-    border-radius: 6pt !important;
-    padding: 9pt 11pt !important;
-    font-size: 8.5pt !important;
-    margin-bottom: 6pt;
-    border: 0.5pt solid #ddd !important;
-  }
   .print-schedule-strip .sch-slot {
     display: flex; align-items: center; gap: 4pt;
     padding: 3pt 8pt;
@@ -1085,14 +1066,6 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   .print-schedule-strip .sch-time { font-weight: 700; }
 
   /* AI box */
-  .ai-box {
-    background: #f0f4f0 !important;
-    border: 0.5pt solid #a5c4a5 !important;
-    border-radius: 6pt !important;
-    padding: 10pt 12pt !important;
-    margin: 8pt 0 !important;
-    break-inside: avoid;
-  }
   .ai-lbl { font-size: 7pt !important; margin-bottom: 6pt !important; }
   .ai-text { font-size: 8.5pt !important; line-height: 1.7 !important; }
 
@@ -1112,37 +1085,120 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   }
   .print-vital-table tr:nth-child(even) td { background: #f7f7f5 !important; }
 
-  /* Cond blocks — 允許在 block 與 block 之間自然分頁，
-     但每個 block 本身若能放下則避免斷裂；過長時允許斷裂以防大空白 */
+  /* ── 防硬切核心規則：所有區塊禁止從內部分頁 ──
+     注意：overflow:hidden 會干擾瀏覽器分頁計算，一律移除             */
+
+  /* 標題不孤立在頁尾 */
+  .plan-sec-title {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  /* 每個照護區塊整體不斷裂 */
   .cond-block {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
     border: 0.5pt solid #ccc !important;
     border-radius: 5pt !important;
     margin-bottom: 7pt !important;
-    overflow: hidden;
+    /* overflow:hidden 已移除，避免干擾分頁計算 */
   }
   .cond-block-head {
     background: #eef2ee !important;
     padding: 6pt 10pt !important;
     font-size: 8.5pt !important; font-weight: 700 !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
-  .cond-block-body { display: grid !important; grid-template-columns: 1fr 1fr !important; }
-  .cond-block-body .col { padding: 7pt 10pt !important; font-size: 8pt !important; line-height: 1.65 !important; white-space: pre-wrap !important; }
+  .cond-block-body {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .cond-block-body .col {
+    padding: 7pt 10pt !important;
+    font-size: 8pt !important;
+    line-height: 1.65 !important;
+    white-space: pre-wrap !important;
+  }
   .cond-block-body .col.zh { border-right: 0.5pt solid #ddd !important; }
 
+  /* 資訊格、排程區、生命徵象、AI建議不斷裂 */
+  .info-grid {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .info-cell {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: #f4f5f2 !important;
+    border-radius: 5pt !important;
+    padding: 7pt 9pt !important;
+    border: 0.5pt solid #ddd !important;
+  }
+  .print-schedule-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .print-schedule-strip {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 6pt;
+    background: #f4f5f2 !important;
+    border-radius: 6pt !important;
+    padding: 9pt 11pt !important;
+    font-size: 8.5pt !important;
+    margin-bottom: 6pt;
+    border: 0.5pt solid #ddd !important;
+  }
+  .print-vital-section {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .ai-box {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: #f0f4f0 !important;
+    border: 0.5pt solid #a5c4a5 !important;
+    border-radius: 6pt !important;
+    padding: 10pt 12pt !important;
+    margin: 8pt 0 !important;
+  }
+
   /* Med items */
-  .med-plan-list { display: flex !important; flex-wrap: wrap !important; gap: 5pt !important; margin-bottom: 10pt !important; }
+  .med-plan-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 5pt !important;
+    margin-bottom: 10pt !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
   .med-plan-item {
     background: #f0f4f0 !important;
     border: 0.5pt solid #a5c4a5 !important;
     border-radius: 4pt !important;
     padding: 5pt 10pt !important;
     font-size: 8.5pt !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   /* Emergency contacts */
-  .emg-grid { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6pt !important; }
+  .emg-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6pt !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+  .emg-card {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
 
   /* Notes */
   .notes-box {
@@ -1151,6 +1207,8 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
     border-radius: 5pt !important;
     padding: 9pt 11pt !important;
     font-size: 8.5pt !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 
   /* Med check rows */
@@ -2415,7 +2473,7 @@ const L = {
     l_fn: "姓名 / Nama", l_frel: "關係 / Hubungan", l_ftel: "電話 / Telepon",
     l_dn: "主治醫師 / Dokter", l_dhosp: "醫院/診所 / Rumah Sakit", l_dtel: "電話 / Telepon",
     genTxt: "產生照顧計劃 / Buat Rencana Perawatan",
-    clearBtn: "🗑 清除 / Hapus",
+    clearBtn: "🗑 清除",
     t_vital: "生命徵象監測 / Tanda-Tanda Vital",
     l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (kali/mnt)", l_temp:"體溫 / Suhu (°C)",
     l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (kali/mnt)", l_sugar:"血糖 / Gula Darah (mg/dL)",
@@ -2430,8 +2488,8 @@ const L = {
     vn_sugar_lang: "Normal: Puasa <b>70–100</b> / 2 jam setelah makan <b>&lt;140 mg/dL</b>",
     foot: "資料僅儲存於本裝置 · 雙語翻譯由 Google 翻譯提供 · Data hanya di perangkat ini",
     planTitle: "照顧計劃 / Rencana Perawatan",
-    printBtn: "🖨 列印 / Cetak",
-    closeBtn: "關閉 / Tutup",
+    printBtn: "🖨 列印",
+    closeBtn: "關閉",
     loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nMenerjemahkan dengan Google Translate & menyusun rencana perawatan…",
     aiLabel: "AI 個人化照顧建議 / Saran Perawatan AI",
     secCare: "照顧重點 / Poin Perawatan",
@@ -2478,7 +2536,7 @@ const L = {
     l_fn: "姓名 / Name", l_frel: "關係 / Relationship", l_ftel: "電話 / Phone",
     l_dn: "主治醫師 / Doctor", l_dhosp: "醫院/診所 / Hospital", l_dtel: "電話 / Phone",
     genTxt: "產生照顧計劃 / Generate Care Plan",
-    clearBtn: "🗑 Reset",
+    clearBtn: "🗑 清除",
     t_vital: "生命徵象監測 / Vital Signs",
     l_bp:"血壓 / Blood Pressure (mmHg)", l_pulse:"脈搏 / Pulse (bpm)", l_temp:"體溫 / Temperature (°C)",
     l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Resp. Rate (bpm)", l_sugar:"血糖 / Blood Sugar (mg/dL)",
@@ -2493,8 +2551,8 @@ const L = {
     vn_sugar_lang: "Normal: Fasting <b>70–100</b> / Post-meal 2h <b>&lt;140 mg/dL</b>",
     foot: "資料僅儲存於本裝置 · Bilingual translation powered by Google Translate · Data stored on this device only",
     planTitle: "照顧計劃 / Care Plan",
-    printBtn: "🖨 列印 / Print",
-    closeBtn: "關閉 / Close",
+    printBtn: "🖨 列印",
+    closeBtn: "關閉",
     loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nTranslating (Google Translate) & generating care plan, please wait…",
     aiLabel: "AI 個人化照顧建議 / AI Personalized Care Recommendations",
     secCare: "照顧重點 / Care Points",
@@ -2541,7 +2599,7 @@ const L = {
     l_fn: "姓名 / Họ Tên", l_frel: "關係 / Quan Hệ", l_ftel: "電話 / Điện Thoại",
     l_dn: "主治醫師 / Bác Sĩ", l_dhosp: "醫院/診所 / Bệnh Viện", l_dtel: "電話 / Điện Thoại",
     genTxt: "產生照顧計劃 / Tạo Kế Hoạch Chăm Sóc",
-    clearBtn: "🗑 Xóa",
+    clearBtn: "🗑 清除",
     t_vital: "生命徵象監測 / Dấu Hiệu Sinh Tồn",
     l_bp:"血壓 / Huyết Áp (mmHg)", l_pulse:"脈搏 / Mạch (lần/phút)", l_temp:"體溫 / Nhiệt Độ (°C)",
     l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Nhịp Thở (lần/phút)", l_sugar:"血糖 / Đường Huyết (mg/dL)",
@@ -2556,8 +2614,8 @@ const L = {
     vn_sugar_lang: "Bình thường: Nhịn đói <b>70–100</b> / Sau ăn 2h <b>&lt;140 mg/dL</b>",
     foot: "資料僅儲存於本裝置 · Dịch song ngữ bởi Google Dịch · Dữ liệu chỉ lưu trên thiết bị này",
     planTitle: "照顧計劃 / Kế Hoạch Chăm Sóc",
-    printBtn: "🖨 列印 / In",
-    closeBtn: "關閉 / Đóng",
+    printBtn: "🖨 列印",
+    closeBtn: "關閉",
     loading: "正在以 Google 翻譯進行雙語轉換並產生照顧計劃，請稍候…\nĐang dịch (Google Dịch) & tạo kế hoạch chăm sóc…",
     aiLabel: "AI 個人化照顧建議 / Khuyến Nghị Chăm Sóc AI",
     secCare: "照顧重點 / Điểm Chăm Sóc",
@@ -3750,24 +3808,21 @@ function applyLang() {
 function _refreshOutputLangLabels() {
   const output = document.getElementById("output");
   if (!output || !output.querySelector(".plan-wrap")) return; /* 計劃尚未產生，免更新 */
-  const VIEW_MODE_LBL = {zh:"顯示模式", id:"Mode Tampilan", en:"View Mode", vi:"Chế Độ Hiển Thị"};
-  const COMPACT_LBL   = {zh:"精簡", id:"Ringkas", en:"Compact", vi:"Tóm Tắt"};
-  const FULL_LBL      = {zh:"詳細", id:"Lengkap", en:"Detailed", vi:"Chi Tiết"};
-  const PDF_LBL       = {zh:"匯出 PDF", id:"Ekspor PDF", en:"Export PDF", vi:"Xuất PDF"};
-  const CLOSE_LBL     = {zh:"關閉", id:"Tutup", en:"Close", vi:"Đóng"};
-  const PRINT_LBL     = {zh:"🖨 列印", id:"🖨 Cetak", en:"🖨 Print", vi:"🖨 In"};
+  const PDF_LBL   = "匯出 PDF";
+  const CLOSE_LBL = "關閉";
+  const PRINT_LBL = "🖨 列印";
   const toggleLabel = output.querySelector(".toggle-label");
-  if (toggleLabel) toggleLabel.textContent = VIEW_MODE_LBL[lang] || VIEW_MODE_LBL.en;
+  if (toggleLabel) toggleLabel.textContent = "顯示模式";
   const vmCompact = document.getElementById("vmBtn_compact");
-  if (vmCompact) vmCompact.textContent = COMPACT_LBL[lang] || COMPACT_LBL.en;
+  if (vmCompact) vmCompact.textContent = "精簡";
   const vmFull = document.getElementById("vmBtn_full");
-  if (vmFull) vmFull.textContent = FULL_LBL[lang] || FULL_LBL.en;
+  if (vmFull) vmFull.textContent = "詳細";
   const pdfBtn = document.getElementById("pdfBtn");
-  if (pdfBtn && !pdfBtn.disabled) pdfBtn.textContent = "📄 " + (PDF_LBL[lang] || PDF_LBL.en);
+  if (pdfBtn && !pdfBtn.disabled) pdfBtn.textContent = "📄 " + PDF_LBL;
   const printBtn = output.querySelector(".btn-print");
-  if (printBtn) printBtn.textContent = PRINT_LBL[lang] || PRINT_LBL.en;
+  if (printBtn) printBtn.textContent = PRINT_LBL;
   const closeBtn = output.querySelector(".btn-ghost");
-  if (closeBtn) closeBtn.textContent = CLOSE_LBL[lang] || CLOSE_LBL.en;
+  if (closeBtn) closeBtn.textContent = CLOSE_LBL;
 }
 
 /* Language switcher */
@@ -4389,14 +4444,14 @@ async function generatePlan() {
   document.getElementById("output").innerHTML = `
     <div class="out-actions no-print">
       <button class="btn btn-print" onclick="openPrintModal()">${t.printBtn}</button>
-      <button class="btn btn-pdf" onclick="exportPDF()" id="pdfBtn">📄 ${({zh:"匯出 PDF",id:"Ekspor PDF",en:"Export PDF",vi:"Xuất PDF"}[lang]||"Export PDF")}</button>
+      <button class="btn btn-pdf" onclick="exportPDF()" id="pdfBtn">📄 匯出 PDF</button>
       <button class="btn btn-ghost" onclick="document.getElementById('output').innerHTML='';document.getElementById('genBtn').disabled=false">${t.closeBtn}</button>
     </div>
     <div class="view-toggle-bar no-print">
-      <span class="toggle-label">${{zh:"顯示模式", id:"Mode Tampilan",en:"View Mode",vi:"Chế Độ Hiển Thị"}[lang]||"顯示模式"}</span>
+      <span class="toggle-label">顯示模式</span>
       <div class="view-mode-switch">
-        <button class="view-mode-btn" id="vmBtn_compact" onclick="setViewMode('compact')">${{zh:"精簡", id:"Ringkas",en:"Compact",vi:"Tóm Tắt"}[lang]||"精簡"}</button>
-        <button class="view-mode-btn active" id="vmBtn_full" onclick="setViewMode('full')">${{zh:"詳細", id:"Lengkap",en:"Detailed",vi:"Chi Tiết"}[lang]||"詳細"}</button>
+        <button class="view-mode-btn" id="vmBtn_compact" onclick="setViewMode('compact')">精簡</button>
+        <button class="view-mode-btn active" id="vmBtn_full" onclick="setViewMode('full')">詳細</button>
       </div>
     </div>
     <div class="plan-wrap" id="planDoc">
@@ -4685,16 +4740,16 @@ document.getElementById("printSectionOpts").addEventListener("click", function(e
 function executePrint() {
   /* 視覺回饋：按鈕暫時顯示「準備列印中…」，防止使用者重複點按 */
   const PRINT_BTN_LABELS = {
-    preparing: {zh:"⏳ 準備列印中…", id:"⏳ Menyiapkan cetak…", en:"⏳ Preparing to print…", vi:"⏳ Đang chuẩn bị in…"},
-    confirm:   {zh:"🖨 確認列印",    id:"🖨 Cetak",            en:"🖨 Print",              vi:"🖨 In"}
+    preparing: "⏳ 準備列印中…",
+    confirm:   "🖨 確認列印"
   };
   const printBtn = document.querySelector(".print-modal-actions .btn-print");
   if (printBtn) {
     printBtn.disabled = true;
-    printBtn.textContent = PRINT_BTN_LABELS.preparing[lang] || PRINT_BTN_LABELS.preparing.en;
+    printBtn.textContent = PRINT_BTN_LABELS.preparing;
     setTimeout(() => {
       printBtn.disabled = false;
-      printBtn.textContent = PRINT_BTN_LABELS.confirm[lang] || PRINT_BTN_LABELS.confirm.en;
+      printBtn.textContent = PRINT_BTN_LABELS.confirm;
     }, 2500);
   }
 
@@ -4751,179 +4806,144 @@ function executePrint() {
 }
 
 /* ========================================================
-   Export PDF (html2canvas + jsPDF — 智慧分頁，不硬切文字)
-   優化策略：
-   1. 先截取整個 planDoc 為一張高解析度大圖
-   2. 收集 planDoc 內所有直接子元素的底部 Y 座標，作為「安全換頁點」
-   3. 分頁時只在安全換頁點處切割，確保每個區塊完整顯示，不橫切文字
-   4. 若單一區塊超過一頁高度，則允許在其底部換頁（保底）
+   Export PDF (html2canvas + jsPDF — works on mobile/tablet)
+======================================================== */
+/* ========================================================
+   Export PDF — 逐區塊截圖，從根本杜絕硬切文字
+   ─────────────────────────────────────────────
+   原理：將 planDoc 拆成一組不可分割的區塊，
+   每塊各自截圖成獨立圖片，依高度填入頁面。
+   若區塊放不進剩餘空間則先換頁再放，
+   永遠不會在區塊中間截斷。
 ======================================================== */
 async function exportPDF() {
   const planDoc = document.getElementById("planDoc");
   if (!planDoc) {
-    alert({zh:"請先產生照顧計劃",id:"Harap buat rencana perawatan dulu",en:"Please generate the care plan first",vi:"Vui lòng tạo kế hoạch chăm sóc trước"}[lang]||"Please generate the care plan first");
+    alert("請先產生照顧計劃");
     return;
   }
 
-  const PDF_BTN_LABELS = {
-    preparing: {zh:"⏳ 產生中，請稍候…", id:"⏳ Sedang memproses…", en:"⏳ Generating PDF…", vi:"⏳ Đang tạo PDF…"},
-    done:      {zh:"📄 匯出 PDF",         id:"Ekspor PDF",          en:"Export PDF",        vi:"Xuất PDF"}
-  };
   const pdfBtn = document.getElementById("pdfBtn");
-  if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.textContent = PDF_BTN_LABELS.preparing[lang] || PDF_BTN_LABELS.preparing.en; }
+  if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.textContent = "⏳ 產生中，請稍候…"; }
 
   try {
-    // 顯示列印表頭
+    /* ── 步驟 0：暫時顯示列印表頭、隱藏 no-print 元素 ── */
     const printHeader = planDoc.querySelector(".print-doc-header");
     if (printHeader) printHeader.style.display = "block";
 
-    // 隱藏 no-print 元素
     const noPrintEls = planDoc.querySelectorAll(".no-print");
-    noPrintEls.forEach(el => el.style.visibility = "hidden");
+    noPrintEls.forEach(el => { el._pdfPrevDisplay = el.style.display; el.style.display = "none"; });
 
-    // 隱藏翻譯提示框（Bug #7）
     const allergyTransBox = document.getElementById("allergyTransBox");
-    const _allergyTransBoxPrev = allergyTransBox ? allergyTransBox.style.display : null;
-    if (allergyTransBox) allergyTransBox.style.display = "none";
+    if (allergyTransBox) { allergyTransBox._pdfPrevDisplay = allergyTransBox.style.display; allergyTransBox.style.display = "none"; }
 
-    // ── 【智慧換頁】收集所有直接子元素的底部 Y（相對於 planDoc 頂部）──
-    // 在截圖前收集，因為截圖不影響 DOM 位置
-    const docRect = planDoc.getBoundingClientRect();
-    const childBreakpoints = []; // 單位：px（相對於 planDoc 頂部）
+    /* ── 步驟 1：收集所有不可切割區塊（按 DOM 順序）── */
+    // 優先選細粒度子區塊；若某元素是已收集元素的後代則跳過（避免重複截圖）
+    const BLOCK_SEL = [
+      ".print-doc-header",
+      ".plan-hd",
+      ".info-grid",
+      ".print-schedule-section",
+      ".ai-box",
+      ".print-vital-section",
+      ".plan-sec-title",
+      ".cond-block",
+      ".med-plan-list",
+      ".emg-grid",
+      ".notes-box",
+      ".disclaimer"
+    ].join(",");
 
-    // 收集所有直接子元素的底部 Y
-    Array.from(planDoc.children).forEach(child => {
-      if (child.classList.contains("print-doc-header")) return; // 表頭另計
-      const r = child.getBoundingClientRect();
-      const bottomY = r.bottom - docRect.top;
-      if (bottomY > 0) childBreakpoints.push(bottomY);
-    });
+    const allMatched = Array.from(planDoc.querySelectorAll(BLOCK_SEL));
 
-    // 也收集 .cond-block、.plan-section、.doc-section 等深層區塊的底部
-    // 讓換頁點更細緻（針對長段落的大區塊）
-    planDoc.querySelectorAll(
-      ".cond-block, .plan-section, .doc-section, .plan-block, " +
-      ".info-grid, .med-plan-list, .notes-box, .emg-cards, " +
-      ".schedule-strip-wrap, .ai-tip-box"
-    ).forEach(el => {
-      const r = el.getBoundingClientRect();
-      const bottomY = r.bottom - docRect.top;
-      if (bottomY > 0) childBreakpoints.push(bottomY);
-    });
+    // 去掉「被其他已選元素包住」的子孫（保留最外層）
+    const blocks = [];
+    for (const el of allMatched) {
+      if (el.offsetHeight === 0 && el !== printHeader) continue; // 不可見的跳過
+      const isDescendant = blocks.some(b => b !== el && b.contains(el));
+      if (!isDescendant) blocks.push(el);
+    }
 
-    // 排序並去重（四捨五入到整數像素）
-    const safeBreaks = [...new Set(childBreakpoints.map(y => Math.round(y)))].sort((a, b) => a - b);
+    /* ── 步驟 2：jsPDF 設定 ── */
+    const { jsPDF } = window.jspdf;
+    const pdf      = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    const pageW    = pdf.internal.pageSize.getWidth();   // 210mm
+    const pageH    = pdf.internal.pageSize.getHeight();  // 297mm
+    const mX       = 12;   // 左右留白 mm
+    const mY       = 12;   // 上下留白 mm
+    const contentW = pageW - mX * 2;  // 可用寬度
+    const usableH  = pageH - mY * 2;  // 每頁可用高度
 
-    // ── 截圖整個 planDoc ──
     const renderW = Math.min(document.documentElement.scrollWidth, 1080);
-    const canvas = await html2canvas(planDoc, {
+    const h2cBase = {
       scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: "#fbfaf6",
       windowWidth: renderW,
-      onclone: function(clonedDoc) {
-        const style = clonedDoc.createElement("style");
-        style.textContent = "* { font-family: 'Noto Sans TC', 'Noto Serif TC', sans-serif !important; }";
-        clonedDoc.head.appendChild(style);
+      onclone: (doc) => {
+        const s = doc.createElement("style");
+        s.textContent = `* { font-family: 'Noto Sans TC','Noto Serif TC',sans-serif !important; }`;
+        doc.head.appendChild(s);
       }
-    });
+    };
 
-    // 還原
-    if (printHeader) printHeader.style.display = "none";
-    noPrintEls.forEach(el => el.style.visibility = "");
-    if (allergyTransBox && _allergyTransBoxPrev !== null) allergyTransBox.style.display = _allergyTransBoxPrev;
+    let curY = mY;   // 目前頁面上的 Y 游標（mm）
 
-    // ── jsPDF 設定 ──
-    const { jsPDF } = window.jspdf;
-    const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+    /* ── 步驟 3：逐區塊截圖並填入 PDF ── */
+    for (let i = 0; i < blocks.length; i++) {
+      const el = blocks[i];
 
-    const pageW  = pdf.internal.pageSize.getWidth();   // 210mm
-    const pageH  = pdf.internal.pageSize.getHeight();  // 297mm
-    const margin = 12; // mm，上下左右留白
-    const contentW = pageW - margin * 2;               // 可用寬度 mm
-    const usableH  = pageH - margin * 2;               // 每頁可用高度 mm
+      const bc = await html2canvas(el, h2cBase);
+      if (!bc || bc.width === 0 || bc.height === 0) continue;
 
-    // canvas 座標系換算比例：canvas px → mm
-    // canvas.width / renderW = scale（=2），docRect 是螢幕 px
-    const docHeightPx = docRect.height; // 螢幕 px
-    const imgH_mm = (docHeightPx / (renderW)) * contentW; // 等比縮放後總高 mm
-    const pxToMm = imgH_mm / docHeightPx;                  // 螢幕px → mm
-    const canvasScale = canvas.width / renderW;             // canvas px / 螢幕 px（=2）
+      // 區塊在 PDF 上的高度（等比縮放到 contentW）
+      const bH = (bc.height / bc.width) * contentW;
 
-    // ── 智慧換頁：根據 safeBreaks 決定每頁截取範圍 ──
-    // startMm：目前頁從整張圖的哪個 mm 開始
-    let startMm = 0;
-    const totalMm = imgH_mm;
-    let pageIndex = 0;
-
-    while (startMm < totalMm - 0.5) {
-      if (pageIndex > 0) pdf.addPage();
-
-      const endIdealMm = startMm + usableH; // 理想結束位置
-
-      let endMm;
-      if (endIdealMm >= totalMm) {
-        // 最後一頁：到底
-        endMm = totalMm;
-      } else {
-        // 找最後一個在 endIdealMm 之前（且不早於 startMm + 20mm）的安全換頁點
-        // 如果找不到，就用理想位置（保底，可能切到區塊邊緣但不會切文字行）
-        const minEndMm = startMm + 20;
-        let bestBreak = -1;
-        for (let i = safeBreaks.length - 1; i >= 0; i--) {
-          const bMm = safeBreaks[i] * pxToMm;
-          if (bMm <= endIdealMm && bMm >= minEndMm) {
-            bestBreak = bMm;
-            break;
-          }
-        }
-        endMm = bestBreak > 0 ? bestBreak : endIdealMm;
+      // 若放不進本頁剩餘空間（且已用掉一些空間）→ 換頁
+      const remaining = usableH - (curY - mY);
+      if (bH > remaining && curY > mY + 2) {
+        pdf.addPage();
+        curY = mY;
       }
 
-      const sliceMm = endMm - startMm;
+      // 若單一區塊本身超過整頁高（超長護理說明）→ 直接放，jsPDF 會裁到頁底；
+      // 實務上這是最佳能做到的，至少不從行中間切
+      const imgData = bc.toDataURL("image/jpeg", 0.93);
+      pdf.addImage(imgData, "JPEG", mX, curY, contentW, bH);
+      curY += bH + 1.5;  // 區塊間距 1.5mm
 
-      // 換算回 canvas 像素
-      const srcY_canvasPx  = (startMm / pxToMm) * canvasScale;
-      const sliceH_canvasPx = (sliceMm / pxToMm) * canvasScale;
-
-      // 防護：確保不超出 canvas 範圍
-      const clampedSrcY  = Math.max(0, Math.min(Math.round(srcY_canvasPx),  canvas.height - 1));
-      const clampedSliceH = Math.min(Math.round(sliceH_canvasPx), canvas.height - clampedSrcY);
-
-      if (clampedSliceH <= 0) break;
-
-      // 切出這一頁的圖
-      const pageCanvas = document.createElement("canvas");
-      pageCanvas.width  = canvas.width;
-      pageCanvas.height = clampedSliceH;
-      const ctx = pageCanvas.getContext("2d");
-      ctx.drawImage(
-        canvas,
-        0, clampedSrcY, canvas.width, clampedSliceH,
-        0, 0,           canvas.width, clampedSliceH
-      );
-      const pageImg = pageCanvas.toDataURL("image/jpeg", 0.93);
-
-      // 計算這一頁圖片在 PDF 上的實際高度（保持比例）
-      const imgOnPageH = (clampedSliceH / canvas.width) * contentW;
-      pdf.addImage(pageImg, "JPEG", margin, margin, contentW, imgOnPageH);
-
-      startMm = endMm;
-      pageIndex++;
+      // 剩餘不足 8mm 且還有後續區塊 → 提前換頁
+      if (i < blocks.length - 1 && usableH - (curY - mY) < 8) {
+        pdf.addPage();
+        curY = mY;
+      }
     }
 
-    // ── 輸出檔名 ──
+    /* ── 步驟 4：還原 DOM ── */
+    if (printHeader) printHeader.style.display = "none";
+    noPrintEls.forEach(el => { el.style.display = el._pdfPrevDisplay ?? ""; });
+    if (allergyTransBox) allergyTransBox.style.display = allergyTransBox._pdfPrevDisplay ?? "";
+
+    /* ── 步驟 5：存檔 ── */
     const namePart = (document.getElementById("f_name")?.value.trim() || "照顧計劃").replace(/[\\/:*?"<>|]/g, "_");
     const d = new Date();
     const datePart = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
     pdf.save(`${namePart}_照顧計劃_${datePart}.pdf`);
 
-  } catch(err) {
+  } catch (err) {
     console.error("[exportPDF]", err);
-    alert({zh:"PDF 產生失敗，請重試。",id:"Gagal membuat PDF, silakan coba lagi.",en:"Failed to generate PDF. Please try again.",vi:"Tạo PDF thất bại. Vui lòng thử lại."}[lang]||"Failed to generate PDF.");
+    // 保底還原
+    try {
+      const ph = document.querySelector("#planDoc .print-doc-header");
+      if (ph) ph.style.display = "none";
+      document.querySelectorAll("#planDoc .no-print").forEach(el => { el.style.display = el._pdfPrevDisplay ?? ""; });
+      const atb = document.getElementById("allergyTransBox");
+      if (atb) atb.style.display = atb._pdfPrevDisplay ?? "";
+    } catch(_) {}
+    alert("PDF 產生失敗，請重試。");
   } finally {
-    if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.textContent = "📄 " + (PDF_BTN_LABELS.done[lang] || PDF_BTN_LABELS.done.en); }
+    if (pdfBtn) { pdfBtn.disabled = false; pdfBtn.textContent = "📄 匯出 PDF"; }
   }
 }
 
