@@ -1549,8 +1549,8 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 .plan-wrap.compact .cond-block-body { grid-template-columns: 1fr; }
 .plan-wrap.compact .cond-block-body .col.zh { border-right: none; }
 .plan-wrap.compact .print-vital-section { display: none; }
-/* 精簡模式只隱藏一般備註，保留警示框（過敏、翻譯失敗）可見 */
-.plan-wrap.compact .notes-box:not([style*="fff3e8"]):not([style*="f0f8f0"]) { display: none; }
+/* 精簡模式只隱藏一般備註，保留警示框（過敏、翻譯失敗）與清潔備註可見 */
+.plan-wrap.compact .notes-box:not([style*="fff3e8"]):not([style*="f0f8f0"]):not(.clean-note-box) { display: none; }
 
 /* ── Med Checkbox (藥物已給藥勾選) ── */
 .med-check-row {
@@ -1674,7 +1674,7 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       </div>
       <div class="row3">
         <div><label id="l_name">姓名 / Name</label><input id="f_name" placeholder="王○○"></div>
-        <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120" step="1"></div>
+        <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120" step="1" inputmode="numeric" autocomplete="off"></div>
         <div>
           <label id="l_sex">性別 / Gender</label>
           <select id="f_sex"></select>
@@ -2037,6 +2037,14 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       <div class="chips" id="cleanChips"></div>
       <label id="l_clean_note" style="margin-top:16px">清潔特殊說明 / Additional Cleaning Instructions</label>
       <textarea id="f_clean_note" placeholder="例：病患過敏漂白水，請改用稀釋酒精消毒；浴室需每日清潔，地板保持乾燥防跌倒。"></textarea>
+
+      <!-- 洗澡方式與注意事項 -->
+      <div style="margin-top:20px;padding-top:16px;border-top:1.5px solid var(--soft)">
+        <div style="font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px" id="l_bath_hd">🛁 洗澡方式與注意事項 / Bathing Method & Safety Notes</div>
+        <div style="font-size:.82rem;color:var(--ink-soft);margin-bottom:10px" id="l_bath_sub">請選擇適用的洗澡方式（可複選），選取後展開查看注意事項 / Select bathing method(s) to view safety notes</div>
+        <div class="chips" id="bathChips"></div>
+        <div id="bathNotesWrap" style="display:none;margin-top:12px"></div>
+      </div>
     </div>
 
     <!-- Action bar -->
@@ -2122,7 +2130,7 @@ function saveToStorage() {
       "f_cohabit","f_eatout","f_env_note","f_sch_note",
       "f_wake","f_breakfast","f_lunch","f_nap","f_dinner","f_bedtime",
       "f_fn","f_frel","f_ftel","f_dn","f_dhosp","f_dtel",
-      "f_vital_note","f_clean_note" // 移除了 f_bp, f_pulse 等不存在的 input
+      "f_vital_note","f_clean_note"
     ];
     const fieldValues = {};
     TEXT_FIELDS.forEach(id => {
@@ -2136,6 +2144,7 @@ function saveToStorage() {
       actSelected:   [...actSelected],
       cleanSelected: [...cleanSelected],
       vitalSelected: [...vitalSelected],
+      bathSelected:  [...bathSelected],
       meds:          meds.map(m=>({...m})),
       savedAt: Date.now()
     };
@@ -2185,6 +2194,7 @@ function loadFromStorage() {
     if (draft.actSelected)   draft.actSelected.forEach(k => actSelected.add(k));
     if (draft.cleanSelected) draft.cleanSelected.forEach(k => cleanSelected.add(k));
     if (draft.vitalSelected) draft.vitalSelected.forEach(k => vitalSelected.add(k));
+    if (draft.bathSelected)  draft.bathSelected.forEach(k => bathSelected.add(k));
 
     /* Restore medication list */
     if (Array.isArray(draft.meds)) {
@@ -2289,7 +2299,11 @@ function rebuildMedRows(langOnly) {
     return;
   }
   list.innerHTML = "";
-  meds.forEach(m => addMed(m));
+  meds.forEach(m => {
+    // 確保每筆藥物都有 id（舊格式相容）
+    if (!m.id) m.id = "med_" + Date.now() + "_" + Math.random().toString(36).slice(2,6);
+    addMed(m);
+  });
 } /* declared early — used in clearAll */
 
 /* ========================================================
@@ -2355,6 +2369,8 @@ const L = {
     t_clean: "打掃清潔注意事項",
     l_clean_hd: "清潔照護注意項目（可複選）",
     l_clean_note: "清潔特殊說明",
+    l_bath_hd: "🛁 洗澡方式與注意事項",
+    l_bath_sub: "請選擇適用的洗澡方式（可複選），選取後展開查看注意事項",
     hdClearTxt: "清除"
   },
   id: {
@@ -2387,8 +2403,7 @@ const L = {
     l_fn: "姓名 / Nama", l_frel: "關係 / Hubungan", l_ftel: "電話 / Telepon",
     l_dn: "主治醫師 / Dokter", l_dhosp: "醫院/診所 / Rumah Sakit", l_dtel: "電話 / Telepon",
     genTxt: "產生照顧計劃 / Buat Rencana Perawatan",
-    clearBtn: "🗑 清除",
-    t_vital: "生命徵象監測 / Tanda-Tanda Vital",
+    clearBtn: "🗑 清除 / Hapus",
     l_bp:"血壓 / Tekanan Darah (mmHg)", l_pulse:"脈搏 / Nadi (kali/mnt)", l_temp:"體溫 / Suhu (°C)",
     l_spo2:"血氧 SpO₂ (%)", l_resp:"呼吸 / Pernapasan (kali/mnt)", l_sugar:"血糖 / Gula Darah (mg/dL)",
     l_vital_note:"監測備註 / Catatan Pemantauan",
@@ -2416,6 +2431,8 @@ const L = {
     t_clean: "打掃清潔注意事項 / Catatan Kebersihan",
     l_clean_hd: "清潔照護注意項目（可複選）/ Pilih item yang berlaku",
     l_clean_note: "清潔特殊說明 / Instruksi Kebersihan Tambahan",
+    l_bath_hd: "🛁 洗澡方式與注意事項 / Cara Mandi & Keselamatan",
+    l_bath_sub: "請選擇適用的洗澡方式（可複選）/ Pilih metode mandi yang berlaku",
     hdClearTxt: "清除"
   },
   en: {
@@ -2477,6 +2494,8 @@ const L = {
     t_clean: "打掃清潔注意事項 / Housekeeping & Cleaning Notes",
     l_clean_hd: "清潔照護注意項目（可複選）/ Select applicable items",
     l_clean_note: "清潔特殊說明 / Additional Cleaning Instructions",
+    l_bath_hd: "🛁 洗澡方式與注意事項 / Bathing Method & Safety Notes",
+    l_bath_sub: "請選擇適用的洗澡方式（可複選）/ Select bathing method(s) to view safety notes",
     hdClearTxt: "清除"
   },
   vi: {
@@ -2538,6 +2557,8 @@ const L = {
     t_clean: "打掃清潔注意事項 / Ghi Chú Vệ Sinh",
     l_clean_hd: "清潔照護注意項目（可複選）/ Chọn mục áp dụng",
     l_clean_note: "清潔特殊說明 / Hướng Dẫn Vệ Sinh Bổ Sung",
+    l_bath_hd: "🛁 洗澡方式與注意事項 / Phương Pháp Tắm & Lưu Ý",
+    l_bath_sub: "請選擇適用的洗澡方式（可複選）/ Chọn phương pháp tắm để xem lưu ý",
     hdClearTxt: "清除"
   }
 };
@@ -3160,6 +3181,148 @@ const CLEAN_ITEMS = [
 
 
 /* ========================================================
+   Bath Methods Data
+======================================================== */
+const BATH_METHODS = [
+  { k:"shower",
+    zh:"🚿 淋浴（扶手輔助）", id:"🚿 Mandi Shower (dengan pegangan)", en:"🚿 Shower (with grab bars)", vi:"🚿 Tắm vòi sen (có tay vịn)",
+    note:{
+      zh:`【淋浴注意事項】
+• 浴室地板鋪防滑墊，確認固定穩妥後再讓患者進入
+• 水溫預先調好（37–40°C），避免患者自行調整燙傷
+• 扶手牢固，淋浴中照顧者全程守候，不可離開
+• 清潔順序：臉→頭→身體→私處→雙腳（由上至下）
+• 沐浴後立即擦乾身體，尤其腋下、鼠蹊部、趾縫
+• 注意避免進水至耳道（中耳炎風險）
+• 空腹或飽食後1小時內勿洗澡；低血壓/心臟病患者須特別注意`,
+      id:`【Catatan Mandi Shower】
+• Pasang keset anti-slip; pastikan stabil sebelum pasien masuk
+• Sesuaikan suhu air terlebih dahulu (37–40°C)
+• Pegangan tangan harus kuat; pendamping harus selalu ada
+• Urutan: wajah→kepala→tubuh→area pribadi→kaki (dari atas ke bawah)
+• Segera keringkan setelah mandi, terutama ketiak, selangkangan, sela jari kaki
+• Jangan mandi dalam keadaan perut kosong atau 1 jam setelah makan penuh`,
+      en:`【Shower Safety Notes】
+• Place non-slip mat; confirm it's secure before patient enters
+• Pre-set water temperature (37–40°C); do not let patient adjust the water themselves
+• Grab bars must be secure; caregiver must stay throughout the shower
+• Cleaning order: face→head→body→private areas→feet (top to bottom)
+• Dry body thoroughly immediately after, especially armpits, groin, between toes
+• Avoid water entering the ear canal (middle ear infection risk)
+• Avoid bathing when fasting or within 1 hour of a full meal; extra caution for hypotension/cardiac patients`,
+      vi:`【Lưu ý khi tắm vòi sen】
+• Trải thảm chống trượt; kiểm tra chắc chắn trước khi bệnh nhân vào
+• Điều chỉnh nhiệt độ nước trước (37–40°C)
+• Tay vịn phải chắc chắn; người chăm sóc phải có mặt suốt quá trình
+• Thứ tự: mặt→đầu→thân→vùng kín→chân (từ trên xuống dưới)
+• Lau khô ngay sau tắm, đặc biệt nách, bẹn, kẽ ngón chân
+• Tránh nước vào ống tai; không tắm lúc đói hoặc sau ăn no 1 giờ`}
+  },
+  { k:"shower_chair",
+    zh:"🪑 坐式淋浴（淋浴椅）", id:"🪑 Shower Duduk (kursi mandi)", en:"🪑 Seated Shower (shower chair)", vi:"🪑 Tắm ngồi (ghế tắm)",
+    note:{
+      zh:`【坐式淋浴注意事項】
+• 淋浴椅須四腳防滑、承重足夠（請確認廠商規格）；使用前檢查螺絲鬆緊
+• 坐定後再開水，水溫37–40°C，手持蓮蓬頭由下往上沖背部
+• 患側或手術側避免直接沖水，用溫毛巾擦拭代替
+• 私處清潔由照顧者或患者自行完成（依能力）；保護患者隱私，保持房門關閉
+• 洗完頭髮確實吹乾（尤其老人），避免著涼
+• 整個沐浴過程照顧者不可離開視線範圍`,
+      id:`【Catatan Shower Duduk】
+• Kursi mandi harus 4 kaki anti-slip, beban cukup; periksa sekrup sebelum digunakan
+• Dudukkan dulu baru alirkan air; suhu 37–40°C; shower head genggam, semprotkan dari bawah ke atas untuk punggung
+• Hindari menyiram langsung ke sisi lemah/operasi — lap dengan handuk hangat
+• Jaga privasi pasien; tutup pintu saat mandi
+• Segera keringkan rambut (terutama lansia) setelah keramas`,
+      en:`【Seated Shower Safety Notes】
+• Shower chair must have four non-slip feet and sufficient weight capacity; check screws before each use
+• Seat patient first, then turn on water; temperature 37–40°C; use handheld showerhead, spray back from bottom up
+• Avoid direct water spray on affected/surgical side — use warm towel instead
+• Protect patient privacy; keep door closed
+• Dry hair thoroughly immediately after washing (especially for elderly) to prevent chills
+• Caregiver must remain within visual range throughout`,
+      vi:`【Lưu ý tắm ngồi】
+• Ghế tắm cần 4 chân chống trượt, đủ chịu lực; kiểm tra ốc vít trước khi dùng
+• Cho ngồi trước rồi mới mở nước; nhiệt độ 37–40°C; dùng vòi tay, xịt lưng từ dưới lên
+• Tránh xịt trực tiếp vào bên yếu/phẫu thuật — dùng khăn ấm thay thế
+• Bảo vệ sự riêng tư của bệnh nhân; đóng cửa khi tắm
+• Sấy khô tóc ngay sau khi gội (đặc biệt người cao tuổi)`}
+  },
+  { k:"sponge_bath",
+    zh:"🧴 擦澡（床上擦澡）", id:"🧴 Lap Tubuh (Mandi Seka di Tempat Tidur)", en:"🧴 Sponge Bath (bed bath)", vi:"🧴 Lau người (tắm lau trên giường)",
+    note:{
+      zh:`【床上擦澡注意事項】
+• 準備2盆溫水（一盆擦臉/上身，一盆擦私處/下身），水溫44–46°C（手背試溫舒適為準）
+• 關閉窗戶冷氣，保持室溫不低於24°C，預防受寒
+• 擦拭順序：臉→頸→上肢（遠端→近端）→胸腹→背部→下肢→私處（最後擦）
+• 擦拭力道適中，每部位擦完立即蓋上毛巾保暖，再進行下一部位
+• 私處擦拭由前往後（預防感染）；女性每次使用新的棉球/紗布
+• 觀察皮膚：有無紅疹、乾燥脫屑、壓紅（骨突處特別留意）
+• 擦澡後協助更換乾淨衣物，動作輕柔避免拉扯`,
+      id:`【Catatan Mandi Seka】
+• Siapkan 2 baskom air hangat (wajah/tubuh atas; area pribadi/bawah); suhu 44–46°C (cek dengan punggung tangan)
+• Tutup jendela/AC; pertahankan suhu ruangan ≥24°C
+• Urutan: wajah→leher→lengan (distal→proksimal)→dada/perut→punggung→kaki→area pribadi (terakhir)
+• Keringkan dan tutup setiap bagian sebelum pindah ke bagian berikutnya
+• Area pribadi dari depan ke belakang (cegah infeksi); wanita: gunakan bola kapas/kasa baru setiap kali
+• Periksa kulit: ruam, kering, kemerahan (terutama tonjolan tulang)
+• Bantu ganti pakaian bersih setelah selesai`,
+      en:`【Sponge Bath Safety Notes】
+• Prepare 2 basins of warm water (one for face/upper body, one for private areas/lower body); temperature 44–46°C (test on back of hand)
+• Close windows and AC; maintain room temperature ≥24°C to prevent chilling
+• Cleaning order: face→neck→arms (distal to proximal)→chest/abdomen→back→legs→private areas (last)
+• Dry and cover each area before moving to the next
+• Private areas: wipe front to back (prevent infection); for female patients, use a fresh cotton ball/gauze each time
+• Inspect skin: rashes, dryness, pressure redness (pay extra attention to bony prominences)
+• Help patient change into clean clothing after bath, handling gently`,
+      vi:`【Lưu ý tắm lau】
+• Chuẩn bị 2 chậu nước ấm (mặt/thân trên; vùng kín/thân dưới); nhiệt độ 44–46°C (thử bằng mu bàn tay)
+• Đóng cửa sổ/máy lạnh; giữ nhiệt độ phòng ≥24°C
+• Thứ tự: mặt→cổ→tay (xa→gần)→ngực/bụng→lưng→chân→vùng kín (cuối cùng)
+• Lau khô và đắp khăn từng vùng trước khi chuyển sang vùng tiếp theo
+• Vùng kín: lau từ trước ra sau (phòng nhiễm khuẩn); bệnh nhân nữ: dùng bông/gạc mới mỗi lần
+• Kiểm tra da: phát ban, khô, đỏ vùng xương (đặc biệt chú ý)
+• Hỗ trợ thay quần áo sạch sau khi lau, thao tác nhẹ nhàng`}
+  },
+  { k:"tub_bath",
+    zh:"🛁 泡澡（浴缸）", id:"🛁 Mandi Berendam (Bathtub)", en:"🛁 Tub Bath (bathtub)", vi:"🛁 Tắm bồn (bồn tắm)",
+    note:{
+      zh:`【泡澡注意事項】
+• 水溫勿超過40°C（高溫易致血管擴張、低血壓、暈眩），年長者建議37–38°C
+• 進出浴缸使用浴缸扶手或防滑踏墊，照顧者全程守候輔助
+• 泡澡時間不超過15–20分鐘（老人尤其不宜過久）
+• 有傷口、手術縫合尚未拆線、導管（PICC、尿管）者禁止泡澡
+• 心臟病、重度靜脈曲張患者需醫師評估後再決定是否適合泡澡
+• 出浴缸前先讓患者在缸內靜坐30秒再起身（防體位性低血壓）
+• 泡澡後立即補充水分（溫開水）`,
+      id:`【Catatan Mandi Berendam】
+• Suhu air ≤40°C (lansia: 37–38°C); suhu tinggi menyebabkan vasodilatasi dan pusing
+• Gunakan pegangan bathtub dan keset anti-slip; pendamping harus selalu ada
+• Durasi berendam ≤15–20 menit
+• Dilarang berendam jika ada luka terbuka, jahitan belum lepas, atau ada kateter (PICC, kateter urin)
+• Pasien jantung atau varises berat: konsultasi dokter terlebih dahulu
+• Sebelum keluar bak: duduk tenang 30 detik dulu untuk mencegah hipotensi ortostatik
+• Segera minum air hangat setelah mandi`,
+      en:`【Tub Bath Safety Notes】
+• Water temperature must not exceed 40°C (elderly: 37–38°C); high heat causes vasodilation, low blood pressure, and dizziness
+• Use tub grab bars and non-slip bath mat; caregiver must stay throughout
+• Soaking time ≤15–20 minutes
+• Tub bath is contraindicated if there are open wounds, unremoved sutures, or indwelling catheters (PICC, urinary catheter)
+• Patients with heart disease or severe varicose veins need physician clearance before tub baths
+• Before exiting the tub: have patient sit still for 30 seconds first to prevent orthostatic hypotension
+• Immediately provide warm water to drink after the bath`,
+      vi:`【Lưu ý tắm bồn】
+• Nhiệt độ nước ≤40°C (người cao tuổi: 37–38°C); nhiệt độ cao gây giãn mạch, hạ huyết áp, chóng mặt
+• Dùng tay vịn bồn tắm và thảm chống trượt; người chăm sóc phải có mặt suốt quá trình
+• Thời gian ngâm ≤15–20 phút
+• Không tắm bồn nếu có vết thương hở, chưa cắt chỉ, hoặc có catheter (PICC, thông tiểu)
+• Bệnh nhân tim mạch hoặc giãn tĩnh mạch nặng cần tham khảo ý kiến bác sĩ
+• Trước khi ra khỏi bồn: cho ngồi yên 30 giây để tránh hạ huyết áp tư thế
+• Uống nước ấm ngay sau tắm`}
+  },
+];
+
+/* ========================================================
    Diet Type Care Advice
 ======================================================== */
 const DIET_ADVICE = {
@@ -3295,6 +3458,7 @@ const DIET_ADVICE = {
 const cleanSelected = new Set();
 const selected = new Set();
 const actSelected = new Set();
+const bathSelected = new Set();
 
 /* ── Vital Info (moved to module scope — was recreated inside generatePlan on every call) ── */
 const VITAL_INFO = {
@@ -3421,6 +3585,62 @@ function renderCleanChips() {
   });
 }
 
+function renderBathChips() {
+  const box = document.getElementById("bathChips");
+  if (!box) return;
+  box.innerHTML = "";
+  BATH_METHODS.forEach(c => {
+    const isOn = bathSelected.has(c.k);
+    const d = document.createElement("div");
+    d.className = "chip" + (isOn ? " on" : "");
+    d.textContent = lang === "zh" ? c.zh : (c.zh + " / " + c[lang]);
+    makeChipAccessible(d, isOn);
+    d.onclick = () => {
+      if (bathSelected.has(c.k)) {
+        bathSelected.delete(c.k);
+      } else {
+        bathSelected.add(c.k);
+      }
+      d.classList.toggle("on");
+      d.setAttribute("aria-pressed", bathSelected.has(c.k) ? "true" : "false");
+      renderBathNotes();
+      scheduleSave();
+    };
+    box.appendChild(d);
+  });
+  renderBathNotes();
+}
+
+function renderBathNotes() {
+  const wrap = document.getElementById("bathNotesWrap");
+  if (!wrap) return;
+  const activeBath = BATH_METHODS.filter(c => bathSelected.has(c.k));
+  if (activeBath.length === 0) { wrap.style.display = "none"; wrap.innerHTML = ""; return; }
+  wrap.style.display = "block";
+  wrap.innerHTML = activeBath.map(c => {
+    const zhText = escapeHtml(c.note.zh);
+    const secText = lang !== "zh" ? escapeHtml(c.note[lang] || "") : "";
+    const isBilingual = lang !== "zh" && secText;
+    const bodyHtml = isBilingual
+      ? `<div class="vital-tip-body" style="display:none;grid-template-columns:1fr 1fr;gap:0;padding:0" data-bilingual="1">
+          <div style="padding:10px 12px;white-space:pre-line;border-right:1px solid #e8d070;font-size:.76rem;line-height:1.9;color:#5a4800">${zhText}</div>
+          <div style="padding:10px 12px;white-space:pre-line;font-size:.76rem;line-height:1.9;color:#7a6520">${secText}</div>
+        </div>`
+      : `<div class="vital-tip-body" style="white-space:pre-line">${zhText}</div>`;
+    return `<div class="vital-tip" style="margin-bottom:8px">
+      <div class="vital-tip-toggle" onclick="
+        var b=this.nextElementSibling;
+        this.classList.toggle('open');
+        if(b.dataset.bilingual){b.style.display=b.style.display==='grid'?'none':'grid';}
+        else{b.classList.toggle('show');}
+      ">
+        ${c.zh}${lang !== "zh" ? (" / " + c[lang]) : ""} — 注意事項 <span class="vital-tip-arrow">▼</span>
+      </div>
+      ${bodyHtml}
+    </div>`;
+  }).join("");
+}
+
 function renderActChips() {
   const box = document.getElementById("actChips");
   if (!box) return;
@@ -3457,7 +3677,7 @@ function applyLang() {
     "l_bp","l_pulse","l_temp","l_spo2","l_resp","l_sugar","l_vital_note",
     "vc_bp","vc_pulse","vc_temp","vc_spo2","vc_resp","vc_sugar","l_vital_select",
     "l_fn","l_frel","l_ftel","l_dn","l_dhosp","l_dtel",
-    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note","t_med","hdClearTxt"
+    "genTxt","clearBtn","foot","t_clean","l_clean_hd","l_clean_note","l_bath_hd","l_bath_sub","t_med","hdClearTxt"
   ];
   ids.forEach(id => {
     const el = document.getElementById(id);
@@ -3479,6 +3699,7 @@ function applyLang() {
   renderChips();
   renderActChips();
   renderCleanChips();
+  renderBathChips();
   rebuildMedRows(true); /* 語系切換：僅更新 placeholder，保留焦點 */
   // update addMedTxt
   const _addMedTxt = document.getElementById("addMedTxt");
@@ -3685,12 +3906,13 @@ async function generatePlan() {
   }
   if (ageInputStr !== "") {
     const ageRawCheck = parseInt(ageInputStr, 10);
-    if (isNaN(ageRawCheck) || ageRawCheck < 0 || ageRawCheck > 120) {
+    const ageIsInteger = /^\d+$/.test(ageInputStr.trim());
+    if (!ageIsInteger || isNaN(ageRawCheck) || ageRawCheck < 0 || ageRawCheck > 120) {
       const ageAlerts = {
-        zh: "請輸入合理的年齡（0–120 歲）。",
-        id: "請輸入合理的年齡（0–120 歲）。\nMasukkan usia yang valid (0–120).",
-        en: "請輸入合理的年齡（0–120 歲）。\nPlease enter a valid age (0–120).",
-        vi: "請輸入合理的年齡（0–120 歲）。\nVui lòng nhập tuổi hợp lệ (0–120)."
+        zh: "請輸入合理的年齡（0–120 歲，整數）。",
+        id: "請輸入合理的年齡（0–120 歲，整數）。\nMasukkan usia yang valid (0–120, bilangan bulat).",
+        en: "請輸入合理的年齡（0–120 歲，整數）。\nPlease enter a valid whole number age (0–120).",
+        vi: "請輸入合理的年齡（0–120 歲，整數）。\nVui lòng nhập tuổi hợp lệ (0–120, số nguyên)."
       };
       alert(ageAlerts[lang] || ageAlerts.en);
       document.getElementById("f_age").focus();
@@ -3794,7 +4016,7 @@ async function generatePlan() {
     en:"⚠ Note: Translation service is temporarily rate-limited. Some custom content shows in Chinese. Please try again later.",
     vi:"⚠ Lưu ý: Dịch vụ dịch thuật bị giới hạn tần suất. Một số nội dung hiển thị bằng tiếng Trung. Vui lòng thử lại sau."
   };
-  const transWarningHtml = _isTranslationBlocked
+  const transWarningHtml = (_isTranslationBlocked && lang !== "zh")
     ? `<div class="notes-box" style="background:#fff3e8; color:#b04621; border-color:#e8c08a; margin-bottom:15px;">
         ${_transWarnMsg[lang]||_transWarnMsg.en}
       </div>`
@@ -4002,17 +4224,42 @@ async function generatePlan() {
   /* ── Cleaning section ── */
   let cleanHtml = "";
   const CLEAN_SEC_LBL = {zh:"清潔與衛生注意", id:"Catatan Kebersihan & Higiene", en:"Cleaning & Hygiene Notes", vi:"Ghi Chú Vệ Sinh"};
-  if (activeClean.length > 0 || cleanNote) {
+  const activeBath = BATH_METHODS.filter(c => bathSelected.has(c.k));
+  if (activeClean.length > 0 || cleanNote || activeBath.length > 0) {
     let items = activeClean.map(c =>
       `<div class="med-plan-item">
         <span class="med-icon">🧹</span>
         <span>${lang === "zh" ? c.zh : (c.zh + ' <span style="color:var(--muted);font-size:.82rem">/ ' + c[lang] + '</span>')}</span>
       </div>`
     ).join("");
+
+    /* Bath methods block */
+    let bathHtml = "";
+    if (activeBath.length > 0) {
+      const BATH_SEC_LBL = {zh:"洗澡方式與注意事項", id:"Cara Mandi & Catatan Keselamatan", en:"Bathing Method & Safety Notes", vi:"Phương Pháp Tắm & Lưu Ý"};
+      const bathItems = activeBath.map(c => {
+        const zhNote = escapeHtml(c.note.zh);
+        const secNote = lang !== "zh" ? escapeHtml(c.note[lang]||"") : "";
+        const noteBody = (lang === "zh" || !secNote)
+          ? `<div class="col zh" style="border-right:none;white-space:pre-line;font-size:.85rem">${zhNote}</div>`
+          : `<div class="col zh" style="white-space:pre-line;font-size:.85rem">${zhNote}</div>
+             <div class="col sec" style="white-space:pre-line;font-size:.83rem">${secNote}</div>`;
+        return `<div class="cond-block" style="margin-bottom:8px">
+          <div class="cond-block-head"><span class="dot"></span>${lang === "zh" ? escapeHtml(c.zh) : (escapeHtml(c.zh) + " / " + escapeHtml(c[lang]))}</div>
+          <div class="cond-block-body" ${lang === "zh" || !secNote ? 'style="grid-template-columns:1fr"' : ""}>${noteBody}</div>
+        </div>`;
+      }).join("");
+      bathHtml = `
+        <div class="plan-sec-title" style="margin-top:16px">🛁 ${lang === "zh" ? "洗澡方式與注意事項" : ("洗澡方式與注意事項 / " + (BATH_SEC_LBL[lang]||BATH_SEC_LBL.en))}</div>
+        ${bathItems}`;
+    }
+
     cleanHtml = `
       <div class="plan-sec-title clean-title">🧹 ${lang === "zh" ? "打掃清潔" : ("打掃清潔 / " + (CLEAN_SEC_LBL[lang]||CLEAN_SEC_LBL.en))}</div>
       <div class="med-plan-list clean-list">${items}</div>
-      ${cleanNote ? `<div class="notes-box clean-note-box" style="margin-top:10px;background:#f0f8f0;border-color:#b8d8b8">${biText(cleanNote, "cleanNote")}</div>` : ""}`;  }
+      ${cleanNote ? `<div class="notes-box clean-note-box" style="margin-top:10px;background:#f0f8f0;border-color:#b8d8b8">${biText(cleanNote, "cleanNote")}</div>` : ""}
+      ${bathHtml}`;
+  }
 
   /* ── Emergency contacts ── */
   let emgHtml = "";
@@ -4258,6 +4505,7 @@ function _doClearAll() {
   actSelected.clear();
   cleanSelected.clear();
   vitalSelected.clear();
+  bathSelected.clear();
   document.querySelectorAll(".chip").forEach(c => {
     c.classList.remove("on");
     c.setAttribute("aria-pressed", "false");
@@ -4275,11 +4523,14 @@ function _doClearAll() {
   meds = [];
   document.getElementById("medList").innerHTML = "";
   document.getElementById("output").innerHTML = "";
-  const _atb = document.getElementById("allergyTransBox"); if (_atb) { _atb.style.display="none"; _atb.innerHTML=""; }
+  // allergyTransBox 已在 renderChips 前清除，此處不重複
   document.getElementById("genBtn").disabled = false;
+  const _atbClear = document.getElementById("allergyTransBox");
+  if (_atbClear) { _atbClear.style.display = "none"; _atbClear.innerHTML = ""; }
   renderChips();
   renderActChips();
   renderCleanChips();
+  renderBathChips();
 }
 
 /* ========================================================
@@ -4339,9 +4590,14 @@ function closePrintModal() {
 /* Close print modal on Escape key */
 document.addEventListener("keydown", function(e) {
   if (e.key === "Escape") {
-    const modal = document.getElementById("printModalOverlay");
-    if (modal && modal.style.display !== "none") {
+    const printModal = document.getElementById("printModalOverlay");
+    if (printModal && printModal.style.display !== "none") {
       closePrintModal();
+      return;
+    }
+    const confirmModal = document.getElementById("confirmModalOverlay");
+    if (confirmModal && confirmModal.style.display !== "none") {
+      confirmModal.style.display = "none";
     }
   }
 });
