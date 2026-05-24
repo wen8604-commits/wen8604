@@ -3738,6 +3738,32 @@ function applyLang() {
   }
 }
 
+/* 【修復 Bug #6】語言切換後同步更新輸出區的按鈕與標籤文字
+   generatePlan 執行時將語言文字硬寫入 innerHTML；切換語言但未重新產生計劃時，
+   此函式負責更新輸出區中的可見標籤，避免舊語言殘留。 */
+function _refreshOutputLangLabels() {
+  const output = document.getElementById("output");
+  if (!output || !output.querySelector(".plan-wrap")) return; /* 計劃尚未產生，免更新 */
+  const VIEW_MODE_LBL = {zh:"顯示模式", id:"Mode Tampilan", en:"View Mode", vi:"Chế Độ Hiển Thị"};
+  const COMPACT_LBL   = {zh:"精簡", id:"Ringkas", en:"Compact", vi:"Tóm Tắt"};
+  const FULL_LBL      = {zh:"詳細", id:"Lengkap", en:"Detailed", vi:"Chi Tiết"};
+  const PDF_LBL       = {zh:"匯出 PDF", id:"Ekspor PDF", en:"Export PDF", vi:"Xuất PDF"};
+  const CLOSE_LBL     = {zh:"關閉", id:"Tutup", en:"Close", vi:"Đóng"};
+  const PRINT_LBL     = {zh:"🖨 列印", id:"🖨 Cetak", en:"🖨 Print", vi:"🖨 In"};
+  const toggleLabel = output.querySelector(".toggle-label");
+  if (toggleLabel) toggleLabel.textContent = VIEW_MODE_LBL[lang] || VIEW_MODE_LBL.en;
+  const vmCompact = document.getElementById("vmBtn_compact");
+  if (vmCompact) vmCompact.textContent = COMPACT_LBL[lang] || COMPACT_LBL.en;
+  const vmFull = document.getElementById("vmBtn_full");
+  if (vmFull) vmFull.textContent = FULL_LBL[lang] || FULL_LBL.en;
+  const pdfBtn = document.getElementById("pdfBtn");
+  if (pdfBtn && !pdfBtn.disabled) pdfBtn.textContent = "📄 " + (PDF_LBL[lang] || PDF_LBL.en);
+  const printBtn = output.querySelector(".btn-print");
+  if (printBtn) printBtn.textContent = PRINT_LBL[lang] || PRINT_LBL.en;
+  const closeBtn = output.querySelector(".btn-ghost");
+  if (closeBtn) closeBtn.textContent = CLOSE_LBL[lang] || CLOSE_LBL.en;
+}
+
 /* Language switcher */
 document.querySelectorAll(".lang-bar button[data-l]").forEach(btn => {
   btn.onclick = () => {
@@ -3747,6 +3773,8 @@ document.querySelectorAll(".lang-bar button[data-l]").forEach(btn => {
     applyLang();
     doAllergyTranslate(); /* refresh allergy translation for new language */
     scheduleSave(); /* persist language preference */
+    /* 【修復 Bug #6】語言切換後同步更新輸出區按鈕文字 */
+    _refreshOutputLangLabels();
   };
 });
 
@@ -3970,7 +3998,7 @@ async function generatePlan() {
   const dn_s = escapeHtml(dn), dhosp_s = escapeHtml(dhosp), dtel_s = escapeHtml(dtel);
 
   /* ── 年齡單位多語化 ── */
-  const AGE_UNIT = {zh:"歲", id:"thn", en:"yrs", vi:"tuổi", zh_fb:"歲"};
+  const AGE_UNIT = {zh:"歲", id:"thn", en:"yrs", vi:"tuổi"};
   const ageUnit  = AGE_UNIT[lang] || "歲";
   const VITAL_MONITOR_LBL = {zh:"需定期監測", id:"Perlu Dipantau Rutin", en:"Monitor Regularly", vi:"Cần Theo Dõi Định Kỳ"};
   const vitalMonitorTxt = lang === "zh" ? "需定期監測" : ("需定期監測 / " + (VITAL_MONITOR_LBL[lang] || VITAL_MONITOR_LBL.en));
@@ -3983,7 +4011,7 @@ async function generatePlan() {
      若使用者行動能力選「臥床」或「四肢癱瘓/全癱」，但未勾選「壓瘡風險」晶片，
      自動將 pressure（壓瘡風險）的照護指引注入，避免高風險臨床漏洞。 */
   const _mobVal = document.getElementById("f_mob").value;
-  const _forcePresureConds = ["bed", "quad", "wheel"];
+  const _forcePresureConds = ["bed", "quad"];
   if (_forcePresureConds.includes(_mobVal)) {
     const _pressureKey = "pressure"; /* CONDS 中壓瘡項目的 key */
     if (!selected.has(_pressureKey)) {
@@ -4278,12 +4306,18 @@ async function generatePlan() {
   if (fn || dn) {
     let cards = "";
     // 過濾電話：tel: URI 只允許數字、加號（國碼）、連字號（RFC 3966）
-    const safeTel = (raw) => escapeHtml(raw.replace(/[^\d\+\-]/g, ''));
+    const safeTel = (raw) => {
+      const cleaned = raw.replace(/[^\d\+\-]/g, '');
+      /* 要求至少 7 位數字才視為合法電話，防止 ---1234 類格式注入 tel: URI */
+      return (cleaned.replace(/[^\d]/g,'').length >= 7) ? escapeHtml(cleaned) : "";
+    };
 
     const DOC_LBL = {zh:"醫師", id:"Dokter", en:"Doctor", vi:"Bác Sĩ"};
     const FAM_LBL = {zh:"家屬", id:"Keluarga", en:"Family", vi:"Gia đình"};
-    if (fn)  cards += `<div class="info-cell"><div class="lbl">${frel_s || (FAM_LBL[lang]||"家屬")}</div><div class="val">${fn_s}${ftel ? `<br><a href="tel:${safeTel(ftel)}" style="color:var(--accent2)">${ftel_s}</a>` : ""}</div></div>`;
-    if (dn)  cards += `<div class="info-cell"><div class="lbl">${lang === "zh" ? "醫師" : ("醫師 / " + (DOC_LBL[lang]||DOC_LBL.en))}</div><div class="val">${dn_s}${dhosp ? " · " + dhosp_s : ""}${dtel ? `<br><a href="tel:${safeTel(dtel)}" style="color:var(--accent2)">${dtel_s}</a>` : ""}</div></div>`;
+    const safeFtel = ftel ? safeTel(ftel) : "";
+    const safeDtel = dtel ? safeTel(dtel) : "";
+    if (fn)  cards += `<div class="info-cell"><div class="lbl">${frel_s || (FAM_LBL[lang]||"家屬")}</div><div class="val">${fn_s}${safeFtel ? `<br><a href="tel:${safeFtel}" style="color:var(--accent2)">${ftel_s}</a>` : ""}</div></div>`;
+    if (dn)  cards += `<div class="info-cell"><div class="lbl">${lang === "zh" ? "醫師" : ("醫師 / " + (DOC_LBL[lang]||DOC_LBL.en))}</div><div class="val">${dn_s}${dhosp ? " · " + dhosp_s : ""}${safeDtel ? `<br><a href="tel:${safeDtel}" style="color:var(--accent2)">${dtel_s}</a>` : ""}</div></div>`;
     emgHtml = `
       <div class="plan-sec-title emg-title">${t.secEmg}</div>
       <div class="emg-grid">${cards}</div>`;
@@ -4486,9 +4520,9 @@ function clearAll() {
   // 使用自訂 Modal 替代 confirm()（原生 confirm() 在 iframe 環境中被阻擋）
   const clearConfirm = {
     zh: "確定要清除所有資料？\n此操作無法復原。",
-    id: "確定要清除所有資料？\nApakah Anda yakin ingin menghapus semua data?",
-    en: "確定要清除所有資料？\nAre you sure you want to reset all fields?",
-    vi: "確定要清除所有資料？\nBạn có chắc muốn xóa tất cả dữ liệu không?"
+    id: "Apakah Anda yakin ingin menghapus semua data?\nTindakan ini tidak dapat dibatalkan.",
+    en: "Are you sure you want to reset all fields?\nThis action cannot be undone.",
+    vi: "Bạn có chắc muốn xóa tất cả dữ liệu không?\nHành động này không thể hoàn tác."
   };
   const msg = clearConfirm[lang] || clearConfirm.en;
   showConfirmModal(msg, function() { _doClearAll(); });
@@ -4733,6 +4767,12 @@ async function exportPDF() {
     const noPrintEls = planDoc.querySelectorAll(".no-print");
     noPrintEls.forEach(el => el.style.visibility = "hidden");
 
+    /* 【修復 Bug #7】html2canvas 不走 @media print，需手動隱藏翻譯提示框
+       避免「翻譯中…」狀態或翻譯結果框被截入 PDF */
+    const allergyTransBox = document.getElementById("allergyTransBox");
+    const _allergyTransBoxPrev = allergyTransBox ? allergyTransBox.style.display : null;
+    if (allergyTransBox) allergyTransBox.style.display = "none";
+
     const canvas = await html2canvas(planDoc, {
       scale: 2,
       useCORS: true,
@@ -4750,6 +4790,7 @@ async function exportPDF() {
     // Restore
     if (printHeader) printHeader.style.display = "none";
     noPrintEls.forEach(el => el.style.visibility = "");
+    if (allergyTransBox && _allergyTransBoxPrev !== null) allergyTransBox.style.display = _allergyTransBoxPrev;
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -4842,8 +4883,8 @@ attachAutoSaveListeners();
     <div style="font-size:2rem;margin-bottom:12px">🗑</div>
     <div id="confirmModalMsg" style="font-size:.95rem;color:#1b1710;line-height:1.6;margin-bottom:22px;white-space:pre-line"></div>
     <div style="display:flex;gap:10px;justify-content:center">
-      <button id="confirmModalOk" style="flex:1;padding:11px 18px;background:linear-gradient(145deg,#b04621,#93381a);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit">確認清除</button>
-      <button id="confirmModalCancel" style="flex:1;padding:11px 18px;background:#f3eee1;color:#4a4236;border:1.5px solid #d8d0bd;border-radius:9px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit">取消</button>
+      <button id="confirmModalOk" style="flex:1;padding:11px 18px;background:linear-gradient(145deg,#b04621,#93381a);color:#fff;border:none;border-radius:9px;font-size:.9rem;font-weight:700;cursor:pointer;font-family:inherit">✓</button>
+      <button id="confirmModalCancel" style="flex:1;padding:11px 18px;background:#f3eee1;color:#4a4236;border:1.5px solid #d8d0bd;border-radius:9px;font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit">✕</button>
     </div>
   </div>
 </div>
