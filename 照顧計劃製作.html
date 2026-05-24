@@ -4751,7 +4751,12 @@ function executePrint() {
 }
 
 /* ========================================================
-   Export PDF (html2canvas + jsPDF — works on mobile/tablet)
+   Export PDF (html2canvas + jsPDF — 智慧分頁，不硬切文字)
+   優化策略：
+   1. 先截取整個 planDoc 為一張高解析度大圖
+   2. 收集 planDoc 內所有直接子元素的底部 Y 座標，作為「安全換頁點」
+   3. 分頁時只在安全換頁點處切割，確保每個區塊完整顯示，不橫切文字
+   4. 若單一區塊超過一頁高度，則允許在其底部換頁（保底）
 ======================================================== */
 async function exportPDF() {
   const planDoc = document.getElementById("planDoc");
@@ -4768,71 +4773,147 @@ async function exportPDF() {
   if (pdfBtn) { pdfBtn.disabled = true; pdfBtn.textContent = PDF_BTN_LABELS.preparing[lang] || PDF_BTN_LABELS.preparing.en; }
 
   try {
-    // Temporarily show print header
+    // 顯示列印表頭
     const printHeader = planDoc.querySelector(".print-doc-header");
     if (printHeader) printHeader.style.display = "block";
 
-    // Hide no-print elements inside planDoc
+    // 隱藏 no-print 元素
     const noPrintEls = planDoc.querySelectorAll(".no-print");
     noPrintEls.forEach(el => el.style.visibility = "hidden");
 
-    /* 【修復 Bug #7】html2canvas 不走 @media print，需手動隱藏翻譯提示框
-       避免「翻譯中…」狀態或翻譯結果框被截入 PDF */
+    // 隱藏翻譯提示框（Bug #7）
     const allergyTransBox = document.getElementById("allergyTransBox");
     const _allergyTransBoxPrev = allergyTransBox ? allergyTransBox.style.display : null;
     if (allergyTransBox) allergyTransBox.style.display = "none";
 
+    // ── 【智慧換頁】收集所有直接子元素的底部 Y（相對於 planDoc 頂部）──
+    // 在截圖前收集，因為截圖不影響 DOM 位置
+    const docRect = planDoc.getBoundingClientRect();
+    const childBreakpoints = []; // 單位：px（相對於 planDoc 頂部）
+
+    // 收集所有直接子元素的底部 Y
+    Array.from(planDoc.children).forEach(child => {
+      if (child.classList.contains("print-doc-header")) return; // 表頭另計
+      const r = child.getBoundingClientRect();
+      const bottomY = r.bottom - docRect.top;
+      if (bottomY > 0) childBreakpoints.push(bottomY);
+    });
+
+    // 也收集 .cond-block、.plan-section、.doc-section 等深層區塊的底部
+    // 讓換頁點更細緻（針對長段落的大區塊）
+    planDoc.querySelectorAll(
+      ".cond-block, .plan-section, .doc-section, .plan-block, " +
+      ".info-grid, .med-plan-list, .notes-box, .emg-cards, " +
+      ".schedule-strip-wrap, .ai-tip-box"
+    ).forEach(el => {
+      const r = el.getBoundingClientRect();
+      const bottomY = r.bottom - docRect.top;
+      if (bottomY > 0) childBreakpoints.push(bottomY);
+    });
+
+    // 排序並去重（四捨五入到整數像素）
+    const safeBreaks = [...new Set(childBreakpoints.map(y => Math.round(y)))].sort((a, b) => a - b);
+
+    // ── 截圖整個 planDoc ──
+    const renderW = Math.min(document.documentElement.scrollWidth, 1080);
     const canvas = await html2canvas(planDoc, {
       scale: 2,
       useCORS: true,
       logging: false,
       backgroundColor: "#fbfaf6",
-      windowWidth: Math.min(document.documentElement.scrollWidth, 1080),
+      windowWidth: renderW,
       onclone: function(clonedDoc) {
-        // Ensure Noto Sans fonts are applied in clone
         const style = clonedDoc.createElement("style");
         style.textContent = "* { font-family: 'Noto Sans TC', 'Noto Serif TC', sans-serif !important; }";
         clonedDoc.head.appendChild(style);
       }
     });
 
-    // Restore
+    // 還原
     if (printHeader) printHeader.style.display = "none";
     noPrintEls.forEach(el => el.style.visibility = "");
     if (allergyTransBox && _allergyTransBoxPrev !== null) allergyTransBox.style.display = _allergyTransBoxPrev;
 
+    // ── jsPDF 設定 ──
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
 
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const margin = 10; // mm
-    const contentW = pageW - margin * 2;
+    const pageW  = pdf.internal.pageSize.getWidth();   // 210mm
+    const pageH  = pdf.internal.pageSize.getHeight();  // 297mm
+    const margin = 12; // mm，上下左右留白
+    const contentW = pageW - margin * 2;               // 可用寬度 mm
+    const usableH  = pageH - margin * 2;               // 每頁可用高度 mm
 
-    const imgData = canvas.toDataURL("image/jpeg", 0.92);
-    const imgW = contentW;
-    const imgH = (canvas.height * imgW) / canvas.width;
+    // canvas 座標系換算比例：canvas px → mm
+    // canvas.width / renderW = scale（=2），docRect 是螢幕 px
+    const docHeightPx = docRect.height; // 螢幕 px
+    const imgH_mm = (docHeightPx / (renderW)) * contentW; // 等比縮放後總高 mm
+    const pxToMm = imgH_mm / docHeightPx;                  // 螢幕px → mm
+    const canvasScale = canvas.width / renderW;             // canvas px / 螢幕 px（=2）
 
-    // Multi-page: slice image across pages
-    const usableH = pageH - margin * 2;
-    const totalPages = Math.ceil(imgH / usableH);
+    // ── 智慧換頁：根據 safeBreaks 決定每頁截取範圍 ──
+    // startMm：目前頁從整張圖的哪個 mm 開始
+    let startMm = 0;
+    const totalMm = imgH_mm;
+    let pageIndex = 0;
 
-    for (let i = 0; i < totalPages; i++) {
-      if (i > 0) pdf.addPage();
-      const srcY = i * usableH;
-      const sliceH = Math.min(usableH, imgH - srcY);
-      // Use a canvas slice for each page
+    while (startMm < totalMm - 0.5) {
+      if (pageIndex > 0) pdf.addPage();
+
+      const endIdealMm = startMm + usableH; // 理想結束位置
+
+      let endMm;
+      if (endIdealMm >= totalMm) {
+        // 最後一頁：到底
+        endMm = totalMm;
+      } else {
+        // 找最後一個在 endIdealMm 之前（且不早於 startMm + 20mm）的安全換頁點
+        // 如果找不到，就用理想位置（保底，可能切到區塊邊緣但不會切文字行）
+        const minEndMm = startMm + 20;
+        let bestBreak = -1;
+        for (let i = safeBreaks.length - 1; i >= 0; i--) {
+          const bMm = safeBreaks[i] * pxToMm;
+          if (bMm <= endIdealMm && bMm >= minEndMm) {
+            bestBreak = bMm;
+            break;
+          }
+        }
+        endMm = bestBreak > 0 ? bestBreak : endIdealMm;
+      }
+
+      const sliceMm = endMm - startMm;
+
+      // 換算回 canvas 像素
+      const srcY_canvasPx  = (startMm / pxToMm) * canvasScale;
+      const sliceH_canvasPx = (sliceMm / pxToMm) * canvasScale;
+
+      // 防護：確保不超出 canvas 範圍
+      const clampedSrcY  = Math.max(0, Math.min(Math.round(srcY_canvasPx),  canvas.height - 1));
+      const clampedSliceH = Math.min(Math.round(sliceH_canvasPx), canvas.height - clampedSrcY);
+
+      if (clampedSliceH <= 0) break;
+
+      // 切出這一頁的圖
       const pageCanvas = document.createElement("canvas");
-      const scaleRatio = canvas.width / imgW;
-      pageCanvas.width = canvas.width;
-      pageCanvas.height = sliceH * scaleRatio;
+      pageCanvas.width  = canvas.width;
+      pageCanvas.height = clampedSliceH;
       const ctx = pageCanvas.getContext("2d");
-      ctx.drawImage(canvas, 0, srcY * scaleRatio, canvas.width, sliceH * scaleRatio, 0, 0, canvas.width, sliceH * scaleRatio);
-      const pageImg = pageCanvas.toDataURL("image/jpeg", 0.92);
-      pdf.addImage(pageImg, "JPEG", margin, margin, imgW, sliceH);
+      ctx.drawImage(
+        canvas,
+        0, clampedSrcY, canvas.width, clampedSliceH,
+        0, 0,           canvas.width, clampedSliceH
+      );
+      const pageImg = pageCanvas.toDataURL("image/jpeg", 0.93);
+
+      // 計算這一頁圖片在 PDF 上的實際高度（保持比例）
+      const imgOnPageH = (clampedSliceH / canvas.width) * contentW;
+      pdf.addImage(pageImg, "JPEG", margin, margin, contentW, imgOnPageH);
+
+      startMm = endMm;
+      pageIndex++;
     }
 
-    // File name with patient name & date
+    // ── 輸出檔名 ──
     const namePart = (document.getElementById("f_name")?.value.trim() || "照顧計劃").replace(/[\\/:*?"<>|]/g, "_");
     const d = new Date();
     const datePart = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
