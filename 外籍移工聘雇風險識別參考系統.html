@@ -1493,7 +1493,7 @@
         </div>
         <div style="padding:1rem;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:12px;text-align:center;">
           <div style="font-size:1.4rem;font-weight:900;color:var(--warn2);margin-bottom:4px;">1個月薪資</div>
-          <div style="font-size:0.78rem;color:var(--text2);">引進費上限（依基本工資，約2萬～2.8萬）<br><span style="color:var(--text3);">依勞動部公告「私立就業服務機構收費項目及金額標準」</span></div>
+          <div style="font-size:0.78rem;color:var(--text2);">引進費上限（不得超過受聘僱者第一個月薪資）<br><span style="color:var(--text3);">依勞動部公告「私立就業服務機構收費項目及金額標準」</span></div>
         </div>
         <div style="padding:1rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:12px;text-align:center;">
           <div style="font-size:1.4rem;font-weight:900;color:var(--accent2);margin-bottom:4px;">1,800元/月</div>
@@ -1691,8 +1691,8 @@
           <span style="background:var(--danger);color:white;font-size:0.7rem;font-weight:900;padding:2px 8px;border-radius:10px;">⛔ 重大</span>
           <span style="font-size:0.9rem;font-weight:700;">收費超過法定上限</span>
         </div>
-        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">要求支付超過法定上限的仲介費用（目前規定為第一個月薪資，約2萬至2.8萬元，請查勞動部公告）；或要求預付超過3個月服務費、分拆費用巧立名目。</p>
-        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第66條、第68條</div>
+        <p style="font-size:0.82rem;color:var(--text2);line-height:1.7;">要求支付超過法定上限的仲介費用（登記費及介紹費合計不得超過受聘僱者第一個月薪資，請依契約薪資與官方標準核對）；或要求預付服務費、分拆費用巧立名目。</p>
+        <div style="margin-top:8px;font-size:0.7rem;color:var(--text3);">⚖️ 就業服務法第35條第2項、第66條</div>
       </div>
 
       <div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--danger);border-radius:14px;padding:1.1rem;">
@@ -1829,7 +1829,7 @@
             <td style="padding:10px 14px;font-weight:600;">引進費（仲介費）</td>
             <td style="padding:10px 14px;color:var(--success2);">≤ 一個月薪資</td>
             <td style="padding:10px 14px;color:var(--danger2);">超過 5 萬元</td>
-            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">約2～2.8萬元，依基本工資調整，請查勞動部公告</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">以受聘僱者第一個月薪資為準，請核對契約薪資與官方收費標準</td>
           </tr>
           <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
             <td style="padding:10px 14px;font-weight:600;">每月服務費（第一年）</td>
@@ -1839,9 +1839,9 @@
           </tr>
           <tr style="border-bottom:1px solid var(--border);">
             <td style="padding:10px 14px;font-weight:600;">預付服務費上限</td>
-            <td style="padding:10px 14px;color:var(--success2);">≤ 3 個月</td>
-            <td style="padding:10px 14px;color:var(--danger2);">要求年付或多年預付</td>
-            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">超過3個月預付屬違規，應按月收取</td>
+            <td style="padding:10px 14px;color:var(--success2);">不得預先收取</td>
+            <td style="padding:10px 14px;color:var(--danger2);">要求任何預付</td>
+            <td style="padding:10px 14px;color:var(--text3);font-size:0.78rem;">外國人服務費須有服務事實後才能收取，且不得預收</td>
           </tr>
           <tr style="border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02);">
             <td style="padding:10px 14px;font-weight:600;">免費更換期</td>
@@ -2028,8 +2028,8 @@ const checkData = {
     { id:'d9', label:'仲介要求由他們代領、代管或代扣發移工的薪資', risk:'high', weight:30, critical:true,  category:'金流' },
   ],
   warn: [
-    { id:'w1', label:'引進費超過一個月薪資（依基本工資為準，約2萬至2.8萬元，請查勞動部公告）', risk:'med', weight:12, category:'金流' },
-    { id:'w2', label:'要求預付超過3個月服務費',            risk:'med', weight:10, category:'金流' },
+    { id:'w1', label:'引進費超過受聘僱者第一個月薪資，或無法對應契約薪資與明細', risk:'med', weight:12, category:'金流' },
+    { id:'w2', label:'要求移工預付服務費，或要求雇主代墊未明列費用',            risk:'med', weight:10, category:'金流' },
     { id:'w3', label:'更換看護需額外付費（3-6個月內）',   risk:'med', weight:8,  category:'契約' },
     { id:'w4', label:'合約條款模糊，含「特殊情況可調整費用」', risk:'med', weight:10, category:'契約' },
     { id:'w5', label:'入台超過3個月還說文件有問題',        risk:'med', weight:8,  category:'透明度' },
@@ -2059,7 +2059,7 @@ const fraudData = [
     op:'引進費超過每月薪資，巧立名目如「行政費」、「文件費」等額外收取',
     how:'總費用超過5萬元；拒絕提供明細；費用種類繁多',
     loss:'額外損失3-10萬元',
-    law:'消費者保護法第17條、就業服務法第68條',
+    law:'消費者保護法第17條、就業服務法第35條、第66條',
     action:['索取完整書面費用明細', '超收部分可要求退還', '向1955檢舉超收行為', '保留所有收款憑證']
   },
   {
@@ -2068,8 +2068,8 @@ const fraudData = [
     op:'要求預付2-3年服務費，以「早鳥優惠」或「名額有限」為由製造緊迫感',
     how:'強調限時折扣；催促馬上決定；優惠金額特別大',
     loss:'預付1-3萬元難以追回，仲介倒閉後無從求償',
-    law:'就業服務法第68條',
-    action:['服務費應按月收取', '最多只能預收3個月', '拒絕年付或多年預付', '若已付款立即向消保官申訴']
+    law:'就業服務法第35條、私立就業服務機構收費項目及金額標準第6條',
+    action:['外國人服務費不得預先收取，須有服務事實後才能收取', '拒絕年付或多年預付', '要求書面列明收費對象、項目與期間', '若已付款立即向1955或消保官諮詢申訴']
   },
   {
     num:3, title:'履歷造假情境', type:'broker', sev:'high',
@@ -2159,7 +2159,7 @@ const fraudData = [
     how:'「我朋友很厲害，你可以直接請她」；說可以省仲介費；要求私下金錢往來',
     loss:'雇主觸犯就業服務法，依違法情節可能面臨罰鍰或廢止許可',
     law:'就業服務法第45條',
-    action:['明確拒絕，「我不能這樣做」', '通知原仲介有此情況', '若對方再次提出留留下紀錄', '絕對不能私下安排非法仲介']
+    action:['明確拒絕，「我不能這樣做」', '通知原仲介有此情況', '若對方再次提出，留下紀錄', '絕對不能私下安排非法仲介']
   }
 ];
 
@@ -2176,7 +2176,7 @@ const lawData = [
   { code:'民法 §227', type:'civil', desc:'不完全給付', content:'仲介無法按約定時間引進看護或服務品質不符合約，雇主可主張不完全給付並請求損害賠償或解除契約', penalty:'賠償損害', hasPenalty:false },
   { code:'民法 §247-1', type:'civil', desc:'定型化契約限制', content:'按仲介預定用於同類契約的條款所訂契約，如有不合理的免責條款或限制條款，法院得宣告無效', penalty:'條款無效', hasPenalty:false },
   { code:'消費者保護法 §17', type:'consumer', desc:'主管機關公告定型化契約', content:'主管機關得公告特定行業定型化契約的應記載及不得記載事項，違反者條款無效且依法處罰', penalty:'5-50萬元罰鍰', hasPenalty:true },
-  { code:'就業服務法 §68', type:'employment', desc:'仲介費用上限授權規定', content:'主管機關（勞動部）得訂定私立就業服務機構之收費項目及金額標準（即「私立就業服務機構收費項目及金額標準」）；超收費用者，依第66條重罰', penalty:'超收費用者，可能依就業服務法及相關收費標準規定遭處罰鍰，實際裁罰金額依主管機關認定', hasPenalty:true },
+  { code:'就業服務法 §35 / 收費標準 §3、§6', type:'employment', desc:'仲介收費項目與金額標準', content:'私立就業服務機構收費項目及金額標準依就業服務法第35條第2項訂定。雇主委任仲介之登記費及介紹費合計不得超過受聘僱者第一個月薪資；外國人服務費依在臺工作累計期間，第1年每月1,800元、第2年每月1,700元、第3年起每月1,500元，且不得預先收取。', penalty:'超收費用者依就業服務法第66條處10至20倍罰鍰', hasPenalty:true },
 ];
 
 const contactData = [
@@ -2192,7 +2192,7 @@ const tacticsData = [
   { id:1,  risk:'low',  cat:'日常補貼', title:'不會煮飯索取外食費', scenario:'以技能缺失為由，要求雇主改給現金取代供膳', motivation:'將雇主「供膳義務」轉化為現金補貼，實際目的多為爭取生活自由度與自主選擇。', legal:'低。雇主法定義務為提供伙食或膳食費，可以實物（餐食）履行，無需給付現金。', law:['就業服務法第46條','雇傭契約約定'], counter:['面試時確認烹飪技能，合約明載供膳方式（實物或現金）','若選擇現金，應固定金額並在薪資條列明，避免不斷追加','建立供膳日誌佐證已履行義務'] },
   { id:2,  risk:'med',  cat:'日常補貼', title:'醫院伙食不合胃口要求日領補貼', scenario:'住院照護期間，以飲食不適為由要求每日300元現金補貼', motivation:'利用醫院照護辛勞，將不適應轉化為變相津貼，300元高於市場一般餐費標準，具過度索求特徵。', legal:'中。若成慣例，可能被認定為經常性給予，日後難以取消，且成為其他移工比較基準。', law:['民法第482條（雇傭契約）'], counter:['由雇主外送或購買，避免現金給付成慣例','提供定額餐券（而非現金），並在收據標明「非經常性」','若確要補貼，一次性給予慰勞金，而非日常化現金'] },
   { id:3,  risk:'low',  cat:'日常補貼', title:'醫院期間另收洗衣費', scenario:'將照護中的洗衣工作拆解，主張應另外收費', motivation:'將工作內容拆解化，針對特定勞務額外收費，反映工作範疇認知差異。', legal:'低。洗衣屬基本照護範疇，合約若有明列則依約處理，若無明列仍屬一般照護工作。', law:['雇傭契約約定'], counter:['合約明列「照護工作包含基本清潔事務（含病患衣物清洗）」','使用醫院自助洗衣，由雇主支付投幣費（保留收據），避免轉為現金','避免接受口頭協議，任何額外給付一律書面化'] },
-  { id:4,  risk:'high', cat:'薪酬轉嫁', title:'要求「實拿」薪資不付雜費', scenario:'要求雇主吸收健保費、服務費等原應由移工負擔的法定扣除額', motivation:'違反勞動法令之代扣原則，若雇主同意將承擔法律風險，且實際支出遠超帳面薪資。', legal:'高。健保費、服務費有法定分擔比例，雇主代為負擔屬違法給付，可能導致健保局追繳及稅務問題。', law:['全民健康保險法','就業服務法第68條','私立就業服務機構收費標準'], counter:['堅持按法定比例扣款，提供清晰薪資條逐項說明','若移工抗拒，請仲介介入說明法律規定','保存所有薪資給付明細與轉帳紀錄至少5年'] },
+  { id:4,  risk:'high', cat:'薪酬轉嫁', title:'要求「實拿」薪資不付雜費', scenario:'要求雇主吸收健保費、服務費等原應由移工負擔的法定扣除額', motivation:'違反勞動法令之代扣原則，若雇主同意將承擔法律風險，且實際支出遠超帳面薪資。', legal:'高。健保費、服務費有法定分擔比例，雇主若代為負擔，可能造成薪資、保費與帳務爭議。', law:['全民健康保險法','就業服務法第35條','私立就業服務機構收費項目及金額標準'], counter:['堅持按法定比例扣款，提供清晰薪資條逐項說明','若移工抗拒，請仲介介入說明法律規定','保存所有薪資給付明細與轉帳紀錄至少5年'] },
   { id:5,  risk:'med',  cat:'薪酬轉嫁', title:'轉中階後要求加薪並免除服務費', scenario:'取得中階移工資格後，以市場行情為由要求加薪並主張免除仲介服務費', motivation:'中階移工具備留台年資優勢，藉供需失衡進行跳槽威脅，反映議價籌碼轉移。', legal:'中。加薪屬雙方協商範疇，無法律強制；服務費免除需仲介同意，單方主張無效。', law:['就業服務法第46條','私立就業服務機構許可及管理辦法'], counter:['評估長期留任價值，可提供階梯式加薪方案，但須簽署留任承諾書','服務費調整應由三方（雇主、移工、仲介）書面協議','若決定加薪，明確說明這是留任獎勵非市場行情'] },
   { id:6,  risk:'med',  cat:'福利勒索', title:'要求雇主負擔個人非職業傷病醫療費', scenario:'非因工作造成的疾病或傷害，要求雇主全額負擔醫療費用', motivation:'非因工受傷之醫療費法律上由移工自理，此要求屬情感或財務勒索，測試雇主底線。', legal:'中。若非職業災害，醫療費由移工自理；若雇主主動承諾全額負擔，可能形成慣例且無法收回。', law:['勞工保險條例','全民健康保險法','職業災害勞工保護法'], counter:['協助申請勞保、健保理賠，但不承諾全額負擔','可提供墊付後按月扣款方案（簽署還款協議）','協助申請外籍勞工醫療補助（各縣市政府有提供）','區分職業災害與一般疾病，依法辦理'] },
   { id:7,  risk:'low',  cat:'福利勒索', title:'要求雇主支付返鄉機票費', scenario:'以各種理由要求合約期內回國，並要求雇主支付來回機票', motivation:'利用雇主怕麻煩心態，將自願回國轉為雇主責任，屬市場供需失衡下的極端要求。', legal:'低。合約期內回國屬請假行為，交通費用依合約約定，無法定義務要求雇主支付。', law:['雇傭契約約定'], counter:['合約明載「返鄉假期間交通費用由移工自理」','若願意補貼機票作為激勵，書面化為服務年資獎勵非義務','拒絕前說明合約依據，由仲介出面溝通'] },
@@ -2223,6 +2223,16 @@ let fraudFilter = 'all';
 let lawFilter = 'all';
 let currentFraud = null;
 
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[ch]));
+}
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
@@ -2252,8 +2262,8 @@ function buildGroup(containerId, items, cls, riskCls, riskLabel) {
     div.id = 'ci-' + item.id;
     div.innerHTML = `
       <div class="check-box" id="cb-${item.id}"></div>
-      <div class="check-label">${item.label}</div>
-      <div class="check-risk ${riskCls}">${riskLabel}</div>
+      <div class="check-label">${escapeHTML(item.label)}</div>
+      <div class="check-risk ${riskCls}">${escapeHTML(riskLabel)}</div>
     `;
     div.setAttribute('role', 'checkbox');
     div.setAttribute('aria-checked', 'false');
@@ -2382,14 +2392,14 @@ function renderFraud(data) {
     card.dataset.fraudNum = f.num;
     card.innerHTML = `
       <div class="fraud-card-header">
-        <div class="fraud-num">${f.num}</div>
-        <div class="fraud-title">${f.title}</div>
-        <div class="fraud-sev" style="background:${sevBg};color:${sevColor};border:1px solid ${sevColor}40;">${f.sevLabel}</div>
+        <div class="fraud-num">${escapeHTML(f.num)}</div>
+        <div class="fraud-title">${escapeHTML(f.title)}</div>
+        <div class="fraud-sev" style="background:${sevBg};color:${sevColor};border:1px solid ${sevColor}40;">${escapeHTML(f.sevLabel)}</div>
       </div>
       <div class="fraud-card-body">
-        <div class="fraud-row"><span class="fraud-row-label">操作手法</span><span class="fraud-row-val">${f.op.substring(0,60)}...</span></div>
-        <div class="fraud-row"><span class="fraud-row-label">可能損失</span><span class="fraud-row-val" style="color:#fca5a5;font-weight:600;">${f.loss}</span></div>
-        <div style="margin-top:6px;"><span class="fraud-law">⚖️ ${f.law.split('、')[0]}</span></div>
+        <div class="fraud-row"><span class="fraud-row-label">操作手法</span><span class="fraud-row-val">${escapeHTML(f.op.substring(0,60))}...</span></div>
+        <div class="fraud-row"><span class="fraud-row-label">可能損失</span><span class="fraud-row-val" style="color:#fca5a5;font-weight:600;">${escapeHTML(f.loss)}</span></div>
+        <div style="margin-top:6px;"><span class="fraud-law">⚖️ ${escapeHTML(f.law.split('、')[0])}</span></div>
         <div style="margin-top:10px;text-align:right;"><button class="btn btn-sm btn-ghost" data-fraud-idx="${f.num-1}">查看詳情 →</button></div>
       </div>
     `;
@@ -2433,20 +2443,20 @@ function openFraud(idx) {
   document.getElementById('modalBody').innerHTML = `
     <div style="margin-bottom:1rem;">
       <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">操作手法</div>
-      <div style="font-size:0.88rem;line-height:1.7;color:var(--text);">${f.op}</div>
+      <div style="font-size:0.88rem;line-height:1.7;color:var(--text);">${escapeHTML(f.op)}</div>
     </div>
     <div style="margin-bottom:1rem;">
       <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">如何辨識</div>
-      <div style="font-size:0.88rem;line-height:1.7;color:var(--text);">${f.how}</div>
+      <div style="font-size:0.88rem;line-height:1.7;color:var(--text);">${escapeHTML(f.how)}</div>
     </div>
     <div style="margin-bottom:1rem;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;">
       <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">可能損失</div>
-      <div style="font-size:1rem;font-weight:700;color:#fca5a5;">${f.loss}</div>
+      <div style="font-size:1rem;font-weight:700;color:#fca5a5;">${escapeHTML(f.loss)}</div>
     </div>
     <div style="margin-bottom:1rem;">
       <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">法律依據</div>
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
-        ${f.law.split('、').map(l => `<span class="fraud-law" style="font-size:0.8rem;">${l}</span>`).join('')}
+        ${f.law.split('、').map(l => `<span class="fraud-law" style="font-size:0.8rem;">${escapeHTML(l)}</span>`).join('')}
       </div>
     </div>
     <div>
@@ -2454,7 +2464,7 @@ function openFraud(idx) {
       ${f.action.map((a,i) => `
         <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85rem;">
           <div style="width:22px;height:22px;background:var(--success);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:900;color:white;flex-shrink:0;">${i+1}</div>
-          <div style="color:var(--text);line-height:1.5;">${a}</div>
+          <div style="color:var(--text);line-height:1.5;">${escapeHTML(a)}</div>
         </div>
       `).join('')}
     </div>
@@ -2479,10 +2489,10 @@ function renderLaw(data) {
     tr.dataset.type = l.type;
     tr.dataset.penalty = l.hasPenalty;
     tr.innerHTML = `
-      <td><span class="law-code">${l.code}</span></td>
-      <td style="font-weight:600;color:var(--text);">${l.desc}</td>
-      <td style="color:var(--text2);">${l.content}</td>
-      <td class="penalty-val">${l.penalty}</td>
+      <td><span class="law-code">${escapeHTML(l.code)}</span></td>
+      <td style="font-weight:600;color:var(--text);">${escapeHTML(l.desc)}</td>
+      <td style="color:var(--text2);">${escapeHTML(l.content)}</td>
+      <td class="penalty-val">${escapeHTML(l.penalty)}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -2520,15 +2530,15 @@ function buildContacts() {
     card.className = 'contact-card';
     card.innerHTML = `
       <div class="contact-header">
-        <div class="contact-icon" style="background:${c.bg};color:${c.color};">${c.icon}</div>
+        <div class="contact-icon" style="background:${c.bg};color:${c.color};">${escapeHTML(c.icon)}</div>
         <div>
-          <div class="contact-name">${c.name}</div>
-          <div class="contact-type">${c.type}</div>
+          <div class="contact-name">${escapeHTML(c.name)}</div>
+          <div class="contact-type">${escapeHTML(c.type)}</div>
         </div>
       </div>
-      <div class="contact-phone" style="color:${c.color};">${c.phone}</div>
-      <div class="contact-desc">${c.desc}</div>
-      <div class="contact-tags">${c.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      <div class="contact-phone" style="color:${c.color};">${escapeHTML(c.phone)}</div>
+      <div class="contact-desc">${escapeHTML(c.desc)}</div>
+      <div class="contact-tags">${c.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>
     `;
     grid.appendChild(card);
   });
@@ -2569,10 +2579,10 @@ function generateReport() {
   } else {
     let html = '';
     dangerItems.forEach(l => {
-      html += `<div class="report-item"><span class="ri-icon">🔴</span><div class="ri-text">${l}<span class="ri-label">高度風險訊號 — 建議審慎確認</span></div></div>`;
+      html += `<div class="report-item"><span class="ri-icon">🔴</span><div class="ri-text">${escapeHTML(l)}<span class="ri-label">高度風險訊號 — 建議審慎確認</span></div></div>`;
     });
     warnItems.forEach(l => {
-      html += `<div class="report-item"><span class="ri-icon">🟡</span><div class="ri-text">${l}<span class="ri-label">中度風險訊號 — 建議進一步確認</span></div></div>`;
+      html += `<div class="report-item"><span class="ri-icon">🟡</span><div class="ri-text">${escapeHTML(l)}<span class="ri-label">中度風險訊號 — 建議進一步確認</span></div></div>`;
     });
     warnList.innerHTML = html;
   }
@@ -2584,14 +2594,14 @@ function generateReport() {
   if (checkedItems['d1']) recommendations.push({ icon:'⚠️', text:'依就業服務法第 34 條，未經許可從事跨國人力仲介為違法行為。請至勞動部官網查詢業者許可證有效性', label:'務必查證' });
   if (checkedItems['d5']) recommendations.push({ icon:'🚫', text:'依就業服務法第 5、67 條，扣押移工證件屬違法行為，雇主亦負連帶責任。請明確拒絕並可向 1955 通報', label:'建議拒絕' });
   if (checkedItems['d2']) recommendations.push({ icon:'📋', text:'堅持要求合理契約審閱期（一般定型化契約常見至少3日，消保法§11-1規定應給予消費者合理審閱期間），這是您的法定權利，拒絕被催促', label:'維護權益' });
-  if (warn >= 2) recommendations.push({ icon:'💰', text:'費用可能超出法定上限，請對照就業服務法第68條及勞動部「私立就業服務機構收費項目及金額標準」逐項確認。引進費上限為一個月薪資（依基本工資，約2萬至2.8萬元），請查閱勞動部最新公告', label:'費用核查' });
+  if (warn >= 2) recommendations.push({ icon:'💰', text:'費用可能超出法定上限，請對照就業服務法第35條第2項授權訂定之「私立就業服務機構收費項目及金額標準」逐項確認。雇主端登記費及介紹費合計不得超過受聘僱者第一個月薪資；外國人服務費不得預先收取，請查閱勞動部最新公告', label:'費用核查' });
   if (ok >= 3) recommendations.push({ icon:'✅', text:'您已完成多項合規確認，繼續保持所有文件的拍照存證', label:'持續執行' });
   if (recommendations.length === 0) recommendations.push({ icon:'💡', text:'請完成風險評估頁面的問卷後，報告將顯示針對性建議', label:'待評估' });
 
   rec.innerHTML = recommendations.map(r => `
     <div class="report-item">
-      <span class="ri-icon">${r.icon}</span>
-      <div class="ri-text">${r.text}<span class="ri-label">${r.label}</span></div>
+      <span class="ri-icon">${escapeHTML(r.icon)}</span>
+      <div class="ri-text">${escapeHTML(r.text)}<span class="ri-label">${escapeHTML(r.label)}</span></div>
     </div>
   `).join('');
 }
@@ -2699,15 +2709,15 @@ function buildTactics() {
     card.setAttribute('data-search', [t.title, t.scenario, t.motivation, t.counter.join(' ')].join(' ').toLowerCase());
     card.innerHTML = `
       <div class="tac-card-head">
-        <div class="tac-num">案例 ${String(t.id).padStart(2,'0')}</div>
+        <div class="tac-num">案例 ${escapeHTML(String(t.id).padStart(2,'0'))}</div>
         <div>
-          <div class="tac-title">${t.title}</div>
-          <div class="tac-scenario">「${t.scenario}」</div>
+          <div class="tac-title">${escapeHTML(t.title)}</div>
+          <div class="tac-scenario">「${escapeHTML(t.scenario)}」</div>
         </div>
       </div>
       <div class="tac-foot">
         <span class="tac-risk-badge ${t.risk}">${t.risk==='high'?'🔴 高風險':t.risk==='med'?'🟡 中風險':'🟢 低風險'}</span>
-        <span class="tac-cat-badge">${t.cat}</span>
+        <span class="tac-cat-badge">${escapeHTML(t.cat)}</span>
         <span class="tac-arrow">▶</span>
       </div>`;
     card.addEventListener('click', () => tacToggleDetail(t.id));
@@ -2755,27 +2765,27 @@ function tacToggleDetail(id) {
     <div class="tac-detail-head">
       <div>
         <div class="tac-detail-num">
-          案例 ${String(t.id).padStart(2,'0')} &nbsp;·&nbsp; ${t.cat}類 &nbsp;·&nbsp;
+          案例 ${escapeHTML(String(t.id).padStart(2,'0'))} &nbsp;·&nbsp; ${escapeHTML(t.cat)}類 &nbsp;·&nbsp;
           <span class="tac-risk-badge ${t.risk}">${t.risk==='high'?'🔴 高風險':t.risk==='med'?'🟡 中風險':'🟢 低風險'}</span>
         </div>
-        <div class="tac-detail-title">${t.title}</div>
-        <div class="tac-detail-scenario">「${t.scenario}」</div>
+        <div class="tac-detail-title">${escapeHTML(t.title)}</div>
+        <div class="tac-detail-scenario">「${escapeHTML(t.scenario)}」</div>
       </div>
       <button class="tac-close-btn" id="tacCloseBtn-${id}">✕ 收起</button>
     </div>
     <div class="tac-detail-grid">
       <div class="tac-block">
         <div class="tac-block-title">💡 行為動機分析</div>
-        <p>${t.motivation}</p>
+        <p>${escapeHTML(t.motivation)}</p>
       </div>
       <div class="tac-block">
         <div class="tac-block-title">⚠️ 法律風險評估</div>
-        <p>${t.legal}</p>
-        <div style="margin-top:0.65rem">${t.law.map(l=>`<span class="law-chip">${l}</span>`).join('')}</div>
+        <p>${escapeHTML(t.legal)}</p>
+        <div style="margin-top:0.65rem">${t.law.map(l=>`<span class="law-chip">${escapeHTML(l)}</span>`).join('')}</div>
       </div>
       <div class="tac-block">
         <div class="tac-block-title">🛡 雇主應對策略</div>
-        <ul>${t.counter.map(c=>`<li>${c}</li>`).join('')}</ul>
+        <ul>${t.counter.map(c=>`<li>${escapeHTML(c)}</li>`).join('')}</ul>
       </div>
     </div>`;
 
