@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>外籍看護補充合約製作工具 v8</title>
+<title>外籍看護補充合約製作工具 v9</title>
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -245,10 +245,10 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 <small style="opacity:0.6;font-size:11px;">v8</small></span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 <small style="opacity:0.6;font-size:11px;">v9</small></span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
-      <button class="btn btn-gold btn-sm" onclick="generatePreview()">👁 <span>預覽</span></button>
+      <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
       <button class="btn btn-primary btn-sm" onclick="exportPDF(this)">📥 <span>匯出PDF（列印）</span></button>
       <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ <span>列印</span></button>
     </div>
@@ -646,7 +646,7 @@
         </div>
         <div style="display:flex;justify-content:space-between;margin-top:20px;">
           <button class="btn btn-outline" onclick="showSection('sec-rules')">← 上一步</button>
-          <button class="btn btn-gold" onclick="showSection('sec-preview');generatePreview()">✅ 產生合約預覽 →</button>
+          <button class="btn btn-gold" onclick="showSection('sec-preview')">✅ 產生合約預覽 →</button>
         </div>
       </div>
 
@@ -1238,7 +1238,7 @@ function fillSample() {
     if(lbl && el.checked) lbl.classList.add('checked');
   });
 
-  alert('✅ 已填入 v8 合規之範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
+  alert('✅ 已填入 v9 合規範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
 }
 
 function clearAll() {
