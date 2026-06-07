@@ -1,0 +1,2670 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外籍看護日誌 — 客製化設定精靈</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:      #1a1f2e;
+  --muted:    #6b7280;
+  --border:   #e2e6ea;
+  --bg:       #f7f9fc;
+  --white:    #ffffff;
+  --accent:   #2563eb;
+  --accent2:  #7c3aed;
+  --success:  #059669;
+  --warn:     #d97706;
+  --danger:   #dc2626;
+  --radius:   10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  font-family:'Noto Sans TC','Noto Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:14px;
+  min-height:100vh;
+}
+
+/* ── TOP BAR ── */
+.topbar{
+  background:var(--ink);
+  color:#fff;
+  padding:14px 24px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.topbar-brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;}
+.topbar-sub{font-size:11px;opacity:.6;}
+.topbar-lang{display:flex;gap:6px;}
+.tlbtn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:20px;padding:3px 11px;font-size:12px;cursor:pointer;transition:.15s;font-family:inherit;}
+.tlbtn:hover{background:rgba(255,255,255,.15);}
+.tlbtn.active{background:var(--accent);border-color:var(--accent);}
+
+/* ── PROGRESS ── */
+.progress-bar{
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+  display:flex;
+  align-items:center;
+  gap:0;
+  overflow-x:auto;
+}
+.step-pill{
+  display:flex;align-items:center;gap:0;
+  flex-shrink:0;
+}
+.step-node{
+  display:flex;align-items:center;gap:6px;
+  padding:12px 16px;
+  font-size:12.5px;font-weight:500;
+  color:var(--muted);
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:.2s;
+  white-space:nowrap;
+}
+.step-node.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:700;}
+.step-node.done{color:var(--success);}
+.step-num{
+  width:20px;height:20px;border-radius:50%;
+  background:var(--border);
+  color:var(--muted);
+  font-size:11px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  transition:.2s;
+}
+.step-node.active .step-num{background:var(--accent);color:#fff;}
+.step-node.done .step-num{background:var(--success);color:#fff;}
+.step-arrow{color:var(--border);font-size:12px;padding:0 2px;}
+
+/* ── MAIN LAYOUT ── */
+.wizard-body{
+  max-width:860px;
+  margin:0 auto;
+  padding:24px 20px 60px;
+}
+
+/* ── SECTION CARD ── */
+.section-card{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  margin-bottom:20px;
+  overflow:hidden;
+}
+.section-card-head{
+  padding:14px 18px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;
+  user-select:none;
+}
+.section-card-head-left{display:flex;align-items:center;gap:10px;}
+.section-icon{font-size:18px;}
+.section-title{font-weight:700;font-size:14px;}
+.section-subtitle{font-size:11px;color:var(--muted);margin-top:1px;}
+.section-toggle-icon{font-size:16px;color:var(--muted);transition:.2s;}
+.section-card-head.collapsed .section-toggle-icon{transform:rotate(-90deg);}
+.section-body{padding:18px 20px;}
+.section-body.hidden{display:none;}
+
+/* ── STEP PAGES ── */
+.step-page{display:none;}
+.step-page.active{display:block;}
+
+/* ── FORM ROWS ── */
+.form-row{
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+  gap:14px 20px;
+  margin-bottom:14px;
+}
+.form-row.single{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
+.form-label .optional{font-weight:400;color:#aaa;font-size:11px;margin-left:4px;}
+.form-input,.form-select,.form-textarea{
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:8px 12px;
+  font-size:13px;
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--white);
+  outline:none;
+  transition:border-color .2s;
+}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-textarea{resize:vertical;min-height:70px;}
+
+/* ── TOGGLE SWITCHES ── */
+.toggle-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  margin-bottom:8px;
+  transition:border-color .15s;
+}
+.toggle-row:hover{border-color:#c5cae9;}
+.toggle-row.on{border-color:var(--accent);background:#f0f4ff;}
+.toggle-label{display:flex;flex-direction:column;gap:2px;}
+.toggle-label-main{font-size:13px;font-weight:600;}
+.toggle-label-sub{font-size:11px;color:var(--muted);}
+.toggle-switch{
+  position:relative;width:40px;height:22px;flex-shrink:0;
+}
+.toggle-switch input{opacity:0;width:0;height:0;}
+.toggle-track{
+  position:absolute;inset:0;
+  background:var(--border);
+  border-radius:11px;
+  cursor:pointer;
+  transition:.2s;
+}
+.toggle-track::before{
+  content:'';
+  position:absolute;
+  width:16px;height:16px;
+  left:3px;top:3px;
+  background:#fff;
+  border-radius:50%;
+  transition:.2s;
+}
+.toggle-switch input:checked+.toggle-track{background:var(--accent);}
+.toggle-switch input:checked+.toggle-track::before{transform:translateX(18px);}
+
+/* ── CHIP / TAG SELECTOR ── */
+.chip-group{display:flex;flex-wrap:wrap;gap:7px;}
+.chip-option{
+  border:1.5px solid var(--border);
+  background:var(--bg);
+  border-radius:20px;
+  padding:5px 14px;
+  font-size:12.5px;
+  font-family:inherit;
+  color:var(--muted);
+  cursor:pointer;
+  transition:.15s;
+  user-select:none;
+}
+.chip-option:hover{border-color:#90a4d4;color:var(--ink);}
+.chip-option.selected{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.chip-option.selected-green{background:var(--success);border-color:var(--success);color:#fff;font-weight:600;}
+
+/* ── COLOR THEME PICKER ── */
+.theme-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:10px;
+}
+.theme-card{
+  border:2px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.15s;
+}
+.theme-card:hover{border-color:#90a4d4;transform:translateY(-2px);}
+.theme-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.2);}
+.theme-preview{height:36px;display:flex;}
+.theme-preview-pri{flex:3;}
+.theme-preview-acc{flex:1;}
+.theme-name{font-size:11px;font-weight:600;text-align:center;padding:5px 4px;color:var(--muted);}
+
+/* ── CONTACT ENTRY ── */
+.contact-entry{
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:10px;
+  background:var(--bg);
+}
+.contact-entry-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.contact-entry-title{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:6px;}
+.btn-del-entry{
+  background:transparent;border:1.5px solid #fca5a5;
+  color:var(--danger);border-radius:6px;
+  padding:3px 10px;font-size:11px;cursor:pointer;font-family:inherit;
+}
+.btn-del-entry:hover{background:#fef2f2;}
+.btn-add-entry{
+  background:transparent;
+  border:1.5px dashed var(--accent);
+  color:var(--accent);
+  border-radius:8px;padding:8px 16px;
+  font-size:13px;font-family:inherit;cursor:pointer;
+  width:100%;text-align:center;
+  transition:.15s;margin-top:4px;
+}
+.btn-add-entry:hover{background:#eff6ff;}
+
+/* ── DRUG ENTRY ── */
+.drug-entry{
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  padding:12px 14px;
+  margin-bottom:10px;
+  background:var(--bg);
+}
+.drug-entry-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.drug-entry-title{font-weight:700;font-size:12.5px;}
+
+/* ── FONT PICKER ── */
+.font-picker-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.font-card{
+  border:2px solid var(--border);
+  border-radius:8px;
+  padding:8px 14px;
+  cursor:pointer;
+  transition:.15s;
+  text-align:center;
+}
+.font-card:hover{border-color:#90a4d4;}
+.font-card.selected{border-color:var(--accent);background:#eff6ff;}
+.font-card-sample{font-size:16px;font-weight:700;margin-bottom:2px;}
+.font-card-name{font-size:10px;color:var(--muted);}
+
+/* ── NAVIGATION BUTTONS ── */
+.wizard-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:28px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+}
+.btn-prev{
+  background:var(--white);border:1.5px solid var(--border);
+  color:var(--muted);border-radius:8px;
+  padding:10px 22px;font-size:14px;font-family:inherit;cursor:pointer;
+  transition:.15s;
+}
+.btn-prev:hover{border-color:#999;color:var(--ink);}
+.btn-next{
+  background:var(--accent);color:#fff;border:none;
+  border-radius:8px;padding:10px 28px;
+  font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;
+  transition:.15s;display:flex;align-items:center;gap:8px;
+}
+.btn-next:hover{background:#1d4ed8;}
+.btn-generate{
+  background:linear-gradient(135deg,#059669,#0891b2);
+  color:#fff;border:none;
+  border-radius:8px;padding:12px 32px;
+  font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;
+  transition:.15s;display:flex;align-items:center;gap:10px;
+  box-shadow:0 4px 16px rgba(5,150,105,.3);
+}
+.btn-generate:hover{background:linear-gradient(135deg,#047857,#0e7490);transform:translateY(-1px);}
+
+/* ── SUMMARY PREVIEW ── */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px;}
+.summary-item{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.summary-item-label{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.summary-item-value{font-size:13px;font-weight:600;color:var(--ink);}
+
+/* ── SECTION LABEL WITH BADGE ── */
+.with-badge{display:flex;align-items:center;gap:8px;}
+.badge-opt{background:#fef3c7;color:#92400e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+.badge-req{background:#dbeafe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;}
+
+/* ── DIVIDER ── */
+.divider{border:none;border-top:1px dashed var(--border);margin:14px 0;}
+
+/* ── TIME EDIT INPUT ── */
+.time-edit-input {
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 7px;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+  width: 88px;
+  transition: border-color .15s;
+  cursor: text;
+}
+.time-edit-input:focus { border-color: var(--accent); }
+.toggle-row.on .time-edit-input { border-color: #93c5fd; background: #f0f7ff; }
+
+/* ── RANGE SLIDER ── */
+.range-group{display:flex;align-items:center;gap:12px;}
+.range-input{flex:1;accent-color:var(--accent);}
+.range-value{font-weight:700;color:var(--accent);min-width:36px;text-align:right;}
+
+/* ── INFO BOX ── */
+.info-box{
+  background:#eff6ff;border:1px solid #bfdbfe;
+  border-radius:8px;padding:10px 14px;
+  font-size:12px;color:#1e40af;
+  margin-bottom:14px;
+  display:flex;gap:8px;align-items:flex-start;
+}
+
+/* ── OUTPUT SECTION ── */
+#outputSection{display:none;}
+.output-header{
+  background:linear-gradient(135deg,#059669,#0891b2);
+  color:#fff;
+  border-radius:var(--radius);
+  padding:20px 24px;
+  margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px;
+}
+.output-title{font-size:18px;font-weight:700;}
+.output-sub{font-size:12px;opacity:.8;margin-top:3px;}
+.output-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-out{
+  background:rgba(255,255,255,.2);color:#fff;border:1.5px solid rgba(255,255,255,.5);
+  border-radius:8px;padding:8px 18px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  transition:.15s;display:flex;align-items:center;gap:6px;
+}
+.btn-out:hover{background:rgba(255,255,255,.35);}
+.btn-out-edit{background:rgba(0,0,0,.2);}
+.output-frame-wrap{
+  border:2px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  background:var(--white);
+}
+.output-frame{width:100%;min-height:600px;border:none;display:block;}
+
+/* ══════════════════════════════════════
+   AUTO-SAVE TOAST
+══════════════════════════════════════ */
+#save-toast{
+  position:fixed;bottom:80px;right:16px;z-index:9999;
+  background:#1a1f2e;color:#fff;
+  border-radius:24px;padding:8px 16px;
+  font-size:12px;font-weight:600;
+  display:flex;align-items:center;gap:7px;
+  box-shadow:0 4px 20px rgba(0,0,0,.25);
+  opacity:0;transform:translateY(8px);
+  transition:opacity .3s,transform .3s;
+  pointer-events:none;
+}
+#save-toast.show{opacity:1;transform:translateY(0);}
+#save-toast .dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--success);flex-shrink:0;
+}
+#save-toast.saving .dot{
+  background:var(--warn);
+  animation:pulse-dot .8s infinite;
+}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+#restore-banner{
+  background:#fef3c7;border-bottom:1px solid #fde68a;
+  padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;font-size:13px;color:#92400e;
+  flex-wrap:wrap;
+}
+#restore-banner strong{font-weight:700;}
+.restore-btn{
+  background:#f59e0b;color:#fff;border:none;
+  border-radius:6px;padding:6px 14px;font-size:12px;
+  font-family:inherit;cursor:pointer;font-weight:700;
+  flex-shrink:0;
+}
+.restore-btn.clear{background:transparent;color:#92400e;border:1px solid #fbbf24;}
+.restore-btn:hover{opacity:.85;}
+
+/* ══════════════════════════════════════
+   MOBILE BOTTOM TAB BAR
+══════════════════════════════════════ */
+#mobile-tab-bar{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  background:#fff;
+  border-top:1px solid var(--border);
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  padding:4px 0 env(safe-area-inset-bottom,4px);
+}
+.mtab-list{
+  display:flex;align-items:stretch;
+}
+.mtab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6px 2px 4px;gap:3px;
+  cursor:pointer;border:none;background:transparent;
+  font-family:inherit;color:var(--muted);font-size:9.5px;font-weight:500;
+  transition:color .15s;min-height:52px;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+}
+.mtab.active{color:var(--accent);}
+.mtab.done{color:var(--success);}
+.mtab-icon{font-size:18px;line-height:1;}
+.mtab-label{line-height:1;text-align:center;}
+.mtab-num{
+  position:absolute;top:6px;right:calc(50% - 18px);
+  width:14px;height:14px;border-radius:50%;
+  background:var(--border);color:var(--muted);
+  font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.mtab.active .mtab-num{background:var(--accent);color:#fff;}
+.mtab.done .mtab-num{background:var(--success);color:#fff;}
+/* Active indicator bar */
+.mtab.active::after{
+  content:'';
+  position:absolute;top:0;left:15%;right:15%;height:2.5px;
+  background:var(--accent);border-radius:0 0 3px 3px;
+}
+
+/* ══════════════════════════════════════
+   DESKTOP SIDE PANEL (≥1100px)
+══════════════════════════════════════ */
+@media(min-width:1100px){
+  .wizard-shell{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    min-height:calc(100vh - 56px);
+    align-items:start;
+  }
+  .side-nav{
+    position:sticky;top:56px;
+    background:var(--white);
+    border-right:1px solid var(--border);
+    min-height:calc(100vh - 56px);
+    padding:24px 0;
+    display:flex;flex-direction:column;
+    gap:2px;
+  }
+  .side-nav-item{
+    display:flex;align-items:center;gap:10px;
+    padding:11px 20px;
+    font-size:13px;font-weight:500;
+    color:var(--muted);cursor:pointer;
+    border-left:3px solid transparent;
+    transition:.15s;
+    border-radius:0;
+    user-select:none;
+  }
+  .side-nav-item:hover{background:var(--bg);color:var(--ink);}
+  .side-nav-item.active{
+    color:var(--accent);font-weight:700;
+    border-left-color:var(--accent);
+    background:#eff6ff;
+  }
+  .side-nav-item.done{color:var(--success);}
+  .side-nav-item.done .sn-num{background:var(--success);color:#fff;}
+  .side-nav-item.active .sn-num{background:var(--accent);color:#fff;}
+  .sn-num{
+    width:22px;height:22px;border-radius:50%;
+    background:var(--border);color:var(--muted);
+    font-size:11px;font-weight:700;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .sn-icon{font-size:15px;margin-right:2px;}
+  .side-nav-save{
+    margin-top:auto;padding:16px 20px;
+    border-top:1px solid var(--border);
+    font-size:11px;color:var(--muted);
+    display:flex;align-items:center;gap:6px;
+  }
+  .sn-save-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--border);flex-shrink:0;
+    transition:background .3s;
+  }
+  .sn-save-dot.saved{background:var(--success);}
+  /* Hide top progress bar on desktop */
+  .progress-bar{display:none;}
+  /* Wide body */
+  .wizard-body{
+    max-width:100%;
+    padding:28px 32px 60px;
+  }
+  /* Save toast higher on desktop */
+  #save-toast{bottom:24px;}
+}
+
+/* ══════════════════════════════════════
+   TABLET (640–1099px)
+══════════════════════════════════════ */
+@media(min-width:640px) and (max-width:1099px){
+  .wizard-body{max-width:720px;padding:20px 24px 60px;}
+  .form-row{grid-template-columns:repeat(auto-fill, minmax(200px,1fr));}
+  .theme-grid{grid-template-columns:repeat(4,1fr);}
+  .toggle-row{padding:12px 16px;}
+  .toggle-label-main{font-size:14px;}
+}
+
+/* ══════════════════════════════════════
+   MOBILE (< 640px)
+══════════════════════════════════════ */
+@media(max-width:639px){
+  /* Show tab bar, hide top progress */
+  #mobile-tab-bar{display:block;}
+  .progress-bar{display:none;}
+
+  .topbar{padding:10px 14px;}
+  .topbar-brand{font-size:13px;}
+  .topbar-sub{display:none;}
+  .tlbtn{padding:3px 8px;font-size:11px;}
+
+  .wizard-body{
+    padding:12px 12px 100px; /* bottom padding for tab bar */
+    max-width:100%;
+  }
+
+  .section-card-head{padding:12px 14px;}
+  .section-icon{font-size:16px;}
+  .section-title{font-size:13px;}
+  .section-body{padding:14px 14px;}
+
+  /* Full-width form fields on mobile */
+  .form-row{grid-template-columns:1fr;gap:10px;}
+  .form-row.two-col-mobile{grid-template-columns:1fr 1fr;}
+
+  /* Inputs: taller touch targets */
+  .form-input,.form-select,.form-textarea{
+    padding:11px 12px;font-size:14px;
+  }
+
+  /* Chips: slightly larger for fingers */
+  .chip-option{padding:7px 14px;font-size:13px;}
+
+  /* Toggle rows: stacked on tiny screens */
+  .toggle-row{
+    flex-wrap:wrap;gap:8px;padding:12px 12px;
+  }
+  .toggle-label{flex:1;min-width:0;}
+  .toggle-label-main{font-size:14px;}
+  .toggle-label-sub{font-size:12px;}
+
+  /* Time inputs in toggle rows: full width slot */
+  .toggle-row .time-inputs-wrap{
+    width:100%;display:flex;align-items:center;gap:6px;
+    order:3;
+  }
+  .time-edit-input{width:100%;flex:1;font-size:13px;padding:7px 10px;}
+
+  /* Theme grid 3 cols on phone */
+  .theme-grid{grid-template-columns:repeat(3,1fr);}
+
+  /* Nav buttons: full width on mobile */
+  .wizard-nav{
+    flex-direction:column-reverse;gap:10px;
+    padding-top:16px;margin-top:20px;
+  }
+  .btn-prev,.btn-next,.btn-generate{
+    width:100%;justify-content:center;
+    padding:13px 20px;font-size:15px;
+  }
+
+  /* Summary grid 1 col */
+  .summary-grid{grid-template-columns:1fr 1fr;}
+
+  /* Output iframe shorter on mobile */
+  .output-frame{min-height:400px;}
+  .output-header{padding:14px 16px;}
+  .output-title{font-size:15px;}
+  .output-actions{gap:7px;}
+  .btn-out{padding:7px 12px;font-size:12px;}
+}
+
+/* ── Very small phones ── */
+@media(max-width:360px){
+  .summary-grid{grid-template-columns:1fr;}
+  .theme-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- RESTORE BANNER (shown if saved data exists) -->
+<div id="restore-banner" style="display:none;">
+  <span>💾 <strong>發現上次未完成的設定</strong>，是否要還原？</span>
+  <div style="display:flex;gap:8px;">
+    <button class="restore-btn" onclick="restoreSave()">✅ 還原</button>
+    <button class="restore-btn clear" onclick="dismissRestore()">✕ 忽略</button>
+  </div>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>
+    <div class="topbar-brand">📋 外籍看護工作日誌 — 客製化精靈</div>
+    <div class="topbar-sub">Caregiver Log Customization Wizard</div>
+  </div>
+  <div class="topbar-lang">
+    <button class="tlbtn active" data-lang="zh" onclick="setWizLang('zh')">中文</button>
+    <button class="tlbtn" data-lang="en" onclick="setWizLang('en')">EN</button>
+    <button class="tlbtn" data-lang="id" onclick="setWizLang('id')">ID</button>
+    <button class="tlbtn" data-lang="vi" onclick="setWizLang('vi')">VI</button>
+  </div>
+</div>
+
+<!-- PROGRESS BAR (tablet) -->
+<div class="progress-bar" id="progressBar">
+  <div class="step-pill">
+    <div class="step-node active" id="step-tab-1" onclick="gotoStep(1)">
+      <div class="step-num">1</div>
+      <span class="step-zh">基本資訊</span><span class="step-en" style="display:none">Basic Info</span><span class="step-id" style="display:none">Info Dasar</span><span class="step-vi" style="display:none">Thông tin</span>
+    </div>
+    <span class="step-arrow">›</span>
+  </div>
+  <div class="step-pill">
+    <div class="step-node" id="step-tab-2" onclick="gotoStep(2)">
+      <div class="step-num">2</div>
+      <span class="step-zh">版面外觀</span><span class="step-en" style="display:none">Appearance</span><span class="step-id" style="display:none">Tampilan</span><span class="step-vi" style="display:none">Giao diện</span>
+    </div>
+    <span class="step-arrow">›</span>
+  </div>
+  <div class="step-pill">
+    <div class="step-node" id="step-tab-3" onclick="gotoStep(3)">
+      <div class="step-num">3</div>
+      <span class="step-zh">記錄欄位</span><span class="step-en" style="display:none">Sections</span><span class="step-id" style="display:none">Bagian</span><span class="step-vi" style="display:none">Mục</span>
+    </div>
+    <span class="step-arrow">›</span>
+  </div>
+  <div class="step-pill">
+    <div class="step-node" id="step-tab-4" onclick="gotoStep(4)">
+      <div class="step-num">4</div>
+      <span class="step-zh">緊急聯絡</span><span class="step-en" style="display:none">Emergency</span><span class="step-id" style="display:none">Darurat</span><span class="step-vi" style="display:none">Khẩn cấp</span>
+    </div>
+    <span class="step-arrow">›</span>
+  </div>
+  <div class="step-pill">
+    <div class="step-node" id="step-tab-5" onclick="gotoStep(5)">
+      <div class="step-num">5</div>
+      <span class="step-zh">藥物清單</span><span class="step-en" style="display:none">Medications</span><span class="step-id" style="display:none">Obat</span><span class="step-vi" style="display:none">Thuốc</span>
+    </div>
+    <span class="step-arrow">›</span>
+  </div>
+  <div class="step-pill">
+    <div class="step-node" id="step-tab-6" onclick="gotoStep(6)">
+      <div class="step-num">6</div>
+      <span class="step-zh">預覽輸出</span><span class="step-en" style="display:none">Generate</span><span class="step-id" style="display:none">Buat</span><span class="step-vi" style="display:none">Tạo</span>
+    </div>
+  </div>
+</div>
+
+<!-- WIZARD SHELL: side nav (desktop) + content -->
+<div class="wizard-shell">
+
+<!-- SIDE NAV (desktop only) -->
+<nav class="side-nav" id="sideNav">
+  <div class="side-nav-item active" data-sn="1" onclick="gotoStep(1)">
+    <span class="sn-num">1</span><span class="sn-icon">🏥</span> 基本資訊
+  </div>
+  <div class="side-nav-item" data-sn="2" onclick="gotoStep(2)">
+    <span class="sn-num">2</span><span class="sn-icon">🎨</span> 版面外觀
+  </div>
+  <div class="side-nav-item" data-sn="3" onclick="gotoStep(3)">
+    <span class="sn-num">3</span><span class="sn-icon">📋</span> 記錄欄位
+  </div>
+  <div class="side-nav-item" data-sn="4" onclick="gotoStep(4)">
+    <span class="sn-num">4</span><span class="sn-icon">🚨</span> 緊急聯絡
+  </div>
+  <div class="side-nav-item" data-sn="5" onclick="gotoStep(5)">
+    <span class="sn-num">5</span><span class="sn-icon">💊</span> 藥物清單
+  </div>
+  <div class="side-nav-item" data-sn="6" onclick="gotoStep(6)">
+    <span class="sn-num">6</span><span class="sn-icon">✨</span> 預覽生成
+  </div>
+  <div class="side-nav-save" id="snSaveStatus">
+    <span class="sn-save-dot" id="snDot"></span>
+    <span id="snSaveText">尚未儲存</span>
+  </div>
+</nav>
+
+<div class="wizard-body">
+
+<!-- ════════════════ STEP 1: BASIC INFO ════════════════ -->
+<div class="step-page active" id="step-1">
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🏥</span>
+        <div>
+          <div class="section-title wz-zh">機構 / 家庭基本資訊</div>
+          <div class="section-title wz-en" style="display:none">Organization / Family Basic Info</div>
+          <div class="section-subtitle wz-zh">選填：填寫後會顯示在表單頂部</div>
+          <div class="section-subtitle wz-en" style="display:none">Optional: shown at top of form</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">機構 / 家庭名稱 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-org-name" type="text" placeholder="例：林家、安心居家照護">
+        </div>
+        <div class="form-group">
+          <label class="form-label">地址 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-org-addr" type="text" placeholder="例：台中市西屯區…">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">被照顧者姓名預設 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-patient-name" type="text" placeholder="例：林爺爺">
+        </div>
+        <div class="form-group">
+          <label class="form-label">看護姓名預設 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-caregiver-name" type="text" placeholder="例：Siti">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">備注文字（印於頁尾）<span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-footer-note" type="text" placeholder="例：本表單需每日繳回家屬">
+        </div>
+        <div class="form-group">
+          <label class="form-label">表單語言（主語言）</label>
+          <select class="form-select" id="cfg-lang">
+            <option value="zh">中文（繁體）</option>
+            <option value="en">English</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="vi">Tiếng Việt</option>
+          </select>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">副語言顯示（看護母語對照）</label>
+          <div class="chip-group" id="cfg-sublang">
+            <div class="chip-option" data-val="en" onclick="toggleChip(this,'cfg-sublang','none-exclusive')">🇬🇧 English</div>
+            <div class="chip-option selected" data-val="id" onclick="toggleChip(this,'cfg-sublang','none-exclusive')">🇮🇩 Bahasa</div>
+            <div class="chip-option selected" data-val="vi" onclick="toggleChip(this,'cfg-sublang','none-exclusive')">🇻🇳 Tiếng Việt</div>
+            <div class="chip-option" data-val="none" onclick="toggleChip(this,'cfg-sublang','none-exclusive')">🚫 不顯示</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🧑‍⚕️</span>
+        <div>
+          <div class="section-title">照護對象設定</div>
+          <div class="section-subtitle">選填：協助自動填入常用資訊</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">照護需求程度</label>
+          <div class="chip-group" id="cfg-care-level">
+            <div class="chip-option selected" data-val="full" onclick="toggleChip(this,'cfg-care-level','single')">全天候照護</div>
+            <div class="chip-option" data-val="semi" onclick="toggleChip(this,'cfg-care-level','single')">半自理</div>
+            <div class="chip-option" data-val="night" onclick="toggleChip(this,'cfg-care-level','single')">夜間為主</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">管路 / 特殊護理</label>
+          <div class="chip-group" id="cfg-tubes">
+            <div class="chip-option" data-val="ng" onclick="toggleChip(this,'cfg-tubes','multi')">鼻胃管</div>
+            <div class="chip-option" data-val="foley" onclick="toggleChip(this,'cfg-tubes','multi')">導尿管</div>
+            <div class="chip-option" data-val="trach" onclick="toggleChip(this,'cfg-tubes','multi')">氣切</div>
+            <div class="chip-option" data-val="colostomy" onclick="toggleChip(this,'cfg-tubes','multi')">腸造口</div>
+            <div class="chip-option" data-val="wound" onclick="toggleChip(this,'cfg-tubes','multi')">傷口護理</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">飲食方式</label>
+          <div class="chip-group" id="cfg-feed-type">
+            <div class="chip-option selected" data-val="oral" onclick="toggleChip(this,'cfg-feed-type','single')">口食</div>
+            <div class="chip-option" data-val="tube" onclick="toggleChip(this,'cfg-feed-type','single')">管灌</div>
+            <div class="chip-option" data-val="both" onclick="toggleChip(this,'cfg-feed-type','single')">口食＋管灌</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">移動能力</label>
+          <div class="chip-group" id="cfg-mobility">
+            <div class="chip-option" data-val="walk" onclick="toggleChip(this,'cfg-mobility','single')">可行走</div>
+            <div class="chip-option selected" data-val="wheelchair" onclick="toggleChip(this,'cfg-mobility','single')">輪椅</div>
+            <div class="chip-option" data-val="bedridden" onclick="toggleChip(this,'cfg-mobility','single')">臥床</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <div></div>
+    <button class="btn-next" onclick="gotoStep(2)">下一步：版面外觀 ›</button>
+  </div>
+</div>
+
+<!-- ════════════════ STEP 2: APPEARANCE ════════════════ -->
+<div class="step-page" id="step-2">
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🎨</span>
+        <div>
+          <div class="section-title">主題色彩</div>
+          <div class="section-subtitle">選擇表單主色調</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="theme-grid" id="themeGrid">
+        <div class="theme-card selected" data-theme="blue" onclick="selectTheme('blue')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#1a5276"></div><div class="theme-preview-acc" style="background:#e67e22"></div></div>
+          <div class="theme-name">深海藍</div>
+        </div>
+        <div class="theme-card" data-theme="green" onclick="selectTheme('green')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#1a6b3c"></div><div class="theme-preview-acc" style="background:#d4ac0d"></div></div>
+          <div class="theme-name">森林綠</div>
+        </div>
+        <div class="theme-card" data-theme="purple" onclick="selectTheme('purple')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#6c3483"></div><div class="theme-preview-acc" style="background:#e67e22"></div></div>
+          <div class="theme-name">典雅紫</div>
+        </div>
+        <div class="theme-card" data-theme="warm" onclick="selectTheme('warm')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#935116"></div><div class="theme-preview-acc" style="background:#c0392b"></div></div>
+          <div class="theme-name">溫暖棕</div>
+        </div>
+        <div class="theme-card" data-theme="teal" onclick="selectTheme('teal')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#0e7e72"></div><div class="theme-preview-acc" style="background:#d4ac0d"></div></div>
+          <div class="theme-name">青碧藍</div>
+        </div>
+        <div class="theme-card" data-theme="rose" onclick="selectTheme('rose')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#9d174d"></div><div class="theme-preview-acc" style="background:#0891b2"></div></div>
+          <div class="theme-name">玫瑰紅</div>
+        </div>
+        <div class="theme-card" data-theme="slate" onclick="selectTheme('slate')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#334155"></div><div class="theme-preview-acc" style="background:#0ea5e9"></div></div>
+          <div class="theme-name">岩石灰</div>
+        </div>
+        <div class="theme-card" data-theme="indigo" onclick="selectTheme('indigo')">
+          <div class="theme-preview"><div class="theme-preview-pri" style="background:#3730a3"></div><div class="theme-preview-acc" style="background:#f59e0b"></div></div>
+          <div class="theme-name">靛藍金</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🔡</span>
+        <div>
+          <div class="section-title">字體與排版</div>
+          <div class="section-subtitle">文字大小、行高與欄位密度</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">字體大小</label>
+          <div class="chip-group" id="cfg-fontsize">
+            <div class="chip-option" data-val="11" onclick="toggleChip(this,'cfg-fontsize','single')">小（11px）</div>
+            <div class="chip-option selected" data-val="13" onclick="toggleChip(this,'cfg-fontsize','single')">標準（13px）</div>
+            <div class="chip-option" data-val="15" onclick="toggleChip(this,'cfg-fontsize','single')">大（15px）</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">頁面邊距</label>
+          <div class="chip-group" id="cfg-margin">
+            <div class="chip-option" data-val="tight" onclick="toggleChip(this,'cfg-margin','single')">緊湊</div>
+            <div class="chip-option selected" data-val="normal" onclick="toggleChip(this,'cfg-margin','single')">標準</div>
+            <div class="chip-option" data-val="wide" onclick="toggleChip(this,'cfg-margin','single')">寬鬆</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">表格行高</label>
+          <div class="chip-group" id="cfg-rowheight">
+            <div class="chip-option" data-val="compact" onclick="toggleChip(this,'cfg-rowheight','single')">緊湊</div>
+            <div class="chip-option selected" data-val="normal" onclick="toggleChip(this,'cfg-rowheight','single')">標準</div>
+            <div class="chip-option" data-val="spacious" onclick="toggleChip(this,'cfg-rowheight','single')">寬敞</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">時間欄寬度</label>
+          <div class="chip-group" id="cfg-timecol">
+            <div class="chip-option" data-val="60" onclick="toggleChip(this,'cfg-timecol','single')">窄</div>
+            <div class="chip-option selected" data-val="80" onclick="toggleChip(this,'cfg-timecol','single')">標準</div>
+            <div class="chip-option" data-val="100" onclick="toggleChip(this,'cfg-timecol','single')">寬</div>
+          </div>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">表格斑馬紋</label>
+          <div class="chip-group" id="cfg-zebra">
+            <div class="chip-option selected" data-val="yes" onclick="toggleChip(this,'cfg-zebra','single')">開啟</div>
+            <div class="chip-option" data-val="no" onclick="toggleChip(this,'cfg-zebra','single')">關閉</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">頂部橫幅旗幟</label>
+          <div class="chip-group" id="cfg-flags">
+            <div class="chip-option selected" data-val="yes" onclick="toggleChip(this,'cfg-flags','single')">顯示 🇹🇼🇮🇩🇻🇳</div>
+            <div class="chip-option" data-val="no" onclick="toggleChip(this,'cfg-flags','single')">隱藏</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <button class="btn-prev" onclick="gotoStep(1)">‹ 上一步</button>
+    <button class="btn-next" onclick="gotoStep(3)">下一步：記錄欄位 ›</button>
+  </div>
+</div>
+
+<!-- ════════════════ STEP 3: SECTIONS ════════════════ -->
+<div class="step-page" id="step-3">
+  <div class="info-box">💡 開啟的欄位會出現在生成的日誌中；關閉的欄位完全不顯示，讓版面更清爽。</div>
+
+  <!-- Vital Signs -->
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">💗</span>
+        <div>
+          <div class="section-title with-badge">生命徵象 <span class="badge-req">常用</span></div>
+          <div class="section-subtitle">血壓、體溫、脈搏、血糖</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div id="vital-toggles">
+        <div class="toggle-row on" data-sec="vital-bp">
+          <div class="toggle-label"><div class="toggle-label-main">血壓 Blood Pressure</div><div class="toggle-label-sub">mmHg 上午/下午各一次</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'vital-bp')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="vital-temp">
+          <div class="toggle-label"><div class="toggle-label-main">體溫 Temperature</div><div class="toggle-label-sub">°C 上午/下午</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'vital-temp')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="vital-pulse">
+          <div class="toggle-label"><div class="toggle-label-main">脈搏 Pulse</div><div class="toggle-label-sub">bpm 上午/下午</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'vital-pulse')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="vital-sugar">
+          <div class="toggle-label"><div class="toggle-label-main">血糖 Blood Sugar</div><div class="toggle-label-sub">mg/dL 飯前/飯後</div></div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'vital-sugar')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row" data-sec="vital-spo2">
+          <div class="toggle-label"><div class="toggle-label-main">血氧 SpO₂</div><div class="toggle-label-sub">% 額外加入血氧飽和度</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="toggleRow(this,'vital-spo2')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row" data-sec="vital-weight">
+          <div class="toggle-label"><div class="toggle-label-main">體重 Body Weight</div><div class="toggle-label-sub">kg 定期量測</div></div>
+          <label class="toggle-switch"><input type="checkbox" onchange="toggleRow(this,'vital-weight')"><span class="toggle-track"></span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Care -->
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🗓️</span>
+        <div>
+          <div class="section-title with-badge">每日照護時程 <span class="badge-req">常用</span></div>
+          <div class="section-subtitle">選擇要顯示的照護時段</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px;">🕐 時間欄可直接修改，開關控制此時段是否出現在生成的表單中</div>
+      <div id="care-toggles">
+        <div class="toggle-row on" data-sec="care-morning">
+          <div class="toggle-label">
+            <div class="toggle-label-main">晨間照護</div>
+            <div class="toggle-label-sub">起床、清潔、更衣</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-morning-s" value="06:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-morning-e" value="08:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-breakfast">
+          <div class="toggle-label">
+            <div class="toggle-label-main">早餐</div>
+            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-breakfast-s" value="08:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-breakfast-e" value="09:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-breakfast')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-morning-act">
+          <div class="toggle-label">
+            <div class="toggle-label-main">上午活動</div>
+            <div class="toggle-label-sub">活動、復健、用藥</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-morning-act-s" value="09:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-morning-act-e" value="12:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning-act')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-lunch">
+          <div class="toggle-label">
+            <div class="toggle-label-main">午餐</div>
+            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-lunch-s" value="12:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-lunch-e" value="13:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-lunch')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-nap">
+          <div class="toggle-label">
+            <div class="toggle-label-main">午休</div>
+            <div class="toggle-label-sub">睡眠狀況記錄</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-nap-s" value="13:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-nap-e" value="15:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-nap')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-afternoon">
+          <div class="toggle-label">
+            <div class="toggle-label-main">下午活動</div>
+            <div class="toggle-label-sub">點心、沐浴、娛樂</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-afternoon-s" value="15:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-afternoon-e" value="18:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-afternoon')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-dinner">
+          <div class="toggle-label">
+            <div class="toggle-label-main">晚餐</div>
+            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-dinner-s" value="18:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-dinner-e" value="19:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-dinner')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-evening">
+          <div class="toggle-label">
+            <div class="toggle-label-main">晚間活動</div>
+            <div class="toggle-label-sub">用藥、準備就寢</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-evening-s" value="19:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-evening-e" value="21:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-evening')"><span class="toggle-track"></span></label>
+        </div>
+        <div class="toggle-row on" data-sec="care-night">
+          <div class="toggle-label">
+            <div class="toggle-label-main">夜間照護</div>
+            <div class="toggle-label-sub">翻身、夜間如廁</div>
+          </div>
+          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
+            <input class="time-edit-input" type="time" id="time-care-night-s" value="21:00">
+            <span style="color:var(--muted);font-size:12px;">–</span>
+            <input class="time-edit-input" type="time" id="time-care-night-e" value="06:00">
+          </div>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-night')"><span class="toggle-track"></span></label>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="form-group">
+        <label class="form-label">自訂時段 <span class="optional">選填，每行一個</span></label>
+        <textarea class="form-textarea" id="cfg-custom-slots" placeholder="例：&#10;07:30 早餐藥物&#10;16:00 復健時間"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other Sections -->
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">📊</span>
+        <div>
+          <div class="section-title">其他記錄欄位</div>
+          <div class="section-subtitle">排泄、特殊狀況、簽名</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="toggle-row on" data-sec="sec-elim">
+        <div class="toggle-label"><div class="toggle-label-main">排泄記錄</div><div class="toggle-label-sub">排尿/排便次數、顏色、性狀</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'sec-elim')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-row on" data-sec="sec-notes">
+        <div class="toggle-label"><div class="toggle-label-main">特殊狀況記錄</div><div class="toggle-label-sub">情緒、就醫、訪客、身體不適</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'sec-notes')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-row on" data-sec="sec-signature">
+        <div class="toggle-label"><div class="toggle-label-main">簽名欄</div><div class="toggle-label-sub">看護人員 ＋ 家屬簽名</div></div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'sec-signature')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-row" data-sec="sec-tube-feed">
+        <div class="toggle-label"><div class="toggle-label-main">管灌記錄</div><div class="toggle-label-sub">管灌時間、配方、容量</div></div>
+        <label class="toggle-switch"><input type="checkbox" onchange="toggleRow(this,'sec-tube-feed')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-row" data-sec="sec-wound">
+        <div class="toggle-label"><div class="toggle-label-main">傷口護理記錄</div><div class="toggle-label-sub">換藥時間、傷口狀況</div></div>
+        <label class="toggle-switch"><input type="checkbox" onchange="toggleRow(this,'sec-wound')"><span class="toggle-track"></span></label>
+      </div>
+      <div class="toggle-row" data-sec="sec-rehab">
+        <div class="toggle-label"><div class="toggle-label-main">復健記錄</div><div class="toggle-label-sub">復健項目、時間、成效</div></div>
+        <label class="toggle-switch"><input type="checkbox" onchange="toggleRow(this,'sec-rehab')"><span class="toggle-track"></span></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <button class="btn-prev" onclick="gotoStep(2)">‹ 上一步</button>
+    <button class="btn-next" onclick="gotoStep(4)">下一步：緊急聯絡 ›</button>
+  </div>
+</div>
+
+<!-- ════════════════ STEP 4: EMERGENCY ════════════════ -->
+<div class="step-page" id="step-4">
+  <div class="info-box">📌 緊急聯絡資訊會印在表單頂部，方便看護與家屬快速查閱。所有欄位均為<strong>選填</strong>，不填則不顯示。</div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🚨</span>
+        <div>
+          <div class="section-title">緊急聯絡人設定 <span style="font-size:11px;font-weight:400;color:#6b7280;">（全部選填）</span></div>
+          <div class="section-subtitle">可新增多筆，依照重要程度排序</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div id="contactList"></div>
+      <button class="btn-add-entry" onclick="addContact()">＋ 新增聯絡人</button>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">🏨</span>
+        <div>
+          <div class="section-title">醫療機構 <span style="font-size:11px;font-weight:400;color:#6b7280;">（選填）</span></div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">主治醫院名稱</label>
+          <input class="form-input" id="cfg-hospital" type="text" placeholder="例：台中榮民總醫院">
+        </div>
+        <div class="form-group">
+          <label class="form-label">掛號 / 急診電話</label>
+          <input class="form-input" id="cfg-hospital-tel" type="tel" placeholder="例：04-23592525">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">主治醫師姓名</label>
+          <input class="form-input" id="cfg-doctor-name" type="text" placeholder="例：陳醫師">
+        </div>
+        <div class="form-group">
+          <label class="form-label">診間電話</label>
+          <input class="form-input" id="cfg-doctor-tel" type="tel" placeholder="">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">健保卡號 / 病歷號 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-med-id" type="text" placeholder="">
+        </div>
+        <div class="form-group">
+          <label class="form-label">血型</label>
+          <div class="chip-group" id="cfg-blood-type">
+            <div class="chip-option" data-val="A" onclick="toggleChip(this,'cfg-blood-type','single')">A</div>
+            <div class="chip-option" data-val="B" onclick="toggleChip(this,'cfg-blood-type','single')">B</div>
+            <div class="chip-option" data-val="AB" onclick="toggleChip(this,'cfg-blood-type','single')">AB</div>
+            <div class="chip-option" data-val="O" onclick="toggleChip(this,'cfg-blood-type','single')">O</div>
+            <div class="chip-option" data-val="unk" onclick="toggleChip(this,'cfg-blood-type','single')">不明</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">過敏藥物/注意事項 <span class="optional">選填</span></label>
+        <input class="form-input" id="cfg-allergy" type="text" placeholder="例：對盤尼西林過敏">
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <button class="btn-prev" onclick="gotoStep(3)">‹ 上一步</button>
+    <button class="btn-next" onclick="gotoStep(5)">下一步：藥物清單 ›</button>
+  </div>
+</div>
+
+<!-- ════════════════ STEP 5: MEDICATIONS ════════════════ -->
+<div class="step-page" id="step-5">
+  <div class="info-box">💊 藥物清單會印在表單內，方便看護對照確認。所有欄位均為<strong>選填</strong>，不填則不顯示此區塊。</div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">💊</span>
+        <div>
+          <div class="section-title">藥物提醒清單 <span style="font-size:11px;font-weight:400;color:#6b7280;">（全部選填）</span></div>
+          <div class="section-subtitle">每筆包含藥名、劑量、時間、備注</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div id="drugList"></div>
+      <button class="btn-add-entry" onclick="addDrug()">＋ 新增藥物</button>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">⚙️</span>
+        <div>
+          <div class="section-title">藥物欄位選項</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">藥物欄顯示方式</label>
+          <div class="chip-group" id="cfg-drug-display">
+            <div class="chip-option selected" data-val="table" onclick="toggleChip(this,'cfg-drug-display','single')">表格式</div>
+            <div class="chip-option" data-val="list" onclick="toggleChip(this,'cfg-drug-display','single')">列表式</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">已服用勾選欄</label>
+          <div class="chip-group" id="cfg-drug-checkbox">
+            <div class="chip-option selected" data-val="yes" onclick="toggleChip(this,'cfg-drug-checkbox','single')">顯示</div>
+            <div class="chip-option" data-val="no" onclick="toggleChip(this,'cfg-drug-checkbox','single')">不顯示</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <button class="btn-prev" onclick="gotoStep(4)">‹ 上一步</button>
+    <button class="btn-next" onclick="gotoStep(6)">最後一步：預覽生成 ›</button>
+  </div>
+</div>
+
+<!-- ════════════════ STEP 6: PREVIEW & GENERATE ════════════════ -->
+<div class="step-page" id="step-6">
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">📋</span>
+        <div>
+          <div class="section-title">設定摘要</div>
+          <div class="section-subtitle">確認以下設定後點擊「生成日誌」</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="summary-grid" id="summaryGrid">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </div>
+
+  <div class="wizard-nav">
+    <button class="btn-prev" onclick="gotoStep(5)">‹ 回上一步修改</button>
+    <button class="btn-generate" id="generateBtn" onclick="generateLog()">
+      ✨ 生成客製化日誌
+    </button>
+  </div>
+</div>
+
+<!-- ════════════════ OUTPUT ════════════════ -->
+<div id="outputSection">
+  <div class="output-header">
+    <div>
+      <div class="output-title">✅ 日誌已生成！</div>
+      <div class="output-sub">您的客製化外籍看護工作日誌已準備完成</div>
+    </div>
+    <div class="output-actions">
+      <button class="btn-out" onclick="printOutput()">🖨️ 列印 / 存PDF</button>
+      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
+    </div>
+  </div>
+  <div class="output-frame-wrap">
+    <iframe id="outputFrame" class="output-frame"></iframe>
+  </div>
+</div>
+
+</div><!-- /wizard-body -->
+</div><!-- /wizard-shell -->
+
+<!-- MOBILE BOTTOM TAB BAR -->
+<div id="mobile-tab-bar">
+  <div class="mtab-list">
+    <button class="mtab active" data-mt="1" onclick="gotoStep(1)">
+      <span class="mtab-num">1</span>
+      <span class="mtab-icon">🏥</span>
+      <span class="mtab-label">基本</span>
+    </button>
+    <button class="mtab" data-mt="2" onclick="gotoStep(2)">
+      <span class="mtab-num">2</span>
+      <span class="mtab-icon">🎨</span>
+      <span class="mtab-label">外觀</span>
+    </button>
+    <button class="mtab" data-mt="3" onclick="gotoStep(3)">
+      <span class="mtab-num">3</span>
+      <span class="mtab-icon">📋</span>
+      <span class="mtab-label">欄位</span>
+    </button>
+    <button class="mtab" data-mt="4" onclick="gotoStep(4)">
+      <span class="mtab-num">4</span>
+      <span class="mtab-icon">🚨</span>
+      <span class="mtab-label">聯絡</span>
+    </button>
+    <button class="mtab" data-mt="5" onclick="gotoStep(5)">
+      <span class="mtab-num">5</span>
+      <span class="mtab-icon">💊</span>
+      <span class="mtab-label">藥物</span>
+    </button>
+    <button class="mtab" data-mt="6" onclick="gotoStep(6)">
+      <span class="mtab-num">6</span>
+      <span class="mtab-icon">✨</span>
+      <span class="mtab-label">生成</span>
+    </button>
+  </div>
+</div>
+
+<!-- AUTO-SAVE TOAST -->
+<div id="save-toast">
+  <span class="dot"></span>
+  <span id="save-toast-text">已自動儲存</span>
+</div>
+
+<script>
+/* ══════════════════════════════════════
+   STEP NAVIGATION
+══════════════════════════════════════ */
+let currentStep = 1;
+const TOTAL_STEPS = 6;
+
+function gotoStep(n) {
+  document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-'+n).classList.add('active');
+
+  // Top progress bar
+  document.querySelectorAll('.step-node').forEach((el,i) => {
+    el.classList.remove('active','done');
+    if (i+1 < n) el.classList.add('done');
+    if (i+1 === n) el.classList.add('active');
+  });
+
+  // Desktop side nav
+  document.querySelectorAll('.side-nav-item').forEach(el => {
+    const s = parseInt(el.dataset.sn);
+    el.classList.remove('active','done');
+    if (s < n) el.classList.add('done');
+    if (s === n) el.classList.add('active');
+  });
+
+  // Mobile tab bar
+  document.querySelectorAll('.mtab').forEach(el => {
+    const s = parseInt(el.dataset.mt);
+    el.classList.remove('active','done');
+    if (s < n) el.classList.add('done');
+    if (s === n) el.classList.add('active');
+  });
+
+  currentStep = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  if (n === 6) buildSummary();
+  scheduleSave();
+}
+
+/* ══════════════════════════════════════
+   CARD COLLAPSE
+══════════════════════════════════════ */
+function toggleCard(head) {
+  head.classList.toggle('collapsed');
+  const body = head.nextElementSibling;
+  body.classList.toggle('hidden');
+}
+
+/* ══════════════════════════════════════
+   CHIP TOGGLES
+══════════════════════════════════════ */
+function toggleChip(el, groupId, mode) {
+  const group = document.getElementById(groupId);
+  if (mode === 'single') {
+    group.querySelectorAll('.chip-option').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  } else if (mode === 'none-exclusive') {
+    // Clicking "none" clears all others; clicking a value chip clears "none"
+    if (el.dataset.val === 'none') {
+      group.querySelectorAll('.chip-option').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    } else {
+      group.querySelectorAll('.chip-option[data-val="none"]').forEach(c => c.classList.remove('selected'));
+      el.classList.toggle('selected');
+    }
+  } else {
+    el.classList.toggle('selected');
+  }
+}
+
+/* ══════════════════════════════════════
+   SECTION TOGGLES
+══════════════════════════════════════ */
+function toggleRow(cb, sec) {
+  const row = cb.closest('.toggle-row');
+  row.classList.toggle('on', cb.checked);
+  row.querySelectorAll('.time-edit-input').forEach(inp => {
+    inp.disabled = !cb.checked;
+    inp.style.opacity = cb.checked ? '1' : '0.35';
+  });
+}
+
+function getSectionEnabled(secId) {
+  const row = document.querySelector(`[data-sec="${secId}"]`);
+  if (!row) return true;
+  return row.classList.contains('on');
+}
+
+/* ══════════════════════════════════════
+   THEME
+══════════════════════════════════════ */
+const THEMES = {
+  blue:   { pri:'#1a5276', plight:'#2980b9', acc:'#e67e22', alight:'#fdebd0', hrow:'#fef9e7' },
+  green:  { pri:'#1a6b3c', plight:'#27ae60', acc:'#d4ac0d', alight:'#fef9e7', hrow:'#eafaf1' },
+  purple: { pri:'#6c3483', plight:'#9b59b6', acc:'#e67e22', alight:'#fdebd0', hrow:'#f5eef8' },
+  warm:   { pri:'#935116', plight:'#ca6f1e', acc:'#c0392b', alight:'#fadbd8', hrow:'#fdf2e9' },
+  teal:   { pri:'#0e7e72', plight:'#17a589', acc:'#d4ac0d', alight:'#fef9e7', hrow:'#e8f8f5' },
+  rose:   { pri:'#9d174d', plight:'#be185d', acc:'#0891b2', alight:'#e0f2fe', hrow:'#fdf2f8' },
+  slate:  { pri:'#334155', plight:'#475569', acc:'#0ea5e9', alight:'#e0f2fe', hrow:'#f1f5f9' },
+  indigo: { pri:'#3730a3', plight:'#4f46e5', acc:'#f59e0b', alight:'#fef3c7', hrow:'#eef2ff' },
+};
+let selectedTheme = 'blue';
+function selectTheme(name) {
+  selectedTheme = name;
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.toggle('selected', c.dataset.theme === name));
+}
+function getTheme() { return THEMES[selectedTheme] || THEMES.blue; }
+
+/* ══════════════════════════════════════
+   CHIP VALUE HELPER
+══════════════════════════════════════ */
+function getChipVal(groupId) {
+  const el = document.querySelector(`#${groupId} .chip-option.selected`);
+  return el ? el.dataset.val : null;
+}
+function getChipVals(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .chip-option.selected`)].map(e => e.dataset.val);
+}
+
+/* ══════════════════════════════════════
+   CONTACTS
+══════════════════════════════════════ */
+let contactId = 0;
+
+function addContact() {
+  const id = ++contactId;
+  const list = document.getElementById('contactList');
+  const entry = document.createElement('div');
+  entry.className = 'contact-entry';
+  entry.id = 'contact-'+id;
+  entry.innerHTML = `
+    <div class="contact-entry-head">
+      <div class="contact-entry-title">👤 聯絡人 #${id}</div>
+      <button class="btn-del-entry" onclick="document.getElementById('contact-${id}').remove()">✕ 刪除</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">姓名</label>
+        <input class="form-input" type="text" placeholder="例：林太太" id="c${id}-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">關係 / 身份</label>
+        <input class="form-input" type="text" placeholder="例：女兒" id="c${id}-role">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">電話（手機）</label>
+        <input class="form-input" type="tel" placeholder="例：0912-345-678" id="c${id}-phone">
+      </div>
+      <div class="form-group">
+        <label class="form-label">LINE/其他聯絡方式 <span class="optional">選填</span></label>
+        <input class="form-input" type="text" placeholder="" id="c${id}-line">
+      </div>
+    </div>
+  `;
+  list.appendChild(entry);
+}
+
+function getContacts() {
+  const result = [];
+  document.querySelectorAll('.contact-entry').forEach(entry => {
+    const match = entry.id.match(/contact-(\d+)/);
+    if (!match) return;
+    const id = match[1];
+    const name  = (document.getElementById(`c${id}-name`)?.value || '').trim();
+    const role  = (document.getElementById(`c${id}-role`)?.value || '').trim();
+    const phone = (document.getElementById(`c${id}-phone`)?.value || '').trim();
+    const line  = (document.getElementById(`c${id}-line`)?.value || '').trim();
+    if (name || phone) result.push({name, role, phone, line});
+  });
+  return result;
+}
+
+/* ══════════════════════════════════════
+   DRUGS
+══════════════════════════════════════ */
+let drugId = 0;
+function addDrug() {
+  const id = ++drugId;
+  const list = document.getElementById('drugList');
+  const entry = document.createElement('div');
+  entry.className = 'drug-entry';
+  entry.id = 'drug-'+id;
+  entry.innerHTML = `
+    <div class="drug-entry-head">
+      <div class="drug-entry-title">💊 藥物 #${id}</div>
+      <button class="btn-del-entry" onclick="document.getElementById('drug-${id}').remove()">✕ 刪除</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">藥物名稱</label>
+        <input class="form-input" type="text" placeholder="例：Norvasc / 脈優錠" id="d${id}-name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">劑量</label>
+        <input class="form-input" type="text" placeholder="例：5mg / 半顆" id="d${id}-dose">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">服用時間</label>
+        <input class="form-input" type="text" placeholder="例：早餐後、08:00" id="d${id}-time">
+      </div>
+      <div class="form-group">
+        <label class="form-label">備注 <span class="optional">選填</span></label>
+        <input class="form-input" type="text" placeholder="例：飯後服用" id="d${id}-note">
+      </div>
+    </div>
+  `;
+  list.appendChild(entry);
+}
+
+function getDrugs() {
+  const result = [];
+  document.querySelectorAll('.drug-entry').forEach(entry => {
+    const match = entry.id.match(/drug-(\d+)/);
+    if (!match) return;
+    const id = match[1];
+    const name = (document.getElementById(`d${id}-name`)?.value || '').trim();
+    const dose = (document.getElementById(`d${id}-dose`)?.value || '').trim();
+    const time = (document.getElementById(`d${id}-time`)?.value || '').trim();
+    const note = (document.getElementById(`d${id}-note`)?.value || '').trim();
+    if (name) result.push({name, dose, time, note});
+  });
+  return result;
+}
+
+/* ══════════════════════════════════════
+   SUMMARY
+══════════════════════════════════════ */
+function buildSummary() {
+  const grid = document.getElementById('summaryGrid');
+  const contacts = getContacts();
+  const drugs = getDrugs();
+  const enabledSections = ['vital-bp','vital-temp','vital-pulse','vital-sugar','vital-spo2','vital-weight',
+    'care-morning','care-breakfast','care-morning-act','care-lunch','care-nap','care-afternoon','care-dinner','care-evening','care-night',
+    'sec-elim','sec-notes','sec-signature','sec-tube-feed','sec-wound','sec-rehab'
+  ].filter(s => getSectionEnabled(s)).length;
+
+  grid.innerHTML = `
+    <div class="summary-item"><div class="summary-item-label">機構 / 名稱</div><div class="summary-item-value">${(document.getElementById('cfg-org-name')?.value||'').trim()||'（未填）'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">主語言</div><div class="summary-item-value">${{zh:'中文',en:'English',id:'Bahasa',vi:'Tiếng Việt'}[document.getElementById('cfg-lang').value]||'中文'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">主題色彩</div><div class="summary-item-value" style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${getTheme().pri}"></span>${selectedTheme}</div></div>
+    <div class="summary-item"><div class="summary-item-label">字體大小</div><div class="summary-item-value">${getChipVal('cfg-fontsize')||'13'}px</div></div>
+    <div class="summary-item"><div class="summary-item-label">啟用欄位</div><div class="summary-item-value">${enabledSections} 個</div></div>
+    <div class="summary-item"><div class="summary-item-label">緊急聯絡人</div><div class="summary-item-value">${contacts.length > 0 ? contacts.length+' 筆' : '（未填）'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">藥物清單</div><div class="summary-item-value">${drugs.length > 0 ? drugs.length+' 項' : '（未填）'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">醫院</div><div class="summary-item-value">${(document.getElementById('cfg-hospital')?.value||'').trim()||'（未填）'}</div></div>
+  `;
+}
+
+/* ══════════════════════════════════════
+   WIZARD LANGUAGE
+══════════════════════════════════════ */
+function setWizLang(lang) {
+  document.querySelectorAll('.tlbtn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+  ['zh','en','id','vi'].forEach(l => {
+    const show = l === lang;
+    document.querySelectorAll(`.step-${l}`).forEach(el => el.style.display = show ? '' : 'none');
+    document.querySelectorAll(`.wz-${l}`).forEach(el => el.style.display = show ? '' : 'none');
+  });
+}
+
+/* ══════════════════════════════════════
+   GENERATE LOG
+══════════════════════════════════════ */
+function generateLog() {
+  const btn = document.getElementById('generateBtn');
+  btn.innerHTML = '⏳ 生成中…';
+  btn.disabled = true;
+
+  setTimeout(() => {
+    try {
+      const html = buildLogHTML();
+      const iframe = document.getElementById('outputFrame');
+      iframe.srcdoc = html;
+      document.getElementById('outputSection').style.display = 'block';
+      document.getElementById('outputSection').scrollIntoView({behavior:'smooth'});
+      btn.innerHTML = '✨ 重新生成';
+      btn.disabled = false;
+    } catch(e) {
+      btn.disabled = false;
+      alert('生成失敗：' + e.message);
+      btn.innerHTML = '✨ 生成客製化日誌';
+    }
+  }, 200);
+}
+
+function printOutput() {
+  const iframe = document.getElementById('outputFrame');
+  const doprint = () => {
+    try { iframe.contentWindow.focus(); iframe.contentWindow.print(); }
+    catch(e) { window.print(); }
+  };
+  if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+    doprint();
+  } else {
+    iframe.addEventListener('load', doprint, {once: true});
+  }
+}
+
+/* ══════════════════════════════════════
+   BUILD LOG HTML
+══════════════════════════════════════ */
+
+function buildLogHTML() {
+  const theme = getTheme();
+  const fontSize    = getChipVal('cfg-fontsize') || '13';
+  const margin      = getChipVal('cfg-margin') || 'normal';
+  const rowHeight   = getChipVal('cfg-rowheight') || 'normal';
+  const timeColW    = getChipVal('cfg-timecol') || '80';
+  const zebraOn     = getChipVal('cfg-zebra') !== 'no';
+  const showFlags   = getChipVal('cfg-flags') !== 'no';
+  const orgName     = (document.getElementById('cfg-org-name')?.value||'').trim();
+  const orgAddr     = (document.getElementById('cfg-org-addr')?.value||'').trim();
+  const patientName = (document.getElementById('cfg-patient-name')?.value||'').trim();
+  const caregiverName=(document.getElementById('cfg-caregiver-name')?.value||'').trim();
+  const footerNote  = (document.getElementById('cfg-footer-note')?.value||'').trim();
+  const mainLang    = document.getElementById('cfg-lang')?.value || 'zh';
+  const subLangs    = getChipVals('cfg-sublang').filter(v => v !== 'none' && v !== mainLang);
+  const hospital    = (document.getElementById('cfg-hospital')?.value||'').trim();
+  const hospitalTel = (document.getElementById('cfg-hospital-tel')?.value||'').trim();
+  const doctorName  = (document.getElementById('cfg-doctor-name')?.value||'').trim();
+  const doctorTel   = (document.getElementById('cfg-doctor-tel')?.value||'').trim();
+  const medId       = (document.getElementById('cfg-med-id')?.value||'').trim();
+  const bloodType   = getChipVal('cfg-blood-type') || '';
+  const allergy     = (document.getElementById('cfg-allergy')?.value||'').trim();
+  const contacts    = getContacts();
+  const drugs       = getDrugs();
+  const drugDisplay = getChipVal('cfg-drug-display') || 'table';
+  const drugCB      = getChipVal('cfg-drug-checkbox') !== 'no';
+
+  const marginMap   = {tight:'8mm 8mm 12mm', normal:'14mm 12mm 18mm', wide:'18mm 16mm 22mm'};
+  const paddingPx   = marginMap[margin] || marginMap.normal;
+  const rowPad      = {compact:'5px 8px', normal:'8px 10px', spacious:'12px 10px'}[rowHeight] || '8px 10px';
+  const fs          = parseInt(fontSize) || 13;
+
+  /* ── BILINGUAL TEXT HELPER ──────────────────────────────────
+     B(zh, en, id, vi)
+     Returns main-language text in normal size, plus each
+     selected sub-language below it in smaller muted text.
+     Inline variant Bi() for use inside flowing text spans.
+  ────────────────────────────────────────────────────────── */
+  const DICT = {zh:0, en:1, id:2, vi:3};
+  function pick(args, lang) { return args[DICT[lang]] || args[0]; }
+
+  // Block bilingual: main large + subs stacked below (for headers/labels)
+  function B(...args) {
+    const main = pick(args, mainLang);
+    const subs = subLangs.map(sl => pick(args, sl)).filter(Boolean).filter(t => t !== main);
+    if (!subs.length) return main;
+    const subHtml = subs.map(t =>
+      `<span style="display:block;font-size:${Math.max(9,fs-3)}px;color:#888;font-weight:400;line-height:1.3;margin-top:1px;">${t}</span>`
+    ).join('');
+    return `<span style="display:inline-block;line-height:1.4;">${main}${subHtml}</span>`;
+  }
+
+  // Inline bilingual: "主語 (sub)" — used in flowing sentences
+  function Bi(...args) {
+    const main = pick(args, mainLang);
+    const subs = subLangs.map(sl => pick(args, sl)).filter(Boolean).filter(t => t !== main);
+    if (!subs.length) return main;
+    return `${main}<span style="font-size:${Math.max(9,fs-3)}px;color:#999;margin-left:3px;">(${subs.join(' / ')})</span>`;
+  }
+
+  // Sub-only: just the sub-language text, small (for purely secondary labels)
+  function Sub(...args) {
+    return subLangs.map(sl => pick(args, sl))
+      .filter(Boolean)
+      .map(t => `<span style="font-size:${Math.max(9,fs-3)}px;color:#aaa;">${t}</span>`)
+      .join(' ');
+  }
+
+  /* ── SECTION HEADER helper ── */
+  function SH(...args) {
+    return `<div style="background:${theme.pri};color:white;text-align:center;padding:8px 10px;font-size:${fs}px;font-weight:700;border-radius:4px 4px 0 0;">${B(...args)}</div>`;
+  }
+
+  /* ── LABEL helper (for th cells) ── */
+  function TH(style, ...args) {
+    return `<th style="background:${theme.pri};color:white;padding:7px 8px;font-size:${Math.max(10,fs-1)}px;font-weight:600;border:1px solid ${theme.pri};${style}">${B(...args)}</th>`;
+  }
+
+  /* ── LABEL cell (for td label column) ── */
+  function LabelTD(style, ...args) {
+    return `<td style="text-align:center;background:#f4f6f8;vertical-align:middle;${style}"><div style="font-weight:700;font-size:${Math.max(10,fs-1)}px;color:${theme.pri};">${B(...args)}</div></td>`;
+  }
+
+  // ─ Emergency bar ─
+  let emergencyHTML = '';
+  const hasEmergency = contacts.length > 0 || hospital || doctorName || allergy || bloodType;
+  if (hasEmergency) {
+    emergencyHTML = `
+    <div style="background:#fdf2f8;border:1.5px solid #e8b4d8;border-radius:8px;padding:8px 14px;margin-bottom:14px;">
+      <div style="font-weight:700;color:#8e44ad;margin-bottom:6px;font-size:${Math.max(10,fs-1)}px;">
+        🚨 ${B('緊急聯絡資訊','Emergency Contact','Kontak Darurat','Liên hệ khẩn cấp')}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px 20px;align-items:flex-start;font-size:${Math.max(10,fs-1)}px;">
+        ${contacts.map(c=>`<div style="min-width:160px;"><strong>${c.role||''}</strong> ${c.name||''} ${c.phone?'📞 '+c.phone:''} ${c.line?'／'+c.line:''}</div>`).join('')}
+        ${hospital?`<div>🏥 <strong>${Bi('醫院','Hospital','RS','BV')}：</strong>${hospital}${hospitalTel?' '+hospitalTel:''}</div>`:''}
+        ${doctorName?`<div>👨‍⚕️ <strong>${Bi('主治醫師','Doctor','Dokter','Bác sĩ')}：</strong>${doctorName}${doctorTel?' '+doctorTel:''}</div>`:''}
+        ${bloodType?`<div>🩸 <strong>${Bi('血型','Blood','Gol.Darah','Nhóm máu')}：</strong>${bloodType}</div>`:''}
+        ${allergy?`<div>⚠️ <strong>${Bi('過敏','Allergy','Alergi','Dị ứng')}：</strong>${allergy}</div>`:''}
+        ${medId?`<div>🪪 <strong>${Bi('病歷號','MRN','No.RM','Mã BN')}：</strong>${medId}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  // ─ Drug section ─
+  let drugHTML = '';
+  if (drugs.length > 0) {
+    if (drugDisplay === 'table') {
+      const cbCol = drugCB ? `<th style="width:34px;background:${theme.pri};color:white;padding:7px;border:1px solid ${theme.pri};">✓</th>` : '';
+      const cbBodyCol = () => drugCB ? `<td style="text-align:center;border:1px solid #ddd;"><input type="checkbox"></td>` : '';
+      drugHTML = `
+      <div style="border:2px solid ${theme.pri};border-radius:8px;margin-bottom:14px;overflow:hidden;">
+        <div style="background:${theme.pri};color:white;padding:8px 14px;font-weight:700;font-size:${fs}px;">
+          💊 ${B('藥物提醒清單','Medication List','Daftar Obat','Danh sách thuốc')}
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:${Math.max(10,fs-1)}px;">
+          <thead><tr>
+            ${cbCol}
+            ${TH('text-align:left;', '藥物名稱','Drug Name','Nama Obat','Tên thuốc')}
+            ${TH('text-align:center;width:70px;', '劑量','Dose','Dosis','Liều')}
+            ${TH('text-align:center;width:80px;', '時間','Time','Waktu','Giờ')}
+            ${TH('text-align:left;', '備注','Note','Ket.','Ghi chú')}
+          </tr></thead>
+          <tbody>
+            ${drugs.map((d,i)=>`<tr style="background:${i%2===0?'white':theme.pri+'0d'}">
+              ${cbBodyCol()}
+              <td style="padding:${rowPad};border:1px solid #ddd;font-weight:600;">${d.name}</td>
+              <td style="padding:${rowPad};border:1px solid #ddd;text-align:center;">${d.dose||'—'}</td>
+              <td style="padding:${rowPad};border:1px solid #ddd;text-align:center;">${d.time||'—'}</td>
+              <td style="padding:${rowPad};border:1px solid #ddd;">${d.note||''}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+    } else {
+      drugHTML = `
+      <div style="border:2px solid ${theme.pri};border-radius:8px;margin-bottom:14px;overflow:hidden;">
+        <div style="background:${theme.pri};color:white;padding:8px 14px;font-weight:700;font-size:${fs}px;">
+          💊 ${B('藥物提醒清單','Medication List','Daftar Obat','Danh sách thuốc')}
+        </div>
+        <div style="padding:10px 14px;">
+          ${drugs.map(d=>`<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed #ddd;">
+            ${drugCB?'<input type="checkbox">':''}
+            <span style="font-weight:700;color:${theme.pri};">${d.name}</span>
+            ${d.dose?`<span style="color:#666;">${d.dose}</span>`:''}
+            ${d.time?`<span style="background:${theme.pri}22;border-radius:4px;padding:1px 6px;font-size:${Math.max(9,fs-2)}px;">${d.time}</span>`:''}
+            ${d.note?`<span style="color:#888;font-size:${Math.max(9,fs-2)}px;">${d.note}</span>`:''}
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+  }
+
+  // ─ Vital signs ─
+  const vitalRows = [];
+
+  function vitalLabelCell(w, ...args) {
+    return `<td style="text-align:center;background:#f4f6f8;width:${w}px;vertical-align:middle;padding:4px;">
+      <div style="font-weight:700;font-size:${Math.max(10,fs-1)}px;color:${theme.pri};">${B(...args)}</div>
+    </td>`;
+  }
+  function vitalDataCell(content) {
+    return `<td style="padding:${rowPad};vertical-align:middle;">${content}</td>`;
+  }
+  function timeLabel(...args) {
+    return `<span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;color:${theme.pri};">${Bi(...args)}</span>`;
+  }
+  function inp(w, placeholder='', extra='') {
+    return `<input style="width:${w}px;border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;text-align:center;padding:1px 2px;" type="number" placeholder="${placeholder}" ${extra}>`;
+  }
+
+  if (getSectionEnabled('vital-bp') || getSectionEnabled('vital-temp')) {
+    const bpCell = getSectionEnabled('vital-bp')
+      ? vitalLabelCell(90,'血壓','BP','Tek.Darah','Huyết áp') +
+        vitalDataCell(`${timeLabel('上午','AM','Pagi','Sáng')}：${inp(38,'___')}/${inp(38,'___')} mmHg &nbsp; ${timeLabel('下午','PM','Sore','Chiều')}：${inp(38,'___')}/${inp(38,'___')} mmHg`)
+      : '<td colspan="2"></td>';
+    const tempCell = getSectionEnabled('vital-temp')
+      ? vitalLabelCell(90,'體溫','Temp','Suhu','Nhiệt độ') +
+        vitalDataCell(`${timeLabel('上午','AM','Pagi','Sáng')}：${inp(34,'__','step=0.1')}°C &nbsp; ${timeLabel('下午','PM','Sore','Chiều')}：${inp(34,'__','step=0.1')}°C`)
+      : '<td colspan="2"></td>';
+    vitalRows.push(`<tr>${bpCell}${tempCell}</tr>`);
+  }
+  if (getSectionEnabled('vital-pulse') || getSectionEnabled('vital-sugar')) {
+    const pulseCell = getSectionEnabled('vital-pulse')
+      ? vitalLabelCell(90,'脈搏','Pulse','Nadi','Nhịp tim') +
+        vitalDataCell(`${timeLabel('上午','AM','Pagi','Sáng')}：${inp(40,'___')} bpm &nbsp; ${timeLabel('下午','PM','Sore','Chiều')}：${inp(40,'___')} bpm`)
+      : '<td colspan="2"></td>';
+    const sugarCell = getSectionEnabled('vital-sugar')
+      ? vitalLabelCell(90,'血糖','Sugar','Gula','Đường huyết') +
+        vitalDataCell(`${timeLabel('飯前','Pre','Sblm','Trước')}：${inp(40,'___')} mg/dL &nbsp; ${timeLabel('飯後','Post','Ssdh','Sau')}：${inp(40,'___')} mg/dL`)
+      : '<td colspan="2"></td>';
+    vitalRows.push(`<tr>${pulseCell}${sugarCell}</tr>`);
+  }
+  if (getSectionEnabled('vital-spo2')) {
+    vitalRows.push(`<tr>
+      ${vitalLabelCell(90,'血氧','SpO₂','SpO₂','SpO₂')}
+      ${vitalDataCell(`${timeLabel('上午','AM','Pagi','Sáng')}：${inp(38,'__')}% &nbsp; ${timeLabel('下午','PM','Sore','Chiều')}：${inp(38,'__')}%`)}
+      <td colspan="2"></td>
+    </tr>`);
+  }
+  if (getSectionEnabled('vital-weight')) {
+    vitalRows.push(`<tr>
+      ${vitalLabelCell(90,'體重','Weight','BB','Cân nặng')}
+      ${vitalDataCell(`${inp(50,'___','step=0.1')} kg`)}
+      <td colspan="2"></td>
+    </tr>`);
+  }
+
+  const vitalSection = vitalRows.length > 0 ? `
+    ${SH('生命徵象記錄','Vital Signs','Tanda Vital','Dấu hiệu sinh tồn')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <tbody>${vitalRows.join('')}</tbody>
+    </table>` : '';
+
+  // ─ Care schedule ─
+  function getSlotTime(key) {
+    const s = document.getElementById(`time-${key}-s`)?.value || '';
+    const e = document.getElementById(`time-${key}-e`)?.value || '';
+    return [s||'--:--', e||'--:--'];
+  }
+
+  function timeTD(tp) {
+    return `<td style="text-align:center;background:#eaf2fb;width:${timeColW}px;vertical-align:middle;padding:6px 4px;">
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs)}px;">${tp[0]}</span>
+      <div style="font-size:10px;color:#aaa;">～</div>
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs)}px;">${tp[1]}</span>
+    </td>`;
+  }
+
+  function careLabelTD(...args) {
+    return `<td style="text-align:center;background:#f4f6f8;width:100px;vertical-align:middle;padding:6px 4px;">
+      <div style="font-weight:700;font-size:${Math.max(10,fs-1)}px;color:${theme.pri};">${B(...args)}</div>
+    </td>`;
+  }
+
+  function cb(...args) {
+    return `<label style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:6px;white-space:nowrap;">
+      <input type="checkbox" style="accent-color:${theme.pri};"> ${Bi(...args)}
+    </label>`;
+  }
+
+  function inpText(w, placeholder='...') {
+    return `<input style="border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;width:${w};" type="text" placeholder="${placeholder}">`;
+  }
+  function inpNum(w, placeholder='0') {
+    return `<input style="border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;width:${w};text-align:center;" type="number" placeholder="${placeholder}">`;
+  }
+
+  const CARE_DEFS = {
+    'care-morning': {
+      label: ['晨間照護','Morning Care','Perawatan Pagi','Chăm sóc sáng'],
+      items: [
+        ['協助起床','Assist waking','Bantu bangun','Giúp dậy'],
+        ['更換尿布/如廁','Diaper/Toilet','Popok/BAB','Thay tã/vệ sinh'],
+        ['清潔身體','Body cleaning','Kebersihan tubuh','Vệ sinh thân'],
+        ['更換衣物','Change clothes','Ganti baju','Thay quần áo'],
+        ['測量生命徵象','Vital signs','Tanda vital','Đo sinh tồn'],
+      ],
+      type: 'generic'
+    },
+    'care-breakfast': {
+      label: ['早餐','Breakfast','Sarapan','Bữa sáng'],
+      type: 'meal'
+    },
+    'care-morning-act': {
+      label: ['上午活動','Morning Activities','Kegiatan Pagi','HĐ sáng'],
+      items: [
+        ['服用藥物','Medication','Minum obat','Uống thuốc'],
+        ['復健/運動','Rehab/Exercise','Rehab/Olahraga','Phục hồi/Thể dục'],
+        ['戶外散步','Outdoor walk','Jalan-jalan','Đi dạo ngoài trời'],
+        ['休憩閱讀','Rest/Reading','Istirahat/Baca','Nghỉ ngơi/Đọc sách'],
+      ],
+      type: 'generic'
+    },
+    'care-lunch': {
+      label: ['午餐','Lunch','Makan Siang','Bữa trưa'],
+      type: 'meal'
+    },
+    'care-nap': {
+      label: ['午休','Nap','Tidur Siang','Nghỉ trưa'],
+      items: [
+        ['安穩','Sound sleep','Nyenyak','Ngủ ngon'],
+        ['淺眠','Light sleep','Tidur ringan','Ngủ nhẹ'],
+        ['失眠','Insomnia','Insomnia','Mất ngủ'],
+        ['需翻身','Repositioned','Pindah posisi','Đổi tư thế'],
+      ],
+      type: 'sleep'
+    },
+    'care-afternoon': {
+      label: ['下午活動','Afternoon','Kegiatan Sore','Buổi chiều'],
+      items: [
+        ['點心時間','Snack time','Waktu snack','Ăn nhẹ'],
+        ['服用藥物','Medication','Minum obat','Uống thuốc'],
+        ['沐浴清潔','Bathing','Mandi','Tắm rửa'],
+        ['活動筋骨','Exercise','Olahraga','Vận động'],
+      ],
+      type: 'generic'
+    },
+    'care-dinner': {
+      label: ['晚餐','Dinner','Makan Malam','Bữa tối'],
+      type: 'meal'
+    },
+    'care-evening': {
+      label: ['晚間活動','Evening','Kegiatan Malam','Buổi tối'],
+      items: [
+        ['服用藥物','Medication','Minum obat','Uống thuốc'],
+        ['看電視陪伴','TV/Company','TV/Menemani','Xem TV/Bầu bạn'],
+        ['準備就寢','Bedtime prep','Persiapan tidur','Chuẩn bị ngủ'],
+      ],
+      type: 'generic'
+    },
+    'care-night': {
+      label: ['夜間照護','Night Care','Perawatan Malam','Chăm sóc đêm'],
+      type: 'night'
+    },
+  };
+
+  function mealRow(key, tp, zebra) {
+    const def = CARE_DEFS[key];
+    const bg = zebra && zebraOn ? theme.hrow : 'white';
+    return `<tr style="background:${bg}">
+      ${timeTD(tp)}
+      ${careLabelTD(...def.label)}
+      <td style="padding:${rowPad};vertical-align:top;">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('餐點','Menu','Menu','Thực đơn')}：</span>
+          ${inpText('150px')}
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('進食量','Intake','Asupan','Lượng ăn')}：</span>
+          ${['全部/All','3/4','1/2','1/4'].map(v=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${v}</label>`).join('')}
+        </div>
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('飲水量','Water','Air minum','Nước')}：</span>
+          ${inpNum('44px')} cc
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          ${cb('需協助餵食','Needs feeding assist','Perlu bantuan makan','Cần hỗ trợ ăn')}
+          ${cb('自行進食','Self-feeding','Makan sendiri','Tự ăn')}
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  function sleepRow(key, tp) {
+    const def = CARE_DEFS[key];
+    return `<tr>
+      ${timeTD(tp)}
+      ${careLabelTD(...def.label)}
+      <td style="padding:${rowPad};vertical-align:top;">
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          ${def.items.map(args => cb(...args)).join('')}
+        </div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('其他','Other','Lain','Khác')}：</span>
+          ${inpText('160px')}
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  function nightRow(tp) {
+    const def = CARE_DEFS['care-night'];
+    return `<tr>
+      ${timeTD(tp)}
+      ${careLabelTD(...def.label)}
+      <td style="padding:${rowPad};vertical-align:top;">
+        <div style="display:flex;flex-wrap:wrap;gap:4px 14px;">
+          ${cb('協助就寢','Assist to bed','Bantu tidur','Giúp lên giường')}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          ${cb('定時翻身','Repositioning','Pindah posisi','Đổi tư thế')}
+          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          ${cb('更換尿布','Change diaper','Ganti popok','Thay tã')}
+          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
+          ${cb('夜間如廁','Night toileting','BAB malam','Vệ sinh đêm')}
+          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  function genericRow(key, tp, zebraIdx) {
+    const def = CARE_DEFS[key];
+    const bg = zebraIdx % 2 === 1 && zebraOn ? theme.hrow : 'white';
+    return `<tr style="background:${bg}">
+      ${timeTD(tp)}
+      ${careLabelTD(...def.label)}
+      <td style="padding:${rowPad};vertical-align:top;">
+        <div style="display:flex;flex-wrap:wrap;gap:5px 10px;">
+          ${def.items.map(args => cb(...args)).join('')}
+        </div>
+        <div style="margin-top:6px;display:flex;align-items:center;gap:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('其他','Other','Lain','Khác')}：</span>
+          ${inpText('160px')}
+        </div>
+      </td>
+    </tr>`;
+  }
+
+  const careKeys = ['care-morning','care-breakfast','care-morning-act','care-lunch','care-nap','care-afternoon','care-dinner','care-evening','care-night'];
+  let zebraIdx = 0;
+  const careRows = careKeys
+    .filter(k => getSectionEnabled(k))
+    .map(k => {
+      const tp = getSlotTime(k);
+      const def = CARE_DEFS[k];
+      zebraIdx++;
+      if (def.type === 'meal')    return mealRow(k, tp, zebraIdx % 2 === 1);
+      if (def.type === 'sleep')   return sleepRow(k, tp);
+      if (def.type === 'night')   return nightRow(tp);
+      return genericRow(k, tp, zebraIdx);
+    }).join('');
+
+  // custom slots
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  const customSlotText = (document.getElementById('cfg-custom-slots')?.value || '').trim();
+  let customRows = '';
+  customSlotText.split('\n').forEach(line => {
+    line = line.trim();
+    if (!line) return;
+    customRows += `<tr>
+      <td style="text-align:center;background:#eaf2fb;width:${timeColW}px;font-weight:700;color:${theme.pri};font-size:${fs}px;padding:6px;">—</td>
+      <td style="text-align:center;background:#f4f6f8;width:100px;font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;padding:6px;">${escHtml(line)}</td>
+      <td style="padding:${rowPad};">${inpText('100%')}</td>
+    </tr>`;
+  });
+
+  const careSection = (careRows || customRows) ? `
+    ${SH('每日照護時程記錄','Daily Care Schedule','Jadwal Perawatan','Lịch Chăm Sóc')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <thead><tr>
+        ${TH(`width:${timeColW}px;`,'時間','Time','Waktu','Giờ')}
+        ${TH('width:100px;','照護項目','Care Items','Item Perawatan','Mục chăm sóc')}
+        ${TH('','詳細記錄','Details','Rincian','Chi tiết')}
+      </tr></thead>
+      <tbody>${careRows}${customRows}</tbody>
+    </table>` : '';
+
+  // ─ Elimination ─
+  const elimSection = getSectionEnabled('sec-elim') ? `
+    ${SH('排泄記錄','Elimination Record','Catatan Eliminasi','Ghi Chép Bài Tiết')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <tbody>
+        <tr>
+          ${LabelTD('width:100px;','排尿','Urine','BAK','Tiểu tiện')}
+          <td style="padding:${rowPad};vertical-align:top;">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin-bottom:5px;">
+              <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('次數','Times','Frek.','Số lần')}：</span>
+              ${inpNum('40px')}
+              <span style="font-size:${Math.max(9,fs-2)}px;">${Bi('次','times','kali','lần')}</span>
+            </div>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;margin-bottom:5px;">
+              <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('顏色','Color','Warna','Màu sắc')}：</span>
+              ${cb('正常','Normal','Normal','Bình thường')}
+              ${cb('深黃','Dark yellow','Kuning tua','Vàng đậm')}
+              ${cb('其他','Other','Lain','Khác')}
+            </div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px 8px;">
+              ${cb('失禁','Incontinent','Inkontinensia','Tiểu không tự chủ')}
+              ${cb('需協助','Need assist','Perlu bantuan','Cần hỗ trợ')}
+            </div>
+          </td>
+        </tr>
+        <tr style="background:${zebraOn?theme.hrow:'white'}">
+          ${LabelTD('width:100px;','排便','Bowel','BAB','Đại tiện')}
+          <td style="padding:${rowPad};vertical-align:top;">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin-bottom:5px;">
+              <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('次數','Times','Frek.','Số lần')}：</span>
+              ${inpNum('40px')}
+              <span style="font-size:${Math.max(9,fs-2)}px;">${Bi('次','times','kali','lần')}</span>
+            </div>
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;">
+              <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('性狀','Type','Jenis','Tính chất')}：</span>
+              ${cb('正常','Normal','Normal','Bình thường')}
+              ${cb('軟便','Soft','Lembek','Phân lỏng')}
+              ${cb('硬便','Hard','Keras','Phân cứng')}
+              ${cb('腹瀉','Diarrhea','Diare','Tiêu chảy')}
+              ${cb('便秘','Constipation','Sembelit','Táo bón')}
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>` : '';
+
+  // ─ Tube feed ─
+  const tubeFeedSection = getSectionEnabled('sec-tube-feed') ? `
+    ${SH('管灌記錄','Tube Feeding','Pemberian NGT','Nuôi ăn qua ống')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <thead><tr>
+        ${TH('width:70px;','時間','Time','Waktu','Giờ')}
+        ${TH('','配方','Formula','Formula','Công thức')}
+        ${TH('width:80px;','容量(cc)','Vol.(cc)','Vol.(cc)','Thể tích')}
+        ${TH('','備注','Note','Ket.','Ghi chú')}
+      </tr></thead>
+      <tbody>${[1,2,3,4].map((i)=>`<tr style="background:${i%2===0?theme.pri+'0d':'white'}">
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('58px','__:__')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpNum('60px')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+      </tr>`).join('')}</tbody>
+    </table>` : '';
+
+  // ─ Wound ─
+  const woundSection = getSectionEnabled('sec-wound') ? `
+    ${SH('傷口護理記錄','Wound Care','Perawatan Luka','Chăm sóc vết thương')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <thead><tr>
+        ${TH('','部位','Location','Lokasi','Vị trí')}
+        ${TH('width:90px;','換藥時間','Dressing','Waktu ganti','Giờ thay băng')}
+        ${TH('','傷口狀況','Wound status','Status luka','Tình trạng')}
+        ${TH('','備注','Note','Ket.','Ghi chú')}
+      </tr></thead>
+      <tbody>${[1,2].map((i)=>`<tr style="background:${i%2===0?theme.pri+'0d':'white'}">
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('72px','__:__')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+      </tr>`).join('')}</tbody>
+    </table>` : '';
+
+  // ─ Rehab ─
+  const rehabSection = getSectionEnabled('sec-rehab') ? `
+    ${SH('復健記錄','Rehab Record','Rekam Rehabilitasi','Hồ sơ phục hồi')}
+    <table style="width:100%;border-collapse:collapse;margin-bottom:14px;">
+      <thead><tr>
+        ${TH('','項目','Item','Item','Mục')}
+        ${TH('width:70px;','時間(分)','Min','Menit','Phút')}
+        ${TH('','狀況/成效','Progress','Kemajuan','Tiến độ')}
+      </tr></thead>
+      <tbody>${[1,2,3].map((i)=>`<tr style="background:${i%2===0?theme.pri+'0d':'white'}">
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpNum('54px')}</td>
+        <td style="padding:${rowPad};border:1px solid #ddd;">${inpText('100%')}</td>
+      </tr>`).join('')}</tbody>
+    </table>` : '';
+
+  // ─ Special notes ─
+  const notesSection = getSectionEnabled('sec-notes') ? `
+    <div style="border:2px solid ${theme.pri};border-radius:8px;margin-bottom:14px;overflow:hidden;">
+      <div style="background:${theme.pri};color:white;padding:8px 14px;font-weight:700;font-size:${fs}px;">
+        📋 ${B('特殊狀況記錄','Special Notes','Catatan Khusus','Ghi Chú Đặc Biệt')}
+      </div>
+      <div style="padding:12px 14px;">
+        ${[
+          {label:['情緒狀況','Emotional','Emosi','Tâm trạng'], opts:[['穩定','Stable','Stabil','Ổn định'],['焦躁','Anxious','Cemas','Lo lắng'],['憂鬱','Depressed','Depresi','Trầm cảm'],['愉快','Happy','Gembira','Vui']]},
+          {label:['身體不適','Discomfort','Keluhan','Khó chịu'], opts:null},
+          {label:['就醫記錄','Medical visit','Kunjungan medis','Khám bệnh'], opts:null},
+          {label:['訪客記錄','Visitor','Pengunjung','Khách thăm'], opts:null},
+          {label:['其他備注','Remarks','Lainnya','Ghi chú khác'], opts:null},
+        ].map(({label, opts})=>`
+          <div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px dashed #ddd;">
+            <input type="checkbox" style="margin-top:2px;accent-color:${theme.pri};">
+            <div style="flex:1;">
+              <span style="font-weight:700;font-size:${Math.max(10,fs-1)}px;">${B(...label)}：</span>
+              ${opts
+                ? opts.map(o=>cb(...o)).join('')
+                : inpText('240px')
+              }
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>` : '';
+
+  // ─ Signature ─
+  const signatureSection = getSectionEnabled('sec-signature') ? `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;">
+      <div style="border:2px solid ${theme.pri};border-radius:8px;padding:12px 14px;background:#eaf2fb;">
+        <div style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;margin-bottom:4px;">
+          ${B('看護人員簽名','Caregiver Signature','Tanda Tangan Pengasuh','Chữ ký người chăm sóc')}
+        </div>
+        <div style="border-bottom:2px dashed #7f8c8d;height:42px;margin-top:8px;"></div>
+      </div>
+      <div style="border:2px solid ${theme.pri};border-radius:8px;padding:12px 14px;background:#eaf2fb;">
+        <div style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;margin-bottom:4px;">
+          ${B('家屬簽名（已閱）','Family Signature (Reviewed)','Tanda Tangan Keluarga','Chữ ký gia đình')}
+        </div>
+        <div style="border-bottom:2px dashed #7f8c8d;height:42px;margin-top:8px;"></div>
+      </div>
+    </div>` : '';
+
+  const flagsHTML = showFlags ? `<div style="font-size:20px;letter-spacing:4px;margin-bottom:4px;">🇹🇼 🇮🇩 🇻🇳 🇬🇧</div>` : '';
+  const titleMap = {zh:'外籍看護工作日誌表',en:'Foreign Caregiver Daily Work Log',id:'Jurnal Kerja Harian Pengasuh',vi:'Nhật Ký Làm Việc Hàng Ngày'};
+  const subTitles = subLangs.map(sl => titleMap[sl]).filter(Boolean);
+
+  return `<!DOCTYPE html>
+<html lang="${mainLang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>${titleMap[mainLang]||titleMap.zh}</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:#e8edf2;color:#1c2833;font-size:${fs}px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.page{width:210mm;max-width:100%;margin:16px auto;background:#fff;padding:${paddingPx};box-shadow:0 6px 30px rgba(0,0,0,.15);border-radius:4px;}
+.action-bar{background:#fff;border-bottom:1px solid #d5d8dc;display:flex;align-items:center;justify-content:flex-end;padding:8px 16px;gap:8px;position:sticky;top:0;z-index:10;}
+.btn-print{background:${theme.pri};color:white;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-family:inherit;cursor:pointer;}
+.btn-print:hover{opacity:.85;}
+table{width:100%;border-collapse:collapse;}
+@media print{
+  body{background:white;}
+  .action-bar{display:none!important;}
+  .page{margin:0;box-shadow:none;width:210mm;max-width:210mm;padding:12mm 10mm 14mm;}
+  @page{size:A4 portrait;margin:6mm;}
+}
+@media(max-width:640px){.page{padding:8px;}.action-bar{padding:6px 8px;}}
+</style>
+</head>
+<body>
+<div class="action-bar">
+  <button class="btn-print" onclick="window.print()">🖨️ ${B('列印 / 存PDF','Print / Save PDF','Cetak / PDF','In / PDF')}</button>
+</div>
+<div class="page">
+  <div style="text-align:center;padding-bottom:12px;border-bottom:3px solid ${theme.pri};margin-bottom:16px;">
+    ${orgName?`<div style="font-size:${Math.max(10,fs-2)}px;color:#666;font-weight:500;margin-bottom:4px;">🏥 ${orgName}${orgAddr?' ・ '+orgAddr:''}</div>`:''}
+    ${flagsHTML}
+    <h1 style="color:${theme.pri};font-size:${fs+8}px;font-weight:700;line-height:1.3;">${titleMap[mainLang]||titleMap.zh}</h1>
+    ${subTitles.length ? `<div style="font-size:${Math.max(10,fs-1)}px;color:#999;margin-top:3px;letter-spacing:0.3px;">${subTitles.join(' ／ ')}</div>` : ''}
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;background:#eaf2fb;border-left:5px solid ${theme.pri};border-radius:6px;padding:14px 16px;margin-bottom:16px;">
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('日期','Date','Tanggal','Ngày')}：</span>
+      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="date" value="${new Date().toISOString().split('T')[0]}">
+    </div>
+    <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:4px;grid-column:1/-1;">
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;padding-top:2px;">${B('天氣','Weather','Cuaca','Thời tiết')}：</span>
+      <div style="display:flex;flex-wrap:wrap;gap:5px 10px;">
+        ${['☀️ 晴/Sunny','⛅ 多雲/Cloudy','🌧️ 雨/Rain','⛈️ 雷雨/Thunder','🌫️ 霧/Fog','🥵 炎熱/Hot','🥶 寒冷/Cold'].map(w=>`<label style="display:flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${w}</label>`).join('')}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('被照顧者','Patient','Pasien','Bệnh nhân')}：</span>
+      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${patientName}">
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('看護姓名','Caregiver','Pengasuh','Người CSCK')}：</span>
+      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${caregiverName}">
+    </div>
+  </div>
+
+  ${emergencyHTML}
+  ${drugHTML}
+  ${vitalSection}
+  ${careSection}
+  ${elimSection}
+  ${tubeFeedSection}
+  ${woundSection}
+  ${rehabSection}
+  ${notesSection}
+  ${signatureSection}
+  ${footerNote?`<div style="margin-top:12px;text-align:center;font-size:${Math.max(9,fs-2)}px;color:#888;border-top:1px dashed #ccc;padding-top:8px;">${footerNote}</div>`:''}
+</div>
+</body>
+</html>`;
+}
+
+/* ══════════════════════════════════════
+   AUTO-SAVE SYSTEM
+══════════════════════════════════════ */
+const SAVE_KEY = 'nurselog_wizard_v4';
+let saveTimer = null;
+let lastSaveHash = '';
+
+function collectState() {
+  const state = {
+    step: currentStep,
+    fields: {},
+    chips: {},
+    toggles: {},
+    contacts: [],
+    drugs: [],
+    theme: selectedTheme,
+    ts: Date.now(),
+  };
+
+  // Plain text/select fields
+  ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name',
+   'cfg-footer-note','cfg-lang','cfg-hospital','cfg-hospital-tel',
+   'cfg-doctor-name','cfg-doctor-tel','cfg-med-id','cfg-allergy',
+   'cfg-custom-slots'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) state.fields[id] = el.value;
+  });
+
+  // All chip groups
+  ['cfg-sublang','cfg-care-level','cfg-tubes','cfg-feed-type','cfg-mobility',
+   'cfg-fontsize','cfg-margin','cfg-rowheight','cfg-timecol','cfg-zebra',
+   'cfg-flags','cfg-blood-type','cfg-drug-display','cfg-drug-checkbox'].forEach(gid => {
+    const el = document.getElementById(gid);
+    if (el) {
+      state.chips[gid] = [...el.querySelectorAll('.chip-option.selected')].map(c => c.dataset.val);
+    }
+  });
+
+  // Toggle switches (section on/off + time inputs)
+  document.querySelectorAll('[data-sec]').forEach(row => {
+    const sec = row.dataset.sec;
+    const cb = row.querySelector('input[type=checkbox]');
+    if (cb) {
+      state.toggles[sec] = {on: cb.checked};
+      const ts = document.getElementById(`time-${sec}-s`);
+      const te = document.getElementById(`time-${sec}-e`);
+      if (ts) state.toggles[sec].ts = ts.value;
+      if (te) state.toggles[sec].te = te.value;
+    }
+  });
+
+  // Contacts
+  document.querySelectorAll('.contact-entry').forEach(entry => {
+    const m = entry.id.match(/contact-(\d+)/);
+    if (!m) return;
+    const id = m[1];
+    state.contacts.push({
+      name:  document.getElementById(`c${id}-name`)?.value  || '',
+      role:  document.getElementById(`c${id}-role`)?.value  || '',
+      phone: document.getElementById(`c${id}-phone`)?.value || '',
+      line:  document.getElementById(`c${id}-line`)?.value  || '',
+    });
+  });
+
+  // Drugs
+  document.querySelectorAll('.drug-entry').forEach(entry => {
+    const m = entry.id.match(/drug-(\d+)/);
+    if (!m) return;
+    const id = m[1];
+    state.drugs.push({
+      name: document.getElementById(`d${id}-name`)?.value || '',
+      dose: document.getElementById(`d${id}-dose`)?.value || '',
+      time: document.getElementById(`d${id}-time`)?.value || '',
+      note: document.getElementById(`d${id}-note`)?.value || '',
+    });
+  });
+
+  return state;
+}
+
+function applyState(state) {
+  // Fields
+  Object.entries(state.fields || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+
+  // Chips
+  Object.entries(state.chips || {}).forEach(([gid, vals]) => {
+    const group = document.getElementById(gid);
+    if (!group) return;
+    group.querySelectorAll('.chip-option').forEach(c => {
+      c.classList.toggle('selected', vals.includes(c.dataset.val));
+    });
+  });
+
+  // Toggles
+  Object.entries(state.toggles || {}).forEach(([sec, info]) => {
+    const row = document.querySelector(`[data-sec="${sec}"]`);
+    if (!row) return;
+    const cb = row.querySelector('input[type=checkbox]');
+    if (cb) {
+      cb.checked = info.on;
+      row.classList.toggle('on', info.on);
+      row.querySelectorAll('.time-edit-input').forEach(inp => {
+        inp.disabled = !info.on;
+        inp.style.opacity = info.on ? '1' : '0.35';
+      });
+    }
+    const ts = document.getElementById(`time-${sec}-s`);
+    const te = document.getElementById(`time-${sec}-e`);
+    if (ts && info.ts) ts.value = info.ts;
+    if (te && info.te) te.value = info.te;
+  });
+
+  // Theme
+  if (state.theme) selectTheme(state.theme);
+
+  // Contacts
+  if (state.contacts?.length) {
+    document.getElementById('contactList').innerHTML = '';
+    contactId = 0;
+    state.contacts.forEach(c => {
+      addContact();
+      const id = contactId; // contactId is incremented inside addContact(), capture after
+      document.getElementById(`c${id}-name`).value  = c.name  || '';
+      document.getElementById(`c${id}-role`).value  = c.role  || '';
+      document.getElementById(`c${id}-phone`).value = c.phone || '';
+      document.getElementById(`c${id}-line`).value  = c.line  || '';
+    });
+  }
+
+  // Drugs
+  if (state.drugs?.length) {
+    document.getElementById('drugList').innerHTML = '';
+    drugId = 0;
+    state.drugs.forEach(d => {
+      addDrug();
+      const id = drugId; // drugId is incremented inside addDrug(), capture after
+      document.getElementById(`d${id}-name`).value = d.name || '';
+      document.getElementById(`d${id}-dose`).value = d.dose || '';
+      document.getElementById(`d${id}-time`).value = d.time || '';
+      document.getElementById(`d${id}-note`).value = d.note || '';
+    });
+  }
+}
+
+function showToast(msg, saving=false) {
+  const toast = document.getElementById('save-toast');
+  document.getElementById('save-toast-text').textContent = msg;
+  toast.classList.toggle('saving', saving);
+  toast.classList.add('show');
+  clearTimeout(toast._timer);
+  toast._timer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function updateSaveStatus(saved) {
+  const dot  = document.getElementById('snDot');
+  const text = document.getElementById('snSaveText');
+  if (!dot || !text) return;
+  if (saved) {
+    dot.classList.add('saved');
+    text.textContent = '已自動儲存';
+  } else {
+    dot.classList.remove('saved');
+    text.textContent = '儲存中…';
+  }
+}
+
+function doSave() {
+  try {
+    const state = collectState();
+    const json  = JSON.stringify(state);
+    if (json === lastSaveHash) return; // no change
+    sessionStorage.setItem(SAVE_KEY, json);
+    lastSaveHash = json;
+    showToast('✅ 已自動儲存');
+    updateSaveStatus(true);
+  } catch(e) {
+    console.warn('AutoSave failed:', e);
+  }
+}
+
+function scheduleSave() {
+  updateSaveStatus(false);
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(doSave, 900);
+}
+
+function restoreSave() {
+  try {
+    const raw = sessionStorage.getItem(SAVE_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    applyState(state);
+    if (state.step) gotoStep(state.step);
+    document.getElementById('restore-banner').style.display = 'none';
+    showToast('✅ 設定已還原');
+  } catch(e) {
+    alert('還原失敗：' + e.message);
+  }
+}
+
+function dismissRestore() {
+  document.getElementById('restore-banner').style.display = 'none';
+  sessionStorage.removeItem(SAVE_KEY);
+}
+
+/* ══════════════════════════════════════
+   SWIPE GESTURE (mobile)
+══════════════════════════════════════ */
+(function initSwipe(){
+  let sx=0, sy=0;
+  document.addEventListener('touchstart', e => {
+    sx = e.touches[0].clientX;
+    sy = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx;
+    const dy = e.changedTouches[0].clientY - sy;
+    // Only horizontal swipes, not starting on an input
+    if (Math.abs(dx) < 60 || Math.abs(dy) > Math.abs(dx)*0.7) return;
+    const tag = e.target.tagName;
+    if (['INPUT','SELECT','TEXTAREA'].includes(tag)) return;
+    if (dx < 0 && currentStep < TOTAL_STEPS) gotoStep(currentStep+1);
+    if (dx > 0 && currentStep > 1) gotoStep(currentStep-1);
+  }, {passive:true});
+})();
+
+/* ══════════════════════════════════════
+   INIT
+══════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Default contacts & drugs
+  addContact();
+  addDrug();
+  addDrug();
+
+  // Time input: prevent toggle-row collapse
+  document.querySelectorAll('.time-edit-input').forEach(inp => {
+    inp.addEventListener('mousedown', e => e.stopPropagation());
+    inp.addEventListener('click', e => e.stopPropagation());
+  });
+
+  // Check for saved state
+  try {
+    const raw = sessionStorage.getItem(SAVE_KEY);
+    if (raw) {
+      const state = JSON.parse(raw);
+      // Only show restore if saved less than 24h ago
+      if (state.ts && (Date.now() - state.ts) < 86400000) {
+        document.getElementById('restore-banner').style.display = 'flex';
+      } else {
+        sessionStorage.removeItem(SAVE_KEY);
+      }
+    }
+  } catch(e) {}
+
+  // Auto-save on any input change
+  document.body.addEventListener('input', scheduleSave);
+  document.body.addEventListener('change', scheduleSave);
+
+  // Save before leaving page
+  window.addEventListener('beforeunload', doSave);
+});
+</script>
+</body>
+</html>
