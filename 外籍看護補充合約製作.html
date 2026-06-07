@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>外籍看護補充合約製作工具 v7</title>
+<title>外籍看護補充合約製作工具 v8</title>
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -246,7 +246,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 <small style="opacity:0.6;font-size:11px;">v7</small></span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 <small style="opacity:0.6;font-size:11px;">v8</small></span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="generatePreview()">👁 <span>預覽</span></button>
@@ -494,7 +494,7 @@
           <div><h2>第三章：薪資待遇與休息休假</h2><p>合規提醒：約定薪資不得低於勞動部核定之最低標準，請依實際聘僱條件填寫</p></div>
         </div>
         <div class="form-grid">
-          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" oninput="if(this.value&&parseInt(this.value)<20000){this.style.borderColor='var(--red)';this.title='薪資低於2025年家庭看護工最低標準 NT$20,000！';}else{this.style.borderColor='';this.title=''}"></div>
+          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" oninput="validateSalary(this)"></div>
           <div class="form-group"><label>固定發薪日期</label>
             <select id="pay_day">
               <option value="">-- 請選擇日期 --</option>
@@ -549,6 +549,7 @@
             </select>
           </div>
         </div>
+        <div id="salary-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 約定薪資低於 2025 年家庭看護工最低標準 <strong>NT$20,000</strong>，請確認是否正確！</div>
         <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">甲方保障與提供福利 (Benefits Provided by Party A)</h3>
         <div class="help-box info" style="font-size:12px;margin-bottom:10px;">⚖️ <strong>法規提示：</strong>前四項（膳食、住宿、健保、職災險）為法定義務，<strong>必須勾選</strong>。後四項為強化保障條款，強烈建議一併勾選。</div>
         <div class="checkbox-group">
@@ -848,8 +849,8 @@ function setLang(lang) {
   document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
   const tabEl = document.getElementById('tab-' + lang);
   if (tabEl) tabEl.classList.add('active');
-  // Always regenerate preview so it reflects the new language immediately
-  generatePreview();
+  // Only regenerate preview if currently on the preview section
+  if (currentSection === 'sec-preview') generatePreview();
 }
 
 // ===== HELPERS =====
@@ -1027,9 +1028,11 @@ function generatePreview() {
     <ul class="c-list">
       <li>
         <span class="c-zh">固定常態月薪：新台幣 <strong>${esc(d.salary)}</strong> 元整。</span>
-        ${currentLang !== 'zh' ? `<span class="c-bi">Gaji Bulanan Tetap / Fixed Monthly Salary: NT$ ${esc(d.salary)}</span>` : ''}
+        ${currentLang === 'zh-en' ? `<span class="c-bi">Fixed Monthly Salary: NT$ ${esc(d.salary)}</span>` : ''}
+        ${currentLang === 'zh-id' ? `<span class="c-bi">Gaji Bulanan Tetap: NT$ ${esc(d.salary)}</span>` : ''}
+        ${currentLang === 'zh-vi' ? `<span class="c-bi">Lương tháng cố định: NT$ ${esc(d.salary)}</span>` : ''}
       </li>
-      ${d.pay_day ? `<li><span class="c-zh">固定發薪日期：<strong>${esc(d.pay_day)}</strong>。</span>${currentLang !== 'zh' ? `<span class="c-bi">Tanggal Gajian / Pay Date: ${esc(d.pay_day)}</span>` : ''}</li>` : ''}
+      ${d.pay_day ? `<li><span class="c-zh">固定發薪日期：<strong>${esc(d.pay_day)}</strong>。</span>${currentLang === 'zh-en' ? `<span class="c-bi">Pay Date: ${esc(d.pay_day)}</span>` : ''}${currentLang === 'zh-id' ? `<span class="c-bi">Tanggal Gajian: ${esc(d.pay_day)}</span>` : ''}${currentLang === 'zh-vi' ? `<span class="c-bi">Ngày phát lương: ${esc(d.pay_day)}</span>` : ''}</li>` : ''}
       ${allowLines.length > 0 ? `<li><span class="c-zh"><strong>額外加給津貼項目：</strong></span><ul style="margin-top:4px;">${allowLines.map(l=>`<li style="font-size:10pt;">${l}</li>`).join('')}</ul></li>` : ''}
       <li>
         <span class="c-zh">薪資發放管道機制：</span>
@@ -1047,7 +1050,9 @@ function generatePreview() {
       <li>${renderItemText(d.days_off, currentLang)}</li>
       <li>
         <span class="c-zh">每日基本保障休息與連續睡眠時間合計為：<strong>${esc(d.rest_hours)}</strong> 小時。</span>
-        ${currentLang !== 'zh' ? `<span class="c-bi">Waktu istirahat harian dijamin minimum / Daily rest hours guaranteed: ${esc(d.rest_hours)} jam/hours.</span>` : ''}
+        ${currentLang === 'zh-en' ? `<span class="c-bi">Daily guaranteed rest and continuous sleep total: ${esc(d.rest_hours)} hours.</span>` : ''}
+        ${currentLang === 'zh-id' ? `<span class="c-bi">Waktu istirahat dan tidur berkelanjutan harian dijamin minimum: ${esc(d.rest_hours)} jam.</span>` : ''}
+        ${currentLang === 'zh-vi' ? `<span class="c-bi">Thời gian nghỉ ngơi và ngủ liên tục hàng ngày được bảo đảm tối thiểu: ${esc(d.rest_hours)} giờ.</span>` : ''}
       </li>
       <li>
         <span class="c-zh">未休假加班費計算標準：</span>
@@ -1272,7 +1277,7 @@ function fillSample() {
     if(lbl && el.checked) lbl.classList.add('checked');
   });
 
-  alert('✅ 已填入 v7 合規之範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
+  alert('✅ 已填入 v8 合規之範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
 }
 
 function clearAll() {
@@ -1282,12 +1287,20 @@ function clearAll() {
     document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
     // Uncheck all checkboxes
     document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
-    // Uncheck all radios
+    // Uncheck all radios, then restore default mobility
     document.querySelectorAll('input[type=radio]').forEach(el => el.checked = false);
+    const defaultMobility = document.querySelector('input[name="mobility"][value="mobility_3"]');
+    if (defaultMobility) defaultMobility.checked = true;
     // Remove checked visual state
     document.querySelectorAll('.checkbox-label').forEach(lbl => lbl.classList.remove('checked'));
+    // Reset salary default
+    const salaryEl = document.getElementById('salary');
+    if (salaryEl) { salaryEl.value = '20000'; salaryEl.style.borderColor = ''; }
+    const restEl = document.getElementById('rest_hours');
+    if (restEl) restEl.value = '8';
     // Reset preview area
     document.getElementById('contract-preview-area').innerHTML = '<p style="text-align:center; color:#777; padding:5px 0;">合約建置中...</p>';
+    document.getElementById('print-contract').innerHTML = '';
     showSection('sec-party');
   }
 }
@@ -1305,12 +1318,28 @@ function goToAgency() {
   if (!v('contract_date')) missing.push('簽約日期');
   if (!v('start_date')) missing.push('合約生效起日');
   if (!v('end_date')) missing.push('合約截止日');
+  // Date logic check
+  const s = v('start_date'), e = v('end_date');
+  if (s && e && e < s) missing.push('截止日不得早於起始日');
   if (missing.length > 0) {
     warn.style.display = 'block';
-    warn.innerHTML = '⚠️ 以下欄位尚未填寫，建議補齊再繼續：<strong>' + missing.join('、') + '</strong>';
+    warn.innerHTML = '⚠️ 以下欄位尚未填寫或有誤，請補齊再繼續：<strong>' + missing.join('、') + '</strong>';
+    warn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } else {
     warn.style.display = 'none';
     showSection('sec-agency');
+  }
+}
+
+// ===== SALARY VALIDATION =====
+function validateSalary(el) {
+  const warn = document.getElementById('salary-warning');
+  if (el.value && parseInt(el.value) < 20000) {
+    el.style.borderColor = 'var(--red)';
+    if (warn) warn.style.display = 'block';
+  } else {
+    el.style.borderColor = '';
+    if (warn) warn.style.display = 'none';
   }
 }
 
