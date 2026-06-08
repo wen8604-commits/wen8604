@@ -1851,8 +1851,10 @@ function updateSigLabelInputs(count) {
   let html = '';
   for (let i = 1; i <= count; i++) {
     const existing = document.getElementById('sig-label-' + i);
-    const val = existing ? existing.value : (defaults[i-1] || `簽名 ${i}`);
-    html += `<div class="form-group"><input class="form-input" type="text" id="sig-label-${i}" placeholder="${defaults[i-1]||'簽名者'}" value="${val}"></div>`;
+    const raw = existing ? existing.value : (defaults[i-1] || `簽名 ${i}`);
+    const safeVal = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const safePh  = (defaults[i-1]||'簽名者').replace(/"/g,'&quot;');
+    html += `<div class="form-group"><input class="form-input" type="text" id="sig-label-${i}" placeholder="${safePh}" value="${safeVal}"></div>`;
   }
   wrap.innerHTML = html;
 }
@@ -1880,16 +1882,17 @@ function gotoStep(n) {
   });
 
   currentStep = n;
-  // Scroll to top of wizard body (works on mobile & desktop)
-  const wb = document.querySelector('.wizard-body');
-  if (wb) wb.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  else window.scrollTo({ top: 0, behavior: 'smooth' });
+  // 回到頁面頂端（桌面、平板、手機皆適用）
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   if (n === 6) buildSummary();
   // Hide output when re-entering step 6 without regenerating
   if (n !== 6) {
     const out = document.getElementById('outputSection');
     if (out) out.style.display = 'none';
+    // 清除錯誤提示
+    const errBox = document.getElementById('gen-error-box');
+    if (errBox) errBox.remove();
   }
   scheduleSave();
 }
@@ -1966,8 +1969,9 @@ function buildTaskEditor(secId) {
 }
 
 function taskRowHTML(secId, idx, val) {
+  const safeVal = String(val).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   return `<div class="task-row" id="task-row-${secId}-${idx}">
-    <input class="form-input" type="text" value="${val.replace(/"/g,'&quot;')}" placeholder="輸入工作細項…" id="task-inp-${secId}-${idx}">
+    <input class="form-input" type="text" value="${safeVal}" placeholder="輸入工作細項…" id="task-inp-${secId}-${idx}">
     <button class="btn-del-task" onclick="delTaskRow('task-row-${secId}-${idx}')">✕</button>
   </div>`;
 }
@@ -2278,15 +2282,27 @@ function generateSchedule() {
     } catch (e) {
       btn.disabled = false;
       btn.innerHTML = '✨ 生成客製化時間表';
-      alert('生成失敗：' + e.message);
+      // 用非阻塞方式顯示錯誤，避免 alert 卡住 UI
+      const errBox = document.createElement('div');
+      errBox.style.cssText = 'background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#dc2626;white-space:pre-line;';
+      errBox.textContent = '⚠️ 生成失敗：' + e.message;
+      const nav = document.querySelector('#step-6 .wizard-nav');
+      const old = document.getElementById('gen-error-box');
+      if (old) old.remove();
+      errBox.id = 'gen-error-box';
+      if (nav) nav.before(errBox);
     }
   }, 250);
 }
 
 function printOutput() {
   const iframe = document.getElementById('outputFrame');
-  if (iframe.contentWindow) {
+  if (!iframe) return;
+  // 確保 iframe 已載入內容後再列印
+  if (iframe.contentDocument && iframe.contentDocument.body && iframe.contentDocument.body.innerHTML) {
     iframe.contentWindow.print();
+  } else {
+    iframe.onload = () => { iframe.contentWindow.print(); iframe.onload = null; };
   }
 }
 
@@ -2601,7 +2617,7 @@ function buildScheduleHTML() {
 
   // Filter active slots
   const activeSlots = allSlotDefs.filter(s => {
-    if (s.key.startsWith('task-') || s.key.startsWith('custom-')) return true;
+    if (s.key.startsWith('custom-')) return true;
     return getSecEnabled(s.key);
   });
 
@@ -2610,8 +2626,8 @@ function buildScheduleHTML() {
   const activeDays = dayOrder.filter(d => activeDayVals.includes(d));
 
   // Guard: must have days and slots
-  if (activeDays.length === 0) throw new Error('請至少選擇一個顯示天數（步驟一 → 週別設定）');
-  if (activeSlots.length === 0) throw new Error('請至少開啟一個工作時段（步驟二 → 時段設定）');
+  if (activeDays.length === 0) throw new Error('請至少選擇一個顯示天數\n（步驟一 → 週別設定）');
+  if (activeSlots.length === 0) throw new Error('請至少開啟一個工作時段\n（步驟二 → 時段設定）');
 
   // Row height px
   const rowPx = { compact: 38, normal: 52, loose: 72 }[rowHeight] || 52;
@@ -2687,17 +2703,8 @@ function buildScheduleHTML() {
           const completeLabel = blUI ? blUI.complete : '☐ 已完成';
           const signLabel = blUI ? blUI.sign : '簽名：_______';
           const taskHtml = cellContent.includes('tasks') && resolvedTasks.length
-            ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${tk}</div>`).join('')
+            ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${esc(tk)}</div>`).join('')
             : (cellContent.includes('check') ? `<div class="task-item">${completeLabel}</div>` : '');
-          const noteHtml = cellContent.includes('note') ? '<div class="cell-note"></div>' : '';
-          const signHtml = cellContent.includes('sign') ? `<div class="cell-sign">${signLabel}</div>` : '';
-          return `<td class="td-day">${taskHtml}${noteHtml}${signHtml}</td>`;
-        }).join('')}
-      </tr>`;
-    });
-
-    // Note row
-    if (noteRow) {
       const noteLbl = blUI ? blUI.noteLabel : '每日備注';
       tableHtml += `<tr>
         <td class="td-slot td-note-label">${noteLbl}</td>
@@ -2730,7 +2737,7 @@ function buildScheduleHTML() {
           const userModified2 = JSON.stringify(userTasks2) !== JSON.stringify(defaultForKey2);
           const resolvedTasks = (!userModified2 && blTasks(slot.subKey)) ? blTasks(slot.subKey) : userTasks2;
           const taskHtml = cellContent.includes('tasks') && resolvedTasks.length
-            ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${tk}</div>`).join('')
+            ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${esc(tk)}</div>`).join('')
             : (cellContent.includes('check') ? `<div class="task-item">${completeLabel}</div>` : '');
           const noteHtml = cellContent.includes('note') ? '<div class="cell-note"></div>' : '';
           const signHtml = cellContent.includes('sign') ? `<div class="cell-sign">${signLabel}</div>` : '';
@@ -3033,7 +3040,7 @@ function buildDCReportHTML() {
   const safetyItems = getChipLabels('dc-safety');
   const extraNote = esc((document.getElementById('dc-extra-note')?.value || '').trim());
 
-  if (!spaceRows && weeklyItems.length === 0 && monthlyItems.length === 0) return '';
+  if (!spaceRows.length && weeklyItems.length === 0 && monthlyItems.length === 0) return '';
 
   return `
 <div style="page-break-before:always;padding:0;margin-top:32px;" class="dc-report-wrap">
@@ -3202,14 +3209,21 @@ function collectState() {
 }
 
 function applyState(state) {
-  Object.entries(state.fields || {}).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-  });
+  // ── 1. 先還原 chips（含 cfg-sig-count）────────────────
   Object.entries(state.chips || {}).forEach(([gid, vals]) => {
     const group = document.getElementById(gid);
     if (!group) return;
     group.querySelectorAll('.chip-option').forEach(c => c.classList.toggle('selected', vals.includes(c.dataset.val)));
+  });
+  // ── 2. 還原 cfg-sig-count 後立即建立 label inputs（必須在欄位還原前）
+  if (state.chips && state.chips['cfg-sig-count'] && state.chips['cfg-sig-count'].length > 0) {
+    const cnt = parseInt(state.chips['cfg-sig-count'][0]);
+    if (cnt > 0) updateSigLabelInputs(cnt);
+  }
+  // ── 3. 還原欄位值（sig-label-3/4 此時已存在）────────────
+  Object.entries(state.fields || {}).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
   });
   Object.entries(state.toggles || {}).forEach(([sec, info]) => {
     const row = document.querySelector(`[data-sec="${sec}"]`);
@@ -3337,7 +3351,10 @@ function restoreSave() {
     if (state.step && typeof state.step === 'number' && state.step <= 6) gotoStep(state.step);
     document.getElementById('restore-banner').style.display = 'none';
     showToast('✅ 設定已還原');
-  } catch(e) { alert('還原失敗：' + e.message); }
+  } catch(e) {
+    console.warn('還原失敗：', e);
+    document.getElementById('restore-banner').style.display = 'none';
+  }
 }
 
 function dismissRestore() {
