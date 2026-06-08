@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v12</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -2106,7 +2106,7 @@ function getCustomSlots() {
     const s    = (document.getElementById(`slot-${id}-s`)?.value || '').trim();
     const e    = (document.getElementById(`slot-${id}-e`)?.value || '').trim();
     const desc = (document.getElementById(`slot-${id}-desc`)?.value || '').trim();
-    if (name) result.push({ name: name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'), s, e, desc: desc.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') });
+    if (name) result.push({ name, s, e, desc });
   });
   return result;
 }
@@ -2705,6 +2705,14 @@ function buildScheduleHTML() {
           const taskHtml = cellContent.includes('tasks') && resolvedTasks.length
             ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${esc(tk)}</div>`).join('')
             : (cellContent.includes('check') ? `<div class="task-item">${completeLabel}</div>` : '');
+          const noteHtml = cellContent.includes('note') ? '<div class="cell-note"></div>' : '';
+          const signHtml = cellContent.includes('sign') ? `<div class="cell-sign">${signLabel}</div>` : '';
+          return `<td class="td-day">${taskHtml}${noteHtml}${signHtml}</td>`;
+        }).join('')}
+      </tr>`;
+    });
+
+    if (noteRow) {
       const noteLbl = blUI ? blUI.noteLabel : '每日備注';
       tableHtml += `<tr>
         <td class="td-slot td-note-label">${noteLbl}</td>
@@ -3281,7 +3289,7 @@ function applyState(state) {
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">時段名稱</label>
-              <input class="form-input" id="slot-${id}-name" type="text" value="${cs.name.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}" placeholder="例：物理治療">
+              <input class="form-input" id="slot-${id}-name" type="text" value="${cs.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}" placeholder="例：物理治療">
             </div>
             <div class="form-group">
               <label class="form-label">時間</label>
@@ -3295,7 +3303,7 @@ function applyState(state) {
           <div class="form-row single">
             <div class="form-group">
               <label class="form-label">工作內容說明 <span class="optional">選填</span></label>
-              <input class="form-input" id="slot-${id}-desc" type="text" value="${(cs.desc||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')}" placeholder="例：協助被動關節運動 20 分鐘">
+              <input class="form-input" id="slot-${id}-desc" type="text" value="${(cs.desc||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}" placeholder="例：協助被動關節運動 20 分鐘">
             </div>
           </div>`;
         list.appendChild(entry);
@@ -3354,6 +3362,7 @@ function restoreSave() {
   } catch(e) {
     console.warn('還原失敗：', e);
     document.getElementById('restore-banner').style.display = 'none';
+    showToast('⚠️ 還原失敗，設定已重置');
   }
 }
 
