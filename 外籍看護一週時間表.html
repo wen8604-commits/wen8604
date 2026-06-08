@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v12</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v19</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -136,6 +136,45 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 }
 .time-edit-input:focus{border-color:var(--accent);}
 .toggle-row.on .time-edit-input{border-color:#93c5fd;background:#f0f7ff;}
+
+/* ── SLOT DAY RESTRICTION ── */
+.slot-days-wrap{display:none;border-top:1px dashed #fde68a;margin-top:6px;padding:8px 12px 10px;background:#fffbeb;border-radius:0 0 7px 7px;}
+.slot-days-wrap.open{display:flex;flex-direction:column;gap:6px;}
+.slot-days-label{font-size:11px;font-weight:700;color:#92400e;letter-spacing:.3px;display:flex;align-items:center;gap:6px;}
+.slot-days-label .badge-days{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;}
+.slot-days-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.slot-days-hint{font-size:10.5px;color:#a16207;}
+.btn-toggle-days{background:transparent;border:none;color:#d97706;font-size:11px;font-family:inherit;cursor:pointer;padding:1px 0 1px 4px;display:flex;align-items:center;gap:3px;font-weight:600;transition:color .15s;-webkit-tap-highlight-color:transparent;}
+.btn-toggle-days:hover{color:#b45309;}
+.btn-toggle-days .arrow{font-size:10px;transition:transform .2s;display:inline-block;}
+.btn-toggle-days.open .arrow{transform:rotate(90deg);}
+/* Chip style for slot-days */
+.sd-chip{border:1.5px solid #fde68a;background:#fffde7;border-radius:16px;padding:4px 9px;font-size:12px;font-family:inherit;color:#92400e;cursor:pointer;transition:.12s;user-select:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
+.sd-chip:hover{border-color:#f59e0b;}
+.sd-chip.selected{background:#f59e0b;border-color:#f59e0b;color:#fff;font-weight:600;}
+
+/* ── LIVE PREVIEW PANEL ── */
+#live-preview-panel{display:none;position:fixed;bottom:16px;right:16px;z-index:300;width:280px;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);overflow:hidden;transition:box-shadow .2s;}
+#live-preview-panel.visible{display:block;}
+.lp-header{background:var(--ink);color:#fff;padding:8px 12px;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:space-between;}
+.lp-close{background:transparent;border:none;color:#fff;cursor:pointer;font-size:15px;line-height:1;padding:0;opacity:.7;}
+.lp-close:hover{opacity:1;}
+.lp-body{overflow:auto;max-height:300px;}
+.lp-table{width:100%;border-collapse:collapse;font-size:9px;}
+.lp-table th{background:#1e40af;color:#fff;padding:3px 4px;text-align:center;font-weight:700;white-space:nowrap;}
+.lp-table td{border:1px solid #e5e7eb;padding:3px 5px;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;}
+.lp-table td.lp-slot-name{font-weight:600;color:#374151;max-width:70px;}
+.lp-table td.lp-na{background:#f3f4f6;color:#d1d5db;text-align:center;}
+.lp-table td.lp-ok{background:#f0fdf4;color:#059669;text-align:center;font-weight:700;}
+.lp-table tr:nth-child(even) td.lp-ok{background:#dcfce7;}
+.lp-empty{font-size:11px;color:#9ca3af;text-align:center;padding:16px;}
+#btn-show-preview{position:fixed;bottom:16px;right:16px;z-index:299;background:var(--ink);color:#fff;border:none;border-radius:24px;padding:7px 14px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;display:none;align-items:center;gap:6px;box-shadow:0 4px 16px rgba(0,0,0,.2);-webkit-tap-highlight-color:transparent;}
+#btn-show-preview.visible{display:flex;}
+#btn-show-preview:hover{background:#374151;}
+@media(max-width:639px){
+  #live-preview-panel{bottom:72px;right:8px;width:calc(100vw - 16px);max-width:340px;}
+  #btn-show-preview{bottom:72px;}
+}
 
 /* ── TASK EDITOR ── */
 .task-editor-wrap{display:none;border-top:1px dashed #d1d5db;margin-top:8px;padding-top:10px;}
@@ -343,7 +382,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- TOP BAR -->
 <div class="topbar">
   <div style="min-width:0;flex:1;">
-    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈</div>
+    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈 v19</div>
     <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
   </div>
   <div class="topbar-right">
@@ -368,7 +407,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     <span class="step-arrow">›</span>
   </div>
   <div class="step-pill">
-    <div class="step-node" id="step-tab-4" onclick="gotoStep(4)"><div class="step-num">4</div>工作項目</div>
+    <div class="step-node" id="step-tab-4" onclick="gotoStep(4)"><div class="step-num">4</div>格式設定</div>
     <span class="step-arrow">›</span>
   </div>
   <div class="step-pill">
@@ -388,7 +427,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div class="side-nav-item active" data-sn="1" onclick="gotoStep(1)"><span class="sn-num">1</span><span class="sn-icon">🏠</span> 基本資訊</div>
   <div class="side-nav-item" data-sn="2" onclick="gotoStep(2)"><span class="sn-num">2</span><span class="sn-icon">🕐</span> 時段設定</div>
   <div class="side-nav-item" data-sn="3" onclick="gotoStep(3)"><span class="sn-num">3</span><span class="sn-icon">🧹</span> 大掃除</div>
-  <div class="side-nav-item" data-sn="4" onclick="gotoStep(4)"><span class="sn-num">4</span><span class="sn-icon">📋</span> 工作項目</div>
+  <div class="side-nav-item" data-sn="4" onclick="gotoStep(4)"><span class="sn-num">4</span><span class="sn-icon">📋</span> 格式設定</div>
   <div class="side-nav-item" data-sn="5" onclick="gotoStep(5)"><span class="sn-num">5</span><span class="sn-icon">🎨</span> 版面外觀</div>
   <div class="side-nav-item" data-sn="6" onclick="gotoStep(6)"><span class="sn-num">6</span><span class="sn-icon">✨</span> 預覽生成</div>
   <div class="side-nav-save" id="snSaveStatus">
@@ -516,7 +555,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <span class="section-toggle-icon">▾</span>
     </div>
     <div class="section-body">
-      <div class="toggle-row" id="sig-toggle-row" data-sec="cfg-sig-enable" style="margin-bottom:12px;">
+      <div class="toggle-row" id="sig-toggle-row" style="margin-bottom:12px;">
         <div class="toggle-label">
           <div class="toggle-label-main">顯示簽名欄</div>
           <div class="toggle-label-sub">在生成表單底部加入簽名區域</div>
@@ -1799,6 +1838,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
     <div class="output-actions">
       <button class="btn-out" onclick="printOutput()">🖨️ 列印 / 存PDF</button>
+      <button class="btn-out" onclick="downloadOutput()">💾 下載 HTML</button>
       <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
     </div>
   </div>
@@ -1819,7 +1859,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     <button class="mtab active" data-mt="1" onclick="gotoStep(1)"><span class="mtab-num">1</span><span class="mtab-icon">🏠</span><span class="mtab-label">基本</span></button>
     <button class="mtab" data-mt="2" onclick="gotoStep(2)"><span class="mtab-num">2</span><span class="mtab-icon">🕐</span><span class="mtab-label">時段</span></button>
     <button class="mtab" data-mt="3" onclick="gotoStep(3)"><span class="mtab-num">3</span><span class="mtab-icon">🧹</span><span class="mtab-label">大掃除</span></button>
-    <button class="mtab" data-mt="4" onclick="gotoStep(4)"><span class="mtab-num">4</span><span class="mtab-icon">📋</span><span class="mtab-label">項目</span></button>
+    <button class="mtab" data-mt="4" onclick="gotoStep(4)"><span class="mtab-num">4</span><span class="mtab-icon">📋</span><span class="mtab-label">格式</span></button>
     <button class="mtab" data-mt="5" onclick="gotoStep(5)"><span class="mtab-num">5</span><span class="mtab-icon">🎨</span><span class="mtab-label">外觀</span></button>
     <button class="mtab" data-mt="6" onclick="gotoStep(6)"><span class="mtab-num">6</span><span class="mtab-icon">✨</span><span class="mtab-label">生成</span></button>
   </div>
@@ -2062,7 +2102,46 @@ function getTimeRange(secId) {
 
 /* ══ CUSTOM SLOTS ══ */
 let slotId = 0;
-function addCustomSlot() {
+function customSlotDayChipHTML(id, selectedDays) {
+  // selectedDays: array of day nums as strings, e.g. ['1','5'], or [] means "every day"
+  const days = [
+    { val:'1', label:'一' },
+    { val:'2', label:'二' },
+    { val:'3', label:'三' },
+    { val:'4', label:'四' },
+    { val:'5', label:'五' },
+    { val:'6', label:'六' },
+    { val:'0', label:'日' },
+  ];
+  const allSel = !selectedDays || selectedDays.length === 0;
+  const allCls = allSel ? 'selected' : '';
+  const chips = days.map(d => {
+    const sel = !allSel && selectedDays.includes(d.val) ? 'selected' : '';
+    return `<div class="chip-option${sel?' selected':''}" style="padding:5px 10px;font-size:12px;" data-val="${d.val}" onclick="toggleCustomSlotDay(this,'${id}')">${d.label}</div>`;
+  }).join('');
+  return `<div class="chip-option ${allCls}" style="padding:5px 10px;font-size:12px;" data-val="all" onclick="toggleCustomSlotDay(this,'${id}')">每天</div>${chips}`;
+}
+
+function toggleCustomSlotDay(el, slotId) {
+  const container = document.getElementById('slot-' + slotId + '-days');
+  if (!container) return;
+  if (el.dataset.val === 'all') {
+    // Select "every day" — deselect all specific days
+    container.querySelectorAll('.chip-option').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  } else {
+    // Toggle this day
+    el.classList.toggle('selected');
+    // If any specific day is selected, deselect "every day"
+    const anyDay = [...container.querySelectorAll('.chip-option')].some(c => c.dataset.val !== 'all' && c.classList.contains('selected'));
+    const allBtn = container.querySelector('[data-val="all"]');
+    if (allBtn) allBtn.classList.toggle('selected', !anyDay);
+    // If none selected, revert to "every day"
+    if (!anyDay) allBtn && allBtn.classList.add('selected');
+  }
+}
+
+function addCustomSlot(prefillDays) {
   const id = ++slotId;
   const list = document.getElementById('customSlotList');
   const entry = document.createElement('div');
@@ -2089,6 +2168,15 @@ function addCustomSlot() {
     </div>
     <div class="form-row single">
       <div class="form-group">
+        <label class="form-label">適用星期 <span style="font-size:10px;color:#10b981;background:#d1fae5;border-radius:4px;padding:1px 6px;font-weight:700;margin-left:4px;">NEW</span></label>
+        <div class="chip-group" id="slot-${id}-days" style="flex-wrap:wrap;gap:5px;">
+          ${customSlotDayChipHTML(id, prefillDays || [])}
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">💡 只勾選特定日時，該格才會顯示此時段（如每週五復健）</div>
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
         <label class="form-label">工作內容說明 <span class="optional">選填</span></label>
         <input class="form-input" id="slot-${id}-desc" type="text" placeholder="例：協助被動關節運動 20 分鐘">
       </div>
@@ -2106,7 +2194,19 @@ function getCustomSlots() {
     const s    = (document.getElementById(`slot-${id}-s`)?.value || '').trim();
     const e    = (document.getElementById(`slot-${id}-e`)?.value || '').trim();
     const desc = (document.getElementById(`slot-${id}-desc`)?.value || '').trim();
-    if (name) result.push({ name, s, e, desc });
+    // Collect selected days
+    const daysContainer = document.getElementById(`slot-${id}-days`);
+    let days = [];
+    if (daysContainer) {
+      const allBtn = daysContainer.querySelector('[data-val="all"]');
+      if (!allBtn || !allBtn.classList.contains('selected')) {
+        days = [...daysContainer.querySelectorAll('.chip-option.selected')]
+          .map(c => c.dataset.val)
+          .filter(v => v !== 'all');
+      }
+      // days === [] means every day
+    }
+    if (name) result.push({ name, s, e, desc, days });
   });
   return result;
 }
@@ -2150,6 +2250,17 @@ function calcSlotMinutes(secId) {
 }
 
 function buildWorkHoursStats() {
+  const EN_LABELS = {
+    '晨間照護':'Morning Care','早餐':'Breakfast','早間用藥':'AM Meds',
+    '上午生命徵象':'AM Vitals','上午活動':'Morning Activity','復健訓練':'Rehab',
+    '戶外散步':'Outdoor Walk','外出就醫':'Medical Visit','午餐':'Lunch',
+    '午間用藥':'Noon Meds','午休陪伴':'Afternoon Rest','下午生命徵象':'PM Vitals',
+    '下午活動':'Afternoon Activity','晚餐':'Dinner','晚間用藥':'PM Meds',
+    '晚間活動':'Evening Activity','就寢照護':'Bedtime Care','夜間巡視':'Night Check',
+    '早班打掃':'Morning Clean','午班打掃':'Noon Clean','晚班打掃':'Evening Clean',
+    '週間大掃除':'Weekly Deep Clean','看電視':'TV Viewing','聽音樂':'Music',
+    '閱讀/報紙':'Reading','手工藝/益智':'Craft','家人/社交互動':'Social',
+  };
   const ALL_SLOTS = [
     { key:'s-morning', label:'晨間照護' },
     { key:'s-breakfast', label:'早餐' },
@@ -2192,7 +2303,7 @@ function buildWorkHoursStats() {
       const h = Math.floor(mins / 60), m = mins % 60;
       const timeStr = h > 0 ? (m > 0 ? `${h}h${m}m` : `${h}h`) : `${m}m`;
       slotRows.push(`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #e5e7eb;font-size:12px;">
-        <span style="color:#374151;">${s.label}</span>
+        <span style="color:#374151;">${s.label}${EN_LABELS[s.label] ? '<span style="font-size:10px;color:#9ca3af;margin-left:4px;">/ '+EN_LABELS[s.label]+'</span>' : ''}</span>
         <span style="font-weight:600;color:#1a5276;">${timeStr}</span>
       </div>`);
     }
@@ -2201,28 +2312,28 @@ function buildWorkHoursStats() {
   return `
   <div style="margin-top:16px;border:1.5px solid #bfdbfe;border-radius:10px;overflow:hidden;">
     <div style="background:#1d4ed8;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;">
-      ⏱️ 每日工作時間統計
+      ⏱️ 每日工作時間統計 <span style="font-size:12px;font-weight:400;opacity:.85;letter-spacing:.2px;">Daily Work Hours</span>
     </div>
     <div style="padding:14px 16px;">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px;">
         <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">每日合計</div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">每日合計<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Total Daily</div></div>
           <div style="font-size:18px;font-weight:900;color:#1d4ed8;">${fmtH(totalMins)}</div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">照護工作</div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">照護工作<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Care Work</div></div>
           <div style="font-size:18px;font-weight:900;color:#059669;">${fmtH(careMins)}</div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">🧹 打掃整理</div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🧹 打掃整理<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Cleaning</div></div>
           <div style="font-size:18px;font-weight:900;color:#047857;">${fmtH(cleanMins)}</div>
         </div>
         <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;">🎮 休閒陪伴</div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🎮 休閒陪伴<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Leisure</div></div>
           <div style="font-size:18px;font-weight:900;color:#7c3aed;">${fmtH(leisureMins)}</div>
         </div>
       </div>
-      ${slotRows.length > 0 ? `<details style="cursor:pointer;"><summary style="font-size:12px;font-weight:700;color:#374151;padding:4px 0;list-style:none;display:flex;align-items:center;gap:4px;"><span>▸</span> 各時段明細 (${slotRows.length} 個時段)</summary><div style="margin-top:8px;">${slotRows.join('')}</div></details>` : '<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px 0;">尚未設定任何時段</div>'}
+      ${slotRows.length > 0 ? `<details style="cursor:pointer;"><summary style="font-size:12px;font-weight:700;color:#374151;padding:4px 0;list-style:none;display:flex;align-items:center;gap:4px;"><span>▸</span> 各時段明細 / Time Slot Details (${slotRows.length} 項)</summary><div style="margin-top:8px;">${slotRows.join('')}</div></details>` : '<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px 0;">尚未設定任何時段 / No slots configured</div>'}
     </div>
   </div>`;
 }
@@ -2293,6 +2404,21 @@ function generateSchedule() {
       if (nav) nav.before(errBox);
     }
   }, 250);
+}
+
+function downloadOutput() {
+  const iframe = document.getElementById('outputFrame');
+  if (!iframe || !iframe.srcdoc) return;
+  const blob = new Blob([iframe.srcdoc], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const patientName = (document.getElementById('cfg-patient-name')?.value || '').trim();
+  a.href = url;
+  a.download = (patientName ? patientName + '_' : '') + '外籍看護時間表.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
 
 function printOutput() {
@@ -2421,7 +2547,8 @@ function buildScheduleHTML() {
       tv:'看電視\nNonton TV', music:'聽音樂\nMendengarkan Musik',
       reading:'閱讀報紙\nMembaca Koran', craft:'手工藝/益智\nKeterampilan/Puzzle',
       social:'家人互動\nInteraksi Keluarga',
-      // Tasks per slot
+      clean_morning:'早班打掃\nBersih Pagi', clean_noon:'午班打掃\nBersih Siang',
+      clean_evening:'晚班打掃\nBersih Malam', clean_weekly:'週間大掃除\nBersih Mingguan',
       tasks:{
         morning:     ['起床協助 / Bantu bangun','盥洗清潔 / Kebersihan diri','更衣 / Ganti pakaian'],
         breakfast:   ['備餐/準備 / Siapkan makanan','餵食協助 / Bantu makan','飲水量記錄 / Catat asupan air'],
@@ -2475,6 +2602,8 @@ function buildScheduleHTML() {
       tv:'看電視\nXem Tivi', music:'聽音樂\nNghe Nhạc',
       reading:'閱讀報紙\nĐọc Báo/Sách', craft:'手工藝/益智\nThủ Công/Giải Trí',
       social:'家人互動\nGiao Lưu Gia Đình',
+      clean_morning:'早班打掃\nDọn Dẹp Sáng', clean_noon:'午班打掃\nDọn Dẹp Trưa',
+      clean_evening:'晚班打掃\nDọn Dẹp Tối', clean_weekly:'週間大掃除\nTổng Vệ Sinh Tuần',
       tasks:{
         morning:     ['起床協助 / Hỗ trợ dậy','盥洗清潔 / Vệ sinh cá nhân','更衣 / Thay quần áo'],
         breakfast:   ['備餐/準備 / Chuẩn bị bữa ăn','餵食協助 / Hỗ trợ ăn','飲水量記錄 / Ghi lượng nước'],
@@ -2528,6 +2657,8 @@ function buildScheduleHTML() {
       tv:'看電視\nTV Viewing', music:'聽音樂\nMusic Enjoyment',
       reading:'閱讀報紙\nReading', craft:'手工藝/益智\nCraft / Brain Activity',
       social:'家人互動\nFamily / Social Time',
+      clean_morning:'早班打掃\nMorning Clean', clean_noon:'午班打掃\nNoon Clean',
+      clean_evening:'晚班打掃\nEvening Clean', clean_weekly:'週間大掃除\nWeekly Deep Clean',
       tasks:{
         morning:     ['起床協助 / Assist to rise','盥洗清潔 / Personal hygiene','更衣 / Change clothes'],
         breakfast:   ['備餐/準備 / Prepare meal','餵食協助 / Assist feeding','飲水量記錄 / Log fluid intake'],
@@ -2576,43 +2707,44 @@ function buildScheduleHTML() {
 
   // Build slot definitions — tasks come from user's task editors
   const allSlotDefs = [
-    { key:'s-morning',      zh:'晨間照護',   desc:'起床、盥洗、更衣',               tasks:getSlotTasks('s-morning'),      subKey:'morning' },
-    { key:'s-breakfast',    zh:'早餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-breakfast'),    subKey:'breakfast' },
-    { key:'s-med-am',       zh:'早間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-am'),       subKey:'med_am' },
-    { key:'s-vital-am',     zh:'上午生命徵象', desc:'血壓、體溫、脈搏',              tasks:getSlotTasks('s-vital-am'),     subKey:'vital_am' },
-    { key:'s-morning-act',  zh:'上午活動',   desc:'活動、室內運動、陪伴',              tasks:getSlotTasks('s-morning-act'),  subKey:'morning_act' },
-    { key:'s-rehab',        zh:'復健訓練',   desc:'物理/職能/語言治療',               tasks:getSlotTasks('s-rehab'),        subKey:'rehab_slot' },
-    { key:'s-walk',         zh:'戶外散步',   desc:'室外活動、曬太陽',                 tasks:getSlotTasks('s-walk'),         subKey:'walk' },
-    { key:'s-hospital',     zh:'外出就醫',   desc:'回診、追蹤、陪同就醫',             tasks:getSlotTasks('s-hospital'),     subKey:'hospital' },
-    { key:'s-lunch',        zh:'午餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-lunch'),        subKey:'lunch' },
-    { key:'s-med-noon',     zh:'午間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-noon'),     subKey:'med_noon' },
-    { key:'s-nap',          zh:'午休陪伴',   desc:'協助休息、翻身',                  tasks:getSlotTasks('s-nap'),          subKey:'nap' },
-    { key:'s-vital-pm',     zh:'下午生命徵象', desc:'血壓、血糖等',                  tasks:getSlotTasks('s-vital-pm'),     subKey:'vital_pm' },
-    { key:'s-afternoon-act',zh:'下午活動',   desc:'點心、沐浴、娛樂',                tasks:getSlotTasks('s-afternoon-act'),subKey:'afternoon_act' },
-    { key:'s-dinner',       zh:'晚餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-dinner'),       subKey:'dinner' },
-    { key:'s-med-pm',       zh:'晚間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-pm'),       subKey:'med_pm' },
-    { key:'s-evening',      zh:'晚間活動',   desc:'洗澡、口腔護理',                  tasks:getSlotTasks('s-evening'),      subKey:'evening' },
-    { key:'s-bedtime',      zh:'就寢照護',   desc:'更換尿布、安置就寢',              tasks:getSlotTasks('s-bedtime'),      subKey:'bedtime' },
-    { key:'s-night',        zh:'夜間巡視',   desc:'翻身、如廁協助',                  tasks:getSlotTasks('s-night'),        subKey:'night' },
+    { key:'s-morning',      zh:'晨間照護',   desc:'起床、盥洗、更衣',               tasks:getSlotTasks('s-morning'),      subKey:'morning',      days:getSlotDays('s-morning') },
+    { key:'s-breakfast',    zh:'早餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-breakfast'),    subKey:'breakfast',    days:getSlotDays('s-breakfast') },
+    { key:'s-med-am',       zh:'早間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-am'),       subKey:'med_am',       days:getSlotDays('s-med-am') },
+    { key:'s-morning-act',  zh:'上午活動',   desc:'活動、室內運動、陪伴',              tasks:getSlotTasks('s-morning-act'),  subKey:'morning_act',  days:getSlotDays('s-morning-act') },
+    { key:'s-rehab',        zh:'復健訓練',   desc:'物理/職能/語言治療',               tasks:getSlotTasks('s-rehab'),        subKey:'rehab_slot',   days:getSlotDays('s-rehab') },
+    { key:'s-walk',         zh:'戶外散步',   desc:'室外活動、曬太陽',                 tasks:getSlotTasks('s-walk'),         subKey:'walk',         days:getSlotDays('s-walk') },
+    { key:'s-hospital',     zh:'外出就醫',   desc:'回診、追蹤、陪同就醫',             tasks:getSlotTasks('s-hospital'),     subKey:'hospital',     days:getSlotDays('s-hospital') },
+    { key:'s-vital-am',     zh:'上午生命徵象', desc:'血壓、體溫、脈搏',              tasks:getSlotTasks('s-vital-am'),     subKey:'vital_am',     days:getSlotDays('s-vital-am') },
+    { key:'s-lunch',        zh:'午餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-lunch'),        subKey:'lunch',        days:getSlotDays('s-lunch') },
+    { key:'s-med-noon',     zh:'午間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-noon'),     subKey:'med_noon',     days:getSlotDays('s-med-noon') },
+    { key:'s-nap',          zh:'午休陪伴',   desc:'協助休息、翻身',                  tasks:getSlotTasks('s-nap'),          subKey:'nap',          days:getSlotDays('s-nap') },
+    { key:'s-vital-pm',     zh:'下午生命徵象', desc:'血壓、血糖等',                  tasks:getSlotTasks('s-vital-pm'),     subKey:'vital_pm',     days:getSlotDays('s-vital-pm') },
+    { key:'s-afternoon-act',zh:'下午活動',   desc:'點心、沐浴、娛樂',                tasks:getSlotTasks('s-afternoon-act'),subKey:'afternoon_act',days:getSlotDays('s-afternoon-act') },
+    { key:'s-dinner',       zh:'晚餐',       desc:'備餐、餵食、飲水記錄',            tasks:getSlotTasks('s-dinner'),       subKey:'dinner',       days:getSlotDays('s-dinner') },
+    { key:'s-med-pm',       zh:'晚間用藥',   desc:'對照藥單給藥',                    tasks:getSlotTasks('s-med-pm'),       subKey:'med_pm',       days:getSlotDays('s-med-pm') },
+    { key:'s-evening',      zh:'晚間活動',   desc:'洗澡、口腔護理',                  tasks:getSlotTasks('s-evening'),      subKey:'evening',      days:getSlotDays('s-evening') },
+    { key:'s-bedtime',      zh:'就寢照護',   desc:'更換尿布、安置就寢',              tasks:getSlotTasks('s-bedtime'),      subKey:'bedtime',      days:getSlotDays('s-bedtime') },
+    { key:'s-night',        zh:'夜間巡視',   desc:'翻身、如廁協助',                  tasks:getSlotTasks('s-night'),        subKey:'night',        days:getSlotDays('s-night') },
   ];
 
   // Cleaning slots
-  if (getSecEnabled('s-clean-morning')) allSlotDefs.push({ key:'s-clean-morning', zh:'早班打掃', desc:'床鋪整理、掃地清潔', tasks:getSlotTasks('s-clean-morning'), subKey:'clean_morning', timeRange: getTimeRange('s-clean-morning') });
-  if (getSecEnabled('s-clean-noon'))    allSlotDefs.push({ key:'s-clean-noon',    zh:'午班打掃', desc:'廚房、碗盤、桌面整理', tasks:getSlotTasks('s-clean-noon'), subKey:'clean_noon', timeRange: getTimeRange('s-clean-noon') });
-  if (getSecEnabled('s-clean-evening')) allSlotDefs.push({ key:'s-clean-evening', zh:'晚班打掃', desc:'廚房、浴廁、垃圾整理', tasks:getSlotTasks('s-clean-evening'), subKey:'clean_evening', timeRange: getTimeRange('s-clean-evening') });
-  if (getSecEnabled('s-clean-weekly'))  allSlotDefs.push({ key:'s-clean-weekly',  zh:'週間大掃除', desc:'深度清潔（每週定期）', tasks:getSlotTasks('s-clean-weekly'), subKey:'clean_weekly', timeRange: getTimeRange('s-clean-weekly') });
+  if (getSecEnabled('s-clean-morning')) allSlotDefs.push({ key:'s-clean-morning', zh:'早班打掃', desc:'床鋪整理、掃地清潔', tasks:getSlotTasks('s-clean-morning'), subKey:'clean_morning', timeRange: getTimeRange('s-clean-morning'), days:getSlotDays('s-clean-morning') });
+  if (getSecEnabled('s-clean-noon'))    allSlotDefs.push({ key:'s-clean-noon',    zh:'午班打掃', desc:'廚房、碗盤、桌面整理', tasks:getSlotTasks('s-clean-noon'), subKey:'clean_noon', timeRange: getTimeRange('s-clean-noon'), days:getSlotDays('s-clean-noon') });
+  if (getSecEnabled('s-clean-evening')) allSlotDefs.push({ key:'s-clean-evening', zh:'晚班打掃', desc:'廚房、浴廁、垃圾整理', tasks:getSlotTasks('s-clean-evening'), subKey:'clean_evening', timeRange: getTimeRange('s-clean-evening'), days:getSlotDays('s-clean-evening') });
+  if (getSecEnabled('s-clean-weekly'))  allSlotDefs.push({ key:'s-clean-weekly',  zh:'週間大掃除', desc:'深度清潔（每週定期）', tasks:getSlotTasks('s-clean-weekly'), subKey:'clean_weekly', timeRange: getTimeRange('s-clean-weekly'), days:getSlotDays('s-clean-weekly') });
 
   // Leisure slots
-  if (getSecEnabled('s-tv'))      allSlotDefs.push({ key:'s-tv',      zh:'看電視',      desc:'電視節目陪伴',   tasks:getSlotTasks('s-tv'),      subKey:'tv',      timeRange: getTimeRange('s-tv') });
-  if (getSecEnabled('s-music'))   allSlotDefs.push({ key:'s-music',   zh:'聽音樂',      desc:'音樂欣賞療癒',   tasks:getSlotTasks('s-music'),   subKey:'music',   timeRange: getTimeRange('s-music') });
-  if (getSecEnabled('s-reading')) allSlotDefs.push({ key:'s-reading', zh:'閱讀/報紙',    desc:'讀報、書籍',     tasks:getSlotTasks('s-reading'), subKey:'reading', timeRange: getTimeRange('s-reading') });
-  if (getSecEnabled('s-craft'))   allSlotDefs.push({ key:'s-craft',   zh:'手工藝/益智',  desc:'拼圖、繪畫等',   tasks:getSlotTasks('s-craft'),   subKey:'craft',   timeRange: getTimeRange('s-craft') });
-  if (getSecEnabled('s-social'))  allSlotDefs.push({ key:'s-social',  zh:'家人/社交互動', desc:'探視、視訊、陪伴', tasks:getSlotTasks('s-social'),  subKey:'social',  timeRange: getTimeRange('s-social') });
+  if (getSecEnabled('s-tv'))      allSlotDefs.push({ key:'s-tv',      zh:'看電視',      desc:'電視節目陪伴',   tasks:getSlotTasks('s-tv'),      subKey:'tv',      timeRange: getTimeRange('s-tv'),      days:getSlotDays('s-tv') });
+  if (getSecEnabled('s-music'))   allSlotDefs.push({ key:'s-music',   zh:'聽音樂',      desc:'音樂欣賞療癒',   tasks:getSlotTasks('s-music'),   subKey:'music',   timeRange: getTimeRange('s-music'),   days:getSlotDays('s-music') });
+  if (getSecEnabled('s-reading')) allSlotDefs.push({ key:'s-reading', zh:'閱讀/報紙',    desc:'讀報、書籍',     tasks:getSlotTasks('s-reading'), subKey:'reading', timeRange: getTimeRange('s-reading'), days:getSlotDays('s-reading') });
+  if (getSecEnabled('s-craft'))   allSlotDefs.push({ key:'s-craft',   zh:'手工藝/益智',  desc:'拼圖、繪畫等',   tasks:getSlotTasks('s-craft'),   subKey:'craft',   timeRange: getTimeRange('s-craft'),   days:getSlotDays('s-craft') });
+  if (getSecEnabled('s-social'))  allSlotDefs.push({ key:'s-social',  zh:'家人/社交互動', desc:'探視、視訊、陪伴', tasks:getSlotTasks('s-social'),  subKey:'social',  timeRange: getTimeRange('s-social'),  days:getSlotDays('s-social') });
 
   // Custom slots
   const customSlots = getCustomSlots();
   customSlots.forEach((cs, i) => {
-    allSlotDefs.push({ key:'custom-' + i, zh: cs.name, desc: cs.desc || '', tasks: cs.desc ? [cs.desc] : [], timeRange: (cs.s && cs.e) ? cs.s + '–' + cs.e : '', subKey:'' });
+    // days: [] = every day; [1,5] = only Mon & Fri
+    allSlotDefs.push({ key:'custom-' + i, zh: cs.name, desc: cs.desc || '', tasks: cs.desc ? [cs.desc] : [], timeRange: (cs.s && cs.e) ? cs.s + '–' + cs.e : '', subKey:'', days: cs.days || [] });
   });
 
   // Filter active slots
@@ -2698,8 +2830,13 @@ function buildScheduleHTML() {
           ${slotNameHtml}
           ${timeRange ? `<div class="slot-time">${timeRange}</div>` : ''}
           ${slot.desc && !cellContent.includes('tasks') ? `<div class="slot-desc">${slot.desc}</div>` : ''}
+          ${slot.days && slot.days.length > 0 ? `<div style="font-size:${fontSize-3}px;color:#888;margin-top:2px;">★ ${slot.days.map(d=>(['日','一','二','三','四','五','六'][parseInt(d)])).join('、')} 限定</div>` : ''}
         </td>
         ${activeDays.map(d => {
+          // Check if this custom slot applies to this day
+          if (slot.days && slot.days.length > 0 && !slot.days.includes(String(d))) {
+            return `<td class="td-day" style="background:#f9fafb;"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#d1d5db;font-size:${fontSize-2}px;">—</div></td>`;
+          }
           const completeLabel = blUI ? blUI.complete : '☐ 已完成';
           const signLabel = blUI ? blUI.sign : '簽名：_______';
           const taskHtml = cellContent.includes('tasks') && resolvedTasks.length
@@ -2738,6 +2875,10 @@ function buildScheduleHTML() {
       tableHtml += `<tr ${rowBg}>
         <td class="td-slot">${dayLabel(d)}</td>
         ${activeSlots.map(slot => {
+          // Check if this custom slot applies to this day
+          if (slot.days && slot.days.length > 0 && !slot.days.includes(String(d))) {
+            return `<td class="td-day" style="background:#f9fafb;"><div style="height:100%;display:flex;align-items:center;justify-content:center;color:#d1d5db;font-size:${fontSize-2}px;">—</div></td>`;
+          }
           const completeLabel = blUI ? blUI.complete : '☐ 已完成';
           const signLabel = blUI ? blUI.sign : '簽名：_______';
           const userTasks2 = getSlotTasks(slot.key);
@@ -2775,6 +2916,18 @@ function buildScheduleHTML() {
     return m;
   }
   function fmtMins(m) { const h=Math.floor(m/60),r=m%60; return h>0?(r>0?`${h}h${r}m`:`${h}h`):`${r}m`; }
+  const STATS_EN_MAP = {
+    's-morning':'Morning Care','s-breakfast':'Breakfast','s-med-am':'AM Meds',
+    's-vital-am':'AM Vitals','s-morning-act':'Morning Activity','s-rehab':'Rehab',
+    's-walk':'Outdoor Walk','s-hospital':'Medical Visit','s-lunch':'Lunch',
+    's-med-noon':'Noon Meds','s-nap':'Afternoon Rest','s-vital-pm':'PM Vitals',
+    's-afternoon-act':'Afternoon Activity','s-dinner':'Dinner','s-med-pm':'PM Meds',
+    's-evening':'Evening Activity','s-bedtime':'Bedtime Care','s-night':'Night Check',
+    's-clean-morning':'Morning Clean','s-clean-noon':'Noon Clean',
+    's-clean-evening':'Evening Clean','s-clean-weekly':'Weekly Deep Clean',
+    's-tv':'TV Viewing','s-music':'Music','s-reading':'Reading',
+    's-craft':'Craft','s-social':'Social',
+  };
   const STAT_SLOTS = [
     { key:'s-morning', label:'晨間照護', cat:'care' }, { key:'s-breakfast', label:'早餐', cat:'care' },
     { key:'s-med-am', label:'早間用藥', cat:'care' }, { key:'s-vital-am', label:'上午生命徵象', cat:'care' },
@@ -2797,37 +2950,37 @@ function buildScheduleHTML() {
     if (!getSecEnabled(s.key)) return;
     const m = calcSlotMinsLocal(s.key);
     totalM+=m; if(s.cat==='care')careM+=m; else if(s.cat==='clean')cleanM+=m; else leisureM+=m;
-    if(m>0) statRows.push(`<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;">${s.label}</td><td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(m)}</td></tr>`);
+    if(m>0) statRows.push(`<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;">${s.label}${STATS_EN_MAP[s.key]?'<span style="font-size:'+(fontSize-3)+'px;color:#9ca3af;margin-left:4px;">/ '+STATS_EN_MAP[s.key]+'</span>':''}</td><td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(m)}</td></tr>`);
   });
   const statsHtml = statRows.length === 0 ? '' : `
 <div style="margin-top:14px;border:1.5px solid ${t.pri};border-radius:8px;overflow:hidden;page-break-inside:avoid;">
   <div style="background:${t.pri};color:#fff;padding:8px 14px;font-weight:700;font-size:${fontSize}px;display:flex;align-items:center;justify-content:space-between;">
-    <span>⏱️ 每日工作時間統計</span>
+    <span>⏱️ 每日工作時間統計 <span style="font-size:${fontSize-2}px;font-weight:400;opacity:.85;letter-spacing:.2px;">Daily Work Hours</span></span>
     <span style="font-size:${fontSize-2}px;opacity:.8;">（以設定時段計算）</span>
   </div>
   <div style="padding:12px 14px;background:${t.alight};">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:3px;">每日合計</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">每日合計<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Total Daily</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:${t.pri};">${fmtMins(totalM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:3px;">照護工作</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">照護工作<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Care Work</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#059669;">${fmtMins(careM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:3px;">🧹 打掃整理</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🧹 打掃整理<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Cleaning</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#047857;">${fmtMins(cleanM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:3px;">🎮 休閒陪伴</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🎮 休閒陪伴<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Leisure</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#7c3aed;">${fmtMins(leisureM)}</div>
       </div>
     </div>
     <table style="width:100%;border-collapse:collapse;">
       <tr style="background:${t.plight};color:#fff;">
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">工作時段</th>
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:80px;">時數</th>
+        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">工作時段 / Time Slot</th>
+        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:80px;">時數 / Hrs</th>
       </tr>
       ${statRows.join('')}
     </table>
@@ -2956,15 +3109,181 @@ ${buildDCReportHTML()}
 /* ══ BUILD 大掃除備註表 HTML ══ */
 function buildDCReportHTML() {
   const t = getTheme();
+  const lang = getChipVal('cfg-lang') || 'zh';
   const patientName = (document.getElementById('cfg-patient-name')?.value || '').trim();
   const caregiverName = (document.getElementById('cfg-caregiver-name')?.value || '').trim();
   const orgName = (document.getElementById('cfg-org-name')?.value || '').trim();
-  const issueDate = new Date().toLocaleDateString('zh-TW');
+  const issueDateRaw = (document.getElementById('cfg-issue-date')?.value || '').trim();
+  const issueDate = (() => {
+    if (!issueDateRaw) return new Date().toLocaleDateString('zh-TW');
+    const d = new Date(issueDateRaw + 'T00:00:00');
+    return isNaN(d.getTime()) ? new Date().toLocaleDateString('zh-TW') : d.toLocaleDateString('zh-TW');
+  })();
 
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-  // Helper: chip labels map
-  const CHIP_LABELS = {
+  // ── DC bilingual translation tables ──────────────────────────────
+  const DC_BL = {
+    'zh-id': {
+      pageTitle: '🧹 大掃除 &amp; 定期整理備註表',
+      pageSubtitle: 'Jadwal Bersih-Bersih &amp; Pemeliharaan Berkala',
+      patientLabel: '被照護者／Pasien',
+      caregiverLabel: '外籍看護／Perawat',
+      issueDateLabel: '制定日 / Tanggal',
+      secSpace: '🏠 按空間分類', secSpaceSub: 'Berdasarkan Ruangan',
+      colRoom: '區域', colRoomSub: 'Ruangan',
+      colItems: '清潔細項', colItemsSub: 'Rincian Kebersihan',
+      colFreq: '頻率', colFreqSub: 'Frekuensi',
+      colNote: '備注', colNoteSub: 'Catatan',
+      colDone: '完成', colDoneSub: 'Selesai',
+      secWeekly: '📆 每週例行清潔', secWeeklySub: 'Kebersihan Rutin Mingguan',
+      execDay: '執行日', execDaySub: 'Hari Pelaksanaan',
+      timeLabel: '時間', timeLabelSub: 'Waktu',
+      noteLabel: '備注', noteLabelSub: 'Catatan',
+      secMonthly: '🗓️ 每月深度清潔', secMonthlySub: 'Bersih Mendalam Bulanan',
+      execTiming: '執行時機', execTimingSub: 'Waktu Pelaksanaan',
+      secSeasonal: '🌸 節慶 / 換季大掃除', secSeasonalSub: 'Bersih-Bersih Musiman',
+      occasion: '時機 / Kesempatan：',
+      secSupplies: '🧴 清潔用品盤點', secSuppliesSub: 'Inventaris Perlengkapan',
+      stockLabel: '庫存量／Stok',
+      secSafety: '⚠️ 安全注意事項', secSafetySub: 'Perhatian Keselamatan',
+      sigCaregiver: '看護簽名', sigCaregiverSub: 'Tanda Tangan Perawat',
+      sigFamily: '家屬確認', sigFamilySub: 'Konfirmasi Keluarga',
+      sigDate: '日期 / Tanggal',
+      rooms: { kitchen:'廚房 / Dapur', bathroom:'浴室/廁所 / Kamar Mandi', living:'客廳/餐廳 / Ruang Tamu', bedroom:'臥室 / Kamar Tidur', balcony:'陽台/室外 / Balkon' },
+      days: {'1':'週一 / Senin','2':'週二 / Selasa','3':'週三 / Rabu','4':'週四 / Kamis','5':'週五 / Jumat','6':'週六 / Sabtu','0':'週日 / Minggu'},
+      weeks: {'1':'第1週 / Minggu 1','2':'第2週 / Minggu 2','3':'第3週 / Minggu 3','4':'第4週 / Minggu 4'},
+      chips: {
+        stove:'爐台清潔 / Kompor', hood:'油煙機 / Penyedot Asap', fridge:'冰箱整理 / Kulkas', sink:'水槽消毒 / Wastafel', cabinet:'碗櫥擦拭 / Lemari Piring',
+        'floor-k':'廚房地板 / Lantai Dapur', microwave:'微波爐/電鍋 / Microwave',
+        toilet:'馬桶刷洗 / Toilet', tiles:'磁磚刷洗 / Ubin', mirror:'鏡面清潔 / Cermin', tub:'浴缸刷洗 / Bak Mandi', drain:'排水孔疏通 / Saluran Air',
+        'disinfect-b':'消毒噴灑 / Disinfeksi', ventfan:'抽風機清潔 / Kipas Ventilasi',
+        'floor-l':'地板拖地/吸塵 / Lantai Ruang', sofa:'沙發擦拭 / Sofa', windows:'窗戶玻璃 / Jendela', 'ac-filter':'冷氣濾網清洗 / Filter AC',
+        curtains:'窗簾清洗 / Gorden', furniture:'家具表面 / Furnitur', 'tv-area':'電視/電器區 / Area TV',
+        sheets:'換洗床單被套 / Ganti Sprei', mattress:'床墊翻面/除塵 / Balik Kasur', wardrobe:'衣櫃整理 / Lemari Baju', 'floor-bed':'地板清潔 / Lantai Kamar',
+        pillow:'枕頭套清洗 / Sarung Bantal', 'under-bed':'床底清潔 / Kolong Tempat Tidur',
+        'floor-bal':'地面清掃 / Lantai Balkon', 'laundry-rack':'曬衣架擦拭 / Rak Jemuran', plants:'植栽澆水整理 / Tanaman', 'drain-bal':'排水孔清潔 / Saluran', railing:'欄杆擦拭 / Pagar',
+        'vacuum-all':'全室吸塵 / Vakum', 'mop-all':'全室拖地 / Pel Lantai', 'toilet-wk':'廁所刷洗 / Sikat Toilet', 'trash-wk':'全屋垃圾清除 / Buang Sampah', 'wipe-surfaces':'桌面/檯面擦拭 / Lap Meja', 'laundry-wk':'大件洗衣 / Cuci Besar',
+        'fridge-m':'冰箱深度清理 / Bersih Kulkas', 'hood-m':'油煙機清洗 / Cuci Penyedot Asap', 'ac-filter-m':'冷氣濾網清洗 / Filter AC', 'wipe-walls-m':'擦拭牆面 / Lap Dinding',
+        'disinfect-m':'全室消毒 / Disinfeksi Semua', 'change-linens-m':'更換所有床單 / Ganti Semua Sprei', 'organize-m':'雜物整理歸位 / Rapikan Barang',
+        cny:'農曆年前 / Sebelum Imlek', spring:'春季換季 / Pergantian Musim Semi', summer:'夏季換季 / Musim Panas', fall:'秋季換季 / Musim Gugur', winter:'冬季換季 / Musim Dingin', 'custom-s':'自訂 / Lainnya',
+        'deep-all':'全室深度清潔 / Bersih Mendalam', 'windows-s':'全戶窗戶清洗 / Cuci Semua Jendela', 'curtains-s':'窗簾拆洗 / Cuci Gorden', 'closet-s':'衣櫃換季整理 / Rapikan Lemari',
+        'storage-s':'儲物間整理 / Rapikan Gudang', 'ceiling-s':'天花板/燈具除塵 / Langit-langit & Lampu', 'mattress-s':'床墊翻轉/除蟎 / Balik & Tungau Kasur',
+        bleach:'漂白水 / Pemutih', detergent:'清潔劑 / Deterjen', mop:'拖把/拖把頭 / Kain Pel', gloves:'橡膠手套 / Sarung Tangan', scrub:'菜瓜布/刷具 / Spons/Sikat',
+        'garbage-bags':'垃圾袋 / Kantong Sampah', 'disinfect-spray':'消毒噴霧 / Spray Disinfektan', vacuumbag:'吸塵器集塵袋 / Kantong Vakum',
+        ventilate:'使用化學清潔劑時注意通風 / Ventilasi saat pakai bahan kimia', 'wet-floor':'濕地板放置警示 / Pasang tanda lantai basah', 'no-mix':'漂白水勿與其他清潔劑混用 / Jangan campur pemutih',
+        'patient-away':'清潔時安置被照護者至安全區域 / Pindahkan pasien ke area aman', ladder:'高處清潔須告知家屬 / Beritahu keluarga saat bersih tempat tinggi',
+        weekly:'每週 / Mingguan', biweekly:'每兩週 / Dua Minggu Sekali', monthly:'每月 / Bulanan', quarterly:'每季 / Triwulan',
+      }
+    },
+    'zh-vi': {
+      pageTitle: '🧹 大掃除 &amp; 定期整理備註表',
+      pageSubtitle: 'Lịch Tổng Vệ Sinh &amp; Dọn Dẹp Định Kỳ',
+      patientLabel: '被照護者／Người Được Chăm Sóc',
+      caregiverLabel: '外籍看護／Người Chăm Sóc',
+      issueDateLabel: '制定日 / Ngày Lập',
+      secSpace: '🏠 按空間分類', secSpaceSub: 'Phân Loại Theo Phòng',
+      colRoom: '區域', colRoomSub: 'Phòng/Khu Vực',
+      colItems: '清潔細項', colItemsSub: 'Chi Tiết Vệ Sinh',
+      colFreq: '頻率', colFreqSub: 'Tần Suất',
+      colNote: '備注', colNoteSub: 'Ghi Chú',
+      colDone: '完成', colDoneSub: 'Hoàn Thành',
+      secWeekly: '📆 每週例行清潔', secWeeklySub: 'Vệ Sinh Thường Tuần',
+      execDay: '執行日', execDaySub: 'Ngày Thực Hiện',
+      timeLabel: '時間', timeLabelSub: 'Thời Gian',
+      noteLabel: '備注', noteLabelSub: 'Ghi Chú',
+      secMonthly: '🗓️ 每月深度清潔', secMonthlySub: 'Vệ Sinh Sâu Hàng Tháng',
+      execTiming: '執行時機', execTimingSub: 'Thời Điểm Thực Hiện',
+      secSeasonal: '🌸 節慶 / 換季大掃除', secSeasonalSub: 'Tổng Vệ Sinh Theo Mùa',
+      occasion: '時機 / Thời Điểm：',
+      secSupplies: '🧴 清潔用品盤點', secSuppliesSub: 'Kiểm Kê Vật Dụng Vệ Sinh',
+      stockLabel: '庫存量／Tồn Kho',
+      secSafety: '⚠️ 安全注意事項', secSafetySub: 'Lưu Ý An Toàn',
+      sigCaregiver: '看護簽名', sigCaregiverSub: 'Chữ Ký Người Chăm Sóc',
+      sigFamily: '家屬確認', sigFamilySub: 'Xác Nhận Gia Đình',
+      sigDate: '日期 / Ngày',
+      rooms: { kitchen:'廚房 / Bếp', bathroom:'浴室/廁所 / Phòng Tắm', living:'客廳/餐廳 / Phòng Khách', bedroom:'臥室 / Phòng Ngủ', balcony:'陽台/室外 / Ban Công' },
+      days: {'1':'週一 / Thứ Hai','2':'週二 / Thứ Ba','3':'週三 / Thứ Tư','4':'週四 / Thứ Năm','5':'週五 / Thứ Sáu','6':'週六 / Thứ Bảy','0':'週日 / Chủ Nhật'},
+      weeks: {'1':'第1週 / Tuần 1','2':'第2週 / Tuần 2','3':'第3週 / Tuần 3','4':'第4週 / Tuần 4'},
+      chips: {
+        stove:'爐台清潔 / Bếp', hood:'油煙機 / Hút Khói', fridge:'冰箱整理 / Tủ Lạnh', sink:'水槽消毒 / Bồn Rửa', cabinet:'碗櫥擦拭 / Tủ Bát',
+        'floor-k':'廚房地板 / Sàn Bếp', microwave:'微波爐/電鍋 / Lò Vi Sóng',
+        toilet:'馬桶刷洗 / Bồn Cầu', tiles:'磁磚刷洗 / Gạch Men', mirror:'鏡面清潔 / Gương', tub:'浴缸刷洗 / Bồn Tắm', drain:'排水孔疏通 / Cống Thoát',
+        'disinfect-b':'消毒噴灑 / Khử Trùng', ventfan:'抽風機清潔 / Quạt Thông Gió',
+        'floor-l':'地板拖地/吸塵 / Lau Sàn', sofa:'沙發擦拭 / Ghế Sofa', windows:'窗戶玻璃 / Cửa Sổ', 'ac-filter':'冷氣濾網清洗 / Lọc Điều Hòa',
+        curtains:'窗簾清洗 / Rèm Cửa', furniture:'家具表面 / Đồ Nội Thất', 'tv-area':'電視/電器區 / Khu Vực TV',
+        sheets:'換洗床單被套 / Thay Ga Giường', mattress:'床墊翻面/除塵 / Lật Nệm', wardrobe:'衣櫃整理 / Tủ Quần Áo', 'floor-bed':'地板清潔 / Sàn Phòng Ngủ',
+        pillow:'枕頭套清洗 / Vỏ Gối', 'under-bed':'床底清潔 / Gầm Giường',
+        'floor-bal':'地面清掃 / Sàn Ban Công', 'laundry-rack':'曬衣架擦拭 / Giá Phơi', plants:'植栽澆水整理 / Cây Cảnh', 'drain-bal':'排水孔清潔 / Cống', railing:'欄杆擦拭 / Lan Can',
+        'vacuum-all':'全室吸塵 / Hút Bụi', 'mop-all':'全室拖地 / Lau Toàn Bộ', 'toilet-wk':'廁所刷洗 / Chà Bồn Cầu', 'trash-wk':'全屋垃圾清除 / Đổ Rác', 'wipe-surfaces':'桌面/檯面擦拭 / Lau Bàn', 'laundry-wk':'大件洗衣 / Giặt Lớn',
+        'fridge-m':'冰箱深度清理 / Vệ Sinh Tủ Lạnh', 'hood-m':'油煙機清洗 / Rửa Hút Khói', 'ac-filter-m':'冷氣濾網清洗 / Lọc Điều Hòa', 'wipe-walls-m':'擦拭牆面 / Lau Tường',
+        'disinfect-m':'全室消毒 / Khử Trùng Toàn Bộ', 'change-linens-m':'更換所有床單 / Thay Hết Ga', 'organize-m':'雜物整理歸位 / Sắp Xếp Đồ',
+        cny:'農曆年前 / Trước Tết Âm Lịch', spring:'春季換季 / Chuyển Mùa Xuân', summer:'夏季換季 / Mùa Hè', fall:'秋季換季 / Mùa Thu', winter:'冬季換季 / Mùa Đông', 'custom-s':'自訂 / Khác',
+        'deep-all':'全室深度清潔 / Vệ Sinh Sâu', 'windows-s':'全戶窗戶清洗 / Rửa Toàn Bộ Cửa Sổ', 'curtains-s':'窗簾拆洗 / Giặt Rèm', 'closet-s':'衣櫃換季整理 / Dọn Tủ Theo Mùa',
+        'storage-s':'儲物間整理 / Dọn Kho', 'ceiling-s':'天花板/燈具除塵 / Trần & Đèn', 'mattress-s':'床墊翻轉/除蟎 / Lật Nệm & Diệt Mạt',
+        bleach:'漂白水 / Nước Javel', detergent:'清潔劑 / Chất Tẩy Rửa', mop:'拖把/拖把頭 / Cây Lau Nhà', gloves:'橡膠手套 / Găng Tay', scrub:'菜瓜布/刷具 / Miếng Chà',
+        'garbage-bags':'垃圾袋 / Túi Rác', 'disinfect-spray':'消毒噴霧 / Bình Xịt Khử Trùng', vacuumbag:'吸塵器集塵袋 / Túi Hút Bụi',
+        ventilate:'使用化學清潔劑時注意通風 / Thông gió khi dùng hóa chất', 'wet-floor':'濕地板放置警示 / Đặt biển báo sàn ướt', 'no-mix':'漂白水勿與其他清潔劑混用 / Không trộn nước Javel',
+        'patient-away':'清潔時安置被照護者至安全區域 / Đưa người được chăm sóc đến nơi an toàn', ladder:'高處清潔須告知家屬 / Báo gia đình khi vệ sinh trên cao',
+        weekly:'每週 / Hàng Tuần', biweekly:'每兩週 / Hai Tuần Một Lần', monthly:'每月 / Hàng Tháng', quarterly:'每季 / Mỗi Quý',
+      }
+    },
+    'zh-en': {
+      pageTitle: '🧹 大掃除 &amp; 定期整理備註表',
+      pageSubtitle: 'Deep Cleaning &amp; Periodic Maintenance Schedule',
+      patientLabel: '被照護者／Patient',
+      caregiverLabel: '外籍看護／Caregiver',
+      issueDateLabel: '制定日 / Date Issued',
+      secSpace: '🏠 按空間分類', secSpaceSub: 'By Room / Area',
+      colRoom: '區域', colRoomSub: 'Room',
+      colItems: '清潔細項', colItemsSub: 'Cleaning Tasks',
+      colFreq: '頻率', colFreqSub: 'Frequency',
+      colNote: '備注', colNoteSub: 'Notes',
+      colDone: '完成', colDoneSub: 'Done',
+      secWeekly: '📆 每週例行清潔', secWeeklySub: 'Weekly Routine Cleaning',
+      execDay: '執行日', execDaySub: 'Day of Week',
+      timeLabel: '時間', timeLabelSub: 'Time',
+      noteLabel: '備注', noteLabelSub: 'Notes',
+      secMonthly: '🗓️ 每月深度清潔', secMonthlySub: 'Monthly Deep Cleaning',
+      execTiming: '執行時機', execTimingSub: 'Timing',
+      secSeasonal: '🌸 節慶 / 換季大掃除', secSeasonalSub: 'Seasonal / Holiday Cleaning',
+      occasion: '時機 / Occasion：',
+      secSupplies: '🧴 清潔用品盤點', secSuppliesSub: 'Supplies Inventory',
+      stockLabel: '庫存量／Stock',
+      secSafety: '⚠️ 安全注意事項', secSafetySub: 'Safety Precautions',
+      sigCaregiver: '看護簽名', sigCaregiverSub: 'Caregiver Signature',
+      sigFamily: '家屬確認', sigFamilySub: 'Family Confirmation',
+      sigDate: '日期 / Date',
+      rooms: { kitchen:'廚房 / Kitchen', bathroom:'浴室/廁所 / Bathroom', living:'客廳/餐廳 / Living Room', bedroom:'臥室 / Bedroom', balcony:'陽台/室外 / Balcony' },
+      days: {'1':'週一 / Monday','2':'週二 / Tuesday','3':'週三 / Wednesday','4':'週四 / Thursday','5':'週五 / Friday','6':'週六 / Saturday','0':'週日 / Sunday'},
+      weeks: {'1':'第1週 / Week 1','2':'第2週 / Week 2','3':'第3週 / Week 3','4':'第4週 / Week 4'},
+      chips: {
+        stove:'爐台清潔 / Stovetop', hood:'油煙機 / Range Hood', fridge:'冰箱整理 / Fridge', sink:'水槽消毒 / Sink', cabinet:'碗櫥擦拭 / Dish Cabinet',
+        'floor-k':'廚房地板 / Kitchen Floor', microwave:'微波爐/電鍋 / Microwave/Rice Cooker',
+        toilet:'馬桶刷洗 / Toilet', tiles:'磁磚刷洗 / Tiles', mirror:'鏡面清潔 / Mirror', tub:'浴缸刷洗 / Bathtub', drain:'排水孔疏通 / Drain',
+        'disinfect-b':'消毒噴灑 / Disinfect', ventfan:'抽風機清潔 / Ventilation Fan',
+        'floor-l':'地板拖地/吸塵 / Floor Mop/Vacuum', sofa:'沙發擦拭 / Sofa', windows:'窗戶玻璃 / Windows', 'ac-filter':'冷氣濾網清洗 / AC Filter',
+        curtains:'窗簾清洗 / Curtains', furniture:'家具表面 / Furniture', 'tv-area':'電視/電器區 / TV & Electronics',
+        sheets:'換洗床單被套 / Change Bedding', mattress:'床墊翻面/除塵 / Flip Mattress', wardrobe:'衣櫃整理 / Wardrobe', 'floor-bed':'地板清潔 / Bedroom Floor',
+        pillow:'枕頭套清洗 / Pillowcases', 'under-bed':'床底清潔 / Under Bed',
+        'floor-bal':'地面清掃 / Balcony Floor', 'laundry-rack':'曬衣架擦拭 / Drying Rack', plants:'植栽澆水整理 / Plants', 'drain-bal':'排水孔清潔 / Drain', railing:'欄杆擦拭 / Railing',
+        'vacuum-all':'全室吸塵 / Vacuum All Rooms', 'mop-all':'全室拖地 / Mop All Rooms', 'toilet-wk':'廁所刷洗 / Scrub Toilet', 'trash-wk':'全屋垃圾清除 / Empty All Trash', 'wipe-surfaces':'桌面/檯面擦拭 / Wipe Surfaces', 'laundry-wk':'大件洗衣 / Heavy Laundry',
+        'fridge-m':'冰箱深度清理 / Deep-Clean Fridge', 'hood-m':'油煙機清洗 / Clean Range Hood', 'ac-filter-m':'冷氣濾網清洗 / Clean AC Filter', 'wipe-walls-m':'擦拭牆面 / Wipe Walls',
+        'disinfect-m':'全室消毒 / Full Disinfection', 'change-linens-m':'更換所有床單 / Change All Linens', 'organize-m':'雜物整理歸位 / Organize & Declutter',
+        cny:'農曆年前 / Before Lunar New Year', spring:'春季換季 / Spring', summer:'夏季換季 / Summer', fall:'秋季換季 / Autumn', winter:'冬季換季 / Winter', 'custom-s':'自訂 / Custom',
+        'deep-all':'全室深度清潔 / Deep Clean All Rooms', 'windows-s':'全戶窗戶清洗 / Wash All Windows', 'curtains-s':'窗簾拆洗 / Wash Curtains', 'closet-s':'衣櫃換季整理 / Seasonal Wardrobe',
+        'storage-s':'儲物間整理 / Storage Room', 'ceiling-s':'天花板/燈具除塵 / Ceiling & Lights', 'mattress-s':'床墊翻轉/除蟎 / Flip & De-mite Mattress',
+        bleach:'漂白水 / Bleach', detergent:'清潔劑 / Detergent', mop:'拖把/拖把頭 / Mop', gloves:'橡膠手套 / Rubber Gloves', scrub:'菜瓜布/刷具 / Scrub Pad/Brush',
+        'garbage-bags':'垃圾袋 / Garbage Bags', 'disinfect-spray':'消毒噴霧 / Disinfectant Spray', vacuumbag:'吸塵器集塵袋 / Vacuum Bag',
+        ventilate:'使用化學清潔劑時注意通風 / Ventilate when using chemicals', 'wet-floor':'濕地板放置警示 / Place wet floor signs', 'no-mix':'漂白水勿與其他清潔劑混用 / Do not mix bleach with other cleaners',
+        'patient-away':'清潔時安置被照護者至安全區域 / Move patient to safe area during cleaning', ladder:'高處清潔須告知家屬 / Notify family when cleaning at height',
+        weekly:'每週 / Weekly', biweekly:'每兩週 / Bi-Weekly', monthly:'每月 / Monthly', quarterly:'每季 / Quarterly',
+      }
+    }
+  };
+
+  // Zh-only fallback chip labels
+  const CHIP_LABELS_ZH = {
     stove:'爐台清潔', hood:'油煙機', fridge:'冰箱整理', sink:'水槽消毒', cabinet:'碗櫥擦拭',
     'floor-k':'廚房地板', microwave:'微波爐/電鍋',
     toilet:'馬桶刷洗', tiles:'磁磚刷洗', mirror:'鏡面清潔', tub:'浴缸刷洗', drain:'排水孔疏通',
@@ -2987,54 +3306,65 @@ function buildDCReportHTML() {
     weekly:'每週', biweekly:'每兩週', monthly:'每月', quarterly:'每季',
   };
 
+  // Resolve language pack
+  const bl = DC_BL[lang] || null;
+  const chipLabels = bl ? bl.chips : CHIP_LABELS_ZH;
+
   function getChipLabels(id) {
-    return getChipVals(id).map(v => CHIP_LABELS[v] || v);
+    return getChipVals(id).map(v => chipLabels[v] || CHIP_LABELS_ZH[v] || v);
   }
   function getChipLabel(id) {
     const v = getChipVal(id);
-    return v ? (CHIP_LABELS[v] || v) : '—';
+    if (!v) return '—';
+    return chipLabels[v] || CHIP_LABELS_ZH[v] || v;
   }
+  function ui(key) { return bl ? (bl[key] || key) : (key); }
 
-  // Build space section rows
+  // Space section definitions with bilingual room labels
   const spaceSections = [
-    { sec:'dc-kitchen',  icon:'🍳', label:'廚房',     itemsId:'dc-kitchen-items',  freqId:'dc-kitchen-freq',  noteId:'dc-kitchen-note' },
-    { sec:'dc-bathroom', icon:'🚿', label:'浴室/廁所', itemsId:'dc-bathroom-items', freqId:'dc-bathroom-freq', noteId:'dc-bathroom-note' },
-    { sec:'dc-living',   icon:'🛋️', label:'客廳/餐廳', itemsId:'dc-living-items',   freqId:'dc-living-freq',   noteId:'dc-living-note' },
-    { sec:'dc-bedroom',  icon:'🛏️', label:'臥室',     itemsId:'dc-bedroom-items',  freqId:'dc-bedroom-freq',  noteId:'dc-bedroom-note' },
-    { sec:'dc-balcony',  icon:'🌿', label:'陽台/室外', itemsId:'dc-balcony-items',  freqId:'dc-balcony-freq',  noteId:'dc-balcony-note' },
+    { sec:'dc-kitchen',  icon:'🍳', labelZh:'廚房',     itemsId:'dc-kitchen-items',  freqId:'dc-kitchen-freq',  noteId:'dc-kitchen-note' },
+    { sec:'dc-bathroom', icon:'🚿', labelZh:'浴室/廁所', itemsId:'dc-bathroom-items', freqId:'dc-bathroom-freq', noteId:'dc-bathroom-note' },
+    { sec:'dc-living',   icon:'🛋️', labelZh:'客廳/餐廳', itemsId:'dc-living-items',   freqId:'dc-living-freq',   noteId:'dc-living-note' },
+    { sec:'dc-bedroom',  icon:'🛏️', labelZh:'臥室',     itemsId:'dc-bedroom-items',  freqId:'dc-bedroom-freq',  noteId:'dc-bedroom-note' },
+    { sec:'dc-balcony',  icon:'🌿', labelZh:'陽台/室外', itemsId:'dc-balcony-items',  freqId:'dc-balcony-freq',  noteId:'dc-balcony-note' },
   ];
+  const roomKeys = ['kitchen','bathroom','living','bedroom','balcony'];
 
-  const spaceRows = spaceSections.map(ss => {
+  const spaceRows = spaceSections.map((ss, idx) => {
     const enabled = getSecEnabled(ss.sec);
     if (!enabled) return '';
     const items = getChipLabels(ss.itemsId);
     const freq = getChipLabel(ss.freqId);
     const note = esc((document.getElementById(ss.noteId)?.value || '').trim());
+    const roomLabel = (bl && bl.rooms && bl.rooms[roomKeys[idx]]) ? bl.rooms[roomKeys[idx]] : ss.labelZh;
     const itemsHtml = items.map(it =>
-      `<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-        <span style="color:${t.pri};font-size:11px;">☐</span>
-        <span style="font-size:11px;">${esc(it)}</span>
+      `<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:5px;">
+        <span style="color:${t.pri};font-size:11px;flex-shrink:0;margin-top:1px;">☐</span>
+        <span style="font-size:11px;line-height:1.45;">${esc(it)}</span>
       </div>`
     ).join('');
     return `<tr>
-      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:nowrap;">${ss.icon} ${ss.label}</td>
+      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:nowrap;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
       <td style="padding:8px 10px;font-size:11px;">${itemsHtml}</td>
-      <td style="padding:8px 10px;font-size:11px;text-align:center;color:${t.plight};font-weight:700;">${freq}</td>
-      <td style="padding:8px 10px;font-size:11px;color:#555;">${note || '—'}</td>
-      <td style="padding:8px 10px;text-align:center;font-size:13px;">☐</td>
+      <td style="padding:8px 10px;font-size:11px;text-align:center;color:${t.plight};font-weight:700;vertical-align:middle;">${esc(freq)}</td>
+      <td style="padding:8px 10px;font-size:11px;color:#555;vertical-align:middle;">${note || '—'}</td>
+      <td style="padding:8px 10px;text-align:center;font-size:14px;vertical-align:middle;">☐</td>
     </tr>`;
   }).join('');
 
   // Weekly schedule
-  const weeklyDay = ({'1':'週一','2':'週二','3':'週三','4':'週四','5':'週五','6':'週六','0':'週日'})[getChipVal('dc-weekly-day')] || '—';
+  const dayMap = bl ? bl.days : {'1':'週一','2':'週二','3':'週三','4':'週四','5':'週五','6':'週六','0':'週日'};
+  const weekMap = bl ? bl.weeks : {'1':'第1週','2':'第2週','3':'第3週','4':'第4週'};
+  const weeklyDay = dayMap[getChipVal('dc-weekly-day')] || '—';
   const weeklyTimeS = document.getElementById('dc-weekly-time-s')?.value || '';
   const weeklyTimeE = document.getElementById('dc-weekly-time-e')?.value || '';
   const weeklyTime = weeklyTimeS && weeklyTimeE ? weeklyTimeS + '–' + weeklyTimeE : '—';
   const weeklyItems = getChipLabels('dc-weekly-items');
   const weeklyNote = esc((document.getElementById('dc-weekly-note')?.value || '').trim());
 
-  const monthlyWeek = ({'1':'第1週','2':'第2週','3':'第3週','4':'第4週'})[getChipVal('dc-monthly-week')] || '—';
-  const monthlyDay = ({'6':'週六','0':'週日','5':'週五'})[getChipVal('dc-monthly-day')] || '—';
+  const monthlyWeek = weekMap[getChipVal('dc-monthly-week')] || '—';
+  const monthlyDayMap = bl ? bl.days : {'1':'週一','2':'週二','3':'週三','4':'週四','5':'週五','6':'週六','0':'週日'};
+  const monthlyDay = monthlyDayMap[getChipVal('dc-monthly-day')] || '—';
   const monthlyItems = getChipLabels('dc-monthly-items');
   const monthlyNote = esc((document.getElementById('dc-monthly-note')?.value || '').trim());
 
@@ -3057,34 +3387,34 @@ function buildDCReportHTML() {
   .dc-report-wrap td, .dc-report-wrap th { border:1px solid #ddd; vertical-align:top; }
   .dc-section-title { background:${t.pri};color:#fff;padding:8px 14px;font-size:13px;font-weight:700;border-radius:6px 6px 0 0;display:flex;align-items:center;gap:6px;margin-top:18px; }
   .dc-badge { background:rgba(255,255,255,.2);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700; }
-  .dc-tag { display:inline-block;background:${t.alight};color:${t.pri};border-radius:10px;padding:2px 8px;font-size:10px;font-weight:600;margin:2px 2px; }
+  .dc-tag { display:inline-block;background:${t.alight};color:${t.pri};border-radius:10px;padding:3px 9px;font-size:10px;font-weight:600;margin:2px 2px;line-height:1.5; }
   @media print { .dc-report-wrap { page-break-before:always !important; } }
 </style>
 
 <!-- 大掃除表 頁頭 -->
 <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
   <div>
-    <div style="font-size:16px;font-weight:900;color:${t.pri};">🧹 大掃除 &amp; 定期整理備註表</div>
-    <div style="font-size:11px;color:#666;margin-top:3px;">Deep Cleaning &amp; Periodic Housekeeping Schedule</div>
-    ${patientName||caregiverName ? `<div style="font-size:11px;color:#555;margin-top:4px;">${patientName ? '被照護者：'+esc(patientName)+'　' : ''}${caregiverName ? '外籍看護：'+esc(caregiverName) : ''}</div>` : ''}
+    <div style="font-size:16px;font-weight:900;color:${t.pri};">${ui('pageTitle')}</div>
+    <div style="font-size:11px;color:#666;margin-top:3px;">${ui('pageSubtitle')}</div>
+    ${patientName||caregiverName ? `<div style="font-size:11px;color:#555;margin-top:4px;">${patientName ? ui('patientLabel')+'：'+esc(patientName)+'　' : ''}${caregiverName ? ui('caregiverLabel')+'：'+esc(caregiverName) : ''}</div>` : ''}
   </div>
   <div style="text-align:right;font-size:11px;color:#888;">
     ${orgName ? `<div style="font-weight:700;color:${t.pri};">${esc(orgName)}</div>` : ''}
-    <div>制定日：${issueDate}</div>
+    <div>${ui('issueDateLabel')}：${issueDate}</div>
   </div>
 </div>
 
 <!-- ① 按空間分類 -->
 ${spaceRows ? `
-<div class="dc-section-title">🏠 按空間分類 <span class="dc-badge">Space-Based Checklist</span></div>
+<div class="dc-section-title">${ui('secSpace')} <span class="dc-badge">${ui('secSpaceSub')}</span></div>
 <table>
   <thead>
     <tr style="background:${t.plight};color:#fff;font-size:11px;">
-      <th style="padding:7px 10px;width:90px;">區域</th>
-      <th style="padding:7px 10px;">清潔細項</th>
-      <th style="padding:7px 10px;width:70px;">頻率</th>
-      <th style="padding:7px 10px;">備注</th>
-      <th style="padding:7px 10px;width:50px;text-align:center;">完成</th>
+      <th style="padding:7px 10px;width:100px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
+      <th style="padding:7px 10px;">${ui('colItems')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colItemsSub')}</span></th>
+      <th style="padding:7px 10px;width:95px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
+      <th style="padding:7px 10px;">${ui('colNote')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colNoteSub')}</span></th>
+      <th style="padding:7px 10px;width:50px;text-align:center;">${ui('colDone')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colDoneSub')}</span></th>
     </tr>
   </thead>
   <tbody>${spaceRows}</tbody>
@@ -3092,43 +3422,43 @@ ${spaceRows ? `
 
 <!-- ② 每週例行 -->
 ${weeklyItems.length > 0 ? `
-<div class="dc-section-title">📆 每週例行清潔 <span class="dc-badge">Weekly Routine</span></div>
+<div class="dc-section-title">${ui('secWeekly')} <span class="dc-badge">${ui('secWeeklySub')}</span></div>
 <div style="border:1px solid #ddd;border-top:none;padding:12px 16px;background:#fff;border-radius:0 0 6px 6px;">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-bottom:10px;">
-    <div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">執行日</span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${weeklyDay}</span></div>
-    <div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">時間</span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${weeklyTime}</span></div>
+    <div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">${ui('execDay')}<br><span style="font-size:9px;font-weight:400;">${ui('execDaySub')}</span></span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${weeklyDay}</span></div>
+    <div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">${ui('timeLabel')}<br><span style="font-size:9px;font-weight:400;">${ui('timeLabelSub')}</span></span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${weeklyTime}</span></div>
   </div>
   <div style="margin-bottom:8px;">
     ${weeklyItems.map(it => `<span class="dc-tag">☐ ${esc(it)}</span>`).join('')}
   </div>
-  ${weeklyNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 備注：${weeklyNote}</div>` : ''}
+  ${weeklyNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 ${ui('noteLabel')}／${ui('noteLabelSub')}：${weeklyNote}</div>` : ''}
 </div>` : ''}
 
 <!-- ③ 每月深度 -->
 ${monthlyItems.length > 0 ? `
-<div class="dc-section-title">🗓️ 每月深度清潔 <span class="dc-badge">Monthly Deep Clean</span></div>
+<div class="dc-section-title">${ui('secMonthly')} <span class="dc-badge">${ui('secMonthlySub')}</span></div>
 <div style="border:1px solid #ddd;border-top:none;padding:12px 16px;background:#fff;border-radius:0 0 6px 6px;">
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;margin-bottom:10px;">
-    <div><span style="font-size:10px;font-weight:700;color:#888;text-transform:uppercase;">執行時機</span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${monthlyWeek} ${monthlyDay}</span></div>
+    <div><span style="font-size:10px;font-weight:700;color:#888;">${ui('execTiming')}<br><span style="font-size:9px;font-weight:400;">${ui('execTimingSub')}</span></span><br><span style="font-size:13px;font-weight:700;color:${t.pri};">${monthlyWeek} ${monthlyDay}</span></div>
   </div>
   <div style="margin-bottom:8px;">
     ${monthlyItems.map(it => `<span class="dc-tag">☐ ${esc(it)}</span>`).join('')}
   </div>
-  ${monthlyNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 備注：${monthlyNote}</div>` : ''}
+  ${monthlyNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 ${ui('noteLabel')}／${ui('noteLabelSub')}：${monthlyNote}</div>` : ''}
 </div>` : ''}
 
 <!-- ④ 節慶/換季 -->
 ${seasonalItems.length > 0 ? `
-<div class="dc-section-title">🌸 節慶 / 換季大掃除 <span class="dc-badge">Seasonal Cleaning</span></div>
+<div class="dc-section-title">${ui('secSeasonal')} <span class="dc-badge">${ui('secSeasonalSub')}</span></div>
 <div style="border:1px solid #ddd;border-top:none;padding:12px 16px;background:#fff;border-radius:0 0 6px 6px;">
   <div style="margin-bottom:8px;">
-    <span style="font-size:10px;font-weight:700;color:#888;">時機：</span>
+    <span style="font-size:10px;font-weight:700;color:#888;">${ui('occasion')}</span>
     ${seasonalTriggers.map(it => `<span class="dc-tag">${esc(it)}</span>`).join('')}
   </div>
   <div style="margin-bottom:8px;">
     ${seasonalItems.map(it => `<span class="dc-tag">☐ ${esc(it)}</span>`).join('')}
   </div>
-  ${seasonalNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 備注：${seasonalNote}</div>` : ''}
+  ${seasonalNote ? `<div style="font-size:11px;color:#555;border-top:1px dashed #e5e7eb;padding-top:6px;margin-top:6px;">📝 ${ui('noteLabel')}／${ui('noteLabelSub')}：${seasonalNote}</div>` : ''}
 </div>` : ''}
 
 <!-- ⑤ 清潔用品 & 安全 -->
@@ -3136,17 +3466,17 @@ ${supplies.length > 0 || safetyItems.length > 0 ? `
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px;flex-wrap:wrap;">
   ${supplies.length > 0 ? `
   <div>
-    <div class="dc-section-title" style="margin-top:0;border-radius:6px 6px 0 0;">🧴 清潔用品盤點</div>
+    <div class="dc-section-title" style="margin-top:0;border-radius:6px 6px 0 0;">${ui('secSupplies')} <span class="dc-badge">${ui('secSuppliesSub')}</span></div>
     <div style="border:1px solid #ddd;border-top:none;padding:10px 14px;border-radius:0 0 6px 6px;">
-      ${supplies.map(it => `<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #eee;font-size:11px;"><span>${esc(it)}</span><span style="color:#bbb;">庫存量：______</span></div>`).join('')}
+      ${supplies.map(it => `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #eee;font-size:11px;gap:8px;"><span style="flex:1;">${esc(it)}</span><span style="color:#bbb;white-space:nowrap;">${ui('stockLabel')}：______</span></div>`).join('')}
       ${suppliesNote ? `<div style="font-size:10px;color:#888;margin-top:6px;">📝 ${suppliesNote}</div>` : ''}
     </div>
   </div>` : '<div></div>'}
   ${safetyItems.length > 0 ? `
   <div>
-    <div class="dc-section-title" style="margin-top:0;border-radius:6px 6px 0 0;background:#dc2626;">⚠️ 安全注意事項</div>
+    <div class="dc-section-title" style="margin-top:0;border-radius:6px 6px 0 0;background:#dc2626;">${ui('secSafety')} <span class="dc-badge">${ui('secSafetySub')}</span></div>
     <div style="border:1px solid #fca5a5;border-top:none;padding:10px 14px;background:#fff5f5;border-radius:0 0 6px 6px;">
-      ${safetyItems.map(it => `<div style="display:flex;align-items:flex-start;gap:6px;padding:3px 0;font-size:11px;"><span style="color:#dc2626;flex-shrink:0;">⚠</span><span>${esc(it)}</span></div>`).join('')}
+      ${safetyItems.map(it => `<div style="display:flex;align-items:flex-start;gap:6px;padding:4px 0;font-size:11px;line-height:1.45;"><span style="color:#dc2626;flex-shrink:0;margin-top:1px;">⚠</span><span>${esc(it)}</span></div>`).join('')}
       ${extraNote ? `<div style="font-size:10px;color:#888;margin-top:6px;border-top:1px dashed #fca5a5;padding-top:6px;">📝 ${extraNote}</div>` : ''}
     </div>
   </div>` : '<div></div>'}
@@ -3154,9 +3484,9 @@ ${supplies.length > 0 || safetyItems.length > 0 ? `
 
 <!-- 簽名欄 -->
 <div style="display:flex;gap:20px;margin-top:16px;flex-wrap:wrap;">
-  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">看護簽名</div>
-  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">家屬確認</div>
-  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">日期：_______/__/__</div>
+  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">${ui('sigCaregiver')}<br><span style="font-size:10px;color:#aaa;">${ui('sigCaregiverSub')}</span></div>
+  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">${ui('sigFamily')}<br><span style="font-size:10px;color:#aaa;">${ui('sigFamilySub')}</span></div>
+  <div style="flex:1;min-width:120px;text-align:center;border-top:1.5px solid ${t.pri};padding-top:4px;font-size:11px;color:#555;">${ui('sigDate')}：_______/__/__</div>
 </div>
 
 </div>`;
@@ -3191,6 +3521,12 @@ function collectState() {
   });
   document.querySelectorAll('[data-sec]').forEach(row => {
     const sec = row.dataset.sec;
+    if (sec.startsWith('dc-')) {
+      // Store dc- room toggles separately to avoid polluting state.toggles
+      const cb = row.querySelector('input[type=checkbox]');
+      if (cb) state.fields['dc-toggle-' + sec] = cb.checked ? '1' : '0';
+      return;
+    }
     const cb = row.querySelector('input[type=checkbox]');
     if (cb) {
       state.toggles[sec] = { on: cb.checked };
@@ -3213,6 +3549,7 @@ function collectState() {
     state.slotTasks[secId] = tasks;
   });
   state.customSlots = getCustomSlots();
+  state.slotDayRestrictions = Object.assign({}, slotDayRestrictions);
   return state;
 }
 
@@ -3232,6 +3569,15 @@ function applyState(state) {
   Object.entries(state.fields || {}).forEach(([id, val]) => {
     const el = document.getElementById(id);
     if (el) el.value = val;
+  });
+  // Restore dc- room toggles from fields
+  Object.entries(state.fields || {}).forEach(([id, val]) => {
+    if (!id.startsWith('dc-toggle-')) return;
+    const sec = id.replace('dc-toggle-', '');
+    const row = document.querySelector(`[data-sec="${sec}"]`);
+    if (!row) return;
+    const cb = row.querySelector('input[type=checkbox]');
+    if (cb) { cb.checked = val === '1'; row.classList.toggle('on', val === '1'); }
   });
   Object.entries(state.toggles || {}).forEach(([sec, info]) => {
     const row = document.querySelector(`[data-sec="${sec}"]`);
@@ -3254,6 +3600,12 @@ function applyState(state) {
     if (te && info.te) te.value = info.te;
   });
   if (state.theme) selectTheme(state.theme);
+  // Restore slot day restrictions
+  if (state.slotDayRestrictions) {
+    Object.entries(state.slotDayRestrictions).forEach(([secId, days]) => {
+      setSlotDaysFromData(secId, days);
+    });
+  }
   // Restore sig enable
   if (state.fields && state.fields['cfg-sig-enable-checked'] !== undefined) {
     const sigCb = document.getElementById('cfg-sig-enable');
@@ -3298,6 +3650,15 @@ function applyState(state) {
                 <span style="color:var(--muted);">–</span>
                 <input class="form-input" id="slot-${id}-e" type="time" style="flex:1;" value="${cs.e||''}">
               </div>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">適用星期 <span style="font-size:10px;color:#10b981;background:#d1fae5;border-radius:4px;padding:1px 6px;font-weight:700;margin-left:4px;">NEW</span></label>
+              <div class="chip-group" id="slot-${id}-days" style="flex-wrap:wrap;gap:5px;">
+                ${customSlotDayChipHTML(id, cs.days || [])}
+              </div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;">💡 只勾選特定日時，該格才會顯示此時段（如每週五復健）</div>
             </div>
           </div>
           <div class="form-row single">
@@ -3367,9 +3728,195 @@ function restoreSave() {
 }
 
 function dismissRestore() {
-  if (!confirm('確定忽略上次的未完成設定嗎？此操作無法復原。')) return;
   document.getElementById('restore-banner').style.display = 'none';
   sessionStorage.removeItem(SAVE_KEY);
+}
+
+/* ══ SLOT DAY RESTRICTION ══ */
+
+const BUILT_IN_SLOTS_ALL = [
+  's-morning','s-breakfast','s-med-am','s-morning-act','s-rehab','s-walk','s-hospital','s-vital-am',
+  's-lunch','s-med-noon','s-nap','s-vital-pm','s-afternoon-act',
+  's-dinner','s-med-pm','s-evening','s-bedtime','s-night',
+  's-tv','s-music','s-reading','s-craft','s-social',
+  's-clean-morning','s-clean-noon','s-clean-evening','s-clean-weekly'
+];
+
+const slotDayRestrictions = {};
+
+function getSlotDays(secId) {
+  return slotDayRestrictions[secId] || [];
+}
+
+function buildSlotDayUI(secId) {
+  const wrap = document.createElement('div');
+  wrap.className = 'slot-days-wrap';
+  wrap.id = 'days-wrap-' + secId;
+  const days = [
+    { val:'all', label:'每天' },
+    { val:'1', label:'一' },{ val:'2', label:'二' },{ val:'3', label:'三' },
+    { val:'4', label:'四' },{ val:'5', label:'五' },{ val:'6', label:'六' },
+    { val:'0', label:'日' },
+  ];
+  const chips = days.map(d => {
+    const isSel = d.val === 'all';
+    return `<div class="sd-chip${isSel?' selected':''}" data-val="${d.val}" onclick="toggleSlotDay(this,'${secId}')">${d.label}</div>`;
+  }).join('');
+  wrap.innerHTML = `
+    <div class="slot-days-label">
+      <span>📅 限定執行日</span>
+      <span class="badge-days" id="days-badge-${secId}">每天</span>
+    </div>
+    <div class="slot-days-chips" id="days-chips-${secId}">${chips}</div>
+    <div class="slot-days-hint">💡 不限定則每天都顯示；勾選特定日（如週五）該時段只在當天出現</div>`;
+  return wrap;
+}
+
+function toggleSlotDay(el, secId) {
+  const container = document.getElementById('days-chips-' + secId);
+  if (!container) return;
+  if (el.dataset.val === 'all') {
+    container.querySelectorAll('.sd-chip').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    slotDayRestrictions[secId] = [];
+  } else {
+    el.classList.toggle('selected');
+    const anyDay = [...container.querySelectorAll('.sd-chip')].some(c => c.dataset.val !== 'all' && c.classList.contains('selected'));
+    const allBtn = container.querySelector('[data-val="all"]');
+    if (allBtn) allBtn.classList.toggle('selected', !anyDay);
+    if (!anyDay) { allBtn && allBtn.classList.add('selected'); slotDayRestrictions[secId] = []; }
+    else {
+      slotDayRestrictions[secId] = [...container.querySelectorAll('.sd-chip.selected')]
+        .map(c => c.dataset.val).filter(v => v !== 'all');
+    }
+  }
+  updateDaysBadge(secId);
+  schedulePreviewUpdate();
+}
+
+function updateDaysBadge(secId) {
+  const badge = document.getElementById('days-badge-' + secId);
+  if (!badge) return;
+  const days = slotDayRestrictions[secId] || [];
+  const dayNames = { '0':'日','1':'一','2':'二','3':'三','4':'四','5':'五','6':'六' };
+  badge.textContent = days.length === 0 ? '每天' : days.map(d=>dayNames[d]).join('、');
+  badge.style.background = days.length > 0 ? '#f59e0b' : '#fef3c7';
+  badge.style.color = days.length > 0 ? '#fff' : '#92400e';
+}
+
+function setSlotDaysFromData(secId, days) {
+  slotDayRestrictions[secId] = days || [];
+  const container = document.getElementById('days-chips-' + secId);
+  if (!container) return;
+  if (!days || days.length === 0) {
+    container.querySelectorAll('.sd-chip').forEach(c => {
+      c.classList.toggle('selected', c.dataset.val === 'all');
+    });
+  } else {
+    container.querySelectorAll('.sd-chip').forEach(c => {
+      c.classList.toggle('selected', days.includes(c.dataset.val));
+    });
+    const allBtn = container.querySelector('[data-val="all"]');
+    if (allBtn) allBtn.classList.remove('selected');
+  }
+  updateDaysBadge(secId);
+}
+
+function injectSlotDayUIs() {
+  BUILT_IN_SLOTS_ALL.forEach(secId => {
+    if (secId.startsWith('dc-')) return;
+    if (document.getElementById('days-wrap-' + secId)) return;
+    const row = document.querySelector(`[data-sec="${secId}"]`);
+    if (!row) return;
+    const labelDiv = row.querySelector('.toggle-label');
+    if (labelDiv && !document.getElementById('days-btn-' + secId)) {
+      const btn = document.createElement('button');
+      btn.className = 'btn-toggle-days';
+      btn.id = 'days-btn-' + secId;
+      btn.innerHTML = '<span class="arrow">▸</span> 限定星期';
+      btn.onclick = (e) => { e.stopPropagation(); toggleDaysPanel(secId); };
+      labelDiv.appendChild(btn);
+    }
+    const ui = buildSlotDayUI(secId);
+    row.after(ui);
+  });
+}
+
+function toggleDaysPanel(secId) {
+  const wrap = document.getElementById('days-wrap-' + secId);
+  const btn = document.getElementById('days-btn-' + secId);
+  if (!wrap) return;
+  const isOpen = wrap.classList.contains('open');
+  wrap.classList.toggle('open', !isOpen);
+  if (btn) btn.classList.toggle('open', !isOpen);
+}
+
+/* ══ LIVE PREVIEW ══ */
+let previewTimer = null;
+
+function schedulePreviewUpdate() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(updateLivePreview, 350);
+}
+
+function updateLivePreview() {
+  const panel = document.getElementById('live-preview-panel');
+  if (!panel) return;
+  const activeDayVals = getChipVals('cfg-days').map(Number);
+  const dayOrder = [1,2,3,4,5,6,0];
+  const activeDays = dayOrder.filter(d => activeDayVals.includes(d));
+  const dayNamesShort = ['日','一','二','三','四','五','六'];
+  const allSlots = BUILT_IN_SLOTS_ALL.filter(k => getSecEnabled(k));
+  const customSlots = getCustomSlots();
+  const content = document.getElementById('lp-content');
+  if (!content) return;
+
+  if (activeDays.length === 0 || (allSlots.length === 0 && customSlots.length === 0)) {
+    content.innerHTML = '<div class="lp-empty">尚未設定時段或天數</div>';
+    return;
+  }
+  const slotNameMap = {
+    's-morning':'晨間照護','s-breakfast':'早餐','s-med-am':'早間用藥',
+    's-morning-act':'上午活動','s-rehab':'復健訓練','s-walk':'戶外散步',
+    's-hospital':'外出就醫','s-vital-am':'上午生命徵象',
+    's-lunch':'午餐','s-med-noon':'午間用藥','s-nap':'午休陪伴',
+    's-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
+    's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
+    's-bedtime':'就寢照護','s-night':'夜間巡視',
+    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
+    's-craft':'手工藝','s-social':'家人互動',
+    's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
+    's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
+  };
+  const thead = `<tr><th style="min-width:68px;text-align:left;">時段</th>${activeDays.map(d=>`<th>週${dayNamesShort[d]}</th>`).join('')}</tr>`;
+  const rows = allSlots.map(k => {
+    const days = slotDayRestrictions[k] || [];
+    const cells = activeDays.map(d => {
+      return (days.length === 0 || days.includes(String(d)))
+        ? `<td class="lp-ok">✓</td>` : `<td class="lp-na">—</td>`;
+    }).join('');
+    return `<tr><td class="lp-slot-name"${days.length>0?' style="color:#d97706;"':''}>${slotNameMap[k]||k}</td>${cells}</tr>`;
+  });
+  customSlots.forEach(cs => {
+    const days = cs.days || [];
+    const cells = activeDays.map(d => {
+      return (days.length === 0 || days.includes(String(d)))
+        ? `<td class="lp-ok">✓</td>` : `<td class="lp-na">—</td>`;
+    }).join('');
+    rows.push(`<tr><td class="lp-slot-name" style="color:#7c3aed;">★${cs.name||'自訂'}</td>${cells}</tr>`);
+  });
+  content.innerHTML = `<table class="lp-table"><thead>${thead}</thead><tbody>${rows.join('')}</tbody></table>`;
+}
+
+function showPreviewPanel() {
+  document.getElementById('live-preview-panel').classList.add('visible');
+  document.getElementById('btn-show-preview').classList.remove('visible');
+  updateLivePreview();
+}
+
+function hidePreviewPanel() {
+  document.getElementById('live-preview-panel').classList.remove('visible');
+  document.getElementById('btn-show-preview').classList.add('visible');
 }
 
 /* ══ SWIPE (mobile) ══ */
@@ -3389,7 +3936,9 @@ function dismissRestore() {
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject task editors into each toggle-row
+  // Inject slot day restriction UIs first (inserted right after toggle-row)
+  injectSlotDayUIs();
+  // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
   injectTaskEditors();
   // cfg-start-date is optional — no auto-fill
 
@@ -3418,7 +3967,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.altKey && e.key === 'ArrowRight' && currentStep < TOTAL_STEPS) gotoStep(currentStep + 1);
     if (e.altKey && e.key === 'ArrowLeft' && currentStep > 1) gotoStep(currentStep - 1);
   });
+
+  // Hook preview update into existing events
+  document.body.addEventListener('change', schedulePreviewUpdate);
+  document.body.addEventListener('input', schedulePreviewUpdate);
+  schedulePreviewUpdate();
 });
 </script>
+
+<!-- ══ LIVE PREVIEW PANEL ══ -->
+<div id="live-preview-panel" class="visible">
+  <div class="lp-header">
+    <span>📋 時段預覽 <span style="font-size:10px;font-weight:400;opacity:.7;">各時段 × 執行日</span></span>
+    <button class="lp-close" onclick="hidePreviewPanel()" title="收起">✕</button>
+  </div>
+  <div class="lp-body" id="lp-content">
+    <div class="lp-empty">設定時段後即時預覽</div>
+  </div>
+</div>
+<button id="btn-show-preview" onclick="showPreviewPanel()">📋 時段預覽</button>
+
 </body>
 </html>
