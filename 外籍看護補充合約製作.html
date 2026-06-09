@@ -2,8 +2,12 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>外籍看護補充合約製作工具</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#1a2744">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>外籍看護補充合約製作工具 v10.7</title>
+<!-- v10.6 → v10.7 優化：手機/平板/電腦全響應式介面、觸控友善、iOS防縮放、側邊欄橫向滾動、步驟列滾動、表單按鈕全寬 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -78,6 +82,7 @@
     .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
     .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
     .btn-outline:hover { background: var(--navy); color: white; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
 
     .lang-bar {
       background: var(--navy-mid);
@@ -284,6 +289,301 @@
   .c-sig-hint { text-align: center; color: #666; font-size: 9pt; }
   .c-date-row { text-align: center; margin-top: 25px; font-size: 11pt; font-weight: bold; }
   .c-witness { margin-top: 20px; padding: 12px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+/* RESPONSIVE OPTIMIZATION PATCH v10.7 */
+
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* ===== TOP NAV RESPONSIVE ===== */
+@media screen and (max-width: 600px) {
+  .top-nav {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .top-nav .brand span:not(.icon) {
+    display: none;
+  }
+  .top-nav .brand .icon {
+    font-size: 20px;
+  }
+  .top-nav .nav-actions .btn span {
+    display: none;
+  }
+  .top-nav .nav-actions {
+    gap: 4px;
+  }
+  .top-nav .nav-actions .btn {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+}
+
+/* ===== LANG BAR RESPONSIVE ===== */
+@media screen and (max-width: 600px) {
+  .lang-bar {
+    padding: 0 10px;
+    gap: 2px;
+    height: 40px;
+  }
+  .lang-bar > span {
+    display: none;
+  }
+  .lang-tab {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+/* ===== STEP INDICATOR RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .step-indicator {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .step-indicator::-webkit-scrollbar { display: none; }
+  .step {
+    min-width: 60px;
+    flex-shrink: 0;
+    padding: 10px 6px;
+    font-size: 10px;
+  }
+  .step .step-num { font-size: 13px; }
+}
+
+@media screen and (max-width: 480px) {
+  .step { min-width: 52px; font-size: 9px; }
+  .step .step-num { font-size: 12px; }
+}
+
+/* ===== SIDEBAR → HORIZONTAL SCROLL ON MOBILE ===== */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    overflow: hidden;
+  }
+  .sidebar-section:first-child h3 { display: none; }
+  .sidebar-section:first-child {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 4px;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .sidebar-section:first-child::-webkit-scrollbar { display: none; }
+  .sidebar-section:first-child .nav-item {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 7px 12px;
+    font-size: 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+  }
+  .sidebar-section:first-child .nav-item.active {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+  .sidebar-section:nth-child(2) {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .sidebar-section:nth-child(2) h3 { display: none; }
+  .sidebar-section:nth-child(2) .nav-item {
+    flex: 1;
+    justify-content: center;
+    font-size: 12px;
+    padding: 7px 8px;
+    border-radius: var(--radius-xs);
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+  }
+}
+
+/* ===== MAIN LAYOUT RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    padding: 10px;
+    gap: 0;
+  }
+  .content-area { padding-left: 0; }
+}
+
+/* ===== FORM CARD RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .form-card { padding: 16px; }
+  .section-header { gap: 10px; margin-bottom: 14px; }
+  .section-header h2 { font-size: 14px; }
+}
+
+/* ===== FORM GRID RESPONSIVE ===== */
+@media screen and (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; gap: 10px; }
+  .form-grid.cols-3 { grid-template-columns: 1fr; }
+  .form-group.span-2 { grid-column: span 1; }
+}
+
+@media screen and (min-width: 641px) and (max-width: 768px) {
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== INPUT TOUCH SIZING ===== */
+@media screen and (max-width: 768px) {
+  input[type=text], input[type=date], input[type=number], select, textarea {
+    font-size: 16px !important; /* prevents iOS zoom */
+    padding: 11px 12px;
+    min-height: 44px;
+  }
+  textarea { min-height: 88px; }
+  label { font-size: 13px; }
+}
+
+/* ===== CHECKBOX GROUP RESPONSIVE ===== */
+@media screen and (max-width: 640px) {
+  .checkbox-group {
+    grid-template-columns: 1fr !important;
+  }
+  .checkbox-label {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 768px) {
+  .checkbox-group {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ===== NAVIGATION BUTTONS (prev/next) ===== */
+@media screen and (max-width: 480px) {
+  .form-card > div[style*="justify-content:space-between"] {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .form-card > div[style*="justify-content:space-between"] .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* ===== PREVIEW CONTROLS RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .preview-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+  .preview-actions {
+    width: 100%;
+    justify-content: stretch !important;
+  }
+  .preview-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ===== PRINT SETTINGS BAR RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .print-settings-bar {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .settings-divider { display: none; }
+  .settings-group {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .print-settings-bar > span { width: 100%; }
+  /* Hide the long hint text on mobile */
+  .settings-group > label[style*="rgba(255,255,255,0.6)"] { display: none; }
+}
+
+/* ===== CONTRACT PAGE RESPONSIVE PREVIEW ===== */
+@media screen and (max-width: 768px) {
+  .contract-page {
+    width: 100% !important;
+    padding: 14px 12px !important;
+    font-size: 10pt !important;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ===== TABLET SPECIFIC (769-1024) ===== */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .main-layout { padding: 14px; }
+  .sidebar { width: 220px; }
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+  .checkbox-group { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+/* ===== TOUCH FEEDBACK ===== */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active { opacity: 0.75; transform: scale(0.97); }
+  .nav-item:active { background: var(--cream-dark); }
+  .checkbox-label:active { opacity: 0.8; }
+}
+
+/* ===== SECTION HEADER SUB ON SMALL ===== */
+@media screen and (max-width: 480px) {
+  .section-header p { display: none; }
+  .section-icon { width: 32px; height: 32px; font-size: 14px; }
+}
+
+/* ===== HELP BOX RESPONSIVE ===== */
+@media screen and (max-width: 480px) {
+  .help-box { font-size: 12px; padding: 10px 12px; }
+}
+
+/* ===== SMOOTH SCROLL CONTENT AREA ===== */
+@media screen and (max-width: 768px) {
+  .content-area { padding-bottom: 20px; }
+}
+
+/* ===== STICKY NAV SAFE AREA (for notch phones) ===== */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .top-nav {
+    padding-top: env(safe-area-inset-top, 0);
+    height: calc(56px + env(safe-area-inset-top, 0));
+  }
+}
+
+
+  /* ===== STEP NAV BUTTON ROW ===== */
+  .step-nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 8px;
+  }
+  @media screen and (max-width: 480px) {
+    .step-nav-row {
+      flex-direction: column-reverse;
+    }
+    .step-nav-row .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+  }
+
 </style>
 </head>
 <body class="lang-zh">
@@ -294,8 +594,8 @@
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
-      <button class="btn btn-primary btn-sm" onclick="exportPDF(this)">📥 <span>匯出PDF（列印）</span></button>
-      <button class="btn btn-secondary btn-sm" onclick="exportPDF(this)">🖨️ <span>列印</span></button>
+      <button class="btn btn-primary btn-sm" onclick="exportPDF()">📥 <span>匯出PDF（列印）</span></button>
+      <button class="btn btn-secondary btn-sm" onclick="exportPDF()">🖨️ <span>列印</span></button>
     </div>
   </nav>
 
@@ -376,7 +676,7 @@
           <div class="form-group"><label>合約截止日</label><input type="date" id="end_date" onchange="validateDates()"></div>
         </div>
         <div id="date-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 合約截止日不可早於生效起日，請重新檢查日期！</div>
-        <div style="text-align:right;margin-top:20px;">
+        <div class="step-nav-row" style="justify-content:flex-end;">
           <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
           <button class="btn btn-primary" onclick="goToAgency()">下一步：仲介與見證人資訊 →</button>
         </div>
@@ -413,7 +713,7 @@
           <div class="form-group"><label>自訂合約副標題（選填，可輸入個人化說明）</label><input type="text" id="custom_subtitle" placeholder="例：居家長期安養照護特別版 / 重症臥床全程陪護版"></div>
           <div class="form-group"><label>工作地點（若不同於雇主地址）</label><input type="text" id="work_addr" placeholder="例：台北市信義區○○安養機構；留空則同雇主地址"></div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-party')">← 上一步</button>
           <button class="btn btn-primary" onclick="showSection('sec-patient')">下一步：被照顧者資訊 →</button>
         </div>
@@ -442,7 +742,7 @@
           <label>特殊醫囑與醫材注意事項</label>
           <textarea id="pat_special" placeholder="例：留置鼻胃管、每2小時需翻身拍背、避免食用高糖食物。"></textarea>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-agency')">← 上一步</button>
           <button class="btn btn-primary" onclick="showSection('sec-duties')">下一步：工作內容 →</button>
         </div>
@@ -478,7 +778,7 @@
           <label>其他未盡工作備註 (此欄輸入之中文不會自動翻譯，將原樣呈現)</label>
           <textarea id="duties_extra" placeholder="若有特殊家務或照護協議請寫於此..."></textarea>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-patient')">← 上一步</button>
           <button class="btn btn-primary" onclick="showSection('sec-salary')">下一步：薪資休假 →</button>
         </div>
@@ -608,7 +908,7 @@
           <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_passport" checked> 🪪 <strong>人權</strong>｜禁止扣押護照或任何重要個人證件</label>
           <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_contact" checked> 📞 <strong>人權</strong>｜不限制聯繫在台辦事處與仲介機構</label>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-duties')">← 上一步</button>
           <button class="btn btn-primary" onclick="showSection('sec-rules')">下一步：紀律規範 →</button>
         </div>
@@ -651,7 +951,7 @@
             </select>
           </div>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-salary')">← 上一步</button>
           <button class="btn btn-primary" onclick="showSection('sec-special')">下一步：特約與防護條款 →</button>
         </div>
@@ -692,7 +992,7 @@
           <label>其他特約註記 (自訂條款)</label>
           <textarea id="special_extra" placeholder="無則免填。"></textarea>
         </div>
-        <div style="display:flex;justify-content:space-between;margin-top:20px;">
+        <div class="step-nav-row">
           <button class="btn btn-outline" onclick="showSection('sec-rules')">← 上一步</button>
           <button class="btn btn-gold" onclick="showSection('sec-preview')">✅ 產生合約預覽 →</button>
         </div>
@@ -701,9 +1001,9 @@
       <div class="form-card hidden" id="sec-preview">
         <div class="preview-controls">
           <div><h3>📄 合約預覽輸出區</h3><p style="font-size:12px;color:var(--text-light);">請確認排版設定後，點選列印按鈕產生 PDF。</p></div>
-          <div class="preview-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div class="preview-actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
             <button class="btn btn-outline" onclick="showSection('sec-party')">✏️ 返回修正資料</button>
-            <button class="btn btn-gold" onclick="exportPDF(this)">📥 匯出PDF / 列印</button>
+            <button class="btn btn-gold" onclick="exportPDF()">📥 匯出PDF / 列印</button>
           </div>
         </div>
 
@@ -921,9 +1221,9 @@ function showSection(id) {
   if (ni) ni.classList.add('active');
 
   const steps = ['sec-party','sec-agency','sec-patient','sec-duties','sec-salary','sec-rules','sec-special','sec-preview'];
-  document.querySelectorAll('.step').forEach((s,i) => {
+  const idx = steps.indexOf(id);
+  document.querySelectorAll('.step').forEach((s, i) => {
     s.classList.remove('active','done');
-    const idx = steps.indexOf(id);
     if (i === idx) s.classList.add('active');
     else if (i < idx) s.classList.add('done');
   });
@@ -935,7 +1235,8 @@ function showSection(id) {
 function setLang(lang) {
   currentLang = lang;
   // body class controls CSS language-specific colour for .c-bi spans
-  const bodyLang = lang === 'zh' ? 'zh' : lang.split('-')[1];
+  // lang values: 'zh', 'zh-en', 'zh-id', 'zh-vi'
+  const bodyLang = lang.includes('-') ? lang.split('-')[1] : lang;
   document.body.className = "lang-" + bodyLang;
   document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
   const tabEl = document.getElementById('tab-' + lang);
@@ -1021,14 +1322,14 @@ const L = {
 // ===== RENDER引擎：根據目前選定語言輸出項目 =====
 function renderItemText(key, lang) {
   const registryItem = TRANSLATION_REGISTRY[key];
-  if (!registryItem) return key ? `<span class="c-zh">${escHtml(key)}</span>` : ''; // 空值直接回傳空字串；無對照則原樣顯示
+  if (!registryItem) return key ? `<span class="c-zh">${escHtml(key)}</span>` : '';
 
-  const targetLang = lang === 'zh' ? 'zh' : lang.split('-')[1]; // en, id, vi
+  const targetLang = lang.includes('-') ? lang.split('-')[1] : lang;
   if (lang === 'zh') {
-    return `<span class="c-zh">${registryItem.zh}</span>`;
+    return `<span class="c-zh">${escHtml(registryItem.zh)}</span>`;
   } else {
-    // 輸出雙語對照格式
-    return `<span class="c-zh">${registryItem.zh}</span><span class="c-bi">${registryItem[targetLang] || registryItem.en}</span>`;
+    const biText = registryItem[targetLang] || registryItem.en;
+    return `<span class="c-zh">${escHtml(registryItem.zh)}</span><span class="c-bi">${escHtml(biText)}</span>`;
   }
 }
 
@@ -1308,7 +1609,7 @@ function updatePageStyle() {
 }
 
 // ===== PDF EXPORT =====
-function exportPDF(triggerEl) {
+function exportPDF() {
   // Always navigate to preview section first to ensure sec-preview is visible
   showSection('sec-preview');
   generatePreview();
@@ -1385,8 +1686,10 @@ function clearAll() {
   if (confirm('確定要清除所有填寫的資料？')) {
     document.querySelectorAll('input[type=text], input[type=date], textarea').forEach(el => el.value = '');
     document.querySelectorAll('input[type=number]').forEach(el => {
-      // Reset to default value or 0
-      el.value = el.defaultValue !== undefined && el.defaultValue !== '' ? el.defaultValue : '0';
+      // Reset each number input to its specific default
+      if (el.id === 'salary') { el.value = '20000'; }
+      else if (el.id === 'rest_hours') { el.value = '8'; }
+      else { el.value = '0'; }
       el.style.borderColor = '';
     });
     // Reset selects to first option
@@ -1399,13 +1702,11 @@ function clearAll() {
     if (defaultMobility) defaultMobility.checked = true;
     // Remove checked visual state
     document.querySelectorAll('.checkbox-label').forEach(lbl => lbl.classList.remove('checked'));
-    // Reset salary default
-    const salaryEl = document.getElementById('salary');
-    if (salaryEl) { salaryEl.value = '20000'; salaryEl.style.borderColor = ''; }
+    // Reset salary warning and date warning
     const salaryWarn = document.getElementById('salary-warning');
     if (salaryWarn) salaryWarn.style.display = 'none';
-    const restEl = document.getElementById('rest_hours');
-    if (restEl) restEl.value = '8';
+    const salaryEl = document.getElementById('salary');
+    if (salaryEl) salaryEl.style.borderColor = '';
     // Also reset end_date red border and date-warning if any
     const endDateEl = document.getElementById('end_date');
     if (endDateEl) endDateEl.style.borderColor = '';
