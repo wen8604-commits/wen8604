@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v19</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -382,7 +382,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- TOP BAR -->
 <div class="topbar">
   <div style="min-width:0;flex:1;">
-    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈</div>
+    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈 v19</div>
     <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
   </div>
   <div class="topbar-right">
@@ -3344,7 +3344,7 @@ function buildDCReportHTML() {
       </div>`
     ).join('');
     return `<tr>
-      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:nowrap;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
+      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:normal;word-break:break-word;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
       <td style="padding:8px 10px;font-size:11px;">${itemsHtml}</td>
       <td style="padding:8px 10px;font-size:11px;text-align:center;color:${t.plight};font-weight:700;vertical-align:middle;">${esc(freq)}</td>
       <td style="padding:8px 10px;font-size:11px;color:#555;vertical-align:middle;">${note || '—'}</td>
@@ -3410,9 +3410,9 @@ ${spaceRows ? `
 <table>
   <thead>
     <tr style="background:${t.plight};color:#fff;font-size:11px;">
-      <th style="padding:7px 10px;width:100px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
+      <th style="padding:7px 10px;width:130px;min-width:120px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colItems')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colItemsSub')}</span></th>
-      <th style="padding:7px 10px;width:95px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
+      <th style="padding:7px 10px;width:110px;min-width:100px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colNote')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colNoteSub')}</span></th>
       <th style="padding:7px 10px;width:50px;text-align:center;">${ui('colDone')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colDoneSub')}</span></th>
     </tr>
@@ -3500,9 +3500,6 @@ function collectState() {
   const state = { ts: Date.now(), step: currentStep, fields: {}, chips: {}, toggles: {}, customSlots: [], theme: selectedTheme, slotId };
   ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name','cfg-start-date','cfg-issue-date','cfg-footer-note',
    'cfg-sig-note','sig-label-1','sig-label-2','sig-label-3','sig-label-4',
-   // Step 2 sub-option text fields
-   'rehab-freq','walk-note','hosp-dept','hosp-freq','hosp-note',
-   'tv-note','music-note','craft-note','social-note','clean-weekly-note',
    // Step 3 大掃除 notes
    'dc-kitchen-note','dc-bathroom-note','dc-living-note','dc-bedroom-note','dc-balcony-note',
    'dc-weekly-note','dc-weekly-time-s','dc-weekly-time-e',
@@ -3513,10 +3510,6 @@ function collectState() {
   ['cfg-care-level','cfg-days','cfg-layout','cfg-day-axis','cfg-cell-content','cfg-note-row','cfg-lang','cfg-flags',
    'cfg-fontsize','cfg-rowheight','cfg-zebra','cfg-pagenum',
    'cfg-sig-count','cfg-sig-style','cfg-sig-date',
-   // Step 2 sub-option chips
-   'rehab-type','rehab-location','walk-place','walk-aid','hosp-type','hosp-transport',
-   'tv-type','music-type','music-device','reading-type','craft-type','social-type',
-   'clean-morning-items','clean-noon-items','clean-evening-items','clean-weekly-items','clean-weekly-freq',
    // Step 3 大掃除
    'dc-kitchen-items','dc-kitchen-freq','dc-bathroom-items','dc-bathroom-freq',
    'dc-living-items','dc-living-freq','dc-bedroom-items','dc-bedroom-freq',
@@ -3552,7 +3545,7 @@ function collectState() {
     const list = document.getElementById('task-list-' + secId);
     if (!list) return;
     const tasks = [];
-    list.querySelectorAll('input[type=text]').forEach(inp => { if (inp.value.trim()) tasks.push(inp.value); });
+    list.querySelectorAll('input[type=text]').forEach(inp => tasks.push(inp.value));
     state.slotTasks[secId] = tasks;
   });
   state.customSlots = getCustomSlots();
@@ -3890,8 +3883,8 @@ function updateLivePreview() {
     's-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
     's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
     's-bedtime':'就寢照護','s-night':'夜間巡視',
-    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
-    's-craft':'手工藝/益智','s-social':'家人/社交互動',
+    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
+    's-craft':'手工藝','s-social':'家人互動',
     's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
     's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
   };
@@ -3943,9 +3936,9 @@ function hidePreviewPanel() {
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  // 注意：先注入 slot day UIs（緊接 toggle-row 後），再注入 task editors
-  // （task editors 用 row.after() 插入，會推到 slot day UI 前方，最終順序：toggle-row → task-editor → slot-days-wrap）
+  // Inject slot day restriction UIs first (inserted right after toggle-row)
   injectSlotDayUIs();
+  // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
   injectTaskEditors();
   // cfg-start-date is optional — no auto-fill
 
