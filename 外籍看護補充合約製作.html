@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#1a2744">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>外籍看護補充合約製作工具 v10.8</title>
-<!-- v10.6 → v10.7 優化：手機/平板/電腦全響應式介面、觸控友善、iOS防縮放、側邊欄橫向滾動、步驟列滾動、表單按鈕全寬 -->
+<title>外籍看護補充合約製作工具 v10.9</title>
+<!-- v10.9 修復：DOMContentLoaded 初始化、全域錯誤監控、generatePreview try/catch 防崩、radio 樣式同步、exportPDF 改用 rAF、localStorage 自動存還原 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -590,7 +590,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v10.9</span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
@@ -1198,13 +1198,24 @@ const TRANSLATION_REGISTRY = {
 let currentLang = 'zh';
 let currentSection = 'sec-party';
 
-// 動態綁定優化：監聽所有 checkbox 點擊使其標籤亮起
+// 動態綁定優化：監聽所有 checkbox / radio 點擊使其標籤亮起
 document.addEventListener('change', function(e) {
-  if (e.target && e.target.type === 'checkbox') {
+  if (e.target && (e.target.type === 'checkbox' || e.target.type === 'radio')) {
     const lbl = e.target.closest('.checkbox-label');
     if (lbl) {
-      if (e.target.checked) lbl.classList.add('checked');
-      else lbl.classList.remove('checked');
+      if (e.target.type === 'radio') {
+        // radio 同組其他選項需先取消高亮
+        const name = e.target.name;
+        document.querySelectorAll(`input[name="${name}"]`).forEach(function(r) {
+          const rl = r.closest('.checkbox-label');
+          if (rl) rl.classList.remove('checked');
+        });
+        lbl.classList.add('checked');
+      } else {
+        // checkbox
+        if (e.target.checked) lbl.classList.add('checked');
+        else lbl.classList.remove('checked');
+      }
     }
   }
 });
@@ -1335,6 +1346,23 @@ function renderItemText(key, lang) {
 
 // ===== GENERATE CONTRACT HTML =====
 function generatePreview() {
+  const previewEl = document.getElementById('contract-preview-area');
+  if (!previewEl) {
+    console.error('generatePreview: 找不到 #contract-preview-area，請確認 HTML 結構');
+    return;
+  }
+  try {
+    _doGeneratePreview(previewEl);
+  } catch(e) {
+    console.error('generatePreview 發生錯誤：', e);
+    previewEl.innerHTML = `<div style="padding:24px;color:#c0392b;background:#fdf2f2;border-radius:8px;border:2px solid #ec5b5b;">
+      <strong>⚠️ 合約預覽產生失敗</strong><br>
+      <span style="font-size:13px;">錯誤訊息：${e.message || e}<br>請確認所有必填欄位已填寫，或開啟 F12 Console 查看詳細錯誤。</span>
+    </div>`;
+  }
+}
+
+function _doGeneratePreview(previewEl) {
   const t = L[currentLang] || L['zh'];
   const d = gatherData();
   // Sanitise all free-text user values going into HTML
@@ -1544,7 +1572,7 @@ function generatePreview() {
   </div>
 </div>`;
 
-  document.getElementById('contract-preview-area').innerHTML = html;
+  previewEl.innerHTML = html;
   applyFontSize();
   // No separate print-contract div needed — @media print renders sec-preview directly
 }
@@ -1612,13 +1640,18 @@ function updatePageStyle() {
 function exportPDF() {
   // Always navigate to preview section first to ensure sec-preview is visible
   showSection('sec-preview');
-  generatePreview();
+  try { generatePreview(); } catch(e) { console.error('exportPDF generatePreview 錯誤：', e); }
   // Apply current font size to freshly rendered pages
   const fs = printSettings.fontSize || '10';
   document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
   updatePageStyle();
-  // Delay to ensure DOM fully renders before print dialog
-  setTimeout(() => { window.print(); }, 350);
+  // 使用雙層 requestAnimationFrame 確保 DOM 完全渲染後再開啟列印對話框
+  // 比固定 setTimeout(350ms) 更可靠，適應各種設備速度
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      window.print();
+    });
+  });
 }
 
 // ===== SAMPLE DATA =====
@@ -1715,8 +1748,11 @@ function clearAll() {
     const partyWarn = document.getElementById('party-warn');
     if (partyWarn) partyWarn.style.display = 'none';
     // Reset preview area
-    document.getElementById('contract-preview-area').innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
+    const previewArea = document.getElementById('contract-preview-area');
+    if (previewArea) previewArea.innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
     showSection('sec-party');
+    // 清除 localStorage 自動存檔
+    try { localStorage.removeItem(LS_KEY); } catch(e) {}
   }
 }
 
@@ -1760,6 +1796,79 @@ function goToAgency() {
     showSection('sec-agency');
   }
 }
+
+// ===== localStorage 自動存檔 / 還原 =====
+const LS_KEY = 'care_contract_v10_autosave';
+
+function autoSaveToStorage() {
+  try {
+    const fields = {};
+    document.querySelectorAll('input[type=text], input[type=date], input[type=number], textarea').forEach(el => {
+      if (el.id) fields[el.id] = el.value;
+    });
+    document.querySelectorAll('select').forEach(el => {
+      if (el.id) fields[el.id] = el.value;
+    });
+    const checked = {};
+    document.querySelectorAll('input[type=checkbox]').forEach(el => {
+      if (el.name && el.value) checked[el.name + ':' + el.value] = el.checked;
+    });
+    document.querySelectorAll('input[type=radio]').forEach(el => {
+      if (el.name && el.value && el.checked) checked['radio:' + el.name] = el.value;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify({ fields, checked, lang: currentLang, ts: Date.now() }));
+  } catch(e) {
+    console.warn('自動存檔失敗：', e);
+  }
+}
+
+function autoRestoreFromStorage() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data || !data.fields) return;
+    // 還原文字/數字/日期/select 欄位
+    Object.keys(data.fields).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = data.fields[id];
+    });
+    // 還原 checkbox / radio
+    if (data.checked) {
+      Object.keys(data.checked).forEach(key => {
+        if (key.startsWith('radio:')) {
+          const name = key.slice(6);
+          const val = data.checked[key];
+          const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+          if (el) { el.checked = true; const lbl = el.closest('.checkbox-label'); if (lbl) lbl.classList.add('checked'); }
+        } else {
+          const [name, value] = key.split(':');
+          const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+          if (el) {
+            el.checked = data.checked[key];
+            const lbl = el.closest('.checkbox-label');
+            if (lbl) {
+              if (data.checked[key]) lbl.classList.add('checked');
+              else lbl.classList.remove('checked');
+            }
+          }
+        }
+      });
+    }
+    // 還原語言設定
+    if (data.lang && typeof setLang === 'function') setLang(data.lang);
+    console.info('[自動還原] 已從 localStorage 還原上次填寫資料（' + new Date(data.ts).toLocaleString() + '）');
+  } catch(e) {
+    console.warn('自動還原失敗（資料損毀或不相容），已忽略：', e);
+  }
+}
+
+// 每 30 秒自動存檔一次；任何 input 變動後也即時存
+(function initAutoSave() {
+  document.addEventListener('input',  autoSaveToStorage);
+  document.addEventListener('change', autoSaveToStorage);
+  setInterval(autoSaveToStorage, 30000);
+})();
 
 // ===== SALARY VALIDATION =====
 function validateSalary(el) {
@@ -1810,9 +1919,33 @@ function escHtml(str) {
     。replace(/'/g, '&#39;');
 }
 
-// ===== INITIALIZATION =====
-showSection('sec-party');
-updatePageStyle();
+// ===== GLOBAL ERROR MONITOR =====
+window.onerror = function(msg, url, line, col, err) {
+  console.error('[全域錯誤]', msg, '第' + line + '行', err);
+  // 不跳 alert 以免干擾使用者，錯誤只記錄於 Console
+  return false;
+};
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('[未處理 Promise 錯誤]', e.reason);
+});
+
+// ===== INITIALIZATION (DOMContentLoaded 確保 DOM 已就緒) =====
+document.addEventListener('DOMContentLoaded', function () {
+  // 安全呼叫 showSection
+  if (typeof showSection === 'function') {
+    showSection('sec-party');
+  } else {
+    console.error('showSection 函式未定義，請確認 JS 載入順序');
+  }
+  // 安全呼叫 updatePageStyle
+  if (typeof updatePageStyle === 'function') {
+    updatePageStyle();
+  } else {
+    console.warn('updatePageStyle 函式未定義，跳過初始化列印樣式');
+  }
+  // localStorage 自動還原（若有）
+  autoRestoreFromStorage();
+});
 </script>
 </body>
 </html>
