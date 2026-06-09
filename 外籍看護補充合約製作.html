@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>外籍看護補充合約製作工具 v9</title>
+<title>外籍看護補充合約製作工具</title>
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -176,24 +176,69 @@
     }
   }
 
+  /* ===== PRINT FORMAT SETTINGS PANEL ===== */
+  .print-settings-bar {
+    background: var(--navy-mid); border-radius: var(--radius); padding: 12px 16px;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .print-settings-bar label { color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .print-settings-bar select, .print-settings-bar input[type=range] {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    color: white; border-radius: 4px; padding: 4px 8px; font-size: 12px; outline: none;
+  }
+  .print-settings-bar select option { background: #243560; color: white; }
+  .settings-group { display: flex; align-items: center; gap: 6px; }
+  .settings-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+  #font-size-val { color: var(--gold-light); font-weight: 700; min-width: 30px; font-size: 12px; }
+
   /* ===== PRINT CONTRACT ===== */
+  @page {
+    size: A4 portrait;
+    margin: 18mm 16mm 16mm 16mm;
+  }
   @media print {
-    .tool-wrapper, .top-nav, .lang-bar, .sidebar, .content-area, .step-indicator, .preview-controls { display: none !important; }
-    body { background: white; }
-    #print-contract { display: block !important; }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+    /* Hide all UI chrome */
+    .tool-wrapper > .top-nav,
+    .tool-wrapper > .lang-bar,
+    .sidebar,
+    .step-indicator,
+    .preview-controls,
+    .print-settings-bar,
+    .help-box { display: none !important; }
+    /* Remove layout chrome from main-layout and content-area */
+    .main-layout { display: block !important; padding: 0 !important; max-width: none !important; }
+    .content-area { padding: 0 !important; }
+    /* Hide all form-cards except sec-preview */
+    .form-card { display: none !important; }
+    #sec-preview { display: block !important; background: white !important;
+      box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 !important; }
+    #contract-print-wrapper { display: block !important; }
+    #contract-preview-area { background: white !important; padding: 0 !important; border-radius: 0 !important; }
   }
 
   /* ===== CONTRACT PREVIEW & PRINT STYLES ===== */
+  #contract-print-wrapper { display: contents; }
   .contract-page {
     width: 210mm; min-height: 297mm; padding: 20mm 18mm; margin: 0 auto;
-    background: white; color: #000; font-size: 10.5pt; line-height: 1.5;
+    background: white; color: #000; font-size: var(--contract-font-size, 10.5pt); line-height: 1.6;
+    font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif;
   }
   @media screen {
     .contract-page { box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin-bottom: 20px; border: 1px solid #ddd; }
   }
   @media print {
-    .contract-page { page-break-after: always; margin: 0; box-shadow: none; border: none; }
-    .contract-page:last-child { page-break-after: auto; }
+    .contract-page {
+      width: 100% !important; min-height: auto !important;
+      padding: 0 !important; margin: 0 !important;
+      box-shadow: none !important; border: none !important;
+      page-break-after: always; break-after: page;
+      font-size: var(--contract-font-size, 10.5pt) !important;
+    }
+    .contract-page:last-child { page-break-after: auto; break-after: auto; }
+    .c-sig { page-break-inside: avoid; break-inside: avoid; }
+    .c-article { page-break-inside: avoid; break-inside: avoid; }
   }
 
   .c-header { text-align: center; border-bottom: 3px solid #1a2744; padding-bottom: 12px; margin-bottom: 16px; }
@@ -245,12 +290,12 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 <small style="opacity:0.6;font-size:11px;">v9</small></span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具</span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
       <button class="btn btn-primary btn-sm" onclick="exportPDF(this)">📥 <span>匯出PDF（列印）</span></button>
-      <button class="btn btn-secondary btn-sm" onclick="window.print()">🖨️ <span>列印</span></button>
+      <button class="btn btn-secondary btn-sm" onclick="exportPDF(this)">🖨️ <span>列印</span></button>
     </div>
   </nav>
 
@@ -302,7 +347,7 @@
         <h3 style="font-size:14px;color:var(--navy);margin-bottom:12px;border-left:4px solid var(--teal);padding-left:8px;">甲方（雇主）</h3>
         <div class="form-grid">
           <div class="form-group"><label>雇主姓名 Name</label><input type="text" id="emp_name" placeholder="例：王大明"></div>
-          <div class="form-group"><label>身分證字號 ID No.</label><input type="text" id="emp_id" placeholder="A123456789"></div>
+          <div class="form-group"><label>身分證字號 ID No.</label><input type="text" id="emp_id" placeholder="A123456789" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
           <div class="form-group"><label>聯絡電話 Phone</label><input type="text" id="emp_phone" placeholder="0912-345-678"></div>
           <div class="form-group"><label>電子信箱 Email</label><input type="text" id="emp_email" placeholder="example@mail.com"></div>
           <div class="form-group span-2"><label>地址 Address</label><input type="text" id="emp_addr" placeholder="請輸入主聘僱合約登記之工作地址"></div>
@@ -469,9 +514,9 @@
               <option value="每月18日 / Every 18th">每月18日</option>
               <option value="每月19日 / Every 19th">每月19日</option>
               <option value="每月20日 / Every 20th">每月20日</option>
-              <option value="每月21日 / Every 21th">每月21日</option>
-              <option value="每月22日 / Every 22th">每月22日</option>
-              <option value="每月23日 / Every 23th">每月23日</option>
+              <option value="每月21日 / Every 21st">每月21日</option>
+              <option value="每月22日 / Every 22nd">每月22日</option>
+              <option value="每月23日 / Every 23rd">每月23日</option>
               <option value="每月24日 / Every 24th">每月24日</option>
               <option value="每月25日 / Every 25th">每月25日</option>
               <option value="每月26日 / Every 26th">每月26日</option>
@@ -652,24 +697,67 @@
 
       <div class="form-card hidden" id="sec-preview">
         <div class="preview-controls">
-          <div><h3>📄 合約預覽輸出區</h3><p style="font-size:12px;color:var(--text-light);">請檢查條款對照翻譯是否正確。若滿意請點選下列列印按鈕。</p></div>
-          <div class="preview-actions">
+          <div><h3>📄 合約預覽輸出區</h3><p style="font-size:12px;color:var(--text-light);">請確認排版設定後，點選列印按鈕產生 PDF。</p></div>
+          <div class="preview-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
             <button class="btn btn-outline" onclick="showSection('sec-party')">✏️ 返回修正資料</button>
-            <button class="btn btn-gold" onclick="exportPDF(this)">📥 匯出PDF檔案</button>
-            <button class="btn btn-primary" onclick="window.print()">🖨️ 執行列印 / 存成PDF</button>
+            <button class="btn btn-gold" onclick="exportPDF(this)">📥 匯出PDF / 列印</button>
           </div>
         </div>
-        <div class="help-box success"><strong>💡 專業列印提醒：</strong>在瀏覽器彈出的列印視窗中，請務必勾選<strong>「隱私/取消頁首頁尾與網址」</strong>並將<strong>「背景圖形」</strong>選項打開，能讓雙語版面最完美美觀。</div>
-        <div id="contract-preview-area" style="background:#e5e5e5; padding:15px; border-radius:8px; min-height:300px; overflow-x:auto;">
-          <p style="text-align:center; color:#777; padding:5px 0;">合約建置中...</p>
+
+        <!-- 排版格式設定列 -->
+        <div class="print-settings-bar">
+          <span style="color:var(--gold-light);font-weight:700;font-size:13px;">🖨️ 列印排版設定</span>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>紙張</label>
+            <select onchange="applyPrintSetting('paper', this.value)">
+              <option value="A4">A4（預設）</option>
+              <option value="letter">Letter</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>方向</label>
+            <select onchange="applyPrintSetting('orientation', this.value)">
+              <option value="portrait">直式 Portrait</option>
+              <option value="landscape">橫式 Landscape</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>字級</label>
+            <input type="range" min="9" max="13" value="10" step="0.5"
+              oninput="applyPrintSetting('fontSize', this.value); document.getElementById('font-size-val').textContent=this.value+'pt'">
+            <span id="font-size-val">10pt</span>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>頁邊距</label>
+            <select onchange="applyPrintSetting('margin', this.value)">
+              <option value="normal">標準 (18mm)</option>
+              <option value="narrow">窄版 (12mm)</option>
+              <option value="wide">寬版 (24mm)</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label style="color:rgba(255,255,255,0.6);font-size:11px;">💡 列印時請開啟「背景圖形」並取消頁首頁尾</label>
+          </div>
+        </div>
+
+        <div class="help-box success"><strong>✅ 預覽即所見即所得：</strong>下方合約樣式即為列印輸出效果。調整上方字級 / 頁邊距可即時更新預覽。</div>
+
+        <!-- 合約輸出區（直接列印此區，不再依賴隱藏 div）-->
+        <div id="contract-print-wrapper">
+          <div id="contract-preview-area">
+            <p style="text-align:center; color:#777; padding:30px 0;">⏳ 合約建置中，請稍候...</p>
+          </div>
         </div>
       </div>
 
     </div>
   </div>
 </div>
-
-<div id="print-contract" style="display:none"></div>
 
 <script>
 // ===== 核心多國語言條款對照資料庫 =====
@@ -928,7 +1016,7 @@ const L = {
 // ===== RENDER引擎：根據目前選定語言輸出項目 =====
 function renderItemText(key, lang) {
   const registryItem = TRANSLATION_REGISTRY[key];
-  if (!registryItem) return key; // 如果找不到，原樣回傳
+  if (!registryItem) return key ? `<span class="c-zh">${escHtml(key)}</span>` : ''; // 空值直接回傳空字串；無對照則原樣顯示
 
   const targetLang = lang === 'zh' ? 'zh' : lang.split('-')[1]; // en, id, vi
   if (lang === 'zh') {
@@ -945,17 +1033,23 @@ function generatePreview() {
   const d = gatherData();
   // Sanitise all free-text user values going into HTML
   const esc = escHtml;
+  // Apply current font size to contract pages after render
+  const applyFontSize = () => {
+    const fs = printSettings.fontSize || '10';
+    document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
+  };
   
   let dateStr = d.contract_date ? d.contract_date.replace(/-/g, ' / ') : '    /    /    ';
   let startStr = d.start_date ? d.start_date.replace(/-/g, ' / ') : '___________';
   let endStr = d.end_date ? d.end_date.replace(/-/g, ' / ') : '___________';
 
-  // Build allowances description
+  // Build allowances description (guard against negative or NaN)
+  const safeInt = (s) => Math.max(0, parseInt(s) || 0);
   const allowLines = [];
-  if (parseInt(d.allow_food) > 0) allowLines.push(`伙食/代餐津貼：每月新台幣 ${esc(d.allow_food)} 元`);
-  if (parseInt(d.allow_transport) > 0) allowLines.push(`交通補助費：每月新台幣 ${esc(d.allow_transport)} 元`);
-  if (parseInt(d.allow_clothing) > 0) allowLines.push(`換季/購衣補助：每年新台幣 ${esc(d.allow_clothing)} 元`);
-  if (parseInt(d.allow_seniority) > 0) allowLines.push(`年資加薪：每滿一年加給新台幣 ${esc(d.allow_seniority)} 元`);
+  if (safeInt(d.allow_food) > 0) allowLines.push(`伙食/代餐津貼：每月新台幣 ${esc(d.allow_food)} 元`);
+  if (safeInt(d.allow_transport) > 0) allowLines.push(`交通補助費：每月新台幣 ${esc(d.allow_transport)} 元`);
+  if (safeInt(d.allow_clothing) > 0) allowLines.push(`換季/購衣補助：每年新台幣 ${esc(d.allow_clothing)} 元`);
+  if (safeInt(d.allow_seniority) > 0) allowLines.push(`年資加薪：每滿一年加給新台幣 ${esc(d.allow_seniority)} 元`);
 
   // Work hours
   const workHoursStr = (d.work_start && d.work_end) ? `${d.work_start} ～ ${d.work_end}` : '';
@@ -979,7 +1073,7 @@ function generatePreview() {
 <div class="contract-page">
   <div class="c-header">
     <h1>${t.title}</h1>
-    <div class="c-subtitle">${d.custom_subtitle || t.subtitle}</div>
+    <div class="c-subtitle">${esc(d.custom_subtitle) || t.subtitle}</div>
     <div class="c-lang-badge">${t.badge}</div>
   </div>
 
@@ -1003,7 +1097,7 @@ function generatePreview() {
       <li><strong>${t.patName}：</strong>${fld(esc(d.pat_name), 160)} &nbsp;&nbsp; <strong>${t.patAge}：</strong>${fld(esc(d.pat_age), 60)}</li>
       <li><strong>${t.patHealth}：</strong>${fld(esc(d.pat_health), 400)}</li>
       <li><strong>${t.patIll}：</strong>${fld(esc(d.pat_illness), 400)}</li>
-      <li><strong>${t.patMob}：</strong><br>${renderItemText(d.mobility, currentLang)}</li>
+      <li><strong>${t.patMob}：</strong><br>${d.mobility ? renderItemText(d.mobility, currentLang) : '<span class="c-zh" style="color:#aaa;">（未選擇 / Not specified）</span>'}</li>
       ${d.pat_special ? `<li><strong>${t.patSpec}：</strong><br><span style="color:#222; font-weight:bold;">${esc(d.pat_special)}</span></li>` : ''}
     </ul>
   </div>
@@ -1021,6 +1115,7 @@ function generatePreview() {
 
 <div class="contract-page">
   <div class="c-section-bar">${t.ch3}</div>
+  <div style="font-size:9pt;color:#555;text-align:right;margin-bottom:6px;">合約有效期間：${startStr} ～ ${endStr}</div>
   <div class="c-article">
     <div class="c-article-num">${t.art3}</div>
     <ul class="c-list">
@@ -1091,6 +1186,7 @@ function generatePreview() {
 
 <div class="contract-page">
   <div class="c-section-bar gold">${t.ch5}</div>
+  <div style="font-size:9pt;color:#555;text-align:right;margin-bottom:6px;">合約有效期間：${startStr} ～ ${endStr}</div>
   <div class="c-article">
     <div class="c-article-num">${t.art5}</div>
     <ul class="c-list">
@@ -1140,8 +1236,8 @@ function generatePreview() {
 </div>`;
 
   document.getElementById('contract-preview-area').innerHTML = html;
-  const printDiv = document.getElementById('print-contract');
-  printDiv.innerHTML = html;
+  applyFontSize();
+  // No separate print-contract div needed — @media print renders sec-preview directly
 }
 
 function gatherData() {
@@ -1166,7 +1262,7 @@ function gatherData() {
     pat_illness: v('pat_illness'), pat_special: v('pat_special'),
     mobility: radio('mobility'),
     duties: checks('duty'), duties_home: checks('duty_home'), duties_extra: v('duties_extra'),
-    salary: v('salary'), pay_day: document.getElementById('pay_day').value, pay_method: v('pay_method'),
+    salary: v('salary'), pay_day: v('pay_day'), pay_method: v('pay_method'),
     days_off: v('days_off'), rest_hours: v('rest_hours'), overtime: v('overtime'),
     benefits: checks('benefit'), prohibits: checks('prohibit'),
     fine_minor: v('fine_minor'), fine_major: v('fine_major'),
@@ -1174,14 +1270,46 @@ function gatherData() {
   };
 }
 
-// ===== PDF EXPORT (使用瀏覽器列印存PDF，不依賴外部CDN) =====
+// ===== PRINT SETTINGS STATE =====
+const printSettings = { paper: 'A4', orientation: 'portrait', fontSize: '10', margin: 'normal' };
+
+const marginMap = { normal: '18mm 16mm 16mm 16mm', narrow: '10mm 10mm 10mm 10mm', wide: '24mm 22mm 20mm 22mm' };
+
+function applyPrintSetting(key, val) {
+  printSettings[key] = val;
+  // Apply font size live to contract pages
+  if (key === 'fontSize') {
+    document.querySelectorAll('.contract-page').forEach(el => {
+      el.style.fontSize = val + 'pt';
+    });
+  }
+  // Rebuild @page style tag
+  updatePageStyle();
+}
+
+function updatePageStyle() {
+  let styleEl = document.getElementById('dynamic-page-style');
+  if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'dynamic-page-style'; document.head.appendChild(styleEl); }
+  const size = printSettings.paper + ' ' + printSettings.orientation;
+  const margin = marginMap[printSettings.margin] || marginMap.normal;
+  const fs = printSettings.fontSize || '10';
+  styleEl.textContent = `
+    @page { size: ${size}; margin: ${margin}; }
+    @media print { .contract-page { font-size: ${fs}pt !important; } }
+  `;
+}
+
+// ===== PDF EXPORT =====
 function exportPDF(triggerEl) {
-  // Make sure preview is generated first
+  // Always navigate to preview section first to ensure sec-preview is visible
+  showSection('sec-preview');
   generatePreview();
-  // Small delay to ensure DOM updates, then trigger print
-  setTimeout(() => {
-    window.print();
-  }, 200);
+  // Apply current font size to freshly rendered pages
+  const fs = printSettings.fontSize || '10';
+  document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
+  updatePageStyle();
+  // Delay to ensure DOM fully renders before print dialog
+  setTimeout(() => { window.print(); }, 350);
 }
 
 // ===== SAMPLE DATA =====
@@ -1210,7 +1338,7 @@ function fillSample() {
   document.getElementById('work_end').value = '22:00';
   document.getElementById('log_format').value = 'log_both';
   document.getElementById('lang_req').value = 'lang_basic_zh';
-  document.getElementById('allow_food').value = '0';
+  document.getElementById('allow_food').value = '3000';
   document.getElementById('allow_transport').value = '500';
   document.getElementById('allow_clothing').value = '1200';
   document.getElementById('allow_seniority').value = '500';
@@ -1232,13 +1360,16 @@ function fillSample() {
   document.getElementById('rest_hours').value = '8';
   document.getElementById('duties_extra').value = '每週六傍晚推輪椅至社區中庭散步30分鐘';
   
-  // 更新 checkbox 狀態樣式
+  // 更新 checkbox 狀態樣式（觸發 change 事件確保所有群組正確亮起）
   document.querySelectorAll('input[type=checkbox]').forEach(el => {
     const lbl = el.closest('.checkbox-label');
-    if(lbl && el.checked) lbl.classList.add('checked');
+    if (lbl) {
+      if (el.checked) lbl.classList.add('checked');
+      else lbl.classList.remove('checked');
+    }
   });
 
-  alert('✅ 已填入 v9 合規範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
+  alert('✅ 已填入合規範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
 }
 
 function clearAll() {
@@ -1257,11 +1388,19 @@ function clearAll() {
     // Reset salary default
     const salaryEl = document.getElementById('salary');
     if (salaryEl) { salaryEl.value = '20000'; salaryEl.style.borderColor = ''; }
+    const salaryWarn = document.getElementById('salary-warning');
+    if (salaryWarn) salaryWarn.style.display = 'none';
     const restEl = document.getElementById('rest_hours');
     if (restEl) restEl.value = '8';
+    // Also reset end_date red border and date-warning if any
+    const endDateEl = document.getElementById('end_date');
+    if (endDateEl) endDateEl.style.borderColor = '';
+    const dateWarn = document.getElementById('date-warning');
+    if (dateWarn) dateWarn.style.display = 'none';
+    const partyWarn = document.getElementById('party-warn');
+    if (partyWarn) partyWarn.style.display = 'none';
     // Reset preview area
-    document.getElementById('contract-preview-area').innerHTML = '<p style="text-align:center; color:#777; padding:5px 0;">合約建置中...</p>';
-    document.getElementById('print-contract').innerHTML = '';
+    document.getElementById('contract-preview-area').innerHTML = '<p style="text-align:center; color:#777; padding:30px 0;">⏳ 合約建置中，請稍候...</p>';
     showSection('sec-party');
   }
 }
@@ -1274,6 +1413,7 @@ function goToAgency() {
   const missing = [];
   if (!v('emp_name')) missing.push('雇主姓名');
   if (!v('emp_id')) missing.push('身分證字號');
+  else if (!/^[A-Z][12]\d{8}$/.test(v('emp_id').toUpperCase())) missing.push('身分證字號格式有誤（應為1碼英文+9碼數字，如A123456789）');
   if (!v('care_name')) missing.push('看護姓名');
   if (!v('care_nation')) missing.push('看護國籍');
   if (!v('contract_date')) missing.push('簽約日期');
@@ -1295,7 +1435,8 @@ function goToAgency() {
 // ===== SALARY VALIDATION =====
 function validateSalary(el) {
   const warn = document.getElementById('salary-warning');
-  if (el.value && parseInt(el.value) < 20000) {
+  const val = parseInt(el.value);
+  if (el.value && (isNaN(val) || val < 20000)) {
     el.style.borderColor = 'var(--red)';
     if (warn) warn.style.display = 'block';
   } else {
@@ -1331,6 +1472,7 @@ function escHtml(str) {
 
 // ===== INITIALIZATION =====
 showSection('sec-party');
+updatePageStyle();
 </script>
 </body>
 </html>
