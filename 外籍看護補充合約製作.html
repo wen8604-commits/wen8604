@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍看護補充合約製作工具 v11.0</title>
+<title>外籍看護補充合約製作工具 v11.0 </title>
 <!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
@@ -203,7 +203,7 @@
   /* ===== PRINT CONTRACT ===== */
   @page {
     size: A4 portrait;
-    margin: 18mm 16mm 16mm 16mm;
+    margin: 12mm 13mm 12mm 13mm;
   }
   @media print {
     * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
@@ -230,8 +230,8 @@
   /* ===== CONTRACT PREVIEW & PRINT STYLES ===== */
   #contract-print-wrapper { display: contents; }
   .contract-page {
-    width: 210mm; min-height: 297mm; padding: 20mm 18mm; margin: 0 auto;
-    background: white; color: #000; font-size: var(--contract-font-size, 10.5pt); line-height: 1.6;
+    width: 210mm; min-height: auto; padding: 10mm 12mm; margin: 0 auto;
+    background: white; color: #000; font-size: var(--contract-font-size, 10pt); line-height: 1.45;
     font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif;
   }
   @media screen {
@@ -243,56 +243,57 @@
       padding: 0 !important; margin: 0 !important;
       box-shadow: none !important; border: none !important;
       page-break-after: always; break-after: page;
-      font-size: var(--contract-font-size, 10.5pt) !important;
+      font-size: var(--contract-font-size, 10pt) !important;
+      line-height: 1.45 !important;
     }
     .contract-page:last-child { page-break-after: auto; break-after: auto; }
     .c-sig { page-break-inside: avoid; break-inside: avoid; }
     .c-article { page-break-inside: avoid; break-inside: avoid; }
   }
 
-  .c-header { text-align: center; border-bottom: 3px solid #1a2744; padding-bottom: 12px; margin-bottom: 16px; }
-  .c-header h1 { font-size: 16pt; font-weight: bold; color: #1a2744; white-space: pre-line; }
-  .c-header .c-subtitle { font-size: 10pt; color: #444; margin-top: 6px; }
-  .c-header .c-lang-badge { display: inline-block; background: #1a2744; color: white; font-size: 8.5pt; padding: 3px 10px; border-radius: 20px; margin-top: 8px; font-weight: bold; }
+  .c-header { text-align: center; border-bottom: 3px solid #1a2744; padding-bottom: 8px; margin-bottom: 10px; }
+  .c-header h1 { font-size: 14pt; font-weight: bold; color: #1a2744; white-space: pre-line; }
+  .c-header .c-subtitle { font-size: 9pt; color: #444; margin-top: 4px; }
+  .c-header .c-lang-badge { display: inline-block; background: #1a2744; color: white; font-size: 8pt; padding: 2px 8px; border-radius: 20px; margin-top: 5px; font-weight: bold; }
 
-  .c-parties { background: #f4f6f9; padding: 12px; margin-bottom: 16px; border-radius: 6px; border: 1px solid #dcdfe6; }
-  .c-parties p { margin: 5px 0; }
+  .c-parties { background: #f4f6f9; padding: 8px 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #dcdfe6; }
+  .c-parties p { margin: 3px 0; }
   .c-field { display: inline-block; border-bottom: 1px solid #000; min-width: 120px; padding: 0 6px; font-weight: bold; color: #111; }
 
-  .c-section-bar { background: #1a2744; color: white; padding: 6px 12px; font-size: 11pt; font-weight: bold; margin: 18px 0 10px; border-radius: 4px; }
+  .c-section-bar { background: #1a2744; color: white; padding: 4px 10px; font-size: 10.5pt; font-weight: bold; margin: 10px 0 6px; border-radius: 4px; }
   .c-section-bar.alt { background: #0e7c7b; }
   .c-section-bar.red { background: #8e2a1e; }
   .c-section-bar.gold { background: #c9973a; }
 
-  .c-article { margin-bottom: 12px; padding: 10px; background: #fafafa; border-left: 4px solid #555; border-radius: 0 6px 6px 0; border: 1px solid #eee; border-left-width: 4px; }
+  .c-article { margin-bottom: 7px; padding: 7px 8px; background: #fafafa; border-left: 4px solid #555; border-radius: 0 6px 6px 0; border: 1px solid #eee; border-left-width: 4px; }
   .c-article.highlight { background: #fffaf4; border-left-color: #c0392b; }
-  .c-article-num { font-weight: bold; font-size: 10.5pt; margin-bottom: 6px; color: #1a2744; }
+  .c-article-num { font-weight: bold; font-size: 10pt; margin-bottom: 3px; color: #1a2744; }
   .c-article-num.red { color: #c0392b; }
 
   /* 語系顏色區分 */
-  .c-zh { font-weight: 500; color: #000; display: block; margin-bottom: 1px; }
-  .c-bi { font-size: 9.5pt; color: #4a4a6a; display: block; font-style: italic; margin-bottom: 4px; line-height: 1.4; }
+  .c-zh { font-weight: 500; color: #000; display: block; margin-bottom: 0; }
+  .c-bi { font-size: 9pt; color: #4a4a6a; display: block; font-style: italic; margin-bottom: 2px; line-height: 1.35; }
   /* 特定語系微調 */
   .lang-en .c-bi { color: #294a7a; }
   .lang-id .c-bi { color: #5b3a8c; font-style: normal; }
   .lang-vi .c-bi { color: #1e6b38; font-style: normal; }
 
-  ul.c-list { padding-left: 20px; margin-top: 4px; }
-  ul.c-list li { margin-bottom: 6px; list-style-type: square; }
+  ul.c-list { padding-left: 18px; margin-top: 2px; }
+  ul.c-list li { margin-bottom: 3px; list-style-type: square; }
 
-  .c-important { background: #e8f8ee; border-left: 4px solid #27ae60; padding: 10px; margin: 12px 0; font-size: 10pt; border-radius: 4px; }
-  .c-redbox { background: #fdf2f2; border: 2px solid #ec5b5b; padding: 12px; margin: 14px 0; border-radius: 6px; }
-  .c-redbox-title { color: #c0392b; font-weight: bold; text-align: center; margin-bottom: 8px; font-size: 11pt; }
+  .c-important { background: #e8f8ee; border-left: 4px solid #27ae60; padding: 7px 8px; margin: 7px 0; font-size: 9.5pt; border-radius: 4px; }
+  .c-redbox { background: #fdf2f2; border: 2px solid #ec5b5b; padding: 8px 10px; margin: 8px 0; border-radius: 6px; }
+  .c-redbox-title { color: #c0392b; font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 10.5pt; }
 
-  .c-sig { margin-top: 25px; page-break-inside: avoid; }
-  .c-sig-title { text-align: center; font-weight: bold; font-size: 12pt; margin-bottom: 15px; letter-spacing: 1px; }
-  .c-sig-box { display: flex; justify-content: space-between; margin-top: 15px; }
+  .c-sig { margin-top: 14px; page-break-inside: avoid; }
+  .c-sig-title { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 10px; letter-spacing: 1px; }
+  .c-sig-box { display: flex; justify-content: space-between; margin-top: 10px; }
   .c-sig-item { width: 48%; }
-  .c-sig-item p { margin: 8px 0; }
-  .c-sig-line { border-bottom: 1px solid #000; margin-top: 35px; margin-bottom: 5px; }
-  .c-sig-hint { text-align: center; color: #666; font-size: 9pt; }
-  .c-date-row { text-align: center; margin-top: 25px; font-size: 11pt; font-weight: bold; }
-  .c-witness { margin-top: 20px; padding: 12px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+  .c-sig-item p { margin: 5px 0; }
+  .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
+  .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
+  .c-date-row { text-align: center; margin-top: 16px; font-size: 10.5pt; font-weight: bold; }
+  .c-witness { margin-top: 12px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
 /* RESPONSIVE OPTIMIZATION PATCH v10.7 */
 
 /* ===== MOBILE BOTTOM NAV ===== */
