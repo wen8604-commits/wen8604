@@ -344,6 +344,78 @@ body{
 .range-input{flex:1;accent-color:var(--accent);}
 .range-value{font-weight:700;color:var(--accent);min-width:36px;text-align:right;}
 
+/* ── DETAIL PANEL (時段細部設定) ── */
+.detail-btn{
+  background:transparent;
+  border:1.5px solid var(--border);
+  color:var(--muted);
+  border-radius:6px;
+  padding:3px 9px;
+  font-size:11px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.15s;
+  flex-shrink:0;
+  display:flex;align-items:center;gap:4px;
+}
+.detail-btn:hover{border-color:#90a4d4;color:var(--ink);}
+.toggle-row.on .detail-btn{border-color:#93c5fd;color:var(--accent);}
+.detail-panel{
+  display:none;
+  border-top:1px dashed var(--border);
+  margin-top:8px;
+  padding-top:10px;
+}
+.detail-panel.open{display:block;}
+.toggle-row-wrap{
+  border:1.5px solid var(--border);
+  border-radius:8px;
+  margin-bottom:8px;
+  transition:border-color .15s;
+  overflow:hidden;
+}
+.toggle-row-wrap:hover{border-color:#c5cae9;}
+.toggle-row-wrap.on{border-color:var(--accent);}
+.toggle-row-wrap .toggle-row{
+  border:none;border-radius:0;margin-bottom:0;
+}
+.detail-sub-label{
+  font-size:11px;font-weight:700;color:var(--muted);
+  letter-spacing:.3px;margin-bottom:6px;
+  text-transform:uppercase;
+}
+.detail-chips-row{
+  display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;
+}
+.detail-chip{
+  border:1.5px solid var(--border);
+  background:var(--bg);
+  border-radius:16px;
+  padding:3px 11px;
+  font-size:11.5px;
+  cursor:pointer;
+  color:var(--muted);
+  transition:.15s;
+  user-select:none;
+  font-family:inherit;
+}
+.detail-chip:hover{border-color:#90a4d4;color:var(--ink);}
+.detail-chip.on{background:var(--success);border-color:var(--success);color:#fff;font-weight:600;}
+.detail-note-input{
+  border:1.5px solid var(--border);
+  border-radius:6px;
+  padding:5px 9px;
+  font-size:12px;
+  font-family:inherit;
+  color:var(--ink);
+  background:var(--white);
+  outline:none;
+  width:100%;
+  transition:border-color .15s;
+}
+.detail-note-input:focus{border-color:var(--accent);}
+.detail-note-input::placeholder{color:#bbb;}
+
 /* ── INFO BOX ── */
 .info-box{
   background:#eff6ff;border:1px solid #bfdbfe;
@@ -1312,114 +1384,325 @@ body{
     <div class="section-body">
       <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:5px;">🕐 時間欄可直接修改，開關控制此時段是否出現在生成的表單中</div>
       <div id="care-toggles">
-        <div class="toggle-row on" data-sec="care-morning">
-          <div class="toggle-label">
-            <div class="toggle-label-main">晨間照護</div>
-            <div class="toggle-label-sub">起床、清潔、更衣</div>
+
+        <!-- 晨間照護 -->
+        <div class="toggle-row-wrap on" id="wrap-care-morning">
+          <div class="toggle-row on" data-sec="care-morning" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">晨間照護</div>
+              <div class="toggle-label-sub">起床、清潔、更衣</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-morning-s" value="06:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-morning-e" value="08:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-morning',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-morning-s" value="06:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-morning-e" value="08:00">
+          <div class="detail-panel" id="detail-care-morning" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-morning">起床狀況</span>
+              <span class="detail-chip on" data-group="care-morning">口腔清潔</span>
+              <span class="detail-chip on" data-group="care-morning">臉部清潔</span>
+              <span class="detail-chip on" data-group="care-morning">更衣</span>
+              <span class="detail-chip" data-group="care-morning">梳洗頭髮</span>
+              <span class="detail-chip" data-group="care-morning">協助站立</span>
+              <span class="detail-chip" data-group="care-morning">輪椅移位</span>
+            </div>
+            <div class="detail-sub-label">備注欄</div>
+            <input class="detail-note-input" type="text" placeholder="例：需兩人協助、注意皮膚狀況" id="note-care-morning">
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-breakfast">
-          <div class="toggle-label">
-            <div class="toggle-label-main">早餐</div>
-            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+
+        <!-- 早餐 -->
+        <div class="toggle-row-wrap on" id="wrap-care-breakfast">
+          <div class="toggle-row on" data-sec="care-breakfast" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">早餐</div>
+              <div class="toggle-label-sub">餐點記錄、飲水量</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-breakfast-s" value="08:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-breakfast-e" value="09:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-breakfast',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-breakfast')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-breakfast-s" value="08:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-breakfast-e" value="09:00">
+          <div class="detail-panel" id="detail-care-breakfast" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-breakfast">飲食內容</span>
+              <span class="detail-chip on" data-group="care-breakfast">食量（多/少/拒食）</span>
+              <span class="detail-chip on" data-group="care-breakfast">飲水量（ml）</span>
+              <span class="detail-chip on" data-group="care-breakfast">早餐用藥</span>
+              <span class="detail-chip" data-group="care-breakfast">噎嗆狀況</span>
+              <span class="detail-chip" data-group="care-breakfast">血糖（飯前）</span>
+              <span class="detail-chip" data-group="care-breakfast">血糖（飯後）</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">飲食質地</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-breakfast-texture">正常</span>
+              <span class="detail-chip" data-group="care-breakfast-texture">軟食</span>
+              <span class="detail-chip" data-group="care-breakfast-texture">剪碎</span>
+              <span class="detail-chip" data-group="care-breakfast-texture">糊狀</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-breakfast')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-morning-act">
-          <div class="toggle-label">
-            <div class="toggle-label-main">上午活動</div>
-            <div class="toggle-label-sub">活動、復健、用藥</div>
+
+        <!-- 上午活動 -->
+        <div class="toggle-row-wrap on" id="wrap-care-morning-act">
+          <div class="toggle-row on" data-sec="care-morning-act" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">上午活動</div>
+              <div class="toggle-label-sub">活動、復健、用藥</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-morning-act-s" value="09:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-morning-act-e" value="12:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-morning-act',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning-act')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-morning-act-s" value="09:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-morning-act-e" value="12:00">
+          <div class="detail-panel" id="detail-care-morning-act" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-morning-act">活動種類</span>
+              <span class="detail-chip on" data-group="care-morning-act">活動時長（分）</span>
+              <span class="detail-chip on" data-group="care-morning-act">用藥記錄</span>
+              <span class="detail-chip" data-group="care-morning-act">復健項目</span>
+              <span class="detail-chip" data-group="care-morning-act">翻身記錄</span>
+              <span class="detail-chip" data-group="care-morning-act">心情狀況</span>
+              <span class="detail-chip" data-group="care-morning-act">訪客記錄</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">活動類型快選</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip" data-group="care-morning-act-type">散步</span>
+              <span class="detail-chip" data-group="care-morning-act-type">復健運動</span>
+              <span class="detail-chip" data-group="care-morning-act-type">看電視</span>
+              <span class="detail-chip" data-group="care-morning-act-type">曬太陽</span>
+              <span class="detail-chip" data-group="care-morning-act-type">社交活動</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning-act')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-lunch">
-          <div class="toggle-label">
-            <div class="toggle-label-main">午餐</div>
-            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+
+        <!-- 午餐 -->
+        <div class="toggle-row-wrap on" id="wrap-care-lunch">
+          <div class="toggle-row on" data-sec="care-lunch" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">午餐</div>
+              <div class="toggle-label-sub">餐點記錄、飲水量</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-lunch-s" value="12:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-lunch-e" value="13:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-lunch',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-lunch')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-lunch-s" value="12:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-lunch-e" value="13:00">
+          <div class="detail-panel" id="detail-care-lunch" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-lunch">飲食內容</span>
+              <span class="detail-chip on" data-group="care-lunch">食量（多/少/拒食）</span>
+              <span class="detail-chip on" data-group="care-lunch">飲水量（ml）</span>
+              <span class="detail-chip on" data-group="care-lunch">午餐用藥</span>
+              <span class="detail-chip" data-group="care-lunch">噎嗆狀況</span>
+              <span class="detail-chip" data-group="care-lunch">血糖（飯後）</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-lunch')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-nap">
-          <div class="toggle-label">
-            <div class="toggle-label-main">午休</div>
-            <div class="toggle-label-sub">睡眠狀況記錄</div>
+
+        <!-- 午休 -->
+        <div class="toggle-row-wrap on" id="wrap-care-nap">
+          <div class="toggle-row on" data-sec="care-nap" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">午休</div>
+              <div class="toggle-label-sub">睡眠狀況記錄</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-nap-s" value="13:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-nap-e" value="15:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-nap',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-nap')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-nap-s" value="13:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-nap-e" value="15:00">
+          <div class="detail-panel" id="detail-care-nap" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-nap">睡眠狀況</span>
+              <span class="detail-chip on" data-group="care-nap">實際入睡時間</span>
+              <span class="detail-chip" data-group="care-nap">翻身記錄</span>
+              <span class="detail-chip" data-group="care-nap">如廁（午休中）</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">睡眠品質選項</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-nap-quality">熟睡</span>
+              <span class="detail-chip on" data-group="care-nap-quality">淺眠</span>
+              <span class="detail-chip on" data-group="care-nap-quality">未入睡</span>
+              <span class="detail-chip" data-group="care-nap-quality">躁動</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-nap')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-afternoon">
-          <div class="toggle-label">
-            <div class="toggle-label-main">下午活動</div>
-            <div class="toggle-label-sub">點心、沐浴、娛樂</div>
+
+        <!-- 下午活動 -->
+        <div class="toggle-row-wrap on" id="wrap-care-afternoon">
+          <div class="toggle-row on" data-sec="care-afternoon" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">下午活動</div>
+              <div class="toggle-label-sub">點心、沐浴、娛樂</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-afternoon-s" value="15:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-afternoon-e" value="18:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-afternoon',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-afternoon')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-afternoon-s" value="15:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-afternoon-e" value="18:00">
+          <div class="detail-panel" id="detail-care-afternoon" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-afternoon">點心記錄</span>
+              <span class="detail-chip on" data-group="care-afternoon">飲水量（ml）</span>
+              <span class="detail-chip" data-group="care-afternoon">沐浴/擦澡</span>
+              <span class="detail-chip" data-group="care-afternoon">皮膚狀況</span>
+              <span class="detail-chip" data-group="care-afternoon">娛樂活動</span>
+              <span class="detail-chip" data-group="care-afternoon">下午用藥</span>
+              <span class="detail-chip" data-group="care-afternoon">翻身記錄</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">沐浴方式</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip" data-group="care-afternoon-bath">淋浴</span>
+              <span class="detail-chip" data-group="care-afternoon-bath">盆浴</span>
+              <span class="detail-chip on" data-group="care-afternoon-bath">擦澡</span>
+              <span class="detail-chip" data-group="care-afternoon-bath">洗頭</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-afternoon')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-dinner">
-          <div class="toggle-label">
-            <div class="toggle-label-main">晚餐</div>
-            <div class="toggle-label-sub">餐點記錄、飲水量</div>
+
+        <!-- 晚餐 -->
+        <div class="toggle-row-wrap on" id="wrap-care-dinner">
+          <div class="toggle-row on" data-sec="care-dinner" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">晚餐</div>
+              <div class="toggle-label-sub">餐點記錄、飲水量</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-dinner-s" value="18:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-dinner-e" value="19:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-dinner',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-dinner')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-dinner-s" value="18:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-dinner-e" value="19:00">
+          <div class="detail-panel" id="detail-care-dinner" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-dinner">飲食內容</span>
+              <span class="detail-chip on" data-group="care-dinner">食量（多/少/拒食）</span>
+              <span class="detail-chip on" data-group="care-dinner">飲水量（ml）</span>
+              <span class="detail-chip on" data-group="care-dinner">晚餐用藥</span>
+              <span class="detail-chip" data-group="care-dinner">噎嗆狀況</span>
+              <span class="detail-chip" data-group="care-dinner">血糖（飯後）</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-dinner')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-evening">
-          <div class="toggle-label">
-            <div class="toggle-label-main">晚間活動</div>
-            <div class="toggle-label-sub">用藥、準備就寢</div>
+
+        <!-- 晚間活動 -->
+        <div class="toggle-row-wrap on" id="wrap-care-evening">
+          <div class="toggle-row on" data-sec="care-evening" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">晚間活動</div>
+              <div class="toggle-label-sub">用藥、準備就寢</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-evening-s" value="19:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-evening-e" value="21:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-evening',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-evening')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-evening-s" value="19:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-evening-e" value="21:00">
+          <div class="detail-panel" id="detail-care-evening" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-evening">晚間用藥</span>
+              <span class="detail-chip on" data-group="care-evening">口腔清潔</span>
+              <span class="detail-chip on" data-group="care-evening">就寢準備</span>
+              <span class="detail-chip" data-group="care-evening">換尿布/成人紙褲</span>
+              <span class="detail-chip" data-group="care-evening">情緒狀況</span>
+              <span class="detail-chip" data-group="care-evening">末次排尿</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">就寢時間記錄</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-evening-bed">記錄入睡時間</span>
+              <span class="detail-chip" data-group="care-evening-bed">記錄血壓（睡前）</span>
+              <span class="detail-chip" data-group="care-evening-bed">記錄體溫（睡前）</span>
+            </div>
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-evening')"><span class="toggle-track"></span></label>
         </div>
-        <div class="toggle-row on" data-sec="care-night">
-          <div class="toggle-label">
-            <div class="toggle-label-main">夜間照護</div>
-            <div class="toggle-label-sub">翻身、夜間如廁</div>
+
+        <!-- 夜間照護 -->
+        <div class="toggle-row-wrap on" id="wrap-care-night">
+          <div class="toggle-row on" data-sec="care-night" style="border:none;margin-bottom:0;">
+            <div class="toggle-label">
+              <div class="toggle-label-main">夜間照護</div>
+              <div class="toggle-label-sub">翻身、夜間如廁</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;margin-right:8px;">
+              <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;">
+                <input class="time-edit-input" type="time" id="time-care-night-s" value="21:00">
+                <span style="color:var(--muted);font-size:12px;">–</span>
+                <input class="time-edit-input" type="time" id="time-care-night-e" value="06:00">
+              </div>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-night',this)" type="button">⚙️ 細部</button>
+            </div>
+            <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-night')"><span class="toggle-track"></span></label>
           </div>
-          <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-            <input class="time-edit-input" type="time" id="time-care-night-s" value="21:00">
-            <span style="color:var(--muted);font-size:12px;">–</span>
-            <input class="time-edit-input" type="time" id="time-care-night-e" value="06:00">
+          <div class="detail-panel" id="detail-care-night" style="padding:0 14px 12px;">
+            <div class="detail-sub-label">記錄子項目</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip on" data-group="care-night">翻身記錄（含時間）</span>
+              <span class="detail-chip on" data-group="care-night">夜間如廁次數</span>
+              <span class="detail-chip" data-group="care-night">夜間嗆咳</span>
+              <span class="detail-chip" data-group="care-night">夜間異常狀況</span>
+              <span class="detail-chip" data-group="care-night">夜間用藥</span>
+              <span class="detail-chip" data-group="care-night">換尿布記錄</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">翻身頻率</div>
+            <div class="detail-chips-row">
+              <span class="detail-chip" data-group="care-night-turn">每1小時</span>
+              <span class="detail-chip on" data-group="care-night-turn">每2小時</span>
+              <span class="detail-chip" data-group="care-night-turn">每3小時</span>
+              <span class="detail-chip" data-group="care-night-turn">依需求</span>
+            </div>
+            <div class="detail-sub-label" style="margin-top:6px;">備注</div>
+            <input class="detail-note-input" type="text" placeholder="例：夜間需注意呼吸聲、備緊急藥物" id="note-care-night">
           </div>
-          <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-night')"><span class="toggle-track"></span></label>
         </div>
+
       </div>
       <hr class="divider">
       <div class="form-group">
@@ -1783,6 +2066,31 @@ function toggleChip(el, groupId, mode) {
 function toggleRow(cb, sec) {
   const row = cb.closest('.toggle-row');
   row.classList.toggle('on', cb.checked);
+  // Also sync the outer wrap if present
+  const wrap = row.closest('.toggle-row-wrap');
+  if (wrap) {
+    wrap.classList.toggle('on', cb.checked);
+    // Auto-close detail panel when slot is turned off
+    if (!cb.checked) {
+      const panel = wrap.querySelector('.detail-panel');
+      if (panel && panel.classList.contains('open')) {
+        panel.classList.remove('open');
+        const detailBtn = wrap.querySelector('.detail-btn');
+        if (detailBtn) {
+          detailBtn.textContent = '⚙️ 細部';
+          detailBtn.style.background = '';
+          detailBtn.style.borderColor = '';
+          detailBtn.style.color = '';
+        }
+      }
+    }
+    // Sync detail-btn enabled state
+    const detailBtn = wrap.querySelector('.detail-btn');
+    if (detailBtn) {
+      detailBtn.style.opacity = cb.checked ? '1' : '0.4';
+      detailBtn.style.pointerEvents = cb.checked ? '' : 'none';
+    }
+  }
   row.querySelectorAll('.time-edit-input').forEach(inp => {
     inp.disabled = !cb.checked;
     inp.style.opacity = cb.checked ? '1' : '0.35';
@@ -2278,140 +2586,173 @@ function buildLogHTML() {
     return `<input style="border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;width:${w};text-align:center;" type="number" min="0" placeholder="${placeholder}">`;
   }
 
+  // ── Helper: get selected detail chips for a group ──
+  function getDetailChips(groupId) {
+    return [...document.querySelectorAll(`.detail-chip.on[data-group="${groupId}"]`)]
+      .map(c => c.textContent.trim());
+  }
+
   const CARE_DEFS = {
-    'care-morning': {
-      label: ['晨間照護','Morning Care','Perawatan Pagi','Chăm sóc sáng'],
-      items: [
-        ['協助起床','Assist waking','Bantu bangun','Giúp dậy'],
-        ['更換尿布/如廁','Diaper/Toilet','Popok/BAB','Thay tã/vệ sinh'],
-        ['清潔身體','Body cleaning','Kebersihan tubuh','Vệ sinh thân'],
-        ['更換衣物','Change clothes','Ganti baju','Thay quần áo'],
-        ['測量生命徵象','Vital signs','Tanda vital','Đo sinh tồn'],
-      ],
-      type: 'generic'
-    },
-    'care-breakfast': {
-      label: ['早餐','Breakfast','Sarapan','Bữa sáng'],
-      type: 'meal'
-    },
-    'care-morning-act': {
-      label: ['上午活動','Morning Activities','Kegiatan Pagi','HĐ sáng'],
-      items: [
-        ['服用藥物','Medication','Minum obat','Uống thuốc'],
-        ['復健/運動','Rehab/Exercise','Rehab/Olahraga','Phục hồi/Thể dục'],
-        ['戶外散步','Outdoor walk','Jalan-jalan','Đi dạo ngoài trời'],
-        ['休憩閱讀','Rest/Reading','Istirahat/Baca','Nghỉ ngơi/Đọc sách'],
-      ],
-      type: 'generic'
-    },
-    'care-lunch': {
-      label: ['午餐','Lunch','Makan Siang','Bữa trưa'],
-      type: 'meal'
-    },
-    'care-nap': {
-      label: ['午休','Nap','Tidur Siang','Nghỉ trưa'],
-      items: [
-        ['安穩','Sound sleep','Nyenyak','Ngủ ngon'],
-        ['淺眠','Light sleep','Tidur ringan','Ngủ nhẹ'],
-        ['失眠','Insomnia','Insomnia','Mất ngủ'],
-        ['需翻身','Repositioned','Pindah posisi','Đổi tư thế'],
-      ],
-      type: 'sleep'
-    },
-    'care-afternoon': {
-      label: ['下午活動','Afternoon','Kegiatan Sore','Buổi chiều'],
-      items: [
-        ['點心時間','Snack time','Waktu snack','Ăn nhẹ'],
-        ['服用藥物','Medication','Minum obat','Uống thuốc'],
-        ['沐浴清潔','Bathing','Mandi','Tắm rửa'],
-        ['活動筋骨','Exercise','Olahraga','Vận động'],
-      ],
-      type: 'generic'
-    },
-    'care-dinner': {
-      label: ['晚餐','Dinner','Makan Malam','Bữa tối'],
-      type: 'meal'
-    },
-    'care-evening': {
-      label: ['晚間活動','Evening','Kegiatan Malam','Buổi tối'],
-      items: [
-        ['服用藥物','Medication','Minum obat','Uống thuốc'],
-        ['看電視陪伴','TV/Company','TV/Menemani','Xem TV/Bầu bạn'],
-        ['準備就寢','Bedtime prep','Persiapan tidur','Chuẩn bị ngủ'],
-      ],
-      type: 'generic'
-    },
-    'care-night': {
-      label: ['夜間照護','Night Care','Perawatan Malam','Chăm sóc đêm'],
-      type: 'night'
-    },
+    'care-morning': { label: ['晨間照護','Morning Care','Perawatan Pagi','Chăm sóc sáng'], type: 'generic' },
+    'care-breakfast': { label: ['早餐','Breakfast','Sarapan','Bữa sáng'], type: 'meal' },
+    'care-morning-act': { label: ['上午活動','Morning Activities','Kegiatan Pagi','HĐ sáng'], type: 'generic' },
+    'care-lunch': { label: ['午餐','Lunch','Makan Siang','Bữa trưa'], type: 'meal' },
+    'care-nap': { label: ['午休','Nap','Tidur Siang','Nghỉ trưa'], type: 'sleep' },
+    'care-afternoon': { label: ['下午活動','Afternoon','Kegiatan Sore','Buổi chiều'], type: 'generic' },
+    'care-dinner': { label: ['晚餐','Dinner','Makan Malam','Bữa tối'], type: 'meal' },
+    'care-evening': { label: ['晚間活動','Evening','Kegiatan Malam','Buổi tối'], type: 'generic' },
+    'care-night': { label: ['夜間照護','Night Care','Perawatan Malam','Chăm sóc đêm'], type: 'night' },
   };
+
+  // ── Render chips as checkboxes in output ──
+  function detailChipsCBs(groupId) {
+    const chips = getDetailChips(groupId);
+    if (!chips.length) return '';
+    return chips.map(name =>
+      `<label style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:6px;white-space:nowrap;margin-bottom:2px;">
+        <input type="checkbox" style="accent-color:${theme.pri};"> ${name}
+      </label>`
+    ).join('');
+  }
+
+  function detailNote(noteId) {
+    const val = (document.getElementById(noteId)?.value || '').trim();
+    if (!val) return '';
+    return `<div style="margin-top:4px;font-size:${Math.max(9,fs-2)}px;color:#888;">📌 ${val}</div>`;
+  }
 
   function mealRow(key, tp, zebra) {
     const def = CARE_DEFS[key];
     const bg = zebra && zebraOn ? theme.hrow : 'white';
+    const chips = getDetailChips(key);
+    const noConfig = chips.length === 0;
+    // Determine if specific meal sub-items were selected
+    const showMenu     = noConfig || chips.includes('飲食內容');
+    const showIntake   = noConfig || chips.includes('食量（多/少/拒食）');
+    const showWater    = noConfig || chips.includes('飲水量（ml）');
+    const showMed      = noConfig || chips.some(c => c.includes('用藥'));
+    const showChoke    = noConfig || chips.includes('噎嗆狀況');
+    const showSugarPre = noConfig || chips.includes('血糖（飯前）');
+    const showSugarPst = noConfig || chips.includes('血糖（飯後）');
+    // Texture chips
+    const texKey = key + '-texture';
+    const textureChips = getDetailChips(texKey);
+    const texLine = textureChips.length
+      ? textureChips.map(t=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${t}</label>`).join('')
+      : '';
     return `<tr style="background:${bg}">
       ${timeTD(tp)}
       ${careLabelTD(...def.label)}
       <td style="padding:${rowPad};vertical-align:top;">
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+        ${showMenu?`<div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
           <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('餐點','Menu','Menu','Thực đơn')}：</span>
           ${inpText('150px')}
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+        </div>`:''}
+        ${texLine?`<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('質地','Texture','Tekstur','Kết cấu')}：</span>${texLine}
+        </div>`:''}
+        ${showIntake?`<div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
           <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('進食量','Intake','Asupan','Lượng ăn')}：</span>
-          ${['全部/All','3/4','1/2','1/4'].map(v=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${v}</label>`).join('')}
-        </div>
-        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
+          ${['全部/All','3/4','1/2','1/4','拒食'].map(v=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${v}</label>`).join('')}
+        </div>`:''}
+        ${showWater?`<div style="display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin-bottom:4px;">
           <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('飲水量','Water','Air minum','Nước')}：</span>
-          ${inpNum('44px')} cc
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          ${cb('需協助餵食','Needs feeding assist','Perlu bantuan makan','Cần hỗ trợ ăn')}
-          ${cb('自行進食','Self-feeding','Makan sendiri','Tự ăn')}
-        </div>
+          ${inpNum('44px')} ml
+        </div>`:''}
+        ${showChoke?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          ${cb('有嗆咳','Choked','Tersedak','Bị sặc')} ${cb('無嗆咳','No choke','Tdk tersedak','Không sặc')}
+        </div>`:''}
+        ${showMed?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('用藥','Med','Obat','Thuốc')}：</span>
+          ${cb('已服用','Given','Sudah','Đã uống')} ${inpText('80px','藥名')}
+        </div>`:''}
+        ${showSugarPre?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('血糖飯前','Pre-meal BG','Gula sblm','Đường trước')}：</span>
+          ${inpNum('44px')} mg/dL
+        </div>`:''}
+        ${showSugarPst?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('血糖飯後','Post-meal BG','Gula ssdh','Đường sau')}：</span>
+          ${inpNum('44px')} mg/dL
+        </div>`:''}
       </td>
     </tr>`;
   }
 
   function sleepRow(key, tp) {
     const def = CARE_DEFS[key];
+    const chips = getDetailChips(key);
+    const qualityChips = getDetailChips(key + '-quality');
+    const noConfig = chips.length === 0;
+    // When no config, show all possible items
+    const ALL_SLEEP_ITEMS = ['睡眠狀況','實際入睡時間','翻身記錄','如廁（午休中）'];
+    const showItems = noConfig ? ALL_SLEEP_ITEMS : chips;
+    const qualityOpts = qualityChips.length ? qualityChips : ['熟睡','淺眠','未入睡'];
     return `<tr>
       ${timeTD(tp)}
       ${careLabelTD(...def.label)}
       <td style="padding:${rowPad};vertical-align:top;">
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${def.items.map(args => cb(...args)).join('')}
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;">
+          ${qualityOpts.map(q=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${q}</label>`).join('')}
         </div>
-        <div style="margin-top:6px;display:flex;align-items:center;gap:4px;">
-          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('其他','Other','Lain','Khác')}：</span>
-          ${inpText('160px')}
+        ${showItems.includes('實際入睡時間')?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('入睡時間','Sleep time','Waktu tidur','Giờ ngủ')}：</span>
+          ${inpText('60px','__:__')}
+        </div>`:''}
+        ${showItems.includes('翻身記錄')?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          ${cb('翻身','Repositioned','Pindah posisi','Đổi tư thế')}
+          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','x','kali','lần')}：</span>${inpNum('36px')}
+        </div>`:''}
+        ${showItems.includes('如廁（午休中）')?`<div style="display:flex;align-items:center;gap:4px;">
+          ${cb('如廁','Toileting','BAB/BAK','Vệ sinh')} ${inpNum('36px')} ${Bi('次','x','kali','lần')}
+        </div>`:''}
+        <div style="margin-top:5px;display:flex;align-items:center;gap:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Note','Ket.','Ghi chú')}：</span>
+          ${inpText('150px')}
         </div>
       </td>
     </tr>`;
   }
 
   function nightRow(tp) {
-    const def = CARE_DEFS['care-night'];
+    const chips = getDetailChips('care-night');
+    const turnChips = getDetailChips('care-night-turn');
+    const noConfig   = chips.length === 0;
+    const showTurn   = noConfig || chips.includes('翻身記錄（含時間）');
+    const showToilet = noConfig || chips.includes('夜間如廁次數');
+    const showChoke  = noConfig || chips.includes('夜間嗆咳');
+    const showAbnorm = noConfig || chips.includes('夜間異常狀況');
+    const showMed    = noConfig || chips.includes('夜間用藥');
+    const showDiaper = noConfig || chips.includes('換尿布記錄');
+    const turnFreq   = turnChips.length ? turnChips[0] : '';
+    const noteVal    = (document.getElementById('note-care-night')?.value || '').trim();
     return `<tr>
       ${timeTD(tp)}
-      ${careLabelTD(...def.label)}
+      ${careLabelTD('夜間照護','Night Care','Perawatan Malam','Chăm sóc đêm')}
       <td style="padding:${rowPad};vertical-align:top;">
-        <div style="display:flex;flex-wrap:wrap;gap:4px 14px;">
-          ${cb('協助就寢','Assist to bed','Bantu tidur','Giúp lên giường')}
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
-          ${cb('定時翻身','Repositioning','Pindah posisi','Đổi tư thế')}
-          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
-          ${cb('更換尿布','Change diaper','Ganti popok','Thay tã')}
-          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:4px;">
-          ${cb('夜間如廁','Night toileting','BAB malam','Vệ sinh đêm')}
-          <span style="font-size:${Math.max(9,fs-2)}px;color:#666;">${Bi('次','times','kali','lần')}：</span>${inpNum('36px')}
-        </div>
+        ${showTurn?`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('翻身','Reposition','Pindah','Đổi tư thế')}${turnFreq?` (${turnFreq})`:''}：</span>
+          ${inpNum('36px')} ${Bi('次','x','kali','lần')}
+          <span style="font-size:${Math.max(9,fs-2)}px;color:#aaa;">${Bi('時間紀錄','Times','Waktu','Giờ')}：</span>${inpText('100px','__:__ / __:__')}
+        </div>`:''}
+        ${showToilet?`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          ${cb('夜間如廁','Night toilet','BAK malam','Vệ sinh đêm')}
+          ${inpNum('36px')} ${Bi('次','x','kali','lần')}
+        </div>`:''}
+        ${showDiaper?`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          ${cb('換尿布','Change diaper','Ganti popok','Thay tã')}
+          ${inpNum('36px')} ${Bi('次','x','kali','lần')}
+        </div>`:''}
+        ${showMed?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          ${cb('夜間用藥','Night med','Obat malam','Thuốc đêm')} ${inpText('80px','藥名')}
+        </div>`:''}
+        ${showChoke?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
+          ${cb('夜間嗆咳','Night choke','Tersedak mlm','Sặc đêm')}
+        </div>`:''}
+        ${showAbnorm?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('異常狀況','Abnormal','Kelainan','Bất thường')}：</span>
+          ${inpText('160px')}
+        </div>`:''}
+        ${noteVal?`<div style="font-size:${Math.max(9,fs-2)}px;color:#888;margin-top:3px;">📌 ${noteVal}</div>`:''}
       </td>
     </tr>`;
   }
@@ -2419,15 +2760,32 @@ function buildLogHTML() {
   function genericRow(key, tp, zebraIdx) {
     const def = CARE_DEFS[key];
     const bg = zebraIdx % 2 === 1 && zebraOn ? theme.hrow : 'white';
+    const chips = getDetailChips(key);
+    // Extra sub-chips by slot key
+    const subChipMap = {
+      'care-morning-act': getDetailChips('care-morning-act-type'),
+      'care-afternoon':   getDetailChips('care-afternoon-bath'),
+      'care-evening':     getDetailChips('care-evening-bed'),
+    };
+    const subChips = subChipMap[key] || [];
     return `<tr style="background:${bg}">
       ${timeTD(tp)}
       ${careLabelTD(...def.label)}
       <td style="padding:${rowPad};vertical-align:top;">
-        <div style="display:flex;flex-wrap:wrap;gap:5px 10px;">
-          ${def.items.map(args => cb(...args)).join('')}
-        </div>
-        <div style="margin-top:6px;display:flex;align-items:center;gap:4px;">
-          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('其他','Other','Lain','Khác')}：</span>
+        ${chips.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px 6px;margin-bottom:6px;">
+          ${chips.map(name=>`<label style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;white-space:nowrap;">
+            <input type="checkbox" style="accent-color:${theme.pri};"> ${name}
+          </label>`).join('')}
+        </div>` : `<div style="display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:6px;">
+          ${cb('完成','Done','Selesai','Hoàn thành')}
+        </div>`}
+        ${subChips.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+          ${subChips.map(s=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;padding:2px 8px;border:1px solid #ddd;border-radius:10px;">
+            <input type="checkbox" style="accent-color:${theme.pri};"> ${s}
+          </label>`).join('')}
+        </div>` : ''}
+        <div style="margin-top:4px;display:flex;align-items:center;gap:4px;">
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Note','Ket.','Ghi chú')}：</span>
           ${inpText('160px')}
         </div>
       </td>
@@ -2703,7 +3061,7 @@ tr { page-break-inside: avoid; break-inside: avoid; }
 /* ══════════════════════════════════════
    AUTO-SAVE SYSTEM
 ══════════════════════════════════════ */
-const SAVE_KEY = 'nurselog_wizard_v5';
+const SAVE_KEY = 'nurselog_wizard_v6';
 let saveTimer = null;
 let lastSaveHash = '';
 
@@ -2749,6 +3107,27 @@ function collectState() {
       if (ts) state.toggles[sec].ts = ts.value;
       if (te) state.toggles[sec].te = te.value;
     }
+  });
+
+  // Detail chips
+  state.detailChips = {};
+  document.querySelectorAll('.detail-chip').forEach(chip => {
+    const group = chip.dataset.group;
+    if (!group) return;
+    if (!state.detailChips[group]) state.detailChips[group] = [];
+    if (chip.classList.contains('on')) state.detailChips[group].push(chip.textContent.trim());
+  });
+
+  // Detail notes
+  state.detailNotes = {};
+  document.querySelectorAll('[id^="note-care-"]').forEach(inp => {
+    state.detailNotes[inp.id] = inp.value;
+  });
+
+  // Detail panels open state
+  state.detailOpen = {};
+  document.querySelectorAll('.detail-panel').forEach(p => {
+    state.detailOpen[p.id] = p.classList.contains('open');
   });
 
   // Contacts
@@ -2804,6 +3183,15 @@ function applyState(state) {
     if (cb) {
       cb.checked = info.on;
       row.classList.toggle('on', info.on);
+      // Sync outer wrap
+      const wrap = row.closest('.toggle-row-wrap');
+      if (wrap) wrap.classList.toggle('on', info.on);
+      // Sync detail-btn
+      const detailBtn = wrap ? wrap.querySelector('.detail-btn') : null;
+      if (detailBtn) {
+        detailBtn.style.opacity = info.on ? '1' : '0.4';
+        detailBtn.style.pointerEvents = info.on ? '' : 'none';
+      }
       row.querySelectorAll('.time-edit-input').forEach(inp => {
         inp.disabled = !info.on;
         inp.style.opacity = info.on ? '1' : '0.35';
@@ -2814,6 +3202,33 @@ function applyState(state) {
     if (ts && info.ts) ts.value = info.ts;
     if (te && info.te) te.value = info.te;
   });
+
+  // Detail chips
+  if (state.detailChips) {
+    document.querySelectorAll('.detail-chip').forEach(chip => {
+      const group = chip.dataset.group;
+      if (!group || !state.detailChips[group]) return;
+      chip.classList.toggle('on', state.detailChips[group].includes(chip.textContent.trim()));
+    });
+  }
+
+  // Detail notes
+  if (state.detailNotes) {
+    Object.entries(state.detailNotes).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = val;
+    });
+  }
+
+  // Detail panels open state
+  if (state.detailOpen) {
+    Object.entries(state.detailOpen).forEach(([id, open]) => {
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      panel.classList.toggle('open', open);
+      restoreDetailBtn(id, open);
+    });
+  }
 
   // Theme
   if (state.theme) selectTheme(state.theme);
@@ -2862,7 +3277,7 @@ function updateSaveStatus(saved) {
   if (!dot || !text) return;
   if (saved) {
     dot.classList.add('saved');
-    text.textContent = '已自動儲存';
+    text.textContent = '已永久儲存';
   } else {
     dot.classList.remove('saved');
     text.textContent = '儲存中…';
@@ -2874,9 +3289,9 @@ function doSave() {
     const state = collectState();
     const json  = JSON.stringify(state);
     if (json === lastSaveHash) return; // no change
-    sessionStorage.setItem(SAVE_KEY, json);
+    localStorage.setItem(SAVE_KEY, json);
     lastSaveHash = json;
-    showToast('✅ 已自動儲存');
+    showToast('✅ 已儲存（永久保留）');
     updateSaveStatus(true);
   } catch(e) {
     console.warn('AutoSave failed:', e);
@@ -2891,13 +3306,13 @@ function scheduleSave() {
 
 function restoreSave() {
   try {
-    const raw = sessionStorage.getItem(SAVE_KEY);
+    const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return;
     const state = JSON.parse(raw);
     applyState(state);
     if (state.step) gotoStep(state.step);
     document.getElementById('restore-banner').style.display = 'none';
-    showToast('✅ 設定已還原');
+    showToast('✅ 設定已還原（永久儲存）');
   } catch(e) {
     alert('還原失敗：' + e.message);
   }
@@ -2905,8 +3320,41 @@ function restoreSave() {
 
 function dismissRestore() {
   document.getElementById('restore-banner').style.display = 'none';
-  sessionStorage.removeItem(SAVE_KEY);
+  localStorage.removeItem(SAVE_KEY);
 }
+
+function toggleDetail(panelId, btn) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  const isOpen = panel.classList.toggle('open');
+  btn.textContent = isOpen ? '▲ 收起' : '⚙️ 細部';
+  btn.style.background = isOpen ? '#eff6ff' : '';
+  btn.style.borderColor = isOpen ? 'var(--accent)' : '';
+  btn.style.color = isOpen ? 'var(--accent)' : '';
+}
+
+function restoreDetailBtn(panelId, open) {
+  const panel = document.getElementById(panelId);
+  if (!panel) return;
+  // Find the detail-btn in the nearest ancestor wrap
+  const wrap = panel.closest('.toggle-row-wrap');
+  const btn = wrap ? wrap.querySelector('.detail-btn') : null;
+  if (!btn) return;
+  btn.textContent = open ? '▲ 收起' : '⚙️ 細部';
+  btn.style.background = open ? '#eff6ff' : '';
+  btn.style.borderColor = open ? 'var(--accent)' : '';
+  btn.style.color = open ? 'var(--accent)' : '';
+}
+
+document.addEventListener('click', function(e) {
+  if (e.target.classList.contains('detail-chip')) {
+    // Only toggle if the panel is open (visible)
+    const panel = e.target.closest('.detail-panel');
+    if (panel && !panel.classList.contains('open')) return;
+    e.target.classList.toggle('on');
+    scheduleSave();
+  }
+});
 
 /* ══════════════════════════════════════
    SWIPE GESTURE (mobile)
@@ -2946,14 +3394,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Check for saved state
   try {
-    const raw = sessionStorage.getItem(SAVE_KEY);
+    const raw = localStorage.getItem(SAVE_KEY);
     if (raw) {
       const state = JSON.parse(raw);
       // Only show restore if saved less than 24h ago
       if (state.ts && (Date.now() - state.ts) < 86400000) {
         document.getElementById('restore-banner').style.display = 'flex';
       } else {
-        sessionStorage.removeItem(SAVE_KEY);
+        localStorage.removeItem(SAVE_KEY);
       }
     }
   } catch(e) {}
