@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#1a2744">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>外籍看護補充合約製作工具 v10.7</title>
+<title>外籍看護補充合約製作工具 v10.8</title>
 <!-- v10.6 → v10.7 優化：手機/平板/電腦全響應式介面、觸控友善、iOS防縮放、側邊欄橫向滾動、步驟列滾動、表單按鈕全寬 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
@@ -595,7 +595,7 @@
       <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
       <button class="btn btn-primary btn-sm" onclick="exportPDF()">📥 <span>匯出PDF（列印）</span></button>
-      <button class="btn btn-secondary btn-sm" onclick="exportPDF()">🖨️ <span>列印</span></button>
+
     </div>
   </nav>
 
@@ -676,8 +676,8 @@
           <div class="form-group"><label>合約截止日</label><input type="date" id="end_date" onchange="validateDates()"></div>
         </div>
         <div id="date-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 合約截止日不可早於生效起日，請重新檢查日期！</div>
+        <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
         <div class="step-nav-row" style="justify-content:flex-end;">
-          <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
           <button class="btn btn-primary" onclick="goToAgency()">下一步：仲介與見證人資訊 →</button>
         </div>
       </div>
@@ -790,7 +790,7 @@
           <div><h2>第三章：薪資待遇與休息休假</h2><p>合規提醒：約定薪資不得低於勞動部核定之最低標準，請依實際聘僱條件填寫</p></div>
         </div>
         <div class="form-grid">
-          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" oninput="validateSalary(this)" onchange="validateSalary(this)" onpaste="setTimeout(()=>validateSalary(this),0)"></div>
+          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" step="1" oninput="validateSalary(this)" onchange="validateSalary(this)" onpaste="setTimeout(()=>validateSalary(this),0)"></div>
           <div class="form-group"><label>固定發薪日期</label>
             <select id="pay_day">
               <option value="">-- 請選擇日期 --</option>
@@ -1053,7 +1053,7 @@
         <!-- 合約輸出區（直接列印此區，不再依賴隱藏 div）-->
         <div id="contract-print-wrapper">
           <div id="contract-preview-area">
-            <p style="text-align:center; color:#777; padding:30px 0;">⏳ 合約建置中，請稍候...</p>
+            <div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>
           </div>
         </div>
       </div>
@@ -1715,12 +1715,26 @@ function clearAll() {
     const partyWarn = document.getElementById('party-warn');
     if (partyWarn) partyWarn.style.display = 'none';
     // Reset preview area
-    document.getElementById('contract-preview-area').innerHTML = '<p style="text-align:center; color:#777; padding:30px 0;">⏳ 合約建置中，請稍候...</p>';
+    document.getElementById('contract-preview-area').innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
     showSection('sec-party');
   }
 }
 
-function resetForm() { showSection('sec-party'); }
+function resetForm() { clearAll(); }
+
+// ===== 台灣身分證加權校驗碼驗證 =====
+function validateTWID(id) {
+  if (!/^[A-Z][12]\d{8}$/.test(id)) return false;
+  const letters = 'ABCDEFGHJKLMNPQRSTUVXYWZIO';
+  const idx = letters.indexOf(id[0]);
+  if (idx < 0) return false;
+  const n1 = Math.floor((idx + 10) / 10);
+  const n0 = (idx + 10) % 10;
+  const digits = [n1, n0, ...id.slice(1).split('').map(Number)];
+  const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
+  const sum = digits.reduce((acc, v, i) => acc + v * weights[i], 0);
+  return sum % 10 === 0;
+}
 
 // ===== STEP 1 VALIDATION =====
 function goToAgency() {
@@ -1728,7 +1742,7 @@ function goToAgency() {
   const missing = [];
   if (!v('emp_name')) missing.push('雇主姓名');
   if (!v('emp_id')) missing.push('身分證字號');
-  else if (!/^[A-Z][12]\d{8}$/.test(v('emp_id').toUpperCase())) missing.push('身分證字號格式有誤（應為1碼英文+9碼數字，如A123456789）');
+  else if (!validateTWID(v('emp_id').toUpperCase())) missing.push('身分證字號格式或校驗碼有誤，請對照實際身分證確認');
   if (!v('care_name')) missing.push('看護姓名');
   if (!v('care_nation')) missing.push('看護國籍');
   if (!v('contract_date')) missing.push('簽約日期');
@@ -1765,9 +1779,20 @@ function validateDates() {
   const s = document.getElementById('start_date').value;
   const e = document.getElementById('end_date').value;
   const warn = document.getElementById('date-warning');
-  if (s && e && e < s) {
-    warn.style.display = 'block';
-    document.getElementById('end_date').style.borderColor = 'var(--red)';
+  if (s && e) {
+    const diffDays = (new Date(e) - new Date(s)) / 86400000;
+    if (new Date(e) < new Date(s)) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ 合約截止日不可早於生效起日，請重新檢查日期！';
+      document.getElementById('end_date').style.borderColor = 'var(--red)';
+    } else if (diffDays > 1095) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>注意：合約期限超過3年（約 ' + Math.round(diffDays/365*10)/10 + ' 年）</strong>。依就服法外籍家庭看護工每次聘僱上限為3年，請確認是否正確。';
+      document.getElementById('end_date').style.borderColor = 'var(--gold)';
+    } else {
+      warn.style.display = 'none';
+      document.getElementById('end_date').style.borderColor = '';
+    }
   } else {
     warn.style.display = 'none';
     document.getElementById('end_date').style.borderColor = '';
