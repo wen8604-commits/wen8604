@@ -10,8 +10,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍看護補充合約製作工具 v10.9</title>
-<!-- v10.9 修復：DOMContentLoaded 初始化、全域錯誤監控、generatePreview try/catch 防崩、radio 樣式同步、exportPDF 改用 rAF、localStorage 自動存還原 -->
+<title>外籍看護補充合約製作工具 v11.0</title>
+<!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -572,6 +572,12 @@
   .form-card.hidden .contract-page { pointer-events: none; }
   .form-card.hidden { pointer-events: none; }
 
+  /* 【高風險修復③】確保 .hidden 絕對隱藏，防止透明覆蓋層擋住按鈕 */
+  .hidden { display: none !important; }
+
+  /* 確保可見的 contract-page 正常接受事件 */
+  .contract-page { pointer-events: auto; }
+
   /* ===== STEP NAV BUTTON ROW ===== */
   .step-nav-row {
     display: flex;
@@ -598,53 +604,53 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v10.9</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v11.0</span></div>
     <div class="nav-actions">
-      <button class="btn btn-secondary btn-sm" onclick="resetForm()">🔄 <span>重設</span></button>
-      <button class="btn btn-gold btn-sm" onclick="showSection('sec-preview')">👁 <span>預覽</span></button>
-      <button class="btn btn-primary btn-sm" onclick="exportPDF()">📥 <span>匯出PDF（列印）</span></button>
+      <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
+      <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
+      <button class="btn btn-primary btn-sm" onclick="safeCall('exportPDF')">📥 <span>匯出PDF（列印）</span></button>
 
     </div>
   </nav>
 
   <div class="lang-bar">
     <span style="color:rgba(255,255,255,0.5);font-size:12px;margin-right:6px;">切換列印語言版本：</span>
-    <button class="lang-tab active" onclick="setLang('zh')" id="tab-zh">純中文版</button>
-    <button class="lang-tab" onclick="setLang('zh-en')" id="tab-zh-en">中英對照</button>
-    <button class="lang-tab" onclick="setLang('zh-id')" id="tab-zh-id">中印對照</button>
-    <button class="lang-tab" onclick="setLang('zh-vi')" id="tab-zh-vi">中越對照</button>
+    <button class="lang-tab active" onclick="safeCall('setLang', 'zh')" id="tab-zh">純中文版</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-en')" id="tab-zh-en">中英對照</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-id')" id="tab-zh-id">中印對照</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-vi')" id="tab-zh-vi">中越對照</button>
   </div>
 
   <div class="main-layout">
     <aside class="sidebar">
       <div class="sidebar-section">
         <h3>合約段落步驟</h3>
-        <button class="nav-item active" onclick="showSection('sec-party')" id="nav-sec-party"><span class="dot"></span>當事人資訊</button>
-        <button class="nav-item" onclick="showSection('sec-agency')" id="nav-sec-agency"><span class="dot"></span>仲介與見證人</button>
-        <button class="nav-item" onclick="showSection('sec-patient')" id="nav-sec-patient"><span class="dot"></span>第一章：被照顧者</button>
-        <button class="nav-item" onclick="showSection('sec-duties')" id="nav-sec-duties"><span class="dot"></span>第二章：工作內容</button>
-        <button class="nav-item" onclick="showSection('sec-salary')" id="nav-sec-salary"><span class="dot"></span>第三章：薪資休假</button>
-        <button class="nav-item" onclick="showSection('sec-rules')" id="nav-sec-rules"><span class="dot"></span>第四章：紀律規範</button>
-        <button class="nav-item" onclick="showSection('sec-special')" id="nav-sec-special"><span class="dot"></span>第五章：特約與防禦條款</button>
-        <button class="nav-item" onclick="showSection('sec-preview')" id="nav-sec-preview"><span class="dot" style="background:var(--teal)"></span>📄 預覽與輸出</button>
+        <button class="nav-item active" onclick="safeCall('showSection', 'sec-party')" id="nav-sec-party"><span class="dot"></span>當事人資訊</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-agency')" id="nav-sec-agency"><span class="dot"></span>仲介與見證人</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-patient')" id="nav-sec-patient"><span class="dot"></span>第一章：被照顧者</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-duties')" id="nav-sec-duties"><span class="dot"></span>第二章：工作內容</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-salary')" id="nav-sec-salary"><span class="dot"></span>第三章：薪資休假</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-rules')" id="nav-sec-rules"><span class="dot"></span>第四章：紀律規範</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-special')" id="nav-sec-special"><span class="dot"></span>第五章：特約與防禦條款</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-preview')" id="nav-sec-preview"><span class="dot" style="background:var(--teal)"></span>📄 預覽與輸出</button>
       </div>
       <div class="sidebar-section">
         <h3>快捷功能</h3>
-        <button class="nav-item" onclick="fillSample()"><span class="dot" style="background:var(--gold)"></span>填入法規標準範例</button>
-        <button class="nav-item" onclick="clearAll()"><span class="dot" style="background:var(--red)"></span>清空重填</button>
+        <button class="nav-item" onclick="safeCall('fillSample')"><span class="dot" style="background:var(--gold)"></span>填入法規標準範例</button>
+        <button class="nav-item" onclick="safeCall('clearAll')"><span class="dot" style="background:var(--red)"></span>清空重填</button>
       </div>
     </aside>
 
     <div class="content-area">
       <div class="step-indicator">
-        <div class="step active" id="step1" onclick="showSection('sec-party')"><span class="step-num">1</span>當事人</div>
-        <div class="step" id="step2" onclick="showSection('sec-agency')"><span class="step-num">2</span>仲介</div>
-        <div class="step" id="step3" onclick="showSection('sec-patient')"><span class="step-num">3</span>被照顧者</div>
-        <div class="step" id="step4" onclick="showSection('sec-duties')"><span class="step-num">4</span>工作內容</div>
-        <div class="step" id="step5" onclick="showSection('sec-salary')"><span class="step-num">5</span>薪資福利</div>
-        <div class="step" id="step6" onclick="showSection('sec-rules')"><span class="step-num">6</span>紀律規範</div>
-        <div class="step" id="step7" onclick="showSection('sec-special')"><span class="step-num">7</span>特約與防護</div>
-        <div class="step" id="step8" onclick="showSection('sec-preview')"><span class="step-num">📄</span>預覽</div>
+        <div class="step active" id="step1" onclick="safeCall('showSection', 'sec-party')"><span class="step-num">1</span>當事人</div>
+        <div class="step" id="step2" onclick="safeCall('showSection', 'sec-agency')"><span class="step-num">2</span>仲介</div>
+        <div class="step" id="step3" onclick="safeCall('showSection', 'sec-patient')"><span class="step-num">3</span>被照顧者</div>
+        <div class="step" id="step4" onclick="safeCall('showSection', 'sec-duties')"><span class="step-num">4</span>工作內容</div>
+        <div class="step" id="step5" onclick="safeCall('showSection', 'sec-salary')"><span class="step-num">5</span>薪資福利</div>
+        <div class="step" id="step6" onclick="safeCall('showSection', 'sec-rules')"><span class="step-num">6</span>紀律規範</div>
+        <div class="step" id="step7" onclick="safeCall('showSection', 'sec-special')"><span class="step-num">7</span>特約與防護</div>
+        <div class="step" id="step8" onclick="safeCall('showSection', 'sec-preview')"><span class="step-num">📄</span>預覽</div>
       </div>
 
       <div class="form-card" id="sec-party">
@@ -686,7 +692,7 @@
         <div id="date-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 合約截止日不可早於生效起日，請重新檢查日期！</div>
         <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
         <div class="step-nav-row" style="justify-content:flex-end;">
-          <button class="btn btn-primary" onclick="goToAgency()">下一步：仲介與見證人資訊 →</button>
+          <button class="btn btn-primary" onclick="safeCall('goToAgency')">下一步：仲介與見證人資訊 →</button>
         </div>
       </div>
 
@@ -722,8 +728,8 @@
           <div class="form-group"><label>工作地點（若不同於雇主地址）</label><input type="text" id="work_addr" placeholder="例：台北市信義區○○安養機構；留空則同雇主地址"></div>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-party')">← 上一步</button>
-          <button class="btn btn-primary" onclick="showSection('sec-patient')">下一步：被照顧者資訊 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-party')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-patient')">下一步：被照顧者資訊 →</button>
         </div>
       </div>
 
@@ -751,8 +757,8 @@
           <textarea id="pat_special" placeholder="例：留置鼻胃管、每2小時需翻身拍背、避免食用高糖食物。"></textarea>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-agency')">← 上一步</button>
-          <button class="btn btn-primary" onclick="showSection('sec-duties')">下一步：工作內容 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-agency')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-duties')">下一步：工作內容 →</button>
         </div>
       </div>
 
@@ -787,8 +793,8 @@
           <textarea id="duties_extra" placeholder="若有特殊家務或照護協議請寫於此..."></textarea>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-patient')">← 上一步</button>
-          <button class="btn btn-primary" onclick="showSection('sec-salary')">下一步：薪資休假 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-patient')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-salary')">下一步：薪資休假 →</button>
         </div>
       </div>
 
@@ -917,8 +923,8 @@
           <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_contact" checked> 📞 <strong>人權</strong>｜不限制聯繫在台辦事處與仲介機構</label>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-duties')">← 上一步</button>
-          <button class="btn btn-primary" onclick="showSection('sec-rules')">下一步：紀律規範 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-duties')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-rules')">下一步：紀律規範 →</button>
         </div>
       </div>
 
@@ -960,8 +966,8 @@
           </div>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-salary')">← 上一步</button>
-          <button class="btn btn-primary" onclick="showSection('sec-special')">下一步：特約與防護條款 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-salary')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-special')">下一步：特約與防護條款 →</button>
         </div>
       </div>
 
@@ -1001,8 +1007,8 @@
           <textarea id="special_extra" placeholder="無則免填。"></textarea>
         </div>
         <div class="step-nav-row">
-          <button class="btn btn-outline" onclick="showSection('sec-rules')">← 上一步</button>
-          <button class="btn btn-gold" onclick="showSection('sec-preview')">✅ 產生合約預覽 →</button>
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-rules')">← 上一步</button>
+          <button class="btn btn-gold" onclick="safeCall('showSection', 'sec-preview')">✅ 產生合約預覽 →</button>
         </div>
       </div>
 
@@ -1010,8 +1016,8 @@
         <div class="preview-controls">
           <div><h3>📄 合約預覽輸出區</h3><p style="font-size:12px;color:var(--text-light);">請確認排版設定後，點選列印按鈕產生 PDF。</p></div>
           <div class="preview-actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-            <button class="btn btn-outline" onclick="showSection('sec-party')">✏️ 返回修正資料</button>
-            <button class="btn btn-gold" onclick="exportPDF()">📥 匯出PDF / 列印</button>
+            <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-party')">✏️ 返回修正資料</button>
+            <button class="btn btn-gold" onclick="safeCall('exportPDF')">📥 匯出PDF / 列印</button>
           </div>
         </div>
 
@@ -1071,6 +1077,35 @@
 </div>
 
 <script>
+// ===== 【高風險修復①②】STORAGE_OK 旗標 + safeCall 函式防護 =====
+// 問題②：一次性探測 localStorage 是否可用（Safari 隱私/無痕/Edge InPrivate 均安全）
+const STORAGE_OK = (function() {
+  try {
+    localStorage.setItem('_t', '1');
+    localStorage.removeItem('_t');
+    return true;
+  } catch(e) {
+    return false;
+  }
+})();
+
+// 問題①：所有 onclick 透過 safeCall 呼叫，任何函式不存在或執行爆炸都不會讓頁面失去控制
+function safeCall(fnName, arg) {
+  try {
+    if (typeof window[fnName] !== 'function') {
+      console.error('[safeCall] 函式未定義：' + fnName + '（請確認 JS 是否完整載入）');
+      return;
+    }
+    if (arg !== undefined) {
+      window[fnName](arg);
+    } else {
+      window[fnName]();
+    }
+  } catch(e) {
+    console.error('[safeCall] 執行 ' + fnName + ' 失敗：', e);
+  }
+}
+
 // ===== 核心多國語言條款對照資料庫 =====
 const TRANSLATION_REGISTRY = {
   // 工作內容
@@ -1875,6 +1910,25 @@ function autoRestoreFromStorage() {
 
 // GitHub Pages 專用修復包：確保所有按鈕與欄位在 load 後可用
 window.addEventListener('load', function() {
+  // ⑤ 【高風險修復⑤】驗證關鍵函式是否全部存在（CDN 或 JS 截斷時的保險）
+  var REQUIRED_FUNCTIONS = ['showSection','setLang','fillSample','clearAll','exportPDF',
+    'generatePreview','updatePageStyle','autoSaveToStorage','autoRestoreFromStorage',
+    'syncCheckboxState','validateSalary','validateDates','safeStorageSet','safeCall'];
+  var missing = REQUIRED_FUNCTIONS.filter(function(fn) { return typeof window[fn] !== 'function'; });
+  if (missing.length > 0) {
+    var msg = '⚠️ 以下 JS 函式載入失敗，部分功能將無法使用：\n' + missing.join(', ') + '\n\n請嘗試：強制重新整理（Ctrl+Shift+R / Cmd+Shift+R）';
+    console.error('[v11 函式驗證]', msg);
+    try {
+      var banner = document.getElementById('_error_banner') || document.createElement('div');
+      banner.id = '_error_banner';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#e67e22;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+      banner.innerHTML = '⚠️ <strong>部分功能載入失敗：</strong>' + missing.join(', ') + '　<small>請按 Ctrl+Shift+R 強制重新整理</small>　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕</button>';
+      if (!banner.parentNode) document.body.appendChild(banner);
+    } catch(_) {}
+  } else {
+    console.log('[v11 函式驗證] ✅ 所有關鍵函式載入正常');
+  }
+
   // 解除可能被意外 disable 的按鈕與表單元素
   document.querySelectorAll('button').forEach(function(btn) {
     btn.disabled = false;
@@ -1894,13 +1948,12 @@ window.addEventListener('load', function() {
   // ④ load 後再次同步 checkbox（防止還原後未執行）
   try { syncCheckboxState(); } catch(e) {}
 
-  console.log('v10.9 GitHub Ready ✅');
+  console.log('v11 GitHub Ready ✅');
 });
 
-  document.addEventListener('input',  autoSaveToStorage);
-  document.addEventListener('change', autoSaveToStorage);
-  setInterval(autoSaveToStorage, 30000);
-})();
+document.addEventListener('input',  autoSaveToStorage);
+document.addEventListener('change', autoSaveToStorage);
+setInterval(autoSaveToStorage, 30000);
 
 // ===== SALARY VALIDATION =====
 function validateSalary(el) {
@@ -1949,8 +2002,9 @@ function escHtml(str) {
   return div.innerHTML;
 }
 
-// ② safeStorage：防止 Safari 隱私模式、無痕模式或某些手機瀏覽器拋錯
+// ② safeStorage：先檢查 STORAGE_OK 旗標，再操作 localStorage（Safari 隱私/無痕完全安全）
 function safeStorageSet(key, val) {
+  if (!STORAGE_OK) { console.info('[Storage] 環境不支援 localStorage，已跳過寫入'); return; }
   try {
     localStorage.setItem(key, val);
   } catch(e) {
@@ -1958,6 +2012,7 @@ function safeStorageSet(key, val) {
   }
 }
 function safeStorageGet(key) {
+  if (!STORAGE_OK) return null;
   try {
     return localStorage.getItem(key);
   } catch(e) {
@@ -1966,6 +2021,7 @@ function safeStorageGet(key) {
   }
 }
 function safeStorageRemove(key) {
+  if (!STORAGE_OK) return;
   try {
     localStorage.removeItem(key);
   } catch(e) {
@@ -1973,14 +2029,34 @@ function safeStorageRemove(key) {
   }
 }
 
-// ===== GLOBAL ERROR MONITOR =====
+// ===== 【高風險修復④】GLOBAL ERROR MONITOR =====
+// 錯誤時用 UI 橫幅提示使用者，而非只寫 console（GitHub Pages 部署時立即可見）
 window.onerror = function(msg, url, line, col, err) {
   console.error('[全域錯誤]', msg, '第' + line + '行', err);
-  // 不跳 alert 以免干擾使用者，錯誤只記錄於 Console
+  // 在頁面頂端插入醒目錯誤橫幅（不用 alert 以免封鎖操作）
+  try {
+    var banner = document.getElementById('_error_banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = '_error_banner';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+      document.body.appendChild(banner);
+    }
+    banner.innerHTML = '⚠️ <strong>JS 錯誤（GitHub 偵錯）：</strong>' + msg + '　<span style="opacity:0.75">第 ' + line + ' 行</span>　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    banner.style.display = 'flex';
+  } catch(_) {}
   return false;
 };
 window.addEventListener('unhandledrejection', function(e) {
   console.error('[未處理 Promise 錯誤]', e.reason);
+  try {
+    var msg = 'Promise: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
+    var banner = document.getElementById('_error_banner') || document.createElement('div');
+    banner.id = '_error_banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+    banner.innerHTML = '⚠️ <strong>Promise 錯誤：</strong>' + msg + '　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    if (!banner.parentNode) document.body.appendChild(banner);
+  } catch(_) {}
 });
 
 // ④ checkbox 樣式同步強制修正函式
