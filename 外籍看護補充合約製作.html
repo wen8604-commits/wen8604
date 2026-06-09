@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#1a2744">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- ⑤ 防止 GitHub Pages 快取問題 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>外籍看護補充合約製作工具 v10.9</title>
 <!-- v10.9 修復：DOMContentLoaded 初始化、全域錯誤監控、generatePreview try/catch 防崩、radio 樣式同步、exportPDF 改用 rAF、localStorage 自動存還原 -->
 <style>
@@ -563,6 +567,10 @@
   }
 }
 
+
+  /* ③ 預覽區覆蓋修正：隱藏時的 contract-page 不得攔截點擊事件 */
+  .form-card.hidden .contract-page { pointer-events: none; }
+  .form-card.hidden { pointer-events: none; }
 
   /* ===== STEP NAV BUTTON ROW ===== */
   .step-nav-row {
@@ -1226,6 +1234,8 @@ function showSection(id) {
   if (!target) { console.warn('showSection: 找不到區段 #' + id); return; }
   document.querySelectorAll('.form-card').forEach(c => c.classList.add('hidden'));
   target.classList.remove('hidden');
+  // ③ 還原可見區塊的 pointer-events
+  target.querySelectorAll('.contract-page').forEach(function(p) { p.style.pointerEvents = ''; });
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const ni = document.getElementById('nav-' + id);
@@ -1752,7 +1762,7 @@ function clearAll() {
     if (previewArea) previewArea.innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
     showSection('sec-party');
     // 清除 localStorage 自動存檔
-    try { localStorage.removeItem(LS_KEY); } catch(e) {}
+    safeStorageRemove(LS_KEY);
   }
 }
 
@@ -1816,7 +1826,7 @@ function autoSaveToStorage() {
     document.querySelectorAll('input[type=radio]').forEach(el => {
       if (el.name && el.value && el.checked) checked['radio:' + el.name] = el.value;
     });
-    localStorage.setItem(LS_KEY, JSON.stringify({ fields, checked, lang: currentLang, ts: Date.now() }));
+    safeStorageSet(LS_KEY, JSON.stringify({ fields, checked, lang: currentLang, ts: Date.now() }));
   } catch(e) {
     console.warn('自動存檔失敗：', e);
   }
@@ -1824,7 +1834,7 @@ function autoSaveToStorage() {
 
 function autoRestoreFromStorage() {
   try {
-    const raw = localStorage.getItem(LS_KEY);
+    const raw = safeStorageGet(LS_KEY);
     if (!raw) return;
     const data = JSON.parse(raw);
     if (!data || !data.fields) return;
@@ -1863,8 +1873,30 @@ function autoRestoreFromStorage() {
   }
 }
 
-// 每 30 秒自動存檔一次；任何 input 變動後也即時存
-(function initAutoSave() {
+// GitHub Pages 專用修復包：確保所有按鈕與欄位在 load 後可用
+window.addEventListener('load', function() {
+  // 解除可能被意外 disable 的按鈕與表單元素
+  document.querySelectorAll('button').forEach(function(btn) {
+    btn.disabled = false;
+  });
+  document.querySelectorAll('input, select, textarea').forEach(function(el) {
+    el.removeAttribute('disabled');
+  });
+
+  // ③ 預覽區覆蓋修正：確認 contract-preview-area 不會遮蔽其他操作區
+  // 若 sec-preview 未顯示，確保 contract-page 不佔用 pointer-events
+  var previewCard = document.getElementById('sec-preview');
+  if (previewCard && previewCard.classList.contains('hidden')) {
+    var pages = previewCard.querySelectorAll('.contract-page');
+    pages.forEach(function(p) { p.style.pointerEvents = 'none'; });
+  }
+
+  // ④ load 後再次同步 checkbox（防止還原後未執行）
+  try { syncCheckboxState(); } catch(e) {}
+
+  console.log('v10.9 GitHub Ready ✅');
+});
+
   document.addEventListener('input',  autoSaveToStorage);
   document.addEventListener('change', autoSaveToStorage);
   setInterval(autoSaveToStorage, 30000);
@@ -1911,12 +1943,34 @@ function validateDates() {
 // ===== XSS SANITIZER (防止使用者輸入含有 HTML 標籤) =====
 function escHtml(str) {
   if (!str) return '';
-  return String(str)
-    。replace(/&/g, '&amp;')
-    。replace(/</g, '&lt;')
-    。replace(/>/g, '&gt;')
-    。replace(/"/g, '&quot;')
-    。replace(/'/g, '&#39;');
+  // 使用 DOM API 確保最安全的 HTML 跳脫（優於 regex 替換）
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
+}
+
+// ② safeStorage：防止 Safari 隱私模式、無痕模式或某些手機瀏覽器拋錯
+function safeStorageSet(key, val) {
+  try {
+    localStorage.setItem(key, val);
+  } catch(e) {
+    console.warn('[Storage] 寫入失敗（可能為無痕模式）：', e);
+  }
+}
+function safeStorageGet(key) {
+  try {
+    return localStorage.getItem(key);
+  } catch(e) {
+    console.warn('[Storage] 讀取失敗：', e);
+    return null;
+  }
+}
+function safeStorageRemove(key) {
+  try {
+    localStorage.removeItem(key);
+  } catch(e) {
+    console.warn('[Storage] 刪除失敗：', e);
+  }
 }
 
 // ===== GLOBAL ERROR MONITOR =====
@@ -1929,22 +1983,55 @@ window.addEventListener('unhandledrejection', function(e) {
   console.error('[未處理 Promise 錯誤]', e.reason);
 });
 
+// ④ checkbox 樣式同步強制修正函式
+function syncCheckboxState() {
+  document.querySelectorAll('.checkbox-label input[type=checkbox]').forEach(function(el) {
+    const lbl = el.closest('.checkbox-label');
+    if (lbl) lbl.classList.toggle('checked', el.checked);
+  });
+  // radio 同步
+  document.querySelectorAll('.checkbox-label input[type=radio]').forEach(function(el) {
+    const lbl = el.closest('.checkbox-label');
+    if (lbl) lbl.classList.toggle('checked', el.checked);
+  });
+}
+
 // ===== INITIALIZATION (DOMContentLoaded 確保 DOM 已就緒) =====
 document.addEventListener('DOMContentLoaded', function () {
-  // 安全呼叫 showSection
-  if (typeof showSection === 'function') {
-    showSection('sec-party');
-  } else {
-    console.error('showSection 函式未定義，請確認 JS 載入順序');
+  // ① 各初始化函式分別 try/catch，任一失敗不影響其他
+  try {
+    if (typeof showSection === 'function') {
+      showSection('sec-party');
+    } else {
+      console.error('showSection 函式未定義，請確認 JS 載入順序');
+    }
+  } catch(e) {
+    console.error('[init] showSection 失敗：', e);
   }
-  // 安全呼叫 updatePageStyle
-  if (typeof updatePageStyle === 'function') {
-    updatePageStyle();
-  } else {
-    console.warn('updatePageStyle 函式未定義，跳過初始化列印樣式');
+
+  try {
+    if (typeof updatePageStyle === 'function') {
+      updatePageStyle();
+    } else {
+      console.warn('updatePageStyle 函式未定義，跳過初始化列印樣式');
+    }
+  } catch(e) {
+    console.error('[init] updatePageStyle 失敗：', e);
   }
+
   // localStorage 自動還原（若有）
-  autoRestoreFromStorage();
+  try {
+    autoRestoreFromStorage();
+  } catch(e) {
+    console.error('[init] autoRestoreFromStorage 失敗：', e);
+  }
+
+  // ④ 確保還原後 checkbox 樣式正確同步
+  try {
+    syncCheckboxState();
+  } catch(e) {
+    console.error('[init] syncCheckboxState 失敗：', e);
+  }
 });
 </script>
 </body>
