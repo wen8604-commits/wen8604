@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍看護補充合約製作工具 v11.2（列印優化＋HTML匯出版）</title>
+<title>外籍看護補充合約製作工具 v12（列印優化＋HTML匯出版）</title>
 <!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
@@ -605,7 +605,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v11.2</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v12</span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
@@ -665,7 +665,7 @@
           <div class="form-group"><label>雇主姓名 Name</label><input type="text" id="emp_name" placeholder="例：王大明"></div>
           <div class="form-group"><label>身分證字號 ID No.</label><input type="text" id="emp_id" placeholder="A123456789" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
           <div class="form-group"><label>聯絡電話 Phone</label><input type="text" id="emp_phone" placeholder="0912-345-678"></div>
-          <div class="form-group"><label>電子信箱 Email</label><input type="text" id="emp_email" placeholder="example@mail.com"></div>
+          <div class="form-group"><label>電子信箱 Email</label><input type="email" id="emp_email" placeholder="example@mail.com"></div>
           <div class="form-group span-2"><label>地址 Address</label><input type="text" id="emp_addr" placeholder="請輸入主聘僱合約登記之工作地址"></div>
         </div>
         <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--gold);padding-left:8px;">乙方（外籍看護）</h3>
@@ -853,7 +853,7 @@
               <option value="off_2">每週休2天</option>
             </select>
           </div>
-          <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="4" max="12"></div>
+          <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="6" max="12" oninput="validateRestHours(this)"></div>
           <div class="form-group"><label>未休假加班費核算</label>
             <select id="overtime">
               <option value="ot_1">依勞動部家庭看護工規定（現行每日NT$733元）</option>
@@ -1500,7 +1500,6 @@ function _doGeneratePreview(previewEl) {
 
 <div class="contract-page">
   <div class="c-section-bar">${t.ch3}</div>
-  <div style="font-size:9pt;color:#555;text-align:right;margin-bottom:6px;">合約有效期間：${startStr} ～ ${endStr}</div>
   <div class="c-article">
     <div class="c-article-num">${t.art3}</div>
     <ul class="c-list">
@@ -1571,7 +1570,6 @@ function _doGeneratePreview(previewEl) {
 
 <div class="contract-page">
   <div class="c-section-bar gold">${t.ch5}</div>
-  <div style="font-size:9pt;color:#555;text-align:right;margin-bottom:6px;">合約有效期間：${startStr} ～ ${endStr}</div>
   <div class="c-article">
     <div class="c-article-num">${t.art5}</div>
     <ul class="c-list">
@@ -1708,7 +1706,7 @@ function exportHTML() {
   try { generatePreview(); } catch(e) { console.error('exportHTML generatePreview 錯誤：', e); }
 
   const previewEl = document.getElementById('contract-preview-area');
-  if (!previewEl || previewEl.innerHTML.trim() === '' || previewEl.querySelector('[style*="尚未產生"]')) {
+  if (!previewEl || !previewEl.querySelector('.contract-page')) {
     alert('⚠️ 請先切換到「預覽與輸出」頁面，確認合約已產生後再匯出 HTML。');
     showSection('sec-preview');
     return;
@@ -1728,14 +1726,21 @@ function exportHTML() {
   const empName = d.emp_name || '未填寫';
   const careName = d.care_name || '未填寫';
   const contractDate = d.contract_date || new Date().toISOString().slice(0,10);
-  const fileName = `補充合約_${empName}_${careName}_${contractDate}.html`;
+  // 檔名用安全字元（strip HTML-special chars）
+  const safeEmpName = empName.replace(/[<>"'&]/g, '');
+  const safeCareName = careName.replace(/[<>"'&]/g, '');
+  const fileName = `補充合約_${safeEmpName}_${safeCareName}_${contractDate}.html`;
+  // HTML 內容用完整 escHtml 跳脫（title / toolbar hint）
+  const empNameEsc = escHtml(empName);
+  const careNameEsc = escHtml(careName);
+  const contractDateEsc = escHtml(contractDate);
 
   const fullHTML = `<!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護補充合約 - ${empName} / ${careName}</title>
+<title>外籍看護補充合約 - ${empNameEsc} / ${careNameEsc}</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif; background: #f0f0f0; }
@@ -1826,7 +1831,7 @@ function exportHTML() {
   <div class="export-toolbar no-print">
     <div>
       <span class="brand">📋 外籍看護補充合約</span>
-      <span class="hint">　雇主：${empName}　看護：${careName}　日期：${contractDate}</span>
+      <span class="hint">　雇主：${empNameEsc}　看護：${careNameEsc}　日期：${contractDateEsc}</span>
     </div>
     <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存為 PDF</button>
   </div>
@@ -1850,7 +1855,7 @@ function exportHTML() {
     // 顯示成功提示
     const banner = document.createElement('div');
     banner.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;background:#27ae60;color:white;font-size:13px;font-family:"Microsoft JhengHei",sans-serif;padding:12px 20px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;';
-    banner.innerHTML = '✅ <strong>合約 HTML 已下載：</strong>' + fileName + '　<button onclick="this.parentNode.remove()" style="margin-left:8px;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;">✕</button>';
+    banner.innerHTML = '✅ <strong>合約 HTML 已下載：</strong>' + escHtml(fileName) + '　<button onclick="this.parentNode.remove()" style="margin-left:8px;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;">✕</button>';
     document.body.appendChild(banner);
     setTimeout(() => { if (banner.parentNode) banner.remove(); }, 5000);
   } catch(e) {
@@ -1864,6 +1869,7 @@ function fillSample() {
   document.getElementById('emp_name').value = '王大明';
   document.getElementById('emp_id').value = 'A123456789';
   document.getElementById('emp_phone').value = '0912-345-678';
+  document.getElementById('emp_email').value = 'wang.daming@example.com';
   document.getElementById('emp_addr').value = '台北市中正區羅斯福路四段1號';
   document.getElementById('care_name').value = 'SITI AMINAH';
   document.getElementById('care_nation').value = '印尼 / Indonesia';
@@ -1894,8 +1900,12 @@ function fillSample() {
   document.getElementById('contract_date').value = today;
   document.getElementById('start_date').value = today;
   
-  const end = new Date(); end.setFullYear(end.getFullYear() + 3);
+  // 合約上限3年 = 1095天，設1092天（ ~2年11個月）不觸發超期警告
+  const end = new Date();
+  end.setDate(end.getDate() + 1092);
   document.getElementById('end_date').value = end.toISOString().slice(0,10);
+  // 同步觸發日期驗證以清除任何殘留警告
+  validateDates();
   
   document.getElementById('pat_name').value = '王林阿嬤';
   document.getElementById('pat_age').value = '85';
@@ -1922,7 +1932,7 @@ function fillSample() {
 
 function clearAll() {
   if (confirm('確定要清除所有填寫的資料？')) {
-    document.querySelectorAll('input[type=text], input[type=date], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type=text], input[type=date], input[type=email], textarea').forEach(el => el.value = '');
     document.querySelectorAll('input[type=number]').forEach(el => {
       // Reset each number input to its specific default
       if (el.id === 'salary') { el.value = '20000'; }
@@ -1952,6 +1962,9 @@ function clearAll() {
     if (dateWarn) dateWarn.style.display = 'none';
     const partyWarn = document.getElementById('party-warn');
     if (partyWarn) partyWarn.style.display = 'none';
+    // Also reset rest_hours border if validateRestHours had triggered
+    const restHoursEl = document.getElementById('rest_hours');
+    if (restHoursEl) restHoursEl.style.borderColor = '';
     // Reset preview area
     const previewArea = document.getElementById('contract-preview-area');
     if (previewArea) previewArea.innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
@@ -1986,6 +1999,7 @@ function goToAgency() {
   else if (!validateTWID(v('emp_id').toUpperCase())) missing.push('身分證字號格式或校驗碼有誤，請對照實際身分證確認');
   if (!v('care_name')) missing.push('看護姓名');
   if (!v('care_nation')) missing.push('看護國籍');
+  if (!v('care_passport')) missing.push('護照號碼（重要法律文件欄位）');
   if (!v('contract_date')) missing.push('簽約日期');
   if (!v('start_date')) missing.push('合約生效起日');
   if (!v('end_date')) missing.push('合約截止日');
@@ -2003,12 +2017,12 @@ function goToAgency() {
 }
 
 // ===== localStorage 自動存檔 / 還原 =====
-const LS_KEY = 'care_contract_v10_autosave';
+const LS_KEY = 'care_contract_v12_autosave';
 
 function autoSaveToStorage() {
   try {
     const fields = {};
-    document.querySelectorAll('input[type=text], input[type=date], input[type=number], textarea').forEach(el => {
+    document.querySelectorAll('input[type=text], input[type=date], input[type=number], input[type=email], textarea').forEach(el => {
       if (el.id) fields[el.id] = el.value;
     });
     document.querySelectorAll('select').forEach(el => {
@@ -2033,7 +2047,7 @@ function autoRestoreFromStorage() {
     if (!raw) return;
     const data = JSON.parse(raw);
     if (!data || !data.fields) return;
-    // 還原文字/數字/日期/select 欄位
+    // 還原文字/數字/日期/email/select 欄位
     Object.keys(data.fields).forEach(id => {
       const el = document.getElementById(id);
       if (el) el.value = data.fields[id];
@@ -2073,11 +2087,11 @@ window.addEventListener('load', function() {
   // ⑤ 【高風險修復⑤】驗證關鍵函式是否全部存在（CDN 或 JS 截斷時的保險）
   var REQUIRED_FUNCTIONS = ['showSection','setLang','fillSample','clearAll','exportPDF','exportHTML',
     'generatePreview','updatePageStyle','autoSaveToStorage','autoRestoreFromStorage',
-    'syncCheckboxState','validateSalary','validateDates','safeStorageSet','safeCall'];
+    'syncCheckboxState','validateSalary','validateDates','validateRestHours','safeStorageSet','safeCall'];
   var missing = REQUIRED_FUNCTIONS.filter(function(fn) { return typeof window[fn] !== 'function'; });
   if (missing.length > 0) {
     var msg = '⚠️ 以下 JS 函式載入失敗，部分功能將無法使用：\n' + missing.join(', ') + '\n\n請嘗試：強制重新整理（Ctrl+Shift+R / Cmd+Shift+R）';
-    console.error('[v11 函式驗證]', msg);
+    console.error('[v12 函式驗證]', msg);
     try {
       var banner = document.getElementById('_error_banner') || document.createElement('div');
       banner.id = '_error_banner';
@@ -2086,7 +2100,7 @@ window.addEventListener('load', function() {
       if (!banner.parentNode) document.body.appendChild(banner);
     } catch(_) {}
   } else {
-    console.log('[v11 函式驗證] ✅ 所有關鍵函式載入正常');
+    console.log('[v12 函式驗證] ✅ 所有關鍵函式載入正常');
   }
 
   // 解除可能被意外 disable 的按鈕與表單元素
@@ -2108,7 +2122,7 @@ window.addEventListener('load', function() {
   // ④ load 後再次同步 checkbox（防止還原後未執行）
   try { syncCheckboxState(); } catch(e) {}
 
-  console.log('v11 GitHub Ready ✅');
+  console.log('v12 GitHub Ready ✅');
 });
 
 document.addEventListener('input',  autoSaveToStorage);
@@ -2133,15 +2147,17 @@ function validateDates() {
   const s = document.getElementById('start_date').value;
   const e = document.getElementById('end_date').value;
   const warn = document.getElementById('date-warning');
+  if (!warn) return;
   if (s && e) {
     const diffDays = (new Date(e) - new Date(s)) / 86400000;
     if (new Date(e) < new Date(s)) {
       warn.style.display = 'block';
-      warn.innerHTML = '⚠️ 合約截止日不可早於生效起日，請重新檢查日期！';
+      warn.textContent = '⚠️ 合約截止日不可早於生效起日，請重新檢查日期！';
       document.getElementById('end_date').style.borderColor = 'var(--red)';
     } else if (diffDays > 1095) {
+      const years = Math.round(diffDays / 365 * 10) / 10;
       warn.style.display = 'block';
-      warn.innerHTML = '⚠️ <strong>注意：合約期限超過3年（約 ' + Math.round(diffDays/365*10)/10 + ' 年）</strong>。依就服法外籍家庭看護工每次聘僱上限為3年，請確認是否正確。';
+      warn.innerHTML = '⚠️ <strong>注意：合約期限超過3年（約 ' + years + ' 年）</strong>。依就服法外籍家庭看護工每次聘僱上限為3年，請確認是否正確。';
       document.getElementById('end_date').style.borderColor = 'var(--gold)';
     } else {
       warn.style.display = 'none';
@@ -2150,6 +2166,16 @@ function validateDates() {
   } else {
     warn.style.display = 'none';
     document.getElementById('end_date').style.borderColor = '';
+  }
+}
+
+// ===== REST HOURS VALIDATION =====
+function validateRestHours(el) {
+  const val = parseInt(el.value);
+  if (el.value && (isNaN(val) || val < 8)) {
+    el.style.borderColor = 'var(--gold)';
+  } else {
+    el.style.borderColor = '';
   }
 }
 
@@ -2202,7 +2228,23 @@ window.onerror = function(msg, url, line, col, err) {
       banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
       document.body.appendChild(banner);
     }
-    banner.innerHTML = '⚠️ <strong>JS 錯誤（GitHub 偵錯）：</strong>' + msg + '　<span style="opacity:0.75">第 ' + line + ' 行</span>　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    // 使用 textContent 插入動態內容，避免 XSS
+    banner.innerHTML = '';
+    var label = document.createElement('span');
+    label.innerHTML = '⚠️ <strong>JS 錯誤（GitHub 偵錯）：</strong>';
+    var msgSpan = document.createElement('span');
+    msgSpan.textContent = msg;
+    var lineSpan = document.createElement('span');
+    lineSpan.style.opacity = '0.75';
+    lineSpan.textContent = '　第 ' + line + ' 行';
+    var closeBtn = document.createElement('button');
+    closeBtn.style.cssText = 'margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;';
+    closeBtn.textContent = '✕ 關閉';
+    closeBtn.onclick = function() { banner.style.display = 'none'; };
+    banner.appendChild(label);
+    banner.appendChild(msgSpan);
+    banner.appendChild(lineSpan);
+    banner.appendChild(closeBtn);
     banner.style.display = 'flex';
   } catch(_) {}
   return false;
@@ -2214,8 +2256,20 @@ window.addEventListener('unhandledrejection', function(e) {
     var banner = document.getElementById('_error_banner') || document.createElement('div');
     banner.id = '_error_banner';
     banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
-    banner.innerHTML = '⚠️ <strong>Promise 錯誤：</strong>' + msg + '　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    banner.innerHTML = '';
+    var label = document.createElement('span');
+    label.innerHTML = '⚠️ <strong>Promise 錯誤：</strong>';
+    var msgSpan = document.createElement('span');
+    msgSpan.textContent = msg;
+    var closeBtn = document.createElement('button');
+    closeBtn.style.cssText = 'margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;';
+    closeBtn.textContent = '✕ 關閉';
+    closeBtn.onclick = function() { banner.style.display = 'none'; };
+    banner.appendChild(label);
+    banner.appendChild(msgSpan);
+    banner.appendChild(closeBtn);
     if (!banner.parentNode) document.body.appendChild(banner);
+    banner.style.display = 'flex';
   } catch(_) {}
 });
 
