@@ -212,7 +212,7 @@
     .content-area { padding: 0 !important; }
     /* Hide all form-cards except sec-preview */
     .form-card { display: none !important; }
-    #sec-preview { display: block !important; background: white !important;
+    .form-card#sec-preview { display: block !important; background: white !important;
       box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 !important; }
     #contract-print-wrapper { display: block !important; }
     #contract-preview-area { background: white !important; padding: 0 !important; border-radius: 0 !important; }
@@ -426,7 +426,7 @@
         </div>
         <div class="form-grid">
           <div class="form-group"><label>被照顧者姓名</label><input type="text" id="pat_name" placeholder="例：王林阿嬤"></div>
-          <div class="form-group"><label>年齡</label><input type="number" id="pat_age" placeholder="85"></div>
+          <div class="form-group"><label>年齡</label><input type="number" id="pat_age" placeholder="85" min="0" max="120"></div>
           <div class="form-group span-2"><label>主要症狀描述</label><input type="text" id="pat_health" placeholder="例：行動不便、輕度失智、需餵食"></div>
           <div class="form-group span-2"><label>醫院診斷疾病</label><input type="text" id="pat_illness" placeholder="例：腦中風、帕金森氏症"></div>
         </div>
@@ -490,7 +490,7 @@
           <div><h2>第三章：薪資待遇與休息休假</h2><p>合規提醒：約定薪資不得低於勞動部核定之最低標準，請依實際聘僱條件填寫</p></div>
         </div>
         <div class="form-grid">
-          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" oninput="validateSalary(this)"></div>
+          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" oninput="validateSalary(this)" onchange="validateSalary(this)" onpaste="setTimeout(()=>validateSalary(this),0)"></div>
           <div class="form-group"><label>固定發薪日期</label>
             <select id="pay_day">
               <option value="">-- 請選擇日期 --</option>
@@ -537,7 +537,7 @@
               <option value="off_2">每週休2天</option>
             </select>
           </div>
-          <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="6" max="10"></div>
+          <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="4" max="12"></div>
           <div class="form-group"><label>未休假加班費核算</label>
             <select id="overtime">
               <option value="ot_1">依勞動部家庭看護工規定（現行每日NT$733元）</option>
@@ -559,12 +559,15 @@
           <div class="form-group"><label>每日正式工作結束時間</label>
             <select id="work_end">
               <option value="">-- 選填 --</option>
+              <option value="18:00">下午 18:00</option>
+              <option value="19:00">下午 19:00</option>
               <option value="20:00">晚上 20:00</option>
               <option value="21:00">晚上 21:00</option>
               <option value="22:00">晚上 22:00</option>
               <option value="22:30">晚上 22:30</option>
               <option value="23:00">晚上 23:00</option>
               <option value="23:30">晚上 23:30</option>
+              <option value="24:00">深夜 24:00（跨夜）</option>
             </select>
           </div>
           <div class="form-group"><label>照護日誌填寫方式</label>
@@ -908,8 +911,10 @@ document.addEventListener('change', function(e) {
 
 // ===== NAVIGATION =====
 function showSection(id) {
+  const target = document.getElementById(id);
+  if (!target) { console.warn('showSection: 找不到區段 #' + id); return; }
   document.querySelectorAll('.form-card').forEach(c => c.classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
+  target.classList.remove('hidden');
 
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const ni = document.getElementById('nav-' + id);
@@ -1086,6 +1091,9 @@ function generatePreview() {
     <p><strong>${t.passport}：</strong>${fld(esc(d.care_passport), 150)} &nbsp;&nbsp; <strong>${t.nation}：</strong>${fld(esc(d.care_nation), 130)}</p>
     <p><strong>${t.arc}：</strong>${fld(esc(d.care_arc), 150)}</p>
     ${d.agency_name ? `<div style="margin-top:8px; border-top:1px dashed #ccc; padding-top:6px;"><p><strong>承辦仲介機構 / Agency：</strong>${fld(esc(d.agency_name), 200)} &nbsp;&nbsp; 許可證字號：${fld(esc(d.agency_license), 180)}</p><p>仲介聯絡電話：${fld(esc(d.agency_phone), 150)} &nbsp;&nbsp; 承辦人員：${fld(esc(d.agency_contact), 120)}</p></div>` : ''}
+    <div style="margin-top:8px; border-top:1px dashed #ccc; padding-top:6px; font-size:10pt;">
+      <p><strong>合約簽署日期：</strong>${fld(esc(dateStr), 140)} &nbsp;&nbsp; <strong>有效期間：</strong><span style="font-weight:bold; color:#1a2744;">${startStr} ～ ${endStr}</span></p>
+    </div>
   </div>
 
   <div class="c-important">${t.note}</div>
@@ -1213,13 +1221,13 @@ function generatePreview() {
         <p><strong>${t.partyA}：</strong></p>
         <div class="c-sig-line"></div>
         <p class="c-sig-hint">${t.sigHint}</p>
-        <p>身分證號 / ID: ${esc(d.emp_id)}</p>
+        <p>身分證號 / ID: ${fld(esc(d.emp_id), 160)}</p>
       </div>
       <div class="c-sig-item">
         <p><strong>${t.partyB}：</strong></p>
         <div class="c-sig-line"></div>
         <p class="c-sig-hint">${t.sigHint}</p>
-        <p>護照號碼 / Passport: ${esc(d.care_passport)}</p>
+        <p>護照號碼 / Passport: ${fld(esc(d.care_passport), 160)}</p>
       </div>
     </div>
     
@@ -1358,6 +1366,7 @@ function fillSample() {
   
   document.getElementById('salary').value = '20000';
   document.getElementById('rest_hours').value = '8';
+  document.getElementById('pay_day').value = '每月5日 / Every 5th';
   document.getElementById('duties_extra').value = '每週六傍晚推輪椅至社區中庭散步30分鐘';
   
   // 更新 checkbox 狀態樣式（觸發 change 事件確保所有群組正確亮起）
@@ -1374,7 +1383,12 @@ function fillSample() {
 
 function clearAll() {
   if (confirm('確定要清除所有填寫的資料？')) {
-    document.querySelectorAll('input[type=text], input[type=date], input[type=number], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type=text], input[type=date], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type=number]').forEach(el => {
+      // Reset to default value or 0
+      el.value = el.defaultValue !== undefined && el.defaultValue !== '' ? el.defaultValue : '0';
+      el.style.borderColor = '';
+    });
     // Reset selects to first option
     document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
     // Uncheck all checkboxes
