@@ -2,7 +2,9 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
 <title>外籍看護日誌 — 客製化設定精靈</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
@@ -699,12 +701,13 @@ body{
 /* ══════════════════════════════════════
    PRINT / PDF 列印樣式
    防止元素在分頁時被切斷
+   iOS/iPadOS Safari & macOS Safari 最佳化
 ══════════════════════════════════════ */
 @media print {
-  /* ── 頁面設定 ── */
+  /* ── 頁面設定（A4 直向，iOS Safari 相容）── */
   @page {
     size: A4 portrait;
-    margin: 15mm 12mm 15mm 12mm;
+    margin: 12mm 10mm 14mm 10mm;
   }
 
   /* ── 隱藏非列印元素 ── */
@@ -731,6 +734,8 @@ body{
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
+    /* iOS Safari requires this on every element */
+    -webkit-filter: none !important;
   }
 
   html, body {
@@ -738,6 +743,9 @@ body{
     margin: 0 !important;
     padding: 0 !important;
     font-size: 12px !important;
+    /* Prevent iOS font size inflation */
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
   }
 
   /* ── 版面容器 ── */
@@ -985,7 +993,7 @@ body{
     <div class="topbar-sub">Caregiver Log Customization Wizard</div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
-    <button class="tlbtn" onclick="window.print()" title="列印 / 儲存 PDF" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
+    <button class="tlbtn" onclick="wizardPrint()" title="列印 / 儲存 PDF" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
       🖨️ <span style="font-size:11px;">列印/PDF</span>
     </button>
     <div class="topbar-lang">
@@ -1936,8 +1944,10 @@ body{
       <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
     </div>
   </div>
-  <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px;">
-    💡 <span>建議使用下方日誌內的 <strong>「🖨️ 列印 / 存PDF」</strong> 按鈕，以確保只列印日誌本身，避免瀏覽器相容問題。</span>
+  <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:flex-start;gap:8px;">
+    💡 <span>點擊下方日誌內的 <strong>「🖨️ 列印 / 存PDF」</strong>按鈕列印。<br>
+    <strong>iPhone / iPad 用戶：</strong>會自動開新分頁，點列印後選「儲存為 PDF」即可。<br>
+    <strong>Mac Safari：</strong>點列印 → 左下角「PDF」→「儲存為 PDF」。</span>
   </div>
   <div class="output-frame-wrap">
     <iframe id="outputFrame" class="output-frame"></iframe>
@@ -2307,20 +2317,77 @@ function generateLog() {
   }, 200);
 }
 
+/* ══════════════════════════════════════
+   PLATFORM DETECTION
+══════════════════════════════════════ */
+function isAppleMobile() {
+  // Detects iPhone, iPad, iPod (including iPad reporting as Mac in newer iOS)
+  const ua = navigator.userAgent || '';
+  const isIOSUA = /iPad|iPhone|iPod/.test(ua);
+  const isIPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+  return isIOSUA || isIPadOS;
+}
+function isApple() {
+  const ua = navigator.userAgent || '';
+  return isAppleMobile() || /Macintosh/.test(ua);
+}
+function isSafari() {
+  const ua = navigator.userAgent || '';
+  return /Safari/.test(ua) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(ua);
+}
+
+/* Wizard-level print (prints the wizard form, not the generated log) */
+function wizardPrint() {
+  // On Apple/Safari, window.print() works fine for the wizard itself
+  window.print();
+}
+
 function printOutput() {
   const iframe = document.getElementById('outputFrame');
+  const html = iframe.srcdoc || '';
+
+  // iOS Safari: iframe.contentWindow.print() is unreliable.
+  // Open the log HTML in a new tab and print from there.
+  if (isAppleMobile() || (isApple() && isSafari())) {
+    const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const win  = window.open(url, '_blank');
+    if (win) {
+      win.addEventListener('load', () => {
+        setTimeout(() => {
+          win.print();
+          // Release blob URL after a delay
+          setTimeout(() => URL.revokeObjectURL(url), 60000);
+        }, 600); // slight delay for fonts/render
+      });
+    } else {
+      // Popup blocked fallback: write directly
+      const w = window.open('', '_blank');
+      if (w) {
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+        w.addEventListener('load', () => setTimeout(() => w.print(), 600));
+      }
+    }
+    return;
+  }
+
+  // Desktop Chrome / Firefox: try iframe print, fall back to new window
   function doprint() {
     try {
       iframe.contentWindow.focus();
       iframe.contentWindow.print();
     } catch(e) {
-      // Cross-origin fallback: open in new window
-      const html = iframe.srcdoc;
+      // Cross-origin or blocked fallback
       if (html) {
         const w = window.open('', '_blank');
-        w.document.write(html);
-        w.document.close();
-        w.onload = () => w.print();
+        if (w) {
+          w.document.open();
+          w.document.write(html);
+          w.document.close();
+          w.addEventListener('load', () => setTimeout(() => w.print(), 400));
+        }
       } else {
         window.print();
       }
@@ -2983,7 +3050,9 @@ function buildLogHTML() {
 <html lang="${mainLang}">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
 <title>${titleMap[mainLang]||titleMap.zh}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -2997,21 +3066,85 @@ table{width:100%;border-collapse:collapse;}
 tr { page-break-inside: avoid; break-inside: avoid; }
 .no-break { page-break-inside: avoid; break-inside: avoid; }
 @media print{
+  /* iOS/macOS Safari: must declare color-adjust on every element */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    -webkit-text-size-adjust: 100% !important;
+    text-size-adjust: 100% !important;
+  }
   body{background:white;}
   .action-bar{display:none!important;}
-  .page{margin:0;box-shadow:none;width:210mm;max-width:210mm;padding:12mm 10mm 14mm;}
-  @page{size:A4 portrait;margin:6mm;}
-  table { page-break-inside: auto; }
+  /* iOS Safari ignores width:210mm inside iframe; use 100% with safe padding */
+  .page{
+    margin:0 auto;
+    box-shadow:none;
+    /* Desktop: fixed A4 width; iOS/mobile: full width */
+    width:210mm;
+    max-width:100%;
+    padding:10mm 8mm 12mm;
+  }
+  @page{
+    size:A4 portrait;
+    /* Narrow margins so content fits on iPhone/iPad rendered PDF */
+    margin:8mm 6mm;
+  }
+  table { page-break-inside: auto; width: 100% !important; }
   tr { page-break-inside: avoid; break-inside: avoid; }
   thead { display: table-header-group; }
   tfoot { display: table-footer-group; }
+  /* Ensure background colors print on Safari */
+  td, th { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  /* Inputs: show values clearly when printed */
+  input[type=text], input[type=number], input[type=date] {
+    border: none !important;
+    border-bottom: 1px solid #999 !important;
+    background: transparent !important;
+    -webkit-appearance: none;
+  }
+  input[type=checkbox] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 11px; height: 11px;
+    border: 1.5px solid #555;
+    border-radius: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  input[type=checkbox]:checked {
+    background: #333 !important;
+    -webkit-print-color-adjust: exact !important;
+  }
 }
-@media(max-width:640px){.page{padding:8px;}.action-bar{padding:6px 8px;}}
+@media(max-width:640px){.page{padding:8px;width:100%;}.action-bar{padding:6px 8px;}}
 </style>
+<script>
+// iOS/Apple platform detection inside generated log
+function _isAppleMobile(){
+  var ua=navigator.userAgent||'';
+  return /iPad|iPhone|iPod/.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+}
+function _isSafari(){
+  var ua=navigator.userAgent||'';
+  return /Safari/.test(ua)&&!/Chrome|CriOS|FxiOS|EdgiOS/.test(ua);
+}
+function logPrint(){
+  // iOS Safari: window.print() works well when page is opened directly (not in iframe)
+  // This log is opened as a standalone page, so window.print() is correct here.
+  // Add a tiny delay to ensure fonts are loaded on mobile.
+  setTimeout(function(){ window.print(); }, 150);
+}
+// Auto-trigger print if URL has ?print=1 (set by parent window on iOS)
+if(window.location.search.indexOf('print=1')>-1){
+  window.addEventListener('load',function(){ setTimeout(logPrint,800); });
+}
+</script>
 </head>
 <body>
 <div class="action-bar">
-  <button class="btn-print" onclick="window.print()">🖨️ ${B('列印 / 存PDF','Print / Save PDF','Cetak / PDF','In / PDF')}</button>
+  <button class="btn-print" onclick="logPrint()">🖨️ ${B('列印 / 存PDF','Print / Save PDF','Cetak / PDF','In / PDF')}</button>
 </div>
 <div class="page">
   <div style="text-align:center;padding-bottom:12px;border-bottom:3px solid ${theme.pri};margin-bottom:16px;">
