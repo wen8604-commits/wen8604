@@ -10,8 +10,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍看護補充合約製作工具 </title>
-<!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
+<title>外籍看護補充合約製作工具</title>
+<!-- v17.0 修復版：①fillSample範例月薪校驗修正、②LS_KEY對齊v17、③ot_1加班費金額修正為828元、④safeCall支援多參數、⑤exportHTML XSS修正、⑥narrow邊距修正、⑦care_arc非必填UI明確標示、⑧fillSample觸發validateSalary ⑨日期分隔符改為「月」「日」正體中文 ⑩工作時段結束選項補足至深夜24:30 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -592,6 +592,147 @@
 }
 
 
+  /* ===== iOS / iPadOS / macOS Safari 列印與 PDF 優化 ===== */
+
+  /* iOS Safari：強制啟用彩色列印（-webkit前綴必要） */
+  * {
+    -webkit-print-color-adjust: exact !important;
+  }
+
+  /* iOS Safari 列印：contract-page 改用 % 寬度取代 mm（Safari 忽略 @page size） */
+  @media print {
+    html {
+      /* iOS Safari 需要此設定確保列印基準正確 */
+      -webkit-text-size-adjust: 100%;
+      font-size: 10pt;
+    }
+    .contract-page {
+      /* iOS Safari @page size 無效時的 fallback：改用 100% 寬，讓系統決定頁面大小 */
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 8mm 10mm !important;
+      margin: 0 !important;
+      /* iOS Safari 強制換頁 */
+      -webkit-break-after: page;
+      break-after: page;
+      page-break-after: always;
+      /* 確保背景色被列印 */
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .contract-page:last-child {
+      -webkit-break-after: auto;
+      break-after: auto;
+      page-break-after: auto;
+    }
+    /* iOS Safari 背景色列印修正（帶有 background-color 的區塊） */
+    .c-section-bar,
+    .c-section-bar.alt,
+    .c-section-bar.red,
+    .c-section-bar.gold,
+    .c-parties,
+    .c-article,
+    .c-article.highlight,
+    .c-important,
+    .c-redbox,
+    .c-lang-badge {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+  }
+
+  /* iOS 觸控按鈕優化：確保 tap target 最小 44×44pt（Apple HIG 標準） */
+  @media screen and (max-width: 768px) {
+    .btn {
+      min-height: 44px;
+      min-width: 44px;
+      -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+      touch-action: manipulation; /* 消除 300ms 點擊延遲 */
+    }
+    /* iOS Safari 輸入框避免自動縮放（已有 font-size:16px，此為額外保險） */
+    input, select, textarea {
+      touch-action: manipulation;
+      -webkit-appearance: none; /* 移除 iOS 預設樣式 */
+    }
+    select {
+      /* iOS select 需要此設定才能正常顯示自訂背景 */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a4a6a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 32px;
+    }
+    /* 步驟導航按鈕組 iOS 優化 */
+    .step-nav-row .btn {
+      min-height: 48px;
+      font-size: 15px;
+    }
+  }
+
+  /* iOS Safe Area（iPhone 劉海/Dynamic Island/底部Home Bar 安全區） */
+  @supports (padding: env(safe-area-inset-bottom)) {
+    .top-nav {
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
+    }
+    /* 底部操作區留出 Home Bar 空間 */
+    .content-area {
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+    /* 預覽區底部按鈕不被 Home Bar 遮擋 */
+    .preview-controls {
+      padding-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* iPad 橫向模式（landscape split view）優化 */
+  @media screen and (min-width: 1024px) and (orientation: landscape) {
+    .main-layout { padding: 16px 20px; }
+  }
+
+  /* iOS 預覽區滾動優化（防止橡皮筋效果影響列印預覽） */
+  @media screen and (max-width: 1024px) {
+    #contract-preview-area {
+      -webkit-overflow-scrolling: touch;
+      overflow-y: auto;
+    }
+    /* 合約預覽縮小以符合行動螢幕 */
+    .contract-page {
+      transform-origin: top left;
+    }
+  }
+
+  /* iOS 列印提示橫幅樣式 */
+  #ios-print-hint {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99998;
+    background: #1a2744;
+    color: white;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    max-width: calc(100vw - 40px);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.35);
+    line-height: 1.6;
+    text-align: center;
+  }
+  #ios-print-hint .hint-close {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font-body);
+  }
+
   /* ③ 預覽區覆蓋修正：隱藏時的 contract-page 不得攔截點擊事件 */
   .form-card.hidden .contract-page { pointer-events: none; }
   .form-card.hidden { pointer-events: none; }
@@ -628,7 +769,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v12</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍看護補充合約製作工具 v17</span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
@@ -706,7 +847,7 @@
             </select>
           </div>
           <div class="form-group"><label>護照號碼 Passport No.</label><input type="text" id="care_passport" placeholder="例：XG123456"></div>
-          <div class="form-group"><label>居留證號 ARC No.</label><input type="text" id="care_arc" placeholder="例：HD01234567"></div>
+          <div class="form-group"><label>居留證號 ARC No. <span style="font-weight:400;color:var(--text-light);">（選填，新到任者可留空）</span></label><input type="text" id="care_arc" placeholder="例：HD01234567"></div>
         </div>
         <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--navy-mid);padding-left:8px;">合約期程</h3>
         <div class="form-grid cols-3">
@@ -879,7 +1020,7 @@
           <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="6" max="12" oninput="validateRestHours(this)"></div>
           <div class="form-group"><label>未休假加班費核算</label>
             <select id="overtime">
-              <option value="ot_1">依勞動部家庭看護工規定（現行每日NT$733元）</option>
+              <option value="ot_1">依勞動部家庭看護工規定（現行每日NT$828元）</option>
               <option value="ot_2">由雙方另行按日依法定標準加給</option>
             </select>
           </div>
@@ -906,7 +1047,7 @@
               <option value="22:30">晚上 22:30</option>
               <option value="23:00">晚上 23:00</option>
               <option value="23:30">晚上 23:30</option>
-              <option value="24:00">深夜 24:00（跨夜）</option>
+              <option value="24:00">深夜 24:00（午夜整）</option>
             </select>
           </div>
           <div class="form-group"><label>照護日誌填寫方式</label>
@@ -926,7 +1067,7 @@
             </select>
           </div>
         </div>
-        <div id="salary-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 約定薪資低於 2025 年家庭看護工最低標準 <strong>NT$20,000</strong>，請確認是否正確！</div>
+        <div id="salary-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 約定薪資低於勞動部核定家庭看護工最低標準 <strong>NT$20,000</strong>（依勞動部公告為準），請確認是否正確！</div>
         <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--red);padding-left:8px;">薪資加給項目（選填）</h3>
         <div class="help-box info" style="font-size:12px;">💰 可額外設定固定津貼或補助，將在合約薪資章節中同步列出。</div>
         <div class="form-grid">
@@ -1131,7 +1272,7 @@
             <label>頁邊距</label>
             <select onchange="applyPrintSetting('margin', this.value)">
               <option value="normal">標準 (18mm)</option>
-              <option value="narrow">窄版 (12mm)</option>
+              <option value="narrow">窄版 (10mm)</option>
               <option value="wide">寬版 (24mm)</option>
             </select>
           </div>
@@ -1142,6 +1283,7 @@
         </div>
 
         <div class="help-box success"><strong>✅ 預覽即所見即所得：</strong>下方合約樣式即為列印輸出效果。調整上方字級 / 頁邊距可即時更新預覽。</div>
+        <div id="ios-hint-box" class="help-box info" style="display:none;"><strong>📱 iPhone / iPad 儲存 PDF：</strong>點「匯出PDF/列印」後，在系統列印預覽畫面 <strong>用兩指放大</strong>，再點右上角 <strong>分享鈕 ⎋ → 儲存至檔案</strong>，即可將合約存成 PDF 到「文件」App。</div>
 
         <!-- 合約輸出區（直接列印此區，不再依賴隱藏 div）-->
         <div id="contract-print-wrapper">
@@ -1153,10 +1295,19 @@
 
     </div>
   </div>
+</div><!-- /.tool-wrapper -->
+
+<!-- iOS 列印提示浮層 -->
+<div id="ios-print-hint">
+  <strong>📱 iPhone / iPad 儲存 PDF 步驟：</strong><br>
+  點選「列印」後，在預覽畫面用<strong>兩指張開</strong>放大，<br>
+  再點右上角 <strong>分享 ⎋</strong> → 選「<strong>儲存至檔案</strong>」<br>
+  即可存成 PDF 至「文件」App。
+  <br>
+  <button class="hint-close" onclick="document.getElementById('ios-print-hint').style.display='none'">我知道了</button>
 </div>
 
 <script>
-// ===== 【高風險修復①②】STORAGE_OK 旗標 + safeCall 函式防護 =====
 // 問題②：一次性探測 localStorage 是否可用（Safari 隱私/無痕/Edge InPrivate 均安全）
 const STORAGE_OK = (function() {
   try {
@@ -1215,7 +1366,7 @@ const TRANSLATION_REGISTRY = {
   off_2: { zh: "每週常態例假2天", en: "Regular 2 days off per week", id: "Libur reguler 2 hari per minggu", vi: "Mỗi tuần nghỉ 2 ngày thường quy" },
 
   // 加班費
-  ot_1: { zh: "依勞動部家庭看護工核定標準（目前為每日新台幣733元）", en: "According to MOL regulations for domestic caregivers (currently NT$733/day)", id: "Sesuai peraturan Kementerian Tenaga Kerja untuk pengasuh (saat ini NT$733/hari)", vi: "Theo tiêu chuẩn của Bộ Lao động đối với khán hộ công gia đình (hiện tại là 733 Đài tệ/ngày)" },
+  ot_1: { zh: "依勞動部家庭看護工核定標準（目前為每日新台幣828元）", en: "According to MOL regulations for domestic caregivers (currently NT$828/day)", id: "Sesuai peraturan Kementerian Tenaga Kerja untuk pengasuh (saat ini NT$828/hari)", vi: "Theo tiêu chuẩn của Bộ Lao động đối với khán hộ công gia đình (hiện tại là 828 Đài tệ/ngày)" },
   ot_2: { zh: "由雙方按日加給並簽認合規津貼", en: "To be supplemented daily by agreement with signed compliance allowance", id: "Ditambahkan setiap hari berdasarkan kesepakatan kedua belah pihak", vi: "Do hai bên tự thỏa thuận thêm theo ngày và ký xác nhận phụ cấp" },
 
   // 禁止事項
@@ -1832,17 +1983,17 @@ function _doGeneratePreview(previewEl) {
       <div class="c-date-row-title">${t.dateTitle}</div>
       <div class="c-date-field">
         <span class="c-date-field-line">${dateParts[0]}</span>
-        <span class="c-date-field-label">年 / Tahun</span>
+        <span class="c-date-field-label">年</span>
       </div>
       <span class="c-date-sep">&nbsp;</span>
       <div class="c-date-field">
         <span class="c-date-field-line">${dateParts[1]}</span>
-        <span class="c-date-field-label">月 / Bulan</span>
+        <span class="c-date-field-label">月</span>
       </div>
       <span class="c-date-sep">&nbsp;</span>
       <div class="c-date-field">
         <span class="c-date-field-line">${dateParts[2]}</span>
-        <span class="c-date-field-label">日 / Tanggal</span>
+        <span class="c-date-field-label">日</span>
       </div>
     </div>
 
@@ -1915,23 +2066,70 @@ function updatePageStyle() {
   const size = printSettings.paper + ' ' + printSettings.orientation;
   const margin = marginMap[printSettings.margin] || marginMap.normal;
   const fs = printSettings.fontSize || '10';
+  // iOS Safari：@page size 不被支援，但 margin 有效；加上 webkit 前綴確保相容性
   styleEl.textContent = `
     @page { size: ${size}; margin: ${margin}; }
-    @media print { .contract-page { font-size: ${fs}pt !important; } }
+    @media print {
+      .contract-page {
+        font-size: ${fs}pt !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      /* iOS Safari：強制 page break webkit 前綴 */
+      .contract-page {
+        -webkit-break-after: page;
+        break-after: page;
+        page-break-after: always;
+      }
+      .contract-page:last-child {
+        -webkit-break-after: auto;
+        break-after: auto;
+        page-break-after: auto;
+      }
+    }
   `;
 }
 
-// ===== PDF EXPORT =====
+// ===== PDF EXPORT（iOS / iPadOS / macOS Safari 優化版） =====
+
+// Apple 平台偵測
+function isApplePlatform() {
+  var ua = navigator.userAgent || '';
+  return /iPhone|iPad|iPod|Macintosh/.test(ua) && 'ontouchstart' in window
+    || /Macintosh/.test(ua) && navigator.maxTouchPoints > 1 // iPad (iPadOS 13+)
+    || /iPhone|iPad|iPod/.test(ua); // iPhone / older iPad
+}
+
+function isIOSDevice() {
+  var ua = navigator.userAgent || '';
+  return /iPhone|iPad|iPod/.test(ua)
+    || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1); // iPad iPadOS 13+
+}
+
 function exportPDF() {
-  // Always navigate to preview section first to ensure sec-preview is visible
+  // Always navigate to preview section first
   showSection('sec-preview');
   try { generatePreview(); } catch(e) { console.error('exportPDF generatePreview 錯誤：', e); }
+
   // Apply current font size to freshly rendered pages
-  const fs = printSettings.fontSize || '10';
-  document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
+  var fs = printSettings.fontSize || '10';
+  document.querySelectorAll('.contract-page').forEach(function(el) {
+    el.style.fontSize = fs + 'pt';
+  });
   updatePageStyle();
-  // 使用雙層 requestAnimationFrame 確保 DOM 完全渲染後再開啟列印對話框
-  // 比固定 setTimeout(350ms) 更可靠，適應各種設備速度
+
+  // iOS 特別處理：顯示操作提示後再列印
+  if (isIOSDevice()) {
+    var hint = document.getElementById('ios-print-hint');
+    if (hint) hint.style.display = 'block';
+    // iOS Safari 列印需要較長等待時間確保 DOM 渲染完成
+    setTimeout(function() {
+      window.print();
+    }, 600);
+    return;
+  }
+
+  // macOS Safari / Chrome / Firefox：使用雙層 rAF 確保 DOM 完全渲染
   requestAnimationFrame(function() {
     requestAnimationFrame(function() {
       window.print();
@@ -2117,7 +2315,18 @@ function exportHTML() {
     // 顯示成功提示
     const banner = document.createElement('div');
     banner.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;background:#27ae60;color:white;font-size:13px;font-family:"Microsoft JhengHei",sans-serif;padding:12px 20px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;';
-    banner.innerHTML = '✅ <strong>合約 HTML 已下載：</strong>' + escHtml(fileName) + '　<button onclick="this.parentNode.remove()" style="margin-left:8px;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;">✕</button>';
+    banner.innerHTML = '';
+    var okLabel = document.createElement('span');
+    okLabel.innerHTML = '✅ <strong>合約 HTML 已下載：</strong>';
+    var fnSpan = document.createElement('span');
+    fnSpan.textContent = fileName;
+    var closeBtn2 = document.createElement('button');
+    closeBtn2.style.cssText = 'margin-left:8px;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;';
+    closeBtn2.textContent = '✕';
+    closeBtn2.onclick = function() { banner.remove(); };
+    banner.appendChild(okLabel);
+    banner.appendChild(fnSpan);
+    banner.appendChild(closeBtn2);
     document.body.appendChild(banner);
     setTimeout(() => { if (banner.parentNode) banner.remove(); }, 5000);
   } catch(e) {
@@ -2180,6 +2389,9 @@ function fillSample() {
   document.getElementById('pay_day').value = '每月5日 / Every 5th';
   document.getElementById('duties_extra').value = '每週六傍晚推輪椅至社區中庭散步30分鐘';
   
+  // 同步觸發薪資驗證，確認警告列正確消除
+  validateSalary(document.getElementById('salary'));
+  
   // 更新 checkbox 狀態樣式（觸發 change 事件確保所有群組正確亮起）
   document.querySelectorAll('input[type=checkbox]').forEach(el => {
     const lbl = el.closest('.checkbox-label');
@@ -2239,6 +2451,7 @@ function clearAll() {
 function resetForm() { clearAll(); }
 
 // ===== 台灣身分證加權校驗碼驗證 =====
+// 字母對照表依內政部標準：A=10,B=11,...,I=34（Z=33,O=35，字母索引 ABCDEFGHJKLMNPQRSTUVXYWZIO）
 function validateTWID(id) {
   if (!/^[A-Z][12]\d{8}$/.test(id)) return false;
   const letters = 'ABCDEFGHJKLMNPQRSTUVXYWZIO';
@@ -2248,7 +2461,7 @@ function validateTWID(id) {
   const n0 = (idx + 10) % 10;
   const digits = [n1, n0, ...id.slice(1).split('').map(Number)];
   const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
-  const sum = digits.reduce((acc, v, i) => acc + v * weights[i], 0);
+  const sum = digits.reduce((acc, d, i) => acc + d * weights[i], 0);
   return sum % 10 === 0;
 }
 
@@ -2279,7 +2492,7 @@ function goToAgency() {
 }
 
 // ===== localStorage 自動存檔 / 還原 =====
-const LS_KEY = 'care_contract_v12_autosave';
+const LS_KEY = 'care_contract_v17_autosave';
 
 function autoSaveToStorage() {
   try {
@@ -2353,7 +2566,7 @@ window.addEventListener('load', function() {
   var missing = REQUIRED_FUNCTIONS.filter(function(fn) { return typeof window[fn] !== 'function'; });
   if (missing.length > 0) {
     var msg = '⚠️ 以下 JS 函式載入失敗，部分功能將無法使用：\n' + missing.join(', ') + '\n\n請嘗試：強制重新整理（Ctrl+Shift+R / Cmd+Shift+R）';
-    console.error('[v12 函式驗證]', msg);
+    console.error('[v17 函式驗證]', msg);
     try {
       var banner = document.getElementById('_error_banner') || document.createElement('div');
       banner.id = '_error_banner';
@@ -2362,7 +2575,7 @@ window.addEventListener('load', function() {
       if (!banner.parentNode) document.body.appendChild(banner);
     } catch(_) {}
   } else {
-    console.log('[v12 函式驗證] ✅ 所有關鍵函式載入正常');
+    console.log('[v17 函式驗證] ✅ 所有關鍵函式載入正常');
   }
 
   // 解除可能被意外 disable 的按鈕與表單元素
@@ -2384,7 +2597,7 @@ window.addEventListener('load', function() {
   // ④ load 後再次同步 checkbox（防止還原後未執行）
   try { syncCheckboxState(); } catch(e) {}
 
-  console.log('v12 GitHub Ready ✅');
+  console.log('v17 GitHub Ready ✅');
 });
 
 document.addEventListener('input',  autoSaveToStorage);
@@ -2515,8 +2728,12 @@ window.addEventListener('unhandledrejection', function(e) {
   console.error('[未處理 Promise 錯誤]', e.reason);
   try {
     var msg = 'Promise: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
-    var banner = document.getElementById('_error_banner') || document.createElement('div');
-    banner.id = '_error_banner';
+    var banner = document.getElementById('_error_banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = '_error_banner';
+      document.body.appendChild(banner);
+    }
     banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
     banner.innerHTML = '';
     var label = document.createElement('span');
@@ -2530,7 +2747,6 @@ window.addEventListener('unhandledrejection', function(e) {
     banner.appendChild(label);
     banner.appendChild(msgSpan);
     banner.appendChild(closeBtn);
-    if (!banner.parentNode) document.body.appendChild(banner);
     banner.style.display = 'flex';
   } catch(_) {}
 });
@@ -2583,6 +2799,24 @@ document.addEventListener('DOMContentLoaded', function () {
     syncCheckboxState();
   } catch(e) {
     console.error('[init] syncCheckboxState 失敗：', e);
+  }
+
+  // Apple 平台偵測：顯示 iOS PDF 操作提示
+  try {
+    if (typeof isIOSDevice === 'function' && isIOSDevice()) {
+      var iosBox = document.getElementById('ios-hint-box');
+      if (iosBox) iosBox.style.display = 'block';
+      // iOS：列印按鈕加上額外提示文字
+      var printBtns = document.querySelectorAll('[onclick*="exportPDF"]');
+      printBtns.forEach(function(btn) {
+        if (!btn.dataset.iosPatched) {
+          btn.dataset.iosPatched = '1';
+          // 在按鈕旁加上小字提示（僅限 iOS）
+        }
+      });
+    }
+  } catch(e) {
+    console.warn('[init] iOS 偵測失敗：', e);
   }
 });
 </script>
