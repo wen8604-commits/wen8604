@@ -10,8 +10,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍幫傭補充合約製作工具 v1.1</title>
-<!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
+<title>外籍幫傭補充合約製作工具 v3.2</title>
+<!-- v3.2 第7條全面強化：新增5個精細化UI欄位（fine_repeat累計升級、fine_abuse傷害處置、resign_notice預告期、resign_breach未足期賠償、dispute_resolve爭議調解），第7條條文擴充為7層結構化輸出，四語翻譯同步升級含《就業服務法》第59條、《刑法》傷害罪法條引用 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -610,7 +610,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v1.1</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v3.2</span></div>
     <div class="nav-actions">
       <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
       <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
@@ -1010,18 +1010,54 @@
           <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_religion"> 禁止在工作場所強行推介個人宗教信仰給雇主家屬</label>
           <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_child_discipline" checked> 嚴禁對家中兒童施以任何體罰或言語恐嚇</label>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">違約違規處置機制</h3>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">違約違規處置機制（第7條）</h3>
+        <div class="help-box info" style="font-size:12px;margin-bottom:12px;">⚖️ <strong>第7條強化版：</strong>以下7個欄位對應合約第7條七層結構化條文，建議依家庭實際情況選擇最適選項。</div>
         <div class="form-grid">
-          <div class="form-group"><label>若違反上述情節之應處機制</label>
+          <div class="form-group"><label>🔸 一般違規警告機制（首次輕微違規）</label>
             <select id="fine_minor">
               <option value="v_1">由雙方及仲介召開協調會並記警告，留任改善</option>
               <option value="v_2">通報主管機關並依法合理解約、限期轉換雇主</option>
             </select>
           </div>
-          <div class="form-group"><label>涉及財物損失或刑責之最高賠償</label>
+          <div class="form-group"><label>🔸 累計違規升級機制（同一事項累積3次）</label>
+            <select id="fine_repeat">
+              <option value="rep_1">書面列管並通報仲介機構，列入解約考量</option>
+              <option value="rep_2">直接終止合約，依就業服務法第59條辦理轉換</option>
+              <option value="rep_3">由甲方裁量決定是否終約，保留彈性處置</option>
+            </select>
+          </div>
+          <div class="form-group"><label>🔸 財物損失賠償標準</label>
             <select id="fine_major">
               <option value="m_1">依實際財產損害證明估價賠償</option>
               <option value="m_2">依法移送司法機關偵辦並追究實質損害</option>
+            </select>
+          </div>
+          <div class="form-group"><label>🔸 傷害被照顧者最嚴處置</label>
+            <select id="fine_abuse">
+              <option value="ab_1">立即通報衛生福利部保護專線並終止合約</option>
+              <option value="ab_2">提出刑事告訴，追究刑法傷害罪責任</option>
+              <option value="ab_3">依傷情輕重由甲方裁量，輕微者警告留任，重者終約提告</option>
+            </select>
+          </div>
+          <div class="form-group"><label>🔸 乙方主動離職預告期</label>
+            <select id="resign_notice">
+              <option value="rn_30">30日（標準預告期）</option>
+              <option value="rn_14">14日（縮短特例，需雙方同意）</option>
+              <option value="rn_60">60日（高依賴照護建議，保障照護延續）</option>
+            </select>
+          </div>
+          <div class="form-group"><label>🔸 未足期預告離職之違約處置</label>
+            <select id="resign_breach">
+              <option value="rb_1">甲方保留依法請求空窗期實際損害賠償之權利</option>
+              <option value="rb_2">要求乙方完成完整工作交接後方可離職</option>
+              <option value="rb_3">甲方不追究，但須扣除當月未服務天數薪資</option>
+            </select>
+          </div>
+          <div class="form-group span-2"><label>🔸 勞資爭議調解程序</label>
+            <select id="dispute_resolve">
+              <option value="dr_1">仲介機構優先調解→仍有爭議再申請勞動局調解</option>
+              <option value="dr_2">直接向當地勞動局申請勞資爭議調解</option>
+              <option value="dr_3">雙方自行協商，協商不成方申請勞動局調解</option>
             </select>
           </div>
         </div>
@@ -1249,6 +1285,32 @@ const TRANSLATION_REGISTRY = {
   m_1: { zh: "依實際財產損害證明、專業單據估價進行損害賠償", en: "Compensation based on actual property damage certificates or commercial evaluations", id: "Ganti rugi berdasarkan bukti kerusakan properti nyata atau taksiran komersial resmi", vi: "Bồi thường thiệt hại dựa trên chứng nhận thiệt hại tài sản thực tế hoặc bảng báo giá chuyên nghiệp" },
   m_2: { zh: "依法移送台灣司法機關偵辦，並追究實質法律責任與連帶損失", en: "Transfer to Taiwan judicial authorities for investigation and pursue substantial legal responsibilities", id: "Diserahkan ke otoritas yudisial Taiwan untuk penyelidikan dan menuntut tanggung jawab hukum", vi: "Chuyển giao cho cơ quan tư pháp Đài Loan điều tra theo pháp luật và truy cứu trách nhiệm pháp lý thực chất" },
 
+  // ===== 第7條擴充：5個新欄位翻譯詞條 =====
+  // 累計違規升級機制
+  rep_1: { zh: "同一事項違規累計達3次，書面列管並通報仲介機構，列入終約評估考量", en: "Upon 3 repeated violations of the same matter, Party B shall be placed on written record and reported to the agency, and contract termination shall be considered", id: "Jika pelanggaran yang sama terjadi 3 kali, Pihak B akan dicatat secara tertulis dan dilaporkan ke agensi, sebagai bahan pertimbangan pengakhiran kontrak", vi: "Nếu vi phạm cùng một vấn đề tích lũy đến 3 lần, Bên B sẽ bị lập hồ sơ bằng văn bản và thông báo cho công ty môi giới, đưa vào diện xem xét chấm dứt hợp đồng" },
+  rep_2: { zh: "同一事項累積違規3次，甲方得依《就業服務法》第59條規定，直接終止合約並辦理轉換雇主手續", en: "Upon 3 cumulative violations of the same matter, Party A may directly terminate the contract and initiate employer transfer procedures pursuant to Article 59 of the Employment Services Act", id: "Setelah 3 pelanggaran berulang, Pihak A dapat langsung mengakhiri kontrak dan mengurus prosedur pindah majikan sesuai Pasal 59 UU Ketenagakerjaan", vi: "Tích lũy 3 lần vi phạm cùng một vấn đề, Bên A có thể trực tiếp chấm dứt hợp đồng và thực hiện thủ tục chuyển đổi chủ lao động theo Điều 59 Luật Dịch vụ Việc làm" },
+  rep_3: { zh: "同一事項累積違規3次，是否終止合約由甲方依實際情節輕重裁量決定，保留彈性處置空間", en: "Upon 3 cumulative violations of the same matter, Party A retains discretionary authority to decide whether to terminate the contract based on the severity of circumstances", id: "Setelah 3 pelanggaran berulang, Pihak A berhak memutuskan secara diskresi apakah akan mengakhiri kontrak berdasarkan tingkat keparahan situasi", vi: "Sau 3 lần vi phạm tích lũy cùng loại, Bên A có quyền quyết định tùy nghi có chấm dứt hợp đồng hay không dựa trên mức độ nghiêm trọng của tình huống thực tế" },
+
+  // 傷害被照顧者處置
+  ab_1: { zh: "乙方若對被照顧者施以身體傷害、精神虐待或不當對待，甲方得立即通報衛生福利部保護專線（113），並立即終止本合約，不適用任何預告期", en: "If Party B physically harms, mentally abuses, or mistreats the care recipient, Party A may immediately report to the Ministry of Health and Welfare's protective hotline (113) and terminate the contract immediately without any notice period", id: "Jika Pihak B menyebabkan cedera fisik, pelecehan mental, atau perlakuan tidak pantas kepada penerima perawatan, Pihak A dapat langsung melapor ke hotline perlindungan Kementerian Kesehatan (113) dan mengakhiri kontrak tanpa masa pemberitahuan", vi: "Nếu Bên B gây thương tích thể chất, lạm dụng tinh thần hoặc đối xử không đúng mực với người được chăm sóc, Bên A có thể lập tức báo cáo đường dây bảo vệ Bộ Y tế (113) và chấm dứt hợp đồng ngay, không cần thông báo trước" },
+  ab_2: { zh: "乙方若對被照顧者施以傷害行為，甲方得依《刑法》傷害罪（第277條）提出刑事告訴，追究乙方刑事責任，並同時請求民事損害賠償", en: "If Party B harms the care recipient, Party A may file a criminal complaint pursuant to Article 277 of the Criminal Code (injury offense) and simultaneously claim civil damages against Party B", id: "Jika Pihak B menyakiti penerima perawatan, Pihak A dapat mengajukan tuntutan pidana sesuai Pasal 277 KUHP (delik penganiayaan) dan sekaligus menuntut ganti rugi perdata", vi: "Nếu Bên B gây thương tích cho người được chăm sóc, Bên A có thể đệ trình tố cáo hình sự theo Điều 277 Bộ luật Hình sự (tội gây thương tích) và đồng thời yêu cầu bồi thường dân sự" },
+  ab_3: { zh: "乙方若對被照顧者造成傷害，甲方依傷情輕重裁量：情節輕微者予口頭或書面警告並留任觀察；情節重大者立即終止合約並依法提出刑事告訴", en: "If Party B causes harm to the care recipient, Party A shall assess the severity: minor cases result in a written warning with probationary retention; serious cases result in immediate contract termination and criminal prosecution", id: "Jika Pihak B menyebabkan cedera pada penerima perawatan, Pihak A menilai keparahannya: kasus ringan mendapat peringatan tertulis dan masa percobaan; kasus serius berakibat pemutusan kontrak segera dan tuntutan pidana", vi: "Nếu Bên B gây thương tích cho người được chăm sóc, Bên A đánh giá mức độ: trường hợp nhẹ được cảnh cáo bằng văn bản và theo dõi thử thách; trường hợp nghiêm trọng dẫn đến chấm dứt hợp đồng ngay và truy tố hình sự" },
+
+  // 乙方離職預告期
+  rn_30: { zh: "乙方如決定主動離職，須提前30個曆日以書面方式通知甲方，此為標準預告期", en: "If Party B decides to resign voluntarily, Party B must provide 30 calendar days' written advance notice to Party A. This is the standard notice period", id: "Jika Pihak B memutuskan untuk mengundurkan diri, Pihak B harus memberikan pemberitahuan tertulis kepada Pihak A minimal 30 hari kalender sebelumnya. Ini adalah masa pemberitahuan standar", vi: "Nếu Bên B quyết định tự nguyện nghỉ việc, Bên B phải thông báo bằng văn bản cho Bên A trước 30 ngày dương lịch. Đây là thời gian báo trước tiêu chuẩn" },
+  rn_14: { zh: "乙方如決定主動離職，須提前14個曆日以書面方式通知甲方；縮短預告期限須經甲乙雙方書面同意方可適用", en: "If Party B decides to resign voluntarily, Party B must provide 14 calendar days' written advance notice to Party A. This shortened notice period requires written agreement from both parties", id: "Jika Pihak B memutuskan mengundurkan diri, Pihak B harus memberikan pemberitahuan tertulis 14 hari kalender sebelumnya. Pengurangan masa pemberitahuan ini memerlukan persetujuan tertulis dari kedua pihak", vi: "Nếu Bên B quyết định tự nguyện nghỉ việc, Bên B phải thông báo bằng văn bản cho Bên A trước 14 ngày dương lịch. Việc rút ngắn thời gian báo trước này cần có sự đồng ý bằng văn bản của cả hai bên" },
+  rn_60: { zh: "乙方如決定主動離職，須提前60個曆日以書面方式通知甲方；高度依賴照護環境下，此延長預告期為保障被照顧者照護延續性之建議標準", en: "If Party B decides to resign voluntarily, Party B must provide 60 calendar days' written advance notice to Party A. In high-dependency care environments, this extended notice period is the recommended standard to ensure continuity of care", id: "Jika Pihak B memutuskan mengundurkan diri, Pihak B harus memberikan pemberitahuan tertulis 60 hari kalender sebelumnya. Dalam lingkungan perawatan dengan ketergantungan tinggi, masa pemberitahuan yang diperpanjang ini direkomendasikan untuk menjamin kesinambungan perawatan", vi: "Nếu Bên B quyết định tự nguyện nghỉ việc, Bên B phải thông báo bằng văn bản cho Bên A trước 60 ngày dương lịch. Trong môi trường chăm sóc có mức độ phụ thuộc cao, thời gian báo trước kéo dài này được khuyến nghị để đảm bảo tính liên tục của công việc chăm sóc" },
+
+  // 未足期離職賠償
+  rb_1: { zh: "乙方若未依規定足期預告擅自離職，致甲方發生照護空窗期或需重新招募之損失，甲方保留依法向乙方請求實際損害賠償之完整權利", en: "If Party B resigns without completing the required notice period, causing Party A to suffer care gaps or recruitment losses, Party A reserves the full legal right to claim actual damages from Party B", id: "Jika Pihak B mengundurkan diri tanpa menyelesaikan masa pemberitahuan yang diperlukan, menyebabkan Pihak A mengalami kesenjangan perawatan atau kerugian rekrutmen, Pihak A berhak menuntut ganti rugi nyata dari Pihak B secara hukum", vi: "Nếu Bên B nghỉ việc mà không hoàn thành thời gian báo trước theo quy định, khiến Bên A phải chịu khoảng trống chăm sóc hoặc chi phí tuyển dụng lại, Bên A bảo lưu đầy đủ quyền hợp pháp yêu cầu Bên B bồi thường thiệt hại thực tế" },
+  rb_2: { zh: "乙方若提出離職申請，無論是否足額預告，均須確實完成工作交接（含照護紀錄、藥品管理、緊急聯繫資訊等）後方可正式離職，未完成交接不得離開工作場所", en: "Regardless of whether the notice period is complete, Party B must fully complete the work handover (including care records, medication management, emergency contact information, etc.) before officially leaving. Party B may not leave the workplace without completing the handover", id: "Terlepas dari apakah masa pemberitahuan sudah lengkap, Pihak B harus menyelesaikan serah terima pekerjaan secara menyeluruh (termasuk catatan perawatan, manajemen obat, informasi kontak darurat, dll.) sebelum resmi berhenti. Pihak B tidak boleh meninggalkan tempat kerja tanpa menyelesaikan serah terima", vi: "Bất kể thời gian báo trước có đầy đủ hay không, Bên B phải hoàn thành đầy đủ việc bàn giao công việc (bao gồm hồ sơ chăm sóc, quản lý thuốc, thông tin liên lạc khẩn cấp, v.v.) trước khi chính thức nghỉ việc. Bên B không được rời khỏi nơi làm việc khi chưa hoàn thành bàn giao" },
+  rb_3: { zh: "乙方若未足期預告離職，甲方不另行追究違約責任，但依實際服務天數比例計算當月薪資，未服務天數之薪資予以扣除，不予補發", en: "If Party B resigns without completing the notice period, Party A will not pursue breach of contract liability, but the monthly salary will be calculated proportionally based on actual days worked. Salary for unworked days will be deducted and not reimbursed", id: "Jika Pihak B mengundurkan diri tanpa masa pemberitahuan penuh, Pihak A tidak akan menuntut pertanggungjawaban pelanggaran kontrak, namun gaji bulanan dihitung secara proporsional berdasarkan hari kerja aktual. Gaji untuk hari yang tidak bekerja akan dipotong", vi: "Nếu Bên B nghỉ việc không đủ thời gian báo trước, Bên A sẽ không truy cứu trách nhiệm vi phạm hợp đồng, nhưng lương tháng sẽ được tính theo tỷ lệ ngày làm việc thực tế. Lương những ngày không làm việc sẽ bị khấu trừ và không hoàn trả" },
+
+  // 爭議調解程序
+  dr_1: { zh: "雙方如發生勞資爭議，應先透過承辦仲介機構進行協調調解；如仲介調解無法達成共識，雙方再共同向工作地點所在地之勞動局申請正式勞資爭議調解", en: "In the event of a labor dispute, both parties shall first seek mediation through the agency. If agency mediation fails to reach a consensus, both parties shall jointly apply for formal labor dispute mediation with the local Labor Bureau", id: "Jika terjadi perselisihan perburuhan, kedua pihak harus terlebih dahulu mencari mediasi melalui agensi. Jika mediasi agensi gagal mencapai konsensus, kedua pihak bersama-sama mengajukan mediasi perselisihan perburuhan resmi ke Dinas Tenaga Kerja setempat", vi: "Trong trường hợp xảy ra tranh chấp lao động, hai bên phải tìm kiếm hòa giải thông qua công ty môi giới trước. Nếu hòa giải qua môi giới không đạt được sự đồng thuận, hai bên cùng nộp đơn hòa giải tranh chấp lao động chính thức lên Cục Lao động địa phương" },
+  dr_2: { zh: "雙方如發生勞資爭議，得直接向工作地點所在地之直轄市或縣（市）勞動局（處）申請勞資爭議調解，無須先經仲介機構居中處理", en: "In the event of a labor dispute, both parties may directly apply for labor dispute mediation with the municipal or county/city Labor Bureau at the work location, without prior mediation through the agency", id: "Jika terjadi perselisihan perburuhan, kedua pihak dapat langsung mengajukan mediasi perselisihan perburuhan ke Dinas Tenaga Kerja kota madya atau kabupaten/kota tempat kerja, tanpa mediasi agensi terlebih dahulu", vi: "Trong trường hợp xảy ra tranh chấp lao động, hai bên có thể trực tiếp nộp đơn hòa giải tranh chấp lao động lên Cục Lao động thành phố trực thuộc trung ương hoặc quận/huyện nơi làm việc, không cần qua môi giới trước" },
+  dr_3: { zh: "雙方如發生勞資爭議，應先嘗試雙方自行友好協商處理；如協商30日內仍無法達成共識，方得向工作地點所在地之勞動局申請正式調解程序", en: "In the event of a labor dispute, both parties shall first attempt to resolve the matter through friendly negotiation. If no consensus is reached within 30 days of negotiation, either party may then apply for formal mediation with the local Labor Bureau", id: "Jika terjadi perselisihan perburuhan, kedua pihak harus terlebih dahulu mencoba menyelesaikan secara musyawarah. Jika dalam 30 hari tidak tercapai kesepakatan, barulah salah satu pihak dapat mengajukan mediasi resmi ke Dinas Tenaga Kerja setempat", vi: "Trong trường hợp xảy ra tranh chấp lao động, hai bên phải trước tiên cố gắng giải quyết thông qua thương lượng thân thiện. Nếu trong vòng 30 ngày vẫn không đạt được đồng thuận, bên nào cũng có thể nộp đơn hòa giải chính thức lên Cục Lao động địa phương" },
+
   // 新增：強化防禦條款 (Special Defensive Clauses)
   s_labor_law: { zh: "勞基法適用聲明：外籍家庭幫傭依法適用《勞動基準法》，各項權利義務依勞基法及本合約辦理，相關假別及加班費應依法計給。", en: "Labor Law Exemption: Both parties acknowledge home caregivers are NOT subject to the Labor Standards Act. Rights and obligations are governed by this contract and Employment Services Act.", id: "Pengecualian UU Tenaga Kerja: Kedua pihak menyadari pengasuh rumah tangga tidak tunduk pada UU Standar Tenaga Kerja. Hak diatur oleh kontrak ini dan UU Layanan Kerja.", vi: "Tuyên bố không áp dụng Luật Lao động Cơ bản: Hai bên hiểu rõ khán hộ công gia đình không áp dụng Luật Lao động Cơ bản. Quyền lợi tuân theo hợp đồng này và Luật Việc làm." },
   s_damage_claim: { zh: "未預告離職/違約損害賠償聲明：若乙方未依規定提前30日書面預告逕行離職或重大違約，造成甲方空窗期損失，甲方保留依法請求重新招募與實際行政損害賠償之權利。", en: "Breach Damages Claim: If Party B resigns without 30-day written notice or commits a major breach, Party A reserves the right to claim actual damages for recruitment and care gap losses.", id: "Tuntutan Ganti Rugi Pelanggaran: Jika Pihak B mengundurkan diri tanpa pemberitahuan 30 hari atau melakukan pelanggaran berat, Pihak A berhak menuntut ganti rugi nyata untuk rekrutmen dan masa kosong.", vi: "Yêu cầu bồi thường vi phạm: Nếu Bên B nghỉ việc không báo trước 30 ngày hoặc vi phạm nghiêm trọng, Bên A có quyền yêu cầu bồi thường thiệt hại thực tế cho thời gian trống và phí tuyển dụng." },
@@ -1342,8 +1404,8 @@ document.addEventListener('change', function(e) {
           if (rl) rl.classList.remove('checked');
         });
         lbl.classList.add('checked');
-  
-        // checkbox
+      } else {
+        // checkbox 高亮處理
         if (e.target.checked) lbl.classList.add('checked');
         else lbl.classList.remove('checked');
       }
@@ -1541,7 +1603,6 @@ function _doGeneratePreview(previewEl) {
 
   // 彙整條款
   const careDutiesHtml = d.duties.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
-  const homeDutiesHtml = d.duties_home.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
   const benefitsHtml = d.benefits.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
   const prohibitsHtml = d.prohibits.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
   const specialsHtml = d.specials.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
@@ -1599,7 +1660,6 @@ function _doGeneratePreview(previewEl) {
     <div class="c-article-num">${t.art2}</div>
     <ul class="c-list">
       ${careDutiesHtml}
-      ${homeDutiesHtml}
       ${d.duties_extra ? `<li style="list-style-type:circle; color:#333;"><strong>雇主特加備註：</strong>${esc(d.duties_extra)}</li>` : ''}
     </ul>
   </div>
@@ -1666,12 +1726,34 @@ function _doGeneratePreview(previewEl) {
     <div class="c-article-num red">${t.art4b}</div>
     <ul class="c-list">
       <li>
+        <span class="c-zh"><strong>（一）一般違規警告機制：</strong></span>
         <span class="c-zh">乙方如發生一般生活或照護違規情事之應處機制：</span>
         ${renderItemText(d.fine_minor, currentLang)}
       </li>
       <li>
+        <span class="c-zh"><strong>（二）累計違規升級處置：</strong></span>
+        ${renderItemText(d.fine_repeat, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>（三）財物損失賠償標準：</strong></span>
         <span class="c-zh">如涉及重大財產損失、侵害生命安全或法律刑責上限：</span>
         ${renderItemText(d.fine_major, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>（四）傷害被照顧者最嚴處置：</strong></span>
+        ${renderItemText(d.fine_abuse, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>（五）乙方主動離職預告義務：</strong></span>
+        ${renderItemText(d.resign_notice, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>（六）未足期預告違約處置：</strong></span>
+        ${renderItemText(d.resign_breach, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>（七）勞資爭議調解程序：</strong></span>
+        ${renderItemText(d.dispute_resolve, currentLang)}
       </li>
     </ul>
   </div>
@@ -1771,11 +1853,14 @@ function gatherData() {
     pat_name: v('pat_name'), pat_age: v('pat_age'), pat_health: v('pat_health'),
     pat_illness: v('pat_illness'), pat_special: v('pat_special'),
     mobility: radio('mobility'),
-    duties: checks('duty'), duties_home: checks('duty_home'), duties_extra: v('duties_extra'),
+    duties: checks('duty'), duties_extra: v('duties_extra'),
     salary: v('salary'), pay_day: v('pay_day'), pay_method: v('pay_method'),
     days_off: v('days_off'), rest_hours: v('rest_hours'), overtime: v('overtime'),
     benefits: checks('benefit'), prohibits: checks('prohibit'),
     fine_minor: v('fine_minor'), fine_major: v('fine_major'),
+    fine_repeat: v('fine_repeat'), fine_abuse: v('fine_abuse'),
+    resign_notice: v('resign_notice'), resign_breach: v('resign_breach'),
+    dispute_resolve: v('dispute_resolve'),
     specials: checks('special'), special_extra: v('special_extra')
   };
 }
@@ -1955,7 +2040,7 @@ function exportHTML() {
 <body>
   <div class="export-toolbar no-print">
     <div>
-      <span class="brand">📋 外籍看護補充合約</span>
+      <span class="brand">📋 外籍幫傭補充合約</span>
       <span class="hint">　雇主：${empName}　看護：${careName}　日期：${contractDate}</span>
     </div>
     <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存為 PDF</button>
@@ -2000,6 +2085,7 @@ function fillSample() {
   document.getElementById('maid_passport').value = 'XG987654';
   document.getElementById('maid_arc').value = 'HD32145678';
   document.getElementById('emp_email').value = 'wangdaming@example.com';
+  document.getElementById('custom_subtitle').value = '居家長期安養照護特別版';
   
   // NEW v6 fields
   document.getElementById('agency_name').value = '台灣優質仲介有限公司';
@@ -2106,6 +2192,7 @@ function resetForm() { clearAll(); }
 // ===== 台灣身分證加權校驗碼驗證 =====
 function validateTWID(id) {
   if (!/^[A-Z][12]\d{8}$/.test(id)) return false;
+  // 正確台灣身分證字母對應表（依地區編碼順序，A=10開始）
   const letters = 'ABCDEFGHJKLMNPQRSTUVXYWZIO';
   const idx = letters.indexOf(id[0]);
   if (idx < 0) return false;
@@ -2113,7 +2200,7 @@ function validateTWID(id) {
   const n0 = (idx + 10) % 10;
   const digits = [n1, n0, ...id.slice(1).split('').map(Number)];
   const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
-  const sum = digits.reduce((acc, v, i) => acc + v * weights[i], 0);
+  const sum = digits.reduce((acc, d, i) => acc + d * weights[i], 0);
   return sum % 10 === 0;
 }
 
@@ -2182,12 +2269,21 @@ function autoRestoreFromStorage() {
     if (data.checked) {
       Object.keys(data.checked).forEach(key => {
         if (key.startsWith('radio:')) {
+          // 還原 radio 選取狀態
           const name = key.slice(6);
           const val = data.checked[key];
           const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
-          if (el) { el.checked = true; const lbl = el.closest('.checkbox-label'); if (lbl) lbl.classList.add('checked'); }
-    
-          const [name, value] = key.split(':');
+          if (el) {
+            el.checked = true;
+            const lbl = el.closest('.checkbox-label');
+            if (lbl) lbl.classList.add('checked');
+          }
+        } else {
+          // 還原 checkbox 勾選狀態
+          const colonIdx = key.indexOf(':');
+          if (colonIdx < 0) return;
+          const name = key.slice(0, colonIdx);
+          const value = key.slice(colonIdx + 1);
           const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
           if (el) {
             el.checked = data.checked[key];
@@ -2386,7 +2482,7 @@ document.addEventListener('DOMContentLoaded', function () {
   try {
     if (typeof showSection === 'function') {
       showSection('sec-party');
-
+    } else {
       console.error('showSection 函式未定義，請確認 JS 載入順序');
     }
   } catch(e) {
@@ -2396,7 +2492,7 @@ document.addEventListener('DOMContentLoaded', function () {
   try {
     if (typeof updatePageStyle === 'function') {
       updatePageStyle();
-
+    } else {
       console.warn('updatePageStyle 函式未定義，跳過初始化列印樣式');
     }
   } catch(e) {
