@@ -10,7 +10,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍看護補充合約製作工具 v12（列印優化＋HTML匯出版）</title>
+<title>外籍看護補充合約製作工具 </title>
 <!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
@@ -967,21 +967,74 @@
           <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_parttime"> 禁止在聘僱期間私下接受第三方非法打工</label>
           <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_religion"> 禁止在工作場所強行推介個人宗教信仰給雇主家屬</label>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">違約違規處置機制</h3>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">⚖️ 第7條：違規處置與違約責任（詳細設定）</h3>
+        <div class="help-box info" style="font-size:12px;">📋 本區設定將輸出為合約第7條完整條文，建議依實際管理風格選擇，條款層次越完整，發生爭議時保障越有力。</div>
+
+        <h4 style="font-size:13px;color:var(--teal);margin:14px 0 6px;border-left:3px solid var(--teal);padding-left:8px;">① 一般違規（警告制度）</h4>
         <div class="form-grid">
-          <div class="form-group"><label>若違反上述情節之應處機制</label>
+          <div class="form-group"><label>首次輕微違規之應處機制</label>
             <select id="fine_minor">
-              <option value="v_1">由雙方及仲介召開協調會並記警告，留任改善</option>
-              <option value="v_2">通報主管機關並依法合理解約、限期轉換雇主</option>
+              <option value="v_1">口頭警告並記錄，限期改善（仲介知悉存查）</option>
+              <option value="v_1b">召開三方協調會（甲乙雙方＋仲介），發給書面警告通知</option>
+              <option value="v_2">通報主管機關並終止合約，依法辦理轉換或遣返</option>
             </select>
           </div>
-          <div class="form-group"><label>涉及財物損失或刑責之最高賠償</label>
-            <select id="fine_major">
-              <option value="m_1">依實際財產損害證明估價賠償</option>
-              <option value="m_2">依法移送司法機關偵辦並追究實質損害</option>
+          <div class="form-group"><label>同一事項累計達三次違規之處置</label>
+            <select id="fine_repeat">
+              <option value="vr_1">升級為書面警告，並通知仲介列管</option>
+              <option value="vr_2">視同重大違規，甲方得依法終止合約不另行通知</option>
+              <option value="vr_3">依實際情節，由甲方決定留任或終止</option>
             </select>
           </div>
         </div>
+
+        <h4 style="font-size:13px;color:var(--red);margin:14px 0 6px;border-left:3px solid var(--red);padding-left:8px;">② 重大違規（財損與刑責）</h4>
+        <div class="form-grid">
+          <div class="form-group"><label>涉及財物毀損、偷竊之賠償標準</label>
+            <select id="fine_major">
+              <option value="m_1">依實際財產損害單據估價，由乙方全額賠償</option>
+              <option value="m_2">依法移送司法機關偵辦，追究民事與刑事責任</option>
+              <option value="m_3">先依單據賠償，情節重大者另移送司法追訴</option>
+            </select>
+          </div>
+          <div class="form-group"><label>傷害被照顧者（體罰、虐待）之處置</label>
+            <select id="fine_abuse">
+              <option value="fa_1">立即終止合約，通報衛生福利部及勞動主管機關</option>
+              <option value="fa_2">立即終止合約並依刑法提出傷害告訴，追究刑事責任</option>
+              <option value="fa_3">依實際傷情，由甲方決定是否提出刑事告訴</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 style="font-size:13px;color:var(--gold);margin:14px 0 6px;border-left:3px solid var(--gold);padding-left:8px;">③ 乙方主動離職規範</h4>
+        <div class="form-grid">
+          <div class="form-group"><label>乙方正常離職預告期限</label>
+            <select id="resign_notice">
+              <option value="rn_30">依法提前30日書面通知甲方（標準規定）</option>
+              <option value="rn_14">提前14日通知（雙方協議縮短，限特殊情形）</option>
+              <option value="rn_60">提前60日通知（高依賴度照護建議採用）</option>
+            </select>
+          </div>
+          <div class="form-group"><label>未足期預告離職之賠償義務</label>
+            <select id="resign_breach">
+              <option value="rb_1">甲方保留請求實際招募與空窗期損害賠償之權利</option>
+              <option value="rb_2">除賠償外，協助甲方至少兩週交接照護工作</option>
+              <option value="rb_3">不另追究，協助辦理轉換手續即可</option>
+            </select>
+          </div>
+        </div>
+
+        <h4 style="font-size:13px;color:var(--navy);margin:14px 0 6px;border-left:3px solid var(--navy);padding-left:8px;">④ 爭議調解程序</h4>
+        <div class="form-grid">
+          <div class="form-group span-2"><label>勞資爭議之優先處理機制</label>
+            <select id="dispute_resolve">
+              <option value="dr_1">優先由仲介公司介入調解，三方協商無共識再申請勞動局調解</option>
+              <option value="dr_2">直接向當地勞動局申請勞資爭議調解</option>
+              <option value="dr_3">由雙方自行協商，協商不成再請仲介介入</option>
+            </select>
+          </div>
+        </div>
+
         <div class="step-nav-row">
           <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-salary')">← 上一步</button>
           <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-special')">下一步：特約與防護條款 →</button>
@@ -1174,10 +1227,132 @@ const TRANSLATION_REGISTRY = {
   p_religion: { zh: "乙方不得在工作場所強迫或勸說雇主家屬改變宗教信仰，宗教自由應相互尊重", en: "Party B must not compel or persuade the employer's family members to change their religious beliefs; mutual respect for religious freedom is required", id: "Pihak B tidak boleh memaksa anggota keluarga majikan untuk mengubah keyakinan agama; kebebasan beragama harus saling dihormati", vi: "Bên B không được ép buộc hoặc thuyết phục thành viên gia đình chủ nhà thay đổi tín ngưỡng tôn giáo; cần tôn trọng lẫn nhau" },
 
   // 違約責任
-  v_1: { zh: "由雙方及仲介召開協調會並記警告，促其限期留任改善", en: "A conciliation meeting will be held by both parties and agency for warning and improvement", id: "Pertemuan koordinasi diadakan oleh kedua pihak dan agensi untuk peringatan dan perbaikan", vi: "Hai bên và trung gian sẽ họp điều phối, lập biên bản cảnh cáo và yêu cầu cải thiện trong thời hạn" },
-  v_2: { zh: "通報主管機關並終止合約，依法限期辦理轉換雇主或遣返", en: "Report to competent authority, terminate contract, and transfer employer or repatriate according to law", id: "Laporkan ke otoritas berwenang, akhiri kontrak, dan lakukan transfer majikan atau pemulangan", vi: "Thông báo cho cơ quan quản lý và chấm dứt hợp đồng, làm thủ tục chuyển chủ hoặc về nước theo luật" },
-  m_1: { zh: "依實際財產損害證明、專業單據估價進行損害賠償", en: "Compensation based on actual property damage certificates or commercial evaluations", id: "Ganti rugi berdasarkan bukti kerusakan properti nyata atau taksiran komersial resmi", vi: "Bồi thường thiệt hại dựa trên chứng nhận thiệt hại tài sản thực tế hoặc bảng báo giá chuyên nghiệp" },
-  m_2: { zh: "依法移送台灣司法機關偵辦，並追究實質法律責任與連帶損失", en: "Transfer to Taiwan judicial authorities for investigation and pursue substantial legal responsibilities", id: "Diserahkan ke otoritas yudisial Taiwan untuk penyelidikan dan menuntut tanggung jawab hukum", vi: "Chuyển giao cho cơ quan tư pháp Đài Loan điều tra theo pháp luật và truy cứu trách nhiệm pháp lý thực chất" },
+  v_1: {
+    zh: "口頭警告並登記備忘錄，要求乙方限期改善，仲介公司同步知悉存查",
+    en: "Verbal warning with written memo, Party B must improve within specified period; agency notified for records",
+    id: "Peringatan lisan dengan catatan tertulis, Pihak B harus memperbaiki dalam waktu yang ditentukan; agensi diberitahu",
+    vi: "Cảnh cáo miệng có lập biên bản, Bên B phải cải thiện trong thời hạn quy định; thông báo công ty môi giới lưu hồ sơ"
+  },
+  v_1b: {
+    zh: "由甲乙雙方與仲介公司召開三方協調會，發給書面警告通知書，要求乙方提交改善計畫",
+    en: "A three-party conciliation meeting shall be held by Party A, Party B, and the agency; a written warning notice is issued and Party B must submit an improvement plan",
+    id: "Pertemuan tiga pihak diadakan oleh Pihak A, Pihak B, dan agensi; surat peringatan tertulis diterbitkan dan Pihak B wajib menyerahkan rencana perbaikan",
+    vi: "Tổ chức cuộc họp ba bên gồm Bên A, Bên B và công ty môi giới; phát hành thông báo cảnh cáo bằng văn bản và yêu cầu Bên B nộp kế hoạch cải thiện"
+  },
+  v_2: {
+    zh: "通報勞動主管機關並依法終止勞動契約，限期辦理轉換雇主或出國，乙方須配合辦理一切行政手續",
+    en: "Report to the competent labor authority and legally terminate the contract; Party B must transfer employers or depart within the legal deadline and cooperate with all administrative procedures",
+    id: "Laporkan ke otoritas tenaga kerja dan akhiri kontrak sesuai hukum; Pihak B harus alih majikan atau pulang dalam batas waktu hukum dan bekerja sama dengan semua prosedur administrasi",
+    vi: "Thông báo cơ quan lao động có thẩm quyền và chấm dứt hợp đồng theo pháp luật; Bên B phải chuyển chủ hoặc xuất cảnh trong thời hạn pháp luật quy định và phối hợp làm thủ tục hành chính"
+  },
+  vr_1: {
+    zh: "同一違規事項累計達三次，視情節升級為正式書面警告，並通知仲介列管追蹤，作為合約評估依據",
+    en: "Repeated violations of the same item three times shall be escalated to a formal written warning; agency is notified for tracking and used as basis for contract assessment",
+    id: "Pelanggaran yang sama tiga kali berturut-turut akan ditingkatkan menjadi peringatan tertulis resmi; agensi diberitahu untuk pemantauan sebagai dasar evaluasi kontrak",
+    vi: "Vi phạm cùng một loại lỗi tích lũy đủ ba lần sẽ bị nâng lên cảnh cáo bằng văn bản chính thức; thông báo công ty môi giới theo dõi, làm cơ sở đánh giá hợp đồng"
+  },
+  vr_2: {
+    zh: "同一違規累計達三次，視同重大違規，甲方得依就服法第59條規定不另行通知逕行終止合約",
+    en: "Three cumulative violations of the same item are treated as a serious breach; Party A may terminate the contract without further notice pursuant to Article 59 of the Employment Services Act",
+    id: "Tiga pelanggaran kumulatif atas hal yang sama dianggap pelanggaran serius; Pihak A dapat mengakhiri kontrak tanpa pemberitahuan lebih lanjut berdasarkan Pasal 59 UU Ketenagakerjaan",
+    vi: "Ba lần vi phạm tích lũy cùng một loại được xem là vi phạm nghiêm trọng; Bên A có thể chấm dứt hợp đồng mà không cần thông báo thêm theo Điều 59 Luật Dịch vụ Việc làm"
+  },
+  vr_3: {
+    zh: "累計違規次數由甲方留存記錄，依實際情節輕重由甲方裁量決定留任改善或終止合約",
+    en: "Cumulative violation records shall be kept by Party A, who shall determine whether to retain Party B for improvement or terminate the contract based on actual circumstances",
+    id: "Catatan pelanggaran kumulatif disimpan oleh Pihak A, yang akan menentukan apakah Pihak B dipertahankan untuk perbaikan atau kontrak diakhiri berdasarkan keadaan aktual",
+    vi: "Hồ sơ vi phạm tích lũy do Bên A lưu giữ; Bên A sẽ quyết định giữ Bên B cải thiện hay chấm dứt hợp đồng tùy theo thực tế tình tiết"
+  },
+  m_1: {
+    zh: "依實際財產損害之修復估價單、購買憑證或專業鑑定報告，由乙方負擔全額賠償",
+    en: "Party B shall bear full compensation based on repair estimates, purchase receipts, or professional appraisal reports of actual property damage",
+    id: "Pihak B menanggung ganti rugi penuh berdasarkan perkiraan perbaikan, tanda terima pembelian, atau laporan penilaian profesional atas kerusakan properti nyata",
+    vi: "Bên B chịu toàn bộ bồi thường dựa trên báo giá sửa chữa, hóa đơn mua hàng hoặc báo cáo thẩm định chuyên nghiệp về thiệt hại tài sản thực tế"
+  },
+  m_2: {
+    zh: "依法移送台灣司法機關偵辦，並向乙方提起民事損害賠償訴訟，追究全部實質損失",
+    en: "Transfer to Taiwan judicial authorities for criminal investigation, and file a civil damages lawsuit against Party B to pursue full actual losses",
+    id: "Serahkan ke otoritas yudisial Taiwan untuk penyelidikan pidana, dan ajukan gugatan ganti rugi perdata terhadap Pihak B untuk menuntut semua kerugian nyata",
+    vi: "Chuyển giao cho cơ quan tư pháp Đài Loan điều tra hình sự và khởi kiện dân sự đòi bồi thường thiệt hại toàn bộ từ Bên B"
+  },
+  m_3: {
+    zh: "先依財損單據核算由乙方賠償；若情節涉及刑責（偷竊、詐欺、蓄意毀損等），另移送司法機關追訴",
+    en: "Compensation is first calculated based on damage documentation; if criminal liability is involved (theft, fraud, intentional damage, etc.), the case shall also be referred to judicial authorities",
+    id: "Ganti rugi pertama dihitung berdasarkan dokumentasi kerusakan; jika melibatkan tanggung jawab pidana (pencurian, penipuan, kerusakan yang disengaja, dll), kasus juga dilimpahkan ke otoritas yudisial",
+    vi: "Bồi thường được tính trước dựa trên hồ sơ thiệt hại; nếu có liên quan trách nhiệm hình sự (trộm cắp, lừa đảo, cố ý phá hoại, v.v.), vụ án cũng sẽ được chuyển cho cơ quan tư pháp"
+  },
+  fa_1: {
+    zh: "一經查證屬實，甲方立即終止合約，通報衛生福利部保護服務司及勞動主管機關，要求被照顧者安全評估",
+    en: "Upon confirmation, Party A shall immediately terminate the contract, report to the Ministry of Health and Welfare and labor authorities, and request a safety assessment for the patient",
+    id: "Setelah terbukti, Pihak A segera mengakhiri kontrak, melapor ke Kementerian Kesehatan dan Kesejahteraan serta otoritas tenaga kerja, dan meminta penilaian keselamatan pasien",
+    vi: "Sau khi xác nhận, Bên A lập tức chấm dứt hợp đồng, báo cáo với Bộ Y tế và Phúc lợi và cơ quan lao động, yêu cầu đánh giá an toàn cho người được chăm sóc"
+  },
+  fa_2: {
+    zh: "一經查證屬實，甲方立即終止合約，依刑法第277條傷害罪或第286條對幼童、老人、身心障礙者施虐規定提出刑事告訴，追究刑事責任，並保留民事求償權利",
+    en: "Upon confirmation, Party A shall immediately terminate the contract and file criminal charges under the Criminal Code for injury or abuse of elderly/disabled persons, and reserves the right to civil compensation",
+    id: "Setelah terbukti, Pihak A segera mengakhiri kontrak dan mengajukan tuntutan pidana berdasarkan KUHP atas cedera atau penganiayaan terhadap lansia/penyandang disabilitas, serta berhak atas kompensasi perdata",
+    vi: "Sau khi xác nhận, Bên A lập tức chấm dứt hợp đồng và khởi kiện hình sự theo Bộ luật Hình sự về tội gây thương tích hoặc hành hạ người cao tuổi/khuyết tật, đồng thời bảo lưu quyền yêu cầu bồi thường dân sự"
+  },
+  fa_3: {
+    zh: "甲方依實際傷情嚴重程度，決定是否立即終止合約及是否對乙方提出刑事告訴，情節輕微者得以書面警告替代",
+    en: "Party A shall determine whether to immediately terminate the contract and file criminal charges based on the severity of actual injuries; minor cases may be resolved with a written warning instead",
+    id: "Pihak A menentukan apakah akan segera mengakhiri kontrak dan mengajukan tuntutan pidana berdasarkan tingkat keparahan cedera; kasus ringan dapat diselesaikan dengan peringatan tertulis",
+    vi: "Bên A quyết định có chấm dứt hợp đồng ngay lập tức và có khởi kiện hình sự hay không dựa trên mức độ nghiêm trọng của thương tích thực tế; trường hợp nhẹ có thể thay bằng cảnh cáo bằng văn bản"
+  },
+  rn_30: {
+    zh: "乙方如決定離職，應依《就業服務法》規定，提前至少30個曆日以書面方式向甲方提出離職申請",
+    en: "If Party B decides to resign, they shall submit a written resignation to Party A at least 30 calendar days in advance, as required by the Employment Services Act",
+    id: "Jika Pihak B memutuskan untuk mengundurkan diri, mereka harus mengajukan surat pengunduran diri tertulis kepada Pihak A minimal 30 hari kalender sebelumnya, sesuai UU Ketenagakerjaan",
+    vi: "Nếu Bên B quyết định nghỉ việc, phải nộp đơn xin nghỉ bằng văn bản cho Bên A ít nhất 30 ngày theo lịch trước, theo quy định của Luật Dịch vụ Việc làm"
+  },
+  rn_14: {
+    zh: "經甲乙雙方特別協議，乙方離職預告期縮短為14日，僅限於特殊情形（如被照顧者身故、甲方主動解約等）方可適用",
+    en: "By special agreement of both parties, the resignation notice period is shortened to 14 days, applicable only in special circumstances such as patient's passing or Party A's initiative to terminate",
+    id: "Atas kesepakatan khusus kedua pihak, masa pemberitahuan pengunduran diri dipersingkat menjadi 14 hari, hanya berlaku dalam keadaan khusus seperti meninggalnya pasien atau inisiatif Pihak A untuk mengakhiri kontrak",
+    vi: "Theo thỏa thuận đặc biệt của hai bên, thời gian báo trước khi nghỉ việc được rút ngắn xuống còn 14 ngày, chỉ áp dụng trong các trường hợp đặc biệt như người bệnh qua đời hoặc Bên A chủ động chấm dứt hợp đồng"
+  },
+  rn_60: {
+    zh: "考量被照顧者高度依賴照護需求，乙方如決定離職，應提前至少60個曆日書面通知甲方，以利甲方安排接替照護人力",
+    en: "Considering the high care dependency of the patient, Party B shall provide written notice of resignation at least 60 calendar days in advance to allow Party A adequate time to arrange replacement care staff",
+    id: "Mempertimbangkan kebutuhan perawatan pasien yang sangat bergantung, Pihak B harus memberikan pemberitahuan tertulis pengunduran diri minimal 60 hari kalender sebelumnya agar Pihak A dapat mengatur pengganti",
+    vi: "Xét đến nhu cầu chăm sóc phụ thuộc cao của người bệnh, Bên B phải thông báo bằng văn bản ít nhất 60 ngày theo lịch trước khi nghỉ việc để Bên A có đủ thời gian sắp xếp nhân lực thay thế"
+  },
+  rb_1: {
+    zh: "若乙方未依規定期限書面預告逕行離職，甲方保留向乙方請求因空窗期造成之實際照護空缺損害及重新招募費用之賠償權利",
+    en: "If Party B resigns without proper written advance notice, Party A reserves the right to claim compensation from Party B for actual care gap losses and re-recruitment costs incurred",
+    id: "Jika Pihak B mengundurkan diri tanpa pemberitahuan tertulis yang tepat, Pihak A berhak menuntut kompensasi dari Pihak B atas kerugian nyata akibat kekosongan perawatan dan biaya rekrutmen ulang",
+    vi: "Nếu Bên B nghỉ việc không thông báo bằng văn bản theo đúng thời hạn, Bên A bảo lưu quyền yêu cầu Bên B bồi thường thiệt hại thực tế do khoảng trống chăm sóc và chi phí tuyển dụng lại"
+  },
+  rb_2: {
+    zh: "乙方除須賠償甲方實際損害外，應配合完成至少兩週之照護交接工作，確保被照顧者照護不中斷",
+    en: "In addition to compensating Party A for actual damages, Party B shall assist with at least two weeks of care handover work to ensure continuity of care for the patient",
+    id: "Selain mengkompensasi kerugian nyata Pihak A, Pihak B harus membantu setidaknya dua minggu pekerjaan serah terima perawatan untuk memastikan kelangsungan perawatan pasien",
+    vi: "Ngoài việc bồi thường thiệt hại thực tế cho Bên A, Bên B phải hỗ trợ bàn giao công việc chăm sóc ít nhất hai tuần để đảm bảo liên tục chăm sóc cho người bệnh"
+  },
+  rb_3: {
+    zh: "甲方不另行追究賠償，乙方配合辦理轉換雇主行政手續，並確保被照顧者照護不因離職而即刻中斷",
+    en: "Party A shall not pursue further compensation; Party B shall assist with employer transfer administrative procedures and ensure care for the patient is not immediately disrupted",
+    id: "Pihak A tidak menuntut ganti rugi lebih lanjut; Pihak B harus membantu prosedur administrasi alih majikan dan memastikan perawatan pasien tidak langsung terganggu",
+    vi: "Bên A không truy cứu bồi thường thêm; Bên B phối hợp làm thủ tục hành chính chuyển chủ và đảm bảo việc chăm sóc người bệnh không bị gián đoạn ngay lập tức"
+  },
+  dr_1: {
+    zh: "甲乙雙方發生任何勞資爭議，優先請求仲介公司協助介入三方調解；三方調解未能達成共識者，再依法向工作地主管機關申請勞資爭議調解",
+    en: "For any labor dispute between parties, the agency shall first be requested to mediate three-party conciliation. If no consensus is reached, either party may apply to the local competent authority for labor dispute mediation",
+    id: "Untuk setiap perselisihan perburuhan antara para pihak, agensi pertama-tama diminta untuk memediasi konsiliasi tiga pihak. Jika tidak ada konsensus, salah satu pihak dapat mengajukan mediasi perselisihan perburuhan ke otoritas setempat",
+    vi: "Đối với bất kỳ tranh chấp lao động nào giữa các bên, trước tiên yêu cầu công ty môi giới hỗ trợ hòa giải ba bên; nếu không đạt được đồng thuận, có thể nộp đơn xin hòa giải tranh chấp lao động lên cơ quan có thẩm quyền tại địa phương"
+  },
+  dr_2: {
+    zh: "甲乙雙方如有勞資爭議，得直接依法向工作地所在縣市勞動局申請勞資爭議調解，不需經由仲介公司介入",
+    en: "In case of any labor dispute, either party may directly apply for labor dispute mediation with the local city/county labor authority without requiring agency intervention",
+    id: "Jika ada perselisihan perburuhan, salah satu pihak dapat langsung mengajukan mediasi perselisihan perburuhan ke dinas tenaga kerja kota/kabupaten setempat tanpa intervensi agensi",
+    vi: "Trong trường hợp có tranh chấp lao động, các bên có thể trực tiếp nộp đơn xin hòa giải tranh chấp lao động lên cơ quan lao động thành phố/huyện tại địa phương mà không cần công ty môi giới can thiệp"
+  },
+  dr_3: {
+    zh: "甲乙雙方如有勞資爭議，先由雙方自行協商解決；協商逾30日仍未能達成共識，再請仲介公司介入調解或依法申請行政調解",
+    en: "For any labor dispute, both parties shall first attempt self-negotiation. If no agreement is reached within 30 days, either party may request agency mediation or apply for administrative mediation through legal channels",
+    id: "Untuk setiap perselisihan, kedua pihak pertama-tama mencoba negosiasi sendiri. Jika tidak ada kesepakatan dalam 30 hari, salah satu pihak dapat meminta mediasi agensi atau mengajukan mediasi administratif melalui jalur hukum",
+    vi: "Đối với bất kỳ tranh chấp nào, hai bên trước tiên tự thương lượng giải quyết; nếu quá 30 ngày vẫn không đạt được đồng thuận, có thể yêu cầu công ty môi giới hòa giải hoặc nộp đơn hòa giải hành chính theo pháp luật"
+  },
 
   // 新增：強化防禦條款 (Special Defensive Clauses)
   s_labor_law: { zh: "勞基法不適用聲明：雙方明確認知家庭看護工依法不適用《勞動基準法》，各項權利義務依本合約及就服法辦理，乙方不得無故援引勞基法要求資遣費。", en: "Labor Law Exemption: Both parties acknowledge home caregivers are NOT subject to the Labor Standards Act. Rights and obligations are governed by this contract and Employment Services Act.", id: "Pengecualian UU Tenaga Kerja: Kedua pihak menyadari pengasuh rumah tangga tidak tunduk pada UU Standar Tenaga Kerja. Hak diatur oleh kontrak ini dan UU Layanan Kerja.", vi: "Tuyên bố không áp dụng Luật Lao động Cơ bản: Hai bên hiểu rõ khán hộ công gia đình không áp dụng Luật Lao động Cơ bản. Quyền lợi tuân theo hợp đồng này và Luật Việc làm." },
@@ -1572,12 +1747,32 @@ function _doGeneratePreview(previewEl) {
     <div class="c-article-num red">${t.art4b}</div>
     <ul class="c-list">
       <li>
-        <span class="c-zh">乙方如發生一般生活或照護違規情事之應處機制：</span>
+        <span class="c-zh"><strong>【第一層：一般違規警告機制】</strong></span>
         ${renderItemText(d.fine_minor, currentLang)}
       </li>
       <li>
-        <span class="c-zh">如涉及重大財產損失、侵害生命安全或法律刑責上限：</span>
+        <span class="c-zh"><strong>【第二層：累計違規升級處置】</strong></span>
+        ${renderItemText(d.fine_repeat || 'vr_1', currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>【第三層：財物損失賠償標準】</strong></span>
         ${renderItemText(d.fine_major, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>【第四層：傷害被照顧者之最嚴處置】</strong></span>
+        ${renderItemText(d.fine_abuse || 'fa_1', currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>【乙方主動離職預告義務】</strong></span>
+        ${renderItemText(d.resign_notice || 'rn_30', currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>【未足期預告之違約賠償】</strong></span>
+        ${renderItemText(d.resign_breach || 'rb_1', currentLang)}
+      </li>
+      <li>
+        <span class="c-zh"><strong>【勞資爭議調解程序】</strong></span>
+        ${renderItemText(d.dispute_resolve || 'dr_1', currentLang)}
       </li>
     </ul>
   </div>
@@ -1663,7 +1858,10 @@ function gatherData() {
     salary: v('salary'), pay_day: v('pay_day'), pay_method: v('pay_method'),
     days_off: v('days_off'), rest_hours: v('rest_hours'), overtime: v('overtime'),
     benefits: checks('benefit'), prohibits: checks('prohibit'),
-    fine_minor: v('fine_minor'), fine_major: v('fine_major'),
+    fine_minor: v('fine_minor'), fine_repeat: v('fine_repeat'),
+    fine_major: v('fine_major'), fine_abuse: v('fine_abuse'),
+    resign_notice: v('resign_notice'), resign_breach: v('resign_breach'),
+    dispute_resolve: v('dispute_resolve'),
     specials: checks('special'), special_extra: v('special_extra')
   };
 }
