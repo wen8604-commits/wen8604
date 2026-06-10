@@ -1,0 +1,2422 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#1a2744">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<!-- ⑤ 防止 GitHub Pages 快取問題 -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>外籍幫傭補充合約製作工具 v1.1</title>
+<!-- v11.0 高風險5項修復：①safeCall函式防護包裝、②STORAGE_OK旗標+localStorage安全判斷、③pointer-events+.hidden!important防透明覆蓋、④window.onerror改為頁面橫幅可見提示、⑤window.load時關鍵函式存在性驗證 -->
+<style>
+  /* ===== DESIGN SYSTEM ===== */
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243560;
+    --teal: #0e7c7b;
+    --teal-light: #1a9e9d;
+    --gold: #c9973a;
+    --gold-light: #e8b96a;
+    --cream: #f8f5ef;
+    --cream-dark: #ede9e0;
+    --red: #c0392b;
+    --red-light: #fdecea;
+    --green: #27ae60;
+    --green-light: #e8f8ee;
+    --text: #1c1c2e;
+    --text-mid: #4a4a6a;
+    --text-light: #8888aa;
+    --white: #ffffff;
+    --shadow: 0 4px 20px rgba(26,39,68,0.12);
+    --shadow-sm: 0 2px 8px rgba(26,39,68,0.08);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-xs: 4px;
+    --font-body: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', sans-serif;
+    --transition: all 0.25s ease;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== TOOL UI (no-print) ===== */
+  @media screen {
+    .tool-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
+
+    .top-nav {
+      background: var(--navy);
+      color: white;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .top-nav .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+    }
+    .top-nav .nav-actions { display: flex; gap: 8px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary { background: var(--teal); color: white; }
+    .btn-primary:hover { background: var(--teal-light); transform: translateY(-1px); }
+    .btn-secondary { background: rgba(255,255,255,0.12); color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+    .btn-gold { background: var(--gold); color: white; }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+    .btn-outline:hover { background: var(--navy); color: white; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+    .lang-bar {
+      background: var(--navy-mid);
+      padding: 0 20px;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      height: 44px;
+      overflow-x: auto;
+    }
+    .lang-tab {
+      padding: 6px 14px; border-radius: var(--radius-xs);
+      cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap;
+      color: rgba(255,255,255,0.6); transition: var(--transition);
+      border: none; background: transparent;
+    }
+    .lang-tab.active { background: var(--teal); color: white; }
+    .lang-tab:hover:not(.active) { color: white; background: rgba(255,255,255,0.1); }
+
+    .main-layout { display: flex; flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 20px; }
+
+    .sidebar {
+      width: 280px; flex-shrink: 0;
+      background: white; border-radius: var(--radius);
+      box-shadow: var(--shadow-sm); padding: 16px;
+      height: fit-content; position: sticky; top: 116px;
+      max-height: calc(100vh - 136px); overflow-y: auto;
+    }
+    .sidebar h3 {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--text-light); margin-bottom: 10px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--cream-dark);
+    }
+    .sidebar-section { margin-bottom: 16px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 8px; width: 100%;
+      padding: 9px 12px; border-radius: var(--radius-xs);
+      cursor: pointer; border: none; background: transparent;
+      font-size: 13px; color: var(--text-mid); text-align: left; transition: var(--transition);
+    }
+    .nav-item:hover { background: var(--cream); color: var(--navy); }
+    .nav-item.active { background: var(--navy); color: white; }
+    .nav-item .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+    .nav-item.active .dot { background: var(--gold); }
+
+    .content-area { flex: 1; min-width: 0; padding-left: 20px; }
+    .form-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 24px; margin-bottom: 16px; }
+    .form-card.hidden { display: none; }
+    
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid var(--cream-dark); }
+    .section-icon { width: 36px; height: 36px; border-radius: var(--radius-sm); background: var(--navy); color: white; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .section-header h2 { font-size: 16px; color: var(--navy); font-weight: 700; }
+    .section-header p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
+    .form-group.span-2 { grid-column: span 2; }
+    label { font-size: 12px; font-weight: 600; color: var(--text-mid); }
+    
+    input[type=text], input[type=date], input[type=number], select, textarea {
+      width: 100%; padding: 9px 12px; border-radius: var(--radius-xs);
+      border: 1.5px solid var(--cream-dark); background: var(--cream);
+      font-size: 13px; color: var(--text); outline: none; transition: var(--transition);
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--teal); background: white; box-shadow: 0 0 0 3px rgba(14,124,123,0.1); }
+
+    .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-top: 4px; }
+    .checkbox-label {
+      display: flex; align-items: flex-start; gap: 8px; cursor: pointer;
+      padding: 10px 12px; border-radius: var(--radius-xs);
+      border: 1.5px solid var(--cream-dark); font-size: 13px; transition: var(--transition);
+      line-height: 1.4;
+    }
+    .checkbox-label:hover { border-color: var(--teal); background: rgba(14,124,123,0.02); }
+    .checkbox-label input { accent-color: var(--teal); margin-top: 2px; }
+    .checkbox-label.checked { border-color: var(--teal); background: rgba(14,124,123,0.06); font-weight: 600; }
+
+    .step-indicator { display: flex; margin-bottom: 16px; background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden; }
+    .step { flex: 1; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 11px; font-weight: 600; color: var(--text-light); border-right: 1px solid var(--cream-dark); }
+    .step.active { background: var(--navy); color: white; }
+    .step.done { background: var(--green-light); color: var(--green); }
+    .step .step-num { display: block; font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+
+    .preview-controls { background: white; border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 16px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .help-box { padding: 12px 14px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.6; margin-bottom: 12px; }
+    .help-box.info { background: #e8f4fd; border-left: 4px solid #3498db; color: #2c3e50; }
+    .help-box.warning { background: var(--red-light); border-left: 4px solid var(--red); color: #c0392b; }
+    .help-box.success { background: var(--green-light); border-left: 4px solid var(--green); color: #27ae60; }
+    
+    @media (max-width: 768px) {
+      .main-layout { flex-direction: column; padding: 10px; }
+      .sidebar { width: 100%; position: static; margin-bottom: 15px; }
+      .content-area { padding-left: 0; }
+      .checkbox-group { grid-template-columns: 1fr; }
+    }
+  }
+
+  /* ===== PRINT FORMAT SETTINGS PANEL ===== */
+  .print-settings-bar {
+    background: var(--navy-mid); border-radius: var(--radius); padding: 12px 16px;
+    margin-bottom: 12px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .print-settings-bar label { color: rgba(255,255,255,0.85); font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .print-settings-bar select, .print-settings-bar input[type=range] {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    color: white; border-radius: 4px; padding: 4px 8px; font-size: 12px; outline: none;
+  }
+  .print-settings-bar select option { background: #243560; color: white; }
+  .settings-group { display: flex; align-items: center; gap: 6px; }
+  .settings-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.2); }
+  #font-size-val { color: var(--gold-light); font-weight: 700; min-width: 30px; font-size: 12px; }
+
+  /* ===== PRINT CONTRACT ===== */
+  @page {
+    size: A4 portrait;
+    margin: 12mm 13mm 12mm 13mm;
+  }
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+    /* Hide all UI chrome */
+    .tool-wrapper > .top-nav,
+    .tool-wrapper > .lang-bar,
+    .sidebar,
+    .step-indicator,
+    .preview-controls,
+    .print-settings-bar,
+    .help-box { display: none !important; }
+    /* Remove layout chrome from main-layout and content-area */
+    .main-layout { display: block !important; padding: 0 !important; max-width: none !important; }
+    .content-area { padding: 0 !important; }
+    /* Hide all form-cards except sec-preview */
+    .form-card { display: none !important; }
+    .form-card#sec-preview { display: block !important; background: white !important;
+      box-shadow: none !important; border: none !important; padding: 0 !important; margin: 0 !important; }
+    #contract-print-wrapper { display: block !important; }
+    #contract-preview-area { background: white !important; padding: 0 !important; border-radius: 0 !important; }
+  }
+
+  /* ===== CONTRACT PREVIEW & PRINT STYLES ===== */
+  #contract-print-wrapper { display: contents; }
+  .contract-page {
+    width: 210mm; min-height: auto; padding: 10mm 12mm; margin: 0 auto;
+    background: white; color: #000; font-size: var(--contract-font-size, 10pt); line-height: 1.45;
+    font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif;
+  }
+  @media screen {
+    .contract-page { box-shadow: 0 4px 24px rgba(0,0,0,0.15); margin-bottom: 20px; border: 1px solid #ddd; }
+  }
+  @media print {
+    .contract-page {
+      width: 100% !important; min-height: auto !important;
+      padding: 0 !important; margin: 0 !important;
+      box-shadow: none !important; border: none !important;
+      page-break-after: always; break-after: page;
+      font-size: var(--contract-font-size, 10pt) !important;
+      line-height: 1.45 !important;
+    }
+    .contract-page:last-child { page-break-after: auto; break-after: auto; }
+    .c-sig { page-break-inside: avoid; break-inside: avoid; }
+    .c-article { page-break-inside: avoid; break-inside: avoid; }
+  }
+
+  .c-header { text-align: center; border-bottom: 3px solid #1a2744; padding-bottom: 8px; margin-bottom: 10px; }
+  .c-header h1 { font-size: 14pt; font-weight: bold; color: #1a2744; white-space: pre-line; }
+  .c-header .c-subtitle { font-size: 9pt; color: #444; margin-top: 4px; }
+  .c-header .c-lang-badge { display: inline-block; background: #1a2744; color: white; font-size: 8pt; padding: 2px 8px; border-radius: 20px; margin-top: 5px; font-weight: bold; }
+
+  .c-parties { background: #f4f6f9; padding: 8px 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #dcdfe6; }
+  .c-parties p { margin: 3px 0; }
+  .c-field { display: inline-block; border-bottom: 1px solid #000; min-width: 120px; padding: 0 6px; font-weight: bold; color: #111; }
+
+  .c-section-bar { background: #1a2744; color: white; padding: 4px 10px; font-size: 10.5pt; font-weight: bold; margin: 10px 0 6px; border-radius: 4px; }
+  .c-section-bar.alt { background: #0e7c7b; }
+  .c-section-bar.red { background: #8e2a1e; }
+  .c-section-bar.gold { background: #c9973a; }
+
+  .c-article { margin-bottom: 7px; padding: 7px 8px; background: #fafafa; border-left: 4px solid #555; border-radius: 0 6px 6px 0; border: 1px solid #eee; border-left-width: 4px; }
+  .c-article.highlight { background: #fffaf4; border-left-color: #c0392b; }
+  .c-article-num { font-weight: bold; font-size: 10pt; margin-bottom: 3px; color: #1a2744; }
+  .c-article-num.red { color: #c0392b; }
+
+  /* 語系顏色區分 */
+  .c-zh { font-weight: 500; color: #000; display: block; margin-bottom: 0; }
+  .c-bi { font-size: 9pt; color: #4a4a6a; display: block; font-style: italic; margin-bottom: 2px; line-height: 1.35; }
+  /* 特定語系微調 */
+  .lang-en .c-bi { color: #294a7a; }
+  .lang-id .c-bi { color: #5b3a8c; font-style: normal; }
+  .lang-vi .c-bi { color: #1e6b38; font-style: normal; }
+
+  ul.c-list { padding-left: 18px; margin-top: 2px; }
+  ul.c-list li { margin-bottom: 3px; list-style-type: square; }
+
+  .c-important { background: #e8f8ee; border-left: 4px solid #27ae60; padding: 7px 8px; margin: 7px 0; font-size: 9.5pt; border-radius: 4px; }
+  .c-redbox { background: #fdf2f2; border: 2px solid #ec5b5b; padding: 8px 10px; margin: 8px 0; border-radius: 6px; }
+  .c-redbox-title { color: #c0392b; font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 10.5pt; }
+
+  .c-sig { margin-top: 14px; page-break-inside: avoid; }
+  .c-sig-title { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 10px; letter-spacing: 1px; }
+  .c-sig-box { display: flex; justify-content: space-between; margin-top: 10px; }
+  .c-sig-item { width: 48%; }
+  .c-sig-item p { margin: 5px 0; }
+  .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
+  .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
+  .c-date-row { text-align: center; margin-top: 18px; font-size: 10.5pt; font-weight: bold; }
+  .c-date-row .c-date-label { font-size: 9.5pt; color: #444; font-weight: 600; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .c-date-units { display: inline-flex; align-items: baseline; gap: 6px; font-size: 11pt; font-weight: bold; }
+  .c-date-unit { display: inline-flex; align-items: baseline; gap: 3px; }
+  .c-date-box { display: inline-block; border-bottom: 1.5px solid #000; min-width: 44px; text-align: center; padding: 0 4px 1px; font-weight: bold; }
+  .c-date-unit-label { font-size: 10pt; font-weight: 600; color: #111; }
+  .c-witness { margin-top: 12px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+/* RESPONSIVE OPTIMIZATION PATCH v10.7 */
+
+/* ===== MOBILE BOTTOM NAV ===== */
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* ===== TOP NAV RESPONSIVE ===== */
+@media screen and (max-width: 600px) {
+  .top-nav {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .top-nav .brand span:not(.icon) {
+    display: none;
+  }
+  .top-nav .brand .icon {
+    font-size: 20px;
+  }
+  .top-nav .nav-actions .btn span {
+    display: none;
+  }
+  .top-nav .nav-actions {
+    gap: 4px;
+  }
+  .top-nav .nav-actions .btn {
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+}
+
+/* ===== LANG BAR RESPONSIVE ===== */
+@media screen and (max-width: 600px) {
+  .lang-bar {
+    padding: 0 10px;
+    gap: 2px;
+    height: 40px;
+  }
+  .lang-bar > span {
+    display: none;
+  }
+  .lang-tab {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+/* ===== STEP INDICATOR RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .step-indicator {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .step-indicator::-webkit-scrollbar { display: none; }
+  .step {
+    min-width: 60px;
+    flex-shrink: 0;
+    padding: 10px 6px;
+    font-size: 10px;
+  }
+  .step .step-num { font-size: 13px; }
+}
+
+@media screen and (max-width: 480px) {
+  .step { min-width: 52px; font-size: 9px; }
+  .step .step-num { font-size: 12px; }
+}
+
+/* ===== SIDEBAR → HORIZONTAL SCROLL ON MOBILE ===== */
+@media screen and (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    position: static;
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    overflow: hidden;
+  }
+  .sidebar-section:first-child h3 { display: none; }
+  .sidebar-section:first-child {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 4px;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .sidebar-section:first-child::-webkit-scrollbar { display: none; }
+  .sidebar-section:first-child .nav-item {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: 7px 12px;
+    font-size: 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+  }
+  .sidebar-section:first-child .nav-item.active {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+  .sidebar-section:nth-child(2) {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .sidebar-section:nth-child(2) h3 { display: none; }
+  .sidebar-section:nth-child(2) .nav-item {
+    flex: 1;
+    justify-content: center;
+    font-size: 12px;
+    padding: 7px 8px;
+    border-radius: var(--radius-xs);
+    border: 1.5px solid var(--cream-dark);
+    background: var(--cream);
+  }
+}
+
+/* ===== MAIN LAYOUT RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    padding: 10px;
+    gap: 0;
+  }
+  .content-area { padding-left: 0; }
+}
+
+/* ===== FORM CARD RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .form-card { padding: 16px; }
+  .section-header { gap: 10px; margin-bottom: 14px; }
+  .section-header h2 { font-size: 14px; }
+}
+
+/* ===== FORM GRID RESPONSIVE ===== */
+@media screen and (max-width: 640px) {
+  .form-grid { grid-template-columns: 1fr; gap: 10px; }
+  .form-grid.cols-3 { grid-template-columns: 1fr; }
+  .form-group.span-2 { grid-column: span 1; }
+}
+
+@media screen and (min-width: 641px) and (max-width: 768px) {
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== INPUT TOUCH SIZING ===== */
+@media screen and (max-width: 768px) {
+  input[type=text], input[type=date], input[type=number], select, textarea {
+    font-size: 16px !important; /* prevents iOS zoom */
+    padding: 11px 12px;
+    min-height: 44px;
+  }
+  textarea { min-height: 88px; }
+  label { font-size: 13px; }
+}
+
+/* ===== CHECKBOX GROUP RESPONSIVE ===== */
+@media screen and (max-width: 640px) {
+  .checkbox-group {
+    grid-template-columns: 1fr !important;
+  }
+  .checkbox-label {
+    font-size: 13px;
+    padding: 12px 14px;
+  }
+}
+
+@media screen and (min-width: 641px) and (max-width: 768px) {
+  .checkbox-group {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ===== NAVIGATION BUTTONS (prev/next) ===== */
+@media screen and (max-width: 480px) {
+  .form-card > div[style*="justify-content:space-between"] {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+  .form-card > div[style*="justify-content:space-between"] .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+/* ===== PREVIEW CONTROLS RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .preview-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+  .preview-actions {
+    width: 100%;
+    justify-content: stretch !important;
+  }
+  .preview-actions .btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ===== PRINT SETTINGS BAR RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+  .print-settings-bar {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  .settings-divider { display: none; }
+  .settings-group {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .print-settings-bar > span { width: 100%; }
+  /* Hide the long hint text on mobile */
+  .settings-group > label[style*="rgba(255,255,255,0.6)"] { display: none; }
+}
+
+/* ===== CONTRACT PAGE RESPONSIVE PREVIEW ===== */
+@media screen and (max-width: 768px) {
+  .contract-page {
+    width: 100% !important;
+    padding: 14px 12px !important;
+    font-size: 10pt !important;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* ===== TABLET SPECIFIC (769-1024) ===== */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  .main-layout { padding: 14px; }
+  .sidebar { width: 220px; }
+  .form-grid.cols-3 { grid-template-columns: 1fr 1fr; }
+  .checkbox-group { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}
+
+/* ===== TOUCH FEEDBACK ===== */
+@media (hover: none) and (pointer: coarse) {
+  .btn:active { opacity: 0.75; transform: scale(0.97); }
+  .nav-item:active { background: var(--cream-dark); }
+  .checkbox-label:active { opacity: 0.8; }
+}
+
+/* ===== SECTION HEADER SUB ON SMALL ===== */
+@media screen and (max-width: 480px) {
+  .section-header p { display: none; }
+  .section-icon { width: 32px; height: 32px; font-size: 14px; }
+}
+
+/* ===== HELP BOX RESPONSIVE ===== */
+@media screen and (max-width: 480px) {
+  .help-box { font-size: 12px; padding: 10px 12px; }
+}
+
+/* ===== SMOOTH SCROLL CONTENT AREA ===== */
+@media screen and (max-width: 768px) {
+  .content-area { padding-bottom: 20px; }
+}
+
+/* ===== STICKY NAV SAFE AREA (for notch phones) ===== */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .top-nav {
+    padding-top: env(safe-area-inset-top, 0);
+    height: calc(56px + env(safe-area-inset-top, 0));
+  }
+}
+
+
+  /* ③ 預覽區覆蓋修正：隱藏時的 contract-page 不得攔截點擊事件 */
+  .form-card.hidden .contract-page { pointer-events: none; }
+  .form-card.hidden { pointer-events: none; }
+
+  /* 【高風險修復③】確保 .hidden 絕對隱藏，防止透明覆蓋層擋住按鈕 */
+  .hidden { display: none !important; }
+
+  /* 確保可見的 contract-page 正常接受事件 */
+  .contract-page { pointer-events: auto; }
+
+  /* ===== STEP NAV BUTTON ROW ===== */
+  .step-nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    gap: 8px;
+  }
+  @media screen and (max-width: 480px) {
+    .step-nav-row {
+      flex-direction: column-reverse;
+    }
+    .step-nav-row .btn {
+      width: 100%;
+      justify-content: center;
+      padding: 12px 16px;
+      font-size: 14px;
+    }
+  }
+
+</style>
+</head>
+<body class="lang-zh">
+<div class="tool-wrapper">
+
+  <nav class="top-nav">
+    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v1.1</span></div>
+    <div class="nav-actions">
+      <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
+      <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
+      <button class="btn btn-primary btn-sm" onclick="safeCall('exportPDF')">📥 <span>匯出PDF（列印）</span></button>
+      <button class="btn btn-sm" style="background:#5b3a8c;color:white;" onclick="safeCall('exportHTML')">💾 <span>匯出HTML</span></button>
+
+    </div>
+  </nav>
+
+  <div class="lang-bar">
+    <span style="color:rgba(255,255,255,0.5);font-size:12px;margin-right:6px;">切換列印語言版本：</span>
+    <button class="lang-tab active" onclick="safeCall('setLang', 'zh')" id="tab-zh">純中文版</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-en')" id="tab-zh-en">中英對照</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-id')" id="tab-zh-id">中印對照</button>
+    <button class="lang-tab" onclick="safeCall('setLang', 'zh-vi')" id="tab-zh-vi">中越對照</button>
+
+  </div>
+
+  <div class="main-layout">
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3>合約段落步驟</h3>
+        <button class="nav-item active" onclick="safeCall('showSection', 'sec-party')" id="nav-sec-party"><span class="dot"></span>當事人資訊</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-agency')" id="nav-sec-agency"><span class="dot"></span>仲介與見證人</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-household')" id="nav-sec-household"><span class="dot"></span>第一章：家庭基本狀況</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-duties')" id="nav-sec-duties"><span class="dot"></span>第二章：工作內容</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-salary')" id="nav-sec-salary"><span class="dot"></span>第三章：薪資休假</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-rules')" id="nav-sec-rules"><span class="dot"></span>第四章：紀律規範</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-special')" id="nav-sec-special"><span class="dot"></span>第五章：特約與防禦條款</button>
+        <button class="nav-item" onclick="safeCall('showSection', 'sec-preview')" id="nav-sec-preview"><span class="dot" style="background:var(--teal)"></span>📄 預覽與輸出</button>
+      </div>
+      <div class="sidebar-section">
+        <h3>快捷功能</h3>
+        <button class="nav-item" onclick="safeCall('fillSample')"><span class="dot" style="background:var(--gold)"></span>填入法規標準範例</button>
+        <button class="nav-item" onclick="safeCall('clearAll')"><span class="dot" style="background:var(--red)"></span>清空重填</button>
+      </div>
+    </aside>
+
+    <div class="content-area">
+      <div class="step-indicator">
+        <div class="step active" id="step1" onclick="safeCall('showSection', 'sec-party')"><span class="step-num">1</span>當事人</div>
+        <div class="step" id="step2" onclick="safeCall('showSection', 'sec-agency')"><span class="step-num">2</span>仲介</div>
+        <div class="step" id="step3" onclick="safeCall('showSection', 'sec-household')"><span class="step-num">3</span>家庭狀況</div>
+        <div class="step" id="step4" onclick="safeCall('showSection', 'sec-duties')"><span class="step-num">4</span>工作內容</div>
+        <div class="step" id="step5" onclick="safeCall('showSection', 'sec-salary')"><span class="step-num">5</span>薪資福利</div>
+        <div class="step" id="step6" onclick="safeCall('showSection', 'sec-rules')"><span class="step-num">6</span>紀律規範</div>
+        <div class="step" id="step7" onclick="safeCall('showSection', 'sec-special')"><span class="step-num">7</span>特約與防護</div>
+        <div class="step" id="step8" onclick="safeCall('showSection', 'sec-preview')"><span class="step-num">📄</span>預覽</div>
+      </div>
+
+      <div class="form-card" id="sec-party">
+        <div class="section-header">
+          <div class="section-icon">👥</div>
+          <div><h2>當事人基本資訊</h2><p>請確實對照護照與身分證件填寫</p></div>
+        </div>
+        <h3 style="font-size:14px;color:var(--navy);margin-bottom:12px;border-left:4px solid var(--teal);padding-left:8px;">甲方（雇主）</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>雇主姓名 Name</label><input type="text" id="emp_name" placeholder="例：王大明"></div>
+          <div class="form-group"><label>身分證字號 ID No.</label><input type="text" id="emp_id" placeholder="A123456789" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
+          <div class="form-group"><label>聯絡電話 Phone</label><input type="text" id="emp_phone" placeholder="0912-345-678"></div>
+          <div class="form-group"><label>電子信箱 Email</label><input type="text" id="emp_email" placeholder="example@mail.com"></div>
+          <div class="form-group span-2"><label>地址 Address</label><input type="text" id="emp_addr" placeholder="請輸入主聘僱合約登記之工作地址"></div>
+        </div>
+        <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--gold);padding-left:8px;">乙方（外籍幫傭）</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>幫傭姓名 Name (英文正本)</label><input type="text" id="maid_name" placeholder="例：MARIA SANTOS"></div>
+          <div class="form-group"><label>國籍 Nationality</label>
+            <select id="maid_nation">
+              <option value="">-- 選擇國籍 --</option>
+              <option value="印尼 / Indonesia">印尼 / Indonesia</option>
+              <option value="越南 / Vietnam">越南 / Vietnam</option>
+              <option value="菲律賓 / Philippines">菲律賓 / Philippines</option>
+              <option value="泰國 / Thailand">泰國 / Thailand</option>
+              <option value="緬甸 / Myanmar">緬甸 / Myanmar</option>
+              <option value="其他 / Other">其他 / Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label>護照號碼 Passport No.</label><input type="text" id="maid_passport" placeholder="例：AA1234567"></div>
+          <div class="form-group"><label>居留證號 ARC No.</label><input type="text" id="maid_arc" placeholder="例：HD01234567"></div>
+        </div>
+        <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--navy-mid);padding-left:8px;">合約期程</h3>
+        <div class="form-grid cols-3">
+          <div class="form-group"><label>簽約日期</label><input type="date" id="contract_date"></div>
+          <div class="form-group"><label>合約生效起日</label><input type="date" id="start_date" onchange="validateDates()"></div>
+          <div class="form-group"><label>合約截止日</label><input type="date" id="end_date" onchange="validateDates()"></div>
+        </div>
+        <div id="date-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 合約截止日不可早於生效起日，請重新檢查日期！</div>
+        <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
+        <div class="step-nav-row" style="justify-content:flex-end;">
+          <button class="btn btn-primary" onclick="safeCall('goToAgency')">下一步：仲介與見證人資訊 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-agency">
+        <div class="section-header">
+          <div class="section-icon">🏢</div>
+          <div><h2>仲介公司 & 緊急聯絡人 & 合約設定</h2><p>選填項目，可提升合約完整性與法律保障</p></div>
+        </div>
+
+        <h3 style="font-size:14px;color:var(--navy);margin-bottom:12px;border-left:4px solid var(--teal);padding-left:8px;">仲介公司資訊（選填）</h3>
+        <div class="help-box info" style="font-size:12px;">📋 填寫仲介公司資訊後，將自動列入合約見證欄，增強法律效力。</div>
+        <div class="form-grid">
+          <div class="form-group"><label>仲介公司名稱 Agency Name</label><input type="text" id="agency_name" placeholder="例：台灣優質仲介有限公司"></div>
+          <div class="form-group"><label>仲介許可證字號 License No.</label><input type="text" id="agency_license" placeholder="例：私立就業服務機構許可字第XXXXX號"></div>
+          <div class="form-group"><label>仲介聯絡電話 Agency Phone</label><input type="text" id="agency_phone" placeholder="02-XXXX-XXXX"></div>
+          <div class="form-group"><label>仲介負責人 / 承辦人員</label><input type="text" id="agency_contact" placeholder="例：陳主任 / 林小姐"></div>
+        </div>
+
+        <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--gold);padding-left:8px;">緊急聯絡人（選填）</h3>
+        <div class="help-box info" style="font-size:12px;">🚨 設定多位緊急聯絡人，在突發狀況時確保看護有明確的通報對象。</div>
+        <div class="form-grid">
+          <div class="form-group"><label>第一緊急聯絡人姓名</label><input type="text" id="emg1_name" placeholder="例：王大明（雇主本人）"></div>
+          <div class="form-group"><label>第一緊急聯絡人電話</label><input type="text" id="emg1_phone" placeholder="0912-XXX-XXX"></div>
+          <div class="form-group"><label>第一聯絡人關係</label><input type="text" id="emg1_rel" placeholder="例：雇主本人 / 配偶"></div>
+          <div class="form-group"><label>第二緊急聯絡人姓名</label><input type="text" id="emg2_name" placeholder="例：王小明（雇主之子）"></div>
+          <div class="form-group"><label>第二緊急聯絡人電話</label><input type="text" id="emg2_phone" placeholder="0922-XXX-XXX"></div>
+          <div class="form-group"><label>第二聯絡人關係</label><input type="text" id="emg2_rel" placeholder="例：雇主之子 / 家屬"></div>
+        </div>
+
+        <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--navy-mid);padding-left:8px;">合約個性化設定</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>自訂合約副標題（選填，可輸入個人化說明）</label><input type="text" id="custom_subtitle" placeholder="例：居家長期安養照護特別版 / 重症臥床全程陪護版"></div>
+          <div class="form-group"><label>工作地點（若不同於雇主地址）</label><input type="text" id="work_addr" placeholder="例：台北市信義區○○安養機構；留空則同雇主地址"></div>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-party')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-household')">下一步：家庭基本狀況 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-household">
+        <div class="section-header">
+          <div class="section-icon">🏡</div>
+          <div><h2>第一章：家庭基本狀況</h2><p>詳細揭露有助於減少勞資對工作量認知的爭議</p></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>家庭成員人數（含雇主）</label><input type="number" id="hh_members" placeholder="4" min="1" max="20"></div>
+          <div class="form-group"><label>住宅型態</label>
+            <select id="hh_type">
+              <option value="house">獨棟透天厝</option>
+              <option value="apt">公寓樓層（電梯）</option>
+              <option value="apt_walk">公寓樓層（無電梯）</option>
+              <option value="villa">別墅</option>
+              <option value="other">其他</option>
+            </select>
+          </div>
+          <div class="form-group"><label>住宅坪數（大約）</label>
+            <select id="hh_size">
+              <option value="30坪以下">30坪以下</option>
+              <option value="30～50坪">30～50坪</option>
+              <option value="50～80坪" selected>50～80坪</option>
+              <option value="80～120坪">80～120坪</option>
+              <option value="120坪以上">120坪以上</option>
+            </select>
+          </div>
+          <div class="form-group"><label>家中是否有嬰幼兒需照顧</label>
+            <select id="hh_baby">
+              <option value="no">無</option>
+              <option value="infant">有：嬰兒（0-1歲）</option>
+              <option value="toddler">有：幼兒（1-3歲）</option>
+              <option value="child">有：兒童（3-6歲）</option>
+              <option value="multi">有：多名兒童</option>
+            </select>
+          </div>
+          <div class="form-group"><label>家中是否有年長者需一般協助</label>
+            <select id="hh_elderly">
+              <option value="no">無</option>
+              <option value="light">有：輕度協助（生活自理但需陪伴）</option>
+              <option value="medium">有：中度協助（部分需人力幫忙）</option>
+            </select>
+          </div>
+          <div class="form-group"><label>家中寵物狀況</label>
+            <select id="hh_pet">
+              <option value="none">無寵物</option>
+              <option value="dog_small">有：小型犬</option>
+              <option value="dog_large">有：大型犬</option>
+              <option value="cat">有：貓咪</option>
+              <option value="other_pet">有：其他寵物</option>
+            </select>
+          </div>
+          <div class="form-group span-2"><label>其他家庭特殊狀況說明（選填）</label>
+            <textarea id="hh_special" placeholder="例：家中有開業診所辦公室需清潔整理、花園庭院需定期維護..."></textarea>
+          </div>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-agency')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-duties')">下一步：工作內容 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-duties">
+        <div class="section-header">
+          <div class="section-icon">📋</div>
+          <div><h2>第二章：工作範圍與核定標準</h2><p>勾選之項目在輸出時會自動翻譯為選定外語</p></div>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin-bottom:8px;">核心家務清潔項目 (Core Housekeeping)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_sweep" checked> 掃地、拖地（全室）</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_vacuum" checked> 吸塵器清潔地毯地板</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_kitchen_clean" checked> 廚房清潔（爐台、排油煙機、水槽）</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_bathroom" checked> 衛浴廁所清潔消毒</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wipe" checked> 擦拭傢俱、桌面、窗台</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_trash" checked> 清理垃圾、分類資源回收</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_window"> 擦窗戶、清洗紗窗</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_garden"> 庭院、花園澆水整理</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_car"> 清洗車輛（外觀清潔）</label>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">洗滌整燙項目 (Laundry &amp; Ironing)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wash" checked> 洗衣（使用洗衣機）</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_dry" checked> 晾衣、曬衣、烘衣</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_fold" checked> 折疊衣物、歸類收納</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_iron"> 燙衣（全家衣物）</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_bedchange"> 定期更換床單枕套被套</label>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">烹飪餐食項目 (Cooking &amp; Meals)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_cook" checked> 負責三餐烹飪</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_partial"> 負責部分餐食（早餐或晚餐）</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_grocery" checked> 採購日常食材雜貨</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baking"> 備製烘焙點心</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_special"> 配合家庭飲食禁忌烹飪（清真/素食/過敏原）</label>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">育兒照護項目（如適用）(Childcare)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baby_care"> 嬰幼兒日常生活照護（餵食、換尿布、洗澡）</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_school"> 接送兒童上下學</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_homework"> 陪伴兒童課後作業與活動</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_bath"> 協助兒童洗澡盥洗</label>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">其他家務協助項目 (Other Household)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_errand"> 代辦日常雜務（繳費、取件等）</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_organize"> 整理雜物、衣櫃、倉庫</label>
+          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_host"> 配合家庭宴客備料佈置</label>
+        </div>
+        <div class="form-group" style="margin-top:14px;">
+          <label>其他未盡工作備註 (此欄輸入之中文不會自動翻譯，將原樣呈現)</label>
+          <textarea id="duties_extra" placeholder="若有特殊家務或照護協議請寫於此..."></textarea>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-household')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-salary')">下一步：薪資休假 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-salary">
+        <div class="section-header">
+          <div class="section-icon">💰</div>
+          <div><h2>第三章：薪資待遇與休息休假</h2><p>合規提醒：約定薪資不得低於勞動部核定之最低標準，請依實際聘僱條件填寫</p></div>
+        </div>
+        <div class="form-grid">
+          <div class="form-group"><label>約定常態月薪 (NTD)</label><input type="number" id="salary" value="20000" min="20000" step="1" oninput="validateSalary(this)" onchange="validateSalary(this)" onpaste="setTimeout(()=>validateSalary(this),0)"></div>
+          <div class="form-group"><label>固定發薪日期</label>
+            <select id="pay_day">
+              <option value="">-- 請選擇日期 --</option>
+              <option value="每月1日 / Every 1st">每月1日</option>
+              <option value="每月2日 / Every 2nd">每月2日</option>
+              <option value="每月3日 / Every 3rd">每月3日</option>
+              <option value="每月4日 / Every 4th">每月4日</option>
+              <option value="每月5日 / Every 5th">每月5日</option>
+              <option value="每月6日 / Every 6th">每月6日</option>
+              <option value="每月7日 / Every 7th">每月7日</option>
+              <option value="每月8日 / Every 8th">每月8日</option>
+              <option value="每月9日 / Every 9th">每月9日</option>
+              <option value="每月10日 / Every 10th">每月10日</option>
+              <option value="每月11日 / Every 11th">每月11日</option>
+              <option value="每月12日 / Every 12th">每月12日</option>
+              <option value="每月13日 / Every 13th">每月13日</option>
+              <option value="每月14日 / Every 14th">每月14日</option>
+              <option value="每月15日 / Every 15th">每月15日</option>
+              <option value="每月16日 / Every 16th">每月16日</option>
+              <option value="每月17日 / Every 17th">每月17日</option>
+              <option value="每月18日 / Every 18th">每月18日</option>
+              <option value="每月19日 / Every 19th">每月19日</option>
+              <option value="每月20日 / Every 20th">每月20日</option>
+              <option value="每月21日 / Every 21st">每月21日</option>
+              <option value="每月22日 / Every 22nd">每月22日</option>
+              <option value="每月23日 / Every 23rd">每月23日</option>
+              <option value="每月24日 / Every 24th">每月24日</option>
+              <option value="每月25日 / Every 25th">每月25日</option>
+              <option value="每月26日 / Every 26th">每月26日</option>
+              <option value="每月27日 / Every 27th">每月27日</option>
+              <option value="每月28日 / Every 28th">每月28日</option>
+              <option value="每月末日 / Last Day of Month">每月末日（月底）</option>
+            </select>
+          </div>
+          <div class="form-group"><label>發放管道</label>
+            <select id="pay_method">
+              <option value="method_1">直接匯入乙方銀行帳戶</option>
+              <option value="method_2">簽收現金</option>
+            </select>
+          </div>
+          <div class="form-group"><label>每週固定例假</label>
+            <select id="days_off">
+              <option value="off_1">每週休1天 (如因工作不休假，發給加班費)</option>
+              <option value="off_2">每週休2天</option>
+            </select>
+          </div>
+          <div class="form-group"><label>每日基本連續睡眠/休閒時間</label><input type="number" id="rest_hours" value="8" min="4" max="12"></div>
+          <div class="form-group"><label>未休假加班費核算</label>
+            <select id="overtime">
+              <option value="ot_1">依勞動部家庭看護工規定（現行每日NT$733元）</option>
+              <option value="ot_2">由雙方另行按日依法定標準加給</option>
+            </select>
+          </div>
+          <div class="form-group"><label>每日正式工作起始時間</label>
+            <select id="work_start">
+              <option value="">-- 選填 --</option>
+              <option value="05:00">早上 05:00</option>
+              <option value="05:30">早上 05:30</option>
+              <option value="06:00">早上 06:00</option>
+              <option value="06:30">早上 06:30</option>
+              <option value="07:00">早上 07:00</option>
+              <option value="07:30">早上 07:30</option>
+              <option value="08:00">早上 08:00</option>
+            </select>
+          </div>
+          <div class="form-group"><label>每日正式工作結束時間</label>
+            <select id="work_end">
+              <option value="">-- 選填 --</option>
+              <option value="18:00">下午 18:00</option>
+              <option value="19:00">下午 19:00</option>
+              <option value="20:00">晚上 20:00</option>
+              <option value="21:00">晚上 21:00</option>
+              <option value="22:00">晚上 22:00</option>
+              <option value="22:30">晚上 22:30</option>
+              <option value="23:00">晚上 23:00</option>
+              <option value="23:30">晚上 23:30</option>
+              <option value="24:00">深夜 24:00（跨夜）</option>
+            </select>
+          </div>
+          <div class="form-group"><label>照護日誌填寫方式</label>
+            <select id="log_format">
+              <option value="log_paper">紙本日誌（雇主提供紙本格式）</option>
+              <option value="log_app">手機 APP 或 LINE 群組回報</option>
+              <option value="log_both">紙本 + 數位雙重回報</option>
+              <option value="log_none">雙方另行協調，本合約不強制規定</option>
+            </select>
+          </div>
+          <div class="form-group"><label>語言溝通要求</label>
+            <select id="lang_req">
+              <option value="lang_none">不特別要求</option>
+              <option value="lang_basic_zh">要求具備基礎中文溝通能力</option>
+              <option value="lang_improve_zh">要求在職期間持續學習中文</option>
+              <option value="lang_thai_ok">接受使用共同第三語言（英語）溝通</option>
+            </select>
+          </div>
+        </div>
+        <div id="salary-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 約定薪資低於外籍幫傭最低工資標準 <strong>NT$20,000</strong>，請確認是否正確！</div>
+        <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--red);padding-left:8px;">薪資加給項目（選填）</h3>
+        <div class="help-box info" style="font-size:12px;">💰 可額外設定固定津貼或補助，將在合約薪資章節中同步列出。</div>
+        <div class="form-grid">
+          <div class="form-group"><label>伙食津貼 / 代餐補助 (NTD/月，0表示不適用)</label><input type="number" id="allow_food" value="0" min="0" max="5000" placeholder="0"></div>
+          <div class="form-group"><label>交通補助費 (NTD/月，0表示不適用)</label><input type="number" id="allow_transport" value="0" min="0" max="3000" placeholder="0"></div>
+          <div class="form-group"><label>換季/購衣補助 (NTD/年，0表示不適用)</label><input type="number" id="allow_clothing" value="0" min="0" placeholder="0"></div>
+          <div class="form-group"><label>年資加薪 (每滿一年加給 NTD，0表示不適用)</label><input type="number" id="allow_seniority" value="0" min="0" max="3000" placeholder="0"></div>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">甲方保障與提供福利 (Benefits Provided by Party A)</h3>
+        <div class="help-box info" style="font-size:12px;margin-bottom:10px;">⚖️ <strong>法規提示：</strong>前四項（膳食、住宿、健保、職災險）為法定義務，<strong>必須勾選</strong>。後四項為強化保障條款，強烈建議一併勾選。</div>
+        <div class="checkbox-group">
+          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_food" checked> 🍱 <strong>法定</strong>｜免費提供每日三餐合理膳食</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_room" checked> 🛏️ <strong>法定</strong>｜免費提供合規獨立居住空間</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_health" checked> 🏥 <strong>法定</strong>｜依法辦理全民健康保險加保</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_insure" checked> 🦺 <strong>法定</strong>｜依法投保勞工職業災害保險</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_leave" checked> 🎁 <strong>獎勵</strong>｜良好照護績效得發給季度/年度工作獎金</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_transport" checked> 🧋 <strong>獎勵</strong>｜甲方不定期提供飲料點心等日常生活獎勵</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_passport" checked> 🪪 <strong>人權</strong>｜禁止扣押護照或任何重要個人證件</label>
+          <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_contact" checked> 📞 <strong>人權</strong>｜不限制聯繫在台辦事處與仲介機構</label>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-duties')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-rules')">下一步：紀律規範 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-rules">
+        <div class="section-header">
+          <div class="section-icon">⚖️</div>
+          <div><h2>第四章：共同生活紀律與責任歸屬</h2><p>建立互信邊界，避免違規爭議</p></div>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin-bottom:8px;">工作生活禁止事項 (Prohibitions)</h3>
+        <div class="checkbox-group">
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_stay" checked> 未經准許嚴禁在外留宿</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_theft" checked> 嚴禁故意偷竊或侵占財物</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_alcohol" checked> 工作時間內禁止飲酒</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_smoke" checked> 室內空間全面禁止吸菸</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_abuse" checked> 嚴禁對患者施加暴力、虐待或粗暴言語</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_med_alter" checked> 嚴禁私自調劑或擅自停藥</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_privacy" checked> 禁止未經同意洩漏雇主隱私或散布患者照片</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_guest" checked> 未經授權禁止帶外人進入住宅</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_gamble"> 嚴禁賭博或參與非法地下錢莊借貸</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_drug"> 嚴禁持有、使用或販售任何違禁藥物</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_pet"> 未經雇主書面同意，禁止在住宅內飼養任何寵物</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_sublease"> 禁止將雇主提供之居住空間私自分租或借宿他人</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_parttime"> 禁止在聘僱期間私下接受第三方非法打工</label>
+          <label class="checkbox-label"><input type="checkbox" name="prohibit" value="p_religion"> 禁止在工作場所強行推介個人宗教信仰給雇主家屬</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="prohibit" value="p_child_discipline" checked> 嚴禁對家中兒童施以任何體罰或言語恐嚇</label>
+        </div>
+        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">違約違規處置機制</h3>
+        <div class="form-grid">
+          <div class="form-group"><label>若違反上述情節之應處機制</label>
+            <select id="fine_minor">
+              <option value="v_1">由雙方及仲介召開協調會並記警告，留任改善</option>
+              <option value="v_2">通報主管機關並依法合理解約、限期轉換雇主</option>
+            </select>
+          </div>
+          <div class="form-group"><label>涉及財物損失或刑責之最高賠償</label>
+            <select id="fine_major">
+              <option value="m_1">依實際財產損害證明估價賠償</option>
+              <option value="m_2">依法移送司法機關偵辦並追究實質損害</option>
+            </select>
+          </div>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-salary')">← 上一步</button>
+          <button class="btn btn-primary" onclick="safeCall('showSection', 'sec-special')">下一步：特約與防護條款 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-special">
+        <div class="section-header">
+          <div class="section-icon">🛡️</div>
+          <div><h2>第五章：特別防護與補充條款 (防禦強化)</h2><p>針對常見現代家庭爭議之事前特約，勾選以自動列入合約</p></div>
+        </div>
+        
+        <div class="help-box info"><strong>💡 防禦條款提示：</strong> 以下條款結合了《就業服務法》精神與雇主保障，強烈建議勾選以保障雙方權益，避免未來發生薪資、病假或未預告離職之爭議。</div>
+
+        <div class="checkbox-group" style="grid-template-columns:1fr; gap:10px;">
+          <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_labor_law" checked> ⚖️ <strong>勞基法適用聲明：</strong>外籍家庭幫傭依法適用《勞動基準法》，各項權利義務依勞基法及本合約辦理，相關假別及加班費應依法計給。</label>
+          
+          <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_damage_claim" checked> ⚖️ <strong>未預告離職/違約損害賠償聲明：</strong> 若乙方未依法提前30日預告逕行離職或重大違約，甲方保留依法請求重新招募與空窗期實際損害賠償之權利。</label>
+          
+          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_salary_struct" checked> 💰 <strong>薪資結構確認與禁止轉嫁：</strong> 確認約定薪資為應發總額。移工私人仲介費由乙方自理，甲方無代墊或吸收義務；一般消費不構成預支薪資正當理由。</label>
+          
+          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_sick_leave" checked> 🏥 <strong>病假與健康舉證責任：</strong> 因病無法執行照護時，應提供台灣合格醫療機構之醫師診斷證明。若隱瞞重大病情致無法勝任，雇主得依法解約。</label>
+          
+          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_camera" checked> 📹 <strong>監視設備裝設同意：</strong> 乙方同意甲方為確保照護品質，於工作區域（不含私人房間/浴室）裝設監視器，不得以此主張侵犯隱私。</label>
+
+          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_phone" checked> 📱 <strong>手機使用限制：</strong> 非工作休息空檔，工作護理執行期間禁止長時間滑手機、打私人視訊，緊急聯絡除外。</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_advance" checked> 💳 <strong>借支現款限制：</strong> 為防範債務糾紛，每次預支以不超過半月薪資為限，須簽立借據。</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_sns" checked> 📸 <strong>網路社群管制：</strong> 禁止將被照顧者之隱私動態、清涼照或雇主住家內部格局上傳抖音 TikTok、FB。</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_standby" checked> ⏰ <strong>待命時間認定：</strong> 被照顧者夜間入睡後或日間靜養，非連續性突發交辦事項期間，均認定為在宅「待命休息時間」，不另計加班費。</label>
+          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_hospital_stay" checked> 🏥 <strong>住院陪病義務：</strong> 若被照顧者經醫師診斷需住院，乙方同意配合至醫院陪病照料，屬正常職責不另計額外津貼。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_termination_notice"> 📋 <strong>甲方終止合約預告規定：</strong> 甲方如因被照顧者過世、移居機構或病情改善而終止契約，應提前14日書面通知乙方，並協助辦理後續轉換手續。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_valuables"> 🔒 <strong>貴重物品登記聲明：</strong> 雙方同意在簽約日以清單方式列明家中主要貴重物品，乙方不得私自移動或使用，如有遺失雙方得核對清單處理。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_mental_health"> 🧠 <strong>情緒與心理健康支持條款：</strong> 甲方關心乙方身心狀況，如乙方有情緒或適應困難，應主動告知甲方或仲介，雙方共同協調解決，不得以消極怠工方式表達不滿。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_cooking_restriction"> 🍳 <strong>烹飪安全規範：</strong> 乙方使用廚房烹飪時須全程在場看管，嚴禁離開爐火，並遵守雇主家之廚房安全規定及電器使用方式。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_visitor_log"> 📝 <strong>訪客登記制度：</strong> 乙方如有親友來訪，須至少提前一天告知甲方並說明訪客身份，每次訪客時間以不超過3小時為原則。</label>
+          <label class="checkbox-label"><input type="checkbox" name="special" value="s_renewal_priority"> 🔄 <strong>續約優先權：</strong> 合約期滿如甲方有意願續聘，乙方在同等條件下享有優先續約之資格，惟須於期滿前60日表達意願。</label>
+        </div>
+        <div class="form-group" style="margin-top:14px;">
+          <label>其他特約註記 (自訂條款)</label>
+          <textarea id="special_extra" placeholder="無則免填。"></textarea>
+        </div>
+        <div class="step-nav-row">
+          <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-rules')">← 上一步</button>
+          <button class="btn btn-gold" onclick="safeCall('showSection', 'sec-preview')">✅ 產生合約預覽 →</button>
+        </div>
+      </div>
+
+      <div class="form-card hidden" id="sec-preview">
+        <div class="preview-controls">
+          <div><h3>📄 合約預覽輸出區</h3><p style="font-size:12px;color:var(--text-light);">請確認排版設定後，點選列印按鈕產生 PDF。</p></div>
+          <div class="preview-actions" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+            <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-party')">✏️ 返回修正資料</button>
+            <button class="btn btn-gold" onclick="safeCall('exportPDF')">📥 匯出PDF / 列印</button>
+            <button class="btn btn-sm" style="background:#5b3a8c;color:white;padding:10px 18px;font-size:13px;" onclick="safeCall('exportHTML')">💾 匯出合約 HTML 檔</button>
+          </div>
+        </div>
+
+        <!-- 排版格式設定列 -->
+        <div class="print-settings-bar">
+          <span style="color:var(--gold-light);font-weight:700;font-size:13px;">🖨️ 列印排版設定</span>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>紙張</label>
+            <select onchange="applyPrintSetting('paper', this.value)">
+              <option value="A4">A4（預設）</option>
+              <option value="letter">Letter</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>方向</label>
+            <select onchange="applyPrintSetting('orientation', this.value)">
+              <option value="portrait">直式 Portrait</option>
+              <option value="landscape">橫式 Landscape</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>字級</label>
+            <input type="range" min="9" max="13" value="10" step="0.5"
+              oninput="applyPrintSetting('fontSize', this.value); document.getElementById('font-size-val').textContent=this.value+'pt'">
+            <span id="font-size-val">10pt</span>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label>頁邊距</label>
+            <select onchange="applyPrintSetting('margin', this.value)">
+              <option value="normal">標準 (18mm)</option>
+              <option value="narrow">窄版 (12mm)</option>
+              <option value="wide">寬版 (24mm)</option>
+            </select>
+          </div>
+          <div class="settings-divider"></div>
+          <div class="settings-group">
+            <label style="color:rgba(255,255,255,0.6);font-size:11px;">💡 列印時請開啟「背景圖形」並取消頁首頁尾</label>
+          </div>
+        </div>
+
+        <div class="help-box success"><strong>✅ 預覽即所見即所得：</strong>下方合約樣式即為列印輸出效果。調整上方字級 / 頁邊距可即時更新預覽。</div>
+
+        <!-- 合約輸出區（直接列印此區，不再依賴隱藏 div）-->
+        <div id="contract-print-wrapper">
+          <div id="contract-preview-area">
+            <div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== 【高風險修復①②】STORAGE_OK 旗標 + safeCall 函式防護 =====
+// 問題②：一次性探測 localStorage 是否可用（Safari 隱私/無痕/Edge InPrivate 均安全）
+const STORAGE_OK = (function() {
+  try {
+    localStorage.setItem('_t', '1');
+    localStorage.removeItem('_t');
+    return true;
+  } catch(e) {
+    return false;
+  }
+})();
+
+// 問題①：所有 onclick 透過 safeCall 呼叫，任何函式不存在或執行爆炸都不會讓頁面失去控制
+function safeCall(fnName) {
+  try {
+    if (typeof window[fnName] !== 'function') {
+      console.error('[safeCall] 函式未定義：' + fnName + '（請確認 JS 是否完整載入）');
+      return;
+    }
+    // 支援任意數量參數（相容舊有單一 arg 呼叫方式）
+    var args = Array.prototype.slice.call(arguments, 1);
+    window[fnName].apply(window, args);
+  } catch(e) {
+    console.error('[safeCall] 執行 ' + fnName + ' 失敗：', e);
+  }
+}
+
+// ===== 核心多國語言條款對照資料庫 =====
+const TRANSLATION_REGISTRY = {
+  // 幫傭家務工作
+  d_sweep: { zh:"掃地、拖地（全室地板清潔）", en:"Sweeping and mopping (all floor areas)", id:"Menyapu dan mengepel (semua area lantai)", vi:"Quét và lau sàn nhà (toàn bộ các khu vực)" },
+  d_vacuum: { zh:"吸塵器清潔地毯、地板", en:"Vacuuming carpets and floors", id:"Menyedot debu karpet dan lantai", vi:"Hút bụi thảm và sàn nhà" },
+  d_kitchen_clean: { zh:"廚房清潔（爐台、排油煙機、水槽等）", en:"Kitchen cleaning (stove, range hood, sink, etc.)", id:"Membersihkan dapur (kompor, hood, wastafel, dll)", vi:"Dọn dẹp bếp (bếp, máy hút mùi, bồn rửa, v.v.)" },
+  d_bathroom: { zh:"衛浴廁所清潔消毒（含馬桶、洗手台、浴缸）", en:"Bathroom/toilet cleaning and disinfection (toilet, sink, bathtub)", id:"Membersihkan dan mendisinfeksi kamar mandi/toilet", vi:"Dọn dẹp và khử trùng phòng tắm/nhà vệ sinh" },
+  d_wipe: { zh:"擦拭傢俱、桌面、窗台、家電表面", en:"Wiping furniture, tables, windowsills, and appliance surfaces", id:"Mengelap furnitur, meja, ambang jendela, dan peralatan", vi:"Lau chùi đồ nội thất, bàn ghế, bậu cửa sổ và thiết bị" },
+  d_trash: { zh:"清理垃圾、分類資源回收", en:"Removing trash and sorting recyclables", id:"Membuang sampah dan memilah sampah daur ulang", vi:"Đổ rác và phân loại rác tái chế" },
+  d_window: { zh:"擦拭窗戶玻璃、清洗紗窗", en:"Cleaning window glass and window screens", id:"Membersihkan kaca jendela dan kawat nyamuk", vi:"Lau cửa kính và rèm cửa sổ" },
+  d_garden: { zh:"庭院、花園澆水、除草及整理", en:"Watering, weeding, and maintaining yard/garden", id:"Menyiram, menyiangi, dan merawat halaman/taman", vi:"Tưới nước, nhổ cỏ và dọn dẹp sân vườn" },
+  d_car: { zh:"清洗車輛外觀（洗車）", en:"Washing vehicle exteriors (car washing)", id:"Mencuci eksterior kendaraan", vi:"Rửa xe ô tô" },
+  d_wash: { zh:"洗衣（使用洗衣機清洗全家衣物）", en:"Doing laundry using washing machine for all household members", id:"Mencuci pakaian seluruh keluarga menggunakan mesin cuci", vi:"Giặt quần áo cho toàn bộ thành viên gia đình bằng máy giặt" },
+  d_dry: { zh:"晾衣、曬衣、烘衣", en:"Hanging, drying, or machine-drying laundry", id:"Menjemur atau mengeringkan pakaian", vi:"Phơi và sấy quần áo" },
+  d_fold: { zh:"折疊衣物、分類歸位收納", en:"Folding, sorting, and storing clothes in wardrobes", id:"Melipat, menyortir, dan menyimpan pakaian di lemari", vi:"Gấp, phân loại và cất quần áo vào tủ" },
+  d_iron: { zh:"燙衣服（全家衣物）", en:"Ironing clothes for all household members", id:"Menyetrika pakaian seluruh anggota keluarga", vi:"Là ủi quần áo cho toàn bộ thành viên gia đình" },
+  d_bedchange: { zh:"定期更換床單枕套被套", en:"Regularly changing bed sheets, pillowcases, and duvet covers", id:"Mengganti seprai, sarung bantal, dan sarung selimut secara teratur", vi:"Thay ga giường, vỏ gối và vỏ chăn định kỳ" },
+  d_cook: { zh:"負責三餐烹飪（早、午、晚）", en:"Cooking three meals daily (breakfast, lunch, dinner)", id:"Memasak tiga kali sehari (sarapan, makan siang, makan malam)", vi:"Nấu ăn ba bữa mỗi ngày (sáng, trưa, tối)" },
+  d_cook_partial: { zh:"負責部分餐食（早餐或晚餐）", en:"Preparing partial meals (breakfast or dinner only)", id:"Menyiapkan makanan tertentu saja (sarapan atau makan malam)", vi:"Chuẩn bị một phần bữa ăn (chỉ bữa sáng hoặc bữa tối)" },
+  d_grocery: { zh:"採購日常食材雜貨（有交通協助）", en:"Grocery shopping for daily food ingredients (with transportation assistance)", id:"Belanja bahan makanan harian (dengan bantuan transportasi)", vi:"Mua sắm thực phẩm hàng ngày (có hỗ trợ phương tiện)" },
+  d_baking: { zh:"備製烘焙點心", en:"Preparing baked goods and pastries", id:"Membuat kue dan produk bakeri", vi:"Làm bánh và các món nướng" },
+  d_cook_special: { zh:"配合家庭飲食禁忌烹飪（清真/素食/過敏原管控）", en:"Cooking according to family dietary restrictions (halal/vegetarian/allergen control)", id:"Memasak sesuai pantangan makanan keluarga (halal/vegetarian/alergen)", vi:"Nấu ăn theo hạn chế ăn uống của gia đình (halal/chay/kiểm soát dị ứng)" },
+  d_baby_care: { zh:"嬰幼兒日常生活照護（餵食、換尿布、洗澡）", en:"Daily infant/toddler care (feeding, diaper changing, bathing)", id:"Perawatan bayi/balita sehari-hari (makan, ganti popok, mandi)", vi:"Chăm sóc hàng ngày cho trẻ nhỏ (cho ăn, thay tã, tắm rửa)" },
+  d_child_school: { zh:"接送兒童上下學（雇主提供或安排交通）", en:"Picking up and dropping off children at school (employer provides transportation)", id:"Antar jemput anak ke sekolah (majikan menyediakan transportasi)", vi:"Đưa đón trẻ đi học (chủ nhà cung cấp phương tiện)" },
+  d_child_homework: { zh:"陪伴兒童課後作業與活動", en:"Accompanying children in homework and after-school activities", id:"Mendampingi anak dalam mengerjakan PR dan kegiatan sepulang sekolah", vi:"Đồng hành cùng trẻ trong bài tập về nhà và hoạt động sau trường" },
+  d_child_bath: { zh:"協助兒童洗澡盥洗", en:"Helping children bathe and with personal hygiene", id:"Membantu anak mandi dan menjaga kebersihan diri", vi:"Hỗ trợ trẻ tắm rửa và vệ sinh cá nhân" },
+  d_pet_care: { zh:"寵物日常照料（餵食、清潔、護理）", en:"Daily pet care (feeding, cleaning, grooming)", id:"Perawatan hewan peliharaan harian (memberi makan, membersihkan)", vi:"Chăm sóc thú cưng hàng ngày (cho ăn, vệ sinh, chải lông)" },
+  d_errand: { zh:"代辦日常雜務（繳費、取件、跑腿）", en:"Running errands (bill payments, picking up packages, etc.)", id:"Mengurus urusan harian (bayar tagihan, ambil paket, dll)", vi:"Thực hiện các việc vặt hàng ngày (nộp hóa đơn, nhận hàng, v.v.)" },
+  d_organize: { zh:"整理雜物、衣櫃、倉庫", en:"Organizing clutter, wardrobes, and storage areas", id:"Merapikan barang, lemari pakaian, dan area penyimpanan", vi:"Sắp xếp đồ lặt vặt, tủ quần áo và kho chứa đồ" },
+  d_host: { zh:"配合家庭宴客備料佈置協助", en:"Assisting with meal prep and setup for family entertaining", id:"Membantu persiapan makanan dan dekorasi untuk acara keluarga", vi:"Hỗ trợ chuẩn bị thức ăn và trang trí cho tiệc gia đình" },
+  p_child_discipline: { zh:"嚴禁對家中兒童施以任何體罰或言語恐嚇", en:"Any form of physical punishment or verbal intimidation of children in the household is strictly prohibited", id:"Dilarang keras memberikan hukuman fisik atau intimidasi verbal kepada anak-anak di rumah", vi:"Nghiêm cấm mọi hình thức trừng phạt thân thể hoặc đe dọa bằng lời nói đối với trẻ em trong gia đình" },
+  // 工作內容（保留舊有鍵以防引用）
+  d_hygiene: { zh: "個人衛生照護（洗澡、口腔、更衣等）", en: "Personal hygiene care (showering, oral care, changing clothes, etc.)", id: "Perawatan kebersihan pribadi (mandi, perawatan mulut, ganti pakaian, dll)", vi: "Chăm sóc vệ sinh cá nhân (tắm rửa, vệ sinh răng miệng, thay quần áo, v.v.)" },
+  d_diet: { zh: "飲食與餵食照護（備餐、協助進食、記錄）", en: "Dietary and feeding care (meal prep, assistance, tracking)", id: "Perawatan makanan dan pemberian makan (menyiapkan makanan, membantu makan, mencatat)", vi: "Chăm sóc ăn uống (chuẩn bị bữa ăn, hỗ trợ ăn uống, ghi chép)" },
+  d_excretion: { zh: "排泄照護與定期更換尿布", en: "Excretion care and regular diaper changing", id: "Perawatan ekskresi dan penggantian popok secara teratur", vi: "Chăm sóc bài tiết và thay tã định kỳ" },
+  d_turn: { zh: "定時翻身拍背（預防褥瘡）", en: "Regular turning and back patting (prevent bedsores)", id: "Membalikkan badan dan menepuk punggung secara teratur (mencegah luka baring)", vi: "Lật người và vỗ lưng định kỳ (phòng ngừa loét tỳ đè)" },
+  d_med: { zh: "協助遵照醫囑服藥與記錄", en: "Assisting with medication adherence according to doctor's orders", id: "Membantu minum obat dan mencatat sesuai petunjuk dokter", vi: "Hỗ trợ uống thuốc theo chỉ định của bác sĩ và ghi chép" },
+  d_rehab: { zh: "協助居家復健伸展運動", en: "Assisting with home rehabilitation and stretching exercises", id: "Membantu latihan rehabilitasi dan peregangan di rumah", vi: "Hỗ trợ các bài tập kéo giãn và phục hồi chức năng tại nhà" },
+  d_ngtube: { zh: "鼻胃管灌食與相關護理清潔", en: "Nasogastric tube feeding and related care/cleaning", id: "Pemberian makan melalui selang NGT dan perawatan/pembersihan terkait", vi: "Cho ăn qua ống thông mũi dạ dày và chăm sóc vệ sinh liên quan" },
+  d_urine: { zh: "導尿管整理與尿袋清潔更換", en: "Urinary catheter care and cleaning/changing urine bags", id: "Perawatan kateter urin dan pembersihan/penggantian kantong urin", vi: "Chăm sóc ống dẫn lưu nước tiểu và vệ sinh/thay túi đựng nước tiểu" },
+  d_hospital: { zh: "陪同患者至醫院看診與領藥", en: "Accompanying patient to hospital appointments and collecting medicine", id: "Mendampingi pasien ke rumah sakit untuk berobat dan mengambil obat", vi: "Đưa người bệnh đi khám tại bệnh viện và lấy thuốc" },
+  d_emergency: { zh: "突發緊急狀況通報雇主與送醫", en: "Reporting emergencies immediately to the employer and seeking medical help", id: "Melaporkan situasi darurat segera kepada majikan dan mencari bantuan medis", vi: "Thông báo ngay tình trạng khẩn cấp cho chủ nhà và đưa đi bệnh viện" },
+  d_log: { zh: "每日填寫照護工作日誌與健康數值", en: "Filling out daily care logs and health measurements metrics", id: "Mengisi catatan harian perawatan dan hasil pengukuran kesehatan", vi: "Ghi nhật ký chăm sóc và các chỉ số sức khỏe hàng ngày" },
+  
+  // 家務
+  h_wash: { zh: "清洗與晾曬被照顧者之專屬衣物與寢具", en: "Washing and drying patient's personal clothes and bedding", id: "Mencuci dan menjemur pakaian serta perlengkapan tidur khusus pasien", vi: "Giặt và phơi quần áo, chăn ga gối đệm riêng của người được chăm sóc" },
+  h_clean: { zh: "整理與維持被照顧者起居房間之整潔", en: "Cleaning and maintaining patient's living room and space", id: "Merapikan dan menjaga kebersihan kamar tidur pasien", vi: "Dọn dẹp và duy trì sự sạch sẽ phòng ở của người được chăm sóc" },
+  h_kitchen: { zh: "負責照護膳食相關之廚房區域清理", en: "Cleaning the kitchen area related to preparing patient care meals", id: "Membersihkan area dapur yang terkait dengan penyiapan makanan pasien", vi: "Dọn dẹp khu vực nhà bếp liên quan đến việc chuẩn bị bữa ăn chăm sóc" },
+  h_buy: { zh: "外出代購被照顧者專用之生活藥品物資", en: "Going out to purchase daily medical and life supplies for the patient", id: "Pergi keluar untuk membeli persediaan medis dan kebutuhan harian pasien", vi: "Ra ngoài mua hộ nhu yếu phẩm và thuốc men chuyên dụng cho người bệnh" },
+
+  // 發放管道
+  method_1: { zh: "直接匯入受僱者乙方之台灣銀行帳戶", en: "Direct remittance into Employee's (Party B) Taiwan bank account", id: "Transfer langsung ke rekening bank Taiwan milik Pekerja (Pihak B)", vi: "Chuyển khoản trực tiếp vào tài khoản ngân hàng Đài Loan của Bên B" },
+  method_2: { zh: "每月發放現金並由乙方簽收現金簽單", en: "Cash payment monthly with signed receipt by Party B", id: "Pembayaran tunai bulanan dengan tanda terima yang ditandatangani Pihak B", vi: "Phát tiền mặt hàng tháng và có biên nhận do Bên B ký xác nhận" },
+
+  // 休假
+  off_1: { zh: "每週例假1天 (若因照顧需要無法休假，甲方應依法發給一日加班費)", en: "1 day off per week (If unable to rest due to care needs, overtime pay must be paid)", id: "1 hari libur per minggu (Jika tidak bisa libur karena kebutuhan rawat, wajib dibayar lembur)", vi: "Mỗi tuần nghỉ 1 ngày (Nếu do nhu cầu chăm sóc không thể nghỉ, Bên A phải trả lương làm thêm giờ)" },
+  off_2: { zh: "每週常態例假2天", en: "Regular 2 days off per week", id: "Libur reguler 2 hari per minggu", vi: "Mỗi tuần nghỉ 2 ngày thường quy" },
+
+  // 加班費
+  ot_1: { zh: "依勞動部家庭看護工核定標準（目前為每日新台幣733元）", en: "According to MOL regulations for domestic caregivers (currently NT$733/day)", id: "Sesuai peraturan Kementerian Tenaga Kerja untuk pengasuh (saat ini NT$733/hari)", vi: "Theo tiêu chuẩn của Bộ Lao động đối với khán hộ công gia đình (hiện tại là 733 Đài tệ/ngày)" },
+  ot_2: { zh: "由雙方按日加給並簽認合規津貼", en: "To be supplemented daily by agreement with signed compliance allowance", id: "Ditambahkan setiap hari berdasarkan kesepakatan kedua belah pihak", vi: "Do hai bên tự thỏa thuận thêm theo ngày và ký xác nhận phụ cấp" },
+
+  // 禁止事項
+  p_stay: { zh: "未經甲方許可，乙方絕對不得擅自在外留宿", en: "Without permission, Party B must never stay overnight outside the house", id: "Tanpa izin Pihak A, Pihak B sama sekali tidak boleh menginap di luar", vi: "Nếu không có sự đồng ý của Bên A, Bên B tuyệt đối không được tự ý ngủ lại bên ngoài" },
+  p_theft: { zh: "嚴禁故意偷竊、侵占或毀損雇主家屬之財務財產", en: "Theft, embezzlement, or intentional damage of property is strictly prohibited", id: "Sangat dilarang mencuri, menggelapkan, atau merusak properti majikan", vi: "Nghiêm cấm hành vi cố ý trộm cắp, chiếm đoạt hoặc làm hư hỏng tài sản của gia đình chủ" },
+  p_alcohol: { zh: "工作時間內嚴禁飲用酒精性飲料", en: "Drinking alcoholic beverages during working hours is strictly prohibited", id: "Sangat dilarang minum minuman beralkohol selama jam kerja", vi: "Nghiêm cấm uống đồ uống có cồn trong giờ làm việc" },
+  p_smoke: { zh: "雇主住宅室內空間全面禁止吸菸", en: "Smoking inside the employer's residence is entirely prohibited", id: "Dilarang keras merokok di dalam lingkungan rumah majikan", vi: "Cấm hút thuốc hoàn toàn trong không gian nhà ở của chủ lao động" },
+  p_abuse: { zh: "嚴禁對被照顧者實施任何身體暴力、粗暴動作、虐待或言語侮辱", en: "Any physical violence, rough handling, abuse, or verbal insults to the patient are strictly prohibited", id: "Dilarang keras melakukan kekerasan fisik, penanganan kasar, pelecehan, atau penghinaan verbal", vi: "Nghiêm cấm mọi hành vi bạo lực thân thể, động tác thô bạo, ngược đãi hoặc xúc phạm ngôn từ đối với người bệnh" },
+  p_med_alter: { zh: "嚴禁未經醫囑私自更改患者藥量、劑型或擅自停藥", en: "Changing medication dosage, form, or stopping medicine without medical orders is strictly prohibited", id: "Dilarang keras mengubah dosis, bentuk obat, atau menghentikan obat tanpa petunjuk dokter", vi: "Nghiêm cấm việc tự ý thay đổi liều lượng, dạng thuốc hoặc tự ý ngừng thuốc của người bệnh khi chưa có chỉ định" },
+  p_privacy: { zh: "禁止洩漏雇主隱私、對外散布或將被照顧者隱私照片影片傳至網路", en: "Prohibited from leaking privacy or posting patient's privacy photos/videos online", id: "Dilarang membocorkan privasi atau menyebarkan foto/video privasi pasien ke internet", vi: "Nghiêm cấm rò rỉ quyền riêng tư của chủ nhà, phát tán ra ngoài hoặc đăng ảnh/video riêng tư của người bệnh lên mạng" },
+  p_guest: { zh: "未經雇主許可，禁止擅自帶非熟識之外籍友人或親屬進入住宅空間", en: "Bringing foreign friends or relatives into the residence without permission is prohibited", id: "Tanpa izin majikan, dilarang membawa teman atau kerabat asing ke dalam rumah", vi: "Nếu không có sự đồng ý của chủ nhà, cấm tự ý đưa bạn bè hoặc người thân nước ngoài vào nhà" },
+  p_gamble: { zh: "嚴禁參與賭博活動或向地下錢莊借貸，否則雇主不負任何債務連帶責任", en: "Gambling or borrowing from underground money lenders is strictly prohibited; the employer bears no joint liability for any debts", id: "Dilarang berjudi atau meminjam dari rentenir; majikan tidak bertanggung jawab atas utang tersebut", vi: "Nghiêm cấm đánh bạc hoặc vay tiền tín dụng đen; chủ lao động không chịu trách nhiệm liên đới về nợ nần" },
+  p_drug: { zh: "嚴禁持有、吸食、販賣任何管制藥品或非法毒品，一經查獲即依法移送並立即終止契約", en: "Possession, use, or sale of controlled substances is strictly prohibited and will result in immediate contract termination and referral to law enforcement", id: "Dilarang menyimpan, menggunakan, atau menjual narkoba; ditemukan akan langsung berakhir kontrak dan diserahkan ke aparat", vi: "Nghiêm cấm tàng trữ, sử dụng hoặc buôn bán chất ma túy; vi phạm sẽ chấm dứt hợp đồng ngay và bàn giao cơ quan" },
+  p_pet: { zh: "未經雇主書面明確同意，禁止擅自在雇主住宅內飼養任何禽畜、貓狗或其他動物寵物", en: "Without written consent from the employer, keeping any animals or pets inside the residence is strictly prohibited", id: "Tanpa persetujuan tertulis majikan, dilarang memelihara hewan atau binatang peliharaan di rumah majikan", vi: "Nếu không có sự đồng ý bằng văn bản của chủ nhà, nghiêm cấm nuôi bất kỳ động vật hay thú cưng nào trong nhà" },
+  p_sublease: { zh: "嚴禁將雇主提供之居住空間私自分租、借宿或轉借予他人使用", en: "Sub-letting, sharing, or lending the employer-provided accommodation to any third party is strictly prohibited", id: "Dilarang menyewakan kembali, berbagi, atau meminjamkan tempat tinggal yang disediakan majikan kepada pihak lain", vi: "Nghiêm cấm cho thuê lại, chia sẻ hoặc cho mượn chỗ ở do chủ nhà cung cấp cho bất kỳ bên thứ ba nào" },
+  p_parttime: { zh: "合約有效期間，乙方不得私自接受第三方之兼職僱用或於其他場所違法打工", en: "During the contract period, Party B must not accept any part-time employment from third parties or work illegally elsewhere", id: "Selama kontrak berlaku, Pihak B dilarang menerima pekerjaan paruh waktu dari pihak ketiga atau bekerja ilegal di tempat lain", vi: "Trong thời gian hợp đồng có hiệu lực, Bên B không được nhận làm thêm cho bên thứ ba hoặc làm việc trái phép ở nơi khác" },
+  p_religion: { zh: "乙方不得在工作場所強迫或勸說雇主家屬改變宗教信仰，宗教自由應相互尊重", en: "Party B must not compel or persuade the employer's family members to change their religious beliefs; mutual respect for religious freedom is required", id: "Pihak B tidak boleh memaksa anggota keluarga majikan untuk mengubah keyakinan agama; kebebasan beragama harus saling dihormati", vi: "Bên B không được ép buộc hoặc thuyết phục thành viên gia đình chủ nhà thay đổi tín ngưỡng tôn giáo; cần tôn trọng lẫn nhau" },
+
+  // 違約責任
+  v_1: { zh: "由雙方及仲介召開協調會並記警告，促其限期留任改善", en: "A conciliation meeting will be held by both parties and agency for warning and improvement", id: "Pertemuan koordinasi diadakan oleh kedua pihak dan agensi untuk peringatan dan perbaikan", vi: "Hai bên và trung gian sẽ họp điều phối, lập biên bản cảnh cáo và yêu cầu cải thiện trong thời hạn" },
+  v_2: { zh: "通報主管機關並終止合約，依法限期辦理轉換雇主或遣返", en: "Report to competent authority, terminate contract, and transfer employer or repatriate according to law", id: "Laporkan ke otoritas berwenang, akhiri kontrak, dan lakukan transfer majikan atau pemulangan", vi: "Thông báo cho cơ quan quản lý và chấm dứt hợp đồng, làm thủ tục chuyển chủ hoặc về nước theo luật" },
+  m_1: { zh: "依實際財產損害證明、專業單據估價進行損害賠償", en: "Compensation based on actual property damage certificates or commercial evaluations", id: "Ganti rugi berdasarkan bukti kerusakan properti nyata atau taksiran komersial resmi", vi: "Bồi thường thiệt hại dựa trên chứng nhận thiệt hại tài sản thực tế hoặc bảng báo giá chuyên nghiệp" },
+  m_2: { zh: "依法移送台灣司法機關偵辦，並追究實質法律責任與連帶損失", en: "Transfer to Taiwan judicial authorities for investigation and pursue substantial legal responsibilities", id: "Diserahkan ke otoritas yudisial Taiwan untuk penyelidikan dan menuntut tanggung jawab hukum", vi: "Chuyển giao cho cơ quan tư pháp Đài Loan điều tra theo pháp luật và truy cứu trách nhiệm pháp lý thực chất" },
+
+  // 新增：強化防禦條款 (Special Defensive Clauses)
+  s_labor_law: { zh: "勞基法適用聲明：外籍家庭幫傭依法適用《勞動基準法》，各項權利義務依勞基法及本合約辦理，相關假別及加班費應依法計給。", en: "Labor Law Exemption: Both parties acknowledge home caregivers are NOT subject to the Labor Standards Act. Rights and obligations are governed by this contract and Employment Services Act.", id: "Pengecualian UU Tenaga Kerja: Kedua pihak menyadari pengasuh rumah tangga tidak tunduk pada UU Standar Tenaga Kerja. Hak diatur oleh kontrak ini dan UU Layanan Kerja.", vi: "Tuyên bố không áp dụng Luật Lao động Cơ bản: Hai bên hiểu rõ khán hộ công gia đình không áp dụng Luật Lao động Cơ bản. Quyền lợi tuân theo hợp đồng này và Luật Việc làm." },
+  s_damage_claim: { zh: "未預告離職/違約損害賠償聲明：若乙方未依規定提前30日書面預告逕行離職或重大違約，造成甲方空窗期損失，甲方保留依法請求重新招募與實際行政損害賠償之權利。", en: "Breach Damages Claim: If Party B resigns without 30-day written notice or commits a major breach, Party A reserves the right to claim actual damages for recruitment and care gap losses.", id: "Tuntutan Ganti Rugi Pelanggaran: Jika Pihak B mengundurkan diri tanpa pemberitahuan 30 hari atau melakukan pelanggaran berat, Pihak A berhak menuntut ganti rugi nyata untuk rekrutmen dan masa kosong.", vi: "Yêu cầu bồi thường vi phạm: Nếu Bên B nghỉ việc không báo trước 30 ngày hoặc vi phạm nghiêm trọng, Bên A có quyền yêu cầu bồi thường thiệt hại thực tế cho thời gian trống và phí tuyển dụng." },
+  s_salary_struct: { zh: "薪資結構確認與禁止轉嫁：約定薪資為應發總額。移工私人仲介服務費等由乙方自理，甲方無代墊或吸收義務。一般個人消費匯款需求，不構成預支薪資之正當理由。", en: "Salary Structure & No Cost-Shifting: Agreed salary is gross amount. Private agency fees are Party B's responsibility. Party A is not obligated to advance salary for personal expenses.", id: "Struktur Gaji & Larangan Beban Biaya: Gaji adalah jumlah kotor. Biaya agensi pribadi adalah tanggung jawab Pihak B. Majikan tidak wajib menalangi gaji untuk pengeluaran pribadi.", vi: "Cơ cấu lương & Không chuyển giá: Lương thỏa thuận là tổng lương. Phí môi giới cá nhân do Bên B tự chịu. Bên A không có nghĩa vụ ứng trước lương cho chi tiêu cá nhân." },
+  s_sick_leave: { zh: "病假與健康舉證責任：乙方因病無法執行照護時，原則上應提供台灣合格醫療機構之醫師診斷證明。若到職後發現隱瞞重大病情致無法勝任，甲方得依法解約。", en: "Sick Leave & Medical Proof: Must provide a medical certificate from a qualified hospital if unable to work due to illness. Concealing major illnesses allows Party A to terminate contract.", id: "Cuti Sakit & Bukti Medis: Wajib memberikan surat dokter dari RS resmi jika tidak bisa bekerja karena sakit. Menyembunyikan penyakit kronis memungkinkan Pihak A mengakhiri kontrak.", vi: "Nghỉ ốm & Chứng nhận sức khỏe: Phải cung cấp giấy khám bệnh của bệnh viện hợp lệ nếu không thể làm việc do ốm. Che giấu bệnh nặng cho phép Bên A chấm dứt hợp đồng." },
+  s_camera: { zh: "監視設備裝設同意：乙方知悉並同意甲方為確保被照顧者安全與照護品質，於工作區域（不含私人房間與浴室）裝設監視錄影設備，不得以此主張侵犯隱私。", en: "Surveillance Consent: Party B agrees to Party A installing surveillance cameras in work areas (excluding private room/bathroom) to ensure care quality and safety.", id: "Persetujuan CCTV: Pihak B setuju Pihak A memasang kamera pengawas di area kerja (kecuali kamar pribadi/kamar mandi) untuk memastikan kualitas dan keselamatan perawatan.", vi: "Đồng ý camera giám sát: Bên B đồng ý Bên A lắp camera ở khu vực làm việc (trừ phòng riêng/phòng tắm) để đảm bảo an toàn và chất lượng chăm sóc." },
+
+  // 原有特別條款
+  s_phone: { zh: "手機使用限制：非工作休息空檔，工作護理執行期間禁止長時間滑手機或通訊打私人視訊。", en: "Mobile Phone Restrictions: Long-term phone usage or video calls are prohibited during care work hours.", id: "Pembatasan HP: Dilarang menggunakan HP dalam waktu lama atau panggilan video pribadi selama jam kerja.", vi: "Hạn chế sử dụng điện thoại: Không sử dụng điện thoại, gọi video cá nhân thời gian dài trong lúc đang làm việc." },
+  s_advance: { zh: "借支現款限制：為保障權益，乙方每次申請預支薪資上限不得超過半個月，且須確實簽立借據單據。", en: "Salary Advance Limits: Advance cannot exceed half a month's salary and a promissory note must be signed.", id: "Batasan Pinjam Uang: Pinjaman tidak boleh melebihi setengah bulan gaji dan wajib menandatangani kuitansi hutang.", vi: "Hạn chế ứng trước lương: Để đảm bảo quyền lợi, mỗi lần ứng trước không quá nửa tháng lương và phải ký giấy nhận nợ rõ ràng." },
+  s_sns: { zh: "網路社群管制：未經全家人書面同意，絕不可將患者換洗、如廁、雇主家格局隱私拍照上傳抖音 TikTok 或臉書。", en: "Social Media Regulations: Never upload patient care privacy photos or house layouts to TikTok, FB, etc.", id: "Peraturan Media Sosial: Jangan mengunggah foto privasi pasien atau kondisi rumah ke TikTok, FB, dll.", vi: "Kiểm soát mạng xã hội: Tuyệt đối không được chụp ảnh, quay video lúc người bệnh đi vệ sinh, thay đồ hoặc sơ đồ nhà chủ đăng lên TikTok, FB." },
+  s_standby: { zh: "待命時間認定：被照顧者入睡至翌日清晨或日間靜養區間，若無緊急照護突發交辦，均認定為在宅「待命休息時間」，不另計加班費。", en: "Standby Time: The resting period of the patient is recognized as in-house standby/resting time, not overtime.", id: "Waktu Siaga: Waktu istirahat pasien diakui sebagai waktu siaga/istirahat di dalam rumah, bukan lembur.", vi: "Xác định thời gian chờ: Khoảng thời gian người bệnh nghỉ ngơi được tính là thời gian chờ nghỉ ngơi tại nhà, không tính tăng ca." },
+  s_hospital_stay: { zh: "住院陪病義務：若被照顧者罹病經醫師指示必須住院治療，乙方同意配合至醫院執行全天候病床旁照護陪病義務，屬正常工作延伸。", en: "Hospital Escort Duty: If the patient is hospitalized, Party B agrees to accompany and provide care at the hospital as an extension of regular work.", id: "Kewajiban Rawat Inap: Jika pasien harus dirawat di RS, Pihak B setuju mendampingi dan merawat di RS sebagai perpanjangan kerja normal.", vi: "Nghĩa vụ chăm sóc tại bệnh viện: Nếu người bệnh phải nhập viện điều trị, Bên B đồng ý phối hợp vào bệnh viện để chăm sóc như một phần công việc bình thường." },
+  s_termination_notice: { zh: "甲方終止合約預告義務：若因被照顧者不幸過世、移入養護機構或病情好轉至不需照護，甲方決定終止本合約時，應提前14個曆日書面通知乙方，並協助辦理後續行政轉換手續。", en: "Employer's Termination Notice: If Party A decides to terminate the contract due to the patient's passing, transfer to a nursing facility, or recovery, Party A shall provide 14 calendar days' written notice and assist with administrative transfer procedures.", id: "Pemberitahuan Pengakhiran oleh Pihak A: Jika Pihak A memutuskan mengakhiri kontrak karena pasien meninggal, masuk panti, atau sembuh, Pihak A wajib memberikan pemberitahuan tertulis 14 hari dan membantu prosedur alih kerja.", vi: "Thông báo chấm dứt hợp đồng của Bên A: Nếu Bên A quyết định chấm dứt hợp đồng do người bệnh qua đời, vào viện dưỡng lão hoặc hồi phục, Bên A phải thông báo bằng văn bản 14 ngày trước và hỗ trợ thủ tục chuyển đổi." },
+  s_valuables: { zh: "貴重物品登記聲明：雙方於簽約時共同清點家中主要貴重物品並留存清單，乙方不得擅自移動、使用或出借此類財物，若發生遺失，甲方有權核對清單要求乙方說明。", en: "Valuables Registration: Both parties shall jointly inventory major valuables at contract signing. Party B must not move, use, or lend such items. In case of loss, Party A may request explanation from Party B with reference to the inventory.", id: "Pendaftaran Barang Berharga: Kedua pihak wajib menginventarisasi barang berharga utama saat penandatanganan. Pihak B dilarang memindahkan, menggunakan, atau meminjamkan barang tersebut.", vi: "Kê khai tài sản có giá trị: Hai bên cùng kiểm kê các tài sản có giá trị chính khi ký hợp đồng. Bên B không được tự ý di chuyển, sử dụng hoặc cho mượn các tài sản đó." },
+  s_mental_health: { zh: "情緒與心理健康支持條款：甲方關心乙方身心狀態，如乙方因工作或生活適應有任何情緒困難，應主動告知甲方或透過仲介協調，雙方共同溝通解決，不得以消極怠工方式表達不滿。", en: "Mental Health Support: Party A cares about Party B's wellbeing. If Party B faces emotional or adaptation difficulties, Party B should proactively communicate with Party A or through the agency, and must not express dissatisfaction through passive work neglect.", id: "Dukungan Kesehatan Mental: Pihak A peduli kesejahteraan Pihak B. Jika Pihak B menghadapi kesulitan emosional, harus dikomunikasikan melalui Pihak A atau agensi, bukan dengan bekerja malas.", vi: "Hỗ trợ sức khỏe tâm thần: Bên A quan tâm đến tình trạng của Bên B. Nếu Bên B gặp khó khăn cảm xúc, hãy chủ động trao đổi với Bên A hoặc qua môi giới, không được thể hiện sự không hài lòng bằng cách làm việc cẩu thả." },
+  s_cooking_restriction: { zh: "廚房烹飪安全規範：乙方使用廚房烹飪時須全程在場看管，嚴禁離開加熱中之爐火，並須遵守雇主家庭之廚房安全規範及電器使用規定，不得使用私人加熱器具。", en: "Kitchen Safety Rules: Party B must supervise cooking at all times and never leave the stove unattended. Party B must follow the employer's kitchen safety rules and appliance usage regulations.", id: "Aturan Keselamatan Dapur: Pihak B harus mengawasi memasak setiap saat dan tidak boleh meninggalkan kompor menyala. Wajib mengikuti aturan keselamatan dapur dan penggunaan peralatan.", vi: "Quy định an toàn nhà bếp: Bên B phải giám sát nấu ăn suốt thời gian và tuyệt đối không được rời bếp khi đang đun nấu. Phải tuân thủ quy tắc an toàn bếp và cách sử dụng thiết bị." },
+  s_visitor_log: { zh: "訪客登記制度：乙方如有親友計畫來訪，須至少提前一天告知甲方並說明訪客人數及身份，每次訪客以不超過3小時為原則，不得影響照護工作之正常進行。", en: "Visitor Registration: If Party B has friends or family visiting, at least one day's advance notice to Party A is required, including number and relationship of visitors. Visits should not exceed 3 hours and must not disrupt normal care duties.", id: "Pendaftaran Tamu: Jika Pihak B berencana menerima tamu, harus memberitahu Pihak A minimal sehari sebelumnya beserta jumlah dan identitas tamu. Kunjungan tidak boleh melebihi 3 jam.", vi: "Chế độ đăng ký khách thăm: Nếu Bên B có người thân hoặc bạn bè muốn đến thăm, phải thông báo cho Bên A ít nhất một ngày trước và nêu rõ số lượng, quan hệ. Mỗi lần thăm không quá 3 giờ." },
+  s_renewal_priority: { zh: "優先續約權：合約期滿如甲方有意願繼續聘僱，乙方在表現良好且無重大違規前提下，享有同等條件優先續約之資格，惟須於合約期滿前60日向甲方正式表達續約意願。", en: "Priority Renewal Right: Upon contract expiry, if Party A wishes to continue employment, Party B shall have priority renewal rights under equal terms, provided Party B has performed satisfactorily and expresses renewal intent 60 days before expiry.", id: "Hak Pembaruan Prioritas: Jika Pihak A ingin melanjutkan kerja setelah kontrak berakhir, Pihak B berhak diperbarui dengan prioritas jika kinerjanya baik dan menyatakan niat 60 hari sebelum kontrak berakhir.", vi: "Quyền ưu tiên gia hạn hợp đồng: Khi hợp đồng hết hạn, nếu Bên A muốn tiếp tục thuê, Bên B được ưu tiên gia hạn theo điều kiện tương đương, với điều kiện hoàn thành tốt và thông báo ý định 60 ngày trước khi hết hạn." },
+
+  // ===== 甲方法定福利項目 (Benefits) =====
+  b_food: {
+    zh: "甲方免費提供乙方每日三餐合理膳食，飲食內容以在地正常飲食為標準，如有宗教或文化飲食禁忌，雙方應事先溝通確認。",
+    en: "Party A shall provide three meals daily free of charge. Meals shall be of reasonable quality. Any religious or cultural dietary restrictions must be communicated in advance.",
+    id: "Pihak A menyediakan tiga kali makan sehari secara gratis. Kualitas makanan harus wajar. Pantangan makanan karena agama atau budaya harus dikomunikasikan terlebih dahulu.",
+    vi: "Bên A cung cấp ba bữa ăn mỗi ngày miễn phí với chất lượng hợp lý. Các hạn chế ăn uống về tôn giáo hoặc văn hóa phải được thông báo trước."
+  },
+  b_room: {
+    zh: "甲方免費提供乙方符合基本居住標準之獨立臥室或合規居住空間，含基本寢具、電扇或冷暖設備，保障乙方隱私與最低生活尊嚴。",
+    en: "Party A shall provide free accommodation that meets basic living standards, including basic bedding and ventilation or climate control. Privacy and basic dignity of Party B shall be respected.",
+    id: "Pihak A menyediakan tempat tinggal gratis yang memenuhi standar dasar, termasuk perlengkapan tidur dan kipas/pendingin/pemanas ruangan. Privasi dan martabat dasar Pihak B harus dihormati.",
+    vi: "Bên A cung cấp chỗ ở miễn phí đạt tiêu chuẩn cơ bản, bao gồm chăn ga gối đệm và thiết bị điều hoà không khí. Quyền riêng tư và phẩm giá cơ bản của Bên B phải được tôn trọng."
+  },
+  b_health: {
+    zh: "甲方依《全民健康保險法》為乙方辦理全民健保加保，乙方自付保費部分由甲方代扣後依規繳納，乙方享有與本國人同等之健保醫療就診權利。",
+    en: "Party A shall enroll Party B in Taiwan's National Health Insurance (NHI) as required by law. Party B's portion of premiums will be withheld and remitted by Party A. Party B is entitled to equal NHI medical rights.",
+    id: "Pihak A wajib mendaftarkan Pihak B ke Asuransi Kesehatan Nasional (NHI) Taiwan sesuai hukum. Premi bagian Pihak B dipotong dan disetor oleh Pihak A. Pihak B berhak atas hak medis NHI yang setara.",
+    vi: "Bên A có nghĩa vụ đăng ký Bảo hiểm Y tế Quốc gia (NHI) cho Bên B theo quy định pháp luật. Phần phí bảo hiểm của Bên B sẽ bị khấu trừ và nộp bởi Bên A. Bên B được hưởng quyền khám chữa bệnh NHI ngang bằng công dân Đài Loan."
+  },
+  b_insure: {
+    zh: "甲方依《勞工職業災害保險及保護法》為乙方投保職業災害保險，因執行職務造成之職業傷害或疾病，乙方得依法申請相關給付補償。",
+    en: "Party A shall insure Party B under the Occupational Accident Insurance Act. Party B is entitled to claim compensation for occupational injuries or diseases sustained during the performance of duties.",
+    id: "Pihak A wajib mengikutsertakan Pihak B dalam Asuransi Kecelakaan Kerja sesuai undang-undang. Pihak B berhak mengajukan klaim kompensasi atas cedera atau penyakit akibat pekerjaan.",
+    vi: "Bên A có nghĩa vụ mua bảo hiểm tai nạn nghề nghiệp cho Bên B theo Luật Bảo hiểm Tai nạn Lao động. Bên B có quyền yêu cầu bồi thường cho thương tích hoặc bệnh nghề nghiệp phát sinh khi thực hiện nhiệm vụ."
+  },
+  b_leave: {
+    zh: "工作績效獎金：乙方如能持續保持良好照護品質、無重大違規且無曠職，甲方得視情況於每季或年度結算時，酌情發給工作績效獎金，以感謝乙方之辛勞付出（金額及發放時點由甲方視財務狀況裁量）。",
+    en: "Performance Bonus: If Party B maintains good care quality with no major violations or absences, Party A may, at their discretion, issue a performance bonus on a quarterly or annual basis as recognition of Party B's dedicated service. Amount and timing are at Party A's discretion.",
+    id: "Bonus Kinerja: Jika Pihak B menjaga kualitas perawatan yang baik tanpa pelanggaran besar atau ketidakhadiran, Pihak A dapat, atas kebijaksanaannya, memberikan bonus kinerja setiap kuartal atau tahunan. Jumlah dan waktu pemberian sesuai kebijakan Pihak A.",
+    vi: "Thưởng hiệu suất làm việc: Nếu Bên B duy trì chất lượng chăm sóc tốt, không vi phạm nghiêm trọng và không nghỉ phép vô lý, Bên A có thể tùy nghi phát thưởng hiệu suất theo quý hoặc hàng năm để ghi nhận sự cống hiến của Bên B. Số tiền và thời điểm thanh toán theo quyết định của Bên A."
+  },
+  b_transport: {
+    zh: "飲料點心日常獎勵：甲方得不定期提供乙方飲料、水果、點心或小禮品等生活獎勵，以表達對日常照護辛勞之感謝與激勵，此項屬甲方自願性質，不構成固定薪資之一部分。",
+    en: "Daily Refreshment & Snack Rewards: Party A may from time to time provide beverages, fruit, snacks, or small gifts to Party B as a voluntary gesture of appreciation for daily caregiving efforts. This is non-compulsory and does not form part of the agreed salary.",
+    id: "Hadiah Minuman & Camilan Harian: Pihak A dapat sewaktu-waktu memberikan minuman, buah, camilan, atau hadiah kecil kepada Pihak B sebagai bentuk apresiasi sukarela atas kerja keras perawatan sehari-hari. Ini bersifat sukarela dan bukan bagian dari gaji yang disepakati.",
+    vi: "Phần thưởng đồ uống & quà vặt hàng ngày: Bên A có thể không định kỳ cung cấp đồ uống, trái cây, đồ ăn nhẹ hoặc quà nhỏ cho Bên B như một cử chỉ tự nguyện để đánh giá cao những nỗ lực chăm sóc hàng ngày. Điều này là tự nguyện và không cấu thành một phần lương đã thỏa thuận."
+  },
+  b_passport: {
+    zh: "甲方不得扣押乙方護照、居留證或任何個人重要證件。乙方之各項重要文件應由本人自行保管，如有保管需要須取得乙方書面同意。",
+    en: "Party A is strictly prohibited from confiscating Party B's passport, ARC, or any personal identification documents. Party B shall retain personal custody of all important documents.",
+    id: "Pihak A dilarang keras menyita paspor, ARC, atau dokumen identitas pribadi Pihak B. Pihak B berhak menyimpan sendiri semua dokumen penting miliknya.",
+    vi: "Bên A nghiêm cấm tịch thu hộ chiếu, thẻ cư trú (ARC) hoặc bất kỳ giấy tờ tùy thân quan trọng nào của Bên B. Bên B tự bảo quản tất cả các giấy tờ quan trọng của mình."
+  },
+  b_contact: {
+    zh: "甲方不得限制乙方與其原屬國在台辦事處、移工服務中心或合法仲介機構之正常聯繫，乙方享有尋求法律協助與諮詢之自由權利。",
+    en: "Party A shall not restrict Party B from contacting their home country's representative office, migrant worker service centers, or licensed agencies. Party B has the right to seek legal assistance.",
+    id: "Pihak A tidak boleh membatasi Pihak B untuk menghubungi kantor perwakilan negara asal, pusat layanan pekerja migran, atau agensi berlisensi. Pihak B berhak mencari bantuan hukum.",
+    vi: "Bên A không được hạn chế Bên B liên lạc với văn phòng đại diện nước xuất xứ, trung tâm dịch vụ lao động di cư hoặc công ty môi giới có phép. Bên B có quyền tìm kiếm tư vấn pháp lý."
+  },
+
+  // 行動能力
+  mobility_1: { zh: "具備基本生活自理能力 / Independent", en: "Independent", id: "Mandiri", vi: "Có khả năng tự phục vụ cơ bản" },
+  mobility_2: { zh: "部分行動需人力及輔具協助 / Needs Assistance", en: "Needs Assistance", id: "Butuh Bantuan", vi: "Cần nhân lực và dụng cụ hỗ trợ một phần" },
+  mobility_3: { zh: "長期臥床，需完全由他人協助 / Bedridden", en: "Bedridden", id: "Hanya di Ranjang", vi: "Nằm liệt giường lâu ngày, cần người khác hỗ trợ hoàn toàn" }
+};
+
+// ===== UI STATE =====
+let currentLang = 'zh';
+let currentSection = 'sec-party';
+
+// 動態綁定優化：監聽所有 checkbox / radio 點擊使其標籤亮起
+document.addEventListener('change', function(e) {
+  if (e.target && (e.target.type === 'checkbox' || e.target.type === 'radio')) {
+    const lbl = e.target.closest('.checkbox-label');
+    if (lbl) {
+      if (e.target.type === 'radio') {
+        // radio 同組其他選項需先取消高亮
+        const name = e.target.name;
+        document.querySelectorAll(`input[name="${name}"]`).forEach(function(r) {
+          const rl = r.closest('.checkbox-label');
+          if (rl) rl.classList.remove('checked');
+        });
+        lbl.classList.add('checked');
+  
+        // checkbox
+        if (e.target.checked) lbl.classList.add('checked');
+        else lbl.classList.remove('checked');
+      }
+    }
+  }
+});
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  const target = document.getElementById(id);
+  if (!target) { console.warn('showSection: 找不到區段 #' + id); return; }
+  document.querySelectorAll('.form-card').forEach(c => c.classList.add('hidden'));
+  target.classList.remove('hidden');
+  // ③ 還原可見區塊的 pointer-events
+  target.querySelectorAll('.contract-page').forEach(function(p) { p.style.pointerEvents = ''; });
+
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const ni = document.getElementById('nav-' + id);
+  if (ni) ni.classList.add('active');
+
+  const steps = ['sec-party','sec-agency','sec-household','sec-duties','sec-salary','sec-rules','sec-special','sec-preview'];
+  const idx = steps.indexOf(id);
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.classList.remove('active','done');
+    if (i === idx) s.classList.add('active');
+    else if (i < idx) s.classList.add('done');
+  });
+
+  currentSection = id;
+  if (id === 'sec-preview') generatePreview();
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  // body class controls CSS language-specific colour for .c-bi spans
+  // lang values: 'zh', 'zh-en', 'zh-id', 'zh-vi'
+  const bodyLang = lang.includes('-') ? lang.split('-')[1] : lang;
+  document.body.className = "lang-" + bodyLang;
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
+  const tabEl = document.getElementById('tab-' + lang);
+  if (tabEl) tabEl.classList.add('active');
+  // Only regenerate preview if currently on the preview section
+  if (currentSection === 'sec-preview') generatePreview();
+}
+
+// ===== HELPERS =====
+function v(id) { const el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function checks(name) { return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(c => c.value); }
+function radio(name) { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; }
+function fld(val, width) { return val ? `<span class="c-field" style="min-width:${width||120}px">${val}</span>` : `<span class="c-field" style="min-width:${width||120}px">&nbsp;</span>`; }
+
+// ===== MULTI-LANGUAGE FIXED TEXTS =====
+const L = {
+  zh: {
+    title: '外籍幫傭聘僱補充合約書', subtitle: '住家幫傭詳細家務規範與權利義務強化版', badge: '純中文版',
+    partyA: '雇主（甲方）', partyB: '受僱幫傭（乙方）', id: '身分證字號', phone: '聯絡電話', addr: '工作地址',
+    passport: '護照號碼', nation: '受僱國籍', arc: '居留證號',
+    note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充，其法律效力與正式勞動主契約具同等地位。',
+    ch1: '一、家庭基本狀況', art1: '第1條 家庭環境說明',
+    patName:'被照顧者姓名', patAge:'實歲年齡', patHealth:'健康症狀', patIll:'主要確診疾病', patMob:'行動能力判定', patSpec:'醫囑與特殊需求說明',
+    ch2: '二、工作範圍、具體內容與執行標準', art2: '第2條 照護及核准家務項目',
+    ch3: '三、薪資標準、休假機制與福利特別約定', art3: '第3條 薪資待遇與發放管道', art3b: '第4條 休息與例假保障', art3c: '第5條 甲方提供之法定福利項目',
+    ch4: '四、共同生活紀律規範與違約責任', art4: '第6條 工作生活嚴格禁止事項', art4b: '第7條 違規處置與違約責任',
+    ch5: '五、法律聲明與特別防護條款', art5: '第8條 現代家庭特別限制與防禦事項',
+    sigTitle: '立契約書人共同具名正本', dateTitle: '簽署契約書日期', sigHint: '（親筆簽名 / Signature / Cap Jempol）', dateY: '年', dateM: '月', dateD: '日',
+    contract: '本契約一式兩份，由甲乙雙方各執一份為憑。簽署即代表雙方均在完全自主且理解之狀態下合意遵守。',
+    confirm: '⚠️ 乙方重要聲明確認：本人（受僱乙方）已充分了解本合約所有條款，特別是防禦條款之損害賠償權利聲明，完全理解並願意遵守此約定，承擔相關法律責任。',
+    witness: '見證人或承辦仲介公司 (選填)',
+  },
+  'zh-en': {
+    title: '外籍幫傭聘僱補充合約書\nSupplementary Employment Contract for Foreign Domestic Worker', subtitle: '住家幫傭詳細家務規範與權利義務強化版 / Enhanced Regulations for Domestic Work', badge: '中英雙語對照版 / Chinese-English',
+    partyA: '雇主（甲方）/ Employer (Party A)', partyB: '受僱幫傭（乙方）/ Domestic Worker (Party B)', id: '身分證字號 / ID No.', phone: '聯絡電話 / Phone', addr: '工作地址 / Work Address',
+    passport: '護照號碼 / Passport No.', nation: '受僱國籍 / Nationality', arc: '居留證號 / ARC No.',
+    note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nNote: This supplementary contract is an essential addition to the main contract and holds the same legal effect.',
+    ch1: '一、家庭基本狀況 / CHAPTER I: HOUSEHOLD BASIC INFORMATION', art1: '第1條 家庭環境說明 / Article 1: Household Description',
+    patName:'被照顧者姓名 / Patient Name', patAge:'實歲年齡 / Patient Age', patHealth:'健康症狀 / Symptoms', patIll:'主要確診疾病 / Diagnosed Illness', patMob:'行動能力判定 / Mobility Level', patSpec:'醫囑與特殊需求說明 / Special Medical Instructions',
+    ch2: '二、工作範圍、具體內容與執行標準 / CHAPTER II: SCOPE OF CARE WORK & DOMESTIC DUTIES', art2: '第2條 照護及核准家務項目 / Article 2: Authorized Care Items',
+    ch3: '三、薪資標準、休假機制與福利特別約定 / CHAPTER III: SALARY, LEAVE SYSTEM AND BENEFITS', art3: '第3條 薪資待遇與發放管道 / Article 3: Salary Terms', art3b: '第4條 休息與例假保障 / Article 4: Rest and Weekly Holidays', art3c: '第5條 甲方提供之法定福利項目 / Article 5: Benefits Provided by Party A',
+    ch4: '四、共同生活紀律規範與違約責任 / CHAPTER IV: LIVE-IN DISCIPLINE AND BREACH OF TERMS', art4: '第6條 工作生活嚴格禁止事項 / Article 6: Strict Prohibitions', art4b: '第7條 違規處置與違約責任 / Article 7: Handling of Violations',
+    ch5: '五、法律聲明與特別防護條款 / CHAPTER V: SPECIAL PROTECTIVE CLAUSES', art5: '第8條 現代家庭特別限制與防禦事項 / Article 8: Special Restrictions',
+    sigTitle: '立契約書人共同具名正本 / CONTRACTING PARTIES SIGNATURE', dateTitle: '簽署契約書日期 / Date of Agreement', sigHint: '（親筆簽名 / Signature）', dateY: '年 / Year', dateM: '月 / Month', dateD: '日 / Day',
+    contract: '本契約一式兩份，由甲乙雙方各執一份為憑。\nThis contract is made in duplicate, with both parties retaining one original copy.',
+    confirm: '⚠️ 乙方重要聲明確認 / Important Confirmation: I (Party B) have fully read, heard, and understood all terms with help of translator and completely agree to abide by them and bear legal responsibility.',
+    witness: '見證人或承辦仲介公司 (選填) / Witness or Agency (Optional)',
+  },
+  'zh-id': {
+    title: '外籍幫傭聘僱補充合約書\nKontrak Tambahan Kerja untuk Asisten Rumah Tangga Asing', subtitle: '居家照護詳細規範與權利義務強化版 / Peraturan Rinci & Peningkatan Hak Kewajiban', badge: '中印雙語對照版 / Bahasa Indonesia',
+    partyA: '雇主（甲方）/ Majikan (Pihak A)', partyB: '受僱幫傭（乙方）/ Asisten Rumah Tangga (Pihak B)', id: '身分證字號 / No. KTP', phone: '聯絡電話 / No. Telepon', addr: '工作地址 / Alamat Bekerja',
+    passport: '護照號碼 / No. Paspor', nation: '受僱國籍 / Kewarganegaraan', arc: '居留證號 / No. ARC',
+    note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nKeterangan: Kontrak tambahan ini merupakan perpanjangan penting dari kontrak kerja utama dan memiliki kekuatan hukum yang sama.',
+    ch1: '一、被照顧者資訊 / BAB I: INFORMASI PASIEN & KONDISI KESEHATAN', art1: '第1條 被照顧者現況 / Pasal 1: Kondisi Pasien Saat Ini',
+    patName:'被照顧者姓名 / Nama Pasien', patAge:'實歲年齡 / Usia Pasien', patHealth:'健康症狀 / Kondisi Kesehatan', patIll:'主要確診疾病 / Penyakit Utama', patMob:'行動能力判定 / Kemampuan Bergerak', patSpec:'醫囑與特殊需求說明 / Kebutuhan Khusus',
+    ch2: '二、工作內容 / BAB II: CAKUPAN PEKERJAAN PERAWATAN & RUMAH TANGGA', art2: '第2條 照護及核准家務項目 / Pasal 2: Item Pekerjaan Perawatan',
+    ch3: '三、薪資、休假與福利 / BAB III: KETENTUAN GAJI, HARI LIBUR DAN TUNJANGAN', art3: '第3條 薪資待遇與發放管道 / Pasal 3: Gaji dan Metode Pembayaran', art3b: '第4條 休息與例假保障 / Pasal 4: Jaminan Istirahat dan Hari Libur', art3c: '第5條 甲方提供之法定福利項目 / Pasal 5: Tunjangan Terjamin Pihak A',
+    ch4: '四、紀律規範 / BAB IV: PERATURAN DISIPLIN DAN TANGGUNG JAWAB PELANGGARAN', art4: '第6條 工作生活嚴格禁止事項 / Pasal 6: Hal-hal yang Sangat Dilarang', art4b: '第7條 違規處置與違約責任 / Pasal 7: Penanganan Pelanggaran',
+    ch5: '五、法律聲明與特別防護條款 / BAB V: PASAL PERLINDUNGAN KHUSUS', art5: '第8條 現代家庭特別限制與防禦事項 / Pasal 8: Pembatasan Khusus',
+    sigTitle: '立契約書人 / TANDA TANGAN PIHAK BERKONTRAK', dateTitle: '簽署契約書日期 / Tanggal Penandatanganan', sigHint: '（親筆簽名 / Tanda Tangan / Cap Jempol）', dateY: '年 / Tahun', dateM: '月 / Bulan', dateD: '日 / Tanggal',
+    contract: 'Kontrak ini dibuat rangkap dua, masing-masing pihak memegang satu salinan asli sebagai bukti.',
+    confirm: '⚠️ Konfirmasi Penting Pihak B: Saya (Pihak B) telah memahami sepenuhnya semua ketentuan dalam kontrak ini, menyetujuinya, dan bersedia menanggung tanggung jawab hukum terkait.',
+    witness: '見證人或承辦仲介公司 (選填) / Saksi atau Agensi (Opsional)',
+  },
+  'zh-vi': {
+    title: '外籍幫傭聘僱補充合約書\nHợp Đồng Bổ Sung Tuyển Dụng Người Giúp Việc Gia Đình Nước Ngoài', subtitle: '居家照護詳細規範與權利義務強化版 / Quy Định Chi Tiết Bản Nâng Cấp Về Quyền Lợi & Nghĩa Vụ', badge: '中越雙語對照版 / Tiếng Việt',
+    partyA: '雇主（甲方）/ Chủ lao động (Bên A)', partyB: '受僱幫傭（乙方）/ Người giúp việc (Bên B)', id: '身分證字號 / Số CCCD/CMND', phone: '聯絡電話 / Số điện thoại', addr: '工作地址 / Địa chỉ làm việc',
+    passport: '護照號碼 / Số hộ chiếu', nation: '受僱國籍 / Quốc tịch', arc: '居留證號 / Số thẻ cư trú (ARC)',
+    note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nLưu ý: Hợp đồng bổ sung này là phần bổ sung quan trọng của hợp đồng lao động chính và có giá trị pháp lý tương đương.',
+    ch1: '一、被照顧者資訊 / CHƯƠNG I: THÔNG TIN VÀ TÌNH TRẠNG SỨC KHỎE NGƯỜI ĐƯỢC CHĂM SÓC', art1: '第1條 被照顧者現況 / Điều 1: Tình trạng thực tế của người được chăm sóc',
+    patName:'被照顧者姓名 / Họ tên người bệnh', patAge:'實歲年齡 / Tuổi thực tế', patHealth:'健康症狀 / Tình trạng sức khỏe', patIll:'主要確診疾病 / Bệnh lý chính', patMob:'行動能力判定 / Khả năng vận động', patSpec:'醫囑與特殊需求說明 / Hướng dẫn y tế đặc biệt',
+    ch2: '二、工作內容 / CHƯƠNG II: PHẠM VI CÔNG VIỆC CHĂM SÓC & VIỆC NHÀ', art2: '第2條 照護及核准家務項目 / Điều 2: Các hạng mục công việc được phê duyệt',
+    ch3: '三、薪資、休假與福利 / CHƯƠNG III: QUY ĐỊNH VỀ LƯƠNG, NGÀY NGHỈ VÀ PHÚC LỢI', art3: '第3條 薪資待遇與發放管道 / Điều 3: Mức lương và phương thức phát lương', art3b: '第4條 休息與例假保障 / Điều 4: Chế độ nghỉ ngơi và ngày nghỉ lễ', art3c: '第5條 甲方提供之法定福利項目 / Điều 5: Các hạng mục phúc lợi do Bên A cung cấp',
+    ch4: '四、紀律規範 / CHƯƠNG IV: QUY ĐỊNH KỶ LUẬT VÀ TRÁCH NHIỆM VI PHẠM HỢP ĐỒNG', art4: '第6條 工作生活嚴格禁止事項 / Điều 6: Các điều khoản nghiêm cấm', art4b: '第7條 違規處置與違約責任 / Điều 7: Xử lý vi phạm và trách nhiệm',
+    ch5: '五、法律聲明與特別防護條款 / CHƯƠNG V: CÁC ĐIỀU KHOẢN BẢO HỘ ĐẶC BIỆT', art5: '第8條 現代家庭特別限制與防禦事項 / Điều 8: Các thỏa thuận đặc biệt',
+    sigTitle: '立契約書人 / CÁC BÊN KÝ KẾT HỢP ĐỒNG', dateTitle: '簽署契約書日期 / Ngày ký kết hợp đồng', sigHint: '（親筆簽名 / Chữ ký / Điểm chỉ）', dateY: '年 / Năm', dateM: '月 / Tháng', dateD: '日 / Ngày',
+    contract: 'Hợp đồng này được lập thành hai bản, mỗi bên giữ một bản gốc có giá trị như nhau.',
+    confirm: '⚠️ Xác nhận quan trọng của Bên B: Tôi (Bên B) đã hiểu rõ toàn bộ các điều khoản trong hợp đồng bổ sung này thông qua sự hỗ trợ của phiên dịch, hoàn toàn đồng ý tuân thủ và chịu trách nhiệm pháp lý.',
+    witness: '見證人或承辦仲介公司 (選填) / Nhân chứng hoặc Công ty môi giới (Tùy chọn)',
+  }
+};
+
+// ===== RENDER引擎：根據目前選定語言輸出項目 =====
+function renderItemText(key, lang) {
+  const registryItem = TRANSLATION_REGISTRY[key];
+  if (!registryItem) return key ? `<span class="c-zh">${escHtml(key)}</span>` : '';
+
+  const targetLang = lang.includes('-') ? lang.split('-')[1] : lang;
+  if (lang === 'zh') {
+    return `<span class="c-zh">${escHtml(registryItem.zh)}</span>`;
+  } else {
+    const biText = registryItem[targetLang] || registryItem.en;
+    return `<span class="c-zh">${escHtml(registryItem.zh)}</span><span class="c-bi">${escHtml(biText)}</span>`;
+  }
+}
+
+// ===== GENERATE CONTRACT HTML =====
+function generatePreview() {
+  const previewEl = document.getElementById('contract-preview-area');
+  if (!previewEl) {
+    console.error('generatePreview: 找不到 #contract-preview-area，請確認 HTML 結構');
+    return;
+  }
+  try {
+    _doGeneratePreview(previewEl);
+  } catch(e) {
+    console.error('generatePreview 發生錯誤：', e);
+    previewEl.innerHTML = `<div style="padding:24px;color:#c0392b;background:#fdf2f2;border-radius:8px;border:2px solid #ec5b5b;">
+      <strong>⚠️ 合約預覽產生失敗</strong><br>
+      <span style="font-size:13px;">錯誤訊息：${e.message || e}<br>請確認所有必填欄位已填寫，或開啟 F12 Console 查看詳細錯誤。</span>
+    </div>`;
+  }
+}
+
+function _doGeneratePreview(previewEl) {
+  const t = L[currentLang] || L['zh'];
+  const d = gatherData();
+  // Sanitise all free-text user values going into HTML
+  const esc = escHtml;
+  // Apply current font size to contract pages after render
+  const applyFontSize = () => {
+    const fs = printSettings.fontSize || '10';
+    document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
+  };
+  
+  // 家庭基本狀況顯示用標籤
+  const hhTypeLabels = { house:'獨棟透天厝', apt:'公寓樓層（電梯）', apt_walk:'公寓樓層（無電梯）', villa:'別墅', other:'其他' };
+  const hhBabyLabels = { no:'無', infant:'嬰兒（0-1歲）', toddler:'幼兒（1-3歲）', child:'兒童（3-6歲）', multi:'多名兒童' };
+  const hhElderlyLabels = { no:'無', light:'輕度協助（生活自理但需陪伴）', medium:'中度協助（部分需人力幫忙）' };
+  const hhPetLabels = { none:'無寵物', dog_small:'小型犬', dog_large:'大型犬', cat:'貓咪', other_pet:'其他寵物' };
+
+  let dateStr = d.contract_date ? d.contract_date.replace(/-/g, ' / ') : '    /    /    ';
+  const dateParts = d.contract_date ? d.contract_date.split('-') : ['', '', ''];
+  const dateY = dateParts[0] || '';
+  const dateM = dateParts[1] || '';
+  const dateD = dateParts[2] || '';
+  let startStr = d.start_date ? d.start_date.replace(/-/g, ' / ') : '___________';
+  let endStr = d.end_date ? d.end_date.replace(/-/g, ' / ') : '___________';
+
+  // Build allowances description (guard against negative or NaN)
+  const safeInt = (s) => Math.max(0, parseInt(s) || 0);
+  const allowLines = [];
+  if (safeInt(d.allow_food) > 0) allowLines.push(`伙食/代餐津貼：每月新台幣 ${esc(d.allow_food)} 元`);
+  if (safeInt(d.allow_transport) > 0) allowLines.push(`交通補助費：每月新台幣 ${esc(d.allow_transport)} 元`);
+  if (safeInt(d.allow_clothing) > 0) allowLines.push(`換季/購衣補助：每年新台幣 ${esc(d.allow_clothing)} 元`);
+  if (safeInt(d.allow_seniority) > 0) allowLines.push(`年資加薪：每滿一年加給新台幣 ${esc(d.allow_seniority)} 元`);
+
+  // Work hours
+  const workHoursStr = (d.work_start && d.work_end) ? `${d.work_start} ～ ${d.work_end}` : '';
+
+  // log format label
+  const logLabels = { log_paper:'紙本日誌（雇主提供格式）', log_app:'手機APP / LINE群組', log_both:'紙本＋數位雙重', log_none:'另行協調' };
+  const logLabel = logLabels[d.log_format] || '';
+
+  // lang req label
+  const langLabels = { lang_none:'不特別要求', lang_basic_zh:'要求具備基礎中文溝通能力', lang_improve_zh:'要求在職期間持續學習中文', lang_thai_ok:'接受使用共同第三語言（英語）溝通' };
+  const langLabel = langLabels[d.lang_req] || '';
+
+  // 彙整條款
+  const careDutiesHtml = d.duties.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
+  const homeDutiesHtml = d.duties_home.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
+  const benefitsHtml = d.benefits.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
+  const prohibitsHtml = d.prohibits.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
+  const specialsHtml = d.specials.map(k => `<li>${renderItemText(k, currentLang)}</li>`).join('');
+
+  const html = `
+<div class="contract-page">
+  <div class="c-header">
+    <h1>${t.title}</h1>
+    <div class="c-subtitle">${esc(d.custom_subtitle) || t.subtitle}</div>
+    <div class="c-lang-badge">${t.badge}</div>
+  </div>
+
+  <div class="c-parties">
+    <p><strong>${t.partyA}：</strong>${fld(esc(d.emp_name), 180)}</p>
+    <p><strong>${t.id}：</strong>${fld(esc(d.emp_id), 150)} &nbsp;&nbsp; <strong>${t.phone}：</strong>${fld(esc(d.emp_phone), 150)}${d.emp_email ? ` &nbsp;&nbsp; <strong>Email：</strong>${fld(esc(d.emp_email), 180)}` : ''}</p>
+    <p><strong>${t.addr}：</strong>${fld(esc(d.work_addr || d.emp_addr), 350)}</p>
+    <div style="margin-top:8px; border-top:1px dashed #ccc; padding-top:6px;"></div>
+    <p><strong>${t.partyB}：</strong>${fld(esc(d.maid_name), 180)}</p>
+    <p><strong>${t.passport}：</strong>${fld(esc(d.maid_passport), 150)} &nbsp;&nbsp; <strong>${t.nation}：</strong>${fld(esc(d.maid_nation), 130)}</p>
+    <p><strong>${t.arc}：</strong>${fld(esc(d.maid_arc), 150)}</p>
+    ${d.agency_name ? `<div style="margin-top:8px; border-top:1px dashed #ccc; padding-top:6px;"><p><strong>承辦仲介機構 / Agency：</strong>${fld(esc(d.agency_name), 200)} &nbsp;&nbsp; 許可證字號：${fld(esc(d.agency_license), 180)}</p><p>仲介聯絡電話：${fld(esc(d.agency_phone), 150)} &nbsp;&nbsp; 承辦人員：${fld(esc(d.agency_contact), 120)}</p></div>` : ''}
+    <div style="margin-top:8px; border-top:1px dashed #ccc; padding-top:6px; font-size:10pt;">
+      <p><strong>合約簽署日期：</strong>${fld(esc(dateStr), 140)} &nbsp;&nbsp; <strong>有效期間：</strong><span style="font-weight:bold; color:#1a2744;">${startStr} ～ ${endStr}</span></p>
+    </div>
+  </div>
+
+  <div class="c-important">${t.note}</div>
+
+  <div class="c-section-bar">${t.ch1}</div>
+  <div class="c-article">
+    <div class="c-article-num">${t.art1}</div>
+    <ul class="c-list">
+      <li><strong>${t.patName}：</strong>${fld(esc(d.pat_name), 160)} &nbsp;&nbsp; <strong>${t.patAge}：</strong>${fld(esc(d.pat_age), 60)}</li>
+      <li><strong>${t.patHealth}：</strong>${fld(esc(d.pat_health), 400)}</li>
+      <li><strong>${t.patIll}：</strong>${fld(esc(d.pat_illness), 400)}</li>
+      <li><strong>${t.patMob}：</strong><br>${d.mobility ? renderItemText(d.mobility, currentLang) : '<span class="c-zh" style="color:#aaa;">（未選擇 / Not specified）</span>'}</li>
+      ${d.pat_special ? `<li><strong>${t.patSpec}：</strong><br><span style="color:#222; font-weight:bold;">${esc(d.pat_special)}</span></li>` : ''}
+    </ul>
+  </div>
+
+  <div class="c-article">
+    <div class="c-article-num" style="color:var(--text-mid);">家庭基本環境 / Household Overview</div>
+    <ul class="c-list">
+      ${d.hh_members ? `<li>家庭成員人數：<strong>${esc(d.hh_members)} 人</strong></li>` : ''}
+      ${d.hh_type ? `<li>住宅型態：<strong>${esc(hhTypeLabels[d.hh_type] || d.hh_type)}</strong>　住宅坪數：<strong>${esc(d.hh_size)}</strong></li>` : ''}
+      ${d.hh_baby && d.hh_baby !== 'no' ? `<li>家中嬰幼兒照護需求：<strong>${esc(hhBabyLabels[d.hh_baby] || d.hh_baby)}</strong></li>` : ''}
+      ${d.hh_elderly && d.hh_elderly !== 'no' ? `<li>家中年長者協助需求：<strong>${esc(hhElderlyLabels[d.hh_elderly] || d.hh_elderly)}</strong></li>` : ''}
+      ${d.hh_pet && d.hh_pet !== 'none' ? `<li>家中寵物狀況：<strong>${esc(hhPetLabels[d.hh_pet] || d.hh_pet)}</strong></li>` : ''}
+      ${d.hh_special ? `<li>其他家庭特殊說明：${esc(d.hh_special)}</li>` : ''}
+    </ul>
+  </div>
+
+  <div class="c-section-bar alt">${t.ch2}</div>
+  <div class="c-article">
+    <div class="c-article-num">${t.art2}</div>
+    <ul class="c-list">
+      ${careDutiesHtml}
+      ${homeDutiesHtml}
+      ${d.duties_extra ? `<li style="list-style-type:circle; color:#333;"><strong>雇主特加備註：</strong>${esc(d.duties_extra)}</li>` : ''}
+    </ul>
+  </div>
+</div>
+
+<div class="contract-page">
+  <div class="c-section-bar">${t.ch3}</div>
+  <div class="c-article">
+    <div class="c-article-num">${t.art3}</div>
+    <ul class="c-list">
+      <li>
+        <span class="c-zh">固定常態月薪：新台幣 <strong>${esc(d.salary)}</strong> 元整。</span>
+        ${currentLang === 'zh-en' ? `<span class="c-bi">Fixed Monthly Salary: NT$ ${esc(d.salary)}</span>` : ''}
+        ${currentLang === 'zh-id' ? `<span class="c-bi">Gaji Bulanan Tetap: NT$ ${esc(d.salary)}</span>` : ''}
+        ${currentLang === 'zh-vi' ? `<span class="c-bi">Lương tháng cố định: NT$ ${esc(d.salary)}</span>` : ''}
+
+      </li>
+      ${d.pay_day ? `<li><span class="c-zh">固定發薪日期：<strong>${esc(d.pay_day)}</strong>。</span>${currentLang === 'zh-en' ? `<span class="c-bi">Pay Date: ${esc(d.pay_day)}</span>` : ''}${currentLang === 'zh-id' ? `<span class="c-bi">Tanggal Gajian: ${esc(d.pay_day)}</span>` : ''}${currentLang === 'zh-vi' ? `<span class="c-bi">Ngày phát lương: ${esc(d.pay_day)}</span>` : ''}</li>` : ''}
+      ${allowLines.length > 0 ? `<li><span class="c-zh"><strong>額外加給津貼項目：</strong></span><ul style="margin-top:4px;">${allowLines.map(l=>`<li style="font-size:10pt;">${l}</li>`).join('')}</ul></li>` : ''}
+      <li>
+        <span class="c-zh">薪資發放管道機制：</span>
+        ${renderItemText(d.pay_method, currentLang)}
+      </li>
+      ${workHoursStr ? `<li><span class="c-zh">每日核定工作時段：<strong>${esc(workHoursStr)}</strong>（待命休息時間另依待命條款認定）</span></li>` : ''}
+      ${logLabel ? `<li><span class="c-zh">照護日誌填寫方式：${esc(logLabel)}</span></li>` : ''}
+      ${langLabel && d.lang_req !== 'lang_none' ? `<li><span class="c-zh">語言溝通要求：${esc(langLabel)}</span></li>` : ''}
+    </ul>
+  </div>
+
+  <div class="c-article">
+    <div class="c-article-num">${t.art3b}</div>
+    <ul class="c-list">
+      <li>${renderItemText(d.days_off, currentLang)}</li>
+      <li>
+        <span class="c-zh">每日基本保障休息與連續睡眠時間合計為：<strong>${esc(d.rest_hours)}</strong> 小時。</span>
+        ${currentLang === 'zh-en' ? `<span class="c-bi">Daily guaranteed rest and continuous sleep total: ${esc(d.rest_hours)} hours.</span>` : ''}
+        ${currentLang === 'zh-id' ? `<span class="c-bi">Waktu istirahat dan tidur berkelanjutan harian dijamin minimum: ${esc(d.rest_hours)} jam.</span>` : ''}
+        ${currentLang === 'zh-vi' ? `<span class="c-bi">Thời gian nghỉ ngơi và ngủ liên tục hàng ngày được bảo đảm tối thiểu: ${esc(d.rest_hours)} giờ.</span>` : ''}
+
+      </li>
+      <li>
+        <span class="c-zh">未休假加班費計算標準：</span>
+        ${renderItemText(d.overtime, currentLang)}
+      </li>
+    </ul>
+  </div>
+
+  <div class="c-article">
+    <div class="c-article-num">${t.art3c}</div>
+    <ul class="c-list">
+      ${benefitsHtml}
+    </ul>
+  </div>
+
+  <div class="c-section-bar red">${t.ch4}</div>
+  <div class="c-article highlight">
+    <div class="c-article-num red">${t.art4}</div>
+    <ul class="c-list">
+      ${prohibitsHtml}
+    </ul>
+  </div>
+
+  <div class="c-article highlight">
+    <div class="c-article-num red">${t.art4b}</div>
+    <ul class="c-list">
+      <li>
+        <span class="c-zh">乙方如發生一般生活或照護違規情事之應處機制：</span>
+        ${renderItemText(d.fine_minor, currentLang)}
+      </li>
+      <li>
+        <span class="c-zh">如涉及重大財產損失、侵害生命安全或法律刑責上限：</span>
+        ${renderItemText(d.fine_major, currentLang)}
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="contract-page">
+  <div class="c-section-bar gold">${t.ch5}</div>
+  <div class="c-article">
+    <div class="c-article-num">${t.art5}</div>
+    <ul class="c-list">
+      ${specialsHtml}
+      ${d.special_extra ? `<li style="list-style-type:circle;"><strong>雙方加註特約：</strong>${esc(d.special_extra)}</li>` : ''}
+    </ul>
+  </div>
+
+  <div class="c-important" style="text-align:center; font-size:11pt;">
+    中文版合約生效期間：自 <strong>${startStr}</strong> 起 至 <strong>${endStr}</strong> 止。
+  </div>
+
+  <div class="c-important">${t.contract}</div>
+  
+  <div class="c-redbox">
+    <div class="c-redbox-title">⚠️ 雙方確認聲明 / STATEMENT OF CONFIRMATION</div>
+    <p style="font-size:10pt; line-height:1.6;">${t.confirm}</p>
+  </div>
+
+  <div class="c-sig">
+    <div class="c-sig-title">${t.sigTitle}</div>
+    <div class="c-sig-box">
+      <div class="c-sig-item">
+        <p><strong>${t.partyA}：</strong></p>
+        <div class="c-sig-line"></div>
+        <p class="c-sig-hint">${t.sigHint}</p>
+        <p>身分證號 / ID: ${fld(esc(d.emp_id), 160)}</p>
+      </div>
+      <div class="c-sig-item">
+        <p><strong>${t.partyB}：</strong></p>
+        <div class="c-sig-line"></div>
+        <p class="c-sig-hint">${t.sigHint}</p>
+        <p>護照號碼 / Passport: ${fld(esc(d.maid_passport), 160)}</p>
+      </div>
+    </div>
+    
+    <div class="c-date-row">
+      <span class="c-date-label">${t.dateTitle}</span>
+      <div class="c-date-units">
+        <div class="c-date-unit">
+          <span class="c-date-box">${dateY}</span>
+          <span class="c-date-unit-label">${t.dateY || '年'}</span>
+        </div>
+        <div class="c-date-unit">
+          <span class="c-date-box">${dateM}</span>
+          <span class="c-date-unit-label">${t.dateM || '月'}</span>
+        </div>
+        <div class="c-date-unit">
+          <span class="c-date-box">${dateD}</span>
+          <span class="c-date-unit-label">${t.dateD || '日'}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="c-witness">
+      <p><strong>${t.witness}：</strong></p>
+      ${d.agency_name ? `<p>仲介公司名稱：<strong>${esc(d.agency_name)}</strong> &nbsp;&nbsp; 聯絡電話：${esc(d.agency_phone) || '____________________'} &nbsp;&nbsp; 承辦人：${esc(d.agency_contact) || '____________________'}</p><p>仲介許可證字號：${esc(d.agency_license) || '____________________'}</p>` : `<p>名稱/姓名 Name：____________________ &nbsp;&nbsp;&nbsp;&nbsp; 簽名蓋章 Sign：____________________</p><p>關係說明 Relation：□ 仲介公司/Agency &nbsp;&nbsp; □ 家屬親友/Family &nbsp;&nbsp; □ 通譯見證人/Translator</p>`}
+      ${(d.emg1_name || d.emg2_name) ? `<div style="margin-top:12px;padding-top:10px;border-top:1px dashed #ccc;"><p><strong>緊急聯絡人 Emergency Contacts：</strong></p>${d.emg1_name ? `<p>第一聯絡人：${esc(d.emg1_name)}（${esc(d.emg1_rel) || ''}） 電話：${esc(d.emg1_phone) || ''}</p>` : ''}${d.emg2_name ? `<p>第二聯絡人：${esc(d.emg2_name)}（${esc(d.emg2_rel) || ''}） 電話：${esc(d.emg2_phone) || ''}</p>` : ''}</div>` : ''}
+    </div>
+  </div>
+</div>`;
+
+  previewEl.innerHTML = html;
+  applyFontSize();
+  // No separate print-contract div needed — @media print renders sec-preview directly
+}
+
+function gatherData() {
+  return {
+    emp_name: v('emp_name'), emp_id: v('emp_id'), emp_phone: v('emp_phone'),
+    emp_email: v('emp_email'), emp_addr: v('emp_addr'),
+    maid_name: v('maid_name'), maid_nation: v('maid_nation'),
+    maid_passport: v('maid_passport'), maid_arc: v('maid_arc'),
+    contract_date: v('contract_date'), start_date: v('start_date'), end_date: v('end_date'),
+    // NEW: agency & emergency
+    agency_name: v('agency_name'), agency_license: v('agency_license'),
+    agency_phone: v('agency_phone'), agency_contact: v('agency_contact'),
+    emg1_name: v('emg1_name'), emg1_phone: v('emg1_phone'), emg1_rel: v('emg1_rel'),
+    emg2_name: v('emg2_name'), emg2_phone: v('emg2_phone'), emg2_rel: v('emg2_rel'),
+    custom_subtitle: v('custom_subtitle'), work_addr: v('work_addr'),
+    work_start: v('work_start'), work_end: v('work_end'),
+    log_format: v('log_format'), lang_req: v('lang_req'),
+    allow_food: v('allow_food'), allow_transport: v('allow_transport'),
+    allow_clothing: v('allow_clothing'), allow_seniority: v('allow_seniority'),
+    // 第一章：家庭基本狀況
+    hh_members: v('hh_members'), hh_type: v('hh_type'), hh_size: v('hh_size'),
+    hh_baby: v('hh_baby'), hh_elderly: v('hh_elderly'), hh_pet: v('hh_pet'),
+    hh_special: v('hh_special'),
+    // original fields
+    pat_name: v('pat_name'), pat_age: v('pat_age'), pat_health: v('pat_health'),
+    pat_illness: v('pat_illness'), pat_special: v('pat_special'),
+    mobility: radio('mobility'),
+    duties: checks('duty'), duties_home: checks('duty_home'), duties_extra: v('duties_extra'),
+    salary: v('salary'), pay_day: v('pay_day'), pay_method: v('pay_method'),
+    days_off: v('days_off'), rest_hours: v('rest_hours'), overtime: v('overtime'),
+    benefits: checks('benefit'), prohibits: checks('prohibit'),
+    fine_minor: v('fine_minor'), fine_major: v('fine_major'),
+    specials: checks('special'), special_extra: v('special_extra')
+  };
+}
+
+// ===== PRINT SETTINGS STATE =====
+const printSettings = { paper: 'A4', orientation: 'portrait', fontSize: '10', margin: 'normal' };
+
+const marginMap = { normal: '18mm 16mm 16mm 16mm', narrow: '10mm 10mm 10mm 10mm', wide: '24mm 22mm 20mm 22mm' };
+
+function applyPrintSetting(key, val) {
+  printSettings[key] = val;
+  // Apply font size live to contract pages
+  if (key === 'fontSize') {
+    document.querySelectorAll('.contract-page').forEach(el => {
+      el.style.fontSize = val + 'pt';
+    });
+  }
+  // Rebuild @page style tag
+  updatePageStyle();
+}
+
+function updatePageStyle() {
+  let styleEl = document.getElementById('dynamic-page-style');
+  if (!styleEl) { styleEl = document.createElement('style'); styleEl.id = 'dynamic-page-style'; document.head.appendChild(styleEl); }
+  const size = printSettings.paper + ' ' + printSettings.orientation;
+  const margin = marginMap[printSettings.margin] || marginMap.normal;
+  const fs = printSettings.fontSize || '10';
+  styleEl.textContent = `
+    @page { size: ${size}; margin: ${margin}; }
+    @media print { .contract-page { font-size: ${fs}pt !important; } }
+  `;
+}
+
+// ===== PDF EXPORT =====
+function exportPDF() {
+  // Always navigate to preview section first to ensure sec-preview is visible
+  showSection('sec-preview');
+  try { generatePreview(); } catch(e) { console.error('exportPDF generatePreview 錯誤：', e); }
+  // Apply current font size to freshly rendered pages
+  const fs = printSettings.fontSize || '10';
+  document.querySelectorAll('.contract-page').forEach(el => { el.style.fontSize = fs + 'pt'; });
+  updatePageStyle();
+  // 使用雙層 requestAnimationFrame 確保 DOM 完全渲染後再開啟列印對話框
+  // 比固定 setTimeout(350ms) 更可靠，適應各種設備速度
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      window.print();
+    });
+  });
+}
+
+// ===== HTML EXPORT =====
+function exportHTML() {
+  // 先確保預覽已產生
+  try { generatePreview(); } catch(e) { console.error('exportHTML generatePreview 錯誤：', e); }
+
+  const previewEl = document.getElementById('contract-preview-area');
+  if (!previewEl || previewEl.innerHTML.trim() === '' || previewEl.querySelector('[style*="尚未產生"]')) {
+    alert('⚠️ 請先切換到「預覽與輸出」頁面，確認合約已產生後再匯出 HTML。');
+    showSection('sec-preview');
+    return;
+  }
+
+  // 取得合約 HTML 內容
+  const contractHTML = previewEl.innerHTML;
+
+  // 取得合約字體大小設定
+  const fs = printSettings.fontSize || '10';
+  const margin = ({ normal: '18mm 16mm 16mm 16mm', narrow: '10mm 10mm 10mm 10mm', wide: '24mm 22mm 20mm 22mm' })[printSettings.margin] || '18mm 16mm 16mm 16mm';
+  const paper = printSettings.paper || 'A4';
+  const orientation = printSettings.orientation || 'portrait';
+
+  // 組裝獨立 HTML 檔（含所有合約樣式，可直接在瀏覽器開啟或列印）
+  const d = gatherData();
+  const empName = d.emp_name || '未填寫';
+  const careName = d.maid_name || '未填寫';
+  const contractDate = d.contract_date || new Date().toISOString().slice(0,10);
+  const fileName = `幫傭補充合約_${empName}_${(d.maid_name||'未填寫')}_${contractDate}.html`;
+
+  const fullHTML = `<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外籍幫傭補充合約 - ${empName} / ${(d.maid_name||'未填寫')}</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif; background: #f0f0f0; }
+
+  @page { size: ${paper} ${orientation}; margin: ${margin}; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { margin: 0 !important; padding: 0 !important; background: white !important; }
+    .no-print { display: none !important; }
+    .contract-page {
+      width: 100% !important; padding: 0 !important; margin: 0 !important;
+      box-shadow: none !important; border: none !important;
+      page-break-after: always; break-after: page;
+      font-size: ${fs}pt !important;
+    }
+    .contract-page:last-child { page-break-after: auto; break-after: auto; }
+  }
+
+  /* 頂部工具列 */
+  .export-toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: #1a2744; color: white; padding: 10px 20px;
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3); font-family: 'Microsoft JhengHei', sans-serif;
+  }
+  .export-toolbar .brand { font-size: 14px; font-weight: 700; }
+  .export-toolbar .hint { font-size: 12px; color: rgba(255,255,255,0.7); }
+  .print-btn {
+    background: #0e7c7b; color: white; border: none; border-radius: 6px;
+    padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: 'Microsoft JhengHei', sans-serif; white-space: nowrap;
+  }
+  .print-btn:hover { background: #1a9e9d; }
+
+  /* 合約頁面容器 */
+  .page-wrapper { padding-top: 60px; }
+
+  /* 合約樣式（完整複製）*/
+  .contract-page {
+    width: 210mm; min-height: auto; padding: 10mm 12mm; margin: 20px auto;
+    background: white; color: #000; font-size: ${fs}pt; line-height: 1.45;
+    font-family: 'Microsoft JhengHei', 'PingFang TC', 'Noto Sans CJK TC', serif;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15); border: 1px solid #ddd;
+  }
+  .c-header { text-align: center; border-bottom: 3px solid #1a2744; padding-bottom: 8px; margin-bottom: 10px; }
+  .c-header h1 { font-size: 14pt; font-weight: bold; color: #1a2744; white-space: pre-line; }
+  .c-header .c-subtitle { font-size: 9pt; color: #444; margin-top: 4px; }
+  .c-header .c-lang-badge { display: inline-block; background: #1a2744; color: white; font-size: 8pt; padding: 2px 8px; border-radius: 20px; margin-top: 5px; font-weight: bold; }
+  .c-parties { background: #f4f6f9; padding: 8px 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #dcdfe6; }
+  .c-parties p { margin: 3px 0; }
+  .c-field { display: inline-block; border-bottom: 1px solid #000; min-width: 120px; padding: 0 6px; font-weight: bold; color: #111; }
+  .c-section-bar { background: #1a2744; color: white; padding: 4px 10px; font-size: 10.5pt; font-weight: bold; margin: 10px 0 6px; border-radius: 4px; }
+  .c-section-bar.alt { background: #0e7c7b; }
+  .c-section-bar.red { background: #8e2a1e; }
+  .c-section-bar.gold { background: #c9973a; }
+  .c-article { margin-bottom: 7px; padding: 7px 8px; background: #fafafa; border-left: 4px solid #555; border-radius: 0 6px 6px 0; border: 1px solid #eee; border-left-width: 4px; }
+  .c-article.highlight { background: #fffaf4; border-left-color: #c0392b; }
+  .c-article-num { font-weight: bold; font-size: 10pt; margin-bottom: 3px; color: #1a2744; }
+  .c-article-num.red { color: #c0392b; }
+  .c-zh { font-weight: 500; color: #000; display: block; margin-bottom: 0; }
+  .c-bi { font-size: 9pt; color: #4a4a6a; display: block; font-style: italic; margin-bottom: 2px; line-height: 1.35; }
+  .lang-en .c-bi { color: #294a7a; }
+  .lang-id .c-bi { color: #5b3a8c; font-style: normal; }
+  .lang-vi .c-bi { color: #1e6b38; font-style: normal; }
+  ul.c-list { padding-left: 18px; margin-top: 2px; }
+  ul.c-list li { margin-bottom: 3px; list-style-type: square; }
+  .c-important { background: #e8f8ee; border-left: 4px solid #27ae60; padding: 7px 8px; margin: 7px 0; font-size: 9.5pt; border-radius: 4px; }
+  .c-redbox { background: #fdf2f2; border: 2px solid #ec5b5b; padding: 8px 10px; margin: 8px 0; border-radius: 6px; }
+  .c-redbox-title { color: #c0392b; font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 10.5pt; }
+  .c-sig { margin-top: 14px; page-break-inside: avoid; }
+  .c-sig-title { text-align: center; font-weight: bold; font-size: 11pt; margin-bottom: 10px; letter-spacing: 1px; }
+  .c-sig-box { display: flex; justify-content: space-between; margin-top: 10px; }
+  .c-sig-item { width: 48%; }
+  .c-sig-item p { margin: 5px 0; }
+  .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
+  .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
+  .c-date-row { text-align: center; margin-top: 18px; font-size: 10.5pt; font-weight: bold; }
+  .c-date-row .c-date-label { font-size: 9.5pt; color: #444; font-weight: 600; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .c-date-units { display: inline-flex; align-items: baseline; gap: 6px; font-size: 11pt; font-weight: bold; }
+  .c-date-unit { display: inline-flex; align-items: baseline; gap: 3px; }
+  .c-date-box { display: inline-block; border-bottom: 1.5px solid #000; min-width: 44px; text-align: center; padding: 0 4px 1px; font-weight: bold; }
+  .c-date-unit-label { font-size: 10pt; font-weight: 600; color: #111; }
+  .c-witness { margin-top: 12px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+  @media (max-width: 768px) {
+    .contract-page { width: 100% !important; padding: 14px 12px !important; border-radius: 8px; }
+    .export-toolbar { flex-wrap: wrap; gap: 6px; }
+    .export-toolbar .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="export-toolbar no-print">
+    <div>
+      <span class="brand">📋 外籍看護補充合約</span>
+      <span class="hint">　雇主：${empName}　看護：${careName}　日期：${contractDate}</span>
+    </div>
+    <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存為 PDF</button>
+  </div>
+  <div class="page-wrapper">
+    ${contractHTML}
+  </div>
+</body>
+</html>`;
+
+  // 建立 Blob 並觸發下載
+  try {
+    const blob = new Blob([fullHTML], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    // 顯示成功提示
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:99999;background:#27ae60;color:white;font-size:13px;font-family:"Microsoft JhengHei",sans-serif;padding:12px 20px;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;';
+    banner.innerHTML = '✅ <strong>合約 HTML 已下載：</strong>' + fileName + '　<button onclick="this.parentNode.remove()" style="margin-left:8px;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;">✕</button>';
+    document.body.appendChild(banner);
+    setTimeout(() => { if (banner.parentNode) banner.remove(); }, 5000);
+  } catch(e) {
+    alert('⚠️ 匯出 HTML 失敗：' + e.message + '\n\n請嘗試使用最新版瀏覽器（Chrome / Edge / Firefox）。');
+    console.error('exportHTML 失敗：', e);
+  }
+}
+
+// ===== SAMPLE DATA =====
+function fillSample() {
+  document.getElementById('emp_name').value = '王大明';
+  document.getElementById('emp_id').value = 'A123456789';
+  document.getElementById('emp_phone').value = '0912-345-678';
+  document.getElementById('emp_addr').value = '台北市中正區羅斯福路四段1號';
+  document.getElementById('maid_name').value = 'SITI AMINAH';
+  document.getElementById('maid_nation').value = '印尼 / Indonesia';
+  document.getElementById('maid_passport').value = 'XG987654';
+  document.getElementById('maid_arc').value = 'HD32145678';
+  document.getElementById('emp_email').value = 'wangdaming@example.com';
+  
+  // NEW v6 fields
+  document.getElementById('agency_name').value = '台灣優質仲介有限公司';
+  document.getElementById('agency_license').value = '私立就業服務機構許可字第12345號';
+  document.getElementById('agency_phone').value = '02-2345-6789';
+  document.getElementById('agency_contact').value = '陳主任';
+  document.getElementById('emg1_name').value = '王大明';
+  document.getElementById('emg1_phone').value = '0912-345-678';
+  document.getElementById('emg1_rel').value = '雇主本人';
+  document.getElementById('emg2_name').value = '王小明';
+  document.getElementById('emg2_phone').value = '0933-456-789';
+  document.getElementById('emg2_rel').value = '雇主之子';
+  document.getElementById('work_start').value = '07:00';
+  document.getElementById('work_end').value = '22:00';
+  document.getElementById('log_format').value = 'log_both';
+  document.getElementById('lang_req').value = 'lang_basic_zh';
+  document.getElementById('allow_food').value = '3000';
+  document.getElementById('allow_transport').value = '500';
+  document.getElementById('allow_clothing').value = '1200';
+  document.getElementById('allow_seniority').value = '500';
+  
+  const today = new Date().toISOString().slice(0,10);
+  document.getElementById('contract_date').value = today;
+  document.getElementById('start_date').value = today;
+  
+  const end = new Date(); end.setFullYear(end.getFullYear() + 3);
+  document.getElementById('end_date').value = end.toISOString().slice(0,10);
+  
+  document.getElementById('pat_name').value = '王林阿嬤';
+  document.getElementById('pat_age').value = '85';
+  document.getElementById('pat_health').value = '中風後半癱、輕度認知障礙、需定時拍背';
+  document.getElementById('pat_illness').value = '缺血性腦中風、高血壓';
+  document.getElementById('pat_special').value = '有留置鼻胃管，每日灌食4次。注意防範下床跌倒。';
+  
+  document.getElementById('salary').value = '20000';
+  document.getElementById('rest_hours').value = '8';
+  document.getElementById('pay_day').value = '每月5日 / Every 5th';
+  document.getElementById('duties_extra').value = '每週六傍晚推輪椅至社區中庭散步30分鐘';
+  
+  // 補充家庭基本狀況範例資料
+  document.getElementById('hh_members').value = '4';
+  document.getElementById('hh_type').value = 'apt';
+  document.getElementById('hh_size').value = '50～80坪';
+  document.getElementById('hh_baby').value = 'no';
+  document.getElementById('hh_elderly').value = 'medium';
+  document.getElementById('hh_pet').value = 'none';
+
+  // 更新 checkbox 狀態樣式（觸發 change 事件確保所有群組正確亮起）
+  document.querySelectorAll('input[type=checkbox]').forEach(el => {
+    const lbl = el.closest('.checkbox-label');
+    if (lbl) {
+      if (el.checked) lbl.classList.add('checked');
+      else lbl.classList.remove('checked');
+    }
+  });
+
+  alert('✅ 已填入合規範例資料，含仲介/緊急聯絡人/工時/津貼等完整欄位！可直接前往「預覽」進行列印。');
+}
+
+function clearAll() {
+  if (confirm('確定要清除所有填寫的資料？')) {
+    document.querySelectorAll('input[type=text], input[type=date], textarea').forEach(el => el.value = '');
+    document.querySelectorAll('input[type=number]').forEach(el => {
+      // Reset each number input to its specific default
+      if (el.id === 'salary') { el.value = String(MIN_MAID_SALARY); }
+      else if (el.id === 'rest_hours') { el.value = '8'; }
+      else if (el.id === 'hh_members') { el.value = ''; } // 留空讓使用者重填，不預設 0 違反 min=1
+      else { el.value = '0'; }
+      el.style.borderColor = '';
+    });
+    // Reset selects to first option
+    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
+    // Uncheck all radios, then restore default mobility
+    document.querySelectorAll('input[type=radio]').forEach(el => el.checked = false);
+    const defaultMobility = document.querySelector('input[name="mobility"][value="mobility_3"]');
+    if (defaultMobility) defaultMobility.checked = true;
+    // Remove checked visual state
+    document.querySelectorAll('.checkbox-label').forEach(lbl => lbl.classList.remove('checked'));
+    // Reset salary warning and date warning
+    const salaryWarn = document.getElementById('salary-warning');
+    if (salaryWarn) salaryWarn.style.display = 'none';
+    const salaryEl = document.getElementById('salary');
+    if (salaryEl) salaryEl.style.borderColor = '';
+    // Also reset end_date red border and date-warning if any
+    const endDateEl = document.getElementById('end_date');
+    if (endDateEl) endDateEl.style.borderColor = '';
+    const dateWarn = document.getElementById('date-warning');
+    if (dateWarn) dateWarn.style.display = 'none';
+    const partyWarn = document.getElementById('party-warn');
+    if (partyWarn) partyWarn.style.display = 'none';
+    // Reset preview area
+    const previewArea = document.getElementById('contract-preview-area');
+    if (previewArea) previewArea.innerHTML = '<div style="text-align:center;color:#888;padding:40px 20px;line-height:2.2;"><div style="font-size:42px;">📋</div><p style="font-size:15px;font-weight:700;color:#555;margin-top:8px;">尚未產生合約預覽</p><p style="font-size:13px;">請完成所有步驟填寫後，點選「✅ 產生合約預覽」，<br>或從左側側邊欄直接選擇「📄 預覽與輸出」。</p></div>';
+    showSection('sec-party');
+    // 清除 localStorage 自動存檔
+    safeStorageRemove(LS_KEY);
+  }
+}
+
+function resetForm() { clearAll(); }
+
+// ===== 台灣身分證加權校驗碼驗證 =====
+function validateTWID(id) {
+  if (!/^[A-Z][12]\d{8}$/.test(id)) return false;
+  const letters = 'ABCDEFGHJKLMNPQRSTUVXYWZIO';
+  const idx = letters.indexOf(id[0]);
+  if (idx < 0) return false;
+  const n1 = Math.floor((idx + 10) / 10);
+  const n0 = (idx + 10) % 10;
+  const digits = [n1, n0, ...id.slice(1).split('').map(Number)];
+  const weights = [1, 9, 8, 7, 6, 5, 4, 3, 2, 1, 1];
+  const sum = digits.reduce((acc, v, i) => acc + v * weights[i], 0);
+  return sum % 10 === 0;
+}
+
+// ===== STEP 1 VALIDATION =====
+function goToAgency() {
+  const warn = document.getElementById('party-warn');
+  const missing = [];
+  if (!v('emp_name')) missing.push('雇主姓名');
+  if (!v('emp_id')) missing.push('身分證字號');
+  else if (!validateTWID(v('emp_id').toUpperCase())) missing.push('身分證字號格式或校驗碼有誤，請對照實際身分證確認');
+  if (!v('maid_name')) missing.push('看護姓名');
+  if (!v('maid_nation')) missing.push('看護國籍');
+  if (!v('contract_date')) missing.push('簽約日期');
+  if (!v('start_date')) missing.push('合約生效起日');
+  if (!v('end_date')) missing.push('合約截止日');
+  // Date logic check
+  const s = v('start_date'), e = v('end_date');
+  if (s && e && e < s) missing.push('截止日不得早於起始日');
+  if (missing.length > 0) {
+    warn.style.display = 'block';
+    warn.innerHTML = '⚠️ 以下欄位尚未填寫或有誤，請補齊再繼續：<strong>' + missing.join('、') + '</strong>';
+    warn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    warn.style.display = 'none';
+    showSection('sec-agency');
+  }
+}
+
+// ===== localStorage 自動存檔 / 還原 =====
+const LS_KEY = 'care_contract_v10_autosave';
+
+function autoSaveToStorage() {
+  try {
+    const fields = {};
+    document.querySelectorAll('input[type=text], input[type=date], input[type=number], textarea').forEach(el => {
+      if (el.id) fields[el.id] = el.value;
+    });
+    document.querySelectorAll('select').forEach(el => {
+      if (el.id) fields[el.id] = el.value;
+    });
+    const checked = {};
+    document.querySelectorAll('input[type=checkbox]').forEach(el => {
+      if (el.name && el.value) checked[el.name + ':' + el.value] = el.checked;
+    });
+    document.querySelectorAll('input[type=radio]').forEach(el => {
+      if (el.name && el.value && el.checked) checked['radio:' + el.name] = el.value;
+    });
+    safeStorageSet(LS_KEY, JSON.stringify({ fields, checked, lang: currentLang, ts: Date.now() }));
+  } catch(e) {
+    console.warn('自動存檔失敗：', e);
+  }
+}
+
+function autoRestoreFromStorage() {
+  try {
+    const raw = safeStorageGet(LS_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (!data || !data.fields) return;
+    // 還原文字/數字/日期/select 欄位
+    Object.keys(data.fields).forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = data.fields[id];
+    });
+    // 還原 checkbox / radio
+    if (data.checked) {
+      Object.keys(data.checked).forEach(key => {
+        if (key.startsWith('radio:')) {
+          const name = key.slice(6);
+          const val = data.checked[key];
+          const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+          if (el) { el.checked = true; const lbl = el.closest('.checkbox-label'); if (lbl) lbl.classList.add('checked'); }
+    
+          const [name, value] = key.split(':');
+          const el = document.querySelector(`input[name="${name}"][value="${value}"]`);
+          if (el) {
+            el.checked = data.checked[key];
+            const lbl = el.closest('.checkbox-label');
+            if (lbl) {
+              if (data.checked[key]) lbl.classList.add('checked');
+              else lbl.classList.remove('checked');
+            }
+          }
+        }
+      });
+    }
+    // 還原語言設定
+    if (data.lang && typeof setLang === 'function') setLang(data.lang);
+    console.info('[自動還原] 已從 localStorage 還原上次填寫資料（' + new Date(data.ts).toLocaleString() + '）');
+  } catch(e) {
+    console.warn('自動還原失敗（資料損毀或不相容），已忽略：', e);
+  }
+}
+
+// GitHub Pages 專用修復包：確保所有按鈕與欄位在 load 後可用
+window.addEventListener('load', function() {
+  // ⑤ 【高風險修復⑤】驗證關鍵函式是否全部存在（CDN 或 JS 截斷時的保險）
+  var REQUIRED_FUNCTIONS = ['showSection','setLang','fillSample','clearAll','exportPDF','exportHTML',
+    'generatePreview','updatePageStyle','autoSaveToStorage','autoRestoreFromStorage',
+    'syncCheckboxState','validateSalary','validateDates','safeStorageSet','safeCall'];
+  var missing = REQUIRED_FUNCTIONS.filter(function(fn) { return typeof window[fn] !== 'function'; });
+  if (missing.length > 0) {
+    var msg = '⚠️ 以下 JS 函式載入失敗，部分功能將無法使用：\n' + missing.join(', ') + '\n\n請嘗試：強制重新整理（Ctrl+Shift+R / Cmd+Shift+R）';
+    console.error('[v11 函式驗證]', msg);
+    try {
+      var banner = document.getElementById('_error_banner') || document.createElement('div');
+      banner.id = '_error_banner';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#e67e22;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+      banner.innerHTML = '⚠️ <strong>部分功能載入失敗：</strong>' + missing.join(', ') + '　<small>請按 Ctrl+Shift+R 強制重新整理</small>　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕</button>';
+      if (!banner.parentNode) document.body.appendChild(banner);
+    } catch(_) {}
+  } else {
+    console.log('[v11 函式驗證] ✅ 所有關鍵函式載入正常');
+  }
+
+  // 解除可能被意外 disable 的按鈕與表單元素
+  document.querySelectorAll('button').forEach(function(btn) {
+    btn.disabled = false;
+  });
+  document.querySelectorAll('input, select, textarea').forEach(function(el) {
+    el.removeAttribute('disabled');
+  });
+
+  // ③ 預覽區覆蓋修正：確認 contract-preview-area 不會遮蔽其他操作區
+  // 若 sec-preview 未顯示，確保 contract-page 不佔用 pointer-events
+  var previewCard = document.getElementById('sec-preview');
+  if (previewCard && previewCard.classList.contains('hidden')) {
+    var pages = previewCard.querySelectorAll('.contract-page');
+    pages.forEach(function(p) { p.style.pointerEvents = 'none'; });
+  }
+
+  // ④ load 後再次同步 checkbox（防止還原後未執行）
+  try { syncCheckboxState(); } catch(e) {}
+
+  console.log('v11 GitHub Ready ✅');
+});
+
+document.addEventListener('input',  autoSaveToStorage);
+document.addEventListener('change', autoSaveToStorage);
+setInterval(autoSaveToStorage, 30000);
+
+// ===== SALARY VALIDATION =====
+// 外籍家庭幫傭最低薪資依勞動部公告，請每年確認並更新此數值
+const MIN_MAID_SALARY = 20000; // 單位：新台幣，以勞動部最新公告為準
+function validateSalary(el) {
+  const warn = document.getElementById('salary-warning');
+  const val = parseInt(el.value);
+  if (el.value && (isNaN(val) || val < MIN_MAID_SALARY)) {
+    el.style.borderColor = 'var(--red)';
+    if (warn) {
+      warn.innerHTML = `⚠️ 約定薪資低於外籍幫傭最低工資標準 <strong>NT$${MIN_MAID_SALARY.toLocaleString()}</strong>，請確認是否正確！`;
+      warn.style.display = 'block';
+    }
+  } else {
+    el.style.borderColor = '';
+    if (warn) warn.style.display = 'none';
+  }
+}
+
+// ===== DATE VALIDATION =====
+function validateDates() {
+  const sEl = document.getElementById('start_date');
+  const eEl = document.getElementById('end_date');
+  const warn = document.getElementById('date-warning');
+  if (!sEl || !eEl || !warn) return; // 防 DOM 尚未就緒
+  const s = sEl.value;
+  const e = eEl.value;
+  if (s && e) {
+    const diffDays = (new Date(e) - new Date(s)) / 86400000;
+    if (new Date(e) < new Date(s)) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ 合約截止日不可早於生效起日，請重新檢查日期！';
+      eEl.style.borderColor = 'var(--red)';
+    } else if (diffDays > 1095) {
+      warn.style.display = 'block';
+      warn.innerHTML = '⚠️ <strong>注意：合約期限超過3年（約 ' + Math.round(diffDays/365*10)/10 + ' 年）</strong>。依就服法外籍家庭看護工每次聘僱上限為3年，請確認是否正確。';
+      eEl.style.borderColor = 'var(--gold)';
+    } else {
+      warn.style.display = 'none';
+      eEl.style.borderColor = '';
+    }
+  } else {
+    warn.style.display = 'none';
+    eEl.style.borderColor = '';
+  }
+}
+
+// ===== XSS SANITIZER (防止使用者輸入含有 HTML 標籤) =====
+function escHtml(str) {
+  if (!str) return '';
+  // 使用 DOM API 確保最安全的 HTML 跳脫（優於 regex 替換）
+  const div = document.createElement('div');
+  div.appendChild(document.createTextNode(String(str)));
+  return div.innerHTML;
+}
+
+// ② safeStorage：先檢查 STORAGE_OK 旗標，再操作 localStorage（Safari 隱私/無痕完全安全）
+function safeStorageSet(key, val) {
+  if (!STORAGE_OK) { console.info('[Storage] 環境不支援 localStorage，已跳過寫入'); return; }
+  try {
+    localStorage.setItem(key, val);
+  } catch(e) {
+    console.warn('[Storage] 寫入失敗（可能為無痕模式）：', e);
+  }
+}
+function safeStorageGet(key) {
+  if (!STORAGE_OK) return null;
+  try {
+    return localStorage.getItem(key);
+  } catch(e) {
+    console.warn('[Storage] 讀取失敗：', e);
+    return null;
+  }
+}
+function safeStorageRemove(key) {
+  if (!STORAGE_OK) return;
+  try {
+    localStorage.removeItem(key);
+  } catch(e) {
+    console.warn('[Storage] 刪除失敗：', e);
+  }
+}
+
+// ===== 【高風險修復④】GLOBAL ERROR MONITOR =====
+// 錯誤時用 UI 橫幅提示使用者，而非只寫 console（GitHub Pages 部署時立即可見）
+window.onerror = function(msg, url, line, col, err) {
+  console.error('[全域錯誤]', msg, '第' + line + '行', err);
+  // 在頁面頂端插入醒目錯誤橫幅（不用 alert 以免封鎖操作）
+  try {
+    var banner = document.getElementById('_error_banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = '_error_banner';
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+      document.body.appendChild(banner);
+    }
+    banner.innerHTML = '⚠️ <strong>JS 錯誤（GitHub 偵錯）：</strong>' + msg + '　<span style="opacity:0.75">第 ' + line + ' 行</span>　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    banner.style.display = 'flex';
+  } catch(_) {}
+  return false;
+};
+window.addEventListener('unhandledrejection', function(e) {
+  console.error('[未處理 Promise 錯誤]', e.reason);
+  try {
+    var msg = 'Promise: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason));
+    var banner = document.getElementById('_error_banner') || document.createElement('div');
+    banner.id = '_error_banner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#c0392b;color:#fff;font-size:13px;font-family:monospace;padding:8px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(0,0,0,0.4);';
+    banner.innerHTML = '⚠️ <strong>Promise 錯誤：</strong>' + msg + '　<button onclick="this.parentNode.style.display=\'none\'" style="margin-left:auto;background:rgba(255,255,255,0.2);border:none;color:white;padding:2px 10px;border-radius:4px;cursor:pointer;font-size:12px;">✕ 關閉</button>';
+    if (!banner.parentNode) document.body.appendChild(banner);
+  } catch(_) {}
+});
+
+// ④ checkbox 樣式同步強制修正函式
+function syncCheckboxState() {
+  document.querySelectorAll('.checkbox-label input[type=checkbox]').forEach(function(el) {
+    const lbl = el.closest('.checkbox-label');
+    if (lbl) lbl.classList.toggle('checked', el.checked);
+  });
+  // radio 同步
+  document.querySelectorAll('.checkbox-label input[type=radio]').forEach(function(el) {
+    const lbl = el.closest('.checkbox-label');
+    if (lbl) lbl.classList.toggle('checked', el.checked);
+  });
+}
+
+// ===== INITIALIZATION (DOMContentLoaded 確保 DOM 已就緒) =====
+document.addEventListener('DOMContentLoaded', function () {
+  // ① 各初始化函式分別 try/catch，任一失敗不影響其他
+  try {
+    if (typeof showSection === 'function') {
+      showSection('sec-party');
+
+      console.error('showSection 函式未定義，請確認 JS 載入順序');
+    }
+  } catch(e) {
+    console.error('[init] showSection 失敗：', e);
+  }
+
+  try {
+    if (typeof updatePageStyle === 'function') {
+      updatePageStyle();
+
+      console.warn('updatePageStyle 函式未定義，跳過初始化列印樣式');
+    }
+  } catch(e) {
+    console.error('[init] updatePageStyle 失敗：', e);
+  }
+
+  // localStorage 自動還原（若有）
+  try {
+    autoRestoreFromStorage();
+  } catch(e) {
+    console.error('[init] autoRestoreFromStorage 失敗：', e);
+  }
+
+  // ④ 確保還原後 checkbox 樣式正確同步
+  try {
+    syncCheckboxState();
+  } catch(e) {
+    console.error('[init] syncCheckboxState 失敗：', e);
+  }
+});
+</script>
+</body>
+</html>
