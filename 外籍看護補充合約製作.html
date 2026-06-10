@@ -292,8 +292,23 @@
   .c-sig-item p { margin: 5px 0; }
   .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
   .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
-  .c-date-row { text-align: center; margin-top: 16px; font-size: 10.5pt; font-weight: bold; }
-  .c-witness { margin-top: 12px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+  .c-date-row {
+    text-align: center; margin-top: 18px; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 0;
+  }
+  .c-date-row-label {
+    font-size: 10pt; font-weight: bold; color: #1a2744;
+    background: #f4f6f9; border: 1px solid #dcdfe6;
+    padding: 6px 14px; border-radius: 6px 0 0 6px;
+    white-space: nowrap;
+  }
+  .c-date-row-value {
+    font-size: 11pt; font-weight: bold; color: #1a2744; letter-spacing: 2px;
+    border: 1px solid #1a2744; border-left: none;
+    padding: 6px 20px; border-radius: 0 6px 6px 0;
+    min-width: 180px; background: white;
+  }
+  .c-witness { margin-top: 14px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
 /* RESPONSIVE OPTIMIZATION PATCH v10.7 */
 
 /* ===== MOBILE BOTTOM NAV ===== */
@@ -1607,7 +1622,7 @@ function _doGeneratePreview(previewEl) {
     </div>
     
     <div class="c-date-row">
-      ${t.dateTitle}： ${dateStr}
+      <span class="c-date-row-label">${t.dateTitle}</span><span class="c-date-row-value">${dateStr}</span>
     </div>
 
     <div class="c-witness">
@@ -1818,8 +1833,23 @@ function exportHTML() {
   .c-sig-item p { margin: 5px 0; }
   .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
   .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
-  .c-date-row { text-align: center; margin-top: 16px; font-size: 10.5pt; font-weight: bold; }
-  .c-witness { margin-top: 12px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
+  .c-date-row {
+    text-align: center; margin-top: 18px; margin-bottom: 4px;
+    display: flex; align-items: center; justify-content: center; gap: 0;
+  }
+  .c-date-row-label {
+    font-size: 10pt; font-weight: bold; color: #1a2744;
+    background: #f4f6f9; border: 1px solid #dcdfe6;
+    padding: 6px 14px; border-radius: 6px 0 0 6px;
+    white-space: nowrap;
+  }
+  .c-date-row-value {
+    font-size: 11pt; font-weight: bold; color: #1a2744; letter-spacing: 2px;
+    border: 1px solid #1a2744; border-left: none;
+    padding: 6px 20px; border-radius: 0 6px 6px 0;
+    min-width: 180px; background: white;
+  }
+  .c-witness { margin-top: 14px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
   @media (max-width: 768px) {
     .contract-page { width: 100% !important; padding: 14px 12px !important; border-radius: 8px; }
     .export-toolbar { flex-wrap: wrap; gap: 6px; }
