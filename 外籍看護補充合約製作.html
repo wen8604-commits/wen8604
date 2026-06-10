@@ -293,20 +293,28 @@
   .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
   .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
   .c-date-row {
-    text-align: center; margin-top: 18px; margin-bottom: 4px;
-    display: flex; align-items: center; justify-content: center; gap: 0;
+    text-align: center; margin-top: 18px; margin-bottom: 8px;
+    display: flex; align-items: flex-end; justify-content: center; gap: 4px;
+    flex-wrap: wrap;
   }
-  .c-date-row-label {
-    font-size: 10pt; font-weight: bold; color: #1a2744;
-    background: #f4f6f9; border: 1px solid #dcdfe6;
-    padding: 6px 14px; border-radius: 6px 0 0 6px;
-    white-space: nowrap;
+  .c-date-row-title {
+    width: 100%; text-align: center;
+    font-size: 10.5pt; font-weight: bold; color: #1a2744;
+    margin-bottom: 8px; letter-spacing: 1px;
   }
-  .c-date-row-value {
-    font-size: 11pt; font-weight: bold; color: #1a2744; letter-spacing: 2px;
-    border: 1px solid #1a2744; border-left: none;
-    padding: 6px 20px; border-radius: 0 6px 6px 0;
-    min-width: 180px; background: white;
+  .c-date-field {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .c-date-field-line {
+    border-bottom: 1.5px solid #1a2744; width: 72px; min-height: 22px;
+    display: block;
+  }
+  .c-date-field-label {
+    font-size: 8.5pt; color: #444; white-space: nowrap; text-align: center;
+  }
+  .c-date-sep {
+    font-size: 11pt; font-weight: bold; color: #1a2744;
+    padding-bottom: 6px; line-height: 1;
   }
   .c-witness { margin-top: 14px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
 /* RESPONSIVE OPTIMIZATION PATCH v10.7 */
@@ -1612,6 +1620,10 @@ function _doGeneratePreview(previewEl) {
   };
   
   let dateStr = d.contract_date ? d.contract_date.replace(/-/g, ' / ') : '    /    /    ';
+  // Split date into [year, month, day] for individual field display
+  const dateParts = d.contract_date
+    ? d.contract_date.split('-')
+    : ['', '', ''];
   let startStr = d.start_date ? d.start_date.replace(/-/g, ' / ') : '___________';
   let endStr = d.end_date ? d.end_date.replace(/-/g, ' / ') : '___________';
 
@@ -1817,7 +1829,21 @@ function _doGeneratePreview(previewEl) {
     </div>
     
     <div class="c-date-row">
-      <span class="c-date-row-label">${t.dateTitle}</span><span class="c-date-row-value">${dateStr}</span>
+      <div class="c-date-row-title">${t.dateTitle}</div>
+      <div class="c-date-field">
+        <span class="c-date-field-line">${dateParts[0]}</span>
+        <span class="c-date-field-label">年 / Tahun</span>
+      </div>
+      <span class="c-date-sep">&nbsp;</span>
+      <div class="c-date-field">
+        <span class="c-date-field-line">${dateParts[1]}</span>
+        <span class="c-date-field-label">月 / Bulan</span>
+      </div>
+      <span class="c-date-sep">&nbsp;</span>
+      <div class="c-date-field">
+        <span class="c-date-field-line">${dateParts[2]}</span>
+        <span class="c-date-field-label">日 / Tanggal</span>
+      </div>
     </div>
 
     <div class="c-witness">
@@ -2032,20 +2058,28 @@ function exportHTML() {
   .c-sig-line { border-bottom: 1px solid #000; margin-top: 25px; margin-bottom: 4px; }
   .c-sig-hint { text-align: center; color: #666; font-size: 8.5pt; }
   .c-date-row {
-    text-align: center; margin-top: 18px; margin-bottom: 4px;
-    display: flex; align-items: center; justify-content: center; gap: 0;
+    text-align: center; margin-top: 18px; margin-bottom: 8px;
+    display: flex; align-items: flex-end; justify-content: center; gap: 4px;
+    flex-wrap: wrap;
   }
-  .c-date-row-label {
-    font-size: 10pt; font-weight: bold; color: #1a2744;
-    background: #f4f6f9; border: 1px solid #dcdfe6;
-    padding: 6px 14px; border-radius: 6px 0 0 6px;
-    white-space: nowrap;
+  .c-date-row-title {
+    width: 100%; text-align: center;
+    font-size: 10.5pt; font-weight: bold; color: #1a2744;
+    margin-bottom: 8px; letter-spacing: 1px;
   }
-  .c-date-row-value {
-    font-size: 11pt; font-weight: bold; color: #1a2744; letter-spacing: 2px;
-    border: 1px solid #1a2744; border-left: none;
-    padding: 6px 20px; border-radius: 0 6px 6px 0;
-    min-width: 180px; background: white;
+  .c-date-field {
+    display: inline-flex; flex-direction: column; align-items: center; gap: 3px;
+  }
+  .c-date-field-line {
+    border-bottom: 1.5px solid #1a2744; width: 72px; min-height: 22px;
+    display: block;
+  }
+  .c-date-field-label {
+    font-size: 8.5pt; color: #444; white-space: nowrap; text-align: center;
+  }
+  .c-date-sep {
+    font-size: 11pt; font-weight: bold; color: #1a2744;
+    padding-bottom: 6px; line-height: 1;
   }
   .c-witness { margin-top: 14px; padding: 8px 10px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; }
   @media (max-width: 768px) {
