@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v19</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>外籍看護一週工作時間表 — 客製化精靈</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -348,23 +348,49 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 /* ── PRINT ── */
 @media print{
   @page{size:A4 landscape;margin:10mm 12mm 10mm 12mm;}
-  .topbar,.progress-bar,.side-nav,#mobile-tab-bar,#save-toast,#restore-banner,.wizard-nav,.btn-prev,.btn-next,.btn-generate,.btn-out,.btn-out-edit,.output-actions,.step-page:not(.active),.section-card-head .section-toggle-icon{display:none !important;}
-  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-  html,body{background:#fff !important;margin:0 !important;padding:0 !important;font-size:11px !important;}
+  /* iOS/macOS Safari: force color output */
+  *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    color-adjust:exact !important;
+  }
+  /* Hide all wizard chrome; keep only the output iframe */
+  .topbar,.progress-bar,.side-nav,#mobile-tab-bar,#save-toast,
+  #restore-banner,.wizard-nav,.btn-prev,.btn-next,.btn-generate,
+  .btn-out,.btn-out-edit,.output-actions,.output-header,
+  .step-page:not(.active),.section-card-head .section-toggle-icon,
+  #live-preview-panel,#btn-show-preview,
+  .wizard-body .step-page, .wizard-shell .wizard-body{
+    display:none !important;
+  }
+  html,body{
+    background:#fff !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:11px !important;
+    -webkit-text-size-adjust:100% !important;
+  }
   .wizard-shell{display:block !important;}
-  .wizard-body{max-width:100% !important;padding:0 !important;margin:0 !important;}
-  .step-page{display:block !important;}
-  .section-card{border:1px solid #ccc !important;border-radius:6px !important;margin-bottom:12px !important;page-break-inside:avoid !important;break-inside:avoid !important;}
-  .section-body,.section-body.hidden{display:block !important;padding:10px 12px !important;}
-  .section-card-head{background:#f0f4f8 !important;padding:8px 12px !important;border-bottom:1px solid #ddd !important;}
-  .toggle-row{border:1px solid #ccc !important;border-radius:6px !important;padding:6px 10px !important;margin-bottom:5px !important;}
-  .toggle-row.on{background:#f0f4ff !important;border-color:#93c5fd !important;}
-  .form-row{display:grid !important;grid-template-columns:repeat(2,1fr) !important;gap:6px 14px !important;margin-bottom:8px !important;}
-  .form-input,.form-select,.form-textarea{border:1px solid #bbb !important;border-radius:4px !important;padding:4px 8px !important;font-size:11px !important;background:#fff !important;width:100% !important;}
-  .form-label{font-size:10px !important;font-weight:700 !important;color:#555 !important;}
-  #outputSection{display:block !important;page-break-before:always !important;}
-  .output-frame-wrap{border:none !important;}
-  .output-frame{min-height:auto !important;height:auto !important;}
+  /* Show only the output section */
+  #outputSection{
+    display:block !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+  .output-frame-wrap{
+    border:none !important;
+    border-radius:0 !important;
+    overflow:visible !important;
+  }
+  /* On iOS, iframes don't print inline — expand to visible page */
+  .output-frame{
+    width:100% !important;
+    min-height:100vh !important;
+    border:none !important;
+    display:block !important;
+  }
+  /* Safety: if output is not yet generated, hide the empty frame */
+  #outputSection:not([style*="block"]){display:none !important;}
 }
 </style>
 </head>
@@ -382,11 +408,11 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- TOP BAR -->
 <div class="topbar">
   <div style="min-width:0;flex:1;">
-    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈 v19</div>
+    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈</div>
     <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
   </div>
   <div class="topbar-right">
-    <button class="tlbtn" onclick="window.print()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
+    <button class="tlbtn" onclick="handleTopbarPrint()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
       🖨️ <span>列印/PDF</span>
     </button>
   </div>
@@ -1843,7 +1869,12 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
   <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px;">
-    💡 建議使用下方表單內的 <strong>「🖨️ 列印 / 存PDF」</strong> 按鈕，以確保只列印時間表本身。
+    💡 建議使用下方表單內的 <strong>「🖨️ 列印 / 存PDF」</strong> 按鈕，以確保只列印時間表本身。<span id="ios-print-note" style="display:none;"> 📱 iOS / iPadOS 會開啟新分頁，請點「列印」或使用 <strong>分享 ➜ 列印</strong>。</span>
+    <script>
+      if(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){
+        document.getElementById('ios-print-note').style.display='inline';
+      }
+    </script>
   </div>
   <div class="output-frame-wrap">
     <iframe id="outputFrame" class="output-frame"></iframe>
@@ -2424,12 +2455,94 @@ function downloadOutput() {
 function printOutput() {
   const iframe = document.getElementById('outputFrame');
   if (!iframe) return;
-  // 確保 iframe 已載入內容後再列印
-  if (iframe.contentDocument && iframe.contentDocument.body && iframe.contentDocument.body.innerHTML) {
+
+  // ── Detect iOS / iPadOS ──────────────────────────────────────────
+  // iOS Safari cannot print iframe content; open in new tab instead.
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (isIOS) {
+    const content = iframe.srcdoc || '';
+    if (!content) { alert('請先點擊「生成時間表」，再列印。'); return; }
+
+    // Inject iOS hint bar + auto-print prompt into the generated HTML
+    const iosContent = content
+      .replace('</head>',
+        `<meta name="apple-mobile-web-app-capable" content="yes">
+<style>
+@media not print {
+  #ios-hint{position:fixed;top:0;left:0;right:0;z-index:9999;
+    background:#1a1f2e;color:#fff;padding:10px 14px;
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-family:'Noto Sans TC',sans-serif;font-size:13px;line-height:1.4;}
+  #ios-hint strong{color:#fbbf24;}
+  #ios-hint button{background:#fff;color:#1a1f2e;border:none;border-radius:6px;
+    padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;
+    white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+  body{padding-top:52px;}
+}
+@media print{#ios-hint{display:none!important;}body{padding-top:0!important;}}
+</style></head>`)
+      .replace('<body>',
+        `<body>
+<div id="ios-hint">
+  <span>📱 iOS：點「<strong>列印</strong>」或使用下方 <strong>分享 ➜ 列印</strong></span>
+  <button onclick="window.print()">🖨️ 列印 / PDF</button>
+</div>`);
+
+    const blob = new Blob([iosContent], { type: 'text/html;charset=utf-8' });
+    const url  = URL.createObjectURL(blob);
+    const win  = window.open(url, '_blank');
+    if (!win) {
+      // Pop-up blocked — write directly
+      const w = window.open('', '_blank');
+      if (w) { w.document.write(iosContent); w.document.close(); }
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 120000);
+    return;
+  }
+
+  // ── Desktop / Android Chrome ──────────────────────────────────────
+  if (iframe.contentDocument &&
+      iframe.contentDocument.body &&
+      iframe.contentDocument.body.innerHTML) {
     iframe.contentWindow.print();
   } else {
     iframe.onload = () => { iframe.contentWindow.print(); iframe.onload = null; };
   }
+}
+
+/* ══ TOPBAR PRINT (iOS aware) ══ */
+function handleTopbarPrint() {
+  const outSection = document.getElementById('outputSection');
+  const hasOutput = outSection && outSection.style.display === 'block';
+
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+  if (!hasOutput) {
+    if (isIOS) {
+      showIosPrintToast('請先生成時間表，再使用列印功能');
+    } else {
+      alert('請先在步驟六點擊「生成時間表」，再列印。');
+    }
+    return;
+  }
+  printOutput();
+}
+
+function showIosPrintToast(msg) {
+  let el = document.getElementById('ios-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'ios-toast';
+    el.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#1a1f2e;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);white-space:nowrap;pointer-events:none;transition:opacity .3s;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(el._t);
+  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2800);
 }
 
 /* ══ BUILD HTML ══ */
@@ -3058,10 +3171,24 @@ th{background:${t.pri};color:#fff;font-size:${fontSize-1}px;font-weight:700;text
 }
 @media print{
   @page{size:${pageSize};margin:${pageMargin};}
-  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-  body{font-size:${fontSize}px !important;}
+  /* iOS Safari / macOS Safari: force color & image printing */
+  *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    color-adjust:exact !important;
+  }
+  body{font-size:${fontSize}px !important;-webkit-text-size-adjust:100% !important;}
   .no-print{display:none !important;}
   .doc-footer{border-top:1px solid #e0e0e0;}
+  /* Prevent table cells from splitting across pages */
+  tr{page-break-inside:avoid;break-inside:avoid;}
+  table{page-break-inside:auto;}
+  /* Ensure background colors print on all browsers */
+  th,td{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  /* iOS hint bar (injected by printOutput) — always hidden in print */
+  #ios-hint{display:none !important;}
+  /* Remove overflow hidden so full table renders */
+  .schedule-wrap{overflow:visible !important;}
 }
 </style>
 </head>
@@ -3344,7 +3471,7 @@ function buildDCReportHTML() {
       </div>`
     ).join('');
     return `<tr>
-      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:normal;word-break:break-word;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
+      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:nowrap;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
       <td style="padding:8px 10px;font-size:11px;">${itemsHtml}</td>
       <td style="padding:8px 10px;font-size:11px;text-align:center;color:${t.plight};font-weight:700;vertical-align:middle;">${esc(freq)}</td>
       <td style="padding:8px 10px;font-size:11px;color:#555;vertical-align:middle;">${note || '—'}</td>
@@ -3410,9 +3537,9 @@ ${spaceRows ? `
 <table>
   <thead>
     <tr style="background:${t.plight};color:#fff;font-size:11px;">
-      <th style="padding:7px 10px;width:130px;min-width:120px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
+      <th style="padding:7px 10px;width:100px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colItems')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colItemsSub')}</span></th>
-      <th style="padding:7px 10px;width:110px;min-width:100px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
+      <th style="padding:7px 10px;width:95px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colNote')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colNoteSub')}</span></th>
       <th style="padding:7px 10px;width:50px;text-align:center;">${ui('colDone')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colDoneSub')}</span></th>
     </tr>
@@ -3500,6 +3627,9 @@ function collectState() {
   const state = { ts: Date.now(), step: currentStep, fields: {}, chips: {}, toggles: {}, customSlots: [], theme: selectedTheme, slotId };
   ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name','cfg-start-date','cfg-issue-date','cfg-footer-note',
    'cfg-sig-note','sig-label-1','sig-label-2','sig-label-3','sig-label-4',
+   // Step 2 sub-option text fields
+   'rehab-freq','walk-note','hosp-dept','hosp-freq','hosp-note',
+   'tv-note','music-note','craft-note','social-note','clean-weekly-note',
    // Step 3 大掃除 notes
    'dc-kitchen-note','dc-bathroom-note','dc-living-note','dc-bedroom-note','dc-balcony-note',
    'dc-weekly-note','dc-weekly-time-s','dc-weekly-time-e',
@@ -3510,6 +3640,10 @@ function collectState() {
   ['cfg-care-level','cfg-days','cfg-layout','cfg-day-axis','cfg-cell-content','cfg-note-row','cfg-lang','cfg-flags',
    'cfg-fontsize','cfg-rowheight','cfg-zebra','cfg-pagenum',
    'cfg-sig-count','cfg-sig-style','cfg-sig-date',
+   // Step 2 sub-option chips
+   'rehab-type','rehab-location','walk-place','walk-aid','hosp-type','hosp-transport',
+   'tv-type','music-type','music-device','reading-type','craft-type','social-type',
+   'clean-morning-items','clean-noon-items','clean-evening-items','clean-weekly-items','clean-weekly-freq',
    // Step 3 大掃除
    'dc-kitchen-items','dc-kitchen-freq','dc-bathroom-items','dc-bathroom-freq',
    'dc-living-items','dc-living-freq','dc-bedroom-items','dc-bedroom-freq',
@@ -3545,7 +3679,7 @@ function collectState() {
     const list = document.getElementById('task-list-' + secId);
     if (!list) return;
     const tasks = [];
-    list.querySelectorAll('input[type=text]').forEach(inp => tasks.push(inp.value));
+    list.querySelectorAll('input[type=text]').forEach(inp => { if (inp.value.trim()) tasks.push(inp.value); });
     state.slotTasks[secId] = tasks;
   });
   state.customSlots = getCustomSlots();
@@ -3883,8 +4017,8 @@ function updateLivePreview() {
     's-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
     's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
     's-bedtime':'就寢照護','s-night':'夜間巡視',
-    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
-    's-craft':'手工藝','s-social':'家人互動',
+    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
+    's-craft':'手工藝/益智','s-social':'家人/社交互動',
     's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
     's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
   };
@@ -3936,9 +4070,9 @@ function hidePreviewPanel() {
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject slot day restriction UIs first (inserted right after toggle-row)
+  // 注意：先注入 slot day UIs（緊接 toggle-row 後），再注入 task editors
+  // （task editors 用 row.after() 插入，會推到 slot day UI 前方，最終順序：toggle-row → task-editor → slot-days-wrap）
   injectSlotDayUIs();
-  // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
   injectTaskEditors();
   // cfg-start-date is optional — no auto-fill
 
