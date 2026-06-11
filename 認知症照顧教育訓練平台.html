@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>認知症照顧教育訓練平台 v16 · Dementia Care Training</title>
+<title>認知症照顧教育訓練平台 v24 · Dementia Care Training Platform</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600;900&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --bg: #f0f4f8;
+  --bg: #eef2f7;
   --surface: #ffffff;
   --surface2: #f8fafc;
   --ink: #1e293b;
@@ -28,12 +28,16 @@
   --blue: #1d4ed8;
   --blue-light: #dbeafe;
   --border: #e2e8f0;
-  --shadow: 0 2px 12px rgba(0,0,0,.08);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,.12);
-  --radius: 12px;
-  --radius-sm: 8px;
-  --topbar-h: 60px;
-  --sidebar-w: 260px;
+  --border-mid: #cbd5e1;
+  --shadow: 0 1px 8px rgba(0,0,0,.07);
+  --shadow-md: 0 4px 18px rgba(0,0,0,.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,.14);
+  --radius: 14px;
+  --radius-sm: 9px;
+  --radius-lg: 20px;
+  --topbar-h: 62px;
+  --sidebar-w: 268px;
+  --transition: .18s cubic-bezier(.4,0,.2,1);
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -44,21 +48,24 @@ body {
   color: var(--ink);
   font-size: 15px;
   line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 /* ── TOPBAR ── */
 .topbar {
-  background: linear-gradient(135deg, #0d7377 0%, #0f4c75 100%);
+  background: linear-gradient(135deg, #0a6468 0%, #0d5e8a 60%, #0d5070 100%);
   color: white;
-  padding: 0 20px;
+  padding: 0 24px;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   position: sticky;
   top: 0;
   z-index: 200;
   height: var(--topbar-h);
-  box-shadow: 0 2px 16px rgba(0,0,0,.2);
+  box-shadow: 0 2px 20px rgba(0,0,0,.22);
 }
 
 /* Hamburger button – hidden on desktop */
@@ -67,42 +74,45 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,.15);
-  border: none;
-  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: 10px;
   cursor: pointer;
-  padding: 8px;
+  padding: 9px;
   flex-shrink: 0;
   order: -1;
+  transition: background var(--transition);
 }
+.menu-toggle:hover { background: rgba(255,255,255,.24); }
 .menu-toggle span {
   display: block;
   height: 2px;
   background: white;
   border-radius: 2px;
-  transition: all .25s;
+  transition: all .28s cubic-bezier(.4,0,.2,1);
 }
 .menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.menu-toggle.open span:nth-child(2) { opacity: 0; }
+.menu-toggle.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .topbar-icon {
-  width: 38px; height: 38px;
-  background: rgba(255,255,255,.18);
-  border-radius: 10px;
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,.16);
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
+  font-size: 21px;
   flex-shrink: 0;
 }
 
 .topbar-text { flex: 1; min-width: 0; }
 .topbar-title {
   font-family: 'Noto Serif TC', serif;
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 900;
-  letter-spacing: .5px;
+  letter-spacing: .4px;
   line-height: 1.2;
   white-space: nowrap;
   overflow: hidden;
@@ -111,11 +121,12 @@ body {
 
 .topbar-sub {
   font-size: 11px;
-  opacity: .75;
+  opacity: .72;
   font-style: italic;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin-top: 1px;
 }
 
 .topbar-badge {
@@ -152,46 +163,66 @@ body {
 .sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
-  padding: 20px 0;
+  padding: 16px 0 24px;
   position: sticky;
   top: var(--topbar-h);
   height: calc(100vh - var(--topbar-h));
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
 
 .sidebar-section {
-  padding: 0 16px;
-  margin-bottom: 6px;
+  padding: 0 12px;
+  margin-bottom: 4px;
 }
 
 .sidebar-label {
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1.2px;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: var(--ink3);
-  padding: 12px 8px 6px;
+  padding: 14px 8px 5px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 9px 10px;
+  padding: 8px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all .18s;
+  transition: background var(--transition), color var(--transition);
   font-size: 13.5px;
   color: var(--ink2);
   border: none;
   background: none;
   width: 100%;
   text-align: left;
+  position: relative;
 }
 
 .nav-item:hover { background: var(--teal-light); color: var(--teal); }
-.nav-item.active { background: var(--teal-light); color: var(--teal); font-weight: 600; }
+.nav-item.active {
+  background: var(--teal-light);
+  color: var(--teal);
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 3px;
+  background: var(--teal);
+  border-radius: 0 3px 3px 0;
+}
 
 .nav-ico { font-size: 17px; flex-shrink: 0; width: 22px; text-align: center; }
 
@@ -266,9 +297,9 @@ body {
   padding: 20px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  transition: box-shadow .2s, transform .2s;
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
 }
-.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--teal-mid); }
 
 .card-icon { font-size: 28px; margin-bottom: 10px; }
 .card-title {
@@ -432,6 +463,7 @@ html[data-lang="zh"] .card-en { display: none; }
 .badge-amber { background: var(--amber-light); color: var(--amber); }
 .badge-green { background: var(--green-light); color: var(--green); }
 .badge-teal { background: var(--teal-light); color: var(--teal); }
+.badge-blue { background: var(--blue-light); color: var(--blue); }
 
 /* ── PROGRESS OVERVIEW ── */
 .overview-grid {
@@ -466,13 +498,16 @@ html[data-lang="zh"] .card-en { display: none; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 20px;
+  padding: 20px 16px;
   cursor: pointer;
-  transition: all .2s;
+  transition: box-shadow var(--transition), transform var(--transition), border-color var(--transition);
   box-shadow: var(--shadow);
   text-align: center;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
-.home-module:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); border-color: var(--teal-mid); }
+.home-module:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); border-color: var(--teal-mid); }
+.home-module:active { transform: translateY(-1px); box-shadow: var(--shadow); }
 .hm-icon { font-size: 34px; margin-bottom: 10px; }
 .hm-title { font-family: 'Noto Serif TC', serif; font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
 .hm-en, .hm-vi, .hm-id { font-size: 11px; color: var(--ink3); font-style: italic; margin-bottom: 8px; }
@@ -533,55 +568,66 @@ html[data-lang="zh"] .card-en { display: none; }
   display: none;
   position: fixed;
   bottom: 0; left: 0; right: 0;
-  background: var(--surface);
+  background: rgba(255,255,255,.96);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
   border-top: 1px solid var(--border);
   z-index: 180;
-  padding: 6px 0 max(6px, env(safe-area-inset-bottom));
-  box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+  padding: 4px 0 max(8px, env(safe-area-inset-bottom));
+  box-shadow: 0 -2px 16px rgba(0,0,0,.09);
 }
 .bottom-nav-inner {
   display: flex;
   justify-content: space-around;
+  align-items: stretch;
 }
 .bottom-nav-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  justify-content: center;
+  gap: 3px;
   border: none;
   background: none;
   color: var(--ink3);
-  font-size: 9.5px;
+  font-size: 10px;
   font-family: inherit;
-  padding: 4px 10px;
-  border-radius: 8px;
+  font-weight: 500;
+  padding: 6px 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: color .15s;
+  transition: color var(--transition), background var(--transition);
   min-width: 52px;
+  flex: 1;
+  -webkit-tap-highlight-color: transparent;
 }
-.bottom-nav-btn .bn-ico { font-size: 20px; line-height: 1; }
+.bottom-nav-btn .bn-ico { font-size: 22px; line-height: 1; }
 .bottom-nav-btn.active { color: var(--teal); }
 .bottom-nav-btn.active .bn-ico { filter: none; }
+.bottom-nav-btn:active { background: var(--teal-light); }
 
 /* ════════════════════════════════════
    TABLET  (768px – 1023px)
 ════════════════════════════════════ */
 @media (max-width: 1023px) {
-  :root { --sidebar-w: 220px; }
+  :root { --sidebar-w: 230px; }
 
+  .topbar { padding: 0 18px; gap: 12px; }
   .topbar-sub { display: none; }
   .topbar-badge { display: none; }
 
-  .main { padding: 22px 22px 60px; }
+  .main { padding: 24px 24px 60px; }
 
   .overview-grid { grid-template-columns: repeat(2, 1fr); }
-  .home-module-grid { grid-template-columns: repeat(2, 1fr); }
+  .overview-grid .overview-card[style*="span 4"] { grid-column: span 2; }
+  .home-module-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
   .card-grid-3 { grid-template-columns: repeat(2, 1fr); }
 
   .info-table { font-size: 12.5px; }
-  .info-table th, .info-table td { padding: 8px 10px; }
+  .info-table th, .info-table td { padding: 8px 11px; }
 
   .page-title { font-size: 22px; }
+  .nav-item { font-size: 13px; padding: 8px 9px; }
 }
 
 /* ════════════════════════════════════
@@ -590,69 +636,71 @@ html[data-lang="zh"] .card-en { display: none; }
 @media (max-width: 767px) {
   :root { --topbar-h: 56px; }
 
-  /* Topbar adjustments */
+  /* Topbar */
   .topbar { padding: 0 14px; gap: 10px; }
   .menu-toggle { display: flex; }
-  .topbar-icon { width: 32px; height: 32px; font-size: 17px; }
+  .topbar-icon { width: 34px; height: 34px; font-size: 18px; }
   .topbar-title { font-size: 13.5px; }
   .topbar-sub { display: none; }
   .topbar-badge { display: none; }
 
-  /* Shell becomes single column */
+  /* Shell single column */
   .shell { grid-template-columns: 1fr; }
 
-  /* Sidebar slides in from left */
+  /* Sidebar slides in */
   .sidebar {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: min(82vw, 300px);
+    top: 0; left: 0;
+    width: min(84vw, 310px);
     height: 100dvh;
     z-index: 160;
     transform: translateX(-100%);
-    transition: transform .28s cubic-bezier(.4,0,.2,1);
+    transition: transform .3s cubic-bezier(.4,0,.2,1);
     border-right: 1px solid var(--border);
     box-shadow: none;
-    padding-top: calc(var(--topbar-h) + 12px);
+    padding-top: calc(var(--topbar-h) + 10px);
   }
   .sidebar.open {
     transform: translateX(0);
-    box-shadow: 4px 0 24px rgba(0,0,0,.18);
+    box-shadow: 6px 0 30px rgba(0,0,0,.18);
   }
 
   /* Main content */
   .main {
-    padding: 18px 14px calc(80px + env(safe-area-inset-bottom));
+    padding: 16px 14px calc(76px + env(safe-area-inset-bottom));
     max-width: 100%;
   }
 
   /* Page header */
-  .page-title { font-size: 20px; }
+  .page-title { font-size: 19px; line-height: 1.3; }
   .page-desc { font-size: 13px; }
+  .eyebrow { font-size: 10px; }
 
-  /* Cards: stack to single column */
-  .card-grid { grid-template-columns: 1fr; gap: 12px; }
-  .card-grid-3 { grid-template-columns: 1fr; gap: 12px; }
-  .card { padding: 16px; }
-  .card-icon { font-size: 24px; }
+  /* Cards */
+  .card-grid { grid-template-columns: 1fr; gap: 10px; }
+  .card-grid-3 { grid-template-columns: 1fr; gap: 10px; }
+  .card { padding: 15px; }
+  .card-icon { font-size: 24px; margin-bottom: 8px; }
   .card-body { font-size: 13px; }
 
-  /* Overview grid: 2 cols on mobile */
+  /* Overview grid */
   .overview-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .overview-grid .overview-card[style*="span 4"] { grid-column: span 2; }
   .overview-card { padding: 14px 10px; }
-  .overview-num { font-size: 26px; }
+  .overview-num { font-size: 28px; }
   .overview-label { font-size: 11px; }
 
-  /* Home module grid: 2 cols */
+  /* Home module grid */
   .home-module-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .home-module { padding: 14px 10px; }
-  .hm-icon { font-size: 26px; margin-bottom: 6px; }
+  .hm-icon { font-size: 28px; margin-bottom: 6px; }
   .hm-title { font-size: 13px; }
+  .hm-count { font-size: 11px; }
 
-  /* Do/don't: stack */
+  /* Do/don't */
   .do-dont-grid { grid-template-columns: 1fr; }
 
-  /* Tables: horizontal scroll */
+  /* Tables */
   .info-table-wrap {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -660,18 +708,19 @@ html[data-lang="zh"] .card-en { display: none; }
     border-radius: var(--radius-sm);
     box-shadow: var(--shadow);
   }
-  .info-table { margin-bottom: 0; box-shadow: none; font-size: 12px; min-width: 480px; }
+  .info-table { margin-bottom: 0; box-shadow: none; font-size: 12px; min-width: 460px; }
   .info-table th, .info-table td { padding: 8px 10px; }
 
   /* Alert boxes */
-  .alert { padding: 12px 14px; }
-  .alert-ico { font-size: 17px; }
+  .alert { padding: 12px 13px; gap: 10px; }
+  .alert-ico { font-size: 18px; }
   .alert-title { font-size: 13px; }
   .alert-text { font-size: 12.5px; }
   .alert-en { font-size: 11px; }
 
   /* Step list */
-  .step-item { padding: 12px 12px; gap: 10px; }
+  .step-item { padding: 11px 12px; gap: 10px; }
+  .step-num { width: 26px; height: 26px; font-size: 12px; }
   .step-zh { font-size: 13px; }
   .step-en { font-size: 11px; }
   .step-note { font-size: 12px; }
@@ -684,15 +733,94 @@ html[data-lang="zh"] .card-en { display: none; }
   .cl-en { font-size: 11px; }
 
   /* Section title */
-  .sec-title { font-size: 15px; margin: 22px 0 12px; }
+  .sec-title { font-size: 15px; margin: 20px 0 12px; }
 
-  /* Bottom nav visible */
+  /* Flow chart */
+  .flow-node { padding: 11px 13px; }
+  .flow-label { font-size: 13.5px; }
+
+  /* Bottom nav */
   .bottom-nav { display: block; }
+
+  /* Lang buttons: flag only */
+  .lang-btn .lb-label { display: none; }
+  .lang-btn { padding: 5px 7px; min-width: 36px; }
+  .lang-switcher { gap: 3px; }
+
+  /* Nav items larger tap targets on mobile */
+  .nav-item { padding: 10px 10px; font-size: 13.5px; }
 }
 
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
-  .card, .home-module, .sidebar { transition: none !important; }
+  .card, .home-module, .sidebar, .menu-toggle span { transition: none !important; }
+}
+
+/* ════════════════════════════════════
+   LARGE DESKTOP  (≥ 1200px)
+════════════════════════════════════ */
+@media (min-width: 1200px) {
+  :root { --sidebar-w: 288px; }
+  .main { padding: 32px 40px 60px; max-width: 1040px; }
+  .topbar { padding: 0 28px; }
+  .home-module-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .card-grid-3 { gap: 16px; }
+  .overview-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+}
+
+/* ── Focus-visible for keyboard accessibility ── */
+:focus-visible {
+  outline: 2px solid var(--teal-mid);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+button:focus-visible {
+  outline: 2px solid var(--teal-mid);
+  outline-offset: 2px;
+}
+
+/* ── Skip link ── */
+.skip-link {
+  position: fixed; top: -99px; left: 8px; z-index: 9999;
+  background: var(--teal); color: white;
+  padding: 6px 14px; border-radius: 0 0 8px 8px;
+  font-size: 13px; font-weight: 600;
+  transition: top .15s; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* ── Section transition ── */
+.section.active {
+  animation: fadeIn .22s ease-out both;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Checklist interactive feel ── */
+.checklist li {
+  cursor: default;
+  user-select: none;
+  transition: background var(--transition), border-color var(--transition);
+}
+.checklist li:hover {
+  background: var(--surface2);
+  border-color: var(--teal-light);
+}
+
+/* ── Print styles ── */
+@media print {
+  .topbar, .sidebar, .sidebar-overlay, .bottom-nav, .lang-switcher, .menu-toggle { display: none !important; }
+  .shell { display: block; }
+  .main { padding: 0; max-width: 100%; }
+  .section { display: block !important; }
+  .card:hover, .home-module:hover { box-shadow: none; transform: none; border-color: var(--border); }
+  .info-table { min-width: unset; font-size: 11px; }
+  a { color: var(--ink); text-decoration: none; }
+  .alert { break-inside: avoid; }
+  .step-item { break-inside: avoid; }
+  @page { margin: 1.5cm; }
 }
 
 /* ── LANGUAGE SWITCHER ── */
@@ -707,30 +835,25 @@ html[data-lang="zh"] .card-en { display: none; }
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
+  padding: 5px 11px;
   border-radius: 20px;
-  border: 1.5px solid rgba(255,255,255,.28);
-  background: rgba(255,255,255,.1);
+  border: 1.5px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.10);
   color: rgba(255,255,255,.85);
   font-size: 12px;
   font-family: inherit;
   cursor: pointer;
-  transition: all .18s;
+  transition: background var(--transition), border-color var(--transition);
   white-space: nowrap;
   font-weight: 500;
+  -webkit-tap-highlight-color: transparent;
 }
 .lang-btn:hover { background: rgba(255,255,255,.22); color: white; }
-.lang-btn.active { background: rgba(255,255,255,.28); color: white; border-color: rgba(255,255,255,.55); font-weight: 700; }
+.lang-btn.active { background: rgba(255,255,255,.26); color: white; border-color: rgba(255,255,255,.55); font-weight: 700; }
 .lang-btn .lf { font-size: 15px; line-height: 1; }
 
 
-/* Mobile: hide badge text on small screens, keep flags */
-@media (max-width: 767px) {
-  .lang-btn .lb-label { display: none; }
-  .lang-btn { padding: 5px 7px; }
-  .lang-switcher { gap: 3px; }
-  .topbar-badge { display: none; }
-}
+/* Mobile: handled inside main @media (max-width: 767px) block above */
 
 
 /* ══════════════════════════════════
@@ -897,6 +1020,7 @@ html[data-lang="id"] div.cl-en[data-en] { display: block; }
   line-height: 1.55;
 }
 .flow-desc-sec {
+  display: none; /* hidden by default; shown via per-lang CSS rules below */
   font-size: 11.5px;
   color: var(--ink3);
   font-style: italic;
@@ -1002,6 +1126,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">跳至主要內容 Skip to content</a>
 
 <!-- TOPBAR -->
 <div class="topbar">
@@ -1037,7 +1162,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 <div class="shell">
 
 <!-- SIDEBAR -->
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar" id="sidebar" aria-label="訓練模組導覽">
   <div class="sidebar-section">
     <div class="sidebar-label" data-key="menu">主選單</div>
     <button class="nav-item active" onclick="showSection('home')">
@@ -1094,6 +1219,21 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <span class="nav-ico">💬</span> 行為精神症狀
       <span class="tag tag-amber">重要</span>
     </button>
+    <button class="nav-item" onclick="showSection('bpsd-delusion')">
+      <span class="nav-ico">👁️</span> 妄想
+    </button>
+    <button class="nav-item" onclick="showSection('bpsd-hallucination')">
+      <span class="nav-ico">👻</span> 幻覺
+    </button>
+    <button class="nav-item" onclick="showSection('bpsd-sundowning')">
+      <span class="nav-ico">🌇</span> 日落症候群
+    </button>
+    <button class="nav-item" onclick="showSection('bpsd-repetition')">
+      <span class="nav-ico">🔄</span> 重複提問
+    </button>
+    <button class="nav-item" onclick="showSection('bpsd-hiding')">
+      <span class="nav-ico">🔍</span> 藏匿物品
+    </button>
     <button class="nav-item" onclick="showSection('delirium')">
       <span class="nav-ico">⚡</span> 譫妄辨識
       <span class="tag tag-red">重要</span>
@@ -1134,6 +1274,24 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
   </div>
 
   <div class="sidebar-section">
+    <div class="sidebar-label" data-key="legal">法規與雇主規定</div>
+    <button class="nav-item" onclick="showSection('legal-emergency')">
+      <span class="nav-ico">🚑</span> 緊急送醫流程
+      <span class="tag tag-red">重要</span>
+    </button>
+    <button class="nav-item" onclick="showSection('legal-restraint')">
+      <span class="nav-ico">🔒</span> 保護約束原則
+      <span class="tag tag-red">重要</span>
+    </button>
+    <button class="nav-item" onclick="showSection('legal-privacy')">
+      <span class="nav-ico">🔐</span> 個資保護
+    </button>
+    <button class="nav-item" onclick="showSection('legal-family')">
+      <span class="nav-ico">👨‍👩‍👧</span> 家屬聯繫流程
+    </button>
+  </div>
+
+  <div class="sidebar-section">
     <div class="sidebar-label" data-key="self">自我照顧</div>
     <button class="nav-item" onclick="showSection('caregiver-wellbeing')">
       <span class="nav-ico">💚</span> 看護身心健康
@@ -1142,7 +1300,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 </nav>
 
 <!-- MAIN CONTENT -->
-<main class="main">
+<main class="main" id="main-content">
 
 
 <!-- ════════════════════════════════════
@@ -1161,7 +1319,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <div class="overview-label">日常照顧模組<span class="L2 en"><br>Daily Care Modules</span><span class="L2 vi"><br>Mô-đun Chăm Sóc Hàng Ngày</span><span class="L2 id"><br>Modul Perawatan Harian</span></div>
     </div>
     <div class="overview-card">
-      <div class="overview-num" style="color:var(--purple)">5</div>
+      <div class="overview-num" style="color:var(--purple)">10</div>
       <div class="overview-label">行為管理模組<span class="L2 en"><br>Behaviour Modules</span><span class="L2 vi"><br>Mô-đun Quản Lý Hành Vi</span><span class="L2 id"><br>Modul Manajemen Perilaku</span></div>
     </div>
     <div class="overview-card">
@@ -1171,6 +1329,12 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     <div class="overview-card">
       <div class="overview-num" style="color:var(--red)">2</div>
       <div class="overview-label">安全緊急模組<span class="L2 en"><br>Safety &amp; Emergency</span><span class="L2 vi"><br>Mô-đun An Toàn &amp; Khẩn Cấp</span><span class="L2 id"><br>Modul Keselamatan &amp; Darurat</span></div>
+    </div>
+    <div class="overview-card" style="grid-column:span 4">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px">
+        <div class="overview-num" style="color:var(--blue)">4</div>
+        <div class="overview-label" style="text-align:left">法規與雇主規定模組<span class="L2 en"><br>Legal &amp; Employer Regulations</span><span class="L2 vi"><br>Mô-đun Pháp Lý &amp; Quy Định Chủ Lao Động</span><span class="L2 id"><br>Modul Hukum &amp; Peraturan Pemberi Kerja</span></div>
+      </div>
     </div>
   </div>
 
@@ -1258,6 +1422,36 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <div class="hm-title">吞嚥困難照護</div>
       <div class="hm-en L2 en">Dysphagia Care</div><div class="hm-vi L2 vi">Chăm Sóc Khó Nuốt</div><div class="hm-id L2 id">Perawatan Disfagia</div>
       <div class="hm-count"><span class="badge badge-red">重要<span class="L2 en"> Critical</span><span class="L2 vi"> Quan Trọng</span><span class="L2 id"> Penting</span></span></div>
+    </div>
+    <div class="home-module" onclick="showSection('legal-emergency')">
+      <div class="hm-icon">🚑</div>
+      <div class="hm-title">緊急送醫流程</div>
+      <div class="hm-en L2 en">Emergency Transfer</div><div class="hm-vi L2 vi">Quy Trình Cấp Cứu</div><div class="hm-id L2 id">Prosedur Darurat</div>
+      <div class="hm-count"><span class="badge badge-red">法規<span class="L2 en"> Legal</span><span class="L2 vi"> Pháp Lý</span><span class="L2 id"> Hukum</span></span></div>
+    </div>
+    <div class="home-module" onclick="showSection('legal-restraint')">
+      <div class="hm-icon">🔒</div>
+      <div class="hm-title">保護約束原則</div>
+      <div class="hm-en L2 en">Restraint Principles</div><div class="hm-vi L2 vi">Nguyên Tắc Kiềm Chế</div><div class="hm-id L2 id">Prinsip Pengekangan</div>
+      <div class="hm-count"><span class="badge badge-red">法規<span class="L2 en"> Legal</span><span class="L2 vi"> Pháp Lý</span><span class="L2 id"> Hukum</span></span></div>
+    </div>
+    <div class="home-module" onclick="showSection('legal-privacy')">
+      <div class="hm-icon">🔐</div>
+      <div class="hm-title">個人資料保護</div>
+      <div class="hm-en L2 en">Personal Data Protection</div><div class="hm-vi L2 vi">Bảo Vệ Dữ Liệu Cá Nhân</div><div class="hm-id L2 id">Perlindungan Data Pribadi</div>
+      <div class="hm-count"><span class="badge badge-blue">法規<span class="L2 en"> Legal</span><span class="L2 vi"> Pháp Lý</span><span class="L2 id"> Hukum</span></span></div>
+    </div>
+    <div class="home-module" onclick="showSection('legal-family')">
+      <div class="hm-icon">👨‍👩‍👧</div>
+      <div class="hm-title">家屬聯繫流程</div>
+      <div class="hm-en L2 en">Family Contact Protocol</div><div class="hm-vi L2 vi">Quy Trình Liên Lạc Gia Đình</div><div class="hm-id L2 id">Protokol Kontak Keluarga</div>
+      <div class="hm-count"><span class="badge badge-blue">法規<span class="L2 en"> Legal</span><span class="L2 vi"> Pháp Lý</span><span class="L2 id"> Hukum</span></span></div>
+    </div>
+    <div class="home-module" onclick="showSection('caregiver-wellbeing')">
+      <div class="hm-icon">💚</div>
+      <div class="hm-title">看護身心健康</div>
+      <div class="hm-en L2 en">Caregiver Wellbeing</div><div class="hm-vi L2 vi">Sức Khỏe Người Chăm Sóc</div><div class="hm-id L2 id">Kesejahteraan Pengasuh</div>
+      <div class="hm-count"><span class="badge badge-teal">自我照顧<span class="L2 en"> Self-Care</span><span class="L2 vi"> Bản Thân</span><span class="L2 id"> Diri Sendiri</span></span></div>
     </div>
   </div>
 </div>
@@ -1898,6 +2092,496 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 </div>
 
 <!-- ════════════════════════════════════
+     BPSD-DELUSION  妄想
+════════════════════════════════════ -->
+<div id="bpsd-delusion" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · DELUSION</div>
+    <div class="page-title">👁️ 妄想</div>
+    <div class="page-desc">認識、辨識與應對認知症患者的妄想症狀<span class="L2 en"> · Understanding, identifying and responding to delusions in dementia</span><span class="L2 vi"> · Nhận biết và ứng phó với hoang tưởng ở bệnh nhân sa sút trí tuệ</span><span class="L2 id"> · Memahami, mengenali, dan merespons delusi pada demensia</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">什麼是妄想？<span class="tx" data-en="What is Delusion?" data-vi="Hoang Tưởng Là Gì?" data-id="Apa Itu Delusi?"> · What is Delusion?</span></div>
+      <div class="alert-text">妄想是患者堅信一件<strong>不符合事實的事</strong>，且無法透過解釋說服改變。這是腦部疾病的症狀，不是故意說謊或無理取鬧。</div>
+      <div class="alert-en">Delusions are fixed false beliefs that cannot be corrected by reasoning. They are symptoms of brain disease, not intentional lying or troublemaking.</div>
+      <div class="alert-vi">Hoang tưởng là niềm tin sai lầm cố định không thể sửa đổi bằng lý luận. Đây là triệu chứng của bệnh não, không phải cố ý nói dối.</div>
+      <div class="alert-id">Delusi adalah keyakinan palsu yang tidak bisa diubah dengan penalaran. Ini adalah gejala penyakit otak, bukan kebohongan yang disengaja.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🔍</span> 常見妄想類型<span class="tx" data-en="Common Types of Delusion" data-vi="Các Loại Hoang Tưởng Thường Gặp" data-id="Jenis Delusi yang Umum"> · Common Types</span></div>
+  <table class="info-table">
+    <thead><tr>
+      <th>妄想類型<span class="tx" data-en="Type" data-vi="Loại" data-id="Jenis"> · Type</span></th>
+      <th>常見表現<span class="tx" data-en="Common Presentation" data-vi="Biểu Hiện Thường Gặp" data-id="Presentasi Umum"> · Presentation</span></th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>🔑 被竊妄想</strong><br><em data-en="Theft delusion" data-vi="Hoang tưởng bị ăn cắp" data-id="Delusi pencurian">Theft delusion</em></td>
+        <td>堅信財物或重要物品被別人偷走（最常見）<br><em data-en="Convinced their belongings have been stolen (most common)" data-vi="Tin rằng đồ đạc bị người khác đánh cắp (phổ biến nhất)" data-id="Yakin bahwa miliknya dicuri orang lain (paling umum)">Convinced belongings are stolen (most common)</em></td>
+      </tr>
+      <tr>
+        <td><strong>🏠 住所妄想</strong><br><em data-en="Place delusion" data-vi="Hoang tưởng về nơi ở" data-id="Delusi tempat tinggal">Place delusion</em></td>
+        <td>堅持「這裡不是我家，我要回家」，即使身在自家<br><em data-en="Insists 'This is not my home' even when at home" data-vi="Khăng định 'Đây không phải nhà tôi' dù đang ở nhà" data-id="Bersikeras 'Ini bukan rumah saya' meski sedang di rumah">Insists this is not their home</em></td>
+      </tr>
+      <tr>
+        <td><strong>👤 冒名妄想</strong><br><em data-en="Impostor delusion" data-vi="Hoang tưởng giả mạo" data-id="Delusi penipu">Impostor (Capgras)</em></td>
+        <td>認為配偶、子女或照顧者是「冒牌的」陌生人<br><em data-en="Believes family or caregiver is an impostor stranger" data-vi="Tin rằng gia đình hoặc người chăm sóc là kẻ giả mạo" data-id="Percaya keluarga atau pengasuh adalah penipu">Believes family members are impostors</em></td>
+      </tr>
+      <tr>
+        <td><strong>👀 被害妄想</strong><br><em data-en="Persecution delusion" data-vi="Hoang tưởng bị hại" data-id="Delusi penganiayaan">Persecution delusion</em></td>
+        <td>認為有人要傷害、監視或毒害自己<br><em data-en="Believes someone is trying to harm, spy on, or poison them" data-vi="Tin rằng có người muốn làm hại, theo dõi hoặc đầu độc mình" data-id="Percaya ada yang ingin menyakiti, memata-matai, atau meracuni mereka">Believes they are being persecuted</em></td>
+      </tr>
+      <tr>
+        <td><strong>💑 嫉妒妄想</strong><br><em data-en="Jealousy delusion" data-vi="Hoang tưởng ghen tuông" data-id="Delusi kecemburuan">Jealousy delusion</em></td>
+        <td>懷疑配偶不忠，即使毫無根據<br><em data-en="Suspects infidelity without basis" data-vi="Nghi ngờ người phối ngẫu ngoại tình dù không có cơ sở" data-id="Mencurigai perselingkuhan tanpa dasar">Suspects partner's infidelity without basis</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title"><span>✅</span> 正確應對方式<span class="tx" data-en="How to Respond" data-vi="Cách Ứng Phó Đúng" data-id="Cara Merespons yang Benar"> · How to Respond</span></div>
+  <div class="do-dont-grid">
+    <div class="do-box">
+      <div class="do-header">✅ 應該這樣做<span class="tx" data-en="DO" data-vi="NÊN LÀM" data-id="LAKUKAN"> · DO</span></div>
+      <ul>
+        <li>接受情緒，不急著糾正：「我知道您很擔心，我幫您一起找找看。」<div class="step-en">"I know you're worried. Let me look together with you."</div><div class="step-vi">"Tôi hiểu bạn lo lắng. Hãy cùng tìm với tôi."</div><div class="step-id">"Saya mengerti Anda khawatir. Mari kita cari bersama."</div></li>
+        <li>協助尋找物品，轉移焦點，安撫情緒<div class="step-en">Help search for items to redirect and soothe</div><div class="step-vi">Giúp tìm đồ vật để chuyển hướng chú ý và an ủi</div><div class="step-id">Bantu mencari barang untuk mengalihkan perhatian dan menenangkan</div></li>
+        <li>記錄妄想內容與頻率，通報護理師或家屬<div class="step-en">Document content and frequency; report to nurse/family</div><div class="step-vi">Ghi lại nội dung và tần suất; báo cáo cho y tá/gia đình</div><div class="step-id">Catat isi dan frekuensi; laporkan ke perawat/keluarga</div></li>
+        <li>在床頭或常用角落為常見物品指定固定存放位置<div class="step-en">Create fixed storage spots for frequently "lost" items</div><div class="step-vi">Tạo chỗ lưu trữ cố định cho các đồ vật hay bị "mất"</div><div class="step-id">Buat tempat penyimpanan tetap untuk barang yang sering "hilang"</div></li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">❌ 絕對禁止<span class="tx" data-en="DON'T" data-vi="KHÔNG NÊN" data-id="JANGAN"> · DON'T</span></div>
+      <ul>
+        <li>不可爭辯或試圖「說服」患者（只會加劇焦慮）<div class="step-en">Never argue or try to "convince" — it only worsens anxiety</div><div class="step-vi">Không bao giờ tranh luận hoặc cố "thuyết phục" — chỉ làm tăng lo âu</div><div class="step-id">Jangan pernah berdebat atau mencoba "meyakinkan" — hanya memperburuk kecemasan</div></li>
+        <li>不可說「那是假的」「您記錯了」<div class="step-en">Never say "That's false" or "You're wrong"</div><div class="step-vi">Không nói "Điều đó là sai" hoặc "Bạn nhớ sai rồi"</div><div class="step-id">Jangan berkata "Itu salah" atau "Anda keliru"</div></li>
+        <li>不可顯露不耐煩或嘲笑<div class="step-en">Never show impatience or mock the patient</div><div class="step-vi">Không thể hiện sự thiếu kiên nhẫn hoặc chế giễu</div><div class="step-id">Jangan menunjukkan ketidaksabaran atau mengejek</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">立即通報的情況<span class="tx" data-en="Report Immediately If..." data-vi="Báo Cáo Ngay Nếu..." data-id="Laporkan Segera Jika..."> · Report Immediately If...</span></div>
+      <div class="alert-text">妄想內容突然變化或加重 ｜ 因妄想出現攻擊行為 ｜ 患者因妄想拒絕進食或照顧 ｜ 患者試圖離家「逃離危險」</div>
+      <div class="alert-en">Sudden change or worsening of delusion | Aggression due to delusion | Patient refuses food/care because of delusion | Patient tries to flee "danger"</div>
+      <div class="alert-vi">Nội dung hoang tưởng đột ngột thay đổi hoặc nặng hơn | Hung hăng do hoang tưởng | Từ chối ăn/chăm sóc do hoang tưởng | Cố thoát khỏi nhà</div>
+      <div class="alert-id">Perubahan mendadak atau memburuknya delusi | Agresi akibat delusi | Menolak makan/perawatan karena delusi | Mencoba melarikan diri dari "bahaya"</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     BPSD-HALLUCINATION  幻覺
+════════════════════════════════════ -->
+<div id="bpsd-hallucination" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · HALLUCINATION</div>
+    <div class="page-title">👻 幻覺</div>
+    <div class="page-desc">認識認知症相關幻覺、安全應對與通報時機<span class="L2 en"> · Understanding dementia-related hallucinations, safe responses, and when to report</span><span class="L2 vi"> · Nhận biết ảo giác liên quan đến sa sút trí tuệ, cách ứng phó an toàn và khi nào cần báo cáo</span><span class="L2 id"> · Memahami halusinasi terkait demensia, respons aman, dan kapan melapor</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">什麼是幻覺？<span class="tx" data-en="What is Hallucination?" data-vi="Ảo Giác Là Gì?" data-id="Apa Itu Halusinasi?"> · What is Hallucination?</span></div>
+      <div class="alert-text">幻覺是患者<strong>感知到不存在的人事物</strong>——可能是看見（幻視）、聽見（幻聽）、聞到（幻嗅）或感受到（幻觸）。對患者而言，這些體驗是真實的。</div>
+      <div class="alert-en">Hallucinations are perceptions of things that don't exist — visual, auditory, olfactory, or tactile. These experiences feel completely real to the patient.</div>
+      <div class="alert-vi">Ảo giác là cảm nhận về những thứ không tồn tại — nhìn, nghe, ngửi hoặc chạm. Những trải nghiệm này hoàn toàn có thật với bệnh nhân.</div>
+      <div class="alert-id">Halusinasi adalah persepsi terhadap hal-hal yang tidak ada — visual, pendengaran, penciuman, atau sentuhan. Pengalaman ini terasa nyata bagi pasien.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🔍</span> 幻覺類型與常見情境<span class="tx" data-en="Types & Common Scenarios" data-vi="Các Loại Ảo Giác Và Tình Huống Thường Gặp" data-id="Jenis dan Skenario Umum"> · Types & Scenarios</span></div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">👁️</div>
+      <div class="card-title">幻視（最常見）<span class="L2 en"> · Visual (Most Common)</span><span class="L2 vi"> · Ảo Thị (Phổ Biến Nhất)</span><span class="L2 id"> · Visual (Paling Umum)</span></div>
+      <div class="card-body">• 看見不存在的人（常是過世親人）<br>• 看見動物或昆蟲在房間移動<br>• 把影子或衣物誤認為人<br><br><em data-en="Seeing deceased relatives, animals, insects, or misidentifying shadows as people" data-vi="Nhìn thấy người thân đã mất, động vật, côn trùng hoặc nhầm bóng là người" data-id="Melihat keluarga yang sudah meninggal, hewan, serangga, atau salah mengenali bayangan sebagai orang">Visual misperceptions</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👂</div>
+      <div class="card-title">幻聽<span class="L2 en"> · Auditory</span><span class="L2 vi"> · Ảo Thính</span><span class="L2 id"> · Pendengaran</span></div>
+      <div class="card-body">• 聽見有人叫自己名字<br>• 聽見不存在的對話或音樂<br>• 聽見命令性的聲音（較危險）<br><br><em data-en="Hearing own name called, voices, music, or commands (latter is dangerous)" data-vi="Nghe tên mình được gọi, giọng nói, nhạc, hoặc lệnh (loại này nguy hiểm)" data-id="Mendengar nama dipanggil, suara, musik, atau perintah (yang terakhir berbahaya)">Auditory hallucinations</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👃</div>
+      <div class="card-title">幻嗅 / 幻觸<span class="L2 en"> · Smell / Touch</span><span class="L2 vi"> · Ảo Mùi / Ảo Xúc</span><span class="L2 id"> · Penciuman / Sentuhan</span></div>
+      <div class="card-body">• 聞到不存在的氣味（燒焦味、食物香）<br>• 感覺有東西在皮膚上爬<br>• 感覺被人觸碰<br><br><em data-en="Smelling things that aren't there; feeling crawling sensations or phantom touches" data-vi="Ngửi thấy mùi không có; cảm giác bò trên da hoặc chạm ảo" data-id="Mencium sesuatu yang tidak ada; sensasi merayap di kulit atau sentuhan palsu">Other hallucinations</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏰</div>
+      <div class="card-title">好發時間與誘因<span class="L2 en"> · Triggers & Timing</span><span class="L2 vi"> · Thời Điểm Và Yếu Tố Kích Thích</span><span class="L2 id"> · Pemicu dan Waktu"> </span></div>
+      <div class="card-body">• 光線昏暗或黃昏時段（與日落症候群重疊）<br>• 疲勞、感染發燒、脫水<br>• 藥物副作用（尤其抗膽鹼藥物）<br>• 睡眠不足<br><br><em data-en="Dim light, dusk, fatigue, infection/fever, dehydration, medication side effects, sleep deprivation" data-vi="Ánh sáng yếu, chạng vạng, mệt mỏi, nhiễm trùng/sốt, mất nước, tác dụng phụ thuốc, thiếu ngủ" data-id="Cahaya redup, senja, kelelahan, infeksi/demam, dehidrasi, efek samping obat, kurang tidur">Common triggers</em></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>✅</span> 幻覺發生時的應對步驟<span class="tx" data-en="Response Steps" data-vi="Các Bước Ứng Phó" data-id="Langkah Respons"> · Response Steps</span></div>
+  <ul class="step-list">
+    <li class="step-item"><div class="step-num">1</div><div class="step-body">
+      <div class="step-zh">保持冷靜，靠近患者，輕聲說話</div>
+      <div class="step-en">Stay calm, approach gently, speak softly</div>
+      <div class="step-vi">Giữ bình tĩnh, tiếp cận nhẹ nhàng, nói nhỏ nhẹ</div>
+      <div class="step-id">Tetap tenang, dekati dengan lembut, berbicara pelan</div>
+      <div class="step-note">不可突然出聲或快速靠近，避免驚嚇患者加劇恐慌。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">2</div><div class="step-body">
+      <div class="step-zh">確認患者安全，評估是否有立即危險</div>
+      <div class="step-en">Ensure patient safety; assess for immediate danger</div>
+      <div class="step-vi">Đảm bảo an toàn cho bệnh nhân; đánh giá nguy hiểm tức thời</div>
+      <div class="step-id">Pastikan keselamatan pasien; nilai bahaya segera</div>
+      <div class="step-note">若患者試圖「追打」幻視對象或逃跑，需立即介入防止跌倒。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">3</div><div class="step-body">
+      <div class="step-zh">不否認，溫和安撫：「我在這裡，您是安全的」</div>
+      <div class="step-en">Don't deny; gently reassure: "I'm here, you are safe"</div>
+      <div class="step-vi">Không phủ nhận; nhẹ nhàng trấn an: "Tôi ở đây, bạn an toàn"</div>
+      <div class="step-id">Jangan menolak; menenangkan dengan lembut: "Saya di sini, Anda aman"</div>
+      <div class="step-note">避免說「那裡沒有人」，改以情緒陪伴為主。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">4</div><div class="step-body">
+      <div class="step-zh">改善環境：增加室內光線、降低噪音</div>
+      <div class="step-en">Improve environment: increase lighting, reduce noise</div>
+      <div class="step-vi">Cải thiện môi trường: tăng ánh sáng, giảm tiếng ồn</div>
+      <div class="step-id">Perbaiki lingkungan: tambah cahaya, kurangi kebisingan</div>
+      <div class="step-note">許多幻視在光線充足時會減輕，拉開窗簾是第一步。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">5</div><div class="step-body">
+      <div class="step-zh">轉移注意力：帶去另一個房間、提供熟悉物品或音樂</div>
+      <div class="step-en">Redirect: move to another room; offer familiar objects or music</div>
+      <div class="step-vi">Chuyển hướng: dẫn sang phòng khác; đưa vật quen thuộc hoặc nhạc</div>
+      <div class="step-id">Alihkan: pindah ke ruangan lain; tawarkan benda familiar atau musik</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">6</div><div class="step-body">
+      <div class="step-zh">記錄發生時間、內容、持續時間，通報護理師</div>
+      <div class="step-en">Record time, content, duration; report to nurse</div>
+      <div class="step-vi">Ghi lại thời gian, nội dung, thời lượng; báo cáo cho y tá</div>
+      <div class="step-id">Catat waktu, isi, durasi; laporkan ke perawat</div>
+    </div></li>
+  </ul>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">立即通報的警示徵兆<span class="tx" data-en="Red Flags — Report Immediately" data-vi="Dấu Hiệu Nguy Hiểm — Báo Cáo Ngay" data-id="Tanda Bahaya — Laporkan Segera"> · Red Flags</span></div>
+      <div class="alert-text">幻覺突然加劇或出現新型態 ｜ 患者出現攻擊行為 ｜ 患者因幻覺試圖跳窗或逃跑 ｜ 幻覺伴隨發燒、意識混亂（可能為譫妄）｜ 聽到命令性聲音</div>
+      <div class="alert-en">Sudden increase or new type of hallucination | Aggression | Patient tries to jump or flee | Hallucination with fever/confusion (may be delirium) | Commanding voices</div>
+      <div class="alert-vi">Ảo giác đột ngột tăng hoặc loại mới | Hung hăng | Cố nhảy hoặc bỏ trốn | Kèm sốt/lú lẫn (có thể mê sảng) | Nghe giọng ra lệnh</div>
+      <div class="alert-id">Peningkatan mendadak atau jenis baru | Agresi | Mencoba melompat atau melarikan diri | Disertai demam/kebingungan (mungkin delirium) | Suara perintah</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     BPSD-SUNDOWNING  日落症候群
+════════════════════════════════════ -->
+<div id="bpsd-sundowning" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · SUNDOWNING</div>
+    <div class="page-title">🌇 日落症候群</div>
+    <div class="page-desc">傍晚行為加劇的原因、預防與應對策略<span class="L2 en"> · Causes, prevention and response for late-afternoon behavioural worsening</span><span class="L2 vi"> · Nguyên nhân, phòng ngừa và ứng phó với triệu chứng xấu đi vào chiều muộn</span><span class="L2 id"> · Penyebab, pencegahan, dan respons untuk memburuknya perilaku sore hari</span></div>
+  </div>
+
+  <div class="alert alert-purple">
+    <div class="alert-ico">🌇</div>
+    <div class="alert-body">
+      <div class="alert-title">什麼是日落症候群？<span class="tx" data-en="What is Sundowning?" data-vi="Hội Chứng Hoàng Hôn Là Gì?" data-id="Apa Itu Sundowning?"> · What is Sundowning?</span></div>
+      <div class="alert-text">日落症候群指認知症患者在<strong>傍晚至夜間（約16:00–21:00）</strong>出現混亂、激動、焦慮、幻覺或攻擊行為明顯加重的現象。與生理時鐘紊亂、光線減少、疲勞累積有關。</div>
+      <div class="alert-en">Sundowning refers to worsening confusion, agitation, anxiety, hallucinations or aggression in dementia patients typically between 4PM and 9PM. It is linked to disrupted circadian rhythms, reduced light, and accumulated fatigue.</div>
+      <div class="alert-vi">Hội chứng hoàng hôn là hiện tượng lú lẫn, kích động, lo âu, ảo giác hoặc hung hăng nặng hơn rõ rệt vào khoảng 16:00–21:00 ở bệnh nhân sa sút trí tuệ.</div>
+      <div class="alert-id">Sundowning mengacu pada memburuknya kebingungan, agitasi, kecemasan, halusinasi, atau agresi pada pasien demensia biasanya antara pukul 16.00–21.00.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>⚠️</span> 常見觸發因素<span class="tx" data-en="Common Triggers" data-vi="Yếu Tố Kích Thích Thường Gặp" data-id="Pemicu Umum"> · Common Triggers</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">💡</div>
+      <div class="card-title">光線減少<span class="L2 en"> · Reduced Light</span><span class="L2 vi"> · Ánh Sáng Giảm</span><span class="L2 id"> · Cahaya Berkurang</span></div>
+      <div class="card-body">自然光消退打亂生理時鐘，室內陰暗增加定向障礙<br><em data-en="Fading natural light disrupts circadian rhythms; dim indoors worsens disorientation" data-vi="Ánh sáng tự nhiên tắt dần làm rối nhịp sinh học; trong nhà tối tăm làm nặng thêm mất định hướng" data-id="Cahaya alami memudar mengganggu ritme sirkadian; dalam ruangan gelap memperburuk disorientasi">Light-related disruption</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">😴</div>
+      <div class="card-title">疲勞累積<span class="L2 en"> · Accumulated Fatigue</span><span class="L2 vi"> · Mệt Mỏi Tích Lũy</span><span class="L2 id"> · Kelelahan Menumpuk</span></div>
+      <div class="card-body">一整天活動與感官刺激後，大腦應對能力下降<br><em data-en="After a full day of activity, the brain's coping ability decreases" data-vi="Sau cả ngày hoạt động, khả năng ứng phó của não giảm" data-id="Setelah seharian beraktivitas, kemampuan otak untuk mengatasi menurun">Cognitive exhaustion</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏥</div>
+      <div class="card-title">環境變化<span class="L2 en"> · Environment Change</span><span class="L2 vi"> · Thay Đổi Môi Trường</span><span class="L2 id"> · Perubahan Lingkungan</span></div>
+      <div class="card-body">換房間、家人換班、新看護出現，均可誘發<br><em data-en="Room changes, staff shift changes, or new caregivers can trigger episodes" data-vi="Thay phòng, thay ca nhân viên, hoặc người chăm sóc mới có thể gây ra" data-id="Perubahan kamar, pergantian shift, atau pengasuh baru dapat memicunya">Environmental triggers</em></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🛡️</span> 預防策略（每日例行）<span class="tx" data-en="Daily Prevention Strategies" data-vi="Chiến Lược Phòng Ngừa Hàng Ngày" data-id="Strategi Pencegahan Harian"> · Daily Prevention</span></div>
+  <ul class="step-list">
+    <li class="step-item"><div class="step-num">14:00</div><div class="step-body">
+      <div class="step-zh">安排輕鬆活動（摺衣服、看家庭照片）——避免刺激性節目或討論</div>
+      <div class="step-en">Schedule calming activities (folding, family photos) — avoid stimulating content</div>
+      <div class="step-vi">Lên lịch hoạt động nhẹ nhàng — tránh nội dung kích thích</div>
+      <div class="step-id">Jadwalkan aktivitas menenangkan — hindari konten yang merangsang</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">15:00</div><div class="step-body">
+      <div class="step-zh">拉開所有窗簾，打開室內燈，保持光線充足</div>
+      <div class="step-en">Open all curtains; turn on indoor lights; ensure bright environment</div>
+      <div class="step-vi">Kéo tất cả rèm cửa; bật đèn trong nhà; đảm bảo ánh sáng đủ</div>
+      <div class="step-id">Buka semua tirai; nyalakan lampu dalam ruangan; pastikan cukup terang</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">16:00</div><div class="step-body">
+      <div class="step-zh">給予少量點心，確認如廁需求，提供熟悉且安撫的音樂</div>
+      <div class="step-en">Offer a small snack; confirm toileting; play familiar soothing music</div>
+      <div class="step-vi">Cho ăn nhẹ; kiểm tra nhu cầu vệ sinh; mở nhạc quen thuộc êm dịu</div>
+      <div class="step-id">Berikan camilan kecil; konfirmasi kebutuhan toilet; putar musik menenangkan</div>
+      <div class="step-note">飢餓和尿意是傍晚躁動的常見卻易被忽略原因。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">17:00</div><div class="step-body">
+      <div class="step-zh">固定看護陪伴；減少訪客人數；保持環境安靜有秩序</div>
+      <div class="step-en">Consistent caregiver present; limit visitors; keep environment quiet and orderly</div>
+      <div class="step-vi">Người chăm sóc quen thuộc ở bên; hạn chế khách; giữ môi trường yên tĩnh</div>
+      <div class="step-id">Pengasuh tetap hadir; batasi pengunjung; jaga lingkungan tenang dan teratur</div>
+    </div></li>
+  </ul>
+
+  <div class="sec-title"><span>🔥</span> 症狀發作時的即時應對<span class="tx" data-en="When Sundowning Occurs" data-vi="Khi Hội Chứng Bùng Phát" data-id="Saat Sundowning Terjadi"> · Immediate Response</span></div>
+  <div class="do-dont-grid">
+    <div class="do-box">
+      <div class="do-header">✅ 應對方式<span class="tx" data-en="DO" data-vi="NÊN LÀM" data-id="LAKUKAN"> · DO</span></div>
+      <ul>
+        <li>保持平靜語調，降低音量，放慢動作<div class="step-en">Calm tone, lower voice, slow movements</div><div class="step-vi">Giọng bình tĩnh, hạ thấp giọng, chậm lại động tác</div><div class="step-id">Nada tenang, suara rendah, gerakan lambat</div></li>
+        <li>說出患者名字，確認自己的身份：「我是○○，我陪著您。」<div class="step-en">Use patient's name; identify yourself: "I'm [name], I'm here with you."</div><div class="step-vi">Gọi tên bệnh nhân; xác nhận danh tính: "Tôi là [tên], tôi đang ở bên bạn."</div><div class="step-id">Sebut nama pasien; kenalkan diri: "Saya [nama], saya di sini bersama Anda."</div></li>
+        <li>陪患者在光線明亮的空間坐下，給熟悉的毯子或玩偶<div class="step-en">Sit with patient in bright area; offer familiar blanket or toy</div><div class="step-vi">Ngồi cùng bệnh nhân ở nơi sáng; đưa chăn hoặc đồ chơi quen thuộc</div><div class="step-id">Duduk bersama pasien di area terang; berikan selimut atau mainan familiar</div></li>
+        <li>播放患者喜愛的輕柔音樂或廣播<div class="step-en">Play familiar soft music or radio</div><div class="step-vi">Mở nhạc nhẹ hoặc đài radio quen thuộc</div><div class="step-id">Putar musik lembut atau radio yang familiar</div></li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">❌ 禁止行為<span class="tx" data-en="DON'T" data-vi="KHÔNG NÊN" data-id="JANGAN"> · DON'T</span></div>
+      <ul>
+        <li>不可強制要求患者安靜或立刻去睡覺<div class="step-en">Never force patient to be quiet or go to sleep immediately</div><div class="step-vi">Không ép bệnh nhân im lặng hoặc đi ngủ ngay lập tức</div><div class="step-id">Jangan paksa pasien diam atau segera tidur</div></li>
+        <li>不可多人同時圍上前，可能加重驚慌<div class="step-en">Avoid multiple people approaching simultaneously</div><div class="step-vi">Tránh nhiều người cùng tiến đến một lúc</div><div class="step-id">Hindari beberapa orang mendekati secara bersamaan</div></li>
+        <li>不可在患者激動時開始照顧任務（換衣、洗澡）<div class="step-en">Don't begin care tasks during agitation</div><div class="step-vi">Không bắt đầu các nhiệm vụ chăm sóc khi bệnh nhân đang kích động</div><div class="step-id">Jangan mulai tugas perawatan saat pasien sedang agitasi</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">通報時機<span class="tx" data-en="When to Report" data-vi="Khi Nào Cần Báo Cáo" data-id="Kapan Melapor"> · When to Report</span></div>
+      <div class="alert-text">日落症候群持續加重超過3天 ｜ 伴有攻擊行為無法安撫 ｜ 夜間完全無法入睡 ｜ 懷疑有感染或其他疾病（發燒、新症狀）</div>
+      <div class="alert-en">Worsening for 3+ days | Aggression cannot be calmed | Complete inability to sleep at night | Suspected infection or new illness</div>
+      <div class="alert-vi">Nặng hơn liên tục hơn 3 ngày | Hung hăng không thể trấn an | Hoàn toàn không ngủ được | Nghi nhiễm trùng hoặc bệnh mới</div>
+      <div class="alert-id">Memburuk selama 3+ hari | Agresi tidak bisa ditenangkan | Tidak bisa tidur sama sekali | Dicurigai infeksi atau penyakit baru</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     BPSD-REPETITION  重複提問
+════════════════════════════════════ -->
+<div id="bpsd-repetition" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · REPETITION</div>
+    <div class="page-title">🔄 重複提問與重複行為</div>
+    <div class="page-desc">理解重複行為的成因、保持耐心的技巧與有效應對策略<span class="L2 en"> · Understanding repetitive behaviour, techniques for patience, and effective responses</span><span class="L2 vi"> · Hiểu nguyên nhân hành vi lặp lại, kỹ thuật giữ kiên nhẫn và cách ứng phó hiệu quả</span><span class="L2 id"> · Memahami perilaku berulang, teknik kesabaran, dan strategi respons efektif</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">為什麼患者一直重複？<span class="tx" data-en="Why Do Patients Repeat?" data-vi="Tại Sao Bệnh Nhân Lặp Đi Lặp Lại?" data-id="Mengapa Pasien Terus Mengulang?"> · Why Do Patients Repeat?</span></div>
+      <div class="alert-text">患者<strong>真的不記得</strong>自己剛才問過或做過。重複不是故意煩人，而是記憶損傷的直接結果。重複提問背後通常有<strong>情緒需求</strong>：焦慮、不安全感、尋求安撫。</div>
+      <div class="alert-en">Patients genuinely do not remember asking or doing something moments before. Repetition is a direct result of memory damage — not intentional annoyance. Repeated questions usually reflect emotional needs: anxiety, insecurity, seeking reassurance.</div>
+      <div class="alert-vi">Bệnh nhân thực sự không nhớ đã hỏi hoặc làm điều đó. Lặp lại là kết quả trực tiếp của tổn thương trí nhớ, không phải cố tình. Câu hỏi lặp lại thường phản ánh nhu cầu cảm xúc.</div>
+      <div class="alert-id">Pasien benar-benar tidak ingat pernah menanyakan atau melakukan sesuatu. Pengulangan adalah akibat langsung dari kerusakan memori, bukan kesengajaan. Pertanyaan berulang biasanya mencerminkan kebutuhan emosional.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🔍</span> 常見重複類型與背後需求<span class="tx" data-en="Common Types & Underlying Needs" data-vi="Loại Thường Gặp Và Nhu Cầu Tiềm Ẩn" data-id="Jenis Umum dan Kebutuhan Mendasar"> · Types & Needs</span></div>
+  <table class="info-table">
+    <thead><tr>
+      <th>重複行為<span class="tx" data-en="Repetitive Behaviour" data-vi="Hành Vi Lặp Lại" data-id="Perilaku Berulang"> · Behaviour</span></th>
+      <th>可能的潛在需求<span class="tx" data-en="Possible Underlying Need" data-vi="Nhu Cầu Tiềm Ẩn Có Thể" data-id="Kemungkinan Kebutuhan Mendasar"> · Underlying Need</span></th>
+      <th>應對建議<span class="tx" data-en="Suggested Response" data-vi="Cách Ứng Phó Gợi Ý" data-id="Respons yang Disarankan"> · Response</span></th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>「我們幾點吃飯？」</strong>反覆問<br><em data-en="Repeatedly asking meal times" data-vi="Hỏi đi hỏi lại giờ ăn" data-id="Terus bertanya waktu makan">Repeatedly asking meal times</em></td>
+        <td>飢餓、焦慮、想掌握時間<br><em data-en="Hunger, anxiety, need for time orientation" data-vi="Đói, lo âu, cần định hướng thời gian" data-id="Lapar, cemas, butuh orientasi waktu">Hunger / time anxiety</em></td>
+        <td>給予點心；製作「今日行程卡」貼於顯眼處<br><em data-en="Offer snack; place daily schedule card in visible spot" data-vi="Cho ăn nhẹ; dán lịch ngày hôm nay ở chỗ dễ thấy" data-id="Berikan camilan; pasang kartu jadwal harian di tempat terlihat">Snack + schedule card</em></td>
+      </tr>
+      <tr>
+        <td><strong>「我要回家！」</strong>反覆說<br><em data-en="'I want to go home' repeatedly" data-vi="Liên tục nói 'Tôi muốn về nhà'" data-id="Terus berkata 'Saya mau pulang'">Wanting to go home</em></td>
+        <td>不安全感、思念過去、環境陌生<br><em data-en="Insecurity, nostalgia, unfamiliar environment" data-vi="Cảm giác không an toàn, nhớ nhà, môi trường xa lạ" data-id="Rasa tidak aman, nostalgia, lingkungan asing">Insecurity / nostalgia</em></td>
+        <td>不否認；詢問「以前的家」帶出美好回憶；轉移至喜愛活動<br><em data-en="Don't deny; ask about 'home' to evoke memories; redirect to favourite activity" data-vi="Không phủ nhận; hỏi về 'nhà cũ' để gợi kỷ niệm; chuyển hướng sang hoạt động yêu thích" data-id="Jangan tolak; tanya tentang 'rumah lama' untuk membangkitkan kenangan; alihkan ke aktivitas favorit">Validate + redirect</em></td>
+      </tr>
+      <tr>
+        <td><strong>重複撿拾或整理物品</strong><br><em data-en="Repeatedly picking up or arranging objects" data-vi="Liên tục nhặt hoặc sắp xếp đồ vật" data-id="Terus memungut atau menyusun benda">Repetitive sorting/tidying</em></td>
+        <td>需要有事可做、過去職業習慣<br><em data-en="Need for purposeful activity; occupational habit from past" data-vi="Cần có việc để làm; thói quen nghề nghiệp trước đây" data-id="Butuh aktivitas bermakna; kebiasaan pekerjaan masa lalu">Need for purpose</em></td>
+        <td>提供安全的「整理任務」（摺衣服、排放物品）；肯定其行動<br><em data-en="Provide safe 'tidying tasks' (folding, arranging); affirm their actions" data-vi="Cung cấp 'nhiệm vụ dọn dẹp' an toàn; khẳng định hành động của họ" data-id="Berikan 'tugas merapikan' yang aman; afirmasi tindakan mereka">Provide purposeful task</em></td>
+      </tr>
+      <tr>
+        <td><strong>反覆呼叫看護名字</strong><br><em data-en="Repeatedly calling caregiver's name" data-vi="Liên tục gọi tên người chăm sóc" data-id="Terus memanggil nama pengasuh">Calling caregiver repeatedly</em></td>
+        <td>孤單、恐懼、需要確認有人在身旁<br><em data-en="Loneliness, fear, need to confirm presence" data-vi="Cô đơn, sợ hãi, cần xác nhận có người bên cạnh" data-id="Kesepian, ketakutan, perlu konfirmasi kehadiran">Loneliness / fear</em></td>
+        <td>增加陪伴時間；使用熟悉的玩偶或物品提供安撫；確認呼叫後立即回應<br><em data-en="Increase presence; use familiar comfort objects; respond promptly to calls" data-vi="Tăng thời gian ở bên; dùng đồ vật quen thuộc để an ủi; phản hồi ngay khi được gọi" data-id="Tambah kehadiran; gunakan benda familiar; respons segera saat dipanggil">More presence + reassurance</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title"><span>💡</span> 維持耐心的實用技巧<span class="tx" data-en="Practical Tips for Staying Patient" data-vi="Mẹo Thực Tế Để Giữ Kiên Nhẫn" data-id="Tips Praktis Tetap Sabar"> · Staying Patient</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">🗂️</div>
+      <div class="card-title">視覺提示卡<span class="L2 en"> · Visual Cue Cards</span><span class="L2 vi"> · Thẻ Gợi Ý Hình Ảnh</span><span class="L2 id"> · Kartu Petunjuk Visual</span></div>
+      <div class="card-body">製作大字體卡片（如「今天是週四，下午2點吃點心」）貼在床頭、餐桌，讓患者自行查看，減少詢問次數<br><em data-en="Large-font cards placed at bedside/table to reduce asking" data-vi="Thẻ chữ lớn đặt ở đầu giường/bàn ăn để giảm câu hỏi" data-id="Kartu huruf besar di tempat tidur/meja untuk mengurangi pertanyaan">Large-print answer cards</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔁</div>
+      <div class="card-title">「第一次回答」心態<span class="L2 en"> · 'First Time' Mindset</span><span class="L2 vi"> · Tư Duy 'Lần Đầu Tiên'</span><span class="L2 id"> · Pola Pikir 'Pertama Kali'</span></div>
+      <div class="card-body">每次都像是「第一次被問到」般回答，不帶有不耐煩語氣。若感到沮喪，先離開現場10秒深呼吸再回來<br><em data-en="Answer as if hearing it for the first time every time; take 10-second breaks if frustrated" data-vi="Trả lời như lần đầu tiên nghe; nghỉ 10 giây nếu bực bội" data-id="Jawab seolah baru pertama kali mendengar; istirahat 10 detik jika frustrasi">'First time' response</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎯</div>
+      <div class="card-title">情緒先於事實<span class="L2 en"> · Emotions Before Facts</span><span class="L2 vi"> · Cảm Xúc Trước Sự Thật</span><span class="L2 id"> · Emosi Sebelum Fakta</span></div>
+      <div class="card-body">先回應情緒，再（若需要）提供資訊：「您想要確認晚餐——我明白，今天有您喜歡的蛋炒飯喔！」<br><em data-en="Respond to emotion first, then provide information: 'I understand you want to know about dinner — we have your favourite tonight!'" data-vi="Phản hồi cảm xúc trước, rồi cung cấp thông tin: 'Tôi hiểu bạn muốn biết về bữa tối — tối nay có món bạn thích!'" data-id="Respons emosi dulu, lalu berikan informasi: 'Saya mengerti Anda ingin tahu tentang makan malam — malam ini ada makanan favorit Anda!'">Emotion-first response</em></div>
+    </div>
+  </div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">需要通報的情況<span class="tx" data-en="When to Report" data-vi="Khi Nào Cần Báo Cáo" data-id="Kapan Melapor"> · When to Report</span></div>
+      <div class="alert-text">重複行為突然明顯增加（可能為病情惡化或譫妄）｜ 重複內容出現恐懼或痛苦（如「有人要傷害我」）｜ 重複行為影響進食、睡眠或安全</div>
+      <div class="alert-en">Sudden marked increase in repetition (possible deterioration or delirium) | Repetition involving fear or distress ("Someone is going to hurt me") | Affects eating, sleep, or safety</div>
+      <div class="alert-vi">Tăng đột ngột rõ rệt (có thể bệnh xấu hơn hoặc mê sảng) | Lặp lại kèm sợ hãi hoặc đau khổ | Ảnh hưởng đến ăn uống, giấc ngủ hoặc an toàn</div>
+      <div class="alert-id">Peningkatan mendadak yang mencolok (kemungkinan memburuk atau delirium) | Pengulangan disertai rasa takut atau distress | Mempengaruhi makan, tidur, atau keselamatan</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     BPSD-HIDING  藏匿物品
+════════════════════════════════════ -->
+<div id="bpsd-hiding" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · HIDING / HOARDING</div>
+    <div class="page-title">🔍 藏匿物品與囤積行為</div>
+    <div class="page-desc">認識藏匿行為的心理根源、預防安全隱患與有效管理策略<span class="L2 en"> · Understanding the psychology of hiding/hoarding, preventing safety risks, and effective management</span><span class="L2 vi"> · Hiểu tâm lý của hành vi giấu/tích trữ, ngăn ngừa rủi ro an toàn và quản lý hiệu quả</span><span class="L2 id"> · Memahami psikologi menyembunyikan/menimbun, mencegah risiko keamanan, dan manajemen efektif</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">為什麼患者會藏東西？<span class="tx" data-en="Why Do Patients Hide Things?" data-vi="Tại Sao Bệnh Nhân Lại Giấu Đồ?" data-id="Mengapa Pasien Menyembunyikan Barang?"> · Why Do Patients Hide Things?</span></div>
+      <div class="alert-text">藏匿物品源於<strong>不安全感與不信任感</strong>——患者記憶力衰退，擔心財物被竊，或無法記住自己已擁有的東西。藏匿行為是試圖保護自己珍視之物的本能。這不是故意製造麻煩。</div>
+      <div class="alert-en">Hiding stems from insecurity and distrust — patients worry about theft because they can't remember where they put things. Hiding is an instinct to protect what they value. It is not intentional trouble-making.</div>
+      <div class="alert-vi">Giấu đồ xuất phát từ cảm giác không an toàn và thiếu tin tưởng — bệnh nhân lo bị ăn cắp vì không nhớ đã để đồ ở đâu. Giấu đồ là bản năng bảo vệ thứ họ trân trọng.</div>
+      <div class="alert-id">Menyembunyikan berasal dari rasa tidak aman dan ketidakpercayaan — pasien khawatir kecurian karena tidak ingat di mana menaruh barang. Menyembunyikan adalah insting melindungi yang mereka nilai.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🗺️</span> 常見藏匿地點<span class="tx" data-en="Common Hiding Spots" data-vi="Chỗ Giấu Thường Gặp" data-id="Tempat Persembunyian Umum"> · Common Hiding Spots</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">🛏️</div>
+      <div class="card-title">床鋪相關<span class="L2 en"> · Bed-Related</span><span class="L2 vi"> · Khu Vực Giường</span><span class="L2 id"> · Area Tempat Tidur</span></div>
+      <div class="card-body">• 枕頭下方<br>• 床墊與床架之間<br>• 床單褶縫內<br><em data-en="Under pillow, between mattress and frame, in bed linen folds" data-vi="Dưới gối, giữa đệm và khung, trong nếp gấp vải" data-id="Di bawah bantal, antara kasur dan rangka, dalam lipatan sprei">Under pillow, mattress</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👗</div>
+      <div class="card-title">衣物相關<span class="L2 en"> · Clothing-Related</span><span class="L2 vi"> · Khu Vực Quần Áo</span><span class="L2 id"> · Area Pakaian</span></div>
+      <div class="card-body">• 衣服口袋（包括換洗衣物）<br>• 折疊衣物夾縫中<br>• 鞋子或鞋盒裡<br><em data-en="Clothing pockets, folded clothes, shoes or shoe boxes" data-vi="Túi quần áo, quần áo gấp, giày hoặc hộp giày" data-id="Saku pakaian, lipatan baju, sepatu atau kotak sepatu">Pockets, shoes</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🪑</div>
+      <div class="card-title">家具相關<span class="L2 en"> · Furniture-Related</span><span class="L2 vi"> · Khu Vực Đồ Nội Thất</span><span class="L2 id"> · Area Furnitur</span></div>
+      <div class="card-body">• 沙發縫隙<br>• 抽屜最深處<br>• 花盆、垃圾桶底部（食物！）<br><em data-en="Sofa gaps, back of drawers, flower pots, waste bins (food!)" data-vi="Khe sofa, đáy ngăn kéo, chậu hoa, thùng rác (thức ăn!)" data-id="Celah sofa, bagian belakang laci, pot bunga, tempat sampah (makanan!)">Sofas, drawers, containers</em></div>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">安全風險：藏匿食物<span class="tx" data-en="Safety Risk: Hidden Food" data-vi="Nguy Cơ An Toàn: Thức Ăn Bị Giấu" data-id="Risiko Keamanan: Makanan Tersembunyi"> · Safety Risk: Hidden Food</span></div>
+      <div class="alert-text">藏匿食物是<strong>最需要警惕</strong>的情況。腐壞食物可能導致食物中毒；藏在床墊或衣物中的食物也可能引發蟲害或感染。<strong>每天換床單和整理衣物時必須全面檢查。</strong></div>
+      <div class="alert-en">Hidden food is the most critical concern. Spoiled food can cause food poisoning; food in mattresses or clothing can lead to pest infestations or infections. Check thoroughly every day during bed-changing and laundry.</div>
+      <div class="alert-vi">Thức ăn bị giấu là mối lo ngại nghiêm trọng nhất. Thức ăn thiu có thể gây ngộ độc; thức ăn trong đệm hoặc quần áo có thể gây dịch hại hoặc nhiễm trùng. Kiểm tra kỹ mỗi ngày khi thay ga và giặt quần áo.</div>
+      <div class="alert-id">Makanan tersembunyi adalah masalah paling kritis. Makanan basi dapat menyebabkan keracunan; makanan di kasur atau pakaian dapat menyebabkan hama atau infeksi. Periksa menyeluruh setiap hari saat ganti sprei dan laundry.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🛡️</span> 管理策略<span class="tx" data-en="Management Strategies" data-vi="Chiến Lược Quản Lý" data-id="Strategi Manajemen"> · Management Strategies</span></div>
+  <ul class="step-list">
+    <li class="step-item"><div class="step-num">1</div><div class="step-body">
+      <div class="step-zh">建立「安全藏匿盒」——提供一個有鎖或患者認可的「私人空間」讓患者存放珍視物品</div>
+      <div class="step-en">Create a "safe box" — a lockable or patient-approved "private space" for their valued belongings</div>
+      <div class="step-vi">Tạo "hộp an toàn" — không gian riêng có khóa hoặc được bệnh nhân chấp nhận để cất đồ quý</div>
+      <div class="step-id">Buat "kotak aman" — ruang pribadi yang bisa dikunci atau disetujui pasien untuk menyimpan barang berharga</div>
+      <div class="step-note">這可大幅減少患者在危險地點藏匿物品的行為。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">2</div><div class="step-body">
+      <div class="step-zh">每日定時「巡查」常見藏匿地點，特別是食物相關藏匿</div>
+      <div class="step-en">Daily routine check of common hiding spots, especially for food</div>
+      <div class="step-vi">Kiểm tra hàng ngày các chỗ giấu thường gặp, đặc biệt là thức ăn</div>
+      <div class="step-id">Pemeriksaan rutin harian di tempat persembunyian umum, terutama makanan</div>
+      <div class="step-note">建議在換床單、整理衣物時同步進行，避免遺漏。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">3</div><div class="step-body">
+      <div class="step-zh">不可當場責備或強行取回物品——先安撫，再以替換方式處理</div>
+      <div class="step-en">Never scold or forcibly retrieve items — soothe first, then use replacement strategies</div>
+      <div class="step-vi">Không mắng hoặc lấy lại đồ bằng vũ lực — trấn an trước, rồi dùng chiến lược thay thế</div>
+      <div class="step-id">Jangan memarahi atau mengambil paksa barang — tenangkan dulu, lalu gunakan strategi penggantian</div>
+      <div class="step-note">可趁患者注意力轉移時，輕輕取回不安全物品（如藥物、刀叉）。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">4</div><div class="step-body">
+      <div class="step-zh">將危險物品（藥物、剪刀、化學品）移至上鎖儲藏處</div>
+      <div class="step-en">Move dangerous items (medication, scissors, chemicals) to locked storage</div>
+      <div class="step-vi">Chuyển đồ vật nguy hiểm (thuốc, kéo, hóa chất) vào nơi có khóa</div>
+      <div class="step-id">Pindahkan benda berbahaya (obat, gunting, bahan kimia) ke penyimpanan terkunci</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">5</div><div class="step-body">
+      <div class="step-zh">記錄患者慣用藏匿地點，方便後續尋找「遺失」物品</div>
+      <div class="step-en">Document the patient's preferred hiding spots to help locate "missing" items later</div>
+      <div class="step-vi">Ghi lại chỗ giấu quen thuộc để dễ tìm đồ "mất" sau này</div>
+      <div class="step-id">Catat tempat persembunyian favorit pasien untuk memudahkan pencarian barang "hilang"</div>
+      <div class="step-note">此記錄也可交班給下一位看護，避免重複尋找同樣地點。</div>
+    </div></li>
+  </ul>
+
+  <div class="do-dont-grid">
+    <div class="do-box">
+      <div class="do-header">✅ 發現藏匿物品時<span class="tx" data-en="When You Find Hidden Items" data-vi="Khi Tìm Thấy Đồ Bị Giấu" data-id="Saat Menemukan Barang Tersembunyi"> · When Found</span></div>
+      <ul>
+        <li>以輕鬆語氣說：「我來幫您整理一下」，不強調已找到藏匿物<div class="step-en">"Let me help you tidy up" — don't emphasize finding the hidden item</div><div class="step-vi">Nói nhẹ nhàng: "Để tôi giúp dọn dẹp" — không nhấn mạnh đã tìm thấy đồ giấu</div><div class="step-id">Katakan santai: "Biar saya bantu rapikan" — jangan tekankan sudah menemukan barang tersembunyi</div></li>
+        <li>如發現食物腐壞，趁患者不注意時悄悄移除<div class="step-en">If food is spoiled, quietly remove it when patient is distracted</div><div class="step-vi">Nếu thức ăn bị hỏng, lặng lẽ lấy đi khi bệnh nhân không chú ý</div><div class="step-id">Jika makanan busuk, diam-diam singkirkan saat pasien tidak memperhatikan</div></li>
+        <li>若取走珍貴物品，以相似外觀替代品交換（如以假錢替換真錢）<div class="step-en">Replace valuables with look-alikes (e.g. fake money instead of real)</div><div class="step-vi">Nếu lấy đồ vật giá trị, thay bằng đồ tương tự (ví dụ: tiền giả thay tiền thật)</div><div class="step-id">Jika mengambil benda berharga, ganti dengan yang mirip (mis. uang mainan pengganti uang asli)</div></li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">❌ 處理禁忌<span class="tx" data-en="DON'T" data-vi="KHÔNG NÊN" data-id="JANGAN"> · DON'T</span></div>
+      <ul>
+        <li>不可在患者面前清點或公開展示藏匿物品<div class="step-en">Never count or display hidden items in front of the patient</div><div class="step-vi">Không đếm hoặc trưng bày công khai đồ vật bị giấu trước mặt bệnh nhân</div><div class="step-id">Jangan menghitung atau memperlihatkan barang tersembunyi di depan pasien</div></li>
+        <li>不可嘲笑或以輕視語氣談及藏匿行為<div class="step-en">Never mock or speak dismissively of hiding behaviour</div><div class="step-vi">Không chế giễu hoặc nói khinh thường về hành vi giấu đồ</div><div class="step-id">Jangan mengejek atau berbicara meremehkan tentang perilaku menyembunyikan</div></li>
+        <li>不可強行搜身或翻查患者「禁區」（可能引發攻擊）<div class="step-en">Never forcibly search the patient — may provoke aggression</div><div class="step-vi">Không khám xét người hoặc lục soát "vùng cấm" của bệnh nhân — có thể gây tấn công</div><div class="step-id">Jangan menggeledah paksa atau memeriksa "zona terlarang" pasien — bisa memicu agresi</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">需要通報的情況<span class="tx" data-en="When to Report" data-vi="Khi Nào Cần Báo Cáo" data-id="Kapan Melapor"> · When to Report</span></div>
+      <div class="alert-text">發現患者藏匿藥物或危險物品（剪刀、刀具、化學品）｜ 發現大量腐敗食物 ｜ 患者因藏匿行為與他人發生衝突 ｜ 患者拒絕進食卻發現大量藏食</div>
+      <div class="alert-en">Patient hides medications or dangerous items (scissors, knives, chemicals) | Large amounts of rotting food found | Patient in conflict due to hiding | Refuses meals but hoards food</div>
+      <div class="alert-vi">Bệnh nhân giấu thuốc hoặc vật nguy hiểm | Tìm thấy nhiều thức ăn thiu | Xung đột do hành vi giấu đồ | Từ chối ăn nhưng tích trữ thức ăn</div>
+      <div class="alert-id">Pasien menyembunyikan obat atau benda berbahaya | Banyak makanan basi ditemukan | Konflik akibat perilaku menyembunyikan | Menolak makan tapi menimbun makanan</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
      WANDERING
 ════════════════════════════════════ -->
 <div id="wandering" class="section">
@@ -2386,7 +3070,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 ════════════════════════════════════ -->
 <div id="incontinence" class="section">
   <div class="page-header">
-    <div class="eyebrow">日常照顧 · INCONTINENCE CARE</div>
+    <div class="eyebrow">MODULE 20 · INCONTINENCE CARE</div>
     <div class="page-title">🚽 失禁照護</div>
     <div class="page-desc">認知症患者尿失禁與糞失禁的日常照護技巧，維護尊嚴、預防皮膚損傷<span class="L2 en"> · Managing urinary &amp; fecal incontinence with dignity and skin protection</span><span class="L2 vi"> · Quản lý tiểu không tự chủ và đại tiện không tự chủ với sự tôn trọng và bảo vệ da</span><span class="L2 id"> · Mengelola inkontinensia urin &amp; fekal dengan martabat dan perlindungan kulit</span></div>
   </div>
@@ -2670,7 +3354,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 ════════════════════════════════════ -->
 <div id="delirium" class="section">
   <div class="page-header">
-    <div class="eyebrow">BEHAVIOUR · 行為症狀管理</div>
+    <div class="eyebrow">MODULE 21 · DELIRIUM</div>
     <div class="page-title">⚡ 譫妄辨識與處理</div>
     <div class="page-desc">急性意識混亂的早期辨識與正確通報<span class="L2 en"> · Early recognition and reporting of acute confusional states (Delirium)</span><span class="L2 vi"> · Nhận biết sớm và báo cáo tình trạng mê sảng cấp tính</span><span class="L2 id"> · Pengenalan dini dan pelaporan delirium / kebingungan akut</span></div>
   </div>
@@ -2730,6 +3414,57 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       </tr>
     </tbody>
   </table>
+  </div>
+
+  <div class="sec-title"><span>🏥</span> CAM 快速辨識法<span class="tx" data-en="CAM: Confusion Assessment Method" data-vi="CAM: Phương Pháp Đánh Giá Lú Lẫn" data-id="CAM: Metode Penilaian Kebingungan"> · Hospital Gold Standard</span></div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">什麼是 CAM？<span class="tx" data-en="What is the CAM?" data-vi="CAM Là Gì?" data-id="Apa itu CAM?"> · Confusion Assessment Method</span></div>
+      <div class="alert-text">CAM（Confusion Assessment Method）是目前醫院最常使用的譫妄快速辨識工具，<strong>符合第 ①＋② 項，再加上第 ③ 或第 ④ 項，即高度懷疑譫妄</strong>，應立即通報。</div>
+      <div class="alert-en">CAM (Confusion Assessment Method) is the most widely used clinical tool for rapid delirium screening. <strong>Criteria ① + ②, plus either ③ or ④ = likely delirium</strong> — report immediately.</div>
+      <div class="alert-vi">CAM là công cụ sàng lọc mê sảng được sử dụng rộng rãi nhất trong bệnh viện. <strong>Tiêu chí ① + ②, cộng với ③ hoặc ④ = nghi ngờ mê sảng</strong> — báo cáo ngay.</div>
+      <div class="alert-id">CAM adalah alat skrining delirium yang paling banyak digunakan di rumah sakit. <strong>Kriteria ① + ②, ditambah ③ atau ④ = kemungkinan delirium</strong> — laporkan segera.</div>
+    </div>
+  </div>
+
+  <div class="card-grid">
+    <div class="card" style="border-left: 4px solid var(--red); position:relative;">
+      <div style="position:absolute;top:12px;right:12px;background:var(--red);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">必要</div>
+      <div class="card-icon">⚡</div>
+      <div class="card-title">① 急性改變且起伏不定<span class="L2 en"> · Acute Onset &amp; Fluctuation</span><span class="L2 vi"> · Khởi Phát Cấp Tính</span><span class="L2 id"> · Onset Akut &amp; Fluktuasi</span></div>
+      <div class="card-body">與平時<strong>明顯不同</strong>，且症狀在同一天內時好時壞——時而清醒，時而混亂。<br><br><em data-en="A clear change from baseline that fluctuates throughout the day — periods of clarity alternating with confusion." data-vi="Thay đổi rõ ràng so với bình thường và dao động trong ngày — lúc tỉnh táo, lúc lú lẫn." data-id="Perubahan jelas dari kondisi dasar yang berfluktuasi sepanjang hari — bergantian antara lucid dan bingung.">Clear change from baseline, fluctuating.</em></div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--red); position:relative;">
+      <div style="position:absolute;top:12px;right:12px;background:var(--red);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">必要</div>
+      <div class="card-icon">🎯</div>
+      <div class="card-title">② 注意力不集中<span class="L2 en"> · Inattention</span><span class="L2 vi"> · Mất Tập Trung</span><span class="L2 id"> · Perhatian Terganggu</span></div>
+      <div class="card-body">無法<strong>維持對話</strong>、容易分心、叫名字沒反應或需要重複說好幾次才能得到回應。<br><br><em data-en="Cannot sustain conversation, easily distracted, unresponsive to name, or needs multiple repetitions to get a response." data-vi="Không thể duy trì hội thoại, dễ phân tâm, không phản ứng với tên, hoặc cần nhắc lại nhiều lần." data-id="Tidak dapat mempertahankan percakapan, mudah teralihkan, tidak merespons nama, atau perlu diulang berkali-kali.">Cannot focus or sustain attention.</em></div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--amber); position:relative;">
+      <div style="position:absolute;top:12px;right:12px;background:var(--amber);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">加上③或④</div>
+      <div class="card-icon">💭</div>
+      <div class="card-title">③ 思考混亂<span class="L2 en"> · Disorganised Thinking</span><span class="L2 vi"> · Tư Duy Rối Loạn</span><span class="L2 id"> · Pikiran Tidak Teratur</span></div>
+      <div class="card-body">說話<strong>語無倫次</strong>、邏輯跳躍、無法回答簡單問題（如「現在幾月？」），或說出明顯不合理的內容。<br><br><em data-en="Rambling speech, illogical flow, unable to answer simple questions (e.g. 'What month is it?'), or clearly irrational statements." data-vi="Nói chuyện lan man, không logic, không thể trả lời câu hỏi đơn giản, hoặc nói những điều rõ ràng vô lý." data-id="Bicara melantur, tidak logis, tidak bisa menjawab pertanyaan sederhana, atau pernyataan yang jelas tidak masuk akal.">Rambling, illogical, irrational speech.</em></div>
+    </div>
+    <div class="card" style="border-left: 4px solid var(--amber); position:relative;">
+      <div style="position:absolute;top:12px;right:12px;background:var(--amber);color:white;font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;">加上③或④</div>
+      <div class="card-icon">🌫️</div>
+      <div class="card-title">④ 意識程度改變<span class="L2 en"> · Altered Level of Consciousness</span><span class="L2 vi"> · Thay Đổi Mức Độ Ý Thức</span><span class="L2 id"> · Perubahan Tingkat Kesadaran</span></div>
+      <div class="card-body">比平常<strong>過度嗜睡</strong>（難以喚醒）或相反地<strong>過度警覺、激躁</strong>，對周圍環境反應異常。<br><br><em data-en="Unusually drowsy and hard to rouse, OR conversely hyperalert and agitated — abnormal response to surroundings." data-vi="Buồn ngủ bất thường và khó đánh thức, HOẶC ngược lại quá tỉnh táo và kích động — phản ứng bất thường với môi trường xung quanh." data-id="Sangat mengantuk dan sulit dibangunkan, ATAU sebaliknya terlalu waspada dan gelisah — respons abnormal terhadap lingkungan sekitar.">Unusually drowsy OR hyperalert/agitated.</em></div>
+    </div>
+  </div>
+
+  <div class="alert alert-green" style="margin-top:4px;">
+    <div class="alert-ico">✅</div>
+    <div class="alert-body">
+      <div class="alert-title">CAM 判斷口訣<span class="tx" data-en="CAM Decision Rule" data-vi="Quy Tắc Quyết Định CAM" data-id="Aturan Keputusan CAM"> · Quick Rule</span></div>
+      <div class="alert-text"><strong>①＋②</strong> 都出現，再加上 <strong>③或④</strong> 任一項 → <strong>高度懷疑譫妄，立即通報護士</strong></div>
+      <div class="alert-en"><strong>① + ②</strong> both present, plus <strong>③ or ④</strong> → <strong>Likely delirium — report to nurse immediately</strong></div>
+      <div class="alert-vi"><strong>① + ②</strong> đều có, cộng với <strong>③ hoặc ④</strong> → <strong>Nghi ngờ mê sảng — báo cáo y tá ngay</strong></div>
+      <div class="alert-id"><strong>① + ②</strong> keduanya ada, ditambah <strong>③ atau ④</strong> → <strong>Kemungkinan delirium — laporkan ke perawat segera</strong></div>
+    </div>
   </div>
 
   <div class="sec-title"><span>⚠️</span> 譫妄四大警示徵狀<span class="tx" data-en="4 Key Warning Signs of Delirium" data-vi="4 Dấu Hiệu Cảnh Báo Mê Sảng" data-id="4 Tanda Peringatan Utama Delirium"> · STOP and Report</span></div>
@@ -2876,7 +3611,7 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 ════════════════════════════════════ -->
 <div id="swallowing" class="section">
   <div class="page-header">
-    <div class="eyebrow">DAILY CARE · 日常照顧技巧</div>
+    <div class="eyebrow">MODULE 22 · SWALLOWING CARE</div>
     <div class="page-title">🥄 吞嚥困難照護</div>
     <div class="page-desc">認知症中後期常見的吞嚥問題、誤吸預防與正確餵食技巧<span class="L2 en"> · Managing dysphagia, aspiration prevention and safe feeding in mid-to-late dementia</span><span class="L2 vi"> · Quản lý khó nuốt, phòng ngừa hít sặc và kỹ thuật cho ăn an toàn trong sa sút trí tuệ giai đoạn giữa đến muộn</span><span class="L2 id"> · Mengelola disfagia, pencegahan aspirasi dan teknik pemberian makan yang aman pada demensia stadium menengah hingga lanjut</span></div>
   </div>
@@ -3144,6 +3879,461 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
   </ul>
 </div>
 
+
+<!-- ════════════════════════════════════
+     LEGAL: 緊急送醫流程
+════════════════════════════════════ -->
+<div id="legal-emergency" class="section">
+  <div class="page-header">
+    <div class="eyebrow">法規與雇主規定 · LEGAL &amp; REGULATIONS</div>
+    <div class="page-title">🚑 緊急送醫流程 · 119通報</div>
+    <div class="page-desc">台灣法規要求下的緊急醫療程序與119通報義務<span class="L2 en"> · Emergency medical procedures and 119 reporting obligations under Taiwan regulations</span><span class="L2 vi"> · Quy trình y tế khẩn cấp và nghĩa vụ báo cáo 119 theo quy định Đài Loan</span><span class="L2 id"> · Prosedur darurat medis dan kewajiban pelaporan 119 sesuai regulasi Taiwan</span></div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">台灣緊急救護電話<span class="tx" data-en="Taiwan Emergency Number" data-vi="Số Khẩn Cấp Đài Loan" data-id="Nomor Darurat Taiwan"> · Emergency: 119</span></div>
+      <div class="alert-text">遇到緊急狀況立即撥打 <strong>119</strong>（消防救護）。看護有義務在第一時間通報，不可拖延或等待雇主授權。同時撥打時請保持冷靜，清楚說明患者狀況與地址。</div>
+      <div class="alert-en">In an emergency, dial <strong>119</strong> immediately (fire and rescue). As a caregiver you are obligated to call 119 without delay — do not wait for employer approval. Stay calm and clearly state the patient's condition and address.</div>
+      <div class="alert-vi">Trong trường hợp khẩn cấp, quay số <strong>119</strong> ngay lập tức. Người chăm sóc có nghĩa vụ gọi 119 ngay, không được chờ sự cho phép của chủ lao động. Hãy bình tĩnh và nói rõ tình trạng bệnh nhân và địa chỉ.</div>
+      <div class="alert-id">Dalam keadaan darurat, segera hubungi <strong>119</strong>. Pengasuh wajib menghubungi 119 tanpa penundaan — jangan menunggu izin pemberi kerja. Tetap tenang dan sebutkan kondisi pasien dan alamat dengan jelas.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📋</span> 何時必須撥打119？<span class="tx" data-en="When Must You Call 119?" data-vi="Khi Nào Phải Gọi 119?" data-id="Kapan Harus Menghubungi 119?"> · When to Call</span></div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">❤️‍🔥</div>
+      <div class="card-title">立即致命狀況<span class="L2 en"> · Life-Threatening Conditions</span><span class="L2 vi"> · Tình Trạng Nguy Hiểm Tính Mạng</span><span class="L2 id"> · Kondisi Mengancam Jiwa</span></div>
+      <div class="card-body">
+        • 無呼吸、無心跳<br>
+        • 意識不清（叫無反應）<br>
+        • 嚴重出血無法止血<br>
+        • 疑似中風（嘴歪、手無力、說話不清）<br>
+        • 嚴重跌倒或骨折<br>
+        • 嗆咳窒息無法自行排除<br><br>
+        <em data-en="No breathing/pulse, unconscious, severe bleeding, suspected stroke, severe fall, choking." data-vi="Không thở/không mạch, bất tỉnh, chảy máu nhiều, nghi đột quỵ, ngã nặng, nghẹt thở." data-id="Tidak bernapas/tidak ada denyut nadi, tidak sadar, pendarahan hebat, dicurigai stroke, jatuh parah, tersedak.">No breathing/pulse · Unconscious · Severe bleeding · Stroke · Fall · Choking</em>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌡️</div>
+      <div class="card-title">其他需就醫狀況<span class="L2 en"> · Other Medical Needs</span><span class="L2 vi"> · Tình Trạng Cần Khám Bệnh Khác</span><span class="L2 id"> · Kondisi Medis Lainnya</span></div>
+      <div class="card-body">
+        • 高燒 ≥ 38.5°C 且意識改變<br>
+        • 突然劇烈頭痛<br>
+        • 呼吸困難、喘鳴<br>
+        • 持續性癲癇發作（&gt;5分鐘）<br>
+        • 大量嘔血或便血<br>
+        • 疑似骨折或重傷<br><br>
+        <em data-en="High fever + altered consciousness, severe headache, breathing difficulty, prolonged seizure, vomiting blood, fracture." data-vi="Sốt cao + thay đổi ý thức, đau đầu dữ dội, khó thở, co giật kéo dài, nôn ra máu, gãy xương." data-id="Demam tinggi + perubahan kesadaran, sakit kepala parah, kesulitan bernapas, kejang berkepanjangan, muntah darah, patah tulang.">Fever + altered consciousness · Severe headache · Breathing difficulty · Prolonged seizure</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📞</span> 119通報標準步驟<span class="tx" data-en="Standard 119 Reporting Steps" data-vi="Các Bước Báo Cáo 119 Tiêu Chuẩn" data-id="Langkah Standar Pelaporan 119"> · Step-by-Step</span></div>
+
+  <ol class="step-list">
+    <li class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-zh">立即撥打 <strong>119</strong></div>
+        <div class="step-en">Dial 119 immediately</div>
+        <div class="step-vi">Quay số 119 ngay lập tức</div>
+        <div class="step-id">Segera hubungi 119</div>
+        <div class="step-note">保持冷靜。若語言不通，說「我是外籍看護，患者需要急救」，對方會安排翻譯。</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-zh">說明完整地址（含樓層）</div>
+        <div class="step-en">State the full address (including floor)</div>
+        <div class="step-vi">Nêu địa chỉ đầy đủ (bao gồm tầng lầu)</div>
+        <div class="step-id">Sebutkan alamat lengkap (termasuk lantai)</div>
+        <div class="step-note">地址要事先記住或貼在明顯位置。包含：縣市、鄉鎮、路名、門牌、樓層。</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-zh">描述患者狀況與年齡</div>
+        <div class="step-en">Describe patient's condition and age</div>
+        <div class="step-vi">Mô tả tình trạng bệnh nhân và tuổi tác</div>
+        <div class="step-id">Jelaskan kondisi dan usia pasien</div>
+        <div class="step-note">例：「85歲女性，意識不清，有呼吸但叫無反應」。</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-zh">等待指示，勿掛斷電話</div>
+        <div class="step-en">Wait for instructions, do not hang up</div>
+        <div class="step-vi">Chờ hướng dẫn, không cúp máy</div>
+        <div class="step-id">Tunggu instruksi, jangan menutup telepon</div>
+        <div class="step-note">救護人員可能給予現場急救指導（如CPR口訣）。保持電話通暢直到救護車抵達。</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-body">
+        <div class="step-zh">同步通知雇主（家屬）</div>
+        <div class="step-en">Simultaneously notify employer / family</div>
+        <div class="step-vi">Đồng thời thông báo cho chủ lao động / gia đình</div>
+        <div class="step-id">Sekaligus beritahu pemberi kerja / keluarga</div>
+        <div class="step-note">撥打119後，立即聯絡雇主或緊急聯絡人。準備好患者健保卡、就醫記錄、用藥清單。</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">6</div>
+      <div class="step-body">
+        <div class="step-zh">送醫後記錄整個過程</div>
+        <div class="step-en">After transfer, document the entire event</div>
+        <div class="step-vi">Sau khi chuyển viện, ghi lại toàn bộ quá trình</div>
+        <div class="step-id">Setelah transfer, dokumentasikan seluruh kejadian</div>
+        <div class="step-note">記錄：發現時間、症狀、通報時間、救護車抵達時間、送往醫院名稱。這是雇主要求的法定記錄義務。</div>
+      </div>
+    </li>
+  </ol>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚖️</div>
+    <div class="alert-body">
+      <div class="alert-title">看護的法律責任<span class="tx" data-en="Caregiver Legal Responsibility" data-vi="Trách Nhiệm Pháp Lý Của Người Chăm Sóc" data-id="Tanggung Jawab Hukum Pengasuh"> · Your Legal Duty</span></div>
+      <div class="alert-text">依據台灣《緊急醫療救護法》，任何人發現他人有緊急醫療需求，有通報119的義務。看護若因延誤通報而造成傷亡，可能負擔法律責任。<strong>雇主無權禁止你撥打119。</strong></div>
+      <div class="alert-en">Under Taiwan's Emergency Medical Services Act, anyone who witnesses a person in need of emergency medical care has an obligation to report to 119. If a caregiver delays calling and harm results, they may bear legal liability. <strong>Your employer cannot prohibit you from calling 119.</strong></div>
+      <div class="alert-vi">Theo Luật Dịch Vụ Y Tế Khẩn Cấp của Đài Loan, bất kỳ ai chứng kiến người cần cấp cứu đều có nghĩa vụ báo cáo 119. <strong>Chủ lao động không được cấm bạn gọi 119.</strong></div>
+      <div class="alert-id">Berdasarkan Undang-Undang Layanan Darurat Medis Taiwan, siapapun yang menyaksikan orang yang membutuhkan perawatan darurat wajib melapor ke 119. <strong>Pemberi kerja tidak boleh melarang Anda menghubungi 119.</strong></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🏥</span> 陪同就醫準備事項<span class="tx" data-en="What to Bring to Hospital" data-vi="Chuẩn Bị Khi Đi Cấp Cứu" data-id="Persiapan Saat ke Rumah Sakit"> · Be Prepared</span></div>
+  <ul class="checklist">
+    <li><span class="cl-zh">患者全民健康保險卡（健保卡）</span><div class="cl-en" data-en="Patient's National Health Insurance card (NHI card)" data-vi="Thẻ Bảo Hiểm Y Tế Quốc Gia của bệnh nhân" data-id="Kartu Asuransi Kesehatan Nasional pasien"></div></li>
+    <li><span class="cl-zh">目前用藥清單（藥袋或醫師處方）</span><div class="cl-en" data-en="Current medication list (medicine bags or prescription)" data-vi="Danh sách thuốc hiện tại (túi thuốc hoặc đơn thuốc)" data-id="Daftar obat saat ini (kantong obat atau resep)"></div></li>
+    <li><span class="cl-zh">病歷摘要或出院病摘（若有）</span><div class="cl-en" data-en="Medical summary or discharge summary (if available)" data-vi="Tóm tắt hồ sơ y tế hoặc tóm tắt xuất viện (nếu có)" data-id="Ringkasan rekam medis atau ringkasan pemulangan (jika ada)"></div></li>
+    <li><span class="cl-zh">雇主聯絡電話（第一優先通知）</span><div class="cl-en" data-en="Employer's contact number (first to notify)" data-vi="Số điện thoại liên lạc của chủ lao động (ưu tiên thông báo đầu tiên)" data-id="Nomor kontak pemberi kerja (prioritas pertama untuk diberitahu)"></div></li>
+    <li><span class="cl-zh">自己的居留證或護照（醫院辦理手續需要）</span><div class="cl-en" data-en="Your own ARC or passport (needed for hospital registration)" data-vi="Giấy phép cư trú hoặc hộ chiếu của bạn (cần cho thủ tục bệnh viện)" data-id="ARC atau paspor Anda sendiri (diperlukan untuk pendaftaran rumah sakit)"></div></li>
+    <li><span class="cl-zh">患者的過敏史（藥物、食物）</span><div class="cl-en" data-en="Patient's allergy history (medications, food)" data-vi="Tiền sử dị ứng của bệnh nhân (thuốc, thực phẩm)" data-id="Riwayat alergi pasien (obat, makanan)"></div></li>
+  </ul>
+</div>
+
+<!-- ════════════════════════════════════
+     LEGAL: 保護約束原則
+════════════════════════════════════ -->
+<div id="legal-restraint" class="section">
+  <div class="page-header">
+    <div class="eyebrow">法規與雇主規定 · LEGAL &amp; REGULATIONS</div>
+    <div class="page-title">🔒 保護約束原則</div>
+    <div class="page-desc">台灣法規對身體約束的嚴格限制與正確使用方式<span class="L2 en"> · Taiwan's strict regulations on physical restraint and proper usage</span><span class="L2 vi"> · Quy định nghiêm ngặt của Đài Loan về kiềm chế thân thể và cách sử dụng đúng</span><span class="L2 id"> · Peraturan ketat Taiwan tentang pengekangan fisik dan penggunaan yang tepat</span></div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚫</div>
+    <div class="alert-body">
+      <div class="alert-title">未經授權不得約束<span class="tx" data-en="No Restraint Without Authorization" data-vi="Không Được Kiềm Chế Khi Chưa Được Phép" data-id="Dilarang Mengekang Tanpa Izin"> · Critical Rule</span></div>
+      <div class="alert-text">依據台灣《老人福利法》及《護理人員法》，<strong>身體約束屬醫療行為</strong>，必須由醫師或護理師評估後以書面形式授權，並取得家屬同意。看護不可自行決定使用任何形式的約束。</div>
+      <div class="alert-en">Under Taiwan's Senior Welfare Act and Nursing Personnel Act, <strong>physical restraint is a medical act</strong>. It must be authorized in writing by a physician or nurse after assessment, with family consent obtained. Caregivers may not independently decide to apply any form of restraint.</div>
+      <div class="alert-vi">Theo Luật Phúc Lợi Người Cao Tuổi và Luật Điều Dưỡng Viên Đài Loan, <strong>kiềm chế thân thể là hành vi y tế</strong>, phải được bác sĩ hoặc điều dưỡng viên ủy quyền bằng văn bản sau khi đánh giá và có sự đồng ý của gia đình.</div>
+      <div class="alert-id">Berdasarkan Undang-Undang Kesejahteraan Lansia dan Undang-Undang Tenaga Keperawatan Taiwan, <strong>pengekangan fisik adalah tindakan medis</strong>. Harus diotorisasi secara tertulis oleh dokter atau perawat setelah penilaian, dengan persetujuan keluarga.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>⚖️</span> 約束的法律要件<span class="tx" data-en="Legal Requirements for Restraint" data-vi="Yêu Cầu Pháp Lý Để Kiềm Chế" data-id="Persyaratan Hukum untuk Pengekangan"> · Requirements</span></div>
+
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>要件<span class="tx" data-en=" · Requirement" data-vi=" · Yêu Cầu" data-id=" · Persyaratan"></span></th>
+        <th>說明<span class="tx" data-en=" · Details" data-vi=" · Chi Tiết" data-id=" · Detail"></span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>醫療授權</td><td>必須有護理師或醫師的書面醫囑，不可口頭指示</td></tr>
+      <tr><td>知情同意</td><td>家屬必須簽署同意書，了解約束目的、時限與風險</td></tr>
+      <tr><td>最後手段</td><td>必須先嘗試所有非約束替代方案（溝通、環境調整、陪伴）無效後才可考慮</td></tr>
+      <tr><td>定期評估</td><td>每4小時或依醫囑定期評估是否仍有需要，儘早解除</td></tr>
+      <tr><td>完整記錄</td><td>記錄：約束原因、時間、種類、患者反應、皮膚狀況</td></tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title"><span>✅</span> 約束使用時的監測義務<span class="tx" data-en="Monitoring Obligations During Restraint" data-vi="Nghĩa Vụ Theo Dõi Trong Khi Kiềm Chế" data-id="Kewajiban Pemantauan Selama Pengekangan"> · Your Duties</span></div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">👁️</div>
+      <div class="card-title">每小時檢查<span class="L2 en"> · Hourly Check</span><span class="L2 vi"> · Kiểm Tra Mỗi Giờ</span><span class="L2 id"> · Pemeriksaan Per Jam</span></div>
+      <div class="card-body">
+        • 約束部位皮膚：是否發紅、破皮、腫脹<br>
+        • 血液循環：手指/腳趾是否有感覺、顏色是否正常<br>
+        • 呼吸：是否順暢、未受約束影響<br>
+        • 情緒：是否過度激動或異常安靜<br><br>
+        <em data-en="Hourly: skin, circulation, breathing, emotional state." data-vi="Mỗi giờ: da, lưu thông máu, hô hấp, trạng thái cảm xúc." data-id="Per jam: kulit, sirkulasi, pernapasan, kondisi emosional.">Skin · Circulation · Breathing · Emotion</em>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚨</div>
+      <div class="card-title">立即通報情況<span class="L2 en"> · Report Immediately</span><span class="L2 vi"> · Báo Cáo Ngay Lập Tức</span><span class="L2 id"> · Laporkan Segera</span></div>
+      <div class="card-body">
+        • 皮膚出現壓傷或破損<br>
+        • 患者極度激動、哭喊不停<br>
+        • 肢體循環不良（皮膚變色、溫度異常）<br>
+        • 患者出現自傷行為<br>
+        • 約束帶鬆脫或患者試圖掙脫<br><br>
+        <em data-en="Report: skin injury, extreme agitation, poor circulation, self-harm, restraint failure." data-vi="Báo cáo: tổn thương da, kích động cực độ, lưu thông kém, tự gây thương tích, thất bại kiềm chế." data-id="Laporkan: cedera kulit, agitasi ekstrem, sirkulasi buruk, menyakiti diri, kegagalan pengekangan.">Skin · Agitation · Circulation · Self-harm</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>💡</span> 非約束替代方案<span class="tx" data-en="Non-Restraint Alternatives" data-vi="Giải Pháp Thay Thế Không Dùng Kiềm Chế" data-id="Alternatif Non-Pengekangan"> · Try First</span></div>
+  <ul class="checklist">
+    <li><span class="cl-zh">嘗試溝通與安撫（輕聲說話、握手、音樂）</span><div class="cl-en" data-en="Try communication and calming (soft voice, holding hands, music)" data-vi="Thử giao tiếp và xoa dịu (nói nhẹ nhàng, nắm tay, âm nhạc)" data-id="Coba komunikasi dan menenangkan (suara lembut, pegang tangan, musik)"></div></li>
+    <li><span class="cl-zh">調整環境（降低照明、減少噪音、移除危險物品）</span><div class="cl-en" data-en="Adjust environment (lower lighting, reduce noise, remove hazards)" data-vi="Điều chỉnh môi trường (giảm ánh sáng, giảm tiếng ồn, loại bỏ vật nguy hiểm)" data-id="Sesuaikan lingkungan (kurangi pencahayaan, kurangi kebisingan, singkirkan bahaya)"></div></li>
+    <li><span class="cl-zh">提供安全活動（把玩柔軟物品、摺疊毛巾）</span><div class="cl-en" data-en="Provide safe activities (fidget objects, folding towels)" data-vi="Cung cấp hoạt động an toàn (vật để nghịch, gấp khăn)" data-id="Berikan aktivitas aman (benda fidget, melipat handuk)"></div></li>
+    <li><span class="cl-zh">使用防滑床墊、床邊護欄代替身體約束</span><div class="cl-en" data-en="Use non-slip mattresses and bed rails instead of body restraints" data-vi="Dùng đệm chống trượt và thanh chắn giường thay vì kiềm chế thân thể" data-id="Gunakan kasur anti-selip dan rel tempat tidur sebagai pengganti pengekangan tubuh"></div></li>
+    <li><span class="cl-zh">增加陪伴時間，減少患者孤單感</span><div class="cl-en" data-en="Increase companionship time to reduce loneliness" data-vi="Tăng thời gian đồng hành để giảm cảm giác cô đơn" data-id="Tingkatkan waktu menemani untuk mengurangi rasa kesepian"></div></li>
+    <li><span class="cl-zh">通知護士評估是否需調整藥物</span><div class="cl-en" data-en="Notify nurse to assess if medication adjustment is needed" data-vi="Thông báo cho y tá đánh giá xem có cần điều chỉnh thuốc không" data-id="Beritahu perawat untuk menilai apakah penyesuaian obat diperlukan"></div></li>
+  </ul>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">絕對禁止的行為<span class="tx" data-en="Absolutely Prohibited Actions" data-vi="Hành Vi Tuyệt Đối Bị Cấm" data-id="Tindakan yang Benar-Benar Dilarang"> · Never Do</span></div>
+      <div class="alert-text">• 自行用床單、繩子、毛巾綁縛患者<br>• 用手強壓患者使其無法移動<br>• 未記錄的私自約束行為<br>• 約束後離開現場超過15分鐘未巡視<br><br>以上行為均屬違法，可能涉及<strong>虐待長者罪</strong>，最高可判5年有期徒刑（《老人福利法》第50條）。</div>
+      <div class="alert-en">• Self-restraining with sheets, ropes, towels<br>• Forcibly pinning the patient down<br>• Undocumented restraint<br>• Leaving the patient unmonitored for more than 15 minutes while restrained<br><br>These acts are illegal and may constitute <strong>elder abuse</strong>, punishable by up to 5 years imprisonment (Senior Welfare Act Article 50).</div>
+      <div class="alert-vi">Những hành vi này là bất hợp pháp và có thể cấu thành <strong>lạm dụng người cao tuổi</strong>, bị phạt tù đến 5 năm (Điều 50 Luật Phúc Lợi Người Cao Tuổi).</div>
+      <div class="alert-id">Tindakan ini ilegal dan dapat merupakan <strong>pelecehan lansia</strong>, dapat dihukum hingga 5 tahun penjara (Pasal 50 Undang-Undang Kesejahteraan Lansia).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     LEGAL: 個資保護
+════════════════════════════════════ -->
+<div id="legal-privacy" class="section">
+  <div class="page-header">
+    <div class="eyebrow">法規與雇主規定 · LEGAL &amp; REGULATIONS</div>
+    <div class="page-title">🔐 個人資料保護</div>
+    <div class="page-desc">台灣《個人資料保護法》對看護的要求與義務<span class="L2 en"> · Requirements and obligations for caregivers under Taiwan's Personal Data Protection Act</span><span class="L2 vi"> · Yêu cầu và nghĩa vụ đối với người chăm sóc theo Luật Bảo Vệ Dữ Liệu Cá Nhân Đài Loan</span><span class="L2 id"> · Persyaratan dan kewajiban pengasuh berdasarkan Undang-Undang Perlindungan Data Pribadi Taiwan</span></div>
+  </div>
+
+  <div class="alert alert-blue">
+    <div class="alert-ico">📜</div>
+    <div class="alert-body">
+      <div class="alert-title">台灣個資法適用範圍<span class="tx" data-en="Scope of Taiwan's Personal Data Protection Act" data-vi="Phạm Vi Áp Dụng Luật Bảo Vệ Dữ Liệu Cá Nhân Đài Loan" data-id="Ruang Lingkup UU Perlindungan Data Pribadi Taiwan"> · Applies to You</span></div>
+      <div class="alert-text">台灣《個人資料保護法》適用於所有接觸患者個人資料的人員，包含外籍看護。患者的姓名、健康狀況、病史、照片、影片均屬「敏感個人資料」，受法律嚴格保護。</div>
+      <div class="alert-en">Taiwan's Personal Data Protection Act applies to everyone who handles a patient's personal data, including foreign caregivers. A patient's name, health status, medical history, photos, and videos are all "sensitive personal data" strictly protected by law.</div>
+      <div class="alert-vi">Luật Bảo Vệ Dữ Liệu Cá Nhân Đài Loan áp dụng cho tất cả những ai tiếp xúc với dữ liệu cá nhân của bệnh nhân, bao gồm người chăm sóc nước ngoài. Tên, tình trạng sức khỏe, bệnh sử, ảnh và video của bệnh nhân đều là "dữ liệu cá nhân nhạy cảm".</div>
+      <div class="alert-id">Undang-Undang Perlindungan Data Pribadi Taiwan berlaku bagi semua orang yang menangani data pribadi pasien, termasuk pengasuh asing. Nama, status kesehatan, riwayat medis, foto, dan video pasien semuanya merupakan "data pribadi sensitif".</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🚫</span> 絕對不可以做的事<span class="tx" data-en="What You Must Never Do" data-vi="Những Việc Tuyệt Đối Không Được Làm" data-id="Yang Benar-Benar Tidak Boleh Dilakukan"> · Prohibited</span></div>
+
+  <div class="do-dont-grid">
+    <div class="do-box">
+      <div class="do-header">✅ 正確做法<span class="dd-sec en">Correct approach</span><span class="dd-sec vi">Cách làm đúng</span><span class="dd-sec id">Pendekatan yang benar</span></div>
+      <ul>
+        <li>只與直接照顧相關人員分享患者資訊</li>
+        <li>拍照或錄影前取得家屬同意</li>
+        <li>照顧記錄僅供醫療目的使用</li>
+        <li>離開時鎖好含個資的文件</li>
+        <li>就醫時只提供醫療人員所需資訊</li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">✗ 禁止行為<span class="dd-sec en">Prohibited actions</span><span class="dd-sec vi">Hành vi bị cấm</span><span class="dd-sec id">Tindakan yang dilarang</span></div>
+      <ul>
+        <li>將患者照片、影片上傳至社群媒體（Line、Facebook、TikTok等）</li>
+        <li>向不相關的親友、鄰居透露患者病情</li>
+        <li>拍攝患者身體或如廁等私密畫面</li>
+        <li>將患者資料傳送給不認識的人</li>
+        <li>在公共場所大聲討論患者狀況</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">⚖️</div>
+    <div class="alert-body">
+      <div class="alert-title">違法後果<span class="tx" data-en="Legal Consequences" data-vi="Hậu Quả Pháp Lý" data-id="Konsekuensi Hukum"> · Penalties</span></div>
+      <div class="alert-text">違反台灣個資法可處：<br>• <strong>民事賠償</strong>：每件500元至2萬元新台幣，最高2億元<br>• <strong>刑事責任</strong>：意圖營利洩漏可處5年以下有期徒刑<br>• <strong>遣送出境</strong>：違法行為可能導致居留證不予續簽，強制遣返</div>
+      <div class="alert-en">Violations of Taiwan's Personal Data Protection Act may result in: Civil damages NT$500–NT$20,000 per case (max NT$200M); Criminal penalties up to 5 years imprisonment for profit-motivated disclosure; Deportation if the violation leads to refusal of ARC renewal.</div>
+      <div class="alert-vi">Vi phạm Luật Bảo Vệ Dữ Liệu Cá Nhân Đài Loan có thể dẫn đến: Bồi thường dân sự NT$500–NT$20,000 mỗi vụ; Phạt tù đến 5 năm; Trục xuất nếu vi phạm dẫn đến từ chối gia hạn giấy phép cư trú.</div>
+      <div class="alert-id">Pelanggaran UU Perlindungan Data Pribadi Taiwan dapat mengakibatkan: Ganti rugi perdata NT$500–NT$20.000 per kasus; Hukuman pidana hingga 5 tahun penjara; Deportasi jika pelanggaran menyebabkan penolakan perpanjangan ARC.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📱</span> 手機與社群媒體使用原則<span class="tx" data-en="Phone and Social Media Guidelines" data-vi="Nguyên Tắc Sử Dụng Điện Thoại và Mạng Xã Hội" data-id="Panduan Penggunaan Ponsel dan Media Sosial"> · Guidelines</span></div>
+
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>情境<span class="tx" data-en=" · Situation" data-vi=" · Tình Huống" data-id=" · Situasi"></span></th>
+        <th>規定<span class="tx" data-en=" · Rule" data-vi=" · Quy Định" data-id=" · Aturan"></span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>📸 拍攝患者</td><td>需事先獲得家屬<strong>書面或明確口頭同意</strong>，且只能用於私人記憶，不可分享</td></tr>
+      <tr><td>📲 傳送患者資料給家人</td><td>只能傳送給<strong>雇主指定的家屬聯絡人</strong>，不可傳送給其他人</td></tr>
+      <tr><td>💬 在群組討論患者狀況</td><td>只能在<strong>雇主建立的照顧群組</strong>中，且僅限醫療目的，不可加入截圖功能的群組</td></tr>
+      <tr><td>🎥 直播照顧過程</td><td><strong>絕對禁止</strong>，即使患者同意也不行（認知症患者不具完全行為能力）</td></tr>
+      <tr><td>🔒 手機鎖定</td><td>存有患者資料的手機需設定密碼鎖定，防止他人查看</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════
+     LEGAL: 家屬聯繫流程
+════════════════════════════════════ -->
+<div id="legal-family" class="section">
+  <div class="page-header">
+    <div class="eyebrow">法規與雇主規定 · LEGAL &amp; REGULATIONS</div>
+    <div class="page-title">👨‍👩‍👧 家屬聯繫流程</div>
+    <div class="page-desc">正確的家屬通報程序與雇主規定，確保資訊傳遞合法有效<span class="L2 en"> · Correct family notification procedures and employer rules for lawful and effective communication</span><span class="L2 vi"> · Quy trình thông báo gia đình đúng đắn và quy định chủ lao động để đảm bảo truyền thông tin hợp pháp và hiệu quả</span><span class="L2 id"> · Prosedur notifikasi keluarga yang benar dan aturan pemberi kerja untuk komunikasi yang sah dan efektif</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">📋</div>
+    <div class="alert-body">
+      <div class="alert-title">先確認家屬聯絡清單<span class="tx" data-en="First: Confirm the Family Contact List" data-vi="Đầu Tiên: Xác Nhận Danh Sách Liên Lạc Gia Đình" data-id="Pertama: Konfirmasi Daftar Kontak Keluarga"> · Know Before You Need It</span></div>
+      <div class="alert-text">上工前應向雇主確認：緊急聯絡人姓名、與患者關係、電話（主要＋備用）、以及聯絡優先順序。將資訊儲存在手機並貼一份在明顯位置（如冰箱上）。</div>
+      <div class="alert-en">Before starting work, confirm with your employer: emergency contact name, relationship to patient, phone number (primary + backup), and contact priority order. Save this in your phone and post a copy in a visible location (e.g., on the fridge).</div>
+      <div class="alert-vi">Trước khi bắt đầu làm việc, hãy xác nhận với chủ lao động: tên người liên lạc khẩn cấp, mối quan hệ với bệnh nhân, số điện thoại (chính + dự phòng) và thứ tự ưu tiên liên lạc.</div>
+      <div class="alert-id">Sebelum mulai bekerja, konfirmasi dengan pemberi kerja: nama kontak darurat, hubungan dengan pasien, nomor telepon (utama + cadangan), dan urutan prioritas kontak.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📞</span> 不同情況的聯繫時機<span class="tx" data-en="Contact Timing for Different Situations" data-vi="Thời Điểm Liên Lạc Cho Các Tình Huống Khác Nhau" data-id="Waktu Kontak untuk Situasi Berbeda"> · When to Call</span></div>
+
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>情況<span class="tx" data-en=" · Situation" data-vi=" · Tình Huống" data-id=" · Situasi"></span></th>
+        <th>通知時機<span class="tx" data-en=" · When to Notify" data-vi=" · Thời Điểm Thông Báo" data-id=" · Kapan Memberitahu"></span></th>
+        <th>通知對象<span class="tx" data-en=" · Notify Whom" data-vi=" · Thông Báo Cho Ai" data-id=" · Beritahu Siapa"></span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🚨 緊急送醫</td>
+        <td>撥打119後<strong>立即</strong>通知</td>
+        <td>雇主（第一順位），若無法聯絡則通知緊急聯絡人</td>
+      </tr>
+      <tr>
+        <td>🤕 跌倒或受傷</td>
+        <td>處理傷口後<strong>30分鐘內</strong>通知</td>
+        <td>雇主，並說明傷況與後續處置</td>
+      </tr>
+      <tr>
+        <td>🌡️ 發燒或病況惡化</td>
+        <td>量測確認後<strong>當天</strong>通知</td>
+        <td>雇主，提供體溫數值與症狀描述</td>
+      </tr>
+      <tr>
+        <td>💊 用藥問題</td>
+        <td>發現時<strong>立即</strong>通知</td>
+        <td>雇主或護士，切勿自行處理</td>
+      </tr>
+      <tr>
+        <td>😤 行為問題（激烈）</td>
+        <td>無法安撫時<strong>立即</strong>通知</td>
+        <td>雇主，說明情況與已嘗試的方法</td>
+      </tr>
+      <tr>
+        <td>📋 日常觀察</td>
+        <td>依雇主規定（通常每日或每週一次）</td>
+        <td>雇主，用LINE或書面紀錄回報</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title"><span>📝</span> 通報時說什麼？標準格式<span class="tx" data-en="What to Say — Standard Reporting Format" data-vi="Nói Gì — Định Dạng Báo Cáo Tiêu Chuẩn" data-id="Apa yang Dikatakan — Format Pelaporan Standar"> · SBAR Format</span></div>
+
+  <ol class="step-list">
+    <li class="step-item">
+      <div class="step-num">S</div>
+      <div class="step-body">
+        <div class="step-zh"><strong>Situation 情況</strong>：我是誰，照顧誰，發生了什麼</div>
+        <div class="step-en">Situation: Who you are, who you care for, what happened</div>
+        <div class="step-vi">Tình Huống: Bạn là ai, chăm sóc ai, điều gì xảy ra</div>
+        <div class="step-id">Situasi: Siapa Anda, siapa yang Anda rawat, apa yang terjadi</div>
+        <div class="step-note">例：「我是阿姨的看護小花，阿姨剛才在浴室跌倒了。」</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">B</div>
+      <div class="step-body">
+        <div class="step-zh"><strong>Background 背景</strong>：患者目前的健康狀況</div>
+        <div class="step-en">Background: Patient's current health status</div>
+        <div class="step-vi">Bối Cảnh: Tình trạng sức khỏe hiện tại của bệnh nhân</div>
+        <div class="step-id">Latar Belakang: Status kesehatan pasien saat ini</div>
+        <div class="step-note">例：「她今天早上吃過早餐，精神還好，但下午說頭有點暈。」</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">A</div>
+      <div class="step-body">
+        <div class="step-zh"><strong>Assessment 評估</strong>：你觀察到的狀況</div>
+        <div class="step-en">Assessment: What you observed</div>
+        <div class="step-vi">Đánh Giá: Những gì bạn quan sát được</div>
+        <div class="step-id">Penilaian: Apa yang Anda amati</div>
+        <div class="step-note">例：「右手手腕有擦傷，意識清楚，說手腕很痛。我幫她坐到床邊，沒有頭部撞擊。」</div>
+      </div>
+    </li>
+    <li class="step-item">
+      <div class="step-num">R</div>
+      <div class="step-body">
+        <div class="step-zh"><strong>Recommendation 建議</strong>：你需要什麼支援</div>
+        <div class="step-en">Recommendation: What support you need</div>
+        <div class="step-vi">Đề Xuất: Hỗ trợ nào bạn cần</div>
+        <div class="step-id">Rekomendasi: Dukungan apa yang Anda butuhkan</div>
+        <div class="step-note">例：「請問需要帶她去照X光嗎？還是先觀察就好？請指示我下一步怎麼做。」</div>
+      </div>
+    </li>
+  </ol>
+
+  <div class="sec-title"><span>⚠️</span> 通報時的注意事項<span class="tx" data-en="Important Notes When Reporting" data-vi="Lưu Ý Quan Trọng Khi Báo Cáo" data-id="Catatan Penting Saat Melapor"> · Remember</span></div>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">✅</div>
+      <div class="card-title">應該做<span class="L2 en"> · Do These</span><span class="L2 vi"> · Nên Làm</span><span class="L2 id"> · Lakukan Ini</span></div>
+      <div class="card-body">
+        • 如實、完整描述，不誇大也不隱瞞<br>
+        • 記錄通報時間與對方回應<br>
+        • 若無法聯絡，依序嘗試備用聯絡人<br>
+        • 緊急情況先處理患者再通報<br>
+        • 保留所有通訊紀錄（LINE對話、通話記錄）<br><br>
+        <em data-en="Be accurate, record all contacts, follow priority order." data-vi="Chính xác, ghi lại tất cả liên hệ, theo thứ tự ưu tiên." data-id="Akurat, catat semua kontak, ikuti urutan prioritas.">Accurate · Document · Follow priority</em>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚫</div>
+      <div class="card-title">不應該做<span class="L2 en"> · Do Not Do</span><span class="L2 vi"> · Không Nên Làm</span><span class="L2 id"> · Jangan Lakukan</span></div>
+      <div class="card-body">
+        • 隱瞞跌倒、受傷等事件（即使傷勢輕微）<br>
+        • 等到事態嚴重才通報<br>
+        • 傳達不實或猜測性的資訊<br>
+        • 通報給未經授權的第三者（如鄰居）<br>
+        • 在公開場合（電梯、超市）談論患者狀況<br><br>
+        <em data-en="Never conceal events, delay, spread rumors, or share with unauthorized parties." data-vi="Không bao giờ che giấu sự cố, trì hoãn, lan truyền tin đồn hoặc chia sẻ với bên không được phép." data-id="Jangan pernah menyembunyikan kejadian, menunda, menyebarkan rumor, atau berbagi dengan pihak yang tidak berwenang.">Never hide · Never delay · Keep confidential</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">📌</div>
+    <div class="alert-body">
+      <div class="alert-title">建議：準備一張緊急聯絡卡<span class="tx" data-en="Tip: Prepare an Emergency Contact Card" data-vi="Gợi Ý: Chuẩn Bị Thẻ Liên Lạc Khẩn Cấp" data-id="Tips: Siapkan Kartu Kontak Darurat"> · Practical Tip</span></div>
+      <div class="alert-text">建議在上工第一天請雇主協助填寫緊急聯絡卡，貼在冰箱或床頭櫃上，包含：<br>• 119（救護車）<br>• 110（警察）<br>• 雇主手機（第一優先）<br>• 緊急聯絡人（第二優先）<br>• 主治醫師或診所電話<br>• 最近醫院地址與電話</div>
+      <div class="alert-en">On your first day, ask your employer to fill in an emergency contact card to post on the fridge or bedside table, including: 119 (ambulance), 110 (police), employer's mobile (first priority), emergency contact (second), primary doctor/clinic, and nearest hospital address.</div>
+      <div class="alert-vi">Vào ngày đầu tiên làm việc, hãy nhờ chủ lao động điền thẻ liên lạc khẩn cấp và dán lên tủ lạnh hoặc tủ đầu giường, bao gồm: 119, 110, điện thoại chủ lao động (ưu tiên đầu), người liên hệ khẩn cấp, bác sĩ chính và bệnh viện gần nhất.</div>
+      <div class="alert-id">Pada hari pertama bekerja, minta pemberi kerja mengisi kartu kontak darurat untuk ditempel di kulkas atau meja samping tempat tidur, berisi: 119, 110, HP pemberi kerja (prioritas pertama), kontak darurat, dokter utama/klinik, dan rumah sakit terdekat.</div>
+    </div>
+  </div>
+</div>
+
 </main>
 </div>
 
@@ -3162,7 +4352,10 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     <button class="bottom-nav-btn" id="bn-safety" onclick="showSection('emergency');setBottomNav('bn-safety')">
       <span class="bn-ico">🚨</span><span class="bn-lbl" data-zh="緊急" data-en="Emergency" data-vi="Khẩn Cấp" data-id="Darurat">緊急</span>
     </button>
-    <button class="bottom-nav-btn" id="bn-menu" onclick="toggleSidebar()">
+    <button class="bottom-nav-btn" id="bn-legal" onclick="showSection('legal-emergency');setBottomNav('bn-legal')">
+      <span class="bn-ico">⚖️</span><span class="bn-lbl" data-zh="法規" data-en="Legal" data-vi="Pháp Lý" data-id="Hukum">法規</span>
+    </button>
+    <button class="bottom-nav-btn" id="bn-menu" onclick="toggleSidebar()" aria-label="開啟選單">
       <span class="bn-ico">☰</span><span class="bn-lbl" data-zh="選單" data-en="Menu" data-vi="Menu" data-id="Menu">選單</span>
     </button>
   </div>
@@ -3170,7 +4363,12 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 
 <script>
 /* ══════════════════════════════════════════════════
-   STATIC MULTILINGUAL SYSTEM — v16
+   STATIC MULTILINGUAL SYSTEM — v17
+   v17 Fixes (v24 release):
+   • <title> corrected from v22 → v24
+   • BOTTOM_NAV_MAP: caregiver-wellbeing remapped bn-daily → bn-menu (correct category)
+   • bpsd-sundowning do/dont: added missing VI+ID translations (7 items)
+   • bpsd-hiding do/dont: added missing VI+ID translations (6 items)
    v16 Fixes:
    • EN SIDEBAR_LABELS: added missing English suffixes (menu, basics, safety, self)
    • Module eyebrow labels: deduplicated SAFETY (→WANDERING / FALL PREVENTION) and BEHAVIOUR (→REFUSAL)
@@ -3184,7 +4382,7 @@ let currentLang = 'zh';
 /* ── Topbar titles per lang mode ── */
 const TOPBAR_TITLES = {
   zh: '認知症照顧教育訓練平台',
-  en: '認知症照顧教育訓練平台 · Dementia Care Training',
+  en: '認知症照顧教育訓練平台 · Dementia Care Training Platform',
   vi: '認知症照顧教育訓練平台 · Đào Tạo Chăm Sóc Sa Sút Trí Tuệ',
   id: '認知症照顧教育訓練平台 · Pelatihan Perawatan Demensia',
 };
@@ -3209,12 +4407,17 @@ const SIDEBAR_LABELS = {
     'nutrition': '飲食營養', 'mobility': '移位協助',
     'activity': '活動訓練', 'sleep': '睡眠管理',
     'incontinence': '失禁照護',
-    'bpsd': '行為精神症狀', 'wandering': '遊走防走失',
+    'bpsd': '行為精神症狀', 'bpsd-delusion': '妄想', 'bpsd-hallucination': '幻覺',
+    'bpsd-sundowning': '日落症候群', 'bpsd-repetition': '重複提問', 'bpsd-hiding': '藏匿物品',
+    'wandering': '遊走防走失',
     'refusal': '拒絕行為處理', 'communication': '溝通技巧',
     'delirium': '譫妄辨識', 'swallowing': '吞嚥照護',
     'vitals': '生命徵象', 'skin-care': '皮膚照護',
     'medication': '用藥管理', 'fall-prevention': '跌倒預防',
     'emergency': '緊急處理', 'caregiver-wellbeing': '看護身心健康',
+    'legal': '法規與雇主規定',
+    'legal-emergency': '緊急送醫流程', 'legal-restraint': '保護約束原則',
+    'legal-privacy': '個資保護', 'legal-family': '家屬聯繫流程',
     'tag-imp': '重要',
   },
   en: {
@@ -3227,12 +4430,17 @@ const SIDEBAR_LABELS = {
     'nutrition': '飲食營養 · Nutrition', 'mobility': '移位協助 · Mobility',
     'activity': '活動訓練 · Activities', 'sleep': '睡眠管理 · Sleep',
     'incontinence': '失禁照護 · Incontinence Care',
-    'bpsd': '行為症狀 · BPSD', 'wandering': '遊走防走失 · Wandering',
+    'bpsd': '行為症狀 · BPSD', 'bpsd-delusion': '妄想 · Delusion', 'bpsd-hallucination': '幻覺 · Hallucination',
+    'bpsd-sundowning': '日落症候群 · Sundowning', 'bpsd-repetition': '重複提問 · Repetition', 'bpsd-hiding': '藏匿物品 · Hiding',
+    'wandering': '遊走防走失 · Wandering',
     'refusal': '拒絕行為 · Refusal', 'communication': '溝通技巧 · Communication',
     'delirium': '譫妄辨識 · Delirium', 'swallowing': '吞嚥照護 · Swallowing Care',
     'vitals': '生命徵象 · Vital Signs', 'skin-care': '皮膚照護 · Skin Care',
     'medication': '用藥管理 · Medication', 'fall-prevention': '跌倒預防 · Fall Prevention',
     'emergency': '緊急處理 · Emergency', 'caregiver-wellbeing': '看護健康 · Wellbeing',
+    'legal': '法規與雇主規定 · Legal & Regulations',
+    'legal-emergency': '緊急送醫 · Emergency Transfer', 'legal-restraint': '保護約束 · Restraint',
+    'legal-privacy': '個資保護 · Data Privacy', 'legal-family': '家屬聯繫 · Family Contact',
     'tag-imp': '重要 Important',
   },
   vi: {
@@ -3245,12 +4453,17 @@ const SIDEBAR_LABELS = {
     'nutrition': '飲食營養 · Dinh Dưỡng', 'mobility': '移位協助 · Di Chuyển',
     'activity': '活動訓練 · Hoạt Động', 'sleep': '睡眠管理 · Giấc Ngủ',
     'incontinence': '失禁照護 · Tiểu Không Tự Chủ',
-    'bpsd': '行為症狀 · BPSD', 'wandering': '遊走防走失 · Lang Thang',
+    'bpsd': '行為症狀 · BPSD', 'bpsd-delusion': '妄想 · Hoang Tưởng', 'bpsd-hallucination': '幻覺 · Ảo Giác',
+    'bpsd-sundowning': '日落症候群 · Hoàng Hôn', 'bpsd-repetition': '重複提問 · Lặp Lại', 'bpsd-hiding': '藏匿物品 · Giấu Đồ',
+    'wandering': '遊走防走失 · Lang Thang',
     'refusal': '拒絕行為 · Từ Chối', 'communication': '溝通技巧 · Giao Tiếp',
     'delirium': '譫妄辨識 · Mê Sảng', 'swallowing': '吞嚥照護 · Nuốt',
     'vitals': '生命徵象 · Sinh Hiệu', 'skin-care': '皮膚照護 · Da',
     'medication': '用藥管理 · Thuốc', 'fall-prevention': '跌倒預防 · Té Ngã',
     'emergency': '緊急處理 · Khẩn Cấp', 'caregiver-wellbeing': '看護健康 · Sức Khỏe',
+    'legal': '法規與雇主規定 · Pháp Lý',
+    'legal-emergency': '緊急送醫 · Cấp Cứu', 'legal-restraint': '保護約束 · Kiềm Chế',
+    'legal-privacy': '個資保護 · Bảo Vệ Dữ Liệu', 'legal-family': '家屬聯繫 · Liên Lạc Gia Đình',
     'tag-imp': '重要 Quan Trọng',
   },
   id: {
@@ -3263,12 +4476,17 @@ const SIDEBAR_LABELS = {
     'nutrition': '飲食營養 · Gizi', 'mobility': '移位協助 · Mobilisasi',
     'activity': '活動訓練 · Aktivitas', 'sleep': '睡眠管理 · Tidur',
     'incontinence': '失禁照護 · Inkontinensia',
-    'bpsd': '行為症狀 · BPSD', 'wandering': '遊走防走失 · Berkeliaran',
+    'bpsd': '行為症狀 · BPSD', 'bpsd-delusion': '妄想 · Delusi', 'bpsd-hallucination': '幻覺 · Halusinasi',
+    'bpsd-sundowning': '日落症候群 · Sundowning', 'bpsd-repetition': '重複提問 · Pengulangan', 'bpsd-hiding': '藏匿物品 · Sembunyi',
+    'wandering': '遊走防走失 · Berkeliaran',
     'refusal': '拒絕行為 · Penolakan', 'communication': '溝通技巧 · Komunikasi',
     'delirium': '譫妄辨識 · Delirium', 'swallowing': '吞嚥照護 · Disfagia',
     'vitals': '生命徵象 · Tanda Vital', 'skin-care': '皮膚照護 · Kulit',
     'medication': '用藥管理 · Obat', 'fall-prevention': '跌倒預防 · Cegah Jatuh',
     'emergency': '緊急處理 · Darurat', 'caregiver-wellbeing': '看護健康 · Kesejahteraan',
+    'legal': '法規與雇主規定 · Hukum',
+    'legal-emergency': '緊急送醫 · Darurat Medis', 'legal-restraint': '保護約束 · Pengekangan',
+    'legal-privacy': '個資保護 · Privasi Data', 'legal-family': '家屬聯繫 · Kontak Keluarga',
     'tag-imp': '重要 Penting',
   }
 };
@@ -3303,18 +4521,24 @@ const BOTTOM_NAV_MAP = {
   'dementia-basics': 'bn-basics', 'symptoms': 'bn-basics', 'stages': 'bn-basics',
   'morning-care': 'bn-daily', 'personal-hygiene': 'bn-daily', 'nutrition': 'bn-daily',
   'mobility': 'bn-daily', 'activity': 'bn-daily', 'sleep': 'bn-daily', 'incontinence': 'bn-daily',
-  'bpsd': 'bn-daily', 'wandering': 'bn-daily', 'refusal': 'bn-daily',
+  'bpsd': 'bn-daily', 'bpsd-delusion': 'bn-daily', 'bpsd-hallucination': 'bn-daily',
+  'bpsd-sundowning': 'bn-daily', 'bpsd-repetition': 'bn-daily', 'bpsd-hiding': 'bn-daily',
+  'wandering': 'bn-daily', 'refusal': 'bn-daily',
   'communication': 'bn-daily', 'vitals': 'bn-daily', 'skin-care': 'bn-daily',
-  'medication': 'bn-daily', 'caregiver-wellbeing': 'bn-daily',
+  'medication': 'bn-daily',
+  'caregiver-wellbeing': 'bn-menu',
   'delirium': 'bn-daily', 'swallowing': 'bn-daily',
   'fall-prevention': 'bn-safety', 'emergency': 'bn-safety',
+  'legal-emergency': 'bn-legal', 'legal-restraint': 'bn-legal',
+  'legal-privacy': 'bn-legal', 'legal-family': 'bn-legal',
 };
 
 function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   const target = document.getElementById(id);
-  if (target) target.classList.add('active');
+  if (!target) { console.warn('[showSection] Section not found:', id); return; }
+  target.classList.add('active');
   document.querySelectorAll('.nav-item').forEach(btn => {
     if (btn.getAttribute('onclick')?.includes(`'${id}'`)) btn.classList.add('active');
   });
@@ -3353,7 +4577,8 @@ function setLang(lang) {
 
   // Update button states
   document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(`btn-${lang}`).classList.add('active');
+  const btnEl = document.getElementById(`btn-${lang}`);
+  if (btnEl) btnEl.classList.add('active');
 
   currentLang = lang;
 
@@ -3432,12 +4657,15 @@ function updateSidebarLabels(lang) {
       if (label) {
         const ico = btn.querySelector('.nav-ico');
         const tag = btn.querySelector('.tag');
+        // Clone ico/tag before clearing to preserve them
+        const icoClone = ico ? ico.cloneNode(true) : null;
+        const tagClone = tag ? tag.cloneNode(true) : null;
         btn.textContent = '';
-        if (ico) btn.appendChild(ico);
-        btn.appendChild(document.createTextNode(' ' + label));
-        if (tag) {
-          tag.textContent = L['tag-imp'] || tag.textContent;
-          btn.appendChild(tag);
+        if (icoClone) btn.appendChild(icoClone);
+        btn.appendChild(document.createTextNode('\u00a0' + label));
+        if (tagClone) {
+          tagClone.textContent = L['tag-imp'] || tagClone.textContent;
+          btn.appendChild(tagClone);
         }
       }
     }
