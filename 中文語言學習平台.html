@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>中文語言學習平台 — 看護照顧用語（第1–8輯）</title><!-- v9.0 +第8輯 -->
+<title>中文語言學習平台 — 看護照顧用語（第1–10輯）</title><!-- v11.0 +第10輯 -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ===== RESPONSIVE OVERHAUL ===== */
@@ -826,7 +826,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     <div class="logo-icon">中</div>
     <div>
       <div class="logo-text">中文語言學習平台</div>
-      <div class="logo-sub">看護照顧用語・第1–8輯</div>
+      <div class="logo-sub">看護照顧用語・第1–10輯</div>
     </div>
   </div>
 
@@ -1089,6 +1089,62 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">30</span>
     </a>
 
+    <div class="sidebar-section-label" style="margin-top:20px">第9輯・娛樂休閒</div>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_indoor" onclick="setSection('ent_indoor')">
+      <span class="item-icon">📺</span> 室內娛樂
+      <span class="item-badge">20</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_outdoor" onclick="setSection('ent_outdoor')">
+      <span class="item-icon">🌳</span> 戶外活動
+      <span class="item-badge">20</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_social" onclick="setSection('ent_social')">
+      <span class="item-icon">👋</span> 社交互動
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_festival" onclick="setSection('ent_festival')">
+      <span class="item-icon">🎄</span> 節慶活動
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_sports" onclick="setSection('ent_sports')">
+      <span class="item-icon">🏓</span> 運動休閒
+      <span class="item-badge">40</span>
+    </a>
+
+    <div class="sidebar-section-label" style="margin-top:20px">第10輯・健康用語</div>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_body" onclick="setSection('health_body')">
+      <span class="item-icon">🧠</span> 身體部位
+      <span class="item-badge">20</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_symptom" onclick="setSection('health_symptom')">
+      <span class="item-icon">🤒</span> 常見症狀
+      <span class="item-badge">20</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_procedure" onclick="setSection('health_procedure')">
+      <span class="item-icon">🩺</span> 醫療程序
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_medicine" onclick="setSection('health_medicine')">
+      <span class="item-icon">💊</span> 藥物用語
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_checkup" onclick="setSection('health_checkup')">
+      <span class="item-icon">📊</span> 健康檢查
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_prevent" onclick="setSection('health_prevent')">
+      <span class="item-icon">💉</span> 預防保健
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_first_aid" onclick="setSection('health_first_aid')">
+      <span class="item-icon">🚨</span> 急救
+      <span class="item-badge">10</span>
+    </a>
+    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_mental" onclick="setSection('health_mental')">
+      <span class="item-icon">😊</span> 心理健康
+      <span class="item-badge">10</span>
+    </a>
+
     <div class="sidebar-section-label" style="margin-top:20px">學習工具</div>
     <a class="sidebar-item" href="javascript:void(0)" role="button" onclick="openFlashcard(0)">
       <span class="item-icon">⚡</span> 閃卡練習
@@ -1156,8 +1212,66 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     <div class="view" id="view-progress">
       <div class="module-header">
         <div class="module-title">學習進度</div>
-        <div class="module-sub">追蹤你的學習狀況</div>
+        <div class="module-sub">追蹤你的學習狀況・管理記憶資料</div>
       </div>
+
+      <!-- 記憶管理面板 -->
+      <div id="memoryPanel" style="
+        background:#fff;border:1px solid var(--border);border-radius:14px;
+        padding:18px 20px;margin-bottom:18px;
+      ">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <span style="font-size:20px;">💾</span>
+          <div>
+            <div style="font-weight:800;font-size:15px;color:var(--ink);">記憶管理</div>
+            <div id="memorySummary" style="font-size:12px;color:var(--ink-3);margin-top:2px;">載入中...</div>
+          </div>
+          <div style="margin-left:auto;">
+            <div id="memoryStatusBadge" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#D1FAE5;color:#065F46;">✓ 已儲存</div>
+          </div>
+        </div>
+
+        <!-- 操作按鈕列 -->
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;">
+          <button onclick="exportMemory()" style="
+            display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;
+            background:var(--primary);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:700;
+          ">📤 匯出備份</button>
+          <label style="
+            display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;
+            background:var(--teal);color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:700;
+          ">📥 匯入備份<input type="file" accept=".json" onchange="importMemory(event)" style="display:none"></label>
+          <button onclick="clearMastered()" style="
+            display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;
+            background:var(--amber-light);color:var(--amber);border:1px solid #FDE68A;cursor:pointer;font-size:12px;font-weight:700;
+          ">🗑 清除已學會</button>
+          <button onclick="clearStarred()" style="
+            display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;
+            background:#FFF8E1;color:#B45309;border:1px solid #FDE68A;cursor:pointer;font-size:12px;font-weight:700;
+          ">🗑 清除已收藏</button>
+          <button onclick="clearAllProgress()" style="
+            display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;
+            background:var(--rose-light);color:var(--rose);border:1px solid #FECDD3;cursor:pointer;font-size:12px;font-weight:700;
+          ">⚠️ 清除全部</button>
+        </div>
+
+        <!-- 儲存資訊 -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <div style="background:var(--bg);border-radius:9px;padding:10px;text-align:center;">
+            <div id="memMasteredCount" style="font-size:22px;font-weight:900;color:var(--primary);">0</div>
+            <div style="font-size:10px;color:var(--ink-3);margin-top:2px;">✅ 已學會</div>
+          </div>
+          <div style="background:var(--bg);border-radius:9px;padding:10px;text-align:center;">
+            <div id="memStarredCount" style="font-size:22px;font-weight:900;color:#F59E0B;">0</div>
+            <div style="font-size:10px;color:var(--ink-3);margin-top:2px;">⭐ 已收藏</div>
+          </div>
+          <div style="background:var(--bg);border-radius:9px;padding:10px;text-align:center;">
+            <div id="memLastSaved" style="font-size:12px;font-weight:700;color:var(--teal);">—</div>
+            <div style="font-size:10px;color:var(--ink-3);margin-top:2px;">🕐 上次儲存</div>
+          </div>
+        </div>
+      </div>
+
       <div id="progressContainer"></div>
     </div>
 
@@ -2389,6 +2503,294 @@ const SECTIONS = {
       {n:'8-99',e:'🌟',zh:'實踐',      desc:'學以致用',   en:'Apply / Practise',       id:'Menerapkan',             vi:'Thực hành',             ph:'AP-ply',                  ex:'"Apply what you have learnt."'},
       {n:'8-100',e:'✨',zh:'完美',     desc:'極佳',       en:'Perfect!',               id:'Sempurna!',              vi:'Hoàn hảo!',             ph:'PER-fect',                ex:'"Your work is perfect!"'},
     ]
+  },
+
+  // ══════════════════════════════════
+  //  第 9 輯・娛樂休閒用語
+  // ══════════════════════════════════
+  ent_indoor: {
+    zh: '室內娛樂', en: 'Indoor Entertainment', id: 'Hiburan Dalam Ruangan', vi: 'Giải trí trong nhà',
+    sub: 'Indoor Entertainment · Hiburan Dalam Ruangan · Giải trí trong nhà',
+    cards: [
+      {n:'9-01',e:'📺',zh:'看電視',   desc:'消遣',         en:'Watch TV',              id:'Nonton TV',              vi:'Xem TV',               ph:'WATCH TV',                    ex:'"What would you like to watch on TV?"'},
+      {n:'9-02',e:'🎵',zh:'聽音樂',   desc:'放鬆',         en:'Listen to music',       id:'Dengarkan musik',        vi:'Nghe nhạc',            ph:'LIS-ten to MU-sic',           ex:'"Listen to your favourite music."'},
+      {n:'9-03',e:'📰',zh:'看報紙',   desc:'閱讀',         en:'Read newspaper',        id:'Baca koran',             vi:'Đọc báo',              ph:'READ NEWS-pa-per',            ex:'"Read the morning newspaper."'},
+      {n:'9-04',e:'♟️',zh:'下棋',     desc:'益智',         en:'Play chess',            id:'Main catur',             vi:'Chơi cờ',              ph:'PLAY · CHESS',                ex:'"Play chess together."'},
+      {n:'9-05',e:'🧩',zh:'拼圖',     desc:'協調',         en:'Puzzle',                id:'Puzzle',                 vi:'Xếp hình',             ph:'PUZZLE',                      ex:'"Do a picture puzzle."'},
+      {n:'9-06',e:'📖',zh:'看書',     desc:'閱讀',         en:'Read books',            id:'Baca buku',              vi:'Đọc sách',             ph:'READ BOOKS',                  ex:'"Read a storybook."'},
+      {n:'9-07',e:'🎨',zh:'畫畫',     desc:'藝術',         en:'Drawing',               id:'Menggambar',             vi:'Vẽ tranh',             ph:'DRAWING',                     ex:'"Draw a landscape."'},
+      {n:'9-08',e:'🧶',zh:'編織',     desc:'手工藝',       en:'Knitting',              id:'Merajut',                vi:'Đan len',              ph:'KNITTING',                    ex:'"Knit a scarf."'},
+      {n:'9-09',e:'🃏',zh:'玩牌',     desc:'遊戲',         en:'Play cards',            id:'Main kartu',             vi:'Chơi bài',             ph:'PLAY · CARDS',                ex:'"Play a card game."'},
+      {n:'9-10',e:'🎲',zh:'玩骰子',   desc:'遊戲',         en:'Play dice',             id:'Main dadu',              vi:'Chơi xúc xắc',         ph:'PLAY · DICE',                 ex:'"Play a dice game."'},
+      {n:'9-11',e:'📻',zh:'聽廣播',   desc:'資訊',         en:'Listen to radio',       id:'Dengarkan radio',        vi:'Nghe radio',           ph:'LIS-ten to RA-dio',           ex:'"Listen to music on the radio."'},
+      {n:'9-12',e:'🎧',zh:'聽Podcast',desc:'故事',         en:'Listen to podcast',     id:'Dengarkan podcast',      vi:'Nghe podcast',         ph:'LIS-ten to POD-cast',         ex:'"Listen to a story podcast."'},
+      {n:'9-13',e:'📱',zh:'玩手機遊戲',desc:'APP',          en:'Play mobile games',     id:'Main game ponsel',       vi:'Chơi game điện thoại', ph:'PLAY · MOBILE · GAMES',       ex:'"Play a puzzle game on the phone."'},
+      {n:'9-14',e:'🖥️',zh:'看YouTube', desc:'影片',         en:'Watch YouTube',         id:'Nonton YouTube',         vi:'Xem YouTube',          ph:'WATCH YOU-tube',              ex:'"Watch funny YouTube videos."'},
+      {n:'9-15',e:'🎥',zh:'看電影',   desc:'影視',         en:'Watch movies',          id:'Nonton film',            vi:'Xem phim',             ph:'WATCH MOV-ies',               ex:'"Watch an old movie."'},
+      {n:'9-16',e:'🎭',zh:'看劇',     desc:'連續劇',       en:'Watch TV series',       id:'Nonton serial TV',       vi:'Xem phim bộ',          ph:'WATCH TV SE-ries',            ex:'"Watch a drama series."'},
+      {n:'9-17',e:'🧑‍🤝‍🧑',zh:'聊天',desc:'社交',         en:'Chat',                  id:'Mengobrol',              vi:'Trò chuyện',           ph:'CHAT',                        ex:'"Chat about the old days."'},
+      {n:'9-18',e:'📱',zh:'視訊家人', desc:'連繫',         en:'Video call',            id:'Panggilan video',        vi:'Gọi video',            ph:'VID-eo CALL',                 ex:'"Video call your child."'},
+      {n:'9-19',e:'📰',zh:'看雜誌',   desc:'閱讀',         en:'Read magazine',         id:'Baca majalah',           vi:'Đọc tạp chí',          ph:'READ MAG-a-zine',             ex:'"Read a health magazine."'},
+      {n:'9-20',e:'🧩',zh:'折紙',     desc:'手工藝',       en:'Origami',               id:'Origami',                vi:'Gấp giấy',             ph:'OR-i-ga-mi',                  ex:'"Fold origami paper."'},
+    ]
+  },
+
+  ent_outdoor: {
+    zh: '戶外活動', en: 'Outdoor Activities', id: 'Kegiatan Luar Ruangan', vi: 'Hoạt động ngoài trời',
+    sub: 'Outdoor Activities · Kegiatan Luar Ruangan · Hoạt động ngoài trời',
+    cards: [
+      {n:'9-21',e:'🌳',zh:'散步',     desc:'輕度活動',     en:'Leisurely stroll',      id:'Jalan santai',           vi:'Đi dạo',               ph:'LEISURELY · STROLL',          ex:'"Take a leisurely stroll in the park."'},
+      {n:'9-22',e:'🌻',zh:'曬太陽',   desc:'維D',          en:'Sunbathing',            id:'Berjemur',               vi:'Tắm nắng',             ph:'SUN-BATHING',                 ex:'"Sunbathe for 10 minutes."'},
+      {n:'9-23',e:'🌸',zh:'賞花',     desc:'觀賞',         en:'Admire flowers',        id:'Menikmati bunga',        vi:'Ngắm hoa',             ph:'AD-mire FLOW-ers',            ex:'"Admire the flowers in the garden."'},
+      {n:'9-24',e:'🛍️',zh:'逛街',     desc:'購物',         en:'Shopping stroll',       id:'Jalan-jalan belanja',    vi:'Đi dạo mua sắm',       ph:'SHOP-ping STROLL',            ex:'"Go shopping at the mall."'},
+      {n:'9-25',e:'🎪',zh:'看表演',   desc:'文化',         en:'Watch performance',     id:'Nonton pertunjukan',     vi:'Xem biểu diễn',        ph:'WATCH per-FORM-ance',         ex:'"Watch a music performance."'},
+      {n:'9-26',e:'🏞️',zh:'野餐',     desc:'戶外',         en:'Picnic',                id:'Piknik',                 vi:'Picnic',               ph:'PIC-nic',                     ex:'"Have a picnic in the park."'},
+      {n:'9-27',e:'🚲',zh:'騎車',     desc:'運動',         en:'Cycling',               id:'Bersepeda',              vi:'Đạp xe',               ph:'CY-cling',                    ex:'"Cycle around the neighbourhood."'},
+      {n:'9-28',e:'🎣',zh:'釣魚',     desc:'休閒',         en:'Fishing',               id:'Memancing',              vi:'Câu cá',               ph:'FISH-ing',                    ex:'"Go fishing at the lake."'},
+      {n:'9-29',e:'🏞️',zh:'看風景',   desc:'觀景',         en:'View scenery',          id:'Menikmati pemandangan',  vi:'Ngắm cảnh',            ph:'VIEW · SCEN-ery',             ex:'"Enjoy the mountain scenery."'},
+      {n:'9-30',e:'🏕️',zh:'露營',     desc:'戶外',         en:'Camping',               id:'Berkemah',               vi:'Cắm trại',             ph:'CAMP-ing',                    ex:'"Go camping on the weekend."'},
+      {n:'9-31',e:'🌅',zh:'看日出',   desc:'自然',         en:'Watch sunrise',         id:'Nonton matahari terbit', vi:'Xem bình minh',        ph:'WATCH SUN-rise',              ex:'"Watch the sunrise in the morning."'},
+      {n:'9-32',e:'🌇',zh:'看日落',   desc:'自然',         en:'Watch sunset',          id:'Nonton matahari terbenam',vi:'Xem hoàng hôn',       ph:'WATCH SUN-set',               ex:'"Watch the sunset in the afternoon."'},
+      {n:'9-33',e:'🦅',zh:'觀鳥',     desc:'自然',         en:'Birdwatching',          id:'Mengamati burung',       vi:'Ngắm chim',            ph:'BIRD-watch-ing',              ex:'"Watch birds in the park."'},
+      {n:'9-34',e:'🌿',zh:'採花',     desc:'園藝',         en:'Pick flowers',          id:'Memetik bunga',          vi:'Hái hoa',              ph:'PICK · FLOW-ers',             ex:'"Pick flowers in the garden."'},
+      {n:'9-35',e:'🏞️',zh:'攝影',     desc:'拍照',         en:'Photography',           id:'Fotografi',              vi:'Chụp ảnh',             ph:'PHO-tog-ra-phy',              ex:'"Nature photography."'},
+      {n:'9-36',e:'🚲',zh:'騎腳踏車', desc:'運動',         en:'Cycling',               id:'Bersepeda',              vi:'Đạp xe',               ph:'CY-cling',                    ex:'"Cycle on the bike path."'},
+      {n:'9-37',e:'🏃',zh:'慢跑',     desc:'運動',         en:'Jogging',               id:'Jogging',                vi:'Chạy bộ',              ph:'JOG-ging',                    ex:'"Morning jog in the park."'},
+      {n:'9-38',e:'🧘',zh:'戶外瑜伽', desc:'伸展',         en:'Outdoor yoga',          id:'Yoga di luar',           vi:'Yoga ngoài trời',      ph:'OUT-door YO-ga',              ex:'"Outdoor yoga on the grass."'},
+      {n:'9-39',e:'🎾',zh:'打網球',   desc:'運動',         en:'Play tennis',           id:'Main tenis',             vi:'Chơi tennis',          ph:'PLAY · TEN-nis',              ex:'"Play tennis on the court."'},
+      {n:'9-40',e:'🏀',zh:'打籃球',   desc:'運動',         en:'Play basketball',       id:'Main basket',            vi:'Chơi bóng rổ',         ph:'PLAY · BAS-ket-ball',         ex:'"Play basketball in the park."'},
+    ]
+  },
+
+  ent_social: {
+    zh: '社交互動', en: 'Social Interactions', id: 'Interaksi Sosial', vi: 'Giao tiếp xã hội',
+    sub: 'Social Interactions · Interaksi Sosial · Giao tiếp xã hội',
+    cards: [
+      {n:'9-41',e:'👋',zh:'打招呼',   desc:'問候',         en:'Greet',                 id:'Menyapa',                vi:'Chào hỏi',             ph:'GREET',                       ex:'"Greet the neighbours."'},
+      {n:'9-42',e:'😊',zh:'謝謝',     desc:'感謝',         en:'Thank you',             id:'Terima kasih',           vi:'Cảm ơn',               ph:'THANK you',                   ex:'"Thank you for your help."'},
+      {n:'9-43',e:'🙏',zh:'對不起',   desc:'道歉',         en:'Sorry / Excuse me',     id:'Maaf / Permisi',         vi:'Xin lỗi',              ph:'SOR-ry',                      ex:'"Sorry, I made a mistake."'},
+      {n:'9-44',e:'🎂',zh:'生日快樂', desc:'祝賀',         en:'Happy birthday',        id:'Selamat ulang tahun',    vi:'Chúc mừng sinh nhật',  ph:'HAP-py BIRTH-day',            ex:'"Happy birthday, stay healthy always."'},
+      {n:'9-45',e:'😄',zh:'開心',     desc:'情緒',         en:'Happy',                 id:'Senang',                 vi:'Vui vẻ',               ph:'HAP-py',                      ex:'"I\'m happy today."'},
+      {n:'9-46',e:'😢',zh:'難過',     desc:'情緒',         en:'Sad',                   id:'Sedih',                  vi:'Buồn',                 ph:'SAD',                         ex:'"Why are you sad?"'},
+      {n:'9-47',e:'😠',zh:'生氣',     desc:'情緒',         en:'Angry',                 id:'Marah',                  vi:'Tức giận',             ph:'AN-gry',                      ex:'"Don\'t be angry, stay calm."'},
+      {n:'9-48',e:'😴',zh:'疲倦',     desc:'情緒',         en:'Tired',                 id:'Lelah',                  vi:'Mệt',                  ph:'TIRED',                       ex:'"Tired? Let\'s rest."'},
+      {n:'9-49',e:'😊',zh:'微笑',     desc:'表情',         en:'Smile',                 id:'Senyum',                 vi:'Mỉm cười',             ph:'SMILE',                       ex:'"Just smile."'},
+      {n:'9-50',e:'🤗',zh:'擁抱',     desc:'安慰',         en:'Hug',                   id:'Pelukan',                vi:'Ôm',                   ph:'HUG',                         ex:'"A hug to comfort you."'},
+    ]
+  },
+
+  ent_festival: {
+    zh: '節慶活動', en: 'Festivals & Holidays', id: 'Festival & Hari Raya', vi: 'Lễ hội & Ngày lễ',
+    sub: 'Festivals & Holidays · Festival & Hari Raya · Lễ hội & Ngày lễ',
+    cards: [
+      {n:'9-51',e:'🎄',zh:'聖誕節',   desc:'慶祝',         en:'Christmas',             id:'Natal',                  vi:'Giáng sinh',           ph:'CHRISTMAS',                   ex:'"Merry Christmas!"'},
+      {n:'9-52',e:'🎉',zh:'新年',     desc:'跨年',         en:'New Year',              id:'Tahun Baru',             vi:'Năm mới',              ph:'NEW · YEAR',                  ex:'"Happy New Year!"'},
+      {n:'9-53',e:'🌕',zh:'中秋節',   desc:'月餅',         en:'Moon Festival',         id:'Festival Bulan',         vi:'Tết Trung thu',        ph:'MOON · FES-ti-val',           ex:'"Eat mooncakes."'},
+      {n:'9-54',e:'🐉',zh:'端午節',   desc:'粽子',         en:'Dragon Boat Festival',  id:'Festival Perahu Naga',   vi:'Tết Đoan Ngọ',         ph:'DRA-gon BOAT FES-ti-val',     ex:'"Eat rice dumplings."'},
+      {n:'9-55',e:'🧧',zh:'農曆新年', desc:'春節',         en:'Chinese New Year',      id:'Tahun Baru Imlek',       vi:'Tết Nguyên Đán',       ph:'CHI-nese NEW YEAR',           ex:'"Happy Chinese New Year!"'},
+      {n:'9-56',e:'👻',zh:'萬聖節',   desc:'糖果',         en:'Halloween',             id:'Halloween',              vi:'Halloween',            ph:'HAL-low-een',                 ex:'"Happy Halloween!"'},
+      {n:'9-57',e:'🦃',zh:'感恩節',   desc:'聚餐',         en:'Thanksgiving',          id:'Hari Syukur',            vi:'Lễ Tạ ơn',             ph:'THANKS-giv-ing',              ex:'"Eat turkey."'},
+      {n:'9-58',e:'🌹',zh:'母親節',   desc:'送花',         en:'Mother\'s Day',         id:'Hari Ibu',               vi:'Ngày của Mẹ',          ph:'MOTH-er\'s DAY',              ex:'"Happy Mother\'s Day!"'},
+      {n:'9-59',e:'👨',zh:'父親節',   desc:'慶祝',         en:'Father\'s Day',         id:'Hari Ayah',              vi:'Ngày của Cha',         ph:'FA-ther\'s DAY',              ex:'"Happy Father\'s Day!"'},
+      {n:'9-60',e:'❤️',zh:'情人節',   desc:'浪漫',         en:'Valentine\'s Day',      id:'Hari Valentine',         vi:'Ngày Lễ Tình nhân',    ph:'VAL-en-tine\'s DAY',          ex:'"Happy Valentine\'s Day!"'},
+    ]
+  },
+
+  ent_sports: {
+    zh: '運動休閒', en: 'Sports & Leisure', id: 'Olahraga & Rekreasi', vi: 'Thể thao & Giải trí',
+    sub: 'Sports & Leisure · Olahraga & Rekreasi · Thể thao & Giải trí',
+    cards: [
+      {n:'9-61',e:'🏓',zh:'桌球',     desc:'室內',         en:'Table tennis',          id:'Tenis meja',             vi:'Bóng bàn',             ph:'TA-ble TEN-nis',              ex:'"Play a game of ping pong."'},
+      {n:'9-62',e:'🎱',zh:'撞球',     desc:'休閒',         en:'Billiards',             id:'Biliar',                 vi:'Bi-a',                 ph:'BIL-liards',                  ex:'"Play a game of billiards."'},
+      {n:'9-63',e:'🏸',zh:'羽毛球',   desc:'運動',         en:'Badminton',             id:'Bulu tangkis',           vi:'Cầu lông',             ph:'BAD-min-ton',                 ex:'"Play badminton on the court."'},
+      {n:'9-64',e:'⚽',zh:'足球',     desc:'團隊運動',     en:'Soccer / Football',     id:'Sepak bola',             vi:'Bóng đá',              ph:'SOC-cer',                     ex:'"Let\'s play soccer."'},
+      {n:'9-65',e:'🏐',zh:'排球',     desc:'球類',         en:'Volleyball',            id:'Voli',                   vi:'Bóng chuyền',          ph:'VOL-ley-ball',                ex:'"Play beach volleyball."'},
+      {n:'9-66',e:'🏌️',zh:'高爾夫',   desc:'休閒',         en:'Golf',                  id:'Golf',                   vi:'Golf',                 ph:'GOLF',                        ex:'"Play a round of golf."'},
+      {n:'9-67',e:'🛹',zh:'滑板',     desc:'極限',         en:'Skateboarding',         id:'Skateboard',             vi:'Ván trượt',            ph:'SKATE-board-ing',             ex:'"Skateboard in the park."'},
+      {n:'9-68',e:'🧗',zh:'攀岩',     desc:'極限運動',     en:'Rock climbing',         id:'Panjat tebing',          vi:'Leo núi',              ph:'ROCK · CLIMB-ing',            ex:'"Rock climbing at the gym."'},
+      {n:'9-69',e:'🏊',zh:'游泳',     desc:'水上活動',     en:'Swimming',              id:'Berenang',               vi:'Bơi lội',              ph:'SWIM-ming',                   ex:'"Go swimming in the pool."'},
+      {n:'9-70',e:'🤸',zh:'體操',     desc:'伸展',         en:'Gymnastics',            id:'Senam',                  vi:'Thể dục',              ph:'GYM-nas-tics',                ex:'"Morning gymnastics exercise."'},
+      {n:'9-71',e:'⚾',zh:'打棒球',   desc:'團隊',         en:'Play baseball',         id:'Main baseball',          vi:'Chơi bóng chày',       ph:'PLAY BASE-ball',              ex:'"Play baseball in the park."'},
+      {n:'9-72',e:'⛸️',zh:'溜冰',     desc:'運動',         en:'Roller skating',        id:'Sepatu roda',            vi:'Trượt patin',          ph:'ROL-ler SKAT-ing',            ex:'"Go roller skating."'},
+      {n:'9-73',e:'💃',zh:'舞蹈',     desc:'藝術',         en:'Dancing',               id:'Menari',                 vi:'Khiêu vũ',             ph:'DANC-ing',                    ex:'"Dance to the music."'},
+      {n:'9-74',e:'🧘',zh:'太極',     desc:'健身',         en:'Tai chi',               id:'Tai chi',                vi:'Thái cực quyền',       ph:'TAI CHI',                     ex:'"Practice tai chi in the morning."'},
+      {n:'9-75',e:'🏋️',zh:'去健身房', desc:'鍛鍊',         en:'Go to the gym',         id:'Pergi ke gym',           vi:'Đến phòng tập',        ph:'GO to the GYM',               ex:'"Work out at the gym."'},
+      {n:'9-76',e:'🍢',zh:'逛夜市',   desc:'美食',         en:'Night market',          id:'Pasar malam',            vi:'Chợ đêm',              ph:'NIGHT · MAR-ket',             ex:'"Walk around the night market."'},
+      {n:'9-77',e:'🖼️',zh:'看展覽',   desc:'藝術',         en:'Art exhibition',        id:'Pameran seni',           vi:'Xem triển lãm',        ph:'ART ex-HIB-i-tion',           ex:'"Visit the art exhibition."'},
+      {n:'9-78',e:'🐘',zh:'去動物園', desc:'休閒',         en:'Zoo',                   id:'Kebun binatang',         vi:'Sở thú',               ph:'ZOO',                         ex:'"See the animals at the zoo."'},
+      {n:'9-79',e:'🎡',zh:'去遊樂園', desc:'娛樂',         en:'Amusement park',        id:'Taman hiburan',          vi:'Công viên giải trí',   ph:'A-MUSE-ment PARK',            ex:'"Play at the amusement park."'},
+      {n:'9-80',e:'♨️',zh:'泡溫泉',   desc:'放鬆',         en:'Hot spring bath',       id:'Mandi air panas',        vi:'Tắm suối nước nóng',   ph:'HOT SPRING BATH',             ex:'"Relax in a hot spring bath."'},
+      {n:'9-81',e:'🏖️',zh:'去海邊',   desc:'風景',         en:'Go to the beach',       id:'Ke pantai',              vi:'Ra bãi biển',          ph:'GO to the BEACH',             ex:'"Enjoy a day at the beach."'},
+      {n:'9-82',e:'🌊',zh:'看海',     desc:'放鬆',         en:'Watch the sea',         id:'Melihat laut',           vi:'Ngắm biển',            ph:'WATCH the SEA',               ex:'"Let\'s go watch the sea."'},
+      {n:'9-83',e:'🏰',zh:'堆沙堡',   desc:'遊戲',         en:'Build sandcastle',      id:'Buat istana pasir',      vi:'Xây lâu đài cát',      ph:'BUILD SAND-cas-tle',          ex:'"Build a sandcastle at the beach."'},
+      {n:'9-84',e:'🐚',zh:'撿貝殼',   desc:'海邊',         en:'Collect shells',        id:'Cari kerang',            vi:'Nhặt vỏ sò',           ph:'COL-lect SHELLS',             ex:'"Collect shells at the seaside."'},
+      {n:'9-85',e:'🪁',zh:'放風箏',   desc:'戶外',         en:'Fly a kite',            id:'Menaikkan layang-layang',vi:'Thả diều',             ph:'FLY a KITE',                  ex:'"Fly a kite in the park."'},
+      {n:'9-86',e:'🫧',zh:'吹泡泡',   desc:'童趣',         en:'Blow bubbles',          id:'Tiup gelembung',         vi:'Thổi bong bóng',       ph:'BLOW BUB-bles',               ex:'"Blow soap bubbles."'},
+      {n:'9-87',e:'🫣',zh:'抓迷藏',   desc:'遊戲',         en:'Hide-and-seek',         id:'Petak umpet',            vi:'Trốn tìm',             ph:'HIDE-AND-SEEK',               ex:'"Play hide and seek."'},
+      {n:'9-88',e:'🛝',zh:'溜滑梯',   desc:'公園',         en:'Playground slide',      id:'Seluncuran',             vi:'Cầu trượt',            ph:'SLIDE',                       ex:'"Slide down the playground slide."'},
+      {n:'9-89',e:'🧸',zh:'買玩具',   desc:'禮物',         en:'Buy a toy',             id:'Beli mainan',            vi:'Mua đồ chơi',          ph:'BUY a TOY',                   ex:'"Buy a new toy."'},
+      {n:'9-90',e:'🪄',zh:'看魔術',   desc:'表演',         en:'Magic show',            id:'Pertunjukan sulap',      vi:'Xem ảo thuật',         ph:'MAG-ic SHOW',                 ex:'"Watch a magic show."'},
+      {n:'9-91',e:'🗣️',zh:'講笑話',   desc:'逗趣',         en:'Tell jokes',            id:'Cerita lucu',            vi:'Kể chuyện cười',       ph:'TELL JOKES',                  ex:'"Tell funny jokes."'},
+      {n:'9-92',e:'🎂',zh:'辦派對',   desc:'慶祝',         en:'Party',                 id:'Pesta',                  vi:'Tiệc',                 ph:'PAR-ty',                      ex:'"Join the birthday party."'},
+      {n:'9-93',e:'🎆',zh:'看煙火',   desc:'節慶',         en:'Fireworks',             id:'Kembang api',            vi:'Pháo hoa',             ph:'FIRE-works',                  ex:'"Watch the New Year fireworks."'},
+      {n:'9-94',e:'🎪',zh:'馬戲',     desc:'雜技表演',     en:'Circus',                id:'Sirkus',                 vi:'Xiếc',                 ph:'CIR-cus',                     ex:'"Let\'s watch the circus."'},
+      {n:'9-95',e:'🎤',zh:'看演唱會', desc:'音樂',         en:'Concert',               id:'Konser',                 vi:'Buổi hòa nhạc',        ph:'CON-cert',                    ex:'"Go to a music concert."'},
+      {n:'9-96',e:'🎳',zh:'打保齡球', desc:'室內',         en:'Go bowling',            id:'Main bowling',           vi:'Chơi bowling',         ph:'GO BOWL-ing',                 ex:'"Go bowling on the weekend."'},
+      {n:'9-97',e:'🎯',zh:'射飛鏢',   desc:'遊戲',         en:'Play darts',            id:'Main dart',              vi:'Ném phi tiêu',         ph:'PLAY DARTS',                  ex:'"Play darts at the club."'},
+      {n:'9-98',e:'📸',zh:'拍貼紙',   desc:'相機',         en:'Photo sticker booth',   id:'Foto stiker',            vi:'Chụp ảnh sticker',     ph:'PHO-to STICK-er BOOTH',       ex:'"Take photo stickers together."'},
+      {n:'9-99',e:'🍿',zh:'吃爆米花', desc:'電影',         en:'Eat popcorn',           id:'Makan popcorn',          vi:'Ăn bắp rang',          ph:'EAT POP-corn',                ex:'"Eat popcorn while watching."'},
+      {n:'9-100',e:'🎉',zh:'慶祝',    desc:'節日',         en:'Celebration',           id:'Perayaan',               vi:'Lễ kỷ niệm',           ph:'CEL-e-bra-tion',              ex:'"Join the community celebration."'},
+    ]
+  },
+
+  // ── 第10輯・健康用語 ──
+  health_body: {
+    zh: '身體部位', en: 'Body Parts (Health)', id: 'Bagian Tubuh', vi: 'Bộ phận cơ thể',
+    sub: 'Body Parts · Bagian Tubuh · Bộ phận cơ thể',
+    cards: [
+      {n:'10-01',e:'🧠',zh:'腦頭腦',   desc:'大腦',         en:'Brain',             id:'Otak',          vi:'Não',           ph:'BRAIN',                 ex:'"Any head or brain problems?"'},
+      {n:'10-02',e:'👀',zh:'眼睛視力', desc:'視力',         en:'Eyes',              id:'Mata',          vi:'Mắt',           ph:'EYES',                  ex:'"Do your eyes hurt?"'},
+      {n:'10-03',e:'👂',zh:'耳朵聽力', desc:'聽力',         en:'Ears',              id:'Telinga',       vi:'Tai',           ph:'EARS',                  ex:'"Can you hear clearly?"'},
+      {n:'10-04',e:'👃',zh:'鼻子嗅覺', desc:'鼻腔',         en:'Nose',              id:'Hidung',        vi:'Mũi',           ph:'NOSE',                  ex:'"Is your nose blocked?"'},
+      {n:'10-05',e:'👄',zh:'嘴巴口腔', desc:'口腔',         en:'Mouth',             id:'Mulut',         vi:'Miệng',         ph:'MOUTH',                 ex:'"Clean your mouth after eating."'},
+      {n:'10-06',e:'🦷',zh:'牙齒',     desc:'口腔護理',     en:'Teeth',             id:'Gigi',          vi:'Răng',          ph:'TEETH',                 ex:'"Does your tooth hurt?"'},
+      {n:'10-07',e:'👅',zh:'舌頭味覺', desc:'味覺',         en:'Tongue',            id:'Lidah',         vi:'Lưỡi',          ph:'TONGUE',                ex:'"Is your tongue coated?"'},
+      {n:'10-08',e:'🧣',zh:'脖子頸部', desc:'頸部',         en:'Neck',              id:'Leher',         vi:'Cổ',            ph:'NECK',                  ex:'"Is your neck stiff?"'},
+      {n:'10-09',e:'💪',zh:'手臂上肢', desc:'上肢',         en:'Arm',               id:'Lengan',        vi:'Cánh tay',      ph:'ARM',                   ex:'"Does your arm hurt?"'},
+      {n:'10-10',e:'✋',zh:'手手部',   desc:'手部',         en:'Hands',             id:'Tangan',        vi:'Tay',           ph:'HANDS',                 ex:'"Wash hands before eating."'},
+      {n:'10-11',e:'👆',zh:'手指',     desc:'手指',         en:'Fingers',           id:'Jari',          vi:'Ngón tay',      ph:'FIN-gers',              ex:'"Are your fingers swollen?"'},
+      {n:'10-12',e:'❤️',zh:'心臟',     desc:'心跳',         en:'Heart',             id:'Jantung',       vi:'Tim',           ph:'HEART',                 ex:'"Is your heart beating fast?"'},
+      {n:'10-13',e:'🫁',zh:'肺呼吸',   desc:'呼吸',         en:'Lungs',             id:'Paru-paru',     vi:'Phổi',          ph:'LUNGS',                 ex:'"Are your lungs healthy?"'},
+      {n:'10-14',e:'🫀',zh:'肝肝臟',   desc:'肝臟',         en:'Liver',             id:'Hati',          vi:'Gan',           ph:'LIVER',                 ex:'"Take care of your liver."'},
+      {n:'10-15',e:'🫘',zh:'腎腎臟',   desc:'腎臟',         en:'Kidneys',           id:'Ginjal',        vi:'Thận',          ph:'KID-neys',              ex:'"Drink water for kidney health."'},
+      {n:'10-16',e:'🤰',zh:'胃消化',   desc:'消化',         en:'Stomach',           id:'Perut',         vi:'Dạ dày',        ph:'STO-mach',              ex:'"Does your stomach hurt?"'},
+      {n:'10-17',e:'🦴',zh:'骨頭骨骼', desc:'骨骼',         en:'Bones',             id:'Tulang',        vi:'Xương',         ph:'BONES',                 ex:'"Strong bones need calcium."'},
+      {n:'10-18',e:'💪',zh:'肌肉',     desc:'肌力',         en:'Muscles',           id:'Otot',          vi:'Cơ bắp',        ph:'MUS-cles',              ex:'"Are your muscles weak?"'},
+      {n:'10-19',e:'🦵',zh:'腿下肢',   desc:'下肢',         en:'Limbs / Legs',      id:'Tungkai',       vi:'Chân / Đùi',    ph:'LEG / FOOT',            ex:'"Are your legs tired?"'},
+      {n:'10-20',e:'🦶',zh:'腳腳部',   desc:'腳部',         en:'Leg / Foot',        id:'Kaki',          vi:'Bàn chân',      ph:'LEG / FOOT',            ex:'"Wash your feet at night."'},
+    ]
+  },
+  health_symptom: {
+    zh: '常見症狀', en: 'Common Symptoms', id: 'Gejala Umum', vi: 'Triệu chứng thường gặp',
+    sub: 'Common Symptoms · Gejala Umum · Triệu chứng thường gặp',
+    cards: [
+      {n:'10-21',e:'🤕',zh:'頭痛',     desc:'疼痛',         en:'Headache',          id:'Sakit kepala',  vi:'Đau đầu',       ph:'HEAD-ache',             ex:'"Headache? Take medicine."'},
+      {n:'10-22',e:'🤒',zh:'發燒',     desc:'高溫',         en:'Fever',             id:'Demam',         vi:'Sốt',           ph:'FEE-ver',               ex:'"Fever? Take the temperature."'},
+      {n:'10-23',e:'🤧',zh:'感冒鼻涕', desc:'鼻涕',         en:'Runny nose',        id:'Hidung meler',  vi:'Sổ mũi',        ph:'RUN-ny NOSE',           ex:'"Cold? Drink warm water."'},
+      {n:'10-24',e:'🤮',zh:'嘔吐',     desc:'嘔吐',         en:'Vomiting',          id:'Muntah',        vi:'Nôn mửa',       ph:'VOM-it-ing',            ex:'"Vomiting? Drink water slowly."'},
+      {n:'10-25',e:'💩',zh:'腹瀉',     desc:'拉肚子',       en:'Diarrhea',          id:'Diare',         vi:'Tiêu chảy',     ph:'DI-ar-RHEA',            ex:'"Diarrhea? Eat porridge."'},
+      {n:'10-26',e:'🚫',zh:'便秘',     desc:'不通',         en:'Constipation',      id:'Sembelit',      vi:'Táo bón',       ph:'CONSTIPATION',          ex:'"Constipated? Eat more vegetables."'},
+      {n:'10-27',e:'😵',zh:'暈眩',     desc:'頭暈',         en:'Dizzy',             id:'Pusing',        vi:'Chóng mặt',     ph:'DIZ-zi-ness',           ex:'"Dizzy? Sit down first."'},
+      {n:'10-28',e:'😖',zh:'疼痛',     desc:'疼痛',         en:'Pain',              id:'Nyeri',         vi:'Đau',           ph:'PAIN',                  ex:'"Where is the pain?"'},
+      {n:'10-29',e:'🤕',zh:'扭傷',     desc:'受傷',         en:'Sprain',            id:'Keseleo',       vi:'Bong gân',      ph:'SPRAIN',                ex:'"Sprained your ankle? Rest."'},
+      {n:'10-30',e:'🩹',zh:'擦傷',     desc:'傷口',         en:'Abrasion',          id:'Lecet',         vi:'Trầy xước',     ph:'A-BRA-sion',            ex:'"Abrasion – clean the wound."'},
+      {n:'10-31',e:'🔥',zh:'燙傷燒傷', desc:'燒傷',         en:'Burn',              id:'Luka bakar',    vi:'Bỏng',          ph:'BURN',                  ex:'"Burn – apply cold water."'},
+      {n:'10-32',e:'😰',zh:'焦慮',     desc:'情緒',         en:'Anxious',           id:'Cemas',         vi:'Lo lắng',       ph:'ANX-ious',              ex:'"Anxious? Let\'s talk about it."'},
+      {n:'10-33',e:'😞',zh:'憂鬱',     desc:'低落',         en:'Depression',        id:'Depresi',       vi:'Trầm cảm',      ph:'DEPRESSION',            ex:'"Depressed? Let me help you find support."'},
+      {n:'10-34',e:'😴',zh:'失眠',     desc:'睡不好',       en:'Insomnia',          id:'Insomnia',      vi:'Mất ngủ',       ph:'INSOMNIA',              ex:'"Can\'t sleep? Try warm tea."'},
+      {n:'10-35',e:'😩',zh:'疲勞',     desc:'累',           en:'Tired',             id:'Kelelahan',     vi:'Mệt mỏi',       ph:'FA-tigue',              ex:'"Tired? Take a rest."'},
+      {n:'10-36',e:'🤰',zh:'腹痛',     desc:'肚痛',         en:'Stomach ache',      id:'Sakit perut',   vi:'Đau bụng',      ph:'PAIN',                  ex:'"Stomach ache? Eat light food."'},
+      {n:'10-37',e:'🦵',zh:'腿痛',     desc:'下肢痛',       en:'Leg pain',          id:'Sakit kaki',    vi:'Đau chân',      ph:'LEG PAIN',              ex:'"Leg pain? Elevate the leg."'},
+      {n:'10-38',e:'💔',zh:'胸痛',     desc:'胸部疼痛',     en:'Chest pain',        id:'Nyeri dada',    vi:'Đau ngực',      ph:'PAIN',                  ex:'"Chest pain? Call the doctor."'},
+      {n:'10-39',e:'🩸',zh:'出血',     desc:'流血',         en:'Bleeding',          id:'Pendarahan',    vi:'Chảy máu',      ph:'BLEED-ing',             ex:'"Bleeding – press on the wound."'},
+      {n:'10-40',e:'😷',zh:'咳嗽',     desc:'咳嗽',         en:'Cough',             id:'Batuk',         vi:'Ho',            ph:'COUGH',                 ex:'"Coughing? Take cough medicine."'},
+    ]
+  },
+  health_procedure: {
+    zh: '醫療程序', en: 'Medical Procedures', id: 'Prosedur Medis', vi: 'Quy trình y tế',
+    sub: 'Medical Procedures · Prosedur Medis · Quy trình y tế',
+    cards: [
+      {n:'10-41',e:'🩺',zh:'看醫生',   desc:'就診',         en:'See a doctor',      id:'Periksa dokter',vi:'Khám bác sĩ',   ph:'SEE · A · DOCTOR',      ex:'"See the doctor tomorrow."'},
+      {n:'10-42',e:'💉',zh:'打針注射', desc:'注射',         en:'Injection',         id:'Suntikan',      vi:'Tiêm thuốc',    ph:'IN-jec-tion',           ex:'"Receiving a vaccine injection."'},
+      {n:'10-43',e:'🩸',zh:'抽血檢驗', desc:'驗血',         en:'Blood draw',        id:'Ambil darah',   vi:'Lấy máu',       ph:'BLOOD DRAW',            ex:'"Drawing blood for testing."'},
+      {n:'10-44',e:'📷',zh:'X光檢查',  desc:'X光',          en:'X-ray',             id:'Rontgen',       vi:'Chụp X-quang',  ph:'X-RAY',                 ex:'"Getting a bone X-ray."'},
+      {n:'10-45',e:'🩹',zh:'包紮傷口', desc:'包紮',         en:'Bandage',           id:'Membalut',      vi:'Băng bó',       ph:'BANDAGE',               ex:'"Bandaging the wound."'},
+      {n:'10-46',e:'💊',zh:'吃藥用藥', desc:'服藥',         en:'Take medicine',     id:'Minum obat',    vi:'Uống thuốc',    ph:'take ME-di-cine',       ex:'"Take medicine after eating."'},
+      {n:'10-47',e:'🧴',zh:'擦藥外用', desc:'外用藥',       en:'Apply medicine',    id:'Oles obat',     vi:'Thoa thuốc',    ph:'APPLY · MEDICINE',      ex:'"Apply medicine to the wound."'},
+      {n:'10-48',e:'📊',zh:'量血壓',   desc:'血壓',         en:'Measure blood pressure',id:'Ukur tekanan darah',vi:'Đo huyết áp',ph:'BLOOD PRES-sure',   ex:'"Measure blood pressure in the morning."'},
+      {n:'10-49',e:'🌡️',zh:'量體溫',  desc:'體溫',         en:'Take temperature',  id:'Ukur suhu',     vi:'Đo nhiệt độ',   ph:'TAKE TEM-pra-ture',     ex:'"Take body temperature."'},
+      {n:'10-50',e:'🩸',zh:'量血糖',   desc:'糖尿病',       en:'Measure blood sugar',id:'Cek gula darah',vi:'Đo đường huyết',ph:'BLOOD SU-gar',         ex:'"Measure blood sugar before eating."'},
+    ]
+  },
+  health_medicine: {
+    zh: '藥物用語', en: 'Medicine Vocabulary', id: 'Kosakata Obat', vi: 'Từ vựng thuốc',
+    sub: 'Medicine Vocabulary · Kosakata Obat · Từ vựng thuốc',
+    cards: [
+      {n:'10-51',e:'💊',zh:'藥片口服', desc:'藥片',         en:'Tablet',            id:'Tablet',        vi:'Viên thuốc',    ph:'TABLET',                ex:'"Take tablets twice a day."'},
+      {n:'10-52',e:'💊',zh:'膠囊口服', desc:'膠囊',         en:'Capsule',           id:'Kapsul',        vi:'Viên nang',     ph:'CAPSULE',               ex:'"Take capsules with water."'},
+      {n:'10-53',e:'🧴',zh:'藥膏外用', desc:'藥膏',         en:'Ointment',          id:'Salep',         vi:'Thuốc mỡ',      ph:'OINTMENT',              ex:'"Apply ointment to the skin."'},
+      {n:'10-54',e:'💧',zh:'眼藥水',   desc:'眼藥',         en:'Eye drops',         id:'Tetes mata',    vi:'Thuốc nhỏ mắt', ph:'EYE · DROPS',           ex:'"Apply eye drops twice."'},
+      {n:'10-55',e:'💧',zh:'鼻噴劑',   desc:'鼻藥',         en:'Nasal spray',       id:'Semprot hidung',vi:'Xịt mũi',       ph:'NASAL · SPRAY',         ex:'"Use nasal spray for a cold."'},
+      {n:'10-56',e:'💊',zh:'止痛藥',   desc:'止痛',         en:'Pain reliever',     id:'Pereda nyeri',  vi:'Thuốc giảm đau',ph:'PAIN · RELIEVER',       ex:'"Take a pain reliever."'},
+      {n:'10-57',e:'💊',zh:'退燒藥',   desc:'退燒',         en:'Fever reducer',     id:'Penurun demam', vi:'Thuốc hạ sốt',  ph:'FEVER · REDUCER',       ex:'"Take a fever reducer."'},
+      {n:'10-58',e:'💊',zh:'抗生素',   desc:'感染',         en:'Antibiotics',       id:'Antibiotik',    vi:'Kháng sinh',    ph:'ANTIBIOTICS',           ex:'"Take antibiotics as prescribed."'},
+      {n:'10-59',e:'💊',zh:'維生素',   desc:'補充',         en:'Vitamins',          id:'Vitamin',       vi:'Vitamin',       ph:'VITAMINS',              ex:'"Take vitamins every day."'},
+      {n:'10-60',e:'🩹',zh:'OK繃',     desc:'貼布',         en:'Adhesive bandage',  id:'Plester',       vi:'Băng dán',      ph:'ADHESIVE · BANDAGE',    ex:'"Apply an adhesive bandage."'},
+    ]
+  },
+  health_checkup: {
+    zh: '健康檢查', en: 'Health Check-up', id: 'Pemeriksaan Kesehatan', vi: 'Kiểm tra sức khỏe',
+    sub: 'Health Check-up · Pemeriksaan Kesehatan · Kiểm tra sức khỏe',
+    cards: [
+      {n:'10-61',e:'🩸',zh:'血壓BP',   desc:'血壓',         en:'Blood pressure',    id:'Tekanan darah', vi:'Huyết áp',      ph:'BLOOD · PRESSURE',      ex:'"Is blood pressure normal?"'},
+      {n:'10-62',e:'❤️',zh:'脈搏心跳', desc:'心跳',         en:'Pulse rate',        id:'Detak nadi',    vi:'Nhịp tim',      ph:'PULSE · RATE',          ex:'"Measure pulse rate."'},
+      {n:'10-63',e:'🌡️',zh:'體溫溫度', desc:'溫度',         en:'Body temperature',  id:'Suhu tubuh',    vi:'Nhiệt độ cơ thể',ph:'BODY · TEMPERATURE',   ex:'"Body temperature is 37 degrees."'},
+      {n:'10-64',e:'🩸',zh:'血糖',     desc:'糖尿',         en:'Blood sugar',       id:'Gula darah',    vi:'Đường huyết',   ph:'BLOOD · SUGAR',         ex:'"Is blood sugar high?"'},
+      {n:'10-65',e:'📏',zh:'身高',     desc:'高度',         en:'Height',            id:'Tinggi badan',  vi:'Chiều cao',     ph:'HEIGHT',                ex:'"Measure height."'},
+      {n:'10-66',e:'⚖️',zh:'體重',     desc:'重量',         en:'Weight',            id:'Berat badan',   vi:'Cân nặng',      ph:'WEIGHT',                ex:'"Weigh weekly."'},
+      {n:'10-67',e:'🧍',zh:'BMI',      desc:'指數',         en:'BMI',               id:'BMI',           vi:'BMI',           ph:'BMI',                   ex:'"Calculate BMI."'},
+      {n:'10-68',e:'👀',zh:'視力',     desc:'眼睛',         en:'Vision / Eyesight', id:'Penglihatan',   vi:'Thị lực',       ph:'VI-sion / EYE-sight',   ex:'"Let\'s check your vision."'},
+      {n:'10-69',e:'👂',zh:'聽力',     desc:'聽力',         en:'Hearing',           id:'Pendengaran',   vi:'Thính lực',     ph:'HEAR-ing',              ex:'"Hearing test."'},
+      {n:'10-70',e:'🩸',zh:'血檢',     desc:'驗血',         en:'Blood test',        id:'Tes darah',     vi:'Xét nghiệm máu',ph:'BLOOD · TEST',          ex:'"Do an annual blood test."'},
+    ]
+  },
+  health_prevent: {
+    zh: '預防保健', en: 'Prevention & Health', id: 'Pencegahan Kesehatan', vi: 'Phòng ngừa sức khỏe',
+    sub: 'Prevention & Health · Pencegahan Kesehatan · Phòng ngừa sức khỏe',
+    cards: [
+      {n:'10-71',e:'💉',zh:'疫苗預防', desc:'預防',         en:'Vaccine',           id:'Vaksin',        vi:'Vắc-xin',       ph:'VAC-cine',              ex:'"Get the flu vaccine."'},
+      {n:'10-72',e:'🧼',zh:'洗手衛生', desc:'衛生',         en:'Wash hands',        id:'Cuci tangan',   vi:'Rửa tay',       ph:'WASH HANDS',            ex:'"Wash hands for 20 seconds."'},
+      {n:'10-73',e:'😷',zh:'戴口罩',   desc:'防疫',         en:'Wear a mask',       id:'Pakai masker',  vi:'Đeo khẩu trang',ph:'WEAR MASK',             ex:'"Wear a mask outside."'},
+      {n:'10-74',e:'🏃',zh:'運動',     desc:'活動',         en:'Exercise',          id:'Olahraga',      vi:'Tập thể dục',   ph:'EX-er-cise',            ex:'"Exercise 30 minutes a day."'},
+      {n:'10-75',e:'🥗',zh:'均衡飲食', desc:'營養',         en:'Balanced diet',     id:'Diet seimbang', vi:'Chế độ ăn cân bằng',ph:'BAL-anced DIET',   ex:'"Eat a balanced diet with vegetables and fruit."'},
+      {n:'10-76',e:'💧',zh:'多喝水',   desc:'補水',         en:'Drink plenty of water',id:'Minum banyak air',vi:'Uống nhiều nước',ph:'DRINK WA-ter',    ex:'"Drink plenty of water – 8 glasses."'},
+      {n:'10-77',e:'😴',zh:'充足睡眠', desc:'休息',         en:'Enough sleep',      id:'Tidur cukup',   vi:'Ngủ đủ giấc',   ph:'e-NOUGH SLEEP',         ex:'"Get enough sleep – 7 to 8 hours."'},
+      {n:'10-78',e:'🚭',zh:'禁菸',     desc:'戒菸',         en:'No smoking',        id:'Dilarang merokok',vi:'Không hút thuốc',ph:'NO SMOK-ing',         ex:'"No smoking for your health."'},
+      {n:'10-79',e:'🍷',zh:'少喝酒',   desc:'限酒',         en:'Reduce alcohol',    id:'Kurangi alkohol',vi:'Giảm rượu bia', ph:'re-DUCE AL-co-hol',     ex:'"Reduce alcohol intake."'},
+      {n:'10-80',e:'🧘',zh:'減壓',     desc:'壓力',         en:'Reduce stress',     id:'Kurangi stres', vi:'Giảm căng thẳng',ph:'re-DUCE STRESS',       ex:'"Reduce stress with meditation."'},
+    ]
+  },
+  health_first_aid: {
+    zh: '急救', en: 'First Aid', id: 'Pertolongan Pertama', vi: 'Sơ cứu',
+    sub: 'First Aid · Pertolongan Pertama · Sơ cứu',
+    cards: [
+      {n:'10-81',e:'🫀',zh:'CPR',      desc:'心肺復甦',     en:'CPR',               id:'CPR',           vi:'CPR',           ph:'CPR',                   ex:'"Perform CPR if breathing stops."'},
+      {n:'10-82',e:'🫁',zh:'人工呼吸', desc:'急救',         en:'Rescue breathing',  id:'Napas buatan',  vi:'Hô hấp nhân tạo',ph:'RES-cue BREATH-ing',   ex:'"Give mouth-to-mouth resuscitation."'},
+      {n:'10-83',e:'🩹',zh:'止血',     desc:'出血',         en:'Stop bleeding',     id:'Hentikan perdarahan',vi:'Cầm máu',  ph:'STOP · BLEEDING',       ex:'"Stop bleeding by pressing the wound."'},
+      {n:'10-84',e:'🔥',zh:'燙傷處理', desc:'燙傷',         en:'Burn treatment',    id:'Pengobatan luka bakar',vi:'Xử lý bỏng',ph:'BURN TREAT-ment',    ex:'"Apply cold water to a burn."'},
+      {n:'10-85',e:'🆘',zh:'呼救求援', desc:'求救',         en:'Call for help',     id:'Minta tolong',  vi:'Kêu cứu',       ph:'CALL · FOR · HELP',     ex:'"Seek help immediately!"'},
+      {n:'10-86',e:'🚑',zh:'叫救護車', desc:'緊急',         en:'Call ambulance',    id:'Panggil ambulans',vi:'Gọi xe cấp cứu',ph:'CALL · AMBULANCE',     ex:'"Call an ambulance now!"'},
+      {n:'10-87',e:'🩹',zh:'急救箱',   desc:'工具',         en:'First aid kit',     id:'Kotak P3K',     vi:'Hộp sơ cứu',    ph:'FIRST · AID · KIT',     ex:'"Get the first aid kit."'},
+      {n:'10-88',e:'🫁',zh:'噎到',     desc:'梗塞',         en:'Choking',           id:'Tersedak',      vi:'Nghẹt thở',     ph:'CHOKING',               ex:'"Choking? Perform the Heimlich manoeuvre."'},
+      {n:'10-89',e:'😵',zh:'暈倒',     desc:'昏倒',         en:'Fainting',          id:'Pingsan',       vi:'Ngất xỉu',      ph:'FAINTING',              ex:'"Fainting? Elevate the legs."'},
+      {n:'10-90',e:'⚡',zh:'觸電',     desc:'電擊',         en:'Electric shock',    id:'Sengatan listrik',vi:'Điện giật',   ph:'ELECTRIC · SHOCK',      ex:'"Electric shock? Turn off the power."'},
+    ]
+  },
+  health_mental: {
+    zh: '心理健康', en: 'Mental Health', id: 'Kesehatan Mental', vi: 'Sức khỏe tâm thần',
+    sub: 'Mental Health · Kesehatan Mental · Sức khỏe tâm thần',
+    cards: [
+      {n:'10-91',e:'😊',zh:'快樂',     desc:'心情愉快',     en:'Happy',             id:'Bahagia',       vi:'Vui vẻ',        ph:'HAP-py',                ex:'"I feel happy today."'},
+      {n:'10-92',e:'😔',zh:'孤獨寂寞', desc:'孤單',         en:'Loneliness',        id:'Kesepian',      vi:'Cô đơn',        ph:'LONELINESS',            ex:'"Feeling lonely? Let\'s chat."'},
+      {n:'10-93',e:'🧠',zh:'失智認知', desc:'認知',         en:'Dementia',          id:'Demensia',      vi:'Sa sút trí tuệ',ph:'DEMENTIA',              ex:'"Dementia? Do memory exercises."'},
+      {n:'10-94',e:'😰',zh:'恐慌攻擊', desc:'恐慌',         en:'Panic attack',      id:'Serangan panik',vi:'Cơn hoảng loạn',ph:'PANIC · ATTACK',        ex:'"Panic attack? Breathe deeply."'},
+      {n:'10-95',e:'🧘',zh:'冥想減壓', desc:'冥想',         en:'Meditation',        id:'Meditasi',      vi:'Thiền định',    ph:'MEDITATION',            ex:'"Meditation to relax."'},
+      {n:'10-96',e:'🗣️',zh:'談心傾訴', desc:'傾訴',         en:'Talk it out',       id:'Curhat',        vi:'Tâm sự',        ph:'TALK IT OUT',           ex:'"Talk it out if you have any problems."'},
+      {n:'10-97',e:'🧑‍⚕️',zh:'心理醫師',desc:'專業',        en:'Psychologist',      id:'Psikolog',      vi:'Nhà tâm lý học',ph:'PSYCHOLOGIST',          ex:'"Consult a psychologist."'},
+      {n:'10-98',e:'😌',zh:'正面思考', desc:'積極',         en:'Think positive',    id:'Berpikir positif',vi:'Suy nghĩ tích cực',ph:'THINK POS-i-tive',  ex:'"Think positively every day."'},
+      {n:'10-99',e:'🤝',zh:'支持鼓勵', desc:'支持',         en:'Support',           id:'Dukungan',      vi:'Hỗ trợ',        ph:'sup-PORT',              ex:'"I am here to support you."'},
+      {n:'10-100',e:'❤️',zh:'關愛關心',desc:'關心',         en:'Show care',         id:'Tunjukkan perhatian',vi:'Quan tâm',  ph:'CARE',                  ex:'"I care about your health."'},
+    ]
   }
 };
 
@@ -2407,7 +2809,120 @@ function save() {
   try {
     localStorage.setItem('mastered', JSON.stringify(mastered));
     localStorage.setItem('starred',  JSON.stringify(starred));
+    const now = new Date().toISOString();
+    localStorage.setItem('lastSaved', now);
+    updateMemoryPanel();
   } catch(e) { /* private/iframe mode - silent fail */ }
+}
+
+function updateMemoryPanel() {
+  const mCount = Object.values(mastered).filter(Boolean).length;
+  const sCount = Object.values(starred).filter(Boolean).length;
+  const lastSaved = localStorage.getItem('lastSaved');
+  const el = id => document.getElementById(id);
+  if (el('memMasteredCount')) el('memMasteredCount').textContent = mCount;
+  if (el('memStarredCount'))  el('memStarredCount').textContent  = sCount;
+  if (el('memLastSaved') && lastSaved) {
+    const d = new Date(lastSaved);
+    el('memLastSaved').textContent = d.toLocaleDateString('zh-TW', {month:'2-digit',day:'2-digit'}) + ' ' +
+      d.toLocaleTimeString('zh-TW', {hour:'2-digit',minute:'2-digit'});
+  }
+  const totalCards = Object.values(SECTIONS).reduce((a,s) => a + s.cards.length, 0);
+  if (el('memorySummary')) {
+    el('memorySummary').textContent = `共 ${totalCards} 詞・已學 ${mCount} 詞・收藏 ${sCount} 詞`;
+  }
+  if (el('memoryStatusBadge')) {
+    el('memoryStatusBadge').textContent = lastSaved ? '✓ 已儲存' : '尚未儲存';
+    el('memoryStatusBadge').style.background = lastSaved ? '#D1FAE5' : '#FEF3C7';
+    el('memoryStatusBadge').style.color = lastSaved ? '#065F46' : '#92400E';
+  }
+}
+
+// ── 匯出備份 ──
+function exportMemory() {
+  const data = {
+    version: 'v12',
+    exportedAt: new Date().toISOString(),
+    mastered,
+    starred
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '中文學習進度_' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✅ 已匯出備份檔案！');
+}
+
+// ── 匯入備份 ──
+function importMemory(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.mastered && !data.starred) { showToast('❌ 檔案格式錯誤'); return; }
+      if (!confirm(`確定要載入備份？\n已學：${Object.values(data.mastered||{}).filter(Boolean).length} 詞\n收藏：${Object.values(data.starred||{}).filter(Boolean).length} 詞\n\n（將覆蓋現有進度）`)) return;
+      mastered = data.mastered || {};
+      starred  = data.starred  || {};
+      save();
+      renderCards(); updateStats(); renderProgress();
+      showToast('✅ 備份已成功載入！');
+    } catch {
+      showToast('❌ 無法讀取檔案，請確認格式正確');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ── 清除已學會 ──
+function clearMastered() {
+  const count = Object.values(mastered).filter(Boolean).length;
+  if (count === 0) { showToast('ℹ️ 目前沒有已學會的詞彙'); return; }
+  if (!confirm(`確定清除 ${count} 個「已學會」紀錄？\n（收藏不受影響）`)) return;
+  mastered = {};
+  save();
+  renderCards(); updateStats(); renderProgress();
+  showToast('✅ 已清除所有「已學會」紀錄');
+}
+
+// ── 清除已收藏 ──
+function clearStarred() {
+  const count = Object.values(starred).filter(Boolean).length;
+  if (count === 0) { showToast('ℹ️ 目前沒有收藏的詞彙'); return; }
+  if (!confirm(`確定清除 ${count} 個「已收藏」紀錄？\n（學習進度不受影響）`)) return;
+  starred = {};
+  save();
+  renderCards(); updateStats(); renderProgress();
+  showToast('✅ 已清除所有「已收藏」紀錄');
+}
+
+// ── Toast 提示 ──
+function showToast(msg) {
+  let t = document.getElementById('toastMsg');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toastMsg';
+    t.style.cssText = `
+      position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);
+      background:#1E293B;color:#fff;padding:11px 20px;border-radius:30px;
+      font-size:13px;font-weight:600;z-index:9999;opacity:0;
+      transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;
+    `;
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transform = 'translateX(-50%) translateY(20px)';
+  }, 2600);
 }
 
 function setLang(lang, el) {
@@ -2462,6 +2977,11 @@ function setSection(sec, el) {
     trans_navigation:'第7輯 · 交通出行用語', trans_public:'第7輯 · 交通出行用語',
     edu_lang:'第8輯 · 教育學習用語', edu_train:'第8輯 · 教育學習用語', edu_time:'第8輯 · 教育學習用語',
     edu_tools:'第8輯 · 教育學習用語', edu_assess:'第8輯 · 教育學習用語',
+    ent_indoor:'第9輯 · 娛樂休閒用語', ent_outdoor:'第9輯 · 娛樂休閒用語', ent_social:'第9輯 · 娛樂休閒用語',
+    ent_festival:'第9輯 · 娛樂休閒用語', ent_sports:'第9輯 · 娛樂休閒用語',
+    health_body:'第10輯 · 健康用語', health_symptom:'第10輯 · 健康用語', health_procedure:'第10輯 · 健康用語',
+    health_medicine:'第10輯 · 健康用語', health_checkup:'第10輯 · 健康用語', health_prevent:'第10輯 · 健康用語',
+    health_first_aid:'第10輯 · 健康用語', health_mental:'第10輯 · 健康用語',
   };
   const breadEl = document.getElementById('moduleBreadcrumb');
   if (breadEl) breadEl.innerHTML = (moduleMap[sec] || '中文語言學習平台') + ' <span>›</span> <span id="sectionNameBreadcrumb">' + s.zh + '</span>';
@@ -2718,6 +3238,7 @@ function checkAnswer(el, selected, correct, langProp) {
 
 // ── PROGRESS ──
 function renderProgress() {
+  updateMemoryPanel();
   const allSections = Object.entries(SECTIONS);
   const rows = allSections.map(([key, sec]) => {
     const total = sec.cards.length;
@@ -2762,7 +3283,7 @@ function renderProgress() {
     </div>
     <div>${rows.join('')}</div>
     <div style="text-align:center;margin-top:20px;">
-      <button class="nav-btn" onclick="clearAllProgress()">🗑 清除所有進度</button>
+      <button class="nav-btn" onclick="switchPageTab('browse')" style="margin-top:4px;">← 回詞彙瀏覽</button>
     </div>
   `;
 }
@@ -2934,20 +3455,28 @@ document.addEventListener('keydown', e => {
 });
 
 function clearAllProgress() {
-  if (!confirm('確定清除所有進度？')) return;
+  const mCount = Object.values(mastered).filter(Boolean).length;
+  const sCount = Object.values(starred).filter(Boolean).length;
+  if (mCount === 0 && sCount === 0) { showToast('ℹ️ 目前沒有任何學習紀錄'); return; }
+  if (!confirm(`⚠️ 確定清除全部進度？\n\n已學：${mCount} 詞\n收藏：${sCount} 詞\n\n此操作無法復原，建議先匯出備份。`)) return;
   try {
     localStorage.removeItem('mastered');
     localStorage.removeItem('starred');
+    localStorage.removeItem('lastSaved');
   } catch(e) {}
   mastered = {};
   starred  = {};
   renderProgress();
   updateStats();
+  renderCards();
+  updateMemoryPanel();
+  showToast('✅ 已清除全部學習進度');
 }
 
 // init
 setSection('basic');  // properly initialise title, breadcrumb, and cards
 updateStats();
+updateMemoryPanel();
 </script>
 
 <!-- ── BOTTOM NAV (mobile) ── -->
