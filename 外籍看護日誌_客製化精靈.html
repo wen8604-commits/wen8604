@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<title>外籍看護日誌 — 客製化設定精靈</title>
+<title>外籍看護日誌 — 客製化設定精靈 v8</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -541,6 +541,9 @@ body{
 /* ══════════════════════════════════════
    DESKTOP SIDE PANEL (≥1100px)
 ══════════════════════════════════════ */
+/* Hide side-nav on mobile/tablet — only shown at ≥1100px */
+.side-nav { display: none; }
+
 @media(min-width:1100px){
   .wizard-shell{
     display:grid;
@@ -549,12 +552,13 @@ body{
     align-items:start;
   }
   .side-nav{
+    display:flex;
     position:sticky;top:56px;
     background:var(--white);
     border-right:1px solid var(--border);
     min-height:calc(100vh - 56px);
     padding:24px 0;
-    display:flex;flex-direction:column;
+    flex-direction:column;
     gap:2px;
   }
   .side-nav-item{
@@ -990,7 +994,7 @@ body{
 <div class="topbar">
   <div>
     <div class="topbar-brand">📋 外籍看護工作日誌 — 客製化精靈</div>
-    <div class="topbar-sub">Caregiver Log Customization Wizard</div>
+    <div class="topbar-sub">Caregiver Log Customization Wizard v8</div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <button class="tlbtn" onclick="wizardPrint()" title="列印 / 儲存 PDF" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
@@ -1084,7 +1088,7 @@ body{
 <!-- ════════════════ STEP 1: BASIC INFO ════════════════ -->
 <div class="step-page active" id="step-1">
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🏥</span>
         <div>
@@ -1148,7 +1152,7 @@ body{
   </div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🧑‍⚕️</span>
         <div>
@@ -1209,7 +1213,7 @@ body{
 <!-- ════════════════ STEP 2: APPEARANCE ════════════════ -->
 <div class="step-page" id="step-2">
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🎨</span>
         <div>
@@ -1258,7 +1262,7 @@ body{
   </div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🔡</span>
         <div>
@@ -1337,7 +1341,7 @@ body{
 
   <!-- Vital Signs -->
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">💗</span>
         <div>
@@ -1379,7 +1383,7 @@ body{
 
   <!-- Daily Care -->
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🗓️</span>
         <div>
@@ -1406,7 +1410,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-morning-e" value="08:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-morning',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-morning',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning')"><span class="toggle-track"></span></label>
           </div>
@@ -1439,7 +1443,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-breakfast-e" value="09:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-breakfast',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-breakfast',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-breakfast')"><span class="toggle-track"></span></label>
           </div>
@@ -1477,7 +1481,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-morning-act-e" value="12:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-morning-act',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-morning-act',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-morning-act')"><span class="toggle-track"></span></label>
           </div>
@@ -1516,7 +1520,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-lunch-e" value="13:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-lunch',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-lunch',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-lunch')"><span class="toggle-track"></span></label>
           </div>
@@ -1546,7 +1550,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-nap-e" value="15:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-nap',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-nap',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-nap')"><span class="toggle-track"></span></label>
           </div>
@@ -1581,7 +1585,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-afternoon-e" value="18:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-afternoon',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-afternoon',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-afternoon')"><span class="toggle-track"></span></label>
           </div>
@@ -1619,7 +1623,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-dinner-e" value="19:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-dinner',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-dinner',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-dinner')"><span class="toggle-track"></span></label>
           </div>
@@ -1649,7 +1653,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-evening-e" value="21:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-evening',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-evening',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-evening')"><span class="toggle-track"></span></label>
           </div>
@@ -1685,7 +1689,7 @@ body{
                 <span style="color:var(--muted);font-size:12px;">–</span>
                 <input class="time-edit-input" type="time" id="time-care-night-e" value="06:00">
               </div>
-              <button class="detail-btn" onclick="toggleDetail('detail-care-night',this)" type="button">⚙️ 細部</button>
+              <button class="detail-btn" onclick="toggleDetail('detail-care-night',this,event)" type="button">⚙️ 細部</button>
             </div>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleRow(this,'care-night')"><span class="toggle-track"></span></label>
           </div>
@@ -1722,7 +1726,7 @@ body{
 
   <!-- Other Sections -->
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">📊</span>
         <div>
@@ -1771,7 +1775,7 @@ body{
   <div class="info-box">📌 緊急聯絡資訊會印在表單頂部，方便看護與家屬快速查閱。所有欄位均為<strong>選填</strong>，不填則不顯示。</div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🚨</span>
         <div>
@@ -1788,7 +1792,7 @@ body{
   </div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">🏨</span>
         <div>
@@ -1852,7 +1856,7 @@ body{
   <div class="info-box">💊 藥物清單會印在表單內，方便看護對照確認。所有欄位均為<strong>選填</strong>，不填則不顯示此區塊。</div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">💊</span>
         <div>
@@ -1869,7 +1873,7 @@ body{
   </div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">⚙️</span>
         <div>
@@ -1907,7 +1911,7 @@ body{
 <!-- ════════════════ STEP 6: PREVIEW & GENERATE ════════════════ -->
 <div class="step-page" id="step-6">
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head" onclick="toggleCard(this, event)">
       <div class="section-card-head-left">
         <span class="section-icon">📋</span>
         <div>
@@ -1941,7 +1945,7 @@ body{
     </div>
     <div class="output-actions">
       <button class="btn-out" onclick="printOutput()">🖨️ 列印 / 存PDF</button>
-      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
+      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1);scheduleSave();">⟵ 返回修改</button>
     </div>
   </div>
   <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:flex-start;gap:8px;">
@@ -2007,8 +2011,12 @@ let currentStep = 1;
 const TOTAL_STEPS = 6;
 
 function gotoStep(n) {
+  n = parseInt(n);
+  if (!n || n < 1 || n > TOTAL_STEPS) return;
+  const target = document.getElementById('step-'+n);
+  if (!target) return;
   document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
-  document.getElementById('step-'+n).classList.add('active');
+  target.classList.add('active');
 
   // Top progress bar
   document.querySelectorAll('.step-node').forEach((el,i) => {
@@ -2042,10 +2050,16 @@ function gotoStep(n) {
 /* ══════════════════════════════════════
    CARD COLLAPSE
 ══════════════════════════════════════ */
-function toggleCard(head) {
+function toggleCard(head, evt) {
+  // Don't collapse if user clicked a button, input, label, select or checkbox inside the head
+  if (evt) {
+    const tag = evt.target.tagName;
+    if (['BUTTON','INPUT','SELECT','LABEL','TEXTAREA'].includes(tag)) return;
+    if (evt.target.closest('button, input, select, label, textarea')) return;
+  }
   head.classList.toggle('collapsed');
   const body = head.nextElementSibling;
-  body.classList.toggle('hidden');
+  if (body) body.classList.toggle('hidden');
 }
 
 /* ══════════════════════════════════════
@@ -2066,8 +2080,10 @@ function toggleChip(el, groupId, mode) {
       el.classList.toggle('selected');
     }
   } else {
+    // 'multi' or default: simple toggle
     el.classList.toggle('selected');
   }
+  scheduleSave();
 }
 
 /* ══════════════════════════════════════
@@ -2158,7 +2174,7 @@ function addContact() {
   entry.innerHTML = `
     <div class="contact-entry-head">
       <div class="contact-entry-title">👤 聯絡人 #${id}</div>
-      <button class="btn-del-entry" onclick="document.getElementById('contact-${id}').remove()">✕ 刪除</button>
+      <button class="btn-del-entry" onclick="var el=document.getElementById('contact-${id}');if(el)el.remove();">✕ 刪除</button>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -2212,7 +2228,7 @@ function addDrug() {
   entry.innerHTML = `
     <div class="drug-entry-head">
       <div class="drug-entry-title">💊 藥物 #${id}</div>
-      <button class="btn-del-entry" onclick="document.getElementById('drug-${id}').remove()">✕ 刪除</button>
+      <button class="btn-del-entry" onclick="var el=document.getElementById('drug-${id}');if(el)el.remove();">✕ 刪除</button>
     </div>
     <div class="form-row">
       <div class="form-group">
@@ -2258,6 +2274,7 @@ function getDrugs() {
 ══════════════════════════════════════ */
 function buildSummary() {
   const grid = document.getElementById('summaryGrid');
+  if (!grid) return;
   const contacts = getContacts();
   const drugs = getDrugs();
   const enabledSections = ['vital-bp','vital-temp','vital-pulse','vital-sugar','vital-spo2','vital-weight',
@@ -2267,7 +2284,7 @@ function buildSummary() {
 
   grid.innerHTML = `
     <div class="summary-item"><div class="summary-item-label">機構 / 名稱</div><div class="summary-item-value">${(document.getElementById('cfg-org-name')?.value||'').trim()||'（未填）'}</div></div>
-    <div class="summary-item"><div class="summary-item-label">主語言</div><div class="summary-item-value">${{zh:'中文',en:'English',id:'Bahasa',vi:'Tiếng Việt'}[document.getElementById('cfg-lang').value]||'中文'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">主語言</div><div class="summary-item-value">${{zh:'中文',en:'English',id:'Bahasa',vi:'Tiếng Việt'}[document.getElementById('cfg-lang')?.value]||'中文'}</div></div>
     <div class="summary-item"><div class="summary-item-label">主題色彩</div><div class="summary-item-value" style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${getTheme().pri}"></span>${selectedTheme}</div></div>
     <div class="summary-item"><div class="summary-item-label">字體大小</div><div class="summary-item-value">${getChipVal('cfg-fontsize')||'13'}px</div></div>
     <div class="summary-item"><div class="summary-item-label">啟用欄位</div><div class="summary-item-value">${enabledSections} 個</div></div>
@@ -2296,7 +2313,8 @@ function setWizLang(lang) {
 ══════════════════════════════════════ */
 function generateLog() {
   const btn = document.getElementById('generateBtn');
-  const originalLabel = btn.innerHTML;
+  if (btn.disabled) return; // prevent double-click
+  const isRegen = btn.dataset.generated === '1';
   btn.innerHTML = '⏳ 生成中…';
   btn.disabled = true;
 
@@ -2308,10 +2326,11 @@ function generateLog() {
       document.getElementById('outputSection').style.display = 'block';
       document.getElementById('outputSection').scrollIntoView({behavior:'smooth'});
       btn.innerHTML = '✨ 重新生成';
+      btn.dataset.generated = '1';
       btn.disabled = false;
     } catch(e) {
       btn.disabled = false;
-      btn.innerHTML = originalLabel;
+      btn.innerHTML = btn.dataset.generated === '1' ? '✨ 重新生成' : '✨ 生成客製化日誌';
       alert('生成失敗：' + e.message);
     }
   }, 200);
@@ -2393,7 +2412,8 @@ function printOutput() {
       }
     }
   }
-  const doc = iframe.contentDocument;
+  let doc = null;
+  try { doc = iframe.contentDocument; } catch(e) { doc = null; }
   if (doc && doc.readyState === 'complete') {
     doprint();
   } else {
@@ -2875,7 +2895,7 @@ function buildLogHTML() {
 
   // custom slots
   function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
   }
   const customSlotText = (document.getElementById('cfg-custom-slots')?.value || '').trim();
   let customRows = '';
@@ -3140,7 +3160,7 @@ function logPrint(){
 if(window.location.search.indexOf('print=1')>-1){
   window.addEventListener('load',function(){ setTimeout(logPrint,800); });
 }
-</script>
+<\/script>
 </head>
 <body>
 <div class="action-bar">
@@ -3167,11 +3187,11 @@ if(window.location.search.indexOf('print=1')>-1){
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
       <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('被照顧者','Patient','Pasien','Bệnh nhân')}：</span>
-      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${patientName}">
+      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${patientName.replace(/"/g,'&quot;')}">
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
       <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('看護姓名','Caregiver','Pengasuh','Người CSCK')}：</span>
-      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${caregiverName}">
+      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" value="${caregiverName.replace(/"/g,'&quot;')}">
     </div>
   </div>
 
@@ -3371,12 +3391,46 @@ function applyState(state) {
     document.getElementById('contactList').innerHTML = '';
     contactId = 0;
     state.contacts.forEach(c => {
-      addContact();
-      const id = contactId; // contactId is incremented inside addContact(), capture after
-      document.getElementById(`c${id}-name`).value  = c.name  || '';
-      document.getElementById(`c${id}-role`).value  = c.role  || '';
-      document.getElementById(`c${id}-phone`).value = c.phone || '';
-      document.getElementById(`c${id}-line`).value  = c.line  || '';
+      const id = ++contactId;  // capture before addContact mutates it
+      const list = document.getElementById('contactList');
+      const entry = document.createElement('div');
+      entry.className = 'contact-entry';
+      entry.id = 'contact-'+id;
+      entry.innerHTML = `
+        <div class="contact-entry-head">
+          <div class="contact-entry-title">👤 聯絡人 #${id}</div>
+          <button class="btn-del-entry" onclick="var el=document.getElementById('contact-${id}');if(el)el.remove();">✕ 刪除</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">姓名</label>
+            <input class="form-input" type="text" placeholder="例：林太太" id="c${id}-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">關係 / 身份</label>
+            <input class="form-input" type="text" placeholder="例：女兒" id="c${id}-role">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">電話（手機）</label>
+            <input class="form-input" type="tel" placeholder="例：0912-345-678" id="c${id}-phone">
+          </div>
+          <div class="form-group">
+            <label class="form-label">LINE/其他聯絡方式 <span class="optional">選填</span></label>
+            <input class="form-input" type="text" placeholder="" id="c${id}-line">
+          </div>
+        </div>
+      `;
+      list.appendChild(entry);
+      const nameEl  = document.getElementById(`c${id}-name`);
+      const roleEl  = document.getElementById(`c${id}-role`);
+      const phoneEl = document.getElementById(`c${id}-phone`);
+      const lineEl  = document.getElementById(`c${id}-line`);
+      if (nameEl)  nameEl.value  = c.name  || '';
+      if (roleEl)  roleEl.value  = c.role  || '';
+      if (phoneEl) phoneEl.value = c.phone || '';
+      if (lineEl)  lineEl.value  = c.line  || '';
     });
   }
 
@@ -3385,12 +3439,46 @@ function applyState(state) {
     document.getElementById('drugList').innerHTML = '';
     drugId = 0;
     state.drugs.forEach(d => {
-      addDrug();
-      const id = drugId; // drugId is incremented inside addDrug(), capture after
-      document.getElementById(`d${id}-name`).value = d.name || '';
-      document.getElementById(`d${id}-dose`).value = d.dose || '';
-      document.getElementById(`d${id}-time`).value = d.time || '';
-      document.getElementById(`d${id}-note`).value = d.note || '';
+      const id = ++drugId;  // capture before any mutation
+      const list = document.getElementById('drugList');
+      const entry = document.createElement('div');
+      entry.className = 'drug-entry';
+      entry.id = 'drug-'+id;
+      entry.innerHTML = `
+        <div class="drug-entry-head">
+          <div class="drug-entry-title">💊 藥物 #${id}</div>
+          <button class="btn-del-entry" onclick="var el=document.getElementById('drug-${id}');if(el)el.remove();">✕ 刪除</button>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">藥物名稱</label>
+            <input class="form-input" type="text" placeholder="例：Norvasc / 脈優錠" id="d${id}-name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">劑量</label>
+            <input class="form-input" type="text" placeholder="例：5mg / 半顆" id="d${id}-dose">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">服用時間</label>
+            <input class="form-input" type="text" placeholder="例：早餐後、08:00" id="d${id}-time">
+          </div>
+          <div class="form-group">
+            <label class="form-label">備注 <span class="optional">選填</span></label>
+            <input class="form-input" type="text" placeholder="例：飯後服用" id="d${id}-note">
+          </div>
+        </div>
+      `;
+      list.appendChild(entry);
+      const nameEl = document.getElementById(`d${id}-name`);
+      const doseEl = document.getElementById(`d${id}-dose`);
+      const timeEl = document.getElementById(`d${id}-time`);
+      const noteEl = document.getElementById(`d${id}-note`);
+      if (nameEl) nameEl.value = d.name || '';
+      if (doseEl) doseEl.value = d.dose || '';
+      if (timeEl) timeEl.value = d.time || '';
+      if (noteEl) noteEl.value = d.note || '';
     });
   }
 }
@@ -3420,10 +3508,12 @@ function updateSaveStatus(saved) {
 function doSave() {
   try {
     const state = collectState();
-    const json  = JSON.stringify(state);
-    if (json === lastSaveHash) return; // no change
-    localStorage.setItem(SAVE_KEY, json);
-    lastSaveHash = json;
+    // Compare without timestamp field to avoid always-dirty state
+    const { ts: _ts, ...stateForHash } = state;
+    const hash = JSON.stringify(stateForHash);
+    if (hash === lastSaveHash) return; // no change
+    lastSaveHash = hash;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     showToast('✅ 已儲存（永久保留）');
     updateSaveStatus(true);
   } catch(e) {
@@ -3443,8 +3533,12 @@ function restoreSave() {
     if (!raw) return;
     const state = JSON.parse(raw);
     applyState(state);
-    if (state.step) gotoStep(state.step);
+    if (state.step && state.step >= 1 && state.step <= TOTAL_STEPS) gotoStep(state.step);
     document.getElementById('restore-banner').style.display = 'none';
+    // Initialize hash so no immediate redundant save fires
+    const { ts: _ts, ...stateForHash } = state;
+    lastSaveHash = JSON.stringify(stateForHash);
+    updateSaveStatus(true);
     showToast('✅ 設定已還原（永久儲存）');
   } catch(e) {
     alert('還原失敗：' + e.message);
@@ -3453,10 +3547,20 @@ function restoreSave() {
 
 function dismissRestore() {
   document.getElementById('restore-banner').style.display = 'none';
-  localStorage.removeItem(SAVE_KEY);
+  // Mark as dismissed without deleting — user can still see data if they refresh
+  // If they explicitly want to clear, they'd need a separate reset button
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) {
+      const state = JSON.parse(raw);
+      state._dismissed = true;
+      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    }
+  } catch(e) {}
 }
 
-function toggleDetail(panelId, btn) {
+function toggleDetail(panelId, btn, evt) {
+  if (evt) { evt.stopPropagation(); evt.preventDefault(); }
   const panel = document.getElementById(panelId);
   if (!panel) return;
   const isOpen = panel.classList.toggle('open');
@@ -3519,19 +3623,21 @@ document.addEventListener('DOMContentLoaded', () => {
   addDrug();
   addDrug();
 
-  // Time input: prevent toggle-row collapse
-  document.querySelectorAll('.time-edit-input').forEach(inp => {
-    inp.addEventListener('mousedown', e => e.stopPropagation());
-    inp.addEventListener('click', e => e.stopPropagation());
-  });
+  // Time input: prevent toggle-row collapse — use delegation to cover dynamic elements
+  document.body.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('time-edit-input')) e.stopPropagation();
+  }, true);
+  document.body.addEventListener('click', e => {
+    if (e.target.classList.contains('time-edit-input')) e.stopPropagation();
+  }, true);
 
   // Check for saved state
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     if (raw) {
       const state = JSON.parse(raw);
-      // Only show restore if saved less than 24h ago
-      if (state.ts && (Date.now() - state.ts) < 86400000) {
+      // Only show restore if saved less than 24h ago and not dismissed
+      if (state.ts && (Date.now() - state.ts) < 86400000 && !state._dismissed) {
         document.getElementById('restore-banner').style.display = 'flex';
       } else {
         localStorage.removeItem(SAVE_KEY);
