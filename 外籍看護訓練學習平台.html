@@ -1327,6 +1327,65 @@ body{
   *{transition:none!important;animation:none!important}
 }
 
+/* ── Lesson pill correct/wrong states ── */
+.lesson-pill.correct .lesson-pill-status{
+  color:var(--green-600);font-weight:900;
+}
+.lesson-pill.correct{
+  border-color:var(--green-200)!important;
+  background:linear-gradient(135deg,var(--green-50),#fff)!important;
+}
+.lesson-pill.wrong .lesson-pill-status{
+  color:var(--red-500);font-weight:900;
+}
+.lesson-pill.wrong{
+  border-color:var(--red-100)!important;
+  background:linear-gradient(135deg,var(--red-50),#fff)!important;
+}
+
+/* ── Course card with completion indicator ── */
+.course-card.answered{
+  border-color:rgba(29,158,117,.22);
+}
+.course-card.answered-correct{
+  border-left:4px solid var(--green-400)!important;
+}
+.course-card.answered-wrong{
+  border-left:4px solid var(--red-400)!important;
+}
+
+/* ── Unit stats badge ── */
+.unit-stats-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;padding:3px 9px;border-radius:20px;
+  font-weight:700;margin-top:6px;
+}
+.unit-stats-badge.complete{
+  background:var(--green-100);color:var(--green-800);
+  border:1px solid var(--green-200);
+}
+.unit-stats-badge.partial{
+  background:var(--amber-50);color:var(--amber-700);
+  border:1px solid var(--amber-100);
+}
+
+/* ── Improved demo-split on mobile ── */
+@media(max-width:599px){
+  .demo-split{gap:10px}
+}
+
+/* ── Smooth section body animation ── */
+.sec-body{
+  animation:fadeSlide .2s cubic-bezier(.25,.46,.45,.94);
+}
+
+/* ── Lesson quiz answered state highlight ── */
+.lesson-choice.correct{
+  box-shadow:0 0 0 2px var(--green-300)!important;
+}
+.lesson-choice.wrong.selected{
+  box-shadow:0 0 0 2px var(--red-300)!important;
+}
 </style>
 </head>
 <body>
@@ -1425,8 +1484,8 @@ body{
     </div>
     <div class="lp-stat">
       <div class="lp-stat-icon-wrap"><i class="ti ti-help lp-stat-icon"></i></div>
-      <div class="lp-stat-val">1</div>
-      <div class="lp-stat-lbl" data-i18n="statQuiz">測驗</div>
+      <div class="lp-stat-val" data-quiz>0</div>
+      <div class="lp-stat-lbl" data-i18n="statQuiz">已答題</div>
     </div>
     <div class="lp-stat">
       <div class="lp-stat-icon-wrap"><i class="ti ti-certificate lp-stat-icon"></i></div>
@@ -1735,7 +1794,6 @@ const SECTION_META = [
   {icon:'ti-bulb',        bg:'#F1EFE8',ic:'#444441', secBg:'#F1EFE8'}
 ];
 
-// Inline SVG illustrations per section
 const SEC_ILLOS = {
   0: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
     <defs>
@@ -1770,6 +1828,28 @@ const SEC_ILLOS = {
     <rect x="243" y="58" width="50" height="3" rx="1.5" fill="#085041" opacity=".2"/>
     <text x="270" y="70" text-anchor="middle" font-size="10" fill="#085041" font-weight="700" opacity=".8">長期照護</text>
   </svg>`,
+  1: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
+    <defs>
+      <linearGradient id="g1a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#E6F1FB"/>
+        <stop offset="100%" stop-color="#D6EAF8"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="100" fill="url(#g1a)" rx="12"/>
+    <circle cx="60" cy="50" r="28" fill="rgba(12,68,124,.08)"/>
+    <circle cx="60" cy="38" r="13" fill="#1565C0" opacity=".75"/>
+    <path d="M42 72 Q60 58 78 72 L80 86 H40 Z" fill="#1565C0" opacity=".6"/>
+    <path d="M55 34 L65 34 L65 42 L55 42 Z" fill="white" opacity=".8" rx="2"/>
+    <path d="M59 38 L61 38 L61 30 L59 30 Z" fill="white" opacity=".8"/>
+    <path d="M56 37 L64 37" stroke="white" stroke-width="2" opacity=".8"/>
+    <rect x="100" y="20" width="190" height="60" rx="12" fill="white" opacity=".7"/>
+    <text x="116" y="44" font-size="11" fill="#042C53" font-weight="800" opacity=".9">💬</text>
+    <rect x="130" y="38" width="110" height="3" rx="1.5" fill="#1565C0" opacity=".35"/>
+    <rect x="130" y="46" width="140" height="2.5" rx="1.25" fill="#042C53" opacity=".18"/>
+    <rect x="130" y="53" width="120" height="2.5" rx="1.25" fill="#042C53" opacity=".18"/>
+    <rect x="130" y="60" width="90" height="2.5" rx="1.25" fill="#042C53" opacity=".18"/>
+    <text x="160" y="88" text-anchor="middle" font-size="10" fill="#0C447C" opacity=".7" font-weight="600">為什麼這堂課很重要</text>
+  </svg>`,
   2: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
     <defs>
       <linearGradient id="g2a" x1="0" y1="0" x2="1" y2="1">
@@ -1781,6 +1861,44 @@ const SEC_ILLOS = {
     <line x1="28" y1="50" x2="292" y2="50" stroke="#6C63FF" stroke-width="2" stroke-dasharray="4 3" opacity=".25"/>
     <circle cx="28" cy="50" r="18" fill="none" stroke="rgba(108,99,255,.3)" stroke-width="1.5"/><circle cx="28" cy="50" r="16" fill="#6C63FF"/><text x="28" y="54" text-anchor="middle" font-size="12" font-weight="800" fill="white">1</text><circle cx="66" cy="50" r="18" fill="none" stroke="rgba(108,99,255,.3)" stroke-width="1.5"/><circle cx="66" cy="50" r="16" fill="#6C63FF"/><text x="66" y="54" text-anchor="middle" font-size="12" font-weight="800" fill="white">2</text><circle cx="104" cy="50" r="18" fill="none" stroke="rgba(108,99,255,.3)" stroke-width="1.5"/><circle cx="104" cy="50" r="16" fill="#6C63FF"/><text x="104" y="54" text-anchor="middle" font-size="12" font-weight="800" fill="white">3</text><circle cx="142" cy="50" r="13" fill="rgba(108,99,255,.12)"/><text x="142" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#6C63FF">4</text><circle cx="180" cy="50" r="13" fill="rgba(108,99,255,.12)"/><text x="180" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#6C63FF">5</text><circle cx="218" cy="50" r="13" fill="rgba(108,99,255,.12)"/><text x="218" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#6C63FF">6</text><circle cx="256" cy="50" r="13" fill="rgba(108,99,255,.12)"/><text x="256" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#6C63FF">7</text><circle cx="294" cy="50" r="13" fill="rgba(108,99,255,.12)"/><text x="294" y="54" text-anchor="middle" font-size="11" font-weight="800" fill="#6C63FF">8</text>
     <text x="160" y="90" text-anchor="middle" font-size="10" fill="#6C63FF" opacity=".7" font-weight="600">8 個必要步驟</text>
+  </svg>`,
+  3: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
+    <defs>
+      <linearGradient id="g3a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#FCEBEB"/>
+        <stop offset="100%" stop-color="#FFF5F5"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="100" fill="url(#g3a)" rx="12"/>
+    <circle cx="60" cy="50" r="30" fill="rgba(192,57,43,.07)"/>
+    <text x="50" y="57" font-size="32" fill="#C0392B" opacity=".8">✕</text>
+    <rect x="105" y="22" width="192" height="56" rx="10" fill="white" opacity=".75"/>
+    <rect x="116" y="34" width="8" height="8" rx="2" fill="#C0392B" opacity=".7"/>
+    <rect x="130" y="36" width="130" height="3" rx="1.5" fill="#791F1F" opacity=".22"/>
+    <rect x="116" y="50" width="8" height="8" rx="2" fill="#C0392B" opacity=".7"/>
+    <rect x="130" y="52" width="150" height="3" rx="1.5" fill="#791F1F" opacity=".22"/>
+    <rect x="116" y="64" width="8" height="8" rx="2" fill="#C0392B" opacity=".7"/>
+    <rect x="130" y="66" width="110" height="3" rx="1.5" fill="#791F1F" opacity=".22"/>
+    <text x="160" y="92" text-anchor="middle" font-size="10" fill="#791F1F" opacity=".7" font-weight="600">避免這些常見錯誤</text>
+  </svg>`,
+  4: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
+    <defs>
+      <linearGradient id="g4a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#E6F5EF"/>
+        <stop offset="100%" stop-color="#D4F3E8"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="100" fill="url(#g4a)" rx="12"/>
+    <circle cx="60" cy="50" r="30" fill="rgba(29,158,117,.08)"/>
+    <text x="48" y="57" font-size="30" fill="#1D9E75" opacity=".85">✓</text>
+    <rect x="105" y="22" width="192" height="56" rx="10" fill="white" opacity=".75"/>
+    <rect x="116" y="34" width="8" height="8" rx="2" fill="#1D9E75" opacity=".8"/>
+    <rect x="130" y="36" width="130" height="3" rx="1.5" fill="#085041" opacity=".22"/>
+    <rect x="116" y="50" width="8" height="8" rx="2" fill="#1D9E75" opacity=".8"/>
+    <rect x="130" y="52" width="150" height="3" rx="1.5" fill="#085041" opacity=".22"/>
+    <rect x="116" y="64" width="8" height="8" rx="2" fill="#1D9E75" opacity=".8"/>
+    <rect x="130" y="66" width="110" height="3" rx="1.5" fill="#085041" opacity=".22"/>
+    <text x="160" y="92" text-anchor="middle" font-size="10" fill="#085041" opacity=".7" font-weight="600">正確照護做法</text>
   </svg>`,
   5: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
     <defs>
@@ -1799,6 +1917,24 @@ const SEC_ILLOS = {
     <polyline points="15,82 30,82 38,68 46,96 54,82 68,82" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity=".6"/>
     <polyline points="252,82 267,82 275,68 283,96 291,82 305,82" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" opacity=".6"/>
     <text x="160" y="94" text-anchor="middle" font-size="10" fill="#92400E" opacity=".7" font-weight="600">立即注意這些警示徵兆</text>
+  </svg>`,
+  6: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
+    <defs>
+      <linearGradient id="g6a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#EFF6FF"/>
+        <stop offset="100%" stop-color="#DBEAFE"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="100" fill="url(#g6a)" rx="12"/>
+    <circle cx="60" cy="50" r="26" fill="rgba(12,68,124,.08)"/>
+    <text x="46" y="60" font-size="28" opacity=".75">📞</text>
+    <rect x="105" y="18" width="195" height="64" rx="10" fill="white" opacity=".7"/>
+    <rect x="116" y="30" width="90" height="4" rx="2" fill="#1565C0" opacity=".45"/>
+    <rect x="116" y="40" width="168" height="3" rx="1.5" fill="#042C53" opacity=".2"/>
+    <rect x="116" y="48" width="150" height="3" rx="1.5" fill="#042C53" opacity=".2"/>
+    <rect x="116" y="56" width="140" height="3" rx="1.5" fill="#042C53" opacity=".2"/>
+    <rect x="116" y="64" width="100" height="3" rx="1.5" fill="#042C53" opacity=".2"/>
+    <text x="160" y="92" text-anchor="middle" font-size="10" fill="#0C447C" opacity=".75" font-weight="600">何時聯絡家屬</text>
   </svg>`,
   7: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
     <defs>
@@ -1825,6 +1961,24 @@ const SEC_ILLOS = {
     <line x1="25" y1="60" x2="75" y2="60" stroke="#EF4444" stroke-width="2" stroke-linecap="round" opacity=".3"/>
     <line x1="40" y1="68" x2="75" y2="68" stroke="#EF4444" stroke-width="1.5" stroke-linecap="round" opacity=".2"/>
     <text x="160" y="22" text-anchor="middle" font-size="10" fill="#991B1B" opacity=".8" font-weight="700">緊急就醫指引</text>
+  </svg>`,
+  8: `<svg viewBox="0 0 320 100" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100px;display:block">
+    <defs>
+      <linearGradient id="g8a" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#f0fdf4"/>
+        <stop offset="100%" stop-color="#E6F5EF"/>
+      </linearGradient>
+    </defs>
+    <rect width="320" height="100" fill="url(#g8a)" rx="12"/>
+    <circle cx="55" cy="50" r="25" fill="rgba(29,158,117,.1)"/>
+    <text x="42" y="60" font-size="28" opacity=".8">💡</text>
+    <rect x="100" y="18" width="200" height="64" rx="12" fill="white" opacity=".75"/>
+    <rect x="112" y="30" width="80" height="4" rx="2" fill="#1D9E75" opacity=".5"/>
+    <rect x="112" y="40" width="175" height="3" rx="1.5" fill="#085041" opacity=".2"/>
+    <rect x="112" y="48" width="155" height="3" rx="1.5" fill="#085041" opacity=".2"/>
+    <rect x="112" y="56" width="165" height="3" rx="1.5" fill="#085041" opacity=".2"/>
+    <rect x="112" y="64" width="120" height="3" rx="1.5" fill="#085041" opacity=".2"/>
+    <text x="160" y="92" text-anchor="middle" font-size="10" fill="#085041" opacity=".7" font-weight="600">帶走這4個重點</text>
   </svg>`
 };
 
@@ -1919,9 +2073,21 @@ function answerQuiz(chosen){
   },80);
 }
 
+function updateHeroProgress(){
+  const s = getQuizProgressStats();
+  const fill = document.querySelector('.lp-prog-fill');
+  const pct = document.querySelector('.lp-prog-pct');
+  if(fill) fill.style.width = Math.max(1,s.completeRate)+'%';
+  if(pct) pct.innerHTML = s.completeRate+'<span>%</span>';
+  // Also update stat bar quiz count
+  const quizStat = document.querySelector('.lp-stat-val[data-quiz]');
+  if(quizStat) quizStat.textContent = s.answered;
+}
+
 function answerLessonQuiz(lessonNo, chosen){
   lessonQuizState[lessonNo] = chosen;
   renderCourseLibrary();
+  updateHeroProgress();
   setTimeout(()=>{
     const el = document.getElementById(`lesson-card-${lessonNo}`);
     if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
@@ -1956,7 +2122,9 @@ function selectCourseLesson(lessonNo){
 }
 
 function moveCourseLesson(delta){
-  const next = Math.min(100,Math.max(1,Number(selectedLessonNo) + delta));
+  const units = getCourseUnits();
+  const totalLessons = units.reduce((sum,u)=>sum+u.lessons.length,0);
+  const next = Math.min(totalLessons,Math.max(1,Number(selectedLessonNo) + delta));
   selectCourseLesson(String(next).padStart(2,'0'));
 }
 
@@ -1980,7 +2148,7 @@ function renderBody(){
         inner = illo + `<div class="why-block">${c.why.desc}</div>`;
 
       } else if(i===1){
-        inner = `<div class="why-block">${c.why.desc}
+        inner = `<div class="why-block">
           <div class="why-highlight">
             <i class="ti ti-quote why-highlight-icon"></i>
             <div>${c.why.highlight}</div>
@@ -2221,10 +2389,10 @@ const COURSE_LIBRARY = [
       points:['Prepare non-slip mats, water temperature, towels, and clean clothes before bathing.','Clean from cleaner areas to less clean areas, and keep the person warm.','Watch for redness, wounds, bruises, pressure marks, or pain responses.']
     },
     vi:{
-      title:'Ve sinh than the va tam rua',
-      goal:'Ho tro nguoi cao tuoi ve sinh, tam rua va thay quan ao an toan, ton trong rieng tu.',
-      tags:['Ve sinh','Rieng tu','Da'],
-      points:['Chuan bi tham chong truot, nhiet do nuoc, khan va quan ao sach truoc khi tam.','Lau tu vung sach den vung ban hon, dong thoi giu am co the.','Quan sat da co do, tray xuoc, bam tim, vet de hoac phan ung dau khong.']
+      title:'Vệ sinh thân thể và tắm rửa',
+      goal:'Hỗ trợ người cao tuổi vệ sinh, tắm rửa và thay quần áo an toàn, tôn trọng riêng tư.',
+      tags:['Vệ sinh','Riêng tư','Da'],
+      points:['Chuẩn bị thảm chống trượt, nhiệt độ nước, khăn và quần áo sạch trước khi tắm.','Lau từ vùng sạch đến vùng bẩn hơn, đồng thời giữ ấm cơ thể.','Quan sát da có đỏ, trầy xước, bầm tím, vết đè hoặc phản ứng đau không.']
     }
   },
   {
@@ -2249,10 +2417,10 @@ const COURSE_LIBRARY = [
       points:['Before meals, help the person sit upright with the head slightly forward.','Offer small bites slowly and wait for swallowing before the next bite.','If repeated coughing, wet voice, or fast breathing appears, stop feeding and report.']
     },
     vi:{
-      title:'Chuan bi bua an va an toan nuot',
-      goal:'Hieu do mem cua thuc an, tu the an va cach xu ly khi co dau hieu sac.',
-      tags:['Bua an','Dut an','Nuot'],
-      points:['Truoc khi an, giup nguoi cao tuoi ngoi thang, dau hoi cui ve truoc.','Dut tung muong nho, cho nuot xong roi moi dut tiep.','Neu ho lien tuc, giong uot hoac tho nhanh, ngung cho an va bao ngay.']
+      title:'Chuẩn bị bữa ăn và an toàn nuốt',
+      goal:'Hiểu độ mềm của thức ăn, tư thế ăn và cách xử lý khi có dấu hiệu sặc.',
+      tags:['Bữa ăn','Đút ăn','Nuốt'],
+      points:['Trước khi ăn, giúp người cao tuổi ngồi thẳng, đầu hơi cúi về trước.','Đút từng muỗng nhỏ, chờ nuốt xong rồi mới đút tiếp.','Nếu ho liên tục, giọng ướt hoặc thở nhanh, ngừng cho ăn và báo ngay.']
     }
   },
   {
@@ -2277,10 +2445,10 @@ const COURSE_LIBRARY = [
       points:['Before transfer, lock wheelchair brakes, check dry floor, and use non-slip shoes.','Let the person sit at the bed edge first and stand only after dizziness settles.','After a fall, do not pull the person up immediately; check consciousness, pain, bleeding, and possible fracture.']
     },
     vi:{
-      title:'Di chuyen, di lai va phong te nga',
-      goal:'Hoc nguyen tac an toan khi chuyen tu giuong sang ghe, dung day va di lai.',
-      tags:['Di chuyen','Te nga','An toan'],
-      points:['Truoc khi di chuyen, khoa xe lan, kiem tra san kho va giay chong truot.','Khi dung day, cho nguoi cao tuoi ngoi mep giuong den khi het chong mat.','Sau khi te, khong keo dung ngay; kiem tra tinh tao, dau, chay mau va kha nang gay xuong.']
+      title:'Di chuyển, đi lại và phòng té ngã',
+      goal:'Học nguyên tắc an toàn khi chuyển từ giường sang ghế, đứng dậy và đi lại.',
+      tags:['Di chuyển','Té ngã','An toàn'],
+      points:['Trước khi di chuyển, khóa xe lăn, kiểm tra sàn khô và giày chống trượt.','Khi đứng dậy, cho người cao tuổi ngồi mép giường đến khi hết chóng mặt.','Sau khi té, không kéo đứng ngay; kiểm tra tỉnh táo, đau, chảy máu và khả năng gãy xương.']
     }
   },
   {
@@ -2305,10 +2473,10 @@ const COURSE_LIBRARY = [
       points:['Say one thing at a time, slow down, and use gestures or pictures.','When questions repeat, avoid arguing; respond to feelings first, then redirect.','If agitation or refusal appears, pause, reduce stimulation, and try another approach.']
     },
     vi:{
-      title:'Giao tiep voi sa sut tri tue va tran an',
-      goal:'Luyen giao tiep ngan gon, on dinh va ton trong voi nguoi cao tuoi sa sut tri tue.',
-      tags:['Sa sut tri tue','Giao tiep','Cam xuc'],
-      points:['Moi lan chi noi mot viec, noi cham hon, ket hop cu chi hoac hinh anh.','Khi hoi lap lai, khong tranh cai dung sai; dap lai cam xuc truoc roi huong dan.','Neu kich dong hoac tu choi cham soc, tam dung, giam kich thich roi thu cach khac.']
+      title:'Giao tiếp với người sa sút trí tuệ và trấn an',
+      goal:'Luyện giao tiếp ngắn gọn, ổn định và tôn trọng với người cao tuổi sa sút trí tuệ.',
+      tags:['Sa sút trí tuệ','Giao tiếp','Cảm xúc'],
+      points:['Mỗi lần chỉ nói một việc, nói chậm hơn, kết hợp cử chỉ hoặc hình ảnh.','Khi hỏi lặp lại, không tranh cãi đúng sai; đáp lại cảm xúc trước rồi hướng dẫn.','Nếu kích động hoặc từ chối chăm sóc, tạm dừng, giảm kích thích rồi thử cách khác.']
     }
   },
   {
@@ -2333,10 +2501,10 @@ const COURSE_LIBRARY = [
       points:['Remind according to family or medical instructions; do not stop or add medicine by yourself.','Record time taken, missed doses, dizziness, drowsiness, rash, or other reactions.','If the wrong medicine, missed dose, or double dose happens, notify family or medical staff immediately.']
     },
     vi:{
-      title:'Nhac thuoc va quan sat bat thuong',
-      goal:'Hieu vai tro cua nguoi cham soc la nhac va ghi nhan, khong tu y thay doi thuoc.',
-      tags:['Thuoc','Ghi chep','Bao cao'],
-      points:['Nhac uong thuoc theo huong dan gia dinh hoac bac si; khong tu ngung hay them thuoc.','Ghi gio uong thuoc, quen thuoc, chong mat, buon ngu, phat ban hoac phan ung khac.','Neu uong sai, quen hoac uong lap thuoc, bao ngay cho gia dinh hoac nhan vien y te.']
+      title:'Nhắc thuốc và quan sát bất thường',
+      goal:'Hiểu vai trò của người chăm sóc là nhắc và ghi nhận, không tự ý thay đổi thuốc.',
+      tags:['Thuốc','Ghi chép','Báo cáo'],
+      points:['Nhắc uống thuốc theo hướng dẫn gia đình hoặc bác sĩ; không tự ngừng hay thêm thuốc.','Ghi giờ uống thuốc, quên thuốc, chóng mặt, buồn ngủ, phát ban hoặc phản ứng khác.','Nếu uống sai, quên hoặc uống lặp thuốc, báo ngay cho gia đình hoặc nhân viên y tế.']
     }
   },
   {
@@ -2361,10 +2529,10 @@ const COURSE_LIBRARY = [
       points:['Record temperature, food, water, bowel movement, sleep, activity, and mood daily.','Use factual reporting, such as "ate half a bowl at lunch" instead of "ate very little".','During handover, explain completed tasks, unfinished tasks, abnormal findings, and follow-up reminders.']
     },
     vi:{
-      title:'Ghi chep hang ngay va ban giao',
-      goal:'Tao thoi quen ghi chep ro, ngan va de theo doi de gia dinh nam tinh hinh nhanh.',
-      tags:['Ghi chep','Ban giao','Giao tiep'],
-      points:['Ghi nhiet do, an, uong, dai tien, ngu, hoat dong va cam xuc moi ngay.','Bao cao bang su that, vi du "an nua bat trua" ro hon "an rat it".','Khi ban giao, noi viec da lam, chua lam, bat thuong va dieu can theo doi.']
+      title:'Ghi chép hàng ngày và bàn giao',
+      goal:'Tạo thói quen ghi chép rõ, ngắn và dễ theo dõi để gia đình nắm tình hình nhanh.',
+      tags:['Ghi chép','Bàn giao','Giao tiếp'],
+      points:['Ghi nhiệt độ, ăn, uống, đại tiện, ngủ, hoạt động và cảm xúc mỗi ngày.','Báo cáo bằng sự thật, ví dụ "ăn nửa bát trưa" rõ hơn "ăn rất ít".','Khi bàn giao, nói việc đã làm, chưa làm, bất thường và điều cần theo dõi.']
     }
   }
 ];
@@ -2617,15 +2785,15 @@ const COURSE_LANG_PACKS = {
     distractors:['Rely only on personal experience without checking.','Skip explanation and safety checks to save time.','Wait until the family asks; no need to record proactively.']
   },
   vi:{
-    lessonCount:'10 bai',progressTitle:'Thong ke cau hoi',progressSub:'Sau khi chon A/B/C/D, tien do va ty le dung se tu dong cap nhat.',
-    completed:'Da lam',correct:'Dung',accuracy:'Ty le dung',menuTitle:'Menu khoa hoc',menuNote:'Chuyen den don vi',answerOk:'Dung roi!',answerNo:'Chua dung.',
-    showAll:'Xem tat ca',showUnit:'Chi xem don vi nay',currentUnit:'Dang hien thi',openMaterial:'Mo noi dung',prevLesson:'Bai truoc',nextLesson:'Bai tiep',lessonPicker:'Chon bai',
-    correctAnswer:'Dap an dung',wrongTip:'Goi y',textPrefix:'Bai hoc nay tap trung vao',reviewPrefix:'Bai hoc nay tong ket don vi',
-    mustKnow:'Hoc vien can hieu',practice:'Lam mau',mistake:'Vi du sai',
-    quizQuestion:'Khi thuc hien bai nay, viec phu hop nhat can lam truoc la gi?',
-    defaultAnswer:'Kiem tra ke hoach cham soc, an toan moi truong va tinh trang nguoi cao tuoi truoc khi bat dau',
-    tipPrefix:'Doc lai bai hoc va phan lam mau. Tim ba diem chinh: kiem tra an toan, giai thich ton trong, ghi chep va bao cao.',
-    distractors:['Lam theo kinh nghiem rieng ma khong xac nhan.','De tiet kiem thoi gian, bo qua giai thich va kiem tra an toan.','Cho gia dinh hoi roi moi bao cao, khong can ghi chep chu dong.']
+    lessonCount:'10 bài',progressTitle:'Thống kê câu hỏi',progressSub:'Sau khi chọn A/B/C/D, tiến độ và tỷ lệ đúng sẽ tự động cập nhật.',
+    completed:'Đã làm',correct:'Đúng',accuracy:'Tỷ lệ đúng',menuTitle:'Menu khóa học',menuNote:'Chuyển đến đơn vị',answerOk:'Đúng rồi!',answerNo:'Chưa đúng.',
+    showAll:'Xem tất cả',showUnit:'Chỉ xem đơn vị này',currentUnit:'Đang hiển thị',openMaterial:'Mở nội dung',prevLesson:'Bài trước',nextLesson:'Bài tiếp',lessonPicker:'Chọn bài',
+    correctAnswer:'Đáp án đúng',wrongTip:'Gợi ý',textPrefix:'Bài học này tập trung vào',reviewPrefix:'Bài học này tổng kết đơn vị',
+    mustKnow:'Học viên cần hiểu',practice:'Làm mẫu',mistake:'Ví dụ sai',
+    quizQuestion:'Khi thực hiện bài này, việc phù hợp nhất cần làm trước là gì?',
+    defaultAnswer:'Kiểm tra kế hoạch chăm sóc, an toàn môi trường và tình trạng người cao tuổi trước khi bắt đầu',
+    tipPrefix:'Đọc lại bài học và phần làm mẫu. Tìm ba điểm chính: kiểm tra an toàn, giải thích tôn trọng, ghi chép và báo cáo.',
+    distractors:['Làm theo kinh nghiệm riêng mà không xác nhận.','Để tiết kiệm thời gian, bỏ qua giải thích và kiểm tra an toàn.','Chờ gia đình hỏi rồi mới báo cáo, không cần ghi chép chủ động.']
   }
 };
 
@@ -2998,7 +3166,13 @@ function renderCourseLibrary(){
   const renderLessonCard = (unit,title,idx,forceOpen=false)=>{
     const lessonNo = String((unit.no - 1) * 10 + idx + 1).padStart(2,'0');
     const material = buildLessonMaterial(unit,title,idx,lessonNo);
-    return `<article class="course-card compact" id="lesson-card-${lessonNo}">
+    const answered = Number.isInteger(lessonQuizState[lessonNo]);
+    let cardExtra = '';
+    if(answered){
+      const quiz = normalizeQuiz(material.quiz,unit,title,idx);
+      cardExtra = lessonQuizState[lessonNo] === quiz.correct ? ' answered-correct' : ' answered-wrong';
+    }
+    return `<article class="course-card compact${cardExtra}" id="lesson-card-${lessonNo}">
         <div class="course-card-head">
           <div class="course-num" style="background:${unit.color}">${lessonNo}</div>
           <div>
@@ -3044,9 +3218,18 @@ function renderCourseLibrary(){
     const lessonPills = selectedUnit.lessons.map((title,idx)=>{
       const lessonNo = String((selectedUnit.no - 1) * 10 + idx + 1).padStart(2,'0');
       const answered = Number.isInteger(lessonQuizState[lessonNo]);
-      return `<button type="button" class="lesson-pill${lessonNo===selectedLessonNo?' active':''}" onclick="selectCourseLesson('${lessonNo}')">
+      let statusIcon = '·';
+      let pillExtra = '';
+      if(answered){
+        const material = buildLessonMaterial(selectedUnit,title,idx,lessonNo);
+        const quiz = normalizeQuiz(material.quiz,selectedUnit,title,idx);
+        const isCorrect = lessonQuizState[lessonNo] === quiz.correct;
+        statusIcon = isCorrect ? '✓' : '✗';
+        pillExtra = isCorrect ? ' correct' : ' wrong';
+      }
+      return `<button type="button" class="lesson-pill${lessonNo===selectedLessonNo?' active':''}${pillExtra}" onclick="selectCourseLesson('${lessonNo}')">
         <span class="lesson-pill-no">${lessonNo}</span>
-        <span class="lesson-pill-status">${answered?'✓':'•'}</span>
+        <span class="lesson-pill-status">${statusIcon}</span>
       </button>`;
     }).join('');
     courseContent = `<section class="course-unit" id="course-unit-${selectedUnit.no}">
@@ -3066,7 +3249,7 @@ function renderCourseLibrary(){
           <div class="lesson-switcher-grid">${lessonPills}</div>
           <div class="lesson-nav">
             <button type="button" class="lesson-nav-btn" onclick="moveCourseLesson(-1)" ${Number(selectedLessonNo)<=1?'disabled':''}>${pack.prevLesson}</button>
-            <button type="button" class="lesson-nav-btn" onclick="moveCourseLesson(1)" ${Number(selectedLessonNo)>=100?'disabled':''}>${pack.nextLesson}</button>
+            <button type="button" class="lesson-nav-btn" onclick="moveCourseLesson(1)" ${Number(selectedLessonNo)>=getCourseUnits().reduce((s,u)=>s+u.lessons.length,0)?'disabled':''}>${pack.nextLesson}</button>
           </div>
         </aside>
         <main class="lesson-focus">${renderLessonCard(selectedUnit,selectedTitle,selectedIdx,true)}</main>
@@ -3112,6 +3295,7 @@ function renderCourseLibrary(){
 renderSecNav();
 renderBody();
 renderCourseLibrary();
+updateHeroProgress();
 </script>
 </body>
 </html>
