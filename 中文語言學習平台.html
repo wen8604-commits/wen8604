@@ -1127,13 +1127,86 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 .sidebar-vol-header .sidebar-vol-dot { background: var(--vol-c, var(--ink-3)); }
 .sidebar-vol-header .sidebar-vol-label { color: var(--vol-c, var(--ink-3)); }
 
+/* ── HOME VOL GRID ── */
+.home-hero-bar {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 55%, #2563EB 100%);
+  padding: 18px 20px 16px;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  border-radius: 0 0 14px 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(30,58,138,.2);
+}
+.home-hero-icon { font-size: 30px; flex-shrink: 0; }
+.home-hero-text { flex: 1; min-width: 160px; }
+.home-hero-title { font-size: 15px; font-weight: 900; color: #fff; letter-spacing: .02em; }
+.home-hero-sub { font-size: 11px; color: rgba(255,255,255,.7); margin-top: 2px; }
+.home-hero-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.home-vol-label {
+  font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ink-3); padding: 2px 2px 10px;
+}
+.vol-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 9px;
+  padding-bottom: 20px;
+}
+.vol-pick-card {
+  background: #fff; border-radius: 11px;
+  border: 1.5px solid var(--border);
+  padding: 12px 12px 10px;
+  transition: box-shadow .15s, border-color .15s;
+}
+.vol-pick-card:hover { box-shadow: 0 3px 14px rgba(0,0,0,.09); border-color: #C7D7FF; }
+.vol-pick-header { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; }
+.vol-pick-badge {
+  width: 25px; height: 25px; border-radius: 7px;
+  font-size: 10px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; color: #fff; flex-shrink: 0;
+}
+.vol-pick-name { font-size: 12px; font-weight: 700; color: var(--ink); line-height: 1.3; flex: 1; }
+.vol-pick-count { font-size: 10px; color: var(--ink-3); font-weight: 500; flex-shrink: 0; }
+.vol-pick-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.vol-pick-chip {
+  padding: 2px 8px; border-radius: 20px;
+  font-size: 10px; font-weight: 600; cursor: pointer;
+  border: 1.5px solid currentColor;
+  transition: opacity .12s;
+  white-space: nowrap; line-height: 1.5;
+}
+.vol-pick-chip:hover { opacity: .75; }
+
+/* Global search results */
+.global-search-bar {
+  background: var(--primary-light); border: 1.5px solid var(--primary-mid);
+  border-radius: 10px; padding: 9px 14px;
+  font-size: 12px; color: var(--ink-3); margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.global-search-bar strong { color: var(--primary); }
+.global-back-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; font-weight: 600; color: var(--primary);
+  background: var(--primary-light); border: 1.5px solid var(--primary-mid);
+  border-radius: 8px; padding: 5px 12px; cursor: pointer;
+  margin-bottom: 10px; transition: background .12s;
+}
+.global-back-btn:hover { background: var(--primary-mid); }
+.global-sec-head {
+  font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--ink-3); margin: 14px 0 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.global-sec-head::after { content:""; flex:1; height:1px; background: var(--border); }
+.global-sec-head-name { color: var(--ink-2); }
+
 </style>
 </head>
 <body class="lang-en">
 
 <!-- ── TOP NAV ── -->
 <nav class="topnav">
-  <div class="logo">
+  <div class="logo" onclick="showHomePage()" style="cursor:pointer;" title="回首頁">
     <div class="logo-icon">中</div>
     <div>
       <div class="logo-text">中文語言學習平台</div>
@@ -1910,19 +1983,33 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     <!-- ── VIEW: BROWSE ── -->
     <div class="view active" id="view-browse">
 
-      <!-- WELCOME HERO -->
-      <div class="hero-banner" id="heroBanner">
-        <div class="hero-icon">🏥</div>
-        <div class="hero-text">
-          <div class="hero-title">看護照顧專業用語・第1–20輯</div>
-          <div class="hero-sub">涵蓋 20 輯 · 超過 500 個看護用語 · 四語對照學習</div>
-          <div class="hero-cta">
-            <button class="hero-btn hero-btn-primary" onclick="openFlashcard(0)">⚡ 開始閃卡</button>
-            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('quiz')">🧠 詞彙測驗</button>
-            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('dashboard')">📊 學習儀表板</button>
+      <!-- ── GLOBAL SEARCH BAR (always visible in browse) ── -->
+      <div class="search-bar" id="globalSearchBar">
+        <input class="search-input" type="text" placeholder="🔍 搜尋詞彙（全局 · 中文、英文、印尼文、越南文）" id="searchInput" oninput="filterCards()"/>
+        <button class="filter-btn" id="filterStarBtn" onclick="toggleFilterStar()">★ 收藏</button>
+        <button class="filter-btn" id="filterNewBtn" onclick="toggleFilterNew()">僅顯示未學</button>
+      </div>
+
+      <!-- ── HOME VIEW (vol grid) ── -->
+      <div id="homeView" style="display:block;">
+        <div class="home-hero-bar">
+          <div class="home-hero-icon">🏥</div>
+          <div class="home-hero-text">
+            <div class="home-hero-title">看護照顧專業用語・第1–20輯</div>
+            <div class="home-hero-sub">涵蓋 20 輯 · 超過 500 個看護用語 · 四語對照學習</div>
+          </div>
+          <div class="home-hero-actions">
+            <button class="hero-btn hero-btn-primary" onclick="openFlashcard(0)">⚡ 閃卡</button>
+            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('quiz')">🧠 測驗</button>
+            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('dashboard')">📊 儀表板</button>
           </div>
         </div>
+        <div class="home-vol-label">選擇詞彙單元</div>
+        <div class="vol-pick-grid" id="volPickGrid"></div>
       </div>
+
+      <!-- ── SECTION VIEW (shown when a section is selected) ── -->
+      <div id="sectionView" style="display:none;">
 
       <div class="module-header">
         <div class="module-breadcrumb" id="moduleBreadcrumb">
@@ -1948,13 +2035,10 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
         </div>
       </div>
 
-      <div class="search-bar">
-        <input class="search-input" type="text" placeholder="搜尋詞彙（中文、英文、印尼文、越南文）…" id="searchInput" oninput="filterCards()"/>
-        <button class="filter-btn" id="filterStarBtn" onclick="toggleFilterStar()">★ 收藏</button>
-        <button class="filter-btn" id="filterNewBtn" onclick="toggleFilterNew()">僅顯示未學</button>
-      </div>
-
+      <div id="searchInfoBar" style="display:none;"></div>
       <div id="cardsContainer"></div>
+
+      </div><!-- /sectionView -->
     </div>
 
     <!-- ── VIEW: QUIZ ── -->
@@ -5235,9 +5319,8 @@ function setSection(sec, el) {
     vol20_06:'第20輯 · 職場權益與文化適應',
     vol20_07:'第20輯 · 職場權益與文化適應',
   };
-  // Hide hero after first navigation
-  const hero = document.getElementById('heroBanner');
-  if (hero && sec !== 'basic') hero.style.display = 'none';
+  // Show section view, hide home
+  hideHomePage();
 
   // Propagate active vol colour to primary variable for breadcrumb/stats accent
   const activeItem = document.querySelector('.sidebar-item.active');
@@ -5272,21 +5355,48 @@ function setSection(sec, el) {
 
 function renderCards() {
   if (window.speechSynthesis) speechSynthesis.cancel();
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const container = document.getElementById('cardsContainer');
+  const infoBar = document.getElementById('searchInfoBar');
+
+  if (q) {
+    // ── GLOBAL SEARCH across all sections ──
+    let totalHits = 0;
+    let html = '';
+    for (const [secKey, sec] of Object.entries(SECTIONS)) {
+      let matches = sec.cards.filter(c =>
+        c.zh.includes(q) || c.desc.includes(q) ||
+        c.en.toLowerCase().includes(q) ||
+        c.id.toLowerCase().includes(q) ||
+        c.vi.toLowerCase().includes(q)
+      );
+      if (filterStar) matches = matches.filter(c => starred[c.n]);
+      if (filterNew)  matches = matches.filter(c => !mastered[c.n]);
+      if (matches.length === 0) continue;
+      totalHits += matches.length;
+      html += `<div class="global-sec-head"><span class="global-sec-head-name">${sec.zh}</span></div>`;
+      html += `<div class="cards-grid">${matches.map(c => renderCard(c)).join('')}</div>`;
+    }
+    if (infoBar) {
+      infoBar.style.display = '';
+      infoBar.innerHTML = totalHits > 0
+        ? `<div class="global-search-bar">🔍 全局搜尋「<strong>${q}</strong>」，找到 <strong>${totalHits}</strong> 個詞彙</div>`
+        : '';
+    }
+    if (totalHits === 0) {
+      container.innerHTML = '<div class="coming-soon"><div class="cs-icon">🔍</div><h3>沒有符合的詞彙</h3><p>請嘗試其他關鍵字</p></div>';
+    } else {
+      container.innerHTML = html;
+    }
+    return;
+  }
+
+  // ── NORMAL SECTION VIEW ──
+  if (infoBar) infoBar.style.display = 'none';
   const sec = SECTIONS[currentSection];
   let cards = sec.cards;
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  if (q) {
-    cards = cards.filter(c =>
-      c.zh.includes(q) || c.desc.includes(q) ||
-      c.en.toLowerCase().includes(q) ||
-      c.id.toLowerCase().includes(q) ||
-      c.vi.toLowerCase().includes(q)
-    );
-  }
   if (filterStar) cards = cards.filter(c => starred[c.n]);
   if (filterNew)  cards = cards.filter(c => !mastered[c.n]);
-
-  const container = document.getElementById('cardsContainer');
 
   if (cards.length === 0) {
     container.innerHTML = '<div class="coming-soon"><div class="cs-icon">🔍</div><h3>沒有符合的詞彙</h3><p>請嘗試其他關鍵字</p></div>';
@@ -5359,17 +5469,111 @@ function toggleStar(e, n) {
   if (mainEl) mainEl.scrollTop = mainScrollY;
 }
 
-function filterCards() { renderCards(); }
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const sv = document.getElementById('sectionView');
+  const hv = document.getElementById('homeView');
+  if (q) {
+    // Switch to section view for global search results
+    if (sv) sv.style.display = '';
+    if (hv) hv.style.display = 'none';
+    renderCards();
+  } else {
+    // Query cleared: return to home if no section was explicitly active, else show section
+    const hasActive = document.querySelector('.sidebar-item.active');
+    if (!hasActive) {
+      if (sv) sv.style.display = 'none';
+      if (hv) hv.style.display = '';
+    } else {
+      if (sv) sv.style.display = '';
+      if (hv) hv.style.display = 'none';
+      renderCards();
+    }
+  }
+}
+
+// ── VOL META for home grid ──
+const VOL_META = [
+  { num:1,  name:'日常照顧基礎用語', icon:'🛏️', col:'#2563EB', sections:['basic','body','meal','activity','sleep','emotion'] },
+  { num:2,  name:'醫院就診',         icon:'🏥', col:'#0D9488', sections:['hosp_visit','hosp_symptom','hosp_dept','hosp_facility','hosp_equip','hosp_inst'] },
+  { num:3,  name:'復健治療',         icon:'🧠', col:'#7C3AED', sections:['rehab_type','rehab_move','rehab_tool','rehab_assess','rehab_safety','rehab_issue','rehab_home','rehab_cheer'] },
+  { num:4,  name:'飲食營養',         icon:'🍱', col:'#D97706', sections:['food_main','food_diet','food_special','food_supp','food_cook','food_prob','food_tools'] },
+  { num:5,  name:'服裝穿著用語',     icon:'👗', col:'#DB2777', sections:['cloth_basic','cloth_action','cloth_season','cloth_special','cloth_issue','cloth_assist','cloth_care','cloth_etiq'] },
+  { num:6,  name:'居家生活用語',     icon:'🏠', col:'#16A34A', sections:['home_clean','home_safe','home_act','home_routine','home_shop','home_entertain','home_equip'] },
+  { num:7,  name:'交通出行用語',     icon:'🚌', col:'#0369A1', sections:['trans_vehicle','trans_activity','trans_direction','trans_rules','trans_ticket','trans_emergency','trans_navigation','trans_public'] },
+  { num:8,  name:'教育學習用語',     icon:'📚', col:'#9333EA', sections:['edu_lang','edu_train','edu_time','edu_tools','edu_assess'] },
+  { num:9,  name:'娛樂休閒用語',     icon:'🎮', col:'#B45309', sections:['ent_indoor','ent_outdoor','ent_social','ent_festival','ent_sports'] },
+  { num:10, name:'健康用語',         icon:'💊', col:'#0F766E', sections:['health_body','health_symptom','health_procedure','health_medicine','health_checkup','health_prevent','health_first_aid','health_mental'] },
+  { num:11, name:'溝通表達用語',     icon:'💬', col:'#1D4ED8', sections:['comm_greeting','comm_needs','comm_emotion','comm_qa','comm_daily'] },
+  { num:12, name:'清潔沐浴照護',     icon:'🛁', col:'#BE185D', sections:['bath_shower','bath_oral','bath_hand_foot','bath_toilet','bath_laundry','bath_supplies','bath_skin','bath_safety'] },
+  { num:13, name:'失智症與認知照護', icon:'🔵', col:'#15803D', sections:['dem_basic','dem_cognitive','dem_behavior','dem_comm','dem_safety','dem_activity','dem_feeding','dem_hygiene'] },
+  { num:14, name:'慢性病照護管理',   icon:'❤️', col:'#7E22CE', sections:['chr_vitals','chr_cardio','chr_diabetes','chr_resp','chr_renal','chr_pain'] },
+  { num:15, name:'感染控制與防疫',   icon:'🦠', col:'#C2410C', sections:['inf_basics','inf_ppe','inf_clean','inf_isolate','inf_symptoms'] },
+  { num:16, name:'安全防護與意外預防',icon:'🛡️',col:'#0E7490', sections:['safe_fall','safe_home','safe_accident','safe_fire','safe_disaster','safe_electrical','safe_emergency'] },
+  { num:17, name:'安寧緩和與臨終關懷',icon:'🕊️',col:'#4338CA', sections:['vol17_01','vol17_02','vol17_03','vol17_04','vol17_05','vol17_06','vol17_07'] },
+  { num:18, name:'用藥安全與管理',   icon:'💉', col:'#A21CAF', sections:['vol18_01','vol18_02','vol18_03','vol18_04','vol18_05','vol18_06','vol18_07','vol18_08'] },
+  { num:19, name:'管路與造口照護',   icon:'🔩', col:'#0F766E', sections:['vol19_01','vol19_02','vol19_03','vol19_04','vol19_05','vol19_06','vol19_07','vol19_08','vol19_09'] },
+  { num:20, name:'職場權益與文化適應',icon:'🌏',col:'#1E40AF', sections:['vol20_01','vol20_02','vol20_03','vol20_04','vol20_05','vol20_06','vol20_07'] },
+];
+
+function renderVolGrid() {
+  const grid = document.getElementById('volPickGrid');
+  if (!grid) return;
+  grid.innerHTML = VOL_META.map(vol => {
+    const totalCards = vol.sections.reduce((a, sk) => a + (SECTIONS[sk] ? SECTIONS[sk].cards.length : 0), 0);
+    const chips = vol.sections.map(sk => {
+      const s = SECTIONS[sk];
+      if (!s) return '';
+      return `<span class="vol-pick-chip" style="color:${vol.col};"
+        onclick="setSection('${sk}')">${s.zh}</span>`;
+    }).join('');
+    return `<div class="vol-pick-card">
+      <div class="vol-pick-header">
+        <div class="vol-pick-badge" style="background:${vol.col};">${vol.num}</div>
+        <div class="vol-pick-name">${vol.icon} ${vol.name}</div>
+        <div class="vol-pick-count">${totalCards}詞</div>
+      </div>
+      <div class="vol-pick-chips">${chips}</div>
+    </div>`;
+  }).join('');
+}
+
+function showHomePage() {
+  document.getElementById('homeView').style.display = '';
+  document.getElementById('sectionView').style.display = 'none';
+  document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
+  // clear search
+  const si = document.getElementById('searchInput');
+  if (si) si.value = '';
+  const ib = document.getElementById('searchInfoBar');
+  if (ib) ib.style.display = 'none';
+  // scroll to top
+  window.scrollTo({ top: 0 });
+  const mainEl = document.querySelector('.main');
+  if (mainEl) mainEl.scrollTop = 0;
+}
+
+function hideHomePage() {
+  document.getElementById('homeView').style.display = 'none';
+  document.getElementById('sectionView').style.display = '';
+}
 
 function toggleFilterStar() {
   filterStar = !filterStar;
   document.getElementById('filterStarBtn').classList.toggle('active', filterStar);
-  renderCards();
+  ensureSectionViewForFilter(); renderCards();
 }
 function toggleFilterNew() {
   filterNew = !filterNew;
   document.getElementById('filterNewBtn').classList.toggle('active', filterNew);
-  renderCards();
+  ensureSectionViewForFilter(); renderCards();
+}
+function ensureSectionViewForFilter() {
+  // If home is showing and filter is clicked, switch to section view
+  const hv = document.getElementById('homeView');
+  if (hv && hv.style.display !== 'none') {
+    hideHomePage();
+  }
 }
 
 function updateStats() {
@@ -6059,7 +6263,9 @@ function renderDashboard() {
 }
 
 // init
-setSection('basic');  // properly initialise title, breadcrumb, and cards
+currentSection = 'basic';  // set default for stats/quiz context
+renderVolGrid();           // populate home vol grid
+showHomePage();            // show home on load
 updateStats();
 updateMemoryPanel();
 </script>
