@@ -23,11 +23,33 @@
   --ink-2: #334155;
   --ink-3: #64748B;
   --border: #E2E8F0;
-  --bg: #F8FAFC;
+  --bg: #F1F5F9;
   --card: #FFFFFF;
-  --header-h: 60px;
-  --sidebar-w: 240px;
+  --header-h: 62px;
+  --sidebar-w: 248px;
   --bottom-nav-h: 64px;
+
+  /* Volume colour palette */
+  --vol1:  #2563EB; --vol1-l:  #EFF6FF;
+  --vol2:  #0D9488; --vol2-l:  #F0FDFA;
+  --vol3:  #7C3AED; --vol3-l:  #F5F3FF;
+  --vol4:  #D97706; --vol4-l:  #FFFBEB;
+  --vol5:  #DB2777; --vol5-l:  #FDF2F8;
+  --vol6:  #16A34A; --vol6-l:  #F0FDF4;
+  --vol7:  #0369A1; --vol7-l:  #F0F9FF;
+  --vol8:  #9333EA; --vol8-l:  #FAF5FF;
+  --vol9:  #B45309; --vol9-l:  #FFFBEB;
+  --vol10: #0F766E; --vol10-l: #F0FDFA;
+  --vol11: #1D4ED8; --vol11-l: #EFF6FF;
+  --vol12: #BE185D; --vol12-l: #FDF2F8;
+  --vol13: #15803D; --vol13-l: #F0FDF4;
+  --vol14: #7E22CE; --vol14-l: #F5F3FF;
+  --vol15: #C2410C; --vol15-l: #FFF7ED;
+  --vol16: #0E7490; --vol16-l: #ECFEFF;
+  --vol17: #4338CA; --vol17-l: #EEF2FF;
+  --vol18: #A21CAF; --vol18-l: #FDF4FF;
+  --vol19: #0F766E; --vol19-l: #F0FDFA;
+  --vol20: #1E40AF; --vol20-l: #EFF6FF;
 }
 
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color: transparent; }
@@ -44,8 +66,9 @@ body {
 /* ── TOP NAV ── */
 .topnav {
   height: var(--header-h);
-  background: #fff;
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 55%, #2563EB 100%);
+  border-bottom: none;
+  box-shadow: 0 2px 12px rgba(30,58,138,.25);
   display: flex;
   align-items: center;
   padding: 0 20px;
@@ -58,21 +81,24 @@ body {
 .logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 11px;
   text-decoration: none;
-  color: var(--ink);
+  color: #fff;
   flex-shrink: 0;
 }
 .logo-icon {
-  width: 34px; height: 34px;
-  background: var(--primary);
-  border-radius: 10px;
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.18);
+  border: 1.5px solid rgba(255,255,255,.35);
+  border-radius: 11px;
   display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 17px; font-family: 'Noto Serif TC', serif; font-weight: 700;
+  color: #fff; font-size: 18px; font-family: 'Noto Serif TC', serif; font-weight: 700;
   flex-shrink: 0;
+  backdrop-filter: blur(4px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
 }
-.logo-text { font-size: 14px; font-weight: 700; letter-spacing: .02em; }
-.logo-sub  { font-size: 10px; color: var(--ink-3); font-weight: 400; margin-top: 1px; }
+.logo-text { font-size: 14px; font-weight: 700; letter-spacing: .03em; color: #fff; }
+.logo-sub  { font-size: 10px; color: rgba(255,255,255,.65); font-weight: 400; margin-top: 1px; }
 
 .nav-divider { flex: 1; }
 
@@ -80,22 +106,24 @@ body {
 .hamburger-btn {
   display: none;
   width: 38px; height: 38px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
+  border: 1.5px solid rgba(255,255,255,.3);
+  border-radius: 9px;
+  background: rgba(255,255,255,.12);
   align-items: center; justify-content: center;
   cursor: pointer;
   font-size: 18px;
-  color: var(--ink-2);
+  color: #fff;
   flex-shrink: 0;
+  transition: background .15s;
 }
+.hamburger-btn:hover { background: rgba(255,255,255,.22); }
 
 /* language selector */
 .lang-tabs {
   display: flex;
   gap: 3px;
-  background: var(--bg);
-  border: 1px solid var(--border);
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.18);
   border-radius: 10px;
   padding: 3px;
 }
@@ -107,35 +135,36 @@ body {
   cursor: pointer;
   border: none;
   background: transparent;
-  color: var(--ink-3);
+  color: rgba(255,255,255,.7);
   transition: all .15s;
   white-space: nowrap;
   min-height: 32px;
   touch-action: manipulation;
 }
-.lang-tab:hover { background: #fff; color: var(--ink); }
+.lang-tab:hover { background: rgba(255,255,255,.15); color: #fff; }
 .lang-tab.active {
   background: #fff;
   color: var(--primary);
-  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
 }
 .lang-tab .flag { margin-right: 4px; }
 
 .nav-btn {
-  height: 36px;
-  padding: 0 12px;
+  height: 34px;
+  padding: 0 13px;
   border-radius: 8px;
-  border: 1px solid var(--border);
-  background: #fff;
+  border: 1.5px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.12);
   font-size: 12px;
   font-weight: 600;
-  color: var(--ink-2);
+  color: #fff;
   cursor: pointer;
   display: flex; align-items: center; gap: 5px;
   white-space: nowrap;
   touch-action: manipulation;
+  transition: background .15s;
 }
-.nav-btn:hover { border-color: var(--primary); color: var(--primary); }
+.nav-btn:hover { background: rgba(255,255,255,.22); border-color: rgba(255,255,255,.5); }
 .nav-btn.nav-btn-quiz { display: flex; }
 
 /* ── SIDEBAR OVERLAY (mobile/tablet) ── */
@@ -160,13 +189,41 @@ body {
   flex-shrink: 0;
   background: #fff;
   border-right: 1px solid var(--border);
-  padding: 16px 0;
+  padding: 12px 0 20px;
   position: sticky;
   top: var(--header-h);
   height: calc(100vh - var(--header-h));
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+/* Sidebar volume header pill */
+.sidebar-vol-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 4px;
+  margin-top: 14px;
+  margin-bottom: 2px;
+}
+.sidebar-vol-header:first-child { margin-top: 6px; }
+.sidebar-vol-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.sidebar-vol-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  line-height: 1;
 }
 
+/* keep old selector working for "學習工具" block */
 .sidebar-section-label {
   font-size: 10px;
   font-weight: 700;
@@ -181,8 +238,8 @@ body {
 .sidebar-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
+  gap: 9px;
+  padding: 8px 14px 8px 16px;
   font-size: 13px;
   font-weight: 500;
   color: var(--ink-2);
@@ -190,8 +247,10 @@ body {
   border-left: 3px solid transparent;
   transition: all .12s;
   text-decoration: none;
-  min-height: 42px;
+  min-height: 40px;
   touch-action: manipulation;
+  border-radius: 0 8px 8px 0;
+  margin-right: 8px;
 }
 .sidebar-item:hover {
   background: var(--bg);
@@ -201,9 +260,10 @@ body {
   background: var(--primary-light);
   color: var(--primary);
   border-left-color: var(--primary);
+  font-weight: 700;
 }
 .sidebar-item .item-icon {
-  font-size: 16px;
+  font-size: 15px;
   width: 20px;
   text-align: center;
   flex-shrink: 0;
@@ -211,11 +271,18 @@ body {
 .sidebar-item .item-badge {
   margin-left: auto;
   font-size: 10px;
-  background: var(--primary-mid);
-  color: var(--primary);
+  background: var(--bg);
+  color: var(--ink-3);
   padding: 1px 6px;
   border-radius: 10px;
   font-weight: 700;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.sidebar-item.active .item-badge {
+  background: var(--primary-mid);
+  color: var(--primary);
+  border-color: var(--primary-mid);
 }
 .sidebar-item.locked .item-badge {
   background: var(--border);
@@ -494,26 +561,37 @@ body.lang-zh .vcard-ex { display: none; }
 .progress-label { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
 
 /* ── PAGE TABS ── */
-.page-tabs { display: flex; gap: 0; border-bottom: 1.5px solid var(--border); margin-bottom: 20px; }
+.page-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 22px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 5px;
+  width: fit-content;
+  max-width: 100%;
+}
 .page-tab {
-  padding: 10px 16px;
+  padding: 8px 16px;
   font-size: 13px;
   font-weight: 600;
   color: var(--ink-3);
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1.5px;
-  transition: all .12s;
+  border-radius: 8px;
+  transition: all .15s;
   border: none;
   background: transparent;
   white-space: nowrap;
+  min-height: 38px;
   touch-action: manipulation;
-  min-height: 44px;
-  display: flex; align-items: center;
 }
-.page-tab:hover { color: var(--ink); }
-.page-tab.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
-
+.page-tab:hover { background: var(--bg); color: var(--ink); }
+.page-tab.active {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(37,99,235,.25);
+}
 /* ── VIEWS ── */
 .view { display: none; }
 .view.active { display: block; }
@@ -772,10 +850,10 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   .search-input { height: 40px; font-size: 13px; }
   .filter-btn { height: 40px; padding: 0 10px; font-size: 11px; }
 
-  /* Page tabs — scrollable */
-  .page-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  /* Page tabs — scrollable pill row */
+  .page-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; width: 100%; }
   .page-tabs::-webkit-scrollbar { display: none; }
-  .page-tab { padding: 8px 14px; font-size: 12px; flex-shrink: 0; }
+  .page-tab { padding: 7px 13px; font-size: 12px; flex-shrink: 0; }
 
   /* Cards grid — 2 cols on small phones */
   .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -816,6 +894,239 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   .stat-pill { padding: 5px 8px; }
 }
 
+/* ── DASHBOARD ── */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.dash-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.dash-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+}
+.dash-card.dc-blue::before  { background: var(--primary); }
+.dash-card.dc-green::before { background: #16A34A; }
+.dash-card.dc-amber::before { background: #F59E0B; }
+.dash-card.dc-rose::before  { background: var(--rose); }
+.dash-card-icon { font-size: 26px; line-height: 1; margin-bottom: 2px; }
+.dash-card-val {
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -.02em;
+}
+.dash-card.dc-blue  .dash-card-val { color: var(--primary); }
+.dash-card.dc-green .dash-card-val { color: #16A34A; }
+.dash-card.dc-amber .dash-card-val { color: #D97706; }
+.dash-card.dc-rose  .dash-card-val { color: var(--rose); }
+.dash-card-label { font-size: 12px; color: var(--ink-3); font-weight: 600; }
+.dash-card-sub   { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+
+.dash-section-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 12px;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* streak bar */
+.streak-bar {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.streak-day {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-3);
+}
+.streak-day.done { background: #DCFCE7; border-color: #86EFAC; color: #15803D; }
+.streak-day.today { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* quiz history */
+.quiz-history-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.quiz-history-row:last-child { border-bottom: none; }
+.quiz-score-badge {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-left: auto;
+}
+.quiz-score-badge.perfect { background: #DCFCE7; color: #15803D; }
+.quiz-score-badge.good    { background: #DBEAFE; color: #1D4ED8; }
+.quiz-score-badge.ok      { background: #FEF9C3; color: #92400E; }
+.quiz-score-badge.low     { background: #FEE2E2; color: #DC2626; }
+
+/* overall progress donut (CSS) */
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.donut-ring {
+  position: relative;
+  width: 88px; height: 88px;
+  flex-shrink: 0;
+}
+.donut-ring svg { transform: rotate(-90deg); }
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.donut-pct  { font-size: 18px; font-weight: 900; color: var(--primary); line-height: 1; }
+.donut-lbl  { font-size: 9px; color: var(--ink-3); font-weight: 600; }
+.donut-stats { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.donut-stat-row { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.donut-stat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+@media (max-width: 640px) {
+  .dash-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dash-card { padding: 16px 14px 12px; }
+  .dash-card-val { font-size: 30px; }
+  .dash-card-icon { font-size: 22px; }
+}
+
+/* ── WELCOME HERO BANNER ── */
+.hero-banner {
+  background: linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 55%, #2563EB 100%);
+  border-radius: 18px;
+  padding: 24px 28px;
+  margin-bottom: 22px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::before {
+  content: '中';
+  position: absolute;
+  right: -10px; top: -20px;
+  font-size: 130px;
+  font-family: 'Noto Serif TC', serif;
+  font-weight: 900;
+  color: rgba(255,255,255,.06);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+.hero-icon {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.hero-text { flex: 1; min-width: 0; }
+.hero-title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  margin-bottom: 5px;
+}
+.hero-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,.75);
+  line-height: 1.4;
+}
+.hero-cta {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.hero-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all .15s;
+  touch-action: manipulation;
+}
+.hero-btn-primary {
+  background: #fff;
+  color: var(--primary);
+}
+.hero-btn-primary:hover { background: #EFF6FF; }
+.hero-btn-ghost {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,.3);
+}
+.hero-btn-ghost:hover { background: rgba(255,255,255,.25); }
+
+/* ── SIDEBAR VOLUME COLOUR CLASSES ── */
+.vol-1  { --vol-c: var(--vol1);  --vol-cl: var(--vol1-l);  }
+.vol-2  { --vol-c: var(--vol2);  --vol-cl: var(--vol2-l);  }
+.vol-3  { --vol-c: var(--vol3);  --vol-cl: var(--vol3-l);  }
+.vol-4  { --vol-c: var(--vol4);  --vol-cl: var(--vol4-l);  }
+.vol-5  { --vol-c: var(--vol5);  --vol-cl: var(--vol5-l);  }
+.vol-6  { --vol-c: var(--vol6);  --vol-cl: var(--vol6-l);  }
+.vol-7  { --vol-c: var(--vol7);  --vol-cl: var(--vol7-l);  }
+.vol-8  { --vol-c: var(--vol8);  --vol-cl: var(--vol8-l);  }
+.vol-9  { --vol-c: var(--vol9);  --vol-cl: var(--vol9-l);  }
+.vol-10 { --vol-c: var(--vol10); --vol-cl: var(--vol10-l); }
+.vol-11 { --vol-c: var(--vol11); --vol-cl: var(--vol11-l); }
+.vol-12 { --vol-c: var(--vol12); --vol-cl: var(--vol12-l); }
+.vol-13 { --vol-c: var(--vol13); --vol-cl: var(--vol13-l); }
+.vol-14 { --vol-c: var(--vol14); --vol-cl: var(--vol14-l); }
+.vol-15 { --vol-c: var(--vol15); --vol-cl: var(--vol15-l); }
+.vol-16 { --vol-c: var(--vol16); --vol-cl: var(--vol16-l); }
+.vol-17 { --vol-c: var(--vol17); --vol-cl: var(--vol17-l); }
+.vol-18 { --vol-c: var(--vol18); --vol-cl: var(--vol18-l); }
+.vol-19 { --vol-c: var(--vol19); --vol-cl: var(--vol19-l); }
+.vol-20 { --vol-c: var(--vol20); --vol-cl: var(--vol20-l); }
+
+.sidebar-item.active[class*="vol-"] {
+  background: var(--vol-cl, var(--primary-light));
+  color: var(--vol-c, var(--primary));
+  border-left-color: var(--vol-c, var(--primary));
+}
+.sidebar-item.active[class*="vol-"] .item-badge {
+  background: var(--vol-c, var(--primary));
+  color: #fff;
+  border-color: transparent;
+}
+.sidebar-vol-header .sidebar-vol-dot { background: var(--vol-c, var(--ink-3)); }
+.sidebar-vol-header .sidebar-vol-label { color: var(--vol-c, var(--ink-3)); }
+
 </style>
 </head>
 <body class="lang-en">
@@ -853,604 +1164,667 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-section-label">第1輯・看護照顧</div>
-    <a class="sidebar-item active" href="javascript:void(0)" role="button" data-sec="basic" onclick="setSection('basic')">
+    <div class="sidebar-vol-header vol-1">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第1輯・看護照顧</div>
+    </div>
+    <a class="sidebar-item vol-1 active" href="javascript:void(0)" role="button" data-sec="basic" onclick="setSection('basic')">
       <span class="item-icon">🏃</span> 基本動作
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="body" onclick="setSection('body')">
+    <a class="sidebar-item vol-1" href="javascript:void(0)" role="button" data-sec="body" onclick="setSection('body')">
       <span class="item-icon">🧍</span> 身體部位
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="meal" onclick="setSection('meal')">
+    <a class="sidebar-item vol-1" href="javascript:void(0)" role="button" data-sec="meal" onclick="setSection('meal')">
       <span class="item-icon">🍱</span> 飲食護理
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="activity" onclick="setSection('activity')">
+    <a class="sidebar-item vol-1" href="javascript:void(0)" role="button" data-sec="activity" onclick="setSection('activity')">
       <span class="item-icon">🎯</span> 日常活動
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="sleep" onclick="setSection('sleep')">
+    <a class="sidebar-item vol-1" href="javascript:void(0)" role="button" data-sec="sleep" onclick="setSection('sleep')">
       <span class="item-icon">🌙</span> 睡眠護理
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="emotion" onclick="setSection('emotion')">
+    <a class="sidebar-item vol-1" href="javascript:void(0)" role="button" data-sec="emotion" onclick="setSection('emotion')">
       <span class="item-icon">❤️</span> 情緒關懷
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第2輯・醫院就診</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_visit" onclick="setSection('hosp_visit')">
+    <div class="sidebar-vol-header vol-2" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第2輯・醫院就診</div>
+    </div>
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_visit" onclick="setSection('hosp_visit')">
       <span class="item-icon">🏥</span> 就診流程
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_symptom" onclick="setSection('hosp_symptom')">
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_symptom" onclick="setSection('hosp_symptom')">
       <span class="item-icon">🤒</span> 症狀描述
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_dept" onclick="setSection('hosp_dept')">
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_dept" onclick="setSection('hosp_dept')">
       <span class="item-icon">🏨</span> 醫療部門
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_facility" onclick="setSection('hosp_facility')">
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_facility" onclick="setSection('hosp_facility')">
       <span class="item-icon">🚑</span> 醫院設施
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_equip" onclick="setSection('hosp_equip')">
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_equip" onclick="setSection('hosp_equip')">
       <span class="item-icon">🩺</span> 設備與處置
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="hosp_inst" onclick="setSection('hosp_inst')">
+    <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_inst" onclick="setSection('hosp_inst')">
       <span class="item-icon">🆘</span> 醫療指示症狀
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第3輯・復健治療</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_type" onclick="setSection('rehab_type')">
+    <div class="sidebar-vol-header vol-3" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第3輯・復健治療</div>
+    </div>
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_type" onclick="setSection('rehab_type')">
       <span class="item-icon">🏃</span> 復健類型
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_move" onclick="setSection('rehab_move')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_move" onclick="setSection('rehab_move')">
       <span class="item-icon">💪</span> 動作指令
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_tool" onclick="setSection('rehab_tool')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_tool" onclick="setSection('rehab_tool')">
       <span class="item-icon">🦽</span> 輔助器具
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_assess" onclick="setSection('rehab_assess')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_assess" onclick="setSection('rehab_assess')">
       <span class="item-icon">📏</span> 復健評估
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_safety" onclick="setSection('rehab_safety')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_safety" onclick="setSection('rehab_safety')">
       <span class="item-icon">🛡️</span> 復健安全
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_issue" onclick="setSection('rehab_issue')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_issue" onclick="setSection('rehab_issue')">
       <span class="item-icon">🤕</span> 常見問題
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_home" onclick="setSection('rehab_home')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_home" onclick="setSection('rehab_home')">
       <span class="item-icon">🏠</span> 家庭復健
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="rehab_cheer" onclick="setSection('rehab_cheer')">
+    <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_cheer" onclick="setSection('rehab_cheer')">
       <span class="item-icon">🌟</span> 鼓勵支持
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第4輯・飲食營養</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_main" onclick="setSection('food_main')">
+    <div class="sidebar-vol-header vol-4" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第4輯・飲食營養</div>
+    </div>
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_main" onclick="setSection('food_main')">
       <span class="item-icon">🍚</span> 主食與食材
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_diet" onclick="setSection('food_diet')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_diet" onclick="setSection('food_diet')">
       <span class="item-icon">🥗</span> 飲食管理
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_special" onclick="setSection('food_special')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_special" onclick="setSection('food_special')">
       <span class="item-icon">💉</span> 特殊飲食
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_supp" onclick="setSection('food_supp')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_supp" onclick="setSection('food_supp')">
       <span class="item-icon">💊</span> 營養補充
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_cook" onclick="setSection('food_cook')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_cook" onclick="setSection('food_cook')">
       <span class="item-icon">🍳</span> 烹飪方式
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_prob" onclick="setSection('food_prob')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_prob" onclick="setSection('food_prob')">
       <span class="item-icon">🤢</span> 飲食問題
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="food_tools" onclick="setSection('food_tools')">
+    <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_tools" onclick="setSection('food_tools')">
       <span class="item-icon">🥄</span> 餐具與輔助
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第5輯・服裝穿著</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_basic" onclick="setSection('cloth_basic')">
+    <div class="sidebar-vol-header vol-5" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第5輯・服裝穿著</div>
+    </div>
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_basic" onclick="setSection('cloth_basic')">
       <span class="item-icon">👗</span> 基本穿著
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_action" onclick="setSection('cloth_action')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_action" onclick="setSection('cloth_action')">
       <span class="item-icon">🧥</span> 穿脫動作
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_season" onclick="setSection('cloth_season')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_season" onclick="setSection('cloth_season')">
       <span class="item-icon">🌦️</span> 季節穿著
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_special" onclick="setSection('cloth_special')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_special" onclick="setSection('cloth_special')">
       <span class="item-icon">🩹</span> 特殊穿著
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_issue" onclick="setSection('cloth_issue')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_issue" onclick="setSection('cloth_issue')">
       <span class="item-icon">🚫</span> 穿衣問題
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_assist" onclick="setSection('cloth_assist')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_assist" onclick="setSection('cloth_assist')">
       <span class="item-icon">🤲</span> 穿衣輔助
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_care" onclick="setSection('cloth_care')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_care" onclick="setSection('cloth_care')">
       <span class="item-icon">🧼</span> 衣物保養
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="cloth_etiq" onclick="setSection('cloth_etiq')">
+    <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_etiq" onclick="setSection('cloth_etiq')">
       <span class="item-icon">😊</span> 穿衣禮貌
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第6輯・居家生活</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_clean" onclick="setSection('home_clean')">
+    <div class="sidebar-vol-header vol-6" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第6輯・居家生活</div>
+    </div>
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_clean" onclick="setSection('home_clean')">
       <span class="item-icon">🧹</span> 家務清潔
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_safe" onclick="setSection('home_safe')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_safe" onclick="setSection('home_safe')">
       <span class="item-icon">🔒</span> 安全與緊急
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_act" onclick="setSection('home_act')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_act" onclick="setSection('home_act')">
       <span class="item-icon">🎵</span> 居家活動
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_routine" onclick="setSection('home_routine')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_routine" onclick="setSection('home_routine')">
       <span class="item-icon">⏰</span> 日常作息
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_shop" onclick="setSection('home_shop')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_shop" onclick="setSection('home_shop')">
       <span class="item-icon">🛒</span> 購物與外出
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_entertain" onclick="setSection('home_entertain')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_entertain" onclick="setSection('home_entertain')">
       <span class="item-icon">🃏</span> 居家娛樂與交流
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="home_equip" onclick="setSection('home_equip')">
+    <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_equip" onclick="setSection('home_equip')">
       <span class="item-icon">🏠</span> 家居用品與設備
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第7輯・交通出行</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_vehicle" onclick="setSection('trans_vehicle')">
+    <div class="sidebar-vol-header vol-7" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第7輯・交通出行</div>
+    </div>
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_vehicle" onclick="setSection('trans_vehicle')">
       <span class="item-icon">🚌</span> 交通工具
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_activity" onclick="setSection('trans_activity')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_activity" onclick="setSection('trans_activity')">
       <span class="item-icon">🗺️</span> 出行相關
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_direction" onclick="setSection('trans_direction')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_direction" onclick="setSection('trans_direction')">
       <span class="item-icon">⬆️</span> 方向位置
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_rules" onclick="setSection('trans_rules')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_rules" onclick="setSection('trans_rules')">
       <span class="item-icon">🚦</span> 交通規則
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_ticket" onclick="setSection('trans_ticket')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_ticket" onclick="setSection('trans_ticket')">
       <span class="item-icon">🎟️</span> 票券與付費
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_emergency" onclick="setSection('trans_emergency')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_emergency" onclick="setSection('trans_emergency')">
       <span class="item-icon">🚨</span> 緊急交通
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_navigation" onclick="setSection('trans_navigation')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_navigation" onclick="setSection('trans_navigation')">
       <span class="item-icon">📱</span> 導航與路線
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="trans_public" onclick="setSection('trans_public')">
+    <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_public" onclick="setSection('trans_public')">
       <span class="item-icon">🚇</span> 公共交通
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第8輯・教育學習</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="edu_lang" onclick="setSection('edu_lang')">
+    <div class="sidebar-vol-header vol-8" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第8輯・教育學習</div>
+    </div>
+    <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_lang" onclick="setSection('edu_lang')">
       <span class="item-icon">📖</span> 語言學習
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="edu_train" onclick="setSection('edu_train')">
+    <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_train" onclick="setSection('edu_train')">
       <span class="item-icon">🩺</span> 照顧教育訓練
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="edu_time" onclick="setSection('edu_time')">
+    <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_time" onclick="setSection('edu_time')">
       <span class="item-icon">🕐</span> 數字時間
       <span class="item-badge">30</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="edu_tools" onclick="setSection('edu_tools')">
+    <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_tools" onclick="setSection('edu_tools')">
       <span class="item-icon">🖥️</span> 學習工具
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="edu_assess" onclick="setSection('edu_assess')">
+    <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_assess" onclick="setSection('edu_assess')">
       <span class="item-icon">📊</span> 學習評估與心態
       <span class="item-badge">30</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第9輯・娛樂休閒</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_indoor" onclick="setSection('ent_indoor')">
+    <div class="sidebar-vol-header vol-9" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第9輯・娛樂休閒</div>
+    </div>
+    <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_indoor" onclick="setSection('ent_indoor')">
       <span class="item-icon">📺</span> 室內娛樂
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_outdoor" onclick="setSection('ent_outdoor')">
+    <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_outdoor" onclick="setSection('ent_outdoor')">
       <span class="item-icon">🌳</span> 戶外活動
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_social" onclick="setSection('ent_social')">
+    <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_social" onclick="setSection('ent_social')">
       <span class="item-icon">👋</span> 社交互動
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_festival" onclick="setSection('ent_festival')">
+    <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_festival" onclick="setSection('ent_festival')">
       <span class="item-icon">🎄</span> 節慶活動
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="ent_sports" onclick="setSection('ent_sports')">
+    <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_sports" onclick="setSection('ent_sports')">
       <span class="item-icon">🏓</span> 運動休閒
       <span class="item-badge">40</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第10輯・健康用語</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_body" onclick="setSection('health_body')">
+    <div class="sidebar-vol-header vol-10" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第10輯・健康用語</div>
+    </div>
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_body" onclick="setSection('health_body')">
       <span class="item-icon">🧠</span> 身體部位
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_symptom" onclick="setSection('health_symptom')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_symptom" onclick="setSection('health_symptom')">
       <span class="item-icon">🤒</span> 常見症狀
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_procedure" onclick="setSection('health_procedure')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_procedure" onclick="setSection('health_procedure')">
       <span class="item-icon">🩺</span> 醫療程序
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_medicine" onclick="setSection('health_medicine')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_medicine" onclick="setSection('health_medicine')">
       <span class="item-icon">💊</span> 藥物用語
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_checkup" onclick="setSection('health_checkup')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_checkup" onclick="setSection('health_checkup')">
       <span class="item-icon">📊</span> 健康檢查
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_prevent" onclick="setSection('health_prevent')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_prevent" onclick="setSection('health_prevent')">
       <span class="item-icon">💉</span> 預防保健
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_first_aid" onclick="setSection('health_first_aid')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_first_aid" onclick="setSection('health_first_aid')">
       <span class="item-icon">🚨</span> 急救
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="health_mental" onclick="setSection('health_mental')">
+    <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_mental" onclick="setSection('health_mental')">
       <span class="item-icon">😊</span> 心理健康
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第11輯・溝通表達</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="comm_greeting" onclick="setSection('comm_greeting')">
+    <div class="sidebar-vol-header vol-11" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第11輯・溝通表達</div>
+    </div>
+    <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_greeting" onclick="setSection('comm_greeting')">
       <span class="item-icon">👋</span> 基本問候
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="comm_needs" onclick="setSection('comm_needs')">
+    <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_needs" onclick="setSection('comm_needs')">
       <span class="item-icon">🆘</span> 表達需求
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="comm_emotion" onclick="setSection('comm_emotion')">
+    <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_emotion" onclick="setSection('comm_emotion')">
       <span class="item-icon">😊</span> 情感表達
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="comm_qa" onclick="setSection('comm_qa')">
+    <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_qa" onclick="setSection('comm_qa')">
       <span class="item-icon">❓</span> 詢問與回答
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="comm_daily" onclick="setSection('comm_daily')">
+    <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_daily" onclick="setSection('comm_daily')">
       <span class="item-icon">🗣️</span> 日常對話
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第12輯・清潔沐浴照護</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_shower" onclick="setSection('bath_shower')">
+    <div class="sidebar-vol-header vol-12" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第12輯・清潔沐浴照護</div>
+    </div>
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_shower" onclick="setSection('bath_shower')">
       <span class="item-icon">🚿</span> 淋浴與泡澡
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_oral" onclick="setSection('bath_oral')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_oral" onclick="setSection('bath_oral')">
       <span class="item-icon">🦷</span> 口腔清潔
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_hand_foot" onclick="setSection('bath_hand_foot')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_hand_foot" onclick="setSection('bath_hand_foot')">
       <span class="item-icon">✂️</span> 手足護理
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_toilet" onclick="setSection('bath_toilet')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_toilet" onclick="setSection('bath_toilet')">
       <span class="item-icon">🚽</span> 如廁與失禁護理
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_laundry" onclick="setSection('bath_laundry')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_laundry" onclick="setSection('bath_laundry')">
       <span class="item-icon">🛏️</span> 衣物與床品更換
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_supplies" onclick="setSection('bath_supplies')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_supplies" onclick="setSection('bath_supplies')">
       <span class="item-icon">🧴</span> 清潔用品與工具
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_skin" onclick="setSection('bath_skin')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_skin" onclick="setSection('bath_skin')">
       <span class="item-icon">🌿</span> 皮膚保濕與防曬
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="bath_safety" onclick="setSection('bath_safety')">
+    <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_safety" onclick="setSection('bath_safety')">
       <span class="item-icon">🛡️</span> 沐浴輔助與安全
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第13輯・失智症與認知照護</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_basic" onclick="setSection('dem_basic')">
+    <div class="sidebar-vol-header vol-13" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第13輯・失智症與認知照護</div>
+    </div>
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_basic" onclick="setSection('dem_basic')">
       <span class="item-icon">🧠</span> 失智症基礎
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_cognitive" onclick="setSection('dem_cognitive')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_cognitive" onclick="setSection('dem_cognitive')">
       <span class="item-icon">💭</span> 認知功能
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_behavior" onclick="setSection('dem_behavior')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_behavior" onclick="setSection('dem_behavior')">
       <span class="item-icon">😠</span> 行為與心理症狀
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_comm" onclick="setSection('dem_comm')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_comm" onclick="setSection('dem_comm')">
       <span class="item-icon">🗣️</span> 溝通技巧
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_safety" onclick="setSection('dem_safety')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_safety" onclick="setSection('dem_safety')">
       <span class="item-icon">🛡️</span> 環境與安全
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_activity" onclick="setSection('dem_activity')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_activity" onclick="setSection('dem_activity')">
       <span class="item-icon">🧩</span> 日常活動
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_feeding" onclick="setSection('dem_feeding')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_feeding" onclick="setSection('dem_feeding')">
       <span class="item-icon">🍽️</span> 進食照護
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="dem_hygiene" onclick="setSection('dem_hygiene')">
+    <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_hygiene" onclick="setSection('dem_hygiene')">
       <span class="item-icon">🧼</span> 個人衛生
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第14輯・慢性病照護管理</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_vitals" onclick="setSection('chr_vitals')">
+    <div class="sidebar-vol-header vol-14" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第14輯・慢性病照護管理</div>
+    </div>
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_vitals" onclick="setSection('chr_vitals')">
       <span class="item-icon">📊</span> 生命徵象監測
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_cardio" onclick="setSection('chr_cardio')">
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_cardio" onclick="setSection('chr_cardio')">
       <span class="item-icon">🫀</span> 心血管疾病照護
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_diabetes" onclick="setSection('chr_diabetes')">
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_diabetes" onclick="setSection('chr_diabetes')">
       <span class="item-icon">🍬</span> 糖尿病照護
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_resp" onclick="setSection('chr_resp')">
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_resp" onclick="setSection('chr_resp')">
       <span class="item-icon">🫁</span> 呼吸道疾病照護
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_renal" onclick="setSection('chr_renal')">
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_renal" onclick="setSection('chr_renal')">
       <span class="item-icon">🫘</span> 腎臟與泌尿道照護
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="chr_pain" onclick="setSection('chr_pain')">
+    <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_pain" onclick="setSection('chr_pain')">
       <span class="item-icon">😖</span> 疼痛與發燒管理
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第15輯・感染控制與防疫</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="inf_basics" onclick="setSection('inf_basics')">
+    <div class="sidebar-vol-header vol-15" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第15輯・感染控制與防疫</div>
+    </div>
+    <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_basics" onclick="setSection('inf_basics')">
       <span class="item-icon">🦠</span> 感染基礎知識
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="inf_ppe" onclick="setSection('inf_ppe')">
+    <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_ppe" onclick="setSection('inf_ppe')">
       <span class="item-icon">😷</span> 個人防護裝備
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="inf_clean" onclick="setSection('inf_clean')">
+    <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_clean" onclick="setSection('inf_clean')">
       <span class="item-icon">🧴</span> 環境清潔消毒
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="inf_isolate" onclick="setSection('inf_isolate')">
+    <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_isolate" onclick="setSection('inf_isolate')">
       <span class="item-icon">🚧</span> 隔離與預防
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="inf_symptoms" onclick="setSection('inf_symptoms')">
+    <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_symptoms" onclick="setSection('inf_symptoms')">
       <span class="item-icon">🌡️</span> 症狀與照護技巧
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第16輯・安全防護與意外預防</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_fall" onclick="setSection('safe_fall')">
+    <div class="sidebar-vol-header vol-16" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第16輯・安全防護與意外預防</div>
+    </div>
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_fall" onclick="setSection('safe_fall')">
       <span class="item-icon">🤕</span> 跌倒預防
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_home" onclick="setSection('safe_home')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_home" onclick="setSection('safe_home')">
       <span class="item-icon">🏠</span> 居家安全
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_accident" onclick="setSection('safe_accident')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_accident" onclick="setSection('safe_accident')">
       <span class="item-icon">🩹</span> 意外處理
       <span class="item-badge">20</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_fire" onclick="setSection('safe_fire')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_fire" onclick="setSection('safe_fire')">
       <span class="item-icon">🔥</span> 消防安全
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_disaster" onclick="setSection('safe_disaster')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_disaster" onclick="setSection('safe_disaster')">
       <span class="item-icon">🌊</span> 災害應變
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_electrical" onclick="setSection('safe_electrical')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_electrical" onclick="setSection('safe_electrical')">
       <span class="item-icon">🔌</span> 用電與瓦斯安全
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="safe_emergency" onclick="setSection('safe_emergency')">
+    <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_emergency" onclick="setSection('safe_emergency')">
       <span class="item-icon">🚑</span> 緊急救護
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第17輯・安寧緩和與臨終關懷</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_01" onclick="setSection('vol17_01')">
+    <div class="sidebar-vol-header vol-17" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第17輯・安寧緩和與臨終關懷</div>
+    </div>
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_01" onclick="setSection('vol17_01')">
       <span class="item-icon">🕊️</span> 安寧療護基礎
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_02" onclick="setSection('vol17_02')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_02" onclick="setSection('vol17_02')">
       <span class="item-icon">😖</span> 疼痛與症狀控制
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_03" onclick="setSection('vol17_03')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_03" onclick="setSection('vol17_03')">
       <span class="item-icon">😟</span> 心理與情緒支持
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_04" onclick="setSection('vol17_04')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_04" onclick="setSection('vol17_04')">
       <span class="item-icon">🕯️</span> 靈性照顧
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_05" onclick="setSection('vol17_05')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_05" onclick="setSection('vol17_05')">
       <span class="item-icon">🗣️</span> 溝通與決策
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_06" onclick="setSection('vol17_06')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_06" onclick="setSection('vol17_06')">
       <span class="item-icon">👪</span> 家屬支持與後事
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol17_07" onclick="setSection('vol17_07')">
+    <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_07" onclick="setSection('vol17_07')">
       <span class="item-icon">😢</span> 哀傷輔導
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第18輯・用藥安全與管理</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_01" onclick="setSection('vol18_01')">
+    <div class="sidebar-vol-header vol-18" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第18輯・用藥安全與管理</div>
+    </div>
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_01" onclick="setSection('vol18_01')">
       <span class="item-icon">💊</span> 藥物類型
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_02" onclick="setSection('vol18_02')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_02" onclick="setSection('vol18_02')">
       <span class="item-icon">💊</span> 用藥方式
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_03" onclick="setSection('vol18_03')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_03" onclick="setSection('vol18_03')">
       <span class="item-icon">⏰</span> 用藥時間與劑量
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_04" onclick="setSection('vol18_04')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_04" onclick="setSection('vol18_04')">
       <span class="item-icon">🌡️</span> 藥物儲存
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_05" onclick="setSection('vol18_05')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_05" onclick="setSection('vol18_05')">
       <span class="item-icon">😵</span> 副作用與注意事項
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_06" onclick="setSection('vol18_06')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_06" onclick="setSection('vol18_06')">
       <span class="item-icon">📅</span> 用藥輔具
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_07" onclick="setSection('vol18_07')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_07" onclick="setSection('vol18_07')">
       <span class="item-icon">📝</span> 處方與記錄
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol18_08" onclick="setSection('vol18_08')">
+    <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_08" onclick="setSection('vol18_08')">
       <span class="item-icon">💊</span> 特殊藥物
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第19輯・管路與造口照護</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_01" onclick="setSection('vol19_01')">
+    <div class="sidebar-vol-header vol-19" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第19輯・管路與造口照護</div>
+    </div>
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_01" onclick="setSection('vol19_01')">
       <span class="item-icon">🧪</span> 管路基礎
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_02" onclick="setSection('vol19_02')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_02" onclick="setSection('vol19_02')">
       <span class="item-icon">👃</span> 鼻胃管照護
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_03" onclick="setSection('vol19_03')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_03" onclick="setSection('vol19_03')">
       <span class="item-icon">🚽</span> 導尿管照護
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_04" onclick="setSection('vol19_04')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_04" onclick="setSection('vol19_04')">
       <span class="item-icon">🫁</span> 氣切與呼吸管路
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_05" onclick="setSection('vol19_05')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_05" onclick="setSection('vol19_05')">
       <span class="item-icon">💉</span> 靜脈管路
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_06" onclick="setSection('vol19_06')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_06" onclick="setSection('vol19_06')">
       <span class="item-icon">🩻</span> 造口照護
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_07" onclick="setSection('vol19_07')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_07" onclick="setSection('vol19_07')">
       <span class="item-icon">🩹</span> 管路固定與清潔
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_08" onclick="setSection('vol19_08')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_08" onclick="setSection('vol19_08')">
       <span class="item-icon">🩸</span> 併發症與問題處理
       <span class="item-badge">10</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol19_09" onclick="setSection('vol19_09')">
+    <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_09" onclick="setSection('vol19_09')">
       <span class="item-icon">🧻</span> 照護用品
       <span class="item-badge">5</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">第20輯・職場權益與文化適應</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_01" onclick="setSection('vol20_01')">
+    <div class="sidebar-vol-header vol-20" style="margin-top:20px">
+      <div class="sidebar-vol-dot"></div>
+      <div class="sidebar-vol-label">第20輯・職場權益與文化適應</div>
+    </div>
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_01" onclick="setSection('vol20_01')">
       <span class="item-icon">📝</span> 聘僱合約
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_02" onclick="setSection('vol20_02')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_02" onclick="setSection('vol20_02')">
       <span class="item-icon">💰</span> 薪資與休假
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_03" onclick="setSection('vol20_03')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_03" onclick="setSection('vol20_03')">
       <span class="item-icon">🛡️</span> 權利義務
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_04" onclick="setSection('vol20_04')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_04" onclick="setSection('vol20_04')">
       <span class="item-icon">🗣️</span> 職場溝通
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_05" onclick="setSection('vol20_05')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_05" onclick="setSection('vol20_05')">
       <span class="item-icon">🌍</span> 文化差異
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_06" onclick="setSection('vol20_06')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_06" onclick="setSection('vol20_06')">
       <span class="item-icon">🆘</span> 申訴與求助
       <span class="item-badge">15</span>
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" data-sec="vol20_07" onclick="setSection('vol20_07')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_07" onclick="setSection('vol20_07')">
       <span class="item-icon">📄</span> 終止合約
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-section-label" style="margin-top:20px">學習工具</div>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" onclick="openFlashcard(0)">
+    <div class="sidebar-section-label" style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);">學習工具</div>
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="openFlashcard(0)">
       <span class="item-icon">⚡</span> 閃卡練習
     </a>
-    <a class="sidebar-item" href="javascript:void(0)" role="button" onclick="switchPageTab('quiz')">
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="switchPageTab('quiz')">
       <span class="item-icon">🧠</span> 詞彙測驗
+    </a>
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="switchPageTab('dashboard')">
+      <span class="item-icon">🏆</span> 學習儀表板
     </a>
   </aside>
 
@@ -1462,10 +1836,26 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <button class="page-tab active" data-tab="browse" onclick="switchPageTab('browse')">📖 詞彙瀏覽</button>
       <button class="page-tab" data-tab="quiz" onclick="switchPageTab('quiz')">🧠 測驗模式</button>
       <button class="page-tab" data-tab="progress" onclick="switchPageTab('progress')">📊 學習進度</button>
+      <button class="page-tab" data-tab="dashboard" onclick="switchPageTab('dashboard')">🏆 儀表板</button>
     </div>
 
     <!-- ── VIEW: BROWSE ── -->
     <div class="view active" id="view-browse">
+
+      <!-- WELCOME HERO -->
+      <div class="hero-banner" id="heroBanner">
+        <div class="hero-icon">🏥</div>
+        <div class="hero-text">
+          <div class="hero-title">看護照顧專業用語・第1–20輯</div>
+          <div class="hero-sub">涵蓋 20 輯 · 超過 500 個看護用語 · 四語對照學習</div>
+          <div class="hero-cta">
+            <button class="hero-btn hero-btn-primary" onclick="openFlashcard(0)">⚡ 開始閃卡</button>
+            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('quiz')">🧠 詞彙測驗</button>
+            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('dashboard')">📊 學習儀表板</button>
+          </div>
+        </div>
+      </div>
+
       <div class="module-header">
         <div class="module-breadcrumb" id="moduleBreadcrumb">
           第1輯 · 日常照顧基礎用語 <span>›</span>
@@ -1575,7 +1965,14 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <div id="progressContainer"></div>
     </div>
 
-  </main>
+    <!-- ── VIEW: DASHBOARD ── -->
+    <div class="view" id="view-dashboard">
+      <div class="module-header">
+        <div class="module-title">個人學習儀表板</div>
+        <div class="module-sub">追蹤你的學習成果・每天持續進步</div>
+      </div>
+      <div id="dashboardContainer"></div>
+    </div>
 </div>
 
 <!-- ── FLASHCARD MODAL ── -->
@@ -4770,6 +5167,25 @@ function setSection(sec, el) {
     vol20_06:'第20輯 · 職場權益與文化適應',
     vol20_07:'第20輯 · 職場權益與文化適應',
   };
+  // Hide hero after first navigation
+  const hero = document.getElementById('heroBanner');
+  if (hero && sec !== 'basic') hero.style.display = 'none';
+
+  // Propagate active vol colour to primary variable for breadcrumb/stats accent
+  const activeItem = document.querySelector('.sidebar-item.active');
+  if (activeItem) {
+    const volMatch = [...activeItem.classList].find(c => /^vol-\d+$/.test(c));
+    if (volMatch) {
+      const volNum = volMatch.split('-')[1];
+      const root = document.documentElement;
+      const c = getComputedStyle(root).getPropertyValue(`--vol${volNum}`).trim();
+      if (c) root.style.setProperty('--primary', c);
+      else root.style.removeProperty('--primary');
+    } else {
+      document.documentElement.style.removeProperty('--primary');
+    }
+  }
+
   const breadEl = document.getElementById('moduleBreadcrumb');
   if (breadEl) breadEl.innerHTML = (moduleMap[sec] || '中文語言學習平台') + ' <span>›</span> <span id="sectionNameBreadcrumb">' + s.zh + '</span>';
   renderCards();
@@ -4852,6 +5268,7 @@ function renderCard(c) {
 function toggleMastered(n) {
   mastered[n] = !mastered[n];
   save();
+  if (mastered[n]) recordLearningDay();
   const mainEl = document.querySelector('.main');
   const scrollY = window.scrollY;
   const mainScrollY = mainEl ? mainEl.scrollTop : 0;
@@ -4902,6 +5319,7 @@ function switchPageTab(name) {
   document.getElementById('view-' + name).classList.add('active');
   if (name === 'quiz') renderQuiz();
   if (name === 'progress') renderProgress();
+  if (name === 'dashboard') renderDashboard();
   // sync bottom nav
   document.querySelectorAll('.bnav-item[id^="bnav-"]').forEach(b => b.classList.remove('active'));
   const bnavBtn = document.getElementById('bnav-' + name);
@@ -5014,12 +5432,14 @@ function checkAnswer(el, selected, correct, langProp) {
     el.classList.add('correct');
     document.getElementById('quizResult').innerHTML = '<span style="color:#16A34A">✓ 正確！</span>';
     mastered[correct] = true; save();
+    recordQuizAnswer(true);
   } else {
     el.classList.add('wrong');
     document.getElementById('quizResult').innerHTML = '<span style="color:#DC2626">✗ 再試試看！</span>';
     document.querySelectorAll('.quiz-opt').forEach(b => {
       if (b.getAttribute('data-n') === correct) b.classList.add('correct');
     });
+    recordQuizAnswer(false);
   }
 }
 
@@ -5260,6 +5680,202 @@ function clearAllProgress() {
   showToast('✅ 已清除全部學習進度');
 }
 
+// ── QUIZ SCORE TRACKING ──
+function recordQuizAnswer(correct) {
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    // quiz sessions: array of {date, correct, total}
+    let sessions = JSON.parse(localStorage.getItem('quizSessions') || '[]');
+    // find today's session
+    let sess = sessions.find(s => s.date === today);
+    if (!sess) {
+      sess = { date: today, correct: 0, total: 0 };
+      sessions.unshift(sess);
+      if (sessions.length > 30) sessions = sessions.slice(0, 30);
+    }
+    sess.total++;
+    if (correct) sess.correct++;
+    localStorage.setItem('quizSessions', JSON.stringify(sessions));
+    // track learning days
+    let days = JSON.parse(localStorage.getItem('learnDays') || '[]');
+    if (!days.includes(today)) {
+      days.unshift(today);
+      if (days.length > 365) days = days.slice(0, 365);
+      localStorage.setItem('learnDays', JSON.stringify(days));
+    }
+  } catch(e) {}
+}
+
+function recordLearningDay() {
+  try {
+    const today = new Date().toISOString().slice(0,10);
+    let days = JSON.parse(localStorage.getItem('learnDays') || '[]');
+    if (!days.includes(today)) {
+      days.unshift(today);
+      if (days.length > 365) days = days.slice(0, 365);
+      localStorage.setItem('learnDays', JSON.stringify(days));
+    }
+  } catch(e) {}
+}
+
+// ── DASHBOARD RENDER ──
+function renderDashboard() {
+  const allSections  = Object.entries(SECTIONS);
+  const totalCards   = allSections.reduce((a,[,s]) => a + s.cards.length, 0);
+  const learnedCards = allSections.reduce((a,[,s]) => a + s.cards.filter(c => mastered[c.n]).length, 0);
+
+  // completed sections: all cards mastered
+  const completedSections = allSections.filter(([,s]) => s.cards.length > 0 && s.cards.every(c => mastered[c.n])).length;
+  const totalSections = allSections.length;
+
+  // learning days
+  let learnDays = [];
+  try { learnDays = JSON.parse(localStorage.getItem('learnDays') || '[]'); } catch(e){}
+  // also count today if any mastered cards
+  const today = new Date().toISOString().slice(0,10);
+  if (learnedCards > 0 && !learnDays.includes(today)) {
+    learnDays = [today, ...learnDays];
+  }
+  const totalDays = learnDays.length;
+
+  // quiz sessions
+  let sessions = [];
+  try { sessions = JSON.parse(localStorage.getItem('quizSessions') || '[]'); } catch(e){}
+  const totalQuizQ = sessions.reduce((a,s) => a + s.total, 0);
+  const totalCorrect = sessions.reduce((a,s) => a + s.correct, 0);
+  const avgScore = totalQuizQ > 0 ? Math.round(totalCorrect / totalQuizQ * 100) : null;
+
+  // streak: consecutive days up to today
+  let streak = 0;
+  const todayMs = new Date(today).getTime();
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(todayMs - i * 86400000).toISOString().slice(0,10);
+    if (learnDays.includes(d)) streak++;
+    else break;
+  }
+
+  // last 14 days for streak bar
+  const last14 = [];
+  for (let i = 13; i >= 0; i--) {
+    const d = new Date(todayMs - i * 86400000);
+    last14.push({
+      date: d.toISOString().slice(0,10),
+      label: d.toLocaleDateString('zh-TW', {weekday:'narrow'}),
+      day: d.getDate()
+    });
+  }
+
+  // overall pct
+  const overallPct = totalCards > 0 ? Math.round(learnedCards / totalCards * 100) : 0;
+  const r = 38, circ = 2 * Math.PI * r;
+  const dashOffset = circ * (1 - overallPct / 100);
+
+  // quiz history (last 5 sessions)
+  const histRows = sessions.slice(0, 5).map(s => {
+    const pct = s.total > 0 ? Math.round(s.correct / s.total * 100) : 0;
+    const cls = pct === 100 ? 'perfect' : pct >= 70 ? 'good' : pct >= 50 ? 'ok' : 'low';
+    const dateStr = new Date(s.date).toLocaleDateString('zh-TW', {month:'2-digit', day:'2-digit'});
+    return `<div class="quiz-history-row">
+      <span style="font-size:16px;">🧠</span>
+      <div>
+        <div style="font-weight:700;color:var(--ink);font-size:13px;">${dateStr} 測驗</div>
+        <div style="font-size:11px;color:var(--ink-3);">答對 ${s.correct} / ${s.total} 題</div>
+      </div>
+      <span class="quiz-score-badge ${cls}">${pct}%</span>
+    </div>`;
+  }).join('') || `<div style="text-align:center;padding:20px;color:var(--ink-3);font-size:13px;">尚無測驗紀錄，去試試測驗模式吧！</div>`;
+
+  document.getElementById('dashboardContainer').innerHTML = `
+    <!-- 4 stat cards -->
+    <div class="dash-grid">
+      <div class="dash-card dc-blue">
+        <div class="dash-card-icon">📚</div>
+        <div class="dash-card-val">${learnedCards.toLocaleString()}</div>
+        <div class="dash-card-label">已學習單字</div>
+        <div class="dash-card-sub">共 ${totalCards.toLocaleString()} 個詞彙</div>
+      </div>
+      <div class="dash-card dc-green">
+        <div class="dash-card-icon">✅</div>
+        <div class="dash-card-val">${completedSections}</div>
+        <div class="dash-card-label">已完成課程</div>
+        <div class="dash-card-sub">共 ${totalSections} 個單元</div>
+      </div>
+      <div class="dash-card dc-amber">
+        <div class="dash-card-icon">🎯</div>
+        <div class="dash-card-val">${avgScore !== null ? avgScore + '%' : '—'}</div>
+        <div class="dash-card-label">測驗平均分數</div>
+        <div class="dash-card-sub">${totalQuizQ > 0 ? '共 ' + totalQuizQ + ' 題' : '尚未作答'}</div>
+      </div>
+      <div class="dash-card dc-rose">
+        <div class="dash-card-icon">🔥</div>
+        <div class="dash-card-val">${totalDays}</div>
+        <div class="dash-card-label">學習天數</div>
+        <div class="dash-card-sub">連續 ${streak} 天</div>
+      </div>
+    </div>
+
+    <!-- overall progress -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+      <div class="dash-section-title">📈 整體學習進度</div>
+      <div class="donut-wrap">
+        <div class="donut-ring">
+          <svg width="88" height="88" viewBox="0 0 88 88">
+            <circle cx="44" cy="44" r="${r}" fill="none" stroke="var(--border)" stroke-width="9"/>
+            <circle cx="44" cy="44" r="${r}" fill="none" stroke="var(--primary)" stroke-width="9"
+              stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${dashOffset.toFixed(1)}"
+              stroke-linecap="round" style="transition:stroke-dashoffset .6s ease"/>
+          </svg>
+          <div class="donut-center">
+            <div class="donut-pct">${overallPct}%</div>
+            <div class="donut-lbl">完成</div>
+          </div>
+        </div>
+        <div class="donut-stats">
+          <div class="donut-stat-row">
+            <div class="donut-stat-dot" style="background:var(--primary)"></div>
+            <span style="color:var(--ink-2);font-weight:600;">已學 ${learnedCards} 詞</span>
+          </div>
+          <div class="donut-stat-row">
+            <div class="donut-stat-dot" style="background:var(--border)"></div>
+            <span style="color:var(--ink-3);">未學 ${totalCards - learnedCards} 詞</span>
+          </div>
+          <div class="donut-stat-row">
+            <div class="donut-stat-dot" style="background:#16A34A"></div>
+            <span style="color:var(--ink-2);font-weight:600;">完成 ${completedSections} 單元</span>
+          </div>
+          ${streak >= 3 ? `<div class="donut-stat-row"><span style="color:#D97706;font-weight:700;">🔥 連續 ${streak} 天學習！</span></div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- 14-day streak bar -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+      <div class="dash-section-title">📅 近14天學習紀錄</div>
+      <div class="streak-bar">
+        ${last14.map(d => {
+          const isDone  = learnDays.includes(d.date);
+          const isToday = d.date === today;
+          const cls = isDone ? 'done' : (isToday ? 'today' : '');
+          return `<div class="streak-day ${cls}" title="${d.date}">${d.day}<br><span style="font-size:9px">${d.label}</span></div>`;
+        }).join('')}
+      </div>
+      <div style="font-size:11px;color:var(--ink-3);margin-top:8px;">🟢 有學習 &nbsp; 🔵 今天 &nbsp; ⬜ 未學習</div>
+    </div>
+
+    <!-- quiz history -->
+    <div style="background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:16px;">
+      <div class="dash-section-title">🧠 近期測驗成績</div>
+      ${histRows}
+      ${sessions.length > 0 ? `<div style="text-align:center;margin-top:12px;font-size:12px;color:var(--ink-3);">共 ${sessions.length} 次測驗 · 累計 ${totalQuizQ} 題 · 正確率 ${avgScore}%</div>` : ''}
+    </div>
+
+    <div style="text-align:center;margin-top:8px;margin-bottom:20px;">
+      <button class="nav-btn" onclick="switchPageTab('quiz')" style="margin-right:8px;">🧠 去測驗</button>
+      <button class="nav-btn" onclick="switchPageTab('browse')">📖 去學習</button>
+    </div>
+  `;
+}
+
 // init
 setSection('basic');  // properly initialise title, breadcrumb, and cards
 updateStats();
@@ -5279,6 +5895,10 @@ updateMemoryPanel();
     <div class="bnav-sep"></div>
     <button class="bnav-item" id="bnav-progress" onclick="switchToView('progress')">
       <span class="bnav-icon">📊</span>進度
+    </button>
+    <div class="bnav-sep"></div>
+    <button class="bnav-item" id="bnav-dashboard" onclick="switchToView('dashboard')">
+      <span class="bnav-icon">🏆</span>儀表板
     </button>
     <div class="bnav-sep"></div>
     <button class="bnav-item" id="bnav-flash" onclick="openFlashcard(0)">
