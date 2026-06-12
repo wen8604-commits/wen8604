@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>外籍看護幫傭 能力評測系統 v25.2｜聘外看就上手</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+<title>外籍看護幫傭 能力評測系統 v25.5｜聘外看就上手</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -162,6 +161,14 @@ body::after {
 }
 .footer-brand { font-size: 10px; font-weight: 800; color: var(--accent); letter-spacing: 2.5px; margin-bottom: 5px; text-transform: uppercase; }
 .footer-copy { font-size: 10px; color: var(--t3); letter-spacing: .4px; }
+.footer-disclaimer {
+  margin-top: 8px;
+  font-size: 10px; color: var(--t3);
+  letter-spacing: .3px; line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 8px; max-width: 440px;
+  margin-left: auto; margin-right: auto;
+}
 
 /* ─────────────────────────────────────
    HOME SCREEN
@@ -1117,7 +1124,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
     <div class="h-logo-icon">📋</div>
     <div class="h-logo-text">
       <span class="brand-main">外籍看護幫傭 能力評測系統</span>
-      <span class="brand-copy">聘外看就上手 · 版權所有</span>
+      <span class="brand-copy">聘外看就上手</span>
     </div>
   </div>
   <div class="lang-bar">
@@ -4259,9 +4266,21 @@ const SCENARIO_QS = {
 // ============================================================
 // APP STATE - v16
 // ============================================================
-const APP_VERSION = 'v25.2'; // v25.2：PDF 連點鎖定 + 題庫 UUID 生成工具
+// ============================================================
+// v25.5 PATCH LOG（安全與穩定性修復）:
+// ✅ V25-14: APP_VERSION 升至 v25.5，title/footer/報告同步更新
+// ✅ V25-15: migrateRecords prevVersions 補入 records_v25.4，升版不丟歷史紀錄
+// ✅ V25-16: loadRecords() 對 localStorage 歷史紀錄做資料清洗，避免壞資料造成 XSS 或 UI 異常
+// v25.4 PATCH LOG（稽核修復 5 項）:
+// ✅ V25-9:  APP_VERSION 升至 v25.4，title/footer/報告同步更新
+// ✅ V25-10: migrateRecords prevVersions 補入 records_v25.3，升版不丟歷史紀錄
+// ✅ V25-11: retryQuiz() 補入 updateQBInfo() 呼叫，修復重試後題庫預覽不更新（UX）
+// ✅ V25-12: exportReport fallback toast 加入「允許彈出視窗」引導文字，改善 iOS/LINE 場景
+// ✅ V25-13: footer 動態注入補上 role="contentinfo"，強化無障礙語意（A11y）
+// ============================================================
+const APP_VERSION = 'v25.5'; // v25.5：localStorage 歷史紀錄安全清洗 + 遷移補強
 // Fix 4: 答題紀錄綁定版本號（升版自動隔離），書籤 key 固定（跨版本保留）
-const STORAGE_KEY_RECORDS   = `records_${APP_VERSION}`; // 升版後自動隔離舊版紀錄（v25.2）
+const STORAGE_KEY_RECORDS   = `records_${APP_VERSION}`; // 升版後自動隔離舊版紀錄（v25.4）
 const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 
 // ============================================================
@@ -4282,10 +4301,16 @@ const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 //           並補充 STORAGE_KEY_BOOKMARKS 支援 id-based 書籤（向下相容 q.zh key）
 // ✅ V25-2: escapeHTML 由 DOM 方法改為純字串替換，速度提升 3-5x，且無副作用
 //           (const div = document.createElement) → (.replace(/&/g,...) chain)
-// ✅ V25-3: exportReport() 改為透過 html2pdf.js 直接生成 PDF 下載，
-//           行動裝置（LINE/iOS）無需先開新視窗再列印，分享更流暢
+// ✅ V25-3: exportReport() 曾嘗試改為直接生成 PDF 下載
+//           後續版本已改採獨立報告視窗列印，避免 html2canvas 白頁問題
 // ✅ V25-4: APP_VERSION 升至 v25.0，migrateRecords 補入 records_v24.0，
 //           title/footer/報告同步更新
+// ============================================================
+// v25.3 PATCH LOG:
+// ✅ V25-5: 補入「看護認知溝通」「幫傭家務技能」至正式抽題流程
+// ✅ V25-6: 補齊溝通技巧、認知與溝通、洗衣保養、烹飪技能、兒童安全、職場倫理能力維度
+// ✅ V25-7: 抽題與職位題數統計共用 getJobBankKeys()，避免資料與評分流程不同步
+// ✅ V25-8: 移除未使用的 html2pdf CDN 腳本，降低外部依賴與供應鏈風險
 // ============================================================
 
 
@@ -4293,7 +4318,7 @@ const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 (function migrateRecords() {
   try {
     if (localStorage.getItem(STORAGE_KEY_RECORDS)) return; // 新版已有資料，不需遷移
-    const prevVersions = ['records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
+    const prevVersions = ['records_v25.4','records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
     for (const oldKey of prevVersions) {
       const old = localStorage.getItem(oldKey);
       if (old) {
@@ -4329,13 +4354,15 @@ const CAT_DIMS = {
   '身障照顧': '照護',
   // BUG-G FIX v19: 補入 QBANK_EXTRA 分類 mapping
   '壓瘡預防': '照護', '失禁照護': '照護',
-  '溝通協調': '溝通', '工作績效': '溝通', '財物管理': '溝通', '工作效率': '溝通',
+  '溝通協調': '溝通', '溝通技巧': '溝通', '認知與溝通': '溝通',
+  '工作績效': '溝通', '財物管理': '溝通', '工作效率': '溝通',
   '危機應變': '安全', '情境判斷': '安全',
   '食品安全': '衛生', '食品衛生': '衛生',
   '家務整理': '家務', '時間管理': '家務', '家務技能': '家務',
-  '兒童照護': '兒童', '幼兒照顧': '兒童',
+  '洗衣保養': '家務', '烹飪技能': '家務',
+  '兒童照護': '兒童', '幼兒照顧': '兒童', '兒童安全': '兒童',
   '人格特質': '態度', '智力測驗': '態度',
-  '面試情境': '溝通', '工作態度': '態度',
+  '面試情境': '溝通', '工作態度': '態度', '職場倫理': '態度',
 };
 const DIM_COLORS = {
   '醫護': '#e8602e', '照護': '#1fb5cc', '溝通': '#e5b64a',
@@ -4444,24 +4471,33 @@ function updateQBInfo() {
   if (selMode === 'learn') { box.style.display='none'; return; }
   box.style.display='block';
   tags.innerHTML = '';
-  const catColors = {
+const catColors = {
     '危機應變':'rgba(231,76,60,.15)',  '食品衛生':'rgba(39,174,96,.15)',
     '身障照顧':'rgba(52,152,219,.15)', '幼兒照顧':'rgba(155,89,182,.15)',
     '面試情境':'rgba(240,98,42,.15)',   '績效考核':'rgba(245,200,66,.15)',
     '智力測驗':'rgba(54,200,224,.15)', '人格特質':'rgba(255,152,0,.15)',
-    '情境題':'rgba(245,200,66,.15)',
+    '情境題':'rgba(245,200,66,.15)', '認知與溝通':'rgba(245,200,66,.15)',
+    '溝通技巧':'rgba(245,200,66,.15)', '洗衣保養':'rgba(155,89,182,.15)',
+    '烹飪技能':'rgba(155,89,182,.15)', '兒童安全':'rgba(255,152,0,.15)',
+    '職場倫理':'rgba(255,152,0,.15)',
   };
   const catBorders = {
     '危機應變':'rgba(231,76,60,.4)',  '食品衛生':'rgba(39,174,96,.4)',
     '身障照顧':'rgba(52,152,219,.4)', '幼兒照顧':'rgba(155,89,182,.4)',
     '面試情境':'rgba(240,98,42,.4)',   '績效考核':'rgba(245,200,66,.4)',
     '智力測驗':'rgba(54,200,224,.4)', '人格特質':'rgba(255,152,0,.4)',
-    '情境題':'rgba(245,200,66,.4)',
+    '情境題':'rgba(245,200,66,.4)', '認知與溝通':'rgba(245,200,66,.4)',
+    '溝通技巧':'rgba(245,200,66,.4)', '洗衣保養':'rgba(155,89,182,.4)',
+    '烹飪技能':'rgba(155,89,182,.4)', '兒童安全':'rgba(255,152,0,.4)',
+    '職場倫理':'rgba(255,152,0,.4)',
   };
   const catColors2 = {
     '危機應變':'#e74c3c', '食品衛生':'#27ae60', '身障照顧':'#3498db',
     '幼兒照顧':'#9b59b6', '面試情境':'#f0622a', '績效考核':'#f5c842',
     '智力測驗':'#36c8e0', '人格特質':'#ff9800', '情境題':'#f5c842',
+    '認知與溝通':'#f5c842', '溝通技巧':'#f5c842',
+    '洗衣保養':'#9b59b6', '烹飪技能':'#9b59b6',
+    '兒童安全':'#ff9800', '職場倫理':'#ff9800',
   };
   // Update per-job question count in stat box
   if (selJob) {
@@ -4505,37 +4541,35 @@ function shuffleOpts(q) {
   };
 }
 
+function getJobBankKeys(job) {
+  return job === 'caregiver'
+    ? ['看護危機','看護食品','看護身障','看護壓瘡預防','看護失禁照護','看護認知溝通']
+    : ['幫傭危機','幫傭食品','幫傭幼兒','幫傭家務技能'];
+}
+
 function buildPool() {
   const job = selJob, mode = selMode;
   let pool = [];
   const origJobMode = QBANK_ORIG[job]?.[mode] || [];
   pool.push(...origJobMode);
-  // BUG-A FIX v19: 加入 QBANK_EXTRA 的看護壓瘡預防 / 看護失禁照護，確保這批題目可出題
-  const allKeys = job==='caregiver'
-    ? ['看護危機','看護食品','看護身障','看護壓瘡預防','看護失禁照護']
-    : ['幫傭危機','幫傭食品','幫傭幼兒'];
+  // v25.3: 題庫鍵集中管理，避免統計有題、正式測驗卻抽不到題。
+  const allKeys = getJobBankKeys(job);
+  const [crisisKey, foodKey, specialtyKey, ...extraKeys] = allKeys;
   if (mode === 'crisis') {
-    const crisisKey = allKeys[0];
     pool.push(...(QBANK_NEW[crisisKey]||[]));
-    pool.push(...shuffle(QBANK_NEW[allKeys[1]]||[]).slice(0,8));
-    pool.push(...shuffle(QBANK_NEW[allKeys[2]]||[]).slice(0,8));
-    // v19: 加護壓瘡/失禁也可能含危機應變題，補入
-    if (allKeys[3]) pool.push(...shuffle(QBANK_NEW[allKeys[3]]||[]).slice(0,4));
-    if (allKeys[4]) pool.push(...shuffle(QBANK_NEW[allKeys[4]]||[]).slice(0,4));
+    pool.push(...shuffle(QBANK_NEW[foodKey]||[]).slice(0,8));
+    pool.push(...shuffle(QBANK_NEW[specialtyKey]||[]).slice(0,8));
+    extraKeys.forEach(k => pool.push(...shuffle(QBANK_NEW[k]||[]).slice(0,4)));
   } else if (mode === 'specialty') {
-    pool.push(...(QBANK_NEW[allKeys[1]]||[]));
-    pool.push(...(QBANK_NEW[allKeys[2]]||[]));
-    // v19: 壓瘡/失禁屬專項技能
-    if (allKeys[3]) pool.push(...(QBANK_NEW[allKeys[3]]||[]));
-    if (allKeys[4]) pool.push(...(QBANK_NEW[allKeys[4]]||[]));
+    pool.push(...(QBANK_NEW[foodKey]||[]));
+    pool.push(...(QBANK_NEW[specialtyKey]||[]));
+    extraKeys.forEach(k => pool.push(...(QBANK_NEW[k]||[])));
   } else if (mode === 'interview') {
     pool.push(...(SCENARIO_QS[job]||[]));
-    pool.push(...shuffle(QBANK_NEW[allKeys[0]]||[]).slice(0,8));
-    pool.push(...shuffle(QBANK_NEW[allKeys[1]]||[]).slice(0,5));
-    pool.push(...shuffle(QBANK_NEW[allKeys[2]]||[]).slice(0,5));
-    // v19: 補入壓瘡/失禁少量題
-    if (allKeys[3]) pool.push(...shuffle(QBANK_NEW[allKeys[3]]||[]).slice(0,3));
-    if (allKeys[4]) pool.push(...shuffle(QBANK_NEW[allKeys[4]]||[]).slice(0,3));
+    pool.push(...shuffle(QBANK_NEW[crisisKey]||[]).slice(0,8));
+    pool.push(...shuffle(QBANK_NEW[foodKey]||[]).slice(0,5));
+    pool.push(...shuffle(QBANK_NEW[specialtyKey]||[]).slice(0,5));
+    extraKeys.forEach(k => pool.push(...shuffle(QBANK_NEW[k]||[]).slice(0,3)));
   } else {
     allKeys.forEach(k => pool.push(...shuffle(QBANK_NEW[k]||[]).slice(0,8)));
   }
@@ -4987,7 +5021,7 @@ function buildRadarLegend(catStats) {
 // ============================================================
 function saveRecord(correct, total, pct, catStats) {
   try {
-    const records = JSON.parse(localStorage.getItem(STORAGE_KEY_RECORDS) || '[]');
+    const records = loadRecords();
     const level = getLevel(pct);
     const record = {
       id: Date.now(),
@@ -5008,9 +5042,45 @@ function saveRecord(correct, total, pct, catStats) {
   } catch(e) { console.warn('Storage error:', e); }
 }
 
+function clampNumber(value, min, max, fallback = 0) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return fallback;
+  return Math.min(max, Math.max(min, Math.round(num)));
+}
+
+function cleanHistoryText(value, maxLen, fallback = '') {
+  const text = String(value || '').replace(/[<>]/g, '').trim().slice(0, maxLen);
+  return text || fallback;
+}
+
+function sanitizeHistoryRecord(record) {
+  if (!record || typeof record !== 'object') return null;
+  const total = clampNumber(record.total, 0, 200, 0);
+  const correct = clampNumber(record.correct, 0, total > 0 ? total : 0, 0);
+  const pct = clampNumber(record.pct, 0, 100, total ? Math.round(correct / total * 100) : 0);
+  const allowedLevelClasses = new Set(['level-pro', 'level-mid', 'level-basic']);
+  const safeLevelCls = allowedLevelClasses.has(record.levelCls) ? record.levelCls : getLevel(pct).cls;
+  const fallbackLevel = getLevel(pct).label;
+  const safeDate = cleanHistoryText(record.date, 40, new Date().toLocaleString('zh-TW'));
+  return {
+    id: Number.isFinite(Number(record.id)) ? Number(record.id) : Date.now(),
+    date: safeDate,
+    job: record.job === 'helper' ? 'helper' : 'caregiver',
+    mode: ['interview', 'performance', 'crisis', 'specialty'].includes(record.mode) ? record.mode : 'interview',
+    correct,
+    total,
+    pct,
+    level: cleanHistoryText(record.level, 30, fallbackLevel),
+    levelCls: safeLevelCls,
+    catStats: record.catStats && typeof record.catStats === 'object' ? record.catStats : {}
+  };
+}
+
 function loadRecords() {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY_RECORDS) || '[]');
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY_RECORDS) || '[]');
+    if (!Array.isArray(raw)) return [];
+    return raw.map(sanitizeHistoryRecord).filter(Boolean).slice(0, 50);
   } catch(e) { return []; }
 }
 
@@ -5079,15 +5149,11 @@ function clearHistory() {
 }
 
 // ============================================================
-// v9: EXPORT REPORT (HTML print)
+// v26: EXPORT REPORT — 改用獨立視窗列印，完全避開 html2canvas 白頁問題
 // ============================================================
 function exportReport() {
-  // V25-3: 改用 html2pdf.js 直接在背景生成 PDF 並觸發下載
-  // 行動裝置（LINE / iOS）無需新視窗，分享更流暢
-  // V24-4: 先做防呆再 destructure，避免 lastResult 預設值 total===0 時 crash
   if (!lastResult || !lastResult.total) { showToast('⚠ 請先完成一次測驗再匯出'); return; }
 
-  // ✅ V25-2: 按鈕鎖定 — 防止 PDF 連點攻擊，確保一次只執行一個匯出任務
   const exportBtn = document.querySelector('.export-btn');
   if (exportBtn && exportBtn.disabled) return;
   if (exportBtn) { exportBtn.disabled = true; exportBtn.style.opacity = '0.5'; }
@@ -5096,113 +5162,102 @@ function exportReport() {
   const level = getLevel(pct);
   const jobNames = {caregiver:'外籍看護', helper:'外籍幫傭'};
   const modeNames = {interview:'面試情境評估', performance:'工作績效考核', crisis:'危機應變測驗', specialty:'專項能力測驗'};
-
-  const catRows = Object.entries(catStats).map(([cat,s]) => {
-    const p = s.total ? Math.round(s.correct/s.total*100) : 0;
-    const color = p>=80?'#1fa86e':p>=60?'#e09830':'#d94040';
-    const safeCat = escapeHTML(cat);
-    return `<tr>
-      <td style="padding:8px 12px;border-bottom:1px solid #eee;">${safeCat}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center;">${s.correct}/${s.total}</td>
-      <td style="padding:8px 12px;border-bottom:1px solid #eee;text-align:center;color:${color};font-weight:700;">${p}%</td>
-    </tr>`;
-  }).join('');
-  const safeJobName = escapeHTML(jobNames[job]||job);
-  const safeModeNameStr = escapeHTML(modeNames[mode]||mode);
-
   const reportDate = new Date().toLocaleString('zh-TW');
   const fileName = `評測報告_${new Date().toISOString().slice(0,10)}.pdf`;
 
-  // Build a hidden DOM element for html2pdf to render
-  const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'position:absolute; left:-9999px; top:0; font-family:"Noto Sans TC",Arial,sans-serif; max-width:680px; padding:40px 28px; color:#1a2c44; background:#fff;';
-  wrapper.innerHTML = `
-    <h1 style="font-size:20px;color:#e8602e;margin:0 0 4px;">外籍看護幫傭 能力評測報告</h1>
-    <div style="color:#5a7da0;font-size:12px;margin-bottom:20px;">聘外看就上手 · ${APP_VERSION} ｜ ${reportDate}</div>
-    <div style="display:inline-block;padding:5px 14px;border-radius:7px;font-weight:800;font-size:13px;margin-bottom:16px;
-      background:${level.cls==='level-pro'?'#fff8e1':level.cls==='level-mid'?'#e0f7fa':'#fff3e0'};
-      color:${level.cls==='level-pro'?'#e09830':level.cls==='level-mid'?'#1fb5cc':'#e8602e'}">
-      ${level.label}
-    </div>
-    <div style="font-size:12px;margin-bottom:16px;">
-      <strong>職位類型：</strong>${safeJobName} &nbsp;&nbsp;
-      <strong>評測模式：</strong>${safeModeNameStr}
-    </div>
-    <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;">
-      <div style="background:#f4f8fd;border-radius:9px;padding:12px 18px;text-align:center;flex:1;min-width:90px;">
-        <div style="font-size:26px;font-weight:700;color:#e8602e;">${correct}</div>
-        <div style="font-size:10px;color:#5a7da0;margin-top:2px;">答對題數</div>
-      </div>
-      <div style="background:#f4f8fd;border-radius:9px;padding:12px 18px;text-align:center;flex:1;min-width:90px;">
-        <div style="font-size:26px;font-weight:700;color:#d94040;">${total-correct}</div>
-        <div style="font-size:10px;color:#5a7da0;margin-top:2px;">答錯題數</div>
-      </div>
-      <div style="background:#f4f8fd;border-radius:9px;padding:12px 18px;text-align:center;flex:1;min-width:90px;">
-        <div style="font-size:26px;font-weight:700;color:#1fa86e;">${pct}%</div>
-        <div style="font-size:10px;color:#5a7da0;margin-top:2px;">正確率</div>
-      </div>
-      <div style="background:#f4f8fd;border-radius:9px;padding:12px 18px;text-align:center;flex:1;min-width:90px;">
-        <div style="font-size:26px;font-weight:700;color:#1fb5cc;">${total}</div>
-        <div style="font-size:10px;color:#5a7da0;margin-top:2px;">總題數</div>
-      </div>
-    </div>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-      <thead><tr>
-        <th style="background:#f4f8fd;padding:9px 12px;text-align:left;font-size:10px;letter-spacing:1px;color:#5a7da0;">分類</th>
-        <th style="background:#f4f8fd;padding:9px 12px;text-align:center;font-size:10px;letter-spacing:1px;color:#5a7da0;">答對/總題</th>
-        <th style="background:#f4f8fd;padding:9px 12px;text-align:center;font-size:10px;letter-spacing:1px;color:#5a7da0;">正確率</th>
-      </tr></thead>
-      <tbody>${catRows}</tbody>
-    </table>
-    <div style="margin-top:28px;font-size:10px;color:#5a7da0;text-align:center;border-top:1px solid #eee;padding-top:14px;">
-      聘外看就上手 · 外籍看護幫傭能力評測系統 ${APP_VERSION} · 版權所有
-    </div>`;
+  const levelColor = level.cls==='level-pro'?'#e09830':level.cls==='level-mid'?'#1fb5cc':'#e8602e';
+  const levelBg    = level.cls==='level-pro'?'#fff8e1':level.cls==='level-mid'?'#e0f7fa':'#fff3e0';
 
-  document.body.appendChild(wrapper);
+  const catRowsHTML = Object.entries(catStats).map(([cat, s], i) => {
+    const p = s.total ? Math.round(s.correct/s.total*100) : 0;
+    const color = p>=80?'#1fa86e':p>=60?'#e09830':'#d94040';
+    const bg = i%2===0?'#ffffff':'#f8fbff';
+    return `<tr style="background:${bg}">
+      <td style="padding:9px 14px;border-bottom:1px solid #e8eef5;">${escapeHTML(cat)}</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8eef5;text-align:center;">${s.correct} / ${s.total}</td>
+      <td style="padding:9px 14px;border-bottom:1px solid #e8eef5;text-align:center;font-weight:700;color:${color};">${p}%</td>
+    </tr>`;
+  }).join('');
 
-  // V25-3: html2pdf.js — 直接生成 PDF 下載，支援行動裝置
-  if (typeof html2pdf !== 'undefined') {
-    showToast('⏳ 正在生成 PDF…');
-    html2pdf()
-      .set({
-        margin: 0,
-        filename: fileName,
-        image: { type: 'jpeg', quality: 0.96 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-      })
-      .from(wrapper)
-      .save()
-      .then(() => {
-        document.body.removeChild(wrapper);
-        showToast('✓ PDF 報告已下載！');
-      })
-      .catch(() => {
-        document.body.removeChild(wrapper);
-        showToast('⚠ PDF 生成失敗，請重試');
-      })
-      .finally(() => {
-        // ✅ V25-2: 無論成功或失敗，最後都解鎖按鈕
-        if (exportBtn) { exportBtn.disabled = false; exportBtn.style.opacity = '1'; }
-      });
-  } else {
-    // Fallback: html2pdf 未載入時改為 HTML 下載（與舊版相同）
-    document.body.removeChild(wrapper);
-    const blob = new Blob(['\uFEFF' + wrapper.outerHTML], {type:'text/html;charset=utf-8'});
-    const url = URL.createObjectURL(blob);
-    try {
+  const htmlContent = `<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>評測報告</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans TC',Arial,sans-serif; background:#fff; color:#1a2c44; padding:40px 48px; font-size:13px; line-height:1.6; }
+  @media print {
+    body { padding:20px 28px; }
+    .no-print { display:none; }
+    @page { margin:15mm; size:A4; }
+  }
+  h1 { font-size:22px; color:#e8602e; margin-bottom:4px; font-weight:900; }
+  .sub { color:#5a7da0; font-size:12px; margin-bottom:22px; }
+  .level-badge { display:inline-block; padding:5px 16px; border-radius:8px; font-weight:800; font-size:13px; margin-bottom:18px; background:${levelBg}; color:${levelColor}; }
+  .meta { font-size:12px; margin-bottom:20px; color:#334f6a; }
+  .meta strong { color:#1a2c44; }
+  .stats { display:flex; gap:12px; margin-bottom:24px; flex-wrap:wrap; }
+  .stat-box { background:#f4f8fd; border-radius:10px; padding:14px 20px; text-align:center; flex:1; min-width:80px; border:1px solid #dce8f5; }
+  .stat-n { font-size:28px; font-weight:700; line-height:1; margin-bottom:4px; }
+  .stat-l { font-size:10px; color:#5a7da0; }
+  table { width:100%; border-collapse:collapse; font-size:12px; margin-bottom:28px; }
+  thead th { background:#eef4fb; padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1px; color:#5a7da0; font-weight:700; text-transform:uppercase; }
+  thead th:not(:first-child) { text-align:center; }
+  .footer-note { font-size:10px; color:#8aabbf; text-align:center; padding-top:16px; border-top:1px solid #e0eaf5; }
+  .print-btn { display:block; margin:0 auto 28px; padding:12px 32px; background:#e8602e; color:#fff; border:none; border-radius:9px; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .print-btn:hover { background:#c04d22; }
+</style>
+</head>
+<body>
+  <button class="print-btn no-print" onclick="window.print()">🖨️ 列印 / 儲存為 PDF</button>
+  <h1>外籍看護幫傭 能力評測報告</h1>
+  <div class="sub">聘外看就上手 · ${APP_VERSION} ｜ ${reportDate}</div>
+  <div class="level-badge">${level.label}</div>
+  <div class="meta">
+    <strong>職位類型：</strong>${escapeHTML(jobNames[job]||job)} &nbsp;&nbsp;
+    <strong>評測模式：</strong>${escapeHTML(modeNames[mode]||mode)}
+  </div>
+  <div class="stats">
+    <div class="stat-box"><div class="stat-n" style="color:#e8602e;">${correct}</div><div class="stat-l">答對題數</div></div>
+    <div class="stat-box"><div class="stat-n" style="color:#d94040;">${total-correct}</div><div class="stat-l">答錯題數</div></div>
+    <div class="stat-box"><div class="stat-n" style="color:#1fa86e;">${pct}%</div><div class="stat-l">正確率</div></div>
+    <div class="stat-box"><div class="stat-n" style="color:#1fb5cc;">${total}</div><div class="stat-l">總題數</div></div>
+  </div>
+  <table>
+    <thead><tr>
+      <th>分類</th>
+      <th style="text-align:center;">答對 / 總題</th>
+      <th style="text-align:center;">正確率</th>
+    </tr></thead>
+    <tbody>${catRowsHTML}</tbody>
+  </table>
+  <div class="footer-note">© 2026 外籍看護幫傭能力評測系統 All Rights Reserved ｜ 本系統為教育與自我評估用途，不作為正式聘僱、醫療、專業認證或法律依據。</div>
+</body>
+</html>`;
+
+  // 開啟新視窗顯示報告，使用者點「列印/儲存為PDF」
+  try {
+    const w = window.open('', '_blank', 'width=800,height=900');
+    if (w) {
+      w.document.open();
+      w.document.write(htmlContent);
+      w.document.close();
+      showToast('✓ 報告已開啟，請點「列印/儲存為PDF」');
+    } else {
+      // 如果瀏覽器封鎖彈出視窗，改為 Blob 下載 HTML
+      const blob = new Blob([htmlContent], {type:'text/html;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = fileName.replace('.pdf', '.html');
+      a.href = url; a.download = fileName.replace('.pdf','.html');
       document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
-      showToast('✓ 報告已匯出（HTML 格式）');
-    } catch(e) {
-      const w = window.open('', '_blank');
-      if(w) { w.document.write(wrapper.innerHTML); w.document.close(); w.focus(); w.print(); }
-      else { showToast('⚠ 請在外部瀏覽器開啟後再匯出報告'); }
-      setTimeout(() => URL.revokeObjectURL(url), 3000);
+      setTimeout(()=>URL.revokeObjectURL(url), 3000);
+      showToast('✓ 報告已下載（HTML）。若開不了，請允許瀏覽器「彈出視窗」後再試', 4000);
     }
-    // ✅ V25-2: Fallback 路徑也解鎖按鈕
+  } catch(e) {
+    showToast('⚠ 匯出失敗，請在外部瀏覽器開啟本頁面後再試');
+  } finally {
     if (exportBtn) { exportBtn.disabled = false; exportBtn.style.opacity = '1'; }
   }
 }
@@ -5294,8 +5349,9 @@ function goHome() { clearInterval(timerInt); timerInt = null; showScreen('homeSc
 function retryQuiz() { 
   // BUG-D FIX v19: 若 selJob/selMode 有效才重開；否則回首頁重選
   // BUG-3 FIX v20: 重置 reviewOpen，避免答題詳情殘留展開
+  // V25.4: 呼叫 updateQBInfo，確保重試後題庫說明預覽同步更新
   reviewOpen = false;
-  if (selJob && selMode && selMode !== 'learn') { startQuiz(); }
+  if (selJob && selMode && selMode !== 'learn') { updateQBInfo(); startQuiz(); }
   else { showScreen('homeScreen'); }
 }
 function showScreen(id) {
@@ -5621,10 +5677,7 @@ function computeAllQuestions() {
 }
 
 function computePerJobQuestions(job) {
-  // BUG-A/B FIX v19: 加入 QBANK_EXTRA 的看護壓瘡預防 / 看護失禁照護
-  const keys = job === 'caregiver'
-    ? ['看護危機', '看護食品', '看護身障', '看護壓瘡預防', '看護失禁照護']
-    : ['幫傭危機', '幫傭食品', '幫傭幼兒'];
+  const keys = getJobBankKeys(job);
   const pools = [
     ...(QBANK_ORIG?.[job]?.interview || []),
     ...(QBANK_ORIG?.[job]?.performance || []),
@@ -5709,23 +5762,31 @@ function generateQuestionIDs() {
 }
 
 // Init
-window.addEventListener('load',()=>{
+let appInitialized = false;
+function initApp() {
+  if (appInitialized) return;
+  appInitialized = true;
   setTimeout(()=>{
     const l=document.getElementById('loader');
+    if (!l) return;
     l.classList.add('hidden');
-    setTimeout(()=>l.style.display='none',400);
-  },700);
+    setTimeout(()=>{ l.style.display='none'; },400);
+  },300);
   applyLang();
   initStats();
   document.querySelectorAll('.screen .main').forEach(main => {
     if (!main.querySelector('.app-footer')) {
       const footer = document.createElement('div');
       footer.className = 'app-footer';
-      footer.innerHTML = `<div class="footer-brand">聘外看就上手</div><div class="footer-copy">© 版權所有 All Rights Reserved ｜ 外籍看護幫傭能力評測系統 ${APP_VERSION}</div>`;
+      footer.setAttribute('role', 'contentinfo');
+      footer.innerHTML = `<div class="footer-brand">聘外看就上手</div><div class="footer-copy">© 2026 外籍看護幫傭能力評測系統 All Rights Reserved</div><div class="footer-disclaimer">本系統為教育與自我評估用途，不作為正式聘僱、醫療、專業認證或法律依據。</div>`;
       main.appendChild(footer);
     }
   });
-});
+}
+document.addEventListener('DOMContentLoaded', initApp);
+window.addEventListener('load', initApp);
+setTimeout(initApp, 1200);
 
 </script>
 </body>
