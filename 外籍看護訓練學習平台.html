@@ -319,6 +319,23 @@ body{
   font-weight: 700;
 }
 
+/* Sidebar unit items */
+.sb-unit-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  line-height: 1.3;
+}
+.sb-unit-prog {
+  display: block;
+  font-size: 10px;
+  color: rgba(255,255,255,.42);
+  margin-top: 1px;
+}
+.sb-unit-item { min-height: 44px; align-items: center; }
+.sb-unit-item .sb-item-label { flex: 1; min-width: 0; }
+
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .lp-action-notice{
   position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
@@ -1899,13 +1916,6 @@ body { font-size: 15px; }
             </svg>
           </div>
         </div>
-        <div class="lp-prog-wrap">
-          <div class="lp-prog-info">
-            <div class="lp-prog-label" id="prog-label-txt">學習進度</div>
-            <div class="lp-prog-bg"><div class="lp-prog-fill" style="width:1%"></div></div>
-          </div>
-          <div class="lp-prog-pct">1<span>%</span></div>
-        </div>
       </div>
     </div>
 
@@ -2543,7 +2553,7 @@ function renderSidebarNav(){
   });
 
   const nav = document.getElementById('sidebar-nav');
-  if(nav) nav.innerHTML = html;
+  if(nav) nav.innerHTML = html + renderSidebarUnitMenu();
 
   // Sync lang buttons in sidebar
   ['zh','id','en','vi'].forEach(l => {
@@ -2551,6 +2561,32 @@ function renderSidebarNav(){
     const elTop = document.getElementById('lb-'+l+'-top'); if(elTop) elTop.classList.toggle('on', l===lang);
   });
 }
+
+function renderSidebarUnitMenu(){
+  const pack = COURSE_LANG_PACKS[lang] || COURSE_LANG_PACKS.zh;
+  const units = getCourseUnits();
+  const UNIT_ICONS = ['ti-heart-handshake','ti-droplet','ti-utensils','ti-wheelchair','ti-pill','ti-brain','ti-alert-triangle','ti-notebook','ti-star','ti-trophy'];
+  const items = units.map(unit => {
+    const us = getUnitQuizStats(unit);
+    const isActive = courseViewMode === 'unit' && selectedCourseUnit === unit.no;
+    const pct = us.total > 0 ? Math.round(us.answered / us.total * 100) : 0;
+    return `<button class="sb-item sb-unit-item${isActive ? ' sec-active' : ''}" onclick="scrollToCourseUnit(${unit.no})">
+      <div class="sb-item-icon" style="background:${unit.color}22">
+        <i class="ti ${UNIT_ICONS[(unit.no-1)%UNIT_ICONS.length]}" style="color:${unit.color};font-size:13px"></i>
+      </div>
+      <span class="sb-item-label">
+        <span class="sb-unit-name">${unit.title}</span>
+        <span class="sb-unit-prog">${us.answered}/${us.total}</span>
+      </span>
+      ${pct > 0 ? `<span class="sb-item-badge" style="background:${unit.color}33;color:${unit.color}">${pct}%</span>` : ''}
+    </button>`;
+  }).join('');
+  const label = {'zh':'課程單元','id':'Unit Kursus','en':'Course Units','vi':'Đơn vị'}[lang] || '課程單元';
+  return `<div class="sb-divider"></div>
+  <div class="sb-group">
+    <div class="sb-group-label">${label}</div>
+    ${items}
+  </div>`;
 
 function sidebarNavigate(key, idx){
   activeSidebarKey = key;
@@ -2658,13 +2694,11 @@ function answerQuiz(chosen){
 
 function updateHeroProgress(){
   const s = getQuizProgressStats();
-  const fill = document.querySelector('.lp-prog-fill');
-  const pct = document.querySelector('.lp-prog-pct');
-  if(fill) fill.style.width = Math.max(1,s.completeRate)+'%';
-  if(pct) pct.innerHTML = s.completeRate+'<span>%</span>';
-  // Also update stat bar quiz count
+  // Update stat bar quiz count
   const quizStat = document.querySelector('.lp-stat-val[data-quiz]');
   if(quizStat) quizStat.textContent = s.answered;
+  // Refresh sidebar unit menu to reflect new progress
+  renderSidebarNav();
 }
 
 function answerLessonQuiz(lessonNo, chosen){
@@ -2681,11 +2715,14 @@ function scrollToCourseUnit(unitNo){
   selectedCourseUnit = unitNo;
   selectedLessonNo = String((unitNo - 1) * 10 + 1).padStart(2,'0');
   courseViewMode = 'unit';
+  activeSidebarKey = 'courses';
   renderCourseLibrary();
+  renderSidebarNav();
   setTimeout(()=>{
     const el = document.getElementById('course-library');
     if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
   },40);
+  if(window.innerWidth < 960) closeSidebar();
 }
 
 function setCourseViewMode(mode){
@@ -3860,7 +3897,6 @@ function renderCourseLibrary(){
     </div>
     <div class="course-library-note">${copy.note}</div>
   </div>
-  ${renderHomeDashboard()}
   <div class="course-display-bar">
     <div>
       <div class="course-display-title">${displayTitle}</div>
