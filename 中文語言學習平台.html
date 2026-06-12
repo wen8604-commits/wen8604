@@ -1164,10 +1164,20 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-vol-header vol-1">
+    <div class="sidebar-search-wrap">
+      <div class="sidebar-search-box">
+        <span class="sidebar-search-icon">🔍</span>
+        <input type="text" class="sidebar-search-input" id="sidebarSearchInput" placeholder="搜尋詞彙單元…" oninput="filterSidebar(this.value)" />
+        <button class="sidebar-search-clear" id="sidebarSearchClear" onclick="clearSidebarSearch()">✕</button>
+      </div>
+    </div>
+    <div class="sidebar-no-results" id="sidebarNoResults">找不到符合的單元 🙁</div>
+    <div class="sidebar-vol-header vol-1" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第1輯・看護照顧</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-1">
     <a class="sidebar-item vol-1 active" href="javascript:void(0)" role="button" data-sec="basic" onclick="setSection('basic')">
       <span class="item-icon">🏃</span> 基本動作
       <span class="item-badge">20</span>
@@ -1193,10 +1203,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-2" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-2" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第2輯・醫院就診</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-2">
     <a class="sidebar-item vol-2" href="javascript:void(0)" role="button" data-sec="hosp_visit" onclick="setSection('hosp_visit')">
       <span class="item-icon">🏥</span> 就診流程
       <span class="item-badge">20</span>
@@ -1222,10 +1235,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-vol-header vol-3" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-3" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第3輯・復健治療</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-3">
     <a class="sidebar-item vol-3" href="javascript:void(0)" role="button" data-sec="rehab_type" onclick="setSection('rehab_type')">
       <span class="item-icon">🏃</span> 復健類型
       <span class="item-badge">20</span>
@@ -1259,10 +1275,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-4" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-4" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第4輯・飲食營養</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-4">
     <a class="sidebar-item vol-4" href="javascript:void(0)" role="button" data-sec="food_main" onclick="setSection('food_main')">
       <span class="item-icon">🍚</span> 主食與食材
       <span class="item-badge">20</span>
@@ -1292,10 +1311,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-vol-header vol-5" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-5" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第5輯・服裝穿著</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-5">
     <a class="sidebar-item vol-5" href="javascript:void(0)" role="button" data-sec="cloth_basic" onclick="setSection('cloth_basic')">
       <span class="item-icon">👗</span> 基本穿著
       <span class="item-badge">20</span>
@@ -1329,10 +1351,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-6" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-6" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第6輯・居家生活</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-6">
     <a class="sidebar-item vol-6" href="javascript:void(0)" role="button" data-sec="home_clean" onclick="setSection('home_clean')">
       <span class="item-icon">🧹</span> 家務清潔
       <span class="item-badge">20</span>
@@ -1362,10 +1387,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-vol-header vol-7" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-7" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第7輯・交通出行</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-7">
     <a class="sidebar-item vol-7" href="javascript:void(0)" role="button" data-sec="trans_vehicle" onclick="setSection('trans_vehicle')">
       <span class="item-icon">🚌</span> 交通工具
       <span class="item-badge">20</span>
@@ -1399,10 +1427,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-8" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-8" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第8輯・教育學習</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-8">
     <a class="sidebar-item vol-8" href="javascript:void(0)" role="button" data-sec="edu_lang" onclick="setSection('edu_lang')">
       <span class="item-icon">📖</span> 語言學習
       <span class="item-badge">20</span>
@@ -1424,10 +1455,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">30</span>
     </a>
 
-    <div class="sidebar-vol-header vol-9" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-9" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第9輯・娛樂休閒</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-9">
     <a class="sidebar-item vol-9" href="javascript:void(0)" role="button" data-sec="ent_indoor" onclick="setSection('ent_indoor')">
       <span class="item-icon">📺</span> 室內娛樂
       <span class="item-badge">20</span>
@@ -1449,10 +1483,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">40</span>
     </a>
 
-    <div class="sidebar-vol-header vol-10" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-10" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第10輯・健康用語</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-10">
     <a class="sidebar-item vol-10" href="javascript:void(0)" role="button" data-sec="health_body" onclick="setSection('health_body')">
       <span class="item-icon">🧠</span> 身體部位
       <span class="item-badge">20</span>
@@ -1486,10 +1523,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-11" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-11" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第11輯・溝通表達</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-11">
     <a class="sidebar-item vol-11" href="javascript:void(0)" role="button" data-sec="comm_greeting" onclick="setSection('comm_greeting')">
       <span class="item-icon">👋</span> 基本問候
       <span class="item-badge">20</span>
@@ -1511,10 +1551,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-vol-header vol-12" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-12" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第12輯・清潔沐浴照護</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-12">
     <a class="sidebar-item vol-12" href="javascript:void(0)" role="button" data-sec="bath_shower" onclick="setSection('bath_shower')">
       <span class="item-icon">🚿</span> 淋浴與泡澡
       <span class="item-badge">20</span>
@@ -1548,10 +1591,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-13" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-13" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第13輯・失智症與認知照護</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-13">
     <a class="sidebar-item vol-13" href="javascript:void(0)" role="button" data-sec="dem_basic" onclick="setSection('dem_basic')">
       <span class="item-icon">🧠</span> 失智症基礎
       <span class="item-badge">10</span>
@@ -1585,10 +1631,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-14" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-14" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第14輯・慢性病照護管理</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-14">
     <a class="sidebar-item vol-14" href="javascript:void(0)" role="button" data-sec="chr_vitals" onclick="setSection('chr_vitals')">
       <span class="item-icon">📊</span> 生命徵象監測
       <span class="item-badge">20</span>
@@ -1614,10 +1663,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-15" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-15" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第15輯・感染控制與防疫</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-15">
     <a class="sidebar-item vol-15" href="javascript:void(0)" role="button" data-sec="inf_basics" onclick="setSection('inf_basics')">
       <span class="item-icon">🦠</span> 感染基礎知識
       <span class="item-badge">20</span>
@@ -1639,10 +1691,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">20</span>
     </a>
 
-    <div class="sidebar-vol-header vol-16" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-16" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第16輯・安全防護與意外預防</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-16">
     <a class="sidebar-item vol-16" href="javascript:void(0)" role="button" data-sec="safe_fall" onclick="setSection('safe_fall')">
       <span class="item-icon">🤕</span> 跌倒預防
       <span class="item-badge">20</span>
@@ -1672,10 +1727,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-17" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-17" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第17輯・安寧緩和與臨終關懷</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-17">
     <a class="sidebar-item vol-17" href="javascript:void(0)" role="button" data-sec="vol17_01" onclick="setSection('vol17_01')">
       <span class="item-icon">🕊️</span> 安寧療護基礎
       <span class="item-badge">15</span>
@@ -1705,10 +1763,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-18" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-18" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第18輯・用藥安全與管理</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-18">
     <a class="sidebar-item vol-18" href="javascript:void(0)" role="button" data-sec="vol18_01" onclick="setSection('vol18_01')">
       <span class="item-icon">💊</span> 藥物類型
       <span class="item-badge">15</span>
@@ -1742,10 +1803,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
-    <div class="sidebar-vol-header vol-19" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-19" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第19輯・管路與造口照護</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-19">
     <a class="sidebar-item vol-19" href="javascript:void(0)" role="button" data-sec="vol19_01" onclick="setSection('vol19_01')">
       <span class="item-icon">🧪</span> 管路基礎
       <span class="item-badge">10</span>
@@ -1783,10 +1847,13 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">5</span>
     </a>
 
-    <div class="sidebar-vol-header vol-20" style="margin-top:20px">
+    </div>
+    <div class="sidebar-vol-header vol-20" style="margin-top:20px" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第20輯・職場權益與文化適應</div>
+    <span class="sidebar-vol-chevron">▼</span>
     </div>
+    <div class="sidebar-vol-group vol-20">
     <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" data-sec="vol20_01" onclick="setSection('vol20_01')">
       <span class="item-icon">📝</span> 聘僱合約
       <span class="item-badge">15</span>
@@ -1816,6 +1883,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <span class="item-badge">10</span>
     </a>
 
+    </div>
     <div class="sidebar-section-label" style="margin-top:24px;padding-top:12px;border-top:1px solid var(--border);">學習工具</div>
     <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="openFlashcard(0)">
       <span class="item-icon">⚡</span> 閃卡練習
@@ -5514,6 +5582,45 @@ function loadVoices() {
 if (window.speechSynthesis) {
   loadVoices();
   speechSynthesis.onvoiceschanged = loadVoices;
+  // Android 上 getVoices() 常常要呼叫好幾次才會回傳結果，主動重試幾次
+  let _voiceRetry = 0;
+  const _voiceRetryTimer = setInterval(() => {
+    loadVoices();
+    _voiceRetry++;
+    if (ttsVoices.length > 0 || _voiceRetry > 10) clearInterval(_voiceRetryTimer);
+  }, 300);
+}
+
+// Android Chrome 需要在使用者手勢內「解鎖」語音引擎一次，否則第一次播放可能無聲
+let speechUnlocked = false;
+function unlockSpeechSynthesis() {
+  if (speechUnlocked || !window.speechSynthesis) return;
+  try {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    speechSynthesis.speak(u);
+    speechSynthesis.cancel();
+  } catch (e) {}
+  speechUnlocked = true;
+}
+['touchstart','click','pointerdown'].forEach(evt =>
+  document.addEventListener(evt, unlockSpeechSynthesis, { once: true, passive: true })
+);
+
+// Android Chrome 在播放超過約 15 秒後會自動靜音，需定時 pause/resume 來保活
+let _ttsKeepAliveTimer = null;
+function _ttsStartKeepAlive() {
+  _ttsStopKeepAlive();
+  _ttsKeepAliveTimer = setInterval(() => {
+    if (!window.speechSynthesis) return;
+    if (speechSynthesis.speaking && !speechSynthesis.paused) {
+      speechSynthesis.pause();
+      speechSynthesis.resume();
+    }
+  }, 4000);
+}
+function _ttsStopKeepAlive() {
+  if (_ttsKeepAliveTimer) { clearInterval(_ttsKeepAliveTimer); _ttsKeepAliveTimer = null; }
 }
 
 function getBestVoice(localeKey) {
@@ -5527,45 +5634,67 @@ function getBestVoice(localeKey) {
   return null;
 }
 
+// 統一的語音播放函式（含 Android 修正）
+function _doSpeak(text, localeKey, btn) {
+  if (!window.speechSynthesis) {
+    const ua = navigator.userAgent || '';
+    if (/Android/i.test(ua)) {
+      alert('您的裝置不支援語音功能。\n\n在 Android 上請確認：\n1. 已安裝並啟用「Google 文字轉語音」服務（設定 > 系統 > 語言與輸入 > 文字轉語音輸出）\n2. 已下載對應語言的語音資料\n3. 使用 Chrome 瀏覽器開啟本頁');
+    } else {
+      alert('您的裝置不支援語音功能。請使用 Chrome 或 Safari。');
+    }
+    return;
+  }
+
+  document.querySelectorAll('.speak-btn.speaking, .fc-speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
+  _ttsStopKeepAlive();
+
+  try { speechSynthesis.cancel(); } catch (e) {}
+
+  // Android 上 cancel() 後立即 speak() 有時會被忽略，延後一個 tick 再播放
+  setTimeout(() => {
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = getBestVoice(localeKey);
+    if (voice) utter.voice = voice;
+    utter.lang = (TTS_LOCALES[localeKey] || [localeKey])[0];
+    utter.rate = 0.9;
+    utter.pitch = 1;
+
+    if (btn) btn.classList.add('speaking');
+
+    utter.onstart = () => _ttsStartKeepAlive();
+    utter.onend = utter.onerror = () => {
+      _ttsStopKeepAlive();
+      if (btn) btn.classList.remove('speaking');
+    };
+
+    try {
+      speechSynthesis.speak(utter);
+    } catch (e) {
+      if (btn) btn.classList.remove('speaking');
+    }
+
+    // 安全網：若 Android 端從未觸發 onstart/onend（部分裝置會發生），逾時後自行解除狀態
+    setTimeout(() => {
+      if (btn && btn.classList.contains('speaking') && !speechSynthesis.speaking) {
+        btn.classList.remove('speaking');
+      }
+    }, 6000);
+  }, 60);
+}
+
 function speakVcardLang(event, btn) {
   event.stopPropagation();
   const text = btn.getAttribute('data-speak-text')
     .replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
   const locale = btn.getAttribute('data-speak-locale') || 'en';
-  if (!window.speechSynthesis) {
-    alert('您的裝置不支援語音功能。請使用 Chrome 或 Safari。');
-    return;
-  }
-  speechSynthesis.cancel();
-  document.querySelectorAll('.speak-btn.speaking, .fc-speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
-  const utter = new SpeechSynthesisUtterance(text);
-  const voice = getBestVoice(locale);
-  if (voice) utter.voice = voice;
-  utter.lang = (TTS_LOCALES[locale] || [locale])[0];
-  utter.rate = 0.9; utter.pitch = 1;
-  btn.classList.add('speaking');
-  utter.onend = utter.onerror = () => btn.classList.remove('speaking');
-  speechSynthesis.speak(utter);
+  _doSpeak(text, locale, btn);
 }
 
 function speakText(event, text, localeKey) {
   event.stopPropagation();
-  if (!window.speechSynthesis) {
-    alert('您的裝置不支援語音功能。請使用 Chrome 或 Safari。');
-    return;
-  }
-  speechSynthesis.cancel();
   const btn = event.currentTarget;
-  document.querySelectorAll('.speak-btn.speaking, .fc-speak-btn.speaking').forEach(b => b.classList.remove('speaking'));
-  const utter = new SpeechSynthesisUtterance(text);
-  const voice = getBestVoice(localeKey);
-  if (voice) utter.voice = voice;
-  utter.lang = (TTS_LOCALES[localeKey] || [localeKey])[0];
-  utter.rate = 0.9;
-  utter.pitch = 1;
-  btn.classList.add('speaking');
-  utter.onend = utter.onerror = () => btn.classList.remove('speaking');
-  speechSynthesis.speak(utter);
+  _doSpeak(text, localeKey, btn);
 }
 
 function fcSpeak(which) {
@@ -5597,6 +5726,59 @@ function toggleSidebar() {
     sidebar.classList.add('open');
     overlay.classList.add('open');
   }
+}
+
+// ── SIDEBAR: COLLAPSIBLE VOLUME GROUPS ──
+function toggleVolGroup(headerEl) {
+  headerEl.classList.toggle('collapsed');
+}
+
+// ── SIDEBAR: SEARCH / FILTER ──
+function filterSidebar(query) {
+  const sidebar = document.querySelector('.sidebar');
+  const clearBtn = document.getElementById('sidebarSearchClear');
+  const noResults = document.getElementById('sidebarNoResults');
+  const q = query.trim().toLowerCase();
+
+  clearBtn.classList.toggle('show', q.length > 0);
+
+  const headers = sidebar.querySelectorAll('.sidebar-vol-header');
+  const groups = sidebar.querySelectorAll('.sidebar-vol-group');
+
+  if (!q) {
+    sidebar.classList.remove('searching');
+    headers.forEach(h => h.classList.remove('search-hidden'));
+    groups.forEach(g => g.classList.remove('search-hidden'));
+    sidebar.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('search-hidden'));
+    noResults.classList.remove('show');
+    return;
+  }
+
+  sidebar.classList.add('searching');
+  let anyVisible = false;
+
+  groups.forEach((group, idx) => {
+    const header = headers[idx];
+    let groupHasMatch = false;
+    group.querySelectorAll('.sidebar-item').forEach(item => {
+      const text = item.textContent.toLowerCase();
+      const match = text.includes(q);
+      item.classList.toggle('search-hidden', !match);
+      if (match) groupHasMatch = true;
+    });
+    group.classList.toggle('search-hidden', !groupHasMatch);
+    if (header) header.classList.toggle('search-hidden', !groupHasMatch);
+    if (groupHasMatch) anyVisible = true;
+  });
+
+  noResults.classList.toggle('show', !anyVisible);
+}
+
+function clearSidebarSearch() {
+  const input = document.getElementById('sidebarSearchInput');
+  input.value = '';
+  filterSidebar('');
+  input.focus();
 }
 
 function closeSidebar() {
