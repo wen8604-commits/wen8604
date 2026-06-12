@@ -1,0 +1,1006 @@
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.6 — 完整 i18n + 8 級制 + 知識卡 + 結業證書</h2>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.platform{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+
+/* device bar */
+.dbar{display:flex;align-items:center;gap:6px;padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);flex-wrap:wrap}
+.dbar-lbl{font-size:12px;color:var(--color-text-secondary)}
+.dvb{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 11px;cursor:pointer;font-size:12px;color:var(--color-text-secondary);font-family:var(--font-sans);display:flex;align-items:center;gap:5px;transition:background .15s}
+.dvb:hover{background:var(--color-background-secondary)}
+.dvb.on{background:#5a1800;border-color:#5a1800;color:#fff}
+.dbgap{flex:1}
+.dbadge{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-success);background:var(--color-background-success);border:0.5px solid var(--color-border-success);border-radius:var(--border-radius-md);padding:4px 10px}
+
+/* topbar */
+.topbar{background:#5a1800;padding:0 14px;display:flex;align-items:center;gap:8px;height:52px;position:relative}
+.tlogo{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tico{width:32px;height:32px;background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.3);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:17px}
+.tnm{font-size:14px;font-weight:500;color:#fff}
+.tsub{font-size:10px;opacity:.65;color:#fff}
+.tsp{flex:1}
+.tnav{display:flex;gap:2px}
+/* FIX: nav active state now managed via JS */
+.tnb{background:none;border:none;color:rgba(255,255,255,.7);padding:6px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;font-family:var(--font-sans);white-space:nowrap;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:1px}
+.tnb .en{font-size:9px;opacity:.6}
+.tnb:hover,.tnb.act{background:rgba(255,255,255,.17);color:#fff}
+.tlang{display:flex;background:rgba(0,0,0,.2);border-radius:var(--border-radius-md);overflow:hidden;border:0.5px solid rgba(255,255,255,.15);flex-shrink:0}
+.tlb{background:none;border:none;color:rgba(255,255,255,.65);padding:4px 8px;cursor:pointer;font-size:11px;font-family:var(--font-sans);transition:all .15s;white-space:nowrap}
+.tlb:hover{color:#fff;background:rgba(255,255,255,.1)}
+.tlb.on{background:rgba(255,255,255,.22);color:#fff;font-weight:500}
+.thmb{background:none;border:none;color:#fff;cursor:pointer;padding:5px;border-radius:var(--border-radius-md);display:none;align-items:center;justify-content:center}
+.thmb:hover{background:rgba(255,255,255,.15)}
+.tpbar{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(0,0,0,.2)}
+.tpfill{height:100%;background:#f5c84a;transition:width .5s ease}
+
+/* hero */
+.hero{background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);padding:16px 18px}
+.hero-row{display:flex;align-items:flex-start;gap:14px}
+.hero-ico{width:48px;height:48px;background:#5a1800;border-radius:var(--border-radius-lg);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.hero h1{font-size:15px;font-weight:500;color:var(--color-text-primary);line-height:1.3}
+.hero-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.hero-desc{font-size:12px;color:var(--color-text-secondary);margin-top:5px;line-height:1.65}
+.hero-stats{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.spill{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:14px;padding:3px 10px;font-size:11.5px;color:var(--color-text-secondary)}
+.spill strong{color:var(--color-text-primary)}
+
+/* progress */
+.prog{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:8px 18px;display:flex;align-items:center;gap:10px}
+.plbl{font-size:12px;color:var(--color-text-secondary);white-space:nowrap}
+.ptrack{flex:1;height:6px;background:var(--color-background-tertiary);border-radius:3px;overflow:hidden;min-width:40px}
+.pfill{height:100%;background:#5a1800;border-radius:3px;transition:width .5s ease}
+.ppct{font-size:12px;font-weight:500;color:#8a2800;white-space:nowrap}
+.pbadge{background:#fef0c0;color:#7a4800;border-radius:10px;padding:2px 9px;font-size:11px;font-weight:500;white-space:nowrap;border:0.5px solid #d8b040}
+
+/* LEVEL PATH */
+.levelpath{padding:12px 18px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.lp-title{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
+.lp-row{display:flex;gap:0;align-items:center;overflow-x:auto;padding-bottom:2px}
+.lp-step{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;min-width:56px;cursor:pointer;position:relative}
+.lp-step:not(:last-child)::after{content:'';position:absolute;top:13px;left:calc(50% + 14px);right:calc(-50% + 14px);height:2px;background:var(--color-border-tertiary);z-index:0}
+.lp-step.done:not(:last-child)::after{background:#8a2800}
+.lp-node{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--color-border-secondary);background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:11px;z-index:1;transition:all .2s;font-weight:500}
+.lp-step.done .lp-node{background:#1a7248;border-color:#1a7248;color:#fff}
+.lp-step.cur .lp-node{background:#8a2800;border-color:#8a2800;color:#fff}
+.lp-step.locked .lp-node{opacity:.35}
+.lp-lbl{font-size:10px;color:var(--color-text-tertiary);text-align:center;line-height:1.3;max-width:58px}
+.lp-step.cur .lp-lbl{color:#8a2800;font-weight:500}
+.lp-step.done .lp-lbl{color:#1a7248}
+
+/* body */
+.body{display:flex;min-height:480px}
+.sidebar{width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:10px 0;flex-shrink:0}
+.sidebar.gone{display:none}
+.sslbl{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.6px;text-transform:uppercase;padding:8px 14px 4px}
+.si{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;transition:all .15s;color:var(--color-text-secondary);font-size:12.5px;margin:0 6px;position:relative}
+.si:hover{background:var(--color-background-secondary)}
+.si.act{background:rgba(90,24,0,.08);color:#8a2800}
+.si.sdone{color:var(--color-text-success)}
+.si i{font-size:15px;width:18px;text-align:center;flex-shrink:0}
+.si .sbadge{margin-left:auto;background:var(--color-background-secondary);border-radius:8px;padding:1px 6px;font-size:10px;color:var(--color-text-secondary);flex-shrink:0}
+.si.act .sbadge{background:rgba(90,24,0,.12);color:#8a2800}
+.si.sdone .sbadge{background:rgba(26,114,72,.12);color:#1a7248}
+.si .slvl{font-size:9px;color:var(--color-text-tertiary);display:block;margin-top:1px}
+.sdiv{height:0.5px;background:var(--color-border-tertiary);margin:8px 12px}
+
+/* content */
+.content{flex:1;padding:16px;background:var(--color-background-tertiary);min-width:0;overflow:hidden}
+.sechd{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sechd h2{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap}
+.sechd .en{font-size:10px;color:var(--color-text-tertiary)}
+.sechd .ln{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+
+/* lang grid */
+.lgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.lcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:10px 8px;cursor:pointer;transition:all .2s;text-align:center}
+.lcard:hover{border-color:var(--color-border-primary);transform:translateY(-1px)}
+.lcard.on{border:1.5px solid #8a2800;background:rgba(90,24,0,.03)}
+.lcard .flag{font-size:20px;margin-bottom:4px}
+.lcard .ln{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.lcard .lsub{font-size:10px;color:var(--color-text-tertiary)}
+
+/* module grid */
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.mcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:11px 12px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.mcard:hover:not(.locked){border-color:var(--color-border-primary);transform:translateY(-1px)}
+.mcard.actm{border:1.5px solid #8a2800}
+.mcard.mdone{border-color:rgba(26,114,72,.4)}
+.mcard.locked{opacity:.45;pointer-events:none;cursor:default}
+.memoji{font-size:22px;margin-bottom:6px}
+.mtitle{font-size:12.5px;font-weight:500;color:var(--color-text-primary);line-height:1.3}
+.men{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.mlvl{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.mcnt{font-size:11px;color:var(--color-text-secondary);margin-top:5px}
+.mbar{height:3px;background:var(--color-background-tertiary);border-radius:2px;margin-top:8px;overflow:hidden}
+.mfill{height:100%;background:#8a2800;border-radius:2px;transition:width .4s ease}
+.mfill.full{background:#1a7248}
+.mlk{position:absolute;top:8px;right:8px;font-size:13px;opacity:.3}
+.mcheck{position:absolute;top:8px;right:8px;font-size:15px;color:#1a7248}
+
+/* lesson & topics */
+.lesson{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.leshd{background:#5a1800;padding:13px 14px;display:flex;align-items:center;gap:11px}
+.lesico{width:40px;height:40px;background:rgba(255,255,255,.15);border:0.5px solid rgba(255,255,255,.25);border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.leshd h3{font-size:13px;font-weight:500;color:#fff;line-height:1.3}
+.lessub{font-size:10px;opacity:.7;color:#fff;margin-top:1px}
+.leschips{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.chip{background:rgba(255,255,255,.17);border:0.5px solid rgba(255,255,255,.22);border-radius:10px;padding:2px 8px;font-size:10px;color:#fff}
+.lesbody{padding:12px 14px}
+.topics{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.trow{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .15s}
+.trow:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.dot-done{background:#1a7248}.dot-cur{background:#8a2800}.dot-next{background:var(--color-border-primary)}
+.ttxt{font-size:12px;color:var(--color-text-primary);line-height:1.4}
+.ten{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.ttag{font-size:10px;padding:2px 7px;border-radius:6px;margin-left:auto;white-space:nowrap;flex-shrink:0;align-self:flex-start;min-width:44px;text-align:center}
+.tag-done{background:var(--color-background-success);color:var(--color-text-success)}
+.tag-cur{background:rgba(138,40,0,.1);color:#8a2800}
+.tag-nx{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary)}
+
+/* safety */
+.safepanel{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.safehd{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.safehd i{font-size:16px;color:var(--color-text-danger)}
+.safehd .shtitle{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.safehd .shen{font-size:10px;color:var(--color-text-tertiary);margin-left:auto}
+.safebody{padding:9px 12px}
+.saferow{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.saferow:last-child{border-bottom:none}
+.saferow i{font-size:15px;flex-shrink:0;margin-top:1px}
+.saferow.ok i{color:var(--color-text-success)}
+.saferow.no i{color:var(--color-text-danger)}
+.stxt{color:var(--color-text-primary)}
+.sen{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+
+/* data cards */
+.drow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.dcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:10px 12px}
+.dcard-hd{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.dcard-hd i{font-size:16px;color:var(--color-text-secondary)}
+.dcard-hd span{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.drow-item{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.drow-item:last-child{border-bottom:none}
+.dlbl{color:var(--color-text-secondary)}
+.dval{font-weight:500}
+.th{color:#b82000}.tok{color:#1a6030}.twn{color:#8a5000}.tcl{color:#0a4880}
+
+/* quiz */
+.quiz-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
+.quiz-q{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px;line-height:1.5}
+.quiz-opts{display:flex;flex-direction:column;gap:7px}
+.qopt{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;cursor:pointer;font-size:12px;color:var(--color-text-primary);transition:all .15s;text-align:left;font-family:var(--font-sans);line-height:1.4}
+.qopt:hover:not([disabled]){border-color:var(--color-border-primary);background:var(--color-background-primary)}
+.qopt.correct{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.qopt.wrong{background:var(--color-background-danger);border-color:var(--color-border-danger);color:var(--color-text-danger)}
+.quiz-fb{margin-top:10px;font-size:12px;min-height:18px;color:var(--color-text-secondary);padding:0 2px;line-height:1.5}
+.quiz-prog{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--color-text-secondary)}
+.qptrack{flex:1;height:4px;background:var(--color-background-tertiary);border-radius:2px;overflow:hidden}
+.qpfill{height:100%;background:#8a2800;border-radius:2px;transition:width .3s}
+
+/* certificate */
+.cert{background:var(--color-background-primary);border:1.5px solid #c09040;border-radius:var(--border-radius-lg);padding:22px 20px;text-align:center;margin-bottom:14px;position:relative}
+.cert::before{content:'';position:absolute;inset:6px;border:0.5px solid rgba(192,144,64,.5);border-radius:calc(var(--border-radius-lg) - 4px);pointer-events:none}
+.cert-badge{font-size:44px;display:block;margin-bottom:10px}
+.cert-title{font-size:16px;font-weight:500;color:#5a1800;margin-bottom:4px}
+.cert-sub{font-size:11px;color:var(--color-text-tertiary);margin-bottom:14px}
+.cert-name{font-size:22px;font-weight:500;color:var(--color-text-primary);border-bottom:1px solid var(--color-border-secondary);padding-bottom:10px;margin-bottom:10px}
+.cert-body{font-size:12px;color:var(--color-text-secondary);line-height:1.9}
+.cert-seal{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:12px;color:#8a6000}
+
+/* quick */
+.quick{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:4px}
+.qbtn{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:16px;padding:7px 13px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.qbtn:hover{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary)}
+.qbtn.pri{background:#5a1800;border-color:#5a1800;color:#fff}
+.qbtn.pri:hover{background:#8a2800;border-color:#8a2800}
+
+/* knowledge cards */
+.kcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.kcard-hd{display:flex;align-items:center;gap:8px;padding:9px 13px;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.kcard-hd i{font-size:16px;color:#8a2800}
+.kcard-hd .khtitle{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.kcard-hd .khen{font-size:10px;color:var(--color-text-tertiary);margin-left:auto}
+.kcard-body{padding:9px 13px}
+.krow{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kitem{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:7px 10px;border:0.5px solid var(--color-border-tertiary)}
+.kitem .ki-icon{font-size:16px;margin-bottom:3px}
+.kitem .ki-title{font-size:11.5px;font-weight:500;color:var(--color-text-primary);line-height:1.35}
+.kitem .ki-en{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.kitem .ki-desc{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
+.ktip{background:rgba(90,24,0,.04);border:0.5px solid rgba(90,24,0,.15);border-radius:var(--border-radius-md);padding:7px 10px;margin-top:7px;font-size:11.5px;color:var(--color-text-secondary);line-height:1.6}
+.ktip strong{color:#8a2800}
+/* temp table */
+.ttable{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
+.ttable th{background:var(--color-background-secondary);padding:5px 8px;text-align:left;font-weight:500;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-secondary)}
+.ttable td{padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top}
+.ttable tr:last-child td{border-bottom:none}
+.ttable td:first-child{color:var(--color-text-primary);font-weight:500}
+
+/* empty / locked state */
+.empty-state{text-align:center;padding:28px 20px;color:var(--color-text-secondary)}
+.empty-state i{font-size:38px;display:block;margin-bottom:10px;opacity:.35}
+.empty-state .et{font-size:13px;font-weight:500;margin-bottom:5px;color:var(--color-text-primary)}
+.empty-state .es{font-size:12px}
+
+/* bottom nav */
+.bnav{display:none;background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary)}
+.bninner{display:flex;justify-content:space-around;padding:5px 0 4px}
+.bnb{background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 8px;cursor:pointer;color:var(--color-text-secondary);font-size:11px;font-family:var(--font-sans);border-radius:var(--border-radius-md);transition:all .15s;min-width:48px}
+.bnb i{font-size:20px}
+.bnb:hover,.bnb.act{color:#8a2800}
+
+/* footer */
+.footer{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);padding:9px 18px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);flex-wrap:wrap;gap:4px}
+
+/* responsive */
+.shell.tablet .thmb,.shell.mobile .thmb{display:flex}
+.shell.tablet .tnav,.shell.mobile .tnav{display:none}
+.shell.mobile .tlang{display:none}
+.shell.mobile .hero-desc{display:none}
+.shell.mobile .sidebar{display:none}
+.shell.mobile .bnav{display:block}
+.shell.mobile .topics{grid-template-columns:1fr}
+.shell.mobile .footer .fc,.shell.mobile .footer .fr{display:none}
+.shell.tablet .sidebar.gone{display:none}
+.shell.tablet .footer .fc,.shell.tablet .footer .fr{display:none}
+.shell.desktop .lgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.shell.desktop .mgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.shell.desktop .drow{grid-template-columns:repeat(4,minmax(0,1fr))}
+</style>
+
+<div class="platform">
+
+<div class="dbar">
+  <span class="dbar-lbl">裝置</span>
+  <button class="dvb" id="btn-mobile" onclick="setDev('mobile')"><i class="ti ti-device-mobile" aria-hidden="true"></i>手機</button>
+  <button class="dvb" id="btn-tablet" onclick="setDev('tablet')"><i class="ti ti-device-tablet" aria-hidden="true"></i>平板</button>
+  <button class="dvb on" id="btn-desktop" onclick="setDev('desktop')"><i class="ti ti-device-laptop" aria-hidden="true"></i>電腦</button>
+  <div class="dbgap"></div>
+  <div class="dbadge"><i class="ti ti-language" aria-hidden="true"></i>v0.6 — 全域 i18n + 8 級制 + 知識卡 + 3題測驗</div>
+</div>
+
+<div class="shell desktop" id="shell">
+
+<div class="topbar">
+  <div class="tlogo"><div class="tico">🍜</div><div><div class="tnm" id="p-nm">料理基礎學習平台</div><div class="tsub">Culinary Basics Platform</div></div></div>
+  <button class="thmb" id="hamburger" aria-label="選單" onclick="toggleSB()"><i class="ti ti-menu-2" style="font-size:20px" aria-hidden="true"></i></button>
+  <div class="tsp"></div>
+  <div class="tnav">
+    <!-- FIX: data-view attributes for active state management -->
+    <button class="tnb act" data-view="home" onclick="showView('home')"><span data-i="nav.home">首頁</span><span class="en">Home</span></button>
+    <button class="tnb" data-view="levels" onclick="showView('levels')"><span data-i="nav.lessons">課程</span><span class="en">Lessons</span></button>
+    <button class="tnb" data-view="quiz" onclick="showView('quiz')"><span data-i="nav.quiz">測驗</span><span class="en">Quiz</span></button>
+    <button class="tnb" data-view="cert" onclick="showView('cert')"><span data-i="nav.cert">證書</span><span class="en">Cert</span></button>
+  </div>
+  <div class="tlang">
+    <button class="tlb on" onclick="setLang('zh',this)">中文</button>
+    <button class="tlb" onclick="setLang('en',this)">中英</button>
+    <button class="tlb" onclick="setLang('id',this)">中印尼</button>
+    <button class="tlb" onclick="setLang('vi',this)">中越</button>
+  </div>
+  <div class="tpbar"><div class="tpfill" id="tpfill"></div></div>
+</div>
+
+<div class="hero">
+  <div class="hero-row">
+    <div class="hero-ico">👨‍🍳</div>
+    <div>
+      <h1 data-i="hero.title">料理基礎學習平台</h1>
+      <div class="hero-sub" data-i="hero.sub">Culinary Basics · Dasar Memasak · Nền tảng nấu ăn</div>
+      <div class="hero-desc" data-i="hero.desc">從安全到技術，從基礎刀工到火候控制——適合家庭幫傭、廚房助手與烹飪初學者的多語言學習資源。</div>
+      <div class="hero-stats">
+        <div class="spill"><strong>8</strong> <span data-i="stat.mod">大模組</span></div>
+        <div class="spill"><strong>4</strong> <span data-i="stat.lang">語言</span></div>
+        <div class="spill"><strong>8</strong> <span data-i="stat.levels">等級制</span></div>
+        <div class="spill" data-i="stat.cert">完成即頒發證書</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="prog">
+  <span class="plbl" data-i="prog.label">學習進度：</span>
+  <div class="ptrack"><div class="pfill" id="pfill"></div></div>
+  <span class="ppct" id="ppct">0%</span>
+  <span class="pbadge" id="pbadge">🌱</span>
+</div>
+
+<div class="levelpath" id="levelpath">
+  <div class="lp-title" data-i="path.title">學習路徑 Learning Path</div>
+  <div class="lp-row" id="lprow"></div>
+</div>
+
+<div class="body">
+
+<div class="sidebar" id="sidebar">
+  <div class="sslbl" data-i="sidebar.path">學習路徑</div>
+  <div id="sb-items"></div>
+  <div class="sdiv"></div>
+  <div class="sslbl" data-i="sidebar.tools">工具</div>
+  <!-- FIX: data-view for bottom nav active state -->
+  <div class="si" data-view="quiz" onclick="showView('quiz')"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></div>
+  <div class="si" data-view="cert" onclick="showView('cert')"><i class="ti ti-award" aria-hidden="true"></i><span data-i="nav.cert">證書</span></div>
+</div>
+
+<div class="content" id="content"></div>
+
+</div>
+
+<div class="bnav">
+  <div class="bninner">
+    <!-- FIX: data-view for active state management -->
+    <button class="bnb act" data-view="home" onclick="showView('home')" aria-label="首頁"><i class="ti ti-home" aria-hidden="true"></i><span data-i="nav.home">首頁</span></button>
+    <button class="bnb" data-view="levels" onclick="showView('levels')" aria-label="課程"><i class="ti ti-book" aria-hidden="true"></i><span data-i="nav.lessons">課程</span></button>
+    <button class="bnb" data-view="quiz" onclick="showView('quiz')" aria-label="測驗"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></button>
+    <button class="bnb" data-view="cert" onclick="showView('cert')" aria-label="證書"><i class="ti ti-award" aria-hidden="true"></i><span data-i="nav.cert">證書</span></button>
+    <button class="bnb" aria-label="設定"><i class="ti ti-settings" aria-hidden="true"></i><span data-i="nav.settings">設定</span></button>
+  </div>
+</div>
+
+<div class="footer">
+  <span>料理基礎學習平台 v0.6</span>
+  <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
+  <span class="fr" data-i="footer.note">全域 i18n + 8 級制 + 自動證書</span>
+</div>
+
+</div>
+</div>
+
+<script>
+function sendPrompt(t){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(t)}catch(e){}console.log('[sendPrompt]',t)}
+
+/* ── i18n ── */
+var I18N={
+zh:{
+  'nav.home':'首頁','nav.lessons':'課程','nav.quiz':'測驗','nav.cert':'證書','nav.settings':'設定',
+  'hero.title':'料理基礎學習平台','hero.sub':'Culinary Basics · Dasar Memasak · Nền tảng nấu ăn',
+  'hero.desc':'從安全到技術，從基礎刀工到火候控制——適合家庭幫傭、廚房助手與烹飪初學者的多語言學習資源。',
+  'stat.mod':'大模組','stat.lang':'語言','stat.levels':'等級制','stat.cert':'完成即頒發證書',
+  'prog.label':'學習進度：','path.title':'學習路徑',
+  'sidebar.path':'學習路徑','sidebar.tools':'工具',
+  'footer.langs':'繁中 · 中英 · 中印尼 · 中越','footer.note':'全域 i18n + 8 級制 + 自動證書',
+  'sec.lang':'選擇語言','sec.mod':'學習模組','sec.cur':'目前課程',
+  'btn.continue':'繼續學習 ↗','btn.quiz':'本關測驗 ↗','btn.id':'中印尼版 ↗','btn.vi':'中越版 ↗',
+  'tag.done':'完成','tag.cur':'進行中','tag.next':'即將',
+  'prog.badge0':'🌱 尚未開始','prog.badge1':'🏅 初學中','prog.badge2':'🏆 穩步前進','prog.badge3':'⭐ 接近完成','prog.badge4':'🎓 全部完成',
+  'quiz.title':'本關小測驗','quiz.score':'答對','quiz.next':'下一題 →','quiz.finish':'完成測驗','quiz.retry':'重做測驗',
+  'cert.title':'料理基礎結業證書','cert.sub':'Certificate of Completion — Culinary Basics',
+  'cert.body':'已完成料理基礎學習平台全部 8 個等級課程，具備廚房安全操作、食材處理、烹調技術及食品衛生管理之基礎知識。',
+  'cert.seal':'本證書由料理基礎學習平台頒發','cert.not_ready':'請完成所有 8 個等級後解鎖證書。',
+  'lv.locked':'尚未解鎖','chip.prog':'進行中'
+},
+en:{
+  'nav.home':'Home','nav.lessons':'Lessons','nav.quiz':'Quiz','nav.cert':'Certificate','nav.settings':'Settings',
+  'hero.title':'Culinary Basics Learning Platform','hero.sub':'廚房安全 · 刀工 · 火候控制 · 食品衛生',
+  'hero.desc':'From safety to technique — a multilingual resource for domestic helpers, kitchen assistants, and cooking beginners.',
+  'stat.mod':'Modules','stat.lang':'Languages','stat.levels':'Levels','stat.cert':'Certificate on completion',
+  'prog.label':'Progress: ','path.title':'Learning Path',
+  'sidebar.path':'Pathway','sidebar.tools':'Tools',
+  'footer.langs':'ZH · EN · ID · VI','footer.note':'Full i18n + 8 Levels + Auto Certificate',
+  'sec.lang':'Choose Language','sec.mod':'Modules','sec.cur':'Current Lesson',
+  'btn.continue':'Continue ↗','btn.quiz':'Level Quiz ↗','btn.id':'Bahasa version ↗','btn.vi':'Tiếng Việt version ↗',
+  'tag.done':'Done','tag.cur':'In progress','tag.next':'Next',
+  'prog.badge0':'🌱 Not started','prog.badge1':'🏅 Learning','prog.badge2':'🏆 Making progress','prog.badge3':'⭐ Almost done','prog.badge4':'🎓 All complete',
+  'quiz.title':'Level Quiz','quiz.score':'Correct','quiz.next':'Next →','quiz.finish':'Finish Quiz','quiz.retry':'Retry Quiz',
+  'cert.title':'Certificate of Completion','cert.sub':'料理基礎結業證書 — Culinary Basics',
+  'cert.body':'Has successfully completed all 8 levels of the Culinary Basics Learning Platform, demonstrating foundational knowledge in kitchen safety, ingredient handling, cooking techniques, and food hygiene.',
+  'cert.seal':'Issued by Culinary Basics Learning Platform','cert.not_ready':'Complete all 8 levels to unlock your certificate.',
+  'lv.locked':'Locked','chip.prog':'In progress'
+},
+id:{
+  'nav.home':'Beranda','nav.lessons':'Pelajaran','nav.quiz':'Kuis','nav.cert':'Sertifikat','nav.settings':'Pengaturan',
+  'hero.title':'Platform Belajar Memasak','hero.sub':'Keamanan Dapur · 廚房安全 · An toàn bếp',
+  'hero.desc':'Dari keselamatan hingga teknik memasak — panduan multibahasa untuk asisten rumah tangga dan pemula.',
+  'stat.mod':'Modul','stat.lang':'Bahasa','stat.levels':'Tingkat','stat.cert':'Sertifikat saat selesai',
+  'prog.label':'Kemajuan: ','path.title':'Jalur Belajar',
+  'sidebar.path':'Jalur Belajar','sidebar.tools':'Alat',
+  'footer.langs':'ZH · EN · ID · VI','footer.note':'i18n lengkap + 8 Tingkat + Sertifikat',
+  'sec.lang':'Pilih Bahasa','sec.mod':'Modul','sec.cur':'Pelajaran Saat Ini',
+  'btn.continue':'Lanjutkan ↗','btn.quiz':'Kuis Tingkat ↗','btn.id':'Versi Bahasa ↗','btn.vi':'Versi Tiếng Việt ↗',
+  'tag.done':'Selesai','tag.cur':'Sedang','tag.next':'Berikutnya',
+  'prog.badge0':'🌱 Belum mulai','prog.badge1':'🏅 Belajar','prog.badge2':'🏆 Maju pesat','prog.badge3':'⭐ Hampir selesai','prog.badge4':'🎓 Semua selesai',
+  'quiz.title':'Kuis Tingkat','quiz.score':'Benar','quiz.next':'Berikutnya →','quiz.finish':'Selesai Kuis','quiz.retry':'Ulangi Kuis',
+  'cert.title':'Sertifikat Kelulusan','cert.sub':'Certificate of Completion — Dasar Memasak',
+  'cert.body':'Telah menyelesaikan 8 tingkat Platform Belajar Memasak, dengan penguasaan dasar keselamatan dapur, penanganan bahan makanan, teknik memasak, dan kebersihan pangan.',
+  'cert.seal':'Dikeluarkan oleh Platform Belajar Memasak','cert.not_ready':'Selesaikan semua 8 tingkat untuk membuka sertifikat.',
+  'lv.locked':'Terkunci','chip.prog':'Sedang berjalan'
+},
+vi:{
+  'nav.home':'Trang chủ','nav.lessons':'Bài học','nav.quiz':'Kiểm tra','nav.cert':'Chứng chỉ','nav.settings':'Cài đặt',
+  'hero.title':'Nền Tảng Học Nấu Ăn','hero.sub':'An toàn bếp · 廚房安全 · Keamanan Dapur',
+  'hero.desc':'Từ an toàn đến kỹ thuật — tài liệu đa ngôn ngữ dành cho người giúp việc và người mới học nấu ăn.',
+  'stat.mod':'Mô-đun','stat.lang':'Ngôn ngữ','stat.levels':'Cấp độ','stat.cert':'Cấp chứng chỉ khi hoàn thành',
+  'prog.label':'Tiến độ: ','path.title':'Lộ trình học',
+  'sidebar.path':'Lộ trình','sidebar.tools':'Công cụ',
+  'footer.langs':'ZH · EN · ID · VI','footer.note':'i18n đầy đủ + 8 cấp độ + Chứng chỉ',
+  'sec.lang':'Chọn ngôn ngữ','sec.mod':'Mô-đun','sec.cur':'Bài học hiện tại',
+  'btn.continue':'Tiếp tục ↗','btn.quiz':'Kiểm tra cấp ↗','btn.id':'Phiên bản Bahasa ↗','btn.vi':'Phiên bản tiếng Việt ↗',
+  'tag.done':'Hoàn thành','tag.cur':'Đang học','tag.next':'Sắp tới',
+  'prog.badge0':'🌱 Chưa bắt đầu','prog.badge1':'🏅 Đang học','prog.badge2':'🏆 Tiến bộ tốt','prog.badge3':'⭐ Sắp xong','prog.badge4':'🎓 Hoàn thành tất cả',
+  'quiz.title':'Kiểm tra cấp','quiz.score':'Đúng','quiz.next':'Tiếp theo →','quiz.finish':'Hoàn thành kiểm tra','quiz.retry':'Làm lại',
+  'cert.title':'Chứng Chỉ Hoàn Thành','cert.sub':'Certificate of Completion — Nền tảng nấu ăn',
+  'cert.body':'Đã hoàn thành toàn bộ 8 cấp độ của Nền Tảng Học Nấu Ăn, nắm vững kiến thức cơ bản về an toàn bếp, xử lý nguyên liệu, kỹ thuật nấu ăn và vệ sinh thực phẩm.',
+  'cert.seal':'Cấp bởi Nền Tảng Học Nấu Ăn','cert.not_ready':'Hoàn thành 8 cấp để mở khóa chứng chỉ.',
+  'lv.locked':'Chưa mở khóa','chip.prog':'Đang học'
+}};
+
+function t(key){return(I18N[curLang]||I18N.zh)[key]||key}
+
+/* ── module data ── */
+var MODS=[
+  {lv:1,emoji:'🛡️',done:2,total:4,
+   titles:{zh:'廚房安全',en:'Kitchen Safety',id:'Keamanan Dapur',vi:'An toàn bếp'},
+   topics:[{zh:'瓦斯安全',en:'Gas Safety',s:2},{zh:'油炸安全',en:'Deep-frying Safety',s:2},{zh:'火候控制圖解',en:'Heat Control Guide',s:1},{zh:'每日安全檢查表',en:'Daily Safety Checklist',s:0}]},
+  {lv:2,emoji:'🔪',done:1,total:5,
+   titles:{zh:'刀工基礎',en:'Knife Skills',id:'Teknik Pisau',vi:'Kỹ thuật dao'},
+   topics:[{zh:'握刀方式',en:'Grip Technique',s:2},{zh:'切丁／切片',en:'Dice & Slice',s:1},{zh:'剁碎技巧',en:'Mincing',s:0},{zh:'去皮去骨',en:'Peeling & Deboning',s:0},{zh:'砧板管理',en:'Board Management',s:0}]},
+  {lv:3,emoji:'🔥',done:0,total:6,
+   titles:{zh:'火候控制',en:'Heat Control',id:'Kontrol Api',vi:'Kiểm soát lửa'},
+   topics:[{zh:'大火（約180°C以上）',en:'High heat — ~180°C+',s:0},{zh:'中火（約140–180°C）',en:'Medium heat',s:0},{zh:'小火（約100–140°C）',en:'Low heat',s:0},{zh:'保溫/微火（60–100°C）',en:'Keep warm',s:0},{zh:'竹筷測油溫',en:'Chopstick oil test',s:0},{zh:'各烹調法火候對應',en:'Method-heat reference',s:0}]},
+  {lv:4,emoji:'🥩',done:0,total:5,
+   titles:{zh:'食材保存',en:'Food Storage',id:'Penyimpanan Bahan',vi:'Bảo quản thực phẩm'},
+   topics:[{zh:'冷藏／冷凍原則',en:'Refrigeration/Freezing',s:0},{zh:'危險溫度帶（5–60°C）',en:'Danger zone 5–60°C',s:0},{zh:'生熟分離',en:'Raw-cooked separation',s:0},{zh:'正確解凍方式',en:'Safe thawing',s:0},{zh:'食材保鮮期',en:'Shelf life guide',s:0}]},
+  {lv:5,emoji:'🍲',done:0,total:6,
+   titles:{zh:'烹調方法',en:'Cooking Methods',id:'Metode Memasak',vi:'Phương pháp nấu'},
+   topics:[{zh:'炒（大火快炒）',en:'Stir-fry',s:0},{zh:'炸（中大火）',en:'Deep fry',s:0},{zh:'蒸（中大火）',en:'Steam',s:0},{zh:'燉滷（小火慢煮）',en:'Braise/Stew',s:0},{zh:'煎（中火）',en:'Pan-fry',s:0},{zh:'烤焗（烤箱）',en:'Bake/Roast',s:0}]},
+  {lv:6,emoji:'🧼',done:0,total:5,
+   titles:{zh:'食品衛生',en:'Food Hygiene',id:'Kebersihan Pangan',vi:'Vệ sinh thực phẩm'},
+   topics:[{zh:'七步驟洗手法',en:'7-step handwashing',s:0},{zh:'食品中毒四大原因',en:'4 causes of poisoning',s:0},{zh:'砧板顏色管理',en:'Board colour system',s:0},{zh:'冰箱衛生管理',en:'Fridge hygiene',s:0},{zh:'廚具消毒方式',en:'Utensil disinfection',s:0}]},
+  {lv:7,emoji:'📋',done:0,total:4,
+   titles:{zh:'菜單規劃',en:'Menu Planning',id:'Perencanaan Menu',vi:'Lên thực đơn'},
+   topics:[{zh:'均衡飲食原則',en:'Balanced diet',s:0},{zh:'一週菜單設計',en:'Weekly menu design',s:0},{zh:'採購清單製作',en:'Shopping list',s:0},{zh:'預算與份量計算',en:'Budget & portions',s:0}]},
+  {lv:8,emoji:'🏅',done:0,total:1,
+   titles:{zh:'結業測驗',en:'Final Exam',id:'Ujian Akhir',vi:'Kiểm tra cuối khoá'},
+   topics:[{zh:'綜合題庫測驗（40題）',en:'Comprehensive exam (40 Qs)',s:0}]}
+];
+
+var curLang='zh',curMod=0,curView='home',sbOK=true;
+var quizState={q:0,score:0,answered:false};
+
+/* Expanded quizzes: 3 questions per module */
+var QUIZZES=[
+  /* Lv1 廚房安全 */
+  [
+   {q:{zh:'油鍋起火時應該怎麼做？',en:'What should you do when an oil fire starts?',id:'Apa yang harus dilakukan saat minyak terbakar?',vi:'Nên làm gì khi dầu bốc cháy?'},
+    opts:[{zh:'潑水',en:'Pour water',id:'Siram air',vi:'Tưới nước',ok:false},
+          {zh:'關火並蓋上鍋蓋',en:'Turn off heat & cover pot',id:'Matikan api & tutup panci',vi:'Tắt lửa & đậy nắp',ok:true},
+          {zh:'繼續加熱',en:'Keep heating',id:'Terus panaskan',vi:'Tiếp tục đun',ok:false}],
+    fb:{zh:'正確！潑水會讓熱油爆炸性噴濺，必須切斷氧氣來源。',en:'Correct! Water causes explosive splattering. Cut off oxygen instead.',id:'Benar! Air menyebabkan percikan eksplosif.',vi:'Đúng! Nước gây bắn tung tóe. Cắt nguồn oxy.'}},
+   {q:{zh:'聞到瓦斯味時，第一步應該？',en:'When you smell gas, the first step is?',id:'Saat mencium gas, langkah pertama adalah?',vi:'Khi ngửi thấy mùi gas, bước đầu tiên là?'},
+    opts:[{zh:'開燈確認',en:'Turn on light to check',id:'Nyalakan lampu',vi:'Bật đèn kiểm tra',ok:false},
+          {zh:'關閉瓦斯總開關',en:'Turn off main gas valve',id:'Tutup keran gas utama',vi:'Tắt van gas chính',ok:true},
+          {zh:'打電話在廚房裡',en:'Call from inside kitchen',id:'Telepon dari dapur',vi:'Gọi điện trong bếp',ok:false}],
+    fb:{zh:'正確！先關總開關，再開窗，不可開關電器。',en:'Correct! First close the valve, open windows, no electrical switches.',id:'Benar! Tutup katup dulu, buka jendela, jangan sentuh listrik.',vi:'Đúng! Trước tiên đóng van, mở cửa sổ, không chạm điện.'}},
+   {q:{zh:'廚房地板濕滑時應優先採取哪個措施？',en:'When the kitchen floor is wet and slippery, what is the priority action?',id:'Ketika lantai dapur licin, tindakan prioritas adalah?',vi:'Khi sàn bếp ướt trơn, ưu tiên làm gì?'},
+    opts:[{zh:'繼續工作，小心走路',en:'Continue working, walk carefully',id:'Terus bekerja, jalan hati-hati',vi:'Tiếp tục làm, đi cẩn thận',ok:false},
+          {zh:'立即用乾布擦乾並放置警示標示',en:'Immediately dry and place a wet-floor warning',id:'Segera keringkan dan pasang tanda peringatan',vi:'Lau khô ngay và đặt biển cảnh báo',ok:true},
+          {zh:'等下班後再清理',en:'Clean up after the shift',id:'Bersihkan setelah shift',vi:'Dọn sau khi tan ca',ok:false}],
+    fb:{zh:'正確！濕滑地板是廚房最常見的意外原因之一，必須立即處理並警示他人。',en:'Correct! Slippery floors are one of the most common kitchen hazards — dry immediately and warn others.',id:'Benar! Lantai licin adalah salah satu bahaya dapur paling umum — segera keringkan.',vi:'Đúng! Sàn trơn là nguyên nhân tai nạn phổ biến nhất trong bếp — cần xử lý ngay.'}}
+  ],
+  /* Lv2 刀工基礎 */
+  [
+   {q:{zh:'使用刀具時，切好後刀應如何擺放？',en:'After cutting, where should you place the knife?',id:'Setelah memotong, di mana pisau harus diletakkan?',vi:'Sau khi cắt, nên đặt dao ở đâu?'},
+    opts:[{zh:'刀口朝外，放桌邊',en:'Blade out, at table edge',id:'Mata pisau keluar, di tepi meja',vi:'Lưỡi ra ngoài, mép bàn',ok:false},
+          {zh:'刀口朝下，放刀架',en:'Blade down, on knife rack',id:'Letakkan di rak pisau',vi:'Đặt trên giá dao',ok:true},
+          {zh:'刀口朝上，放水槽',en:'Blade up in sink',id:'Di wastafel lurus ke atas',vi:'Lưỡi lên trong bồn rửa',ok:false}],
+    fb:{zh:'正確！刀具應放刀架，不可浸入水中或刀口朝外放置。',en:'Correct! Always rack knives — never soak or leave blade-out.',id:'Benar! Selalu simpan di rak, jangan rendam atau tinggalkan berbahaya.',vi:'Đúng! Luôn đặt dao lên giá, không ngâm hay để lưỡi ra ngoài.'}},
+   {q:{zh:'正確握刀方式是？',en:'Which is the correct knife grip?',id:'Cara memegang pisau yang benar adalah?',vi:'Cách cầm dao đúng là?'},
+    opts:[{zh:'四指握刀柄，大拇指壓在刀背',en:'Four fingers on handle, thumb on blade spine',id:'Empat jari di gagang, ibu jari di punggung pisau',vi:'Bốn ngón giữ cán, ngón cái ép sống dao',ok:true},
+          {zh:'全手握刀柄，拇指在食指上方',en:'Full hand on handle, thumb over index finger',id:'Seluruh tangan di gagang',vi:'Nắm toàn bộ cán dao',ok:false},
+          {zh:'三指握刀柄，食指放刀面',en:'Three fingers on handle, index on blade flat',id:'Tiga jari di gagang, telunjuk di sisi pisau',vi:'Ba ngón giữ cán, ngón trỏ ở thân dao',ok:false}],
+    fb:{zh:'正確！穩固握刀可以控制力道，防止刀具滑動造成割傷。',en:'Correct! A firm pinch grip controls force and prevents the knife from slipping.',id:'Benar! Pegangan yang kuat mengontrol kekuatan dan mencegah pisau tergelincir.',vi:'Đúng! Nắm chắc giúp kiểm soát lực và tránh dao bị trượt.'}},
+   {q:{zh:'切食材時，另一隻手的手指應如何擺放（貓爪式）？',en:'When cutting, how should the guiding hand\'s fingers be positioned (the claw grip)?',id:'Saat memotong, bagaimana jari tangan pengarah diposisikan (cakar kucing)?',vi:'Khi cắt, tay giữ thức ăn nên để ngón tay như thế nào (kiểu vuốt mèo)?'},
+    opts:[{zh:'手指平放在食材上',en:'Fingers flat on the ingredient',id:'Jari rata di atas bahan',vi:'Ngón tay thẳng trên thức ăn',ok:false},
+          {zh:'指尖向後彎曲，指節朝前引導刀面',en:'Fingertips curled back, knuckles forward guiding the blade',id:'Ujung jari ditekuk ke belakang, buku jari ke depan',vi:'Đầu ngón tay cong lại, đốt ngón tay hướng ra trước dẫn dao',ok:true},
+          {zh:'手完全離開食材',en:'Hand completely off the ingredient',id:'Tangan jauh dari bahan',vi:'Tay hoàn toàn tránh xa thức ăn',ok:false}],
+    fb:{zh:'正確！貓爪式能保護手指，以指節引導刀面，是最安全的切食材手勢。',en:'Correct! The claw grip protects fingers — knuckles guide the blade safely.',id:'Benar! Cakar kucing melindungi jari — buku jari memandu pisau dengan aman.',vi:'Đúng! Kiểu vuốt mèo bảo vệ ngón tay — dùng đốt ngón hướng dao an toàn.'}}
+  ],
+  /* Lv3 火候控制 */
+  [
+   {q:{zh:'大火的建議溫度區間是？',en:'Recommended range for high heat is?',id:'Kisaran suhu api besar adalah?',vi:'Nhiệt độ lửa lớn là?'},
+    opts:[{zh:'約50–100°C',en:'~50–100°C',id:'~50–100°C',vi:'~50–100°C',ok:false},
+          {zh:'約180°C以上',en:'~180°C and above',id:'~180°C ke atas',vi:'~180°C trở lên',ok:true},
+          {zh:'約100–140°C',en:'~100–140°C',id:'~100–140°C',vi:'~100–140°C',ok:false}],
+    fb:{zh:'正確！大火約180°C以上，但因爐具材質不同，以目視火焰為主要判斷依據。',en:'Correct! High heat is ~180°C+, but judge by flame and visual cues.',id:'Benar! Api besar ~180°C+, tapi nilai dari tampilan nyala api.',vi:'Đúng! Lửa lớn ~180°C+, nhưng quan sát ngọn lửa để đánh giá.'}},
+   {q:{zh:'用竹筷測試油溫時，若周圍立刻冒出細小氣泡代表？',en:'When testing oil temperature with chopsticks, small steady bubbles mean?',id:'Saat tes suhu minyak dengan sumpit, gelembung kecil langsung muncul artinya?',vi:'Khi thử nhiệt dầu bằng đũa, bong bóng nhỏ ngay lập tức nghĩa là?'},
+    opts:[{zh:'油溫太低（約80–100°C）',en:'Oil too cold (~80–100°C)',id:'Minyak terlalu dingin (~80–100°C)',vi:'Dầu quá lạnh (~80–100°C)',ok:false},
+          {zh:'油溫適中（約160°C），可下食材',en:'Oil at medium temp (~160°C) — ready to fry',id:'Suhu minyak sedang (~160°C) — siap digoreng',vi:'Dầu nhiệt độ vừa (~160°C) — có thể chiên',ok:true},
+          {zh:'油溫過高（約200°C以上）',en:'Oil too hot (~200°C+)',id:'Minyak terlalu panas (~200°C+)',vi:'Dầu quá nóng (~200°C+)',ok:false}],
+    fb:{zh:'正確！細小穩定氣泡代表約160°C，是多數炸物的適合溫度。大量急劇冒泡則表示油溫過高。',en:'Correct! Small steady bubbles indicate ~160°C, ideal for most frying. Violent bubbling means too hot.',id:'Benar! Gelembung kecil stabil menunjukkan ~160°C, ideal untuk menggoreng.',vi:'Đúng! Bong bóng nhỏ ổn định là ~160°C, lý tưởng để chiên.'}},
+   {q:{zh:'燉煮（慢燉）應使用哪種火候？',en:'Which heat level should be used for slow braising/stewing?',id:'Tingkat api apa yang digunakan untuk merebus lambat?',vi:'Nên dùng lửa nào để hầm/kho chậm?'},
+    opts:[{zh:'大火（180°C以上）',en:'High heat (180°C+)',id:'Api besar (180°C+)',vi:'Lửa lớn (180°C+)',ok:false},
+          {zh:'小火（約100–140°C）',en:'Low heat (~100–140°C)',id:'Api kecil (~100–140°C)',vi:'Lửa nhỏ (~100–140°C)',ok:true},
+          {zh:'中大火（約140–180°C）',en:'Medium-high (~140–180°C)',id:'Api sedang-besar (~140–180°C)',vi:'Lửa vừa-lớn (~140–180°C)',ok:false}],
+    fb:{zh:'正確！小火慢燉能讓食材均勻受熱、軟化，同時保留湯汁風味，避免焦底或爆沸。',en:'Correct! Low heat allows even cooking, tenderizing ingredients while preserving broth flavor.',id:'Benar! Api kecil memungkinkan memasak merata, melunakkan bahan sambil menjaga rasa kaldu.',vi:'Đúng! Lửa nhỏ giúp nấu đều, làm mềm nguyên liệu và giữ hương vị nước dùng.'}}
+  ],
+  /* Lv4 食材保存 */
+  [
+   {q:{zh:'食品危險溫度帶是？',en:'The food danger zone temperature range is?',id:'Zona bahaya suhu makanan adalah?',vi:'Vùng nhiệt độ nguy hiểm thực phẩm là?'},
+    opts:[{zh:'0–5°C',en:'0–5°C',id:'0–5°C',vi:'0–5°C',ok:false},
+          {zh:'5–60°C',en:'5–60°C',id:'5–60°C',vi:'5–60°C',ok:true},
+          {zh:'60–80°C',en:'60–80°C',id:'60–80°C',vi:'60–80°C',ok:false}],
+    fb:{zh:'正確！5–60°C是細菌最易繁殖的溫度帶，食物不可在此區間停留超過2小時。',en:'Correct! Bacteria multiply fastest in 5–60°C. Food must not stay here over 2 hours.',id:'Benar! Bakteri berkembang cepat di 5–60°C.',vi:'Đúng! Vi khuẩn nhân lên nhanh nhất ở 5–60°C.'}},
+   {q:{zh:'冷藏室（冰箱）的最佳溫度應設定為？',en:'The ideal temperature for a refrigerator is?',id:'Suhu ideal lemari es sebaiknya?',vi:'Nhiệt độ lý tưởng cho tủ lạnh là?'},
+    opts:[{zh:'0–2°C',en:'0–2°C',id:'0–2°C',vi:'0–2°C',ok:false},
+          {zh:'3–5°C',en:'3–5°C',id:'3–5°C',vi:'3–5°C',ok:true},
+          {zh:'8–10°C',en:'8–10°C',id:'8–10°C',vi:'8–10°C',ok:false}],
+    fb:{zh:'正確！冷藏室應維持3–5°C，可以有效抑制多數細菌繁殖，又不至於凍壞葉菜類。',en:'Correct! Refrigerators should be kept at 3–5°C — inhibits bacteria without freezing leafy vegetables.',id:'Benar! Kulkas harus dijaga pada 3–5°C — menghambat bakteri tanpa membekukan sayuran.',vi:'Đúng! Tủ lạnh nên giữ ở 3–5°C — ức chế vi khuẩn mà không làm đông rau.'}},
+   {q:{zh:'正確的解凍肉類方式是？',en:'The correct method to thaw meat is?',id:'Cara benar mencairkan daging beku adalah?',vi:'Cách đúng để rã đông thịt là?'},
+    opts:[{zh:'放在室溫下隔夜解凍',en:'Leave at room temperature overnight',id:'Biarkan di suhu ruangan semalam',vi:'Để ở nhiệt độ phòng qua đêm',ok:false},
+          {zh:'放入冷藏室（4°C）緩慢解凍',en:'Thaw slowly in the refrigerator (4°C)',id:'Cairkan perlahan di kulkas (4°C)',vi:'Rã đông chậm trong tủ lạnh (4°C)',ok:true},
+          {zh:'直接放入熱水解凍',en:'Thaw directly in hot water',id:'Cairkan langsung dalam air panas',vi:'Rã đông trực tiếp trong nước nóng',ok:false}],
+    fb:{zh:'正確！冷藏解凍最安全，能保持肉品在安全溫度以下；熱水解凍會讓表面快速進入危險溫度帶。',en:'Correct! Refrigerator thawing is safest, keeping meat below the danger zone. Hot water speeds surface into unsafe temps.',id:'Benar! Pencairan di kulkas paling aman, menjaga daging di bawah zona bahaya.',vi:'Đúng! Rã đông trong tủ lạnh an toàn nhất, giữ thịt dưới vùng nguy hiểm.'}}
+  ],
+  /* Lv5 烹調方法 */
+  [
+   {q:{zh:'大火快炒的主要目的是？',en:'The main purpose of high-heat stir-frying is?',id:'Tujuan utama menumis api besar adalah?',vi:'Mục đích chính của xào lửa lớn là?'},
+    opts:[{zh:'讓食材熟透',en:'Cook food thoroughly',id:'Memasak makanan hingga matang',vi:'Nấu chín kỹ thực phẩm',ok:false},
+          {zh:'保留鮮味與脆度',en:'Retain freshness & crispness',id:'Mempertahankan kesegaran & kerenyahan',vi:'Giữ vị tươi & độ giòn',ok:true},
+          {zh:'節省燃料',en:'Save fuel',id:'Hemat bahan bakar',vi:'Tiết kiệm nhiên liệu',ok:false}],
+    fb:{zh:'正確！大火快炒能鎖住食材水分與鮮味，保持脆口口感。',en:'Correct! High-heat stir-fry locks in moisture and flavor, keeping food crisp.',id:'Benar! Menumis api besar mengunci kelembapan dan rasa.',vi:'Đúng! Xào lửa lớn giữ ẩm và hương vị, giữ độ giòn.'}},
+   {q:{zh:'蒸的烹調方式，主要熱能傳遞方式是？',en:'The main heat transfer method in steaming is?',id:'Metode transfer panas utama dalam mengukus adalah?',vi:'Phương thức truyền nhiệt chính khi hấp là?'},
+    opts:[{zh:'直接傳導',en:'Direct conduction',id:'Konduksi langsung',vi:'Dẫn nhiệt trực tiếp',ok:false},
+          {zh:'蒸汽（對流）',en:'Steam (convection)',id:'Uap (konveksi)',vi:'Hơi nước (đối lưu)',ok:true},
+          {zh:'輻射熱',en:'Radiant heat',id:'Panas radiasi',vi:'Bức xạ nhiệt',ok:false}],
+    fb:{zh:'正確！蒸利用水蒸氣傳遞熱能，是最能保留食材原味和營養的烹調方式。',en:'Correct! Steaming uses water vapor (convection) to transfer heat — best for preserving nutrients and flavor.',id:'Benar! Mengukus menggunakan uap air untuk mentransfer panas — terbaik untuk mempertahankan nutrisi.',vi:'Đúng! Hấp dùng hơi nước để truyền nhiệt — tốt nhất để giữ dinh dưỡng và hương vị.'}},
+   {q:{zh:'烤箱烤雞時，最常用的確認熟度方式是？',en:'When roasting chicken in an oven, the most reliable way to check doneness is?',id:'Saat memanggang ayam di oven, cara terbaik memastikan kematangan adalah?',vi:'Khi nướng gà trong lò, cách tin cậy nhất để kiểm tra độ chín là?'},
+    opts:[{zh:'看外皮顏色是否金黃',en:'Check if the skin is golden',id:'Periksa apakah kulit berwarna keemasan',vi:'Kiểm tra da có màu vàng không',ok:false},
+          {zh:'用溫度計刺入最厚部位達75°C以上',en:'Insert thermometer into thickest part — must reach 75°C',id:'Masukkan termometer ke bagian paling tebal — harus mencapai 75°C',vi:'Cắm nhiệt kế vào phần dày nhất — phải đạt 75°C',ok:true},
+          {zh:'烤滿標準時間即可',en:'Cook for the standard time',id:'Masak selama waktu standar',vi:'Nấu đủ thời gian tiêu chuẩn',ok:false}],
+    fb:{zh:'正確！中心溫度達75°C才能確保殺滅沙門氏菌等病原體。外皮顏色和時間只能參考，溫度計才是最準確的方式。',en:'Correct! Internal temp of 75°C ensures pathogens like Salmonella are destroyed. Color and time are guides only.',id:'Benar! Suhu internal 75°C memastikan patogen seperti Salmonella hancur.',vi:'Đúng! Nhiệt độ lõi 75°C đảm bảo tiêu diệt vi khuẩn như Salmonella.'}}
+  ],
+  /* Lv6 食品衛生 */
+  [
+   {q:{zh:'七步驟洗手法中，第一步是？',en:'The first step in the 7-step handwashing method is?',id:'Langkah pertama mencuci tangan 7 langkah adalah?',vi:'Bước đầu tiên trong quy trình rửa tay 7 bước là?'},
+    opts:[{zh:'搓手掌',en:'Rub palms together',id:'Gosok telapak tangan',vi:'Chà lòng bàn tay',ok:false},
+          {zh:'濕潤雙手並塗抹肥皂',en:'Wet hands and apply soap',id:'Basahi tangan lalu oleskan sabun',vi:'Làm ướt tay và thoa xà phòng',ok:true},
+          {zh:'沖洗雙手',en:'Rinse hands',id:'Bilas tangan',vi:'Rửa sạch tay',ok:false}],
+    fb:{zh:'正確！先用流水濕潤雙手，再取適量肥皂開始搓洗。',en:'Correct! First wet hands under running water, then apply an appropriate amount of soap.',id:'Benar! Pertama basahi tangan dengan air mengalir, lalu oleskan sabun.',vi:'Đúng! Đầu tiên làm ướt tay dưới vòi nước, sau đó thoa xà phòng.'}},
+   {q:{zh:'根據砧板顏色管理，紅色砧板應用於？',en:'According to color-coded board system, the red board is for?',id:'Menurut sistem talenan berwarna, talenan merah digunakan untuk?',vi:'Theo hệ thống thớt màu, thớt đỏ dùng cho?'},
+    opts:[{zh:'蔬菜與水果',en:'Vegetables & fruits',id:'Sayuran & buah',vi:'Rau củ và trái cây',ok:false},
+          {zh:'生肉（牛豬羊）',en:'Raw meat (beef, pork, lamb)',id:'Daging mentah (sapi, babi, kambing)',vi:'Thịt sống (bò, heo, dê)',ok:true},
+          {zh:'熟食',en:'Cooked food',id:'Makanan matang',vi:'Thực phẩm đã nấu chín',ok:false}],
+    fb:{zh:'正確！紅=生肉，黃=生禽肉，藍=生海鮮，綠=蔬果，白=熟食，棕=麵包烘焙。分色管理能有效防止交叉汙染。',en:'Correct! Red=raw meat, Yellow=raw poultry, Blue=raw seafood, Green=produce, White=cooked, Brown=bakery. Color coding prevents cross-contamination.',id:'Benar! Merah=daging mentah, Kuning=unggas mentah, Biru=seafood mentah, Hijau=sayuran, Putih=matang, Coklat=roti. Kode warna mencegah kontaminasi silang.',vi:'Đúng! Đỏ=thịt sống, Vàng=gia cầm sống, Xanh dương=hải sản sống, Xanh lá=rau củ, Trắng=thức ăn chín, Nâu=bánh mì. Mã màu ngăn ô nhiễm chéo.'}},
+   {q:{zh:'食品中毒四大原因中，下列哪項屬於「汙染」原因？',en:'Among the 4 causes of food poisoning, which is a "contamination" factor?',id:'Di antara 4 penyebab keracunan makanan, mana yang faktor "kontaminasi"?',vi:'Trong 4 nguyên nhân ngộ độc thực phẩm, điều nào là yếu tố "ô nhiễm"?'},
+    opts:[{zh:'食物在室溫放置超過2小時',en:'Food left at room temperature for over 2 hours',id:'Makanan dibiarkan di suhu ruang lebih dari 2 jam',vi:'Thức ăn để ở nhiệt độ phòng hơn 2 giờ',ok:false},
+          {zh:'生熟食使用同一塊砧板',en:'Using the same board for raw and cooked food',id:'Menggunakan talenan yang sama untuk makanan mentah dan matang',vi:'Dùng chung thớt cho thực phẩm sống và chín',ok:true},
+          {zh:'烹調溫度不足',en:'Insufficient cooking temperature',id:'Suhu memasak tidak cukup',vi:'Nhiệt độ nấu không đủ',ok:false}],
+    fb:{zh:'正確！生熟同板是最典型的交叉汙染。室溫放置超過2小時屬於「增殖」問題；加熱不足屬「加熱不足」問題。四大原因：汙染、增殖、加熱不足、個人衛生不良。',en:'Correct! Sharing boards is classic contamination. Leaving food at room temp over 2 hours is "proliferation". The 4 causes: contamination, proliferation, insufficient heating, poor personal hygiene.',id:'Benar! Berbagi talenan adalah kontaminasi. Makanan di suhu ruang lebih dari 2 jam adalah "proliferasi". 4 penyebab: kontaminasi, proliferasi, pemanasan tidak cukup, kebersihan buruk.',vi:'Đúng! Dùng chung thớt là ô nhiễm. Để thức ăn ở nhiệt độ phòng hơn 2 giờ là "sinh sôi". 4 nguyên nhân: ô nhiễm, sinh sôi, nhiệt không đủ, vệ sinh kém.'}}
+  ],
+  /* Lv7 菜單規劃 */
+  [
+   {q:{zh:'均衡飲食中，蔬菜應佔餐盤的多少比例？',en:'In a balanced diet, what proportion of the plate should be vegetables?',id:'Dalam diet seimbang, berapa proporsi sayuran di piring?',vi:'Trong chế độ ăn cân bằng, rau chiếm bao nhiêu phần đĩa?'},
+    opts:[{zh:'約1/4',en:'About 1/4',id:'Sekitar 1/4',vi:'Khoảng 1/4',ok:false},
+          {zh:'約1/2',en:'About 1/2',id:'Sekitar 1/2',vi:'Khoảng 1/2',ok:true},
+          {zh:'約3/4',en:'About 3/4',id:'Sekitar 3/4',vi:'Khoảng 3/4',ok:false}],
+    fb:{zh:'正確！蔬菜應佔餐盤約一半，搭配適量蛋白質與全穀類。',en:'Correct! Vegetables should fill about half the plate, with protein and whole grains.',id:'Benar! Sayuran harus mengisi sekitar setengah piring.',vi:'Đúng! Rau nên chiếm khoảng một nửa đĩa.'}},
+   {q:{zh:'規劃一週菜單時，應優先考慮哪個因素？',en:'When planning a weekly menu, which factor should be prioritized?',id:'Saat merencanakan menu mingguan, faktor apa yang harus diprioritaskan?',vi:'Khi lên thực đơn tuần, yếu tố nào nên ưu tiên?'},
+    opts:[{zh:'只做自己擅長的料理',en:'Only cook what you know',id:'Hanya masak yang Anda kuasai',vi:'Chỉ nấu những gì bạn quen',ok:false},
+          {zh:'食材多樣性、季節性與家庭成員需求',en:'Variety, seasonality, and family dietary needs',id:'Variasi, musiman, dan kebutuhan anggota keluarga',vi:'Đa dạng, theo mùa và nhu cầu thành viên gia đình',ok:true},
+          {zh:'選擇最便宜的食材',en:'Choose the cheapest ingredients',id:'Pilih bahan yang paling murah',vi:'Chọn nguyên liệu rẻ nhất',ok:false}],
+    fb:{zh:'正確！好的菜單應兼顧食材多樣性（各類食物交替）、季節性（新鮮且便宜）及家庭成員的健康需求。',en:'Correct! A good menu balances variety, seasonality (fresher and cheaper), and the family\'s health and dietary needs.',id:'Benar! Menu yang baik menyeimbangkan variasi, musiman, dan kebutuhan kesehatan keluarga.',vi:'Đúng! Thực đơn tốt cần cân bằng đa dạng, theo mùa và nhu cầu sức khỏe gia đình.'}},
+   {q:{zh:'製作採購清單時，最有效率的方式是？',en:'What is the most efficient way to make a shopping list?',id:'Cara paling efisien membuat daftar belanja adalah?',vi:'Cách hiệu quả nhất để lập danh sách mua sắm là?'},
+    opts:[{zh:'邊逛超市邊決定買什麼',en:'Decide what to buy while browsing the store',id:'Putuskan apa yang dibeli saat keliling toko',vi:'Quyết định mua gì khi đang ở siêu thị',ok:false},
+          {zh:'根據一週菜單，按食材分類列出所需數量',en:'Based on the weekly menu, list quantities organized by food category',id:'Berdasarkan menu mingguan, daftar jumlah yang dibutuhkan berdasarkan kategori bahan',vi:'Dựa vào thực đơn tuần, liệt kê số lượng theo từng loại thực phẩm',ok:true},
+          {zh:'只買促銷商品',en:'Only buy items on sale',id:'Hanya beli barang yang diskon',vi:'Chỉ mua hàng đang giảm giá',ok:false}],
+    fb:{zh:'正確！先定好菜單再依食材分類列清單，能避免重複購買、漏買，也方便在超市快速找到商品。',en:'Correct! Plan the menu first, then list by category — avoids over-buying, missing items, and speeds up shopping.',id:'Benar! Rencanakan menu dulu, lalu daftar berdasarkan kategori — menghindari pembelian berlebihan.',vi:'Đúng! Lên thực đơn trước, rồi liệt kê theo danh mục — tránh mua thừa, thiếu và mua nhanh hơn.'}}
+  ],
+  /* Lv8 結業測驗 */
+  [
+   {q:{zh:'下列哪項不屬於廚房基本安全規則？',en:'Which of the following is NOT a basic kitchen safety rule?',id:'Mana yang bukan aturan keselamatan dapur dasar?',vi:'Điều nào không phải quy tắc an toàn bếp cơ bản?'},
+    opts:[{zh:'保持地板乾燥',en:'Keep floor dry',id:'Jaga lantai tetap kering',vi:'Giữ sàn khô ráo',ok:false},
+          {zh:'炸物時蓋上鍋蓋',en:'Cover pot while deep-frying',id:'Tutup panci saat menggoreng',vi:'Đậy nắp khi chiên ngập dầu',ok:true},
+          {zh:'刀具使用後立即收納',en:'Store knives immediately after use',id:'Simpan pisau segera setelah digunakan',vi:'Cất dao ngay sau khi dùng',ok:false}],
+    fb:{zh:'正確！炸物時絕對不能蓋鍋蓋，蒸汽積聚會導致油爆危險。',en:'Correct! Never cover the pot while deep-frying — steam buildup causes dangerous oil explosions.',id:'Benar! Jangan pernah menutup panci saat menggoreng — uap menyebabkan ledakan minyak.',vi:'Đúng! Không bao giờ đậy nắp khi chiên — hơi tích tụ gây bùng nổ dầu nguy hiểm.'}},
+   {q:{zh:'以下哪種食材最適合用「蒸」的方式烹調，以保留最多營養？',en:'Which ingredient is best cooked by steaming to preserve the most nutrients?',id:'Bahan makanan mana yang paling baik dikukus untuk menjaga nutrisi?',vi:'Nguyên liệu nào thích hợp nhất để hấp nhằm giữ nhiều dinh dưỡng nhất?'},
+    opts:[{zh:'根莖類（紅蘿蔔、馬鈴薯）',en:'Root vegetables (carrots, potatoes)',id:'Sayuran akar (wortel, kentang)',vi:'Rau củ (cà rốt, khoai tây)',ok:false},
+          {zh:'魚類與海鮮',en:'Fish & seafood',id:'Ikan & makanan laut',vi:'Cá & hải sản',ok:true},
+          {zh:'乾燥豆類',en:'Dried legumes',id:'Kacang-kacangan kering',vi:'Đậu khô',ok:false}],
+    fb:{zh:'正確！魚類與海鮮肉質細嫩、含豐富蛋白質與Omega-3，蒸製可避免高溫破壞營養素，又能保持鮮嫩口感。',en:'Correct! Fish and seafood are delicate and rich in protein and Omega-3. Steaming avoids high heat that destroys nutrients.',id:'Benar! Ikan dan makanan laut kaya protein dan Omega-3. Mengukus menghindari panas tinggi yang merusak nutrisi.',vi:'Đúng! Cá và hải sản giàu protein và Omega-3. Hấp tránh nhiệt cao làm hỏng dinh dưỡng.'}},
+   {q:{zh:'食品冷藏時，熟食應放在冰箱的哪個位置？',en:'When refrigerating food, cooked food should be placed where in the fridge?',id:'Saat menyimpan makanan di kulkas, makanan matang sebaiknya diletakkan di mana?',vi:'Khi để thực phẩm trong tủ lạnh, thức ăn chín nên để ở đâu?'},
+    opts:[{zh:'下層，靠近冷凍室',en:'Lower shelf, near the freezer',id:'Rak bawah, dekat freezer',vi:'Ngăn dưới, gần ngăn đá',ok:false},
+          {zh:'上層，避免生食滴液汙染',en:'Upper shelf, away from raw food drips',id:'Rak atas, jauh dari tetesan makanan mentah',vi:'Ngăn trên, tránh dịch từ thực phẩm sống',ok:true},
+          {zh:'門邊格架，方便取用',en:'Door shelf for easy access',id:'Rak pintu untuk kemudahan akses',vi:'Ngăn cửa để dễ lấy',ok:false}],
+    fb:{zh:'正確！熟食應放上層，生食放下層，避免生食的汁液滴落汙染熟食，造成交叉汙染與食物中毒風險。',en:'Correct! Cooked food goes on the upper shelf, raw food on the lower shelf, to prevent raw juices dripping onto cooked food.',id:'Benar! Makanan matang di rak atas, makanan mentah di rak bawah, mencegah jus makanan mentah menetes ke makanan matang.',vi:'Đúng! Thức ăn chín ở ngăn trên, thực phẩm sống ở ngăn dưới, tránh dịch từ thực phẩm sống nhỏ vào thức ăn chín.'}}
+  ]
+];
+
+var MOD_KNOWLEDGE=[
+  /* Lv1 廚房安全 */
+  {
+    title:{zh:'重要安全知識',en:'Key Safety Knowledge',id:'Pengetahuan Keselamatan',vi:'Kiến thức an toàn'},
+    items:[
+      {icon:'🔥',zh:'油炸安全',en:'Frying Safety',desc:{zh:'油溫超過250°C會自燃，炸物時油量不超過鍋深1/3，保持通風。',en:'Oil auto-ignites above 250°C. Fill no more than 1/3 of the pot; ensure ventilation.',id:'Minyak menyala sendiri di atas 250°C. Isi maks 1/3 panci; pastikan ventilasi.',vi:'Dầu tự bốc cháy trên 250°C. Đổ không quá 1/3 nồi; đảm bảo thông gió.'}},
+      {icon:'💧',zh:'濕滑地板',en:'Slippery Floor',desc:{zh:'廚房地板占意外事故60%以上，應穿防滑鞋，滴水立即擦乾。',en:'Kitchen floors account for 60%+ of accidents. Wear non-slip shoes; wipe up spills immediately.',id:'Lantai dapur menyebabkan 60%+ kecelakaan. Gunakan sepatu anti-slip; segera keringkan tumpahan.',vi:'Sàn bếp chiếm 60%+ tai nạn. Đi giày chống trượt; lau khô ngay khi đổ.'}},
+      {icon:'⚡',zh:'用電安全',en:'Electrical Safety',desc:{zh:'濕手不可觸碰電器，電線不可橫過水槽或瓦斯爐，定期檢查插頭。',en:'Never touch appliances with wet hands. Cords must not cross the sink or stove; check plugs regularly.',id:'Jangan pegang peralatan dengan tangan basah. Kabel tidak boleh melintasi wastafel atau kompor.',vi:'Không chạm thiết bị điện bằng tay ướt. Dây điện không được qua bồn rửa hay bếp.'}},
+      {icon:'🆘',zh:'緊急應對',en:'Emergency Response',desc:{zh:'記住急救電話，熟悉廚房滅火器位置，燙傷立即以冷水沖15分鐘。',en:'Know emergency numbers. Locate the fire extinguisher. For burns: cool water for 15 minutes.',id:'Ketahui nomor darurat. Cari tabung pemadam. Luka bakar: air dingin 15 menit.',vi:'Biết số khẩn cấp. Biết vị trí bình chữa cháy. Bỏng: nước lạnh 15 phút.'}}
+    ],
+    tip:{zh:'💡 每天開工前，花30秒確認：瓦斯關閉、地板乾燥、刀具收納、電器無異常。',en:'💡 Before each shift, take 30 seconds: gas off, floor dry, knives stored, appliances normal.',id:'💡 Sebelum setiap shift, luangkan 30 detik: gas mati, lantai kering, pisau tersimpan, peralatan normal.',vi:'💡 Trước mỗi ca, dành 30 giây: tắt gas, sàn khô, dao cất, thiết bị bình thường.'}
+  },
+  /* Lv2 刀工基礎 */
+  {
+    title:{zh:'刀工技法速查',en:'Knife Technique Reference',id:'Referensi Teknik Pisau',vi:'Tham khảo kỹ thuật dao'},
+    items:[
+      {icon:'🔪',zh:'切丁（Dice）',en:'Dice',desc:{zh:'先切片→切條→切丁。大丁約2cm，小丁約1cm，細丁約0.5cm。',en:'Slice → julienne → dice. Large: 2cm, Medium: 1cm, Brunoise: 0.5cm.',id:'Iris → potong korek → potong dadu. Besar: 2cm, sedang: 1cm, halus: 0.5cm.',vi:'Thái → cắt sợi → cắt hạt lựu. Lớn: 2cm, vừa: 1cm, nhỏ: 0.5cm.'}},
+      {icon:'🌿',zh:'切絲（Julienne）',en:'Julienne',desc:{zh:'沿紋路切薄片後疊起切細絲，約3mm寬，長5–6cm為標準絲。',en:'Slice with the grain, then stack and cut into thin strips, ~3mm wide, 5–6cm long.',id:'Iris sesuai serat, tumpuk lalu potong julienne ~3mm lebar, panjang 5–6cm.',vi:'Thái theo thớ, xếp chồng và cắt sợi ~3mm rộng, dài 5–6cm.'}},
+      {icon:'🧅',zh:'剁碎（Mince）',en:'Mince',desc:{zh:'將食材切小後，一手壓刀背，前後搖動刀腹快速剁碎，至所需細緻度。',en:'Chop roughly, then rock the blade with one hand on the spine until finely minced.',id:'Cincang kasar, lalu gerakkan pisau dengan satu tangan di punggung hingga halus.',vi:'Băm thô, rồi lắc dao với một tay ở sống dao cho đến khi nhuyễn theo ý muốn.'}},
+      {icon:'🐟',zh:'去皮去骨',en:'Peel & Debone',desc:{zh:'去魚骨從脊骨側入刀，緊貼骨頭推移。去蔬菜皮宜以削皮刀由上往下均勻操作。',en:'For fish: blade in along the spine, hugging the bone. For vegetables: peel top to bottom evenly.',id:'Untuk ikan: pisau masuk sepanjang tulang belakang. Untuk sayuran: kupas dari atas ke bawah merata.',vi:'Cho cá: nhập dao dọc theo sống lưng. Cho rau củ: gọt từ trên xuống đều.'}}
+    ],
+    tip:{zh:'💡 刀具鋒利反而更安全：鈍刀需要更大力氣，容易滑刀。定期磨刀是廚房基本功。',en:'💡 A sharp knife is safer: a dull knife requires more force and slips more easily. Sharpen knives regularly.',id:'💡 Pisau tajam lebih aman: pisau tumpul memerlukan lebih banyak tenaga dan mudah tergelincir.',vi:'💡 Dao sắc an toàn hơn: dao cùn cần nhiều lực hơn và dễ trượt hơn. Mài dao thường xuyên.'}
+  },
+  /* Lv3 火候控制 */
+  {
+    title:{zh:'火候與溫度對照表',en:'Heat Level & Temperature Reference',id:'Referensi Tingkat Api & Suhu',vi:'Bảng tham chiếu nhiệt độ & lửa'},
+    items:[
+      {icon:'🔴',zh:'大火 High',en:'High Heat ~180°C+',desc:{zh:'適用：快炒、爆香、大火燒開。鍋底快速蒸發水分，食材迅速上色。',en:'For: stir-fry, searing, boiling. Rapid evaporation, quick browning.',id:'Untuk: tumis, menumis bumbu, merebus. Penguapan cepat, kecokelatan cepat.',vi:'Dùng cho: xào, phi thơm, đun sôi. Bay hơi nhanh, nhanh vàng mặt.'}},
+      {icon:'🟡',zh:'中火 Medium',en:'Medium Heat ~140–180°C',desc:{zh:'適用：煎（兩面金黃）、煮湯、炒蛋。平穩加熱，不易焦底。',en:'For: pan-frying (both sides golden), soups, scrambled eggs. Steady heat.',id:'Untuk: menggoreng (dua sisi keemasan), sup, telur orak-arik. Panas stabil.',vi:'Dùng cho: chiên (hai mặt vàng), nấu súp, trứng xào. Nhiệt ổn định.'}},
+      {icon:'🟢',zh:'小火 Low',en:'Low Heat ~100–140°C',desc:{zh:'適用：慢燉、滷、保溫。讓食材緩慢軟化，湯汁充分入味。',en:'For: braising, soy-stewing, keeping warm. Slow softening, deep flavor absorption.',id:'Untuk: rebus lambat, semur, menghangatkan. Pelunakan lambat, penyerapan rasa mendalam.',vi:'Dùng cho: hầm, kho, giữ ấm. Làm mềm chậm, hương vị ngấm sâu.'}},
+      {icon:'🔵',zh:'保溫 Keep Warm',en:'Keep Warm ~60–100°C',desc:{zh:'適用：湯底保溫、蒸蛋定形。不讓食物冷卻，也不繼續烹調。',en:'For: keeping broth warm, setting steamed egg. Maintains temp without further cooking.',id:'Untuk: menjaga kaldu tetap hangat, mengatur telur kukus. Menjaga suhu tanpa memasak lebih lanjut.',vi:'Dùng cho: giữ ấm nước dùng, đặt trứng hấp. Duy trì nhiệt độ mà không nấu thêm.'}}
+    ],
+    tip:{zh:'💡 竹筷測油溫：插入油中——無氣泡=油冷，細小氣泡=約160°C（可下料），大量氣泡=約180°C，劇烈冒泡=過熱危險！',en:'💡 Chopstick oil test: no bubbles=cold, small bubbles=~160°C (ready), many bubbles=~180°C, violent=dangerously hot!',id:'💡 Tes sumpit: tanpa gelembung=dingin, gelembung kecil=~160°C (siap), banyak gelembung=~180°C, heboh=terlalu panas!',vi:'💡 Thử đũa: không bong bóng=lạnh, bong bóng nhỏ=~160°C (sẵn sàng), nhiều bong bóng=~180°C, sôi bùng=quá nóng!'}
+  },
+  /* Lv4 食材保存 */
+  {
+    title:{zh:'食材保存速查',en:'Food Storage Quick Guide',id:'Panduan Cepat Penyimpanan Bahan',vi:'Hướng dẫn nhanh bảo quản thực phẩm'},
+    items:[
+      {icon:'❄️',zh:'冷凍（-18°C以下）',en:'Freezer (-18°C or below)',desc:{zh:'肉類可存3個月、海鮮1–3個月、蔬菜（燙熟後）可存6個月。',en:'Meat: 3 months; seafood: 1–3 months; blanched vegetables: 6 months.',id:'Daging: 3 bulan; seafood: 1–3 bulan; sayuran (blanched): 6 bulan.',vi:'Thịt: 3 tháng; hải sản: 1–3 tháng; rau (chần qua): 6 tháng.'}},
+      {icon:'🌡️',zh:'冷藏（3–5°C）',en:'Refrigerator (3–5°C)',desc:{zh:'熟食2–3天、生肉1–2天、葉菜3–5天（套袋保濕）、雞蛋3–4週。',en:'Cooked food: 2–3 days; raw meat: 1–2 days; leafy veg: 3–5 days (bagged); eggs: 3–4 weeks.',id:'Makanan matang: 2–3 hari; daging mentah: 1–2 hari; sayuran daun: 3–5 hari (dibungkus); telur: 3–4 minggu.',vi:'Thức ăn chín: 2–3 ngày; thịt sống: 1–2 ngày; rau lá: 3–5 ngày (bọc); trứng: 3–4 tuần.'}},
+      {icon:'🏺',zh:'常溫保存',en:'Room Temperature',desc:{zh:'根莖類（馬鈴薯、洋蔥、地瓜）避光通風可存2–4週；米、乾貨密封防潮。',en:'Root veg (potatoes, onions) in cool dark place: 2–4 weeks. Rice and dry goods: sealed, dry.',id:'Sayuran akar (kentang, bawang) di tempat sejuk gelap: 2–4 minggu. Beras dan bahan kering: tersegel, kering.',vi:'Rau củ (khoai tây, hành) nơi tối mát: 2–4 tuần. Gạo và thực phẩm khô: bịt kín, khô ráo.'}},
+      {icon:'⚠️',zh:'危險溫度帶',en:'Danger Zone 5–60°C',desc:{zh:'細菌在此區間每20分鐘可繁殖一倍，食物在此溫度停留不超過2小時。',en:'Bacteria double every 20 minutes in this range. Food must not stay here longer than 2 hours.',id:'Bakteri berlipat ganda setiap 20 menit di rentang ini. Makanan tidak boleh di sini lebih dari 2 jam.',vi:'Vi khuẩn nhân đôi mỗi 20 phút trong khoảng này. Thực phẩm không được ở đây quá 2 giờ.'}}
+    ],
+    tip:{zh:'💡 冰箱擺放原則：上層熟食、中層蛋奶、下層生肉；蔬菜放蔬果抽屜；門架放飲料調料。',en:'💡 Fridge layout: upper=cooked food, middle=dairy/eggs, lower=raw meat; produce drawer for veg; door shelf for drinks & condiments.',id:'💡 Tata letak kulkas: atas=makanan matang, tengah=susu/telur, bawah=daging mentah; laci produk untuk sayuran.',vi:'💡 Sắp xếp tủ lạnh: trên=thức ăn chín, giữa=sữa/trứng, dưới=thịt sống; ngăn rau cho rau củ.'}
+  },
+  /* Lv5 烹調方法 */
+  {
+    title:{zh:'六大烹調法比較',en:'Six Cooking Methods Compared',id:'Perbandingan Enam Metode Memasak',vi:'So sánh sáu phương pháp nấu ăn'},
+    items:[
+      {icon:'🥢',zh:'炒 Stir-fry',en:'Stir-fry (大火快炒)',desc:{zh:'大火+少油+快速翻炒，適合葉菜、嫩肉、海鮮。保留色澤與脆度。',en:'High heat + little oil + rapid tossing. Best for leafy veg, tender meat, seafood. Preserves color and crunch.',id:'Api besar + sedikit minyak + aduk cepat. Terbaik untuk sayuran daun, daging muda, seafood.',vi:'Lửa lớn + ít dầu + đảo nhanh. Tốt cho rau lá, thịt non, hải sản. Giữ màu sắc và độ giòn.'}},
+      {icon:'🫕',zh:'燉滷 Braise',en:'Braise/Stew (小火慢煮)',desc:{zh:'液體+小火慢煮，適合硬質肉類、豆腐、根莖類。湯汁豐富入味。',en:'Liquid + low heat + long cooking. Best for tough cuts, tofu, root veg. Rich, deeply flavored broth.',id:'Cairan + api kecil + memasak lama. Terbaik untuk daging keras, tahu, sayuran akar. Kaldu kaya rasa.',vi:'Dịch + lửa nhỏ + nấu lâu. Tốt cho thịt cứng, đậu hũ, rau củ. Nước dùng đậm đà.'}},
+      {icon:'♨️',zh:'蒸 Steam',en:'Steam (中大火)',desc:{zh:'蒸汽加熱，不直接接觸水，最大程度保留食材原味與營養。適合魚、蛋、糕點。',en:'Steam heat without direct water contact. Maximizes nutrient and flavor retention. Best for fish, eggs, cakes.',id:'Panas uap tanpa kontak air langsung. Memaksimalkan retensi nutrisi dan rasa. Terbaik untuk ikan, telur, kue.',vi:'Nhiệt hơi nước không tiếp xúc nước trực tiếp. Giữ tối đa dinh dưỡng và hương vị. Tốt cho cá, trứng, bánh.'}},
+      {icon:'🍳',zh:'煎 Pan-fry',en:'Pan-fry (中火)',desc:{zh:'少油平底鍋，兩面上色，外酥內嫩。適合雞腿、豆腐、魚排、蛋。',en:'Little oil, flat pan, browning both sides. Crispy outside, tender inside. Best for chicken thighs, tofu, fish fillet, eggs.',id:'Sedikit minyak, wajan datar, kedua sisi kecokelatan. Luar renyah, dalam lembut.',vi:'Ít dầu, chảo phẳng, vàng hai mặt. Ngoài giòn, trong mềm. Tốt cho đùi gà, đậu hũ, phi lê cá, trứng.'}}
+    ],
+    tip:{zh:'💡 烹調方式選擇口訣：嫩→炒蒸；韌→燉滷；薄→煎烤；保健優先→蒸。',en:'💡 Cooking method tip: tender=stir-fry/steam; tough=braise; thin=pan-fry/roast; health first=steam.',id:'💡 Tips metode memasak: lembut=tumis/kukus; keras=rebus; tipis=goreng/panggang; kesehatan=kukus.',vi:'💡 Mẹo chọn phương pháp: non=xào/hấp; dai=hầm; mỏng=chiên/nướng; ưu tiên sức khỏe=hấp.'}
+  },
+  /* Lv6 食品衛生 */
+  {
+    title:{zh:'食品衛生重點',en:'Food Hygiene Key Points',id:'Poin Utama Kebersihan Pangan',vi:'Điểm chính về vệ sinh thực phẩm'},
+    items:[
+      {icon:'🙌',zh:'七步洗手',en:'7-Step Handwash',desc:{zh:'①濕②塗皂③搓掌④搓背⑤搓指縫⑥搓拇指⑦搓指尖。全程至少20秒。',en:'①Wet ②Soap ③Palms ④Backs ⑤Interlace ⑥Thumbs ⑦Fingertips. At least 20 seconds total.',id:'①Basahi ②Sabun ③Telapak ④Punggung ⑤Sela-sela ⑥Ibu jari ⑦Ujung jari. Total 20 detik.',vi:'①Ướt ②Xà phòng ③Lòng bàn tay ④Mu bàn tay ⑤Ngón tay lồng nhau ⑥Ngón cái ⑦Đầu ngón. Ít nhất 20 giây.'}},
+      {icon:'🎨',zh:'砧板顏色',en:'Board Color System',desc:{zh:'紅=生肉，黃=生禽，藍=生海鮮，綠=蔬果，白=熟食，棕=麵包烘焙。',en:'Red=raw meat, Yellow=raw poultry, Blue=raw seafood, Green=produce, White=cooked, Brown=bakery.',id:'Merah=daging mentah, Kuning=unggas mentah, Biru=seafood mentah, Hijau=sayuran, Putih=matang, Coklat=roti.',vi:'Đỏ=thịt sống, Vàng=gia cầm sống, Xanh=hải sản sống, Xanh lá=rau củ, Trắng=thức ăn chín.'}},
+      {icon:'🦠',zh:'食中毒四因',en:'4 Causes of Food Poisoning',desc:{zh:'①汙染（交叉）②增殖（溫度/時間）③加熱不足④個人衛生不良。掌握四因即可預防9成食中毒。',en:'①Contamination ②Proliferation (temp/time) ③Insufficient cooking ④Poor personal hygiene. Preventing these eliminates 90% of cases.',id:'①Kontaminasi ②Proliferasi (suhu/waktu) ③Memasak tidak cukup ④Kebersihan pribadi buruk.',vi:'①Ô nhiễm ②Sinh sôi (nhiệt/thời gian) ③Nấu không đủ ④Vệ sinh cá nhân kém.'}},
+      {icon:'🧹',zh:'廚具消毒',en:'Utensil Disinfection',desc:{zh:'洗滌後以沸水消毒或紫外線燈20分鐘，砧板每週以漂白水（1:99稀釋）浸泡10分鐘。',en:'After washing: boiling water OR UV lamp 20 min. Chopping boards: soak weekly in diluted bleach (1:99) for 10 min.',id:'Setelah dicuci: air mendidih ATAU lampu UV 20 menit. Talenan: rendam mingguan dalam pemutih encer (1:99) selama 10 menit.',vi:'Sau khi rửa: nước sôi HOẶC đèn UV 20 phút. Thớt: ngâm hàng tuần trong nước tẩy pha loãng (1:99) 10 phút.'}}
+    ],
+    tip:{zh:'💡 必須洗手時機：處理食物前、如廁後、碰觸生肉後、打噴嚏/咳嗽後、觸碰手機後。',en:'💡 Always wash hands before: handling food, after using toilet, after touching raw meat, after sneezing/coughing, after using your phone.',id:'💡 Selalu cuci tangan sebelum: menangani makanan, setelah toilet, menyentuh daging mentah, bersin/batuk, menggunakan ponsel.',vi:'💡 Luôn rửa tay khi: trước khi xử lý thực phẩm, sau khi đi vệ sinh, sau khi chạm thịt sống, sau khi hắt hơi/ho, sau khi dùng điện thoại.'}
+  },
+  /* Lv7 菜單規劃 */
+  {
+    title:{zh:'菜單規劃原則',en:'Menu Planning Principles',id:'Prinsip Perencanaan Menu',vi:'Nguyên tắc lên thực đơn'},
+    items:[
+      {icon:'🥗',zh:'均衡餐盤',en:'Balanced Plate',desc:{zh:'蔬菜½、蛋白質¼（肉/魚/豆）、全穀類¼（糙米/地瓜）。每餐包含三種顏色以上的食材。',en:'Veg ½, protein ¼ (meat/fish/beans), whole grains ¼ (brown rice/sweet potato). 3+ colors per meal.',id:'Sayuran ½, protein ¼ (daging/ikan/kacang), biji-bijian utuh ¼. 3+ warna per makan.',vi:'Rau ½, protein ¼ (thịt/cá/đậu), ngũ cốc nguyên hạt ¼. 3+ màu mỗi bữa.'}},
+      {icon:'📅',zh:'一週規劃',en:'Weekly Planning',desc:{zh:'週一到週日輪換食材，同一食材不連續出現超過兩天；確保每週包含：禽肉2次、魚1–2次、豆腐1次、蛋2–3次。',en:'Rotate ingredients; no same item more than 2 consecutive days. Include weekly: poultry 2×, fish 1–2×, tofu 1×, eggs 2–3×.',id:'Rotasi bahan; tidak item sama lebih dari 2 hari berturut-turut. Sertakan mingguan: unggas 2×, ikan 1–2×, tahu 1×, telur 2–3×.',vi:'Xoay vòng nguyên liệu; không lặp cùng món quá 2 ngày liên tiếp. Mỗi tuần: gia cầm 2×, cá 1–2×, đậu hũ 1×, trứng 2–3×.'}},
+      {icon:'🛒',zh:'採購技巧',en:'Shopping Tips',desc:{zh:'依菜單列清單，按生鮮/乾貨/調料分類；先逛乾貨區，最後取生鮮冷凍，避免退冰。',en:'List by menu, group by category (fresh/dry/condiments). Shop dry goods first, fresh/frozen last to minimize warming.',id:'Daftar berdasarkan menu, kelompokkan (segar/kering/bumbu). Belanja bahan kering dulu, segar/beku terakhir.',vi:'Liệt kê theo thực đơn, nhóm theo loại (tươi/khô/gia vị). Mua hàng khô trước, tươi/đông lạnh cuối cùng.'}},
+      {icon:'💰',zh:'預算控制',en:'Budget Control',desc:{zh:'使用當季食材可節省20–40%；豆腐、蛋是最具性價比的蛋白質來源；一週前規劃可減少30%浪費。',en:'Seasonal produce saves 20–40%; tofu and eggs are most cost-effective protein sources; planning a week ahead cuts waste by 30%.',id:'Bahan musiman hemat 20–40%; tahu dan telur adalah sumber protein paling hemat biaya.',vi:'Thực phẩm theo mùa tiết kiệm 20–40%; đậu hũ và trứng là nguồn protein kinh tế nhất.'}}
+    ],
+    tip:{zh:'💡 每週固定一天（例如週日）規劃下週菜單和採購清單，可以大幅節省時間和金錢。',en:'💡 Set a fixed day each week (e.g. Sunday) to plan the next week\'s menu and shopping list — saves significant time and money.',id:'💡 Tetapkan hari tetap setiap minggu (mis. Minggu) untuk merencanakan menu dan daftar belanja minggu depan.',vi:'💡 Đặt một ngày cố định mỗi tuần (VD Chủ nhật) để lên thực đơn và danh sách mua sắm tuần tiếp — tiết kiệm thời gian và tiền bạc.'}
+  },
+  /* Lv8 結業測驗 */
+  {
+    title:{zh:'綜合複習重點',en:'Comprehensive Review',id:'Tinjauan Komprehensif',vi:'Ôn tập tổng hợp'},
+    items:[
+      {icon:'🛡️',zh:'安全第一',en:'Safety First',desc:{zh:'瓦斯安全、防燙防滑、正確用電——廚房三大安全支柱，每日必查。',en:'Gas safety, burn/slip prevention, proper electrical use — the three pillars of kitchen safety. Check daily.',id:'Keamanan gas, pencegahan luka bakar/tergelincir, penggunaan listrik yang benar — tiga pilar keselamatan dapur.',vi:'An toàn gas, phòng bỏng/trượt ngã, sử dụng điện đúng — ba trụ cột an toàn bếp. Kiểm tra hàng ngày.'}},
+      {icon:'🔪',zh:'刀工衛生',en:'Knife & Hygiene',desc:{zh:'正確握刀+貓爪保護+刀架收納；砧板顏色分類+每週消毒；洗手20秒7步驟。',en:'Correct grip + claw guard + knife rack; color-coded boards + weekly disinfection; 20-second 7-step handwash.',id:'Pegangan benar + pelindung cakar + rak pisau; talenan berwarna + disinfeksi mingguan; cuci tangan 7 langkah.',vi:'Cầm đúng + bảo vệ móng vuốt + giá dao; thớt màu + khử trùng hàng tuần; rửa tay 7 bước 20 giây.'}},
+      {icon:'🌡️',zh:'溫度管理',en:'Temperature Control',desc:{zh:'危險帶5–60°C；冷藏3–5°C；冷凍-18°C以下；熟食中心溫度需達75°C以上。',en:'Danger zone 5–60°C; fridge 3–5°C; freezer -18°C; cooked food center must reach 75°C+.',id:'Zona bahaya 5–60°C; kulkas 3–5°C; freezer -18°C; makanan matang harus mencapai 75°C+.',vi:'Vùng nguy hiểm 5–60°C; tủ lạnh 3–5°C; tủ đông -18°C; trung tâm thức ăn chín phải đạt 75°C+.'}},
+      {icon:'🎓',zh:'均衡飲食',en:'Balanced Diet',desc:{zh:'蔬菜½盤、蛋白質¼、全穀¼；每週食材多樣；當季食材最新鮮且經濟。',en:'Veg ½ plate, protein ¼, whole grains ¼; rotate proteins weekly; seasonal ingredients are freshest and cheapest.',id:'Sayuran ½ piring, protein ¼, biji utuh ¼; rotasi protein mingguan; bahan musiman paling segar dan murah.',vi:'Rau ½ đĩa, protein ¼, ngũ cốc nguyên hạt ¼; xoay vòng protein hàng tuần; thực phẩm theo mùa tươi và rẻ nhất.'}}
+    ],
+    tip:{zh:'💡 恭喜完成全部8個等級！每天在廚房實踐這些原則，安全、衛生、美味缺一不可。',en:'💡 Congratulations on completing all 8 levels! Practice these principles daily in the kitchen — safety, hygiene, and deliciousness go together.',id:'💡 Selamat telah menyelesaikan semua 8 tingkat! Praktikkan prinsip-prinsip ini setiap hari di dapur.',vi:'💡 Chúc mừng đã hoàn thành cả 8 cấp độ! Thực hành các nguyên tắc này hàng ngày trong bếp.'}
+  }
+];
+
+function applyI18N(){
+  document.querySelectorAll('[data-i]').forEach(function(el){
+    var k=el.getAttribute('data-i');
+    var v=t(k);
+    if(v)el.textContent=v;
+  });
+}
+
+function calcPct(){
+  var total=0,done=0;
+  MODS.forEach(function(m){total+=m.total;done+=m.done});
+  return total>0?Math.round(done/total*100):0;
+}
+
+function updateProgressUI(){
+  var p=calcPct();
+  document.getElementById('pfill').style.width=p+'%';
+  document.getElementById('tpfill').style.width=p+'%';
+  document.getElementById('ppct').textContent=p+'%';
+  var bk=p===0?'prog.badge0':p<30?'prog.badge1':p<60?'prog.badge2':p<100?'prog.badge3':'prog.badge4';
+  document.getElementById('pbadge').textContent=t(bk);
+}
+
+/* FIX: removed dead 'unlocked' counter variable */
+function buildLevelPath(){
+  var html='';
+  MODS.forEach(function(m,i){
+    var isUnlocked=i===0||(MODS[i-1]&&MODS[i-1].done===MODS[i-1].total);
+    var isDone=m.done===m.total&&m.total>0;
+    var isCur=!isDone&&isUnlocked;
+    var cls=isDone?'done':(isCur?'cur':'locked');
+    var label=m.titles[curLang]||m.titles.zh;
+    var icon=isDone?'<i class="ti ti-check" aria-hidden="true" style="font-size:13px"></i>':m.lv;
+    var shortLabel=label.length>5?label.substring(0,4)+'…':label;
+    html+='<div class="lp-step '+cls+'" onclick="loadModule('+i+')" title="Level '+m.lv+' '+label+'">';
+    html+='<div class="lp-node">'+icon+'</div>';
+    html+='<div class="lp-lbl">Lv'+m.lv+'<br>'+shortLabel+'</div>';
+    html+='</div>';
+  });
+  document.getElementById('lprow').innerHTML=html;
+}
+
+function buildSidebar(){
+  var html='';
+  MODS.forEach(function(m,i){
+    var isUnlocked=i===0||(MODS[i-1]&&MODS[i-1].done===MODS[i-1].total);
+    var isDone=m.done===m.total&&m.total>0;
+    var label=m.titles[curLang]||m.titles.zh;
+    var pct=m.total>0?Math.round(m.done/m.total*100):0;
+    var cls='si'+(i===curMod?' act':'')+(isDone?' sdone':'');
+    var badge=isDone?'✓':pct+'%';
+    if(!isUnlocked){
+      html+='<div class="si" style="opacity:.4;pointer-events:none" aria-disabled="true"><i class="ti ti-lock" aria-hidden="true"></i><span>Lv'+m.lv+' '+label+'</span><span style="margin-left:auto;font-size:10px;opacity:.5">'+t('lv.locked')+'</span></div>';
+    } else {
+      html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="0"><i class="ti '+getIcon(i)+'" aria-hidden="true"></i><span>Lv'+m.lv+' '+label+'<span class="slvl">'+pct+'%</span></span><span class="sbadge">'+badge+'</span></div>';
+    }
+  });
+  document.getElementById('sb-items').innerHTML=html;
+}
+
+function getIcon(i){return['ti-shield','ti-cut','ti-flame','ti-snowflake','ti-soup','ti-wash','ti-clipboard-list','ti-award'][i]||'ti-book'}
+
+/* FIX: Language card selection bug fixed — no more stale DOM reference after showView re-renders */
+function renderHome(){
+  var html='';
+  html+='<div class="sechd"><h2>'+t('sec.lang')+'</h2><div class="ln"></div></div>';
+  html+='<div class="lgrid">';
+  [{code:'zh',flag:'🇹🇼',name:'繁體中文',sub:'Traditional Chinese'},
+   {code:'en',flag:'🇬🇧',name:'中文 + English',sub:'中英雙語'},
+   {code:'id',flag:'🇮🇩',name:'中文 + Bahasa',sub:'中印尼雙語'},
+   {code:'vi',flag:'🇻🇳',name:'中文 + Tiếng Việt',sub:'中越雙語'}].forEach(function(l){
+    var isOn=l.code===curLang;
+    html+='<div class="lcard'+(isOn?' on':'')+'" onclick="setLangCard(\''+l.code+'\',this)">';
+    html+='<div class="flag">'+l.flag+'</div><div class="ln">'+l.name+'</div><div class="lsub">'+l.sub+'</div></div>';
+  });
+  html+='</div>';
+  html+='<div class="sechd"><h2>'+t('sec.mod')+'</h2><div class="ln"></div></div>';
+  html+='<div class="mgrid">';
+  MODS.forEach(function(m,i){
+    var isUnlocked=i===0||(MODS[i-1]&&MODS[i-1].done===MODS[i-1].total);
+    var isDone=m.done===m.total&&m.total>0;
+    var pct=m.total>0?Math.round(m.done/m.total*100):0;
+    var label=m.titles[curLang]||m.titles.zh;
+    var cls='mcard'+(i===curMod?' actm':'')+(isDone?' mdone':'')+(isUnlocked?'':' locked');
+    html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="'+(isUnlocked?0:-1)+'">';
+    html+='<div class="memoji">'+m.emoji+'</div>';
+    html+='<div class="mtitle">'+label+'</div>';
+    html+='<div class="men">'+m.titles.en+'</div>';
+    html+='<div class="mlvl">Level '+m.lv+'</div>';
+    html+='<div class="mcnt">'+m.total+' 單元 — '+m.done+' '+t('tag.done')+'</div>';
+    html+='<div class="mbar"><div class="mfill'+(isDone?' full':'')+'" style="width:'+pct+'%"></div></div>';
+    if(!isUnlocked)html+='<div class="mlk" aria-hidden="true">🔒</div>';
+    if(isDone)html+='<div class="mcheck"><i class="ti ti-circle-check" aria-hidden="true"></i></div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  html+='<div class="quick">';
+  html+='<button class="qbtn pri" onclick="loadModule('+curMod+')">'+t('btn.continue')+'</button>';
+  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='<button class="qbtn" onclick="sendPrompt(\'製作'+MODS[curMod].titles.zh+'中印尼雙語版詳細課程內容\')">'+t('btn.id')+'</button>';
+  html+='<button class="qbtn" onclick="sendPrompt(\'製作'+MODS[curMod].titles.zh+'中越雙語版詳細課程內容\')">'+t('btn.vi')+'</button>';
+  html+='</div>';
+  return html;
+}
+
+function renderLesson(idx){
+  var m=MODS[idx];
+  var label=m.titles[curLang]||m.titles.zh;
+  var isUnlocked=idx===0||(MODS[idx-1]&&MODS[idx-1].done===MODS[idx-1].total);
+  var html='<div class="sechd"><h2>'+t('sec.cur')+' — Lv'+m.lv+' '+label+'</h2><div class="ln"></div></div>';
+  if(!isUnlocked){
+    html+='<div class="empty-state"><i class="ti ti-lock" aria-hidden="true"></i><div class="et">'+t('lv.locked')+'</div><div class="es">Lv'+(m.lv-1)+' '+t('tag.done')+'</div></div>';
+    return html;
+  }
+  html+='<div class="lesson"><div class="leshd"><div class="lesico">'+m.emoji+'</div><div>';
+  html+='<h3>Lv'+m.lv+' '+label+'</h3>';
+  html+='<div class="lessub">'+m.titles.en+' · '+m.titles.id+' · '+m.titles.vi+'</div>';
+  /* FIX: use chip.prog key instead of substring — safe for all languages */
+  html+='<div class="leschips"><span class="chip">'+t('chip.prog')+'</span><span class="chip">'+m.total+' units</span></div>';
+  html+='</div></div><div class="lesbody"><div class="topics">';
+  m.topics.forEach(function(tp){
+    var s=tp.s||0;
+    var dot=s===2?'dot-done':(s===1?'dot-cur':'dot-next');
+    var tag=s===2?'<span class="ttag tag-done">'+t('tag.done')+'</span>':(s===1?'<span class="ttag tag-cur">'+t('tag.cur')+'</span>':'<span class="ttag tag-nx">'+t('tag.next')+'</span>');
+    html+='<div class="trow"><div class="tdot '+dot+'"></div><div style="flex:1;min-width:0"><div class="ttxt">'+tp.zh+'</div><div class="ten">'+tp.en+'</div></div>'+tag+'</div>';
+  });
+  html+='</div></div></div>';
+  html+='<div class="quick">';
+  html+='<button class="qbtn pri" onclick="markProgress('+idx+')">'+t('tag.done')+' +1 ↗</button>';
+  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='<button class="qbtn" onclick="sendPrompt(\'展開 Lv'+m.lv+' '+(m.titles[curLang]||m.titles.zh)+'詳細課程內容，'+curLang+' 語言版\')">'+t('btn.continue')+'</button>';
+  html+='</div>';
+  /* knowledge card */
+  var kd=MOD_KNOWLEDGE[idx];
+  if(kd){
+    var ktitle=kd.title[curLang]||kd.title.zh;
+    html+='<div class="kcard">';
+    html+='<div class="kcard-hd"><i class="ti ti-bulb" aria-hidden="true"></i><span class="khtitle">'+ktitle+'</span><span class="khen">'+kd.title.en+'</span></div>';
+    html+='<div class="kcard-body"><div class="krow">';
+    kd.items.forEach(function(item){
+      var desc=item.desc[curLang]||item.desc.zh;
+      html+='<div class="kitem">';
+      html+='<div class="ki-icon">'+item.icon+'</div>';
+      html+='<div class="ki-title">'+item.zh+'</div>';
+      html+='<div class="ki-en">'+item.en+'</div>';
+      html+='<div class="ki-desc">'+desc+'</div>';
+      html+='</div>';
+    });
+    html+='</div>';
+    var tip=kd.tip[curLang]||kd.tip.zh;
+    html+='<div class="ktip">'+tip+'</div>';
+    html+='</div></div>';
+  }
+  return html;
+}
+
+function renderQuiz(){
+  /* FIX: Each module now has its own quiz set; index is capped to available length */
+  var qi_set=Math.min(curMod,QUIZZES.length-1);
+  var qs=QUIZZES[qi_set]||QUIZZES[0];
+  var qi=quizState.q%qs.length;
+  var q=qs[qi];
+  var html='<div class="sechd"><h2>'+t('quiz.title')+'</h2><div class="ln"></div></div>';
+  html+='<div class="quiz-prog"><span>'+t('tag.done')+' '+quizState.score+'/'+qs.length+'</span><div class="qptrack"><div class="qpfill" style="width:'+Math.round(quizState.q/qs.length*100)+'%"></div></div><span>'+(qi+1)+'/'+qs.length+'</span></div>';
+  html+='<div class="quiz-wrap"><div class="quiz-q">'+(q.q[curLang]||q.q.zh)+'</div>';
+  html+='<div class="quiz-opts">';
+  q.opts.forEach(function(o,oi){
+    html+='<button class="qopt" onclick="answerQ(this,'+o.ok+',\''+encodeURIComponent(q.fb[curLang]||q.fb.zh)+'\')">'+(o[curLang]||o.zh)+'</button>';
+  });
+  html+='</div><div class="quiz-fb" id="quiz-fb"></div></div>';
+  html+='<div class="quick"><button class="qbtn pri" id="quiz-next-btn" style="display:none" onclick="nextQ()">'+t('quiz.next')+'</button></div>';
+  return html;
+}
+
+function renderCert(){
+  var p=calcPct();
+  var html='<div class="sechd"><h2>'+t('nav.cert')+'</h2><div class="ln"></div></div>';
+  if(p<100){
+    var done=0;MODS.forEach(function(m){if(m.done===m.total&&m.total>0)done++});
+    html+='<div class="empty-state">';
+    html+='<i class="ti ti-award" aria-hidden="true"></i>';
+    html+='<div class="et">'+t('cert.not_ready')+'</div>';
+    html+='<div class="es">'+done+' / 8 '+t('tag.done')+'</div>';
+    html+='<div class="mbar" style="max-width:200px;margin:12px auto 0"><div class="mfill" style="width:'+Math.round(done/8*100)+'%"></div></div>';
+    html+='</div>';
+    html+='<div class="quick" style="justify-content:center"><button class="qbtn pri" onclick="showView(\'home\')">'+t('btn.continue')+'</button></div>';
+  } else {
+    html+='<div class="cert">';
+    html+='<span class="cert-badge">🏅</span>';
+    html+='<div class="cert-title">'+t('cert.title')+'</div>';
+    html+='<div class="cert-sub">'+t('cert.sub')+'</div>';
+    html+='<div class="cert-name">— ✦ —</div>';
+    html+='<div class="cert-body">'+t('cert.body')+'</div>';
+    html+='<div class="cert-seal"><i class="ti ti-rosette" aria-hidden="true"></i>'+t('cert.seal')+'</div>';
+    html+='</div>';
+  }
+  return html;
+}
+
+/* FIX: Active state sync for top nav + bottom nav on every view change */
+function updateNavActive(v){
+  document.querySelectorAll('.tnb[data-view]').forEach(function(b){
+    b.classList.toggle('act',b.getAttribute('data-view')===v);
+  });
+  document.querySelectorAll('.bnb[data-view]').forEach(function(b){
+    b.classList.toggle('act',b.getAttribute('data-view')===v);
+  });
+}
+
+function showView(v){
+  curView=v;
+  var c=document.getElementById('content');
+  if(v==='home')c.innerHTML=renderHome();
+  else if(v==='levels')c.innerHTML=renderLesson(curMod);
+  else if(v==='quiz'){quizState={q:0,score:0,answered:false};c.innerHTML=renderQuiz();}
+  else if(v==='cert')c.innerHTML=renderCert();
+  buildSidebar();buildLevelPath();updateProgressUI();
+  /* FIX: update nav active states after every view change */
+  updateNavActive(v);
+}
+
+function loadModule(idx){
+  curMod=idx;
+  showView('levels');
+}
+
+function markProgress(idx){
+  var m=MODS[idx];
+  if(m.done<m.total){m.done++;updateProgressUI();buildSidebar();buildLevelPath();}
+  showView('levels');
+}
+
+function answerQ(btn,isOk,fbEnc){
+  if(quizState.answered)return;
+  quizState.answered=true;
+  btn.classList.add(isOk?'correct':'wrong');
+  if(isOk)quizState.score++;
+  /* FIX: disable all options after answering to prevent accidental multi-click */
+  btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(function(b){b.setAttribute('disabled','');b.style.cursor='default'});
+  var fb=document.getElementById('quiz-fb');
+  if(fb)fb.textContent=decodeURIComponent(fbEnc);
+  var nb=document.getElementById('quiz-next-btn');
+  if(nb)nb.style.display='';
+}
+
+function nextQ(){
+  quizState.q++;quizState.answered=false;
+  var qs=QUIZZES[Math.min(curMod,QUIZZES.length-1)]||QUIZZES[0];
+  if(quizState.q>=qs.length){
+    var c=document.getElementById('content');
+    var scoreHtml='<div style="text-align:center;padding:28px 20px">';
+    scoreHtml+='<i class="ti ti-check-circle" style="font-size:40px;color:var(--color-text-success);display:block;margin-bottom:10px" aria-hidden="true"></i>';
+    scoreHtml+='<div style="font-size:16px;font-weight:500;margin-bottom:6px">'+quizState.score+' / '+qs.length+' '+t('quiz.score')+'</div>';
+    scoreHtml+='<div style="font-size:12px;color:var(--color-text-secondary)">'+Math.round(quizState.score/qs.length*100)+'%</div>';
+    scoreHtml+='</div>';
+    scoreHtml+='<div class="quick" style="justify-content:center">';
+    scoreHtml+='<button class="qbtn pri" onclick="showView(\'home\')">'+t('btn.continue')+'</button>';
+    scoreHtml+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('quiz.retry')+'</button>';
+    scoreHtml+='</div>';
+    c.innerHTML=scoreHtml;
+  } else {
+    document.getElementById('content').innerHTML=renderQuiz();
+  }
+}
+
+/* FIX: setLang no longer causes double-render from inline onclick on lcard;
+   setLangCard handles card UI, setLang handles i18n + view refresh */
+function setLangCard(lang,cardEl){
+  document.querySelectorAll('.lcard').forEach(function(c){c.classList.remove('on')});
+  if(cardEl)cardEl.classList.add('on');
+  setLang(lang,null);
+}
+
+function setLang(lang,btn){
+  curLang=lang;
+  document.querySelectorAll('.tlb').forEach(function(b){b.classList.remove('on')});
+  if(btn)btn.classList.add('on');
+  else{
+    document.querySelectorAll('.tlb').forEach(function(b){
+      if(b.getAttribute('onclick')&&b.getAttribute('onclick').indexOf("'"+lang+"'")>-1)b.classList.add('on');
+    });
+  }
+  applyI18N();
+  document.getElementById('p-nm').textContent=I18N[lang]['hero.title']||I18N.zh['hero.title'];
+  buildSidebar();buildLevelPath();updateProgressUI();showView(curView);
+}
+
+function setDev(d){
+  var s=document.getElementById('shell');
+  s.className='shell '+d;
+  ['mobile','tablet','desktop'].forEach(function(x){document.getElementById('btn-'+x).className='dvb'+(x===d?' on':'')});
+  var sb=document.getElementById('sidebar');
+  sbOK=d==='desktop';
+  sb.style.display=sbOK?'':'none';
+  sb.classList.toggle('gone',!sbOK);
+}
+
+function toggleSB(){
+  sbOK=!sbOK;
+  var sb=document.getElementById('sidebar');
+  sb.style.display=sbOK?'':'none';
+  sb.classList.toggle('gone',!sbOK);
+}
+
+showView('home');
+</script>
