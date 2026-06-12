@@ -1,4 +1,64 @@
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.6 — 完整 i18n + 8 級制 + 知識卡 + 結業證書</h2>
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="料理基礎學習平台 v0.7 — 多語言廚藝入門，適合家庭幫傭與廚房初學者">
+<title>料理基礎學習平台 v0.7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/webfont/tabler-icons.min.css">
+<style>
+/* ── Design tokens (GitHub Pages standalone mode) ── */
+:root{
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #555;
+  --color-text-tertiary: #888;
+  --color-text-success: #1a7248;
+  --color-text-danger: #c0392b;
+  --color-background-primary: #fff;
+  --color-background-secondary: #f6f6f6;
+  --color-background-tertiary: #f0f0f0;
+  --color-background-success: #e8f5ee;
+  --color-background-danger: #fdecea;
+  --color-border-primary: #aaa;
+  --color-border-secondary: #d0d0d0;
+  --color-border-tertiary: #e8e8e8;
+  --color-border-success: #b2dfcc;
+  --color-border-danger: #f5c6c2;
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 10px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --color-text-primary: #f0f0f0;
+    --color-text-secondary: #aaa;
+    --color-text-tertiary: #777;
+    --color-text-success: #4caf82;
+    --color-text-danger: #e57373;
+    --color-background-primary: #1e1e1e;
+    --color-background-secondary: #252525;
+    --color-background-tertiary: #2c2c2c;
+    --color-background-success: #1a3328;
+    --color-background-danger: #3b1a1a;
+    --color-border-primary: #555;
+    --color-border-secondary: #3a3a3a;
+    --color-border-tertiary: #2e2e2e;
+    --color-border-success: #2a5c40;
+    --color-border-danger: #5c2a2a;
+  }
+}
+html,body{margin:0;padding:0;background:var(--color-background-secondary);min-height:100vh}
+body{display:flex;justify-content:center;padding:16px}
+.platform-wrapper{width:100%;max-width:980px}
+
+#api-key-status{font-size:11px;color:#1a7248}
+</style>
+</head>
+<body>
+<div class="platform-wrapper">
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.7 — 分頁課程 + 逐題勾選 + 多語言</h2>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
@@ -127,7 +187,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .leschips{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
 .chip{background:rgba(255,255,255,.17);border:0.5px solid rgba(255,255,255,.22);border-radius:10px;padding:2px 8px;font-size:10px;color:#fff}
 .lesbody{padding:12px 14px}
-.topics{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.topics{display:flex;flex-direction:column;gap:7px}
 .trow{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .15s}
 .trow:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
 .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
@@ -234,6 +294,18 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 /* footer */
 .footer{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);padding:9px 18px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);flex-wrap:wrap;gap:4px}
 
+
+/* topic done toggle */
+.ttick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;cursor:pointer;transition:all .2s;background:var(--color-background-secondary)}
+.ttick.checked{background:#1a7248;border-color:#1a7248;color:#fff}
+/* lesson tabs */
+.les-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin:-12px -14px 12px;padding:0 14px}
+.les-tab{background:none;border:none;border-bottom:2px solid transparent;padding:8px 12px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);font-family:var(--font-sans);margin-bottom:-0.5px;transition:all .15s;white-space:nowrap}
+.les-tab:hover{color:var(--color-text-primary)}
+.les-tab.act{border-bottom-color:#8a2800;color:#8a2800;font-weight:500}
+.les-tabpanel{display:none}
+.les-tabpanel.act{display:block}
+
 /* responsive */
 .shell.tablet .thmb,.shell.mobile .thmb{display:flex}
 .shell.tablet .tnav,.shell.mobile .tnav{display:none}
@@ -241,7 +313,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .shell.mobile .hero-desc{display:none}
 .shell.mobile .sidebar{display:none}
 .shell.mobile .bnav{display:block}
-.shell.mobile .topics{grid-template-columns:1fr}
+.shell.mobile .topics{/* single col already */}
 .shell.mobile .footer .fc,.shell.mobile .footer .fr{display:none}
 .shell.tablet .sidebar.gone{display:none}
 .shell.tablet .footer .fc,.shell.tablet .footer .fr{display:none}
@@ -258,7 +330,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
   <button class="dvb" id="btn-tablet" onclick="setDev('tablet')"><i class="ti ti-device-tablet" aria-hidden="true"></i>平板</button>
   <button class="dvb on" id="btn-desktop" onclick="setDev('desktop')"><i class="ti ti-device-laptop" aria-hidden="true"></i>電腦</button>
   <div class="dbgap"></div>
-  <div class="dbadge"><i class="ti ti-language" aria-hidden="true"></i>v0.6 — 全域 i18n + 8 級制 + 知識卡 + 3題測驗</div>
+  <div class="dbadge"><i class="ti ti-language" aria-hidden="true"></i>v0.7 — 分頁課程 + 逐題勾選 + 多語言</div>
 </div>
 
 <div class="shell desktop" id="shell">
@@ -340,16 +412,16 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 </div>
 
 <div class="footer">
-  <span>料理基礎學習平台 v0.6</span>
+  <span>料理基礎學習平台 v0.7</span>
   <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
-  <span class="fr" data-i="footer.note">全域 i18n + 8 級制 + 自動證書</span>
+  <span class="fr" data-i="footer.note">分頁課程 + 逐題勾選 + 多語言</span>
 </div>
 
 </div>
 </div>
 
 <script>
-function sendPrompt(t){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(t)}catch(e){}console.log('[sendPrompt]',t)}
+function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
 
 /* ── i18n ── */
 var I18N={
@@ -360,7 +432,7 @@ zh:{
   'stat.mod':'大模組','stat.lang':'語言','stat.levels':'等級制','stat.cert':'完成即頒發證書',
   'prog.label':'學習進度：','path.title':'學習路徑',
   'sidebar.path':'學習路徑','sidebar.tools':'工具',
-  'footer.langs':'繁中 · 中英 · 中印尼 · 中越','footer.note':'全域 i18n + 8 級制 + 自動證書',
+  'footer.langs':'繁中 · 中英 · 中印尼 · 中越','footer.note':'分頁課程 + 逐題勾選 + 多語言',
   'sec.lang':'選擇語言','sec.mod':'學習模組','sec.cur':'目前課程',
   'btn.continue':'繼續學習 ↗','btn.quiz':'本關測驗 ↗','btn.id':'中印尼版 ↗','btn.vi':'中越版 ↗',
   'tag.done':'完成','tag.cur':'進行中','tag.next':'即將',
@@ -369,7 +441,9 @@ zh:{
   'cert.title':'料理基礎結業證書','cert.sub':'Certificate of Completion — Culinary Basics',
   'cert.body':'已完成料理基礎學習平台全部 8 個等級課程，具備廚房安全操作、食材處理、烹調技術及食品衛生管理之基礎知識。',
   'cert.seal':'本證書由料理基礎學習平台頒發','cert.not_ready':'請完成所有 8 個等級後解鎖證書。',
-  'lv.locked':'尚未解鎖','chip.prog':'進行中'
+  'lv.locked':'尚未解鎖','chip.prog':'進行中',
+  'tab.topics':'課程主題','tab.knowledge':'知識卡','tab.practice':'練習要點',
+  'topic.mark':'標記完成','topic.unmark':'取消完成',
 },
 en:{
   'nav.home':'Home','nav.lessons':'Lessons','nav.quiz':'Quiz','nav.cert':'Certificate','nav.settings':'Settings',
@@ -387,7 +461,9 @@ en:{
   'cert.title':'Certificate of Completion','cert.sub':'料理基礎結業證書 — Culinary Basics',
   'cert.body':'Has successfully completed all 8 levels of the Culinary Basics Learning Platform, demonstrating foundational knowledge in kitchen safety, ingredient handling, cooking techniques, and food hygiene.',
   'cert.seal':'Issued by Culinary Basics Learning Platform','cert.not_ready':'Complete all 8 levels to unlock your certificate.',
-  'lv.locked':'Locked','chip.prog':'In progress'
+  'lv.locked':'Locked','chip.prog':'In progress',
+  'tab.topics':'Topics','tab.knowledge':'Knowledge','tab.practice':'Practice',
+  'topic.mark':'Mark done','topic.unmark':'Unmark',
 },
 id:{
   'nav.home':'Beranda','nav.lessons':'Pelajaran','nav.quiz':'Kuis','nav.cert':'Sertifikat','nav.settings':'Pengaturan',
@@ -405,7 +481,9 @@ id:{
   'cert.title':'Sertifikat Kelulusan','cert.sub':'Certificate of Completion — Dasar Memasak',
   'cert.body':'Telah menyelesaikan 8 tingkat Platform Belajar Memasak, dengan penguasaan dasar keselamatan dapur, penanganan bahan makanan, teknik memasak, dan kebersihan pangan.',
   'cert.seal':'Dikeluarkan oleh Platform Belajar Memasak','cert.not_ready':'Selesaikan semua 8 tingkat untuk membuka sertifikat.',
-  'lv.locked':'Terkunci','chip.prog':'Sedang berjalan'
+  'lv.locked':'Terkunci','chip.prog':'Sedang berjalan',
+  'tab.topics':'Topik','tab.knowledge':'Pengetahuan','tab.practice':'Latihan',
+  'topic.mark':'Tandai selesai','topic.unmark':'Batal tandai',
 },
 vi:{
   'nav.home':'Trang chủ','nav.lessons':'Bài học','nav.quiz':'Kiểm tra','nav.cert':'Chứng chỉ','nav.settings':'Cài đặt',
@@ -423,7 +501,9 @@ vi:{
   'cert.title':'Chứng Chỉ Hoàn Thành','cert.sub':'Certificate of Completion — Nền tảng nấu ăn',
   'cert.body':'Đã hoàn thành toàn bộ 8 cấp độ của Nền Tảng Học Nấu Ăn, nắm vững kiến thức cơ bản về an toàn bếp, xử lý nguyên liệu, kỹ thuật nấu ăn và vệ sinh thực phẩm.',
   'cert.seal':'Cấp bởi Nền Tảng Học Nấu Ăn','cert.not_ready':'Hoàn thành 8 cấp để mở khóa chứng chỉ.',
-  'lv.locked':'Chưa mở khóa','chip.prog':'Đang học'
+  'lv.locked':'Chưa mở khóa','chip.prog':'Đang học',
+  'tab.topics':'Chủ đề','tab.knowledge':'Kiến thức','tab.practice':'Luyện tập',
+  'topic.mark':'Đánh dấu xong','topic.unmark':'Bỏ đánh dấu',
 }};
 
 function t(key){return(I18N[curLang]||I18N.zh)[key]||key}
@@ -812,46 +892,113 @@ function renderLesson(idx){
     html+='<div class="empty-state"><i class="ti ti-lock" aria-hidden="true"></i><div class="et">'+t('lv.locked')+'</div><div class="es">Lv'+(m.lv-1)+' '+t('tag.done')+'</div></div>';
     return html;
   }
+  var doneCnt=m.topics.filter(function(tp){return tp.s===2}).length;
   html+='<div class="lesson"><div class="leshd"><div class="lesico">'+m.emoji+'</div><div>';
   html+='<h3>Lv'+m.lv+' '+label+'</h3>';
   html+='<div class="lessub">'+m.titles.en+' · '+m.titles.id+' · '+m.titles.vi+'</div>';
-  /* FIX: use chip.prog key instead of substring — safe for all languages */
-  html+='<div class="leschips"><span class="chip">'+t('chip.prog')+'</span><span class="chip">'+m.total+' units</span></div>';
-  html+='</div></div><div class="lesbody"><div class="topics">';
-  m.topics.forEach(function(tp){
+  html+='<div class="leschips"><span class="chip">'+t('chip.prog')+'</span><span class="chip">'+m.total+' units</span><span class="chip" style="background:rgba(26,114,72,.15);color:#1a7248">'+doneCnt+'/'+m.total+' '+t('tag.done')+'</span></div>';
+  html+='</div></div>';
+  html+='<div class="lesbody">';
+  html+='<div class="les-tabs">';
+  html+='<button class="les-tab act" onclick="switchLesTab(this,\'topics\')">'+t('tab.topics')+'</button>';
+  html+='<button class="les-tab" onclick="switchLesTab(this,\'knowledge\')">'+t('tab.knowledge')+'</button>';
+  html+='<button class="les-tab" onclick="switchLesTab(this,\'practice\')">'+t('tab.practice')+'</button>';
+  html+='</div>';
+  /* tab: topics */
+  html+='<div class="les-tabpanel act" id="les-tab-topics">';
+  html+='<div class="topics">';
+  m.topics.forEach(function(tp,ti){
     var s=tp.s||0;
     var dot=s===2?'dot-done':(s===1?'dot-cur':'dot-next');
     var tag=s===2?'<span class="ttag tag-done">'+t('tag.done')+'</span>':(s===1?'<span class="ttag tag-cur">'+t('tag.cur')+'</span>':'<span class="ttag tag-nx">'+t('tag.next')+'</span>');
-    html+='<div class="trow"><div class="tdot '+dot+'"></div><div style="flex:1;min-width:0"><div class="ttxt">'+tp.zh+'</div><div class="ten">'+tp.en+'</div></div>'+tag+'</div>';
+    var checked=s===2;
+    html+='<div class="trow expandable" id="trow-'+idx+'-'+ti+'">';
+    html+='<div class="tdot '+dot+'"></div>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div class="ttxt">'+tp.zh+'</div>';
+    html+='<div class="ten">'+tp.en+'</div>';
+    html+='</div>';
+    html+=tag;
+    html+='<div class="ttick'+(checked?' checked':'')+'" onclick="toggleTopicDone('+idx+','+ti+',this)" title="'+(checked?t('topic.unmark'):t('topic.mark'))+'">'+(checked?'✓':'')+' </div>';
+    html+='</div>';
   });
-  html+='</div></div></div>';
-  html+='<div class="quick">';
-  html+='<button class="qbtn pri" onclick="markProgress('+idx+')">'+t('tag.done')+' +1 ↗</button>';
-  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
-  html+='<button class="qbtn" onclick="sendPrompt(\'展開 Lv'+m.lv+' '+(m.titles[curLang]||m.titles.zh)+'詳細課程內容，'+curLang+' 語言版\')">'+t('btn.continue')+'</button>';
-  html+='</div>';
-  /* knowledge card */
+  html+='</div></div>';
+  /* tab: knowledge */
+  html+='<div class="les-tabpanel" id="les-tab-knowledge">';
   var kd=MOD_KNOWLEDGE[idx];
   if(kd){
     var ktitle=kd.title[curLang]||kd.title.zh;
-    html+='<div class="kcard">';
+    html+='<div class="kcard" style="margin-top:8px">';
     html+='<div class="kcard-hd"><i class="ti ti-bulb" aria-hidden="true"></i><span class="khtitle">'+ktitle+'</span><span class="khen">'+kd.title.en+'</span></div>';
     html+='<div class="kcard-body"><div class="krow">';
     kd.items.forEach(function(item){
       var desc=item.desc[curLang]||item.desc.zh;
-      html+='<div class="kitem">';
-      html+='<div class="ki-icon">'+item.icon+'</div>';
-      html+='<div class="ki-title">'+item.zh+'</div>';
-      html+='<div class="ki-en">'+item.en+'</div>';
-      html+='<div class="ki-desc">'+desc+'</div>';
-      html+='</div>';
+      html+='<div class="kitem"><div class="ki-icon">'+item.icon+'</div><div class="ki-title">'+item.zh+'</div><div class="ki-en">'+item.en+'</div><div class="ki-desc">'+desc+'</div></div>';
     });
     html+='</div>';
     var tip=kd.tip[curLang]||kd.tip.zh;
-    html+='<div class="ktip">'+tip+'</div>';
-    html+='</div></div>';
+    html+='<div class="ktip">'+tip+'</div></div></div>';
   }
+  html+='</div>';
+  /* tab: practice */
+  html+='<div class="les-tabpanel" id="les-tab-practice">';
+  html+='<div style="padding:10px 0">';
+  html+='<div class="safepanel" style="margin-bottom:10px">';
+  html+='<div class="safehd"><i class="ti ti-checklist" aria-hidden="true"></i><span class="shtitle">練習清單 Practice Checklist</span></div>';
+  html+='<div class="safebody">';
+  m.topics.forEach(function(tp,ti){
+    var checked=tp.s===2;
+    html+='<div class="saferow '+(checked?'ok':'no')+'">';
+    html+='<i class="ti ti-'+(checked?'circle-check':'circle')+'" aria-hidden="true"></i>';
+    html+='<div><div class="stxt">'+tp.zh+'</div><div class="sen">'+tp.en+'</div></div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+  html+='<div class="quick" style="justify-content:center">';
+  html+='<button class="qbtn pri" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  if(idx<7)html+='<button class="qbtn" onclick="loadModule('+(idx+1)+')">下一關 Lv'+(m.lv+1)+' →</button>';
+  html+='</div></div></div>';
+  html+='</div></div>';
+  html+='<div class="quick">';
+  html+='<button class="qbtn pri" onclick="markProgress('+idx+')">+1 '+t('tag.done')+' ↗</button>';
+  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='</div>';
   return html;
+}
+
+function switchLesTab(btn,name){
+  /* Use parentElement (les-tabs div) then parentElement (.lesbody) */
+  var lesbody=btn.closest('.lesbody');
+  if(!lesbody)return;
+  lesbody.querySelectorAll('.les-tab').forEach(function(b){b.classList.remove('act')});
+  btn.classList.add('act');
+  lesbody.querySelectorAll('.les-tabpanel').forEach(function(p){p.classList.remove('act')});
+  var panel=document.getElementById('les-tab-'+name);
+  if(panel)panel.classList.add('act');
+}
+
+
+function toggleTopicDone(modIdx,topicIdx,tickEl){
+  var m=MODS[modIdx];
+  var tp=m.topics[topicIdx];
+  var row=tickEl.closest('.trow');
+  var dotEl=row?row.querySelector('.tdot'):null;
+  var tagEl=row?row.querySelector('.ttag'):null;
+  var isDone=tickEl.classList.contains('checked');
+  if(isDone){
+    tp.s=0;
+    tickEl.classList.remove('checked');tickEl.textContent='';tickEl.title=t('topic.mark');
+    if(dotEl)dotEl.className='tdot dot-next';
+    if(tagEl){tagEl.className='ttag tag-nx';tagEl.textContent=t('tag.next');}
+  }else{
+    tp.s=2;
+    tickEl.classList.add('checked');tickEl.textContent='✓';tickEl.title=t('topic.unmark');
+    if(dotEl)dotEl.className='tdot dot-done';
+    if(tagEl){tagEl.className='ttag tag-done';tagEl.textContent=t('tag.done');}
+  }
+  /* Always recount from source of truth */
+  m.done=m.topics.filter(function(tp){return tp.s===2}).length;
+  updateProgressUI();buildSidebar();buildLevelPath();
 }
 
 function renderQuiz(){
@@ -926,7 +1073,14 @@ function loadModule(idx){
 
 function markProgress(idx){
   var m=MODS[idx];
-  if(m.done<m.total){m.done++;updateProgressUI();buildSidebar();buildLevelPath();}
+  /* Find first incomplete topic and mark it done */
+  var found=false;
+  for(var i=0;i<m.topics.length;i++){
+    if((m.topics[i].s||0)!==2){m.topics[i].s=2;found=true;break;}
+  }
+  /* Recount from source of truth */
+  m.done=m.topics.filter(function(tp){return tp.s===2}).length;
+  updateProgressUI();buildSidebar();buildLevelPath();
   showView('levels');
 }
 
@@ -1004,3 +1158,6 @@ function toggleSB(){
 
 showView('home');
 </script>
+</div>
+</body>
+</html>
