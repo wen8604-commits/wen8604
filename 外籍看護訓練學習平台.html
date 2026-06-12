@@ -272,8 +272,8 @@ body{
 
 /* ── Body ── */
 .lp-body{
-  padding:20px 16px 10px;
-  display:flex;flex-direction:column;gap:14px;
+  padding:16px 12px 10px;
+  display:flex;flex-direction:column;gap:12px;
   max-width:1200px;margin:0 auto;width:100%;
 }
 
@@ -895,27 +895,7 @@ body{
   border-color:rgba(29,158,117,.16);
   box-shadow:var(--shadow-md);
 }
-@media(max-width:520px){
-  .course-library-head,.course-display-bar,.unit-menu-head{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-  .course-library-note,.unit-menu-note{
-    text-align:left;
-  }
-  .course-display-actions{
-    width:100%;
-  }
-  .course-view-btn{
-    flex:1;
-  }
-  .unit-menu-grid{
-    grid-template-columns:1fr;
-  }
-  .lesson-switcher-grid{
-    grid-template-columns:repeat(5,minmax(0,1fr));
-  }
-}
+/* old 520px query removed — replaced by v5 overrides below */
 .course-grid{
   display:grid;
   grid-template-columns:1fr;
@@ -1256,71 +1236,11 @@ body{
 }
 .btn-prev:active,.btn-next:active{opacity:.75;transform:scale(.98)}
 
-/* ── Tablet ── */
-@media(min-width:600px){
-  .lp-hero-inner{padding:36px 24px 30px}
-  .lp-hero-illo{width:108px;height:108px;border-radius:26px}
-  .lp-title{font-size:27px}
-  .lp-body{padding:22px 24px 12px}
-  .course-library{padding:10px 24px 26px}
-  .home-dashboard{grid-template-columns:minmax(0,1fr)}
-  .unit-menu-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .demo-split{grid-template-columns:1fr 1fr}
-}
+/* old tablet query removed — replaced by v5 overrides below */
 
-/* ── Desktop ── */
-@media(min-width:900px){
-  .lp-topbar-inner,.lp-hero-inner,.lp-footer-inner{padding:0 40px}
-  .lp-body{padding:28px 40px 16px}
-  .lp-title{font-size:32px}
-  .lp-subtitle{font-size:13px}
-  .lp-hero-illo{width:120px;height:120px;border-radius:28px}
-  .lp-hero-inner{padding:40px 40px 34px}
-  .lp-prog-wrap{padding:16px 20px}
-  .course-library{padding:12px 40px 30px}
-  .home-dashboard{grid-template-columns:360px minmax(0,1fr);align-items:start}
-  .unit-menu-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
-  .course-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .lesson-workspace{grid-template-columns:320px minmax(0,1fr);align-items:start;gap:18px}
-  .lesson-switcher{position:sticky;top:120px}
-  .lesson-switcher-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .lesson-pill{min-height:46px}
-  .lesson-focus .course-card-head{padding:20px 22px 14px}
-  .lesson-focus .course-detail{padding:18px 22px 22px}
-  .lp-stats{max-width:1200px;margin:0 auto;width:100%}
-  .lp-body{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px;
-    align-items:start;
-  }
-  #quiz-card{grid-column:1/-1}
-  .sec-tab{font-size:13px;padding:14px 16px}
-  .sec-header{padding:20px 22px}
-  .sec-body{padding:0 22px 22px}
-  .sec-htag{font-size:11px}
-  .sec-htitle{font-size:16px}
-  .sec-icon-wrap{width:48px;height:48px;border-radius:15px}
-  .sec-icon-wrap i{font-size:22px}
-  .why-block{font-size:15px}
-  .step-txt,.quiz-q{font-size:15px}
-  .quiz-opt{font-size:15px}
-  .alert-row-title{font-size:14px}
-  .alert-row-sub{font-size:13px}
-  .lp-footer-inner{justify-content:center}
-  .btn-prev{max-width:200px;flex:0 1 200px}
-  .btn-next{max-width:280px;flex:0 1 280px}
-  .lp-footer{padding:14px 40px}
-}
+/* old desktop query removed — replaced by v5 overrides below */
 
-/* ── Large Desktop ── */
-@media(min-width:1200px){
-  .lp-topbar-inner,.lp-hero-inner,.lp-footer-inner{padding:0 48px}
-  .lp-body{padding:32px 48px 20px;gap:22px}
-  .lp-hero-inner{padding:44px 48px 36px}
-  .lp-title{font-size:34px}
-}
+/* old large desktop query removed — replaced by v5 overrides below */
 
 /* ── Reduced motion ── */
 @media(prefers-reduced-motion:reduce){
@@ -1385,6 +1305,261 @@ body{
 }
 .lesson-choice.wrong.selected{
   box-shadow:0 0 0 2px var(--red-300)!important;
+}
+
+/* ════════════════════════════════════════════
+   v5 RESPONSIVE LAYOUT OVERHAUL
+   ════════════════════════════════════════════ */
+
+/* ── Global page wrapper ── */
+html { scroll-behavior: smooth; }
+body { font-size: 15px; }
+
+/* ── Topbar: tighter on mobile, proper on desktop ── */
+.lp-topbar { height: 56px; }
+.lp-topbar-inner { padding: 0 16px; }
+.lp-back { font-size: 12px; padding: 6px 12px; gap: 5px; }
+.lp-lb { padding: 5px 10px; font-size: 11px; min-height: 28px; }
+.sec-nav { top: 56px; }
+
+/* ── Hero: more breathing room ── */
+.lp-hero-inner { padding: 24px 16px 22px; }
+.lp-hero-top { gap: 14px; margin-bottom: 16px; }
+.lp-title { font-size: 22px; }
+.lp-subtitle { font-size: 10px; }
+.lp-hero-illo { width: 80px; height: 80px; border-radius: 20px; flex-shrink: 0; }
+.lp-hero-illo svg { width: 50px; height: 50px; }
+.lp-unit-tag { font-size: 10px; padding: 5px 11px; margin-bottom: 9px; }
+.lp-lesson-num { font-size: 10px; margin-bottom: 5px; }
+.lp-prog-wrap { padding: 12px 14px; margin-top: 14px; gap: 14px; }
+.lp-prog-pct { font-size: 22px; }
+
+/* ── Stats bar: icon-only on very small screens, labels below ── */
+.lp-stats-outer { overflow-x: auto; }
+.lp-stats { min-width: 320px; }
+.lp-stat { padding: 10px 6px; gap: 3px; }
+.lp-stat-icon-wrap { width: 30px; height: 30px; border-radius: 8px; }
+.lp-stat-icon { font-size: 14px; }
+.lp-stat-val { font-size: 13px; }
+.lp-stat-lbl { font-size: 9px; }
+
+/* ── Section nav: larger tap targets, visible active state ── */
+.sec-tab { padding: 12px 10px; font-size: 11px; min-height: 44px; }
+
+/* ── Body layout: single column by default ── */
+.lp-body {
+  padding: 16px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Section cards ── */
+.sec-card { border-radius: 16px; }
+.sec-header { padding: 14px 16px; gap: 12px; }
+.sec-icon-wrap { width: 42px; height: 42px; border-radius: 12px; }
+.sec-icon-wrap i { font-size: 18px; }
+.sec-htitle { font-size: 14px; }
+.sec-body { padding: 0 16px 16px; }
+
+/* ── Quiz: comfortable tap targets ── */
+.quiz-opt { padding: 12px 14px; font-size: 13px; min-height: 48px; }
+.quiz-opt-num { width: 28px; height: 28px; font-size: 11px; }
+
+/* ── Course library ── */
+.course-library { padding: 8px 12px 20px; }
+.home-dashboard { gap: 10px; }
+.quiz-progress-panel { padding: 14px; }
+.quiz-progress-val { font-size: 18px; }
+.unit-menu { padding: 12px; }
+.unit-menu-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; }
+.unit-menu-btn { min-height: 46px; padding: 9px; }
+.unit-menu-name { font-size: 11px; }
+
+/* ── Lesson workspace ── */
+.lesson-switcher-grid { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 6px; }
+.lesson-pill { min-height: 38px; }
+.lesson-pill-no { font-size: 11px; }
+
+/* ── Course cards ── */
+.course-card { border-radius: 12px; }
+.course-title { font-size: 14px; }
+.course-grid { gap: 10px; }
+.course-unit { margin: 14px 0 18px; }
+
+/* ── Footer nav ── */
+.lp-footer { padding: 10px 12px; padding-bottom: calc(10px + env(safe-area-inset-bottom,0px)); }
+.btn-prev, .btn-next { padding: 12px 14px; font-size: 13px; min-height: 46px; }
+
+/* ════ TABLET (600px+) ════ */
+@media(min-width: 600px) {
+  .lp-topbar { height: 60px; }
+  .lp-topbar-inner { padding: 0 24px; }
+  .lp-back { font-size: 13px; }
+  .sec-nav { top: 60px; }
+
+  .lp-hero-inner { padding: 32px 28px 26px; }
+  .lp-title { font-size: 28px; }
+  .lp-subtitle { font-size: 11px; }
+  .lp-hero-illo { width: 100px; height: 100px; }
+  .lp-hero-illo svg { width: 60px; height: 60px; }
+
+  .lp-stat { padding: 12px 10px; gap: 4px; }
+  .lp-stat-icon-wrap { width: 32px; height: 32px; }
+  .lp-stat-val { font-size: 15px; }
+  .lp-stat-lbl { font-size: 10px; }
+
+  .sec-tab { font-size: 12px; padding: 13px 12px; }
+
+  .lp-body { padding: 20px 24px 14px; gap: 14px; }
+  .sec-header { padding: 16px 20px; }
+  .sec-body { padding: 0 20px 20px; }
+  .sec-icon-wrap { width: 46px; height: 46px; }
+
+  .course-library { padding: 10px 24px 24px; }
+  .home-dashboard { grid-template-columns: 1fr; }
+  .unit-menu-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+  .course-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .demo-split { grid-template-columns: 1fr 1fr; }
+
+  .lesson-switcher-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+  .lesson-pill { min-height: 42px; }
+
+  .lp-footer { padding: 12px 24px; padding-bottom: calc(12px + env(safe-area-inset-bottom,0px)); }
+  .btn-prev, .btn-next { font-size: 14px; min-height: 50px; }
+}
+
+/* ════ DESKTOP (960px+) ════ */
+@media(min-width: 960px) {
+  .lp-topbar { height: 64px; }
+  .lp-topbar-inner { padding: 0 40px; max-width: 1280px; }
+  .sec-nav { top: 64px; }
+  .sec-nav-inner-wrap { padding: 0 8px; }
+
+  .lp-hero-inner { padding: 48px 40px 38px; max-width: 1280px; }
+  .lp-title { font-size: 34px; }
+  .lp-subtitle { font-size: 12px; }
+  .lp-hero-illo { width: 120px; height: 120px; border-radius: 28px; }
+  .lp-hero-illo svg { width: 72px; height: 72px; }
+
+  .lp-stats { max-width: 1280px; }
+  .lp-stat { padding: 14px 16px; gap: 5px; }
+  .lp-stat-icon-wrap { width: 36px; height: 36px; border-radius: 10px; }
+  .lp-stat-icon { font-size: 16px; }
+  .lp-stat-val { font-size: 16px; }
+  .lp-stat-lbl { font-size: 11px; }
+
+  .sec-tab { font-size: 13px; padding: 14px 18px; min-height: 48px; }
+
+  /* Desktop body: clean 2-col for lesson sections, full-width for quiz + course */
+  .lp-body {
+    padding: 28px 40px 18px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    max-width: 1280px;
+  }
+  #quiz-card { grid-column: 1 / -1; }
+
+  .sec-header { padding: 18px 22px; gap: 16px; }
+  .sec-icon-wrap { width: 50px; height: 50px; border-radius: 15px; }
+  .sec-icon-wrap i { font-size: 22px; }
+  .sec-htag { font-size: 11px; }
+  .sec-htitle { font-size: 16px; }
+  .sec-body { padding: 0 22px 22px; }
+  .why-block { font-size: 15px; }
+  .step-txt { font-size: 15px; }
+  .alert-row-title { font-size: 14px; }
+  .alert-row-sub { font-size: 13px; }
+  .quiz-q, .quiz-opt { font-size: 15px; }
+
+  .course-library { padding: 12px 40px 32px; max-width: 1280px; }
+  .course-library-head { margin: 10px 0 16px; }
+  .course-library-title { font-size: 22px; }
+  .home-dashboard { grid-template-columns: 380px minmax(0,1fr); align-items: start; gap: 14px; }
+  .quiz-progress-panel { padding: 18px; }
+  .quiz-progress-val { font-size: 22px; }
+  .unit-menu { padding: 16px; }
+  .unit-menu-grid { grid-template-columns: repeat(5, minmax(0,1fr)); gap: 8px; }
+  .unit-menu-btn { min-height: 54px; padding: 10px 12px; }
+  .unit-menu-name { font-size: 12px; }
+  .unit-menu-count { font-size: 10px; }
+
+  .lesson-workspace { grid-template-columns: 300px minmax(0,1fr); gap: 18px; align-items: start; }
+  .lesson-switcher { position: sticky; top: 124px; }
+  .lesson-switcher-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; }
+  .lesson-pill { min-height: 46px; }
+  .lesson-focus .course-card-head { padding: 20px 22px 14px; }
+  .lesson-focus .course-detail { padding: 18px 22px 22px; }
+
+  .course-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px; }
+  .course-unit { margin: 20px 0 24px; }
+  .course-unit-title { font-size: 18px; }
+
+  .lp-footer { padding: 14px 40px; padding-bottom: calc(14px + env(safe-area-inset-bottom,0px)); }
+  .lp-footer-inner { justify-content: center; max-width: 1280px; }
+  .btn-prev { max-width: 200px; flex: 0 1 200px; }
+  .btn-next { max-width: 280px; flex: 0 1 280px; }
+}
+
+/* ════ LARGE DESKTOP (1280px+) ════ */
+@media(min-width: 1280px) {
+  .lp-topbar-inner, .lp-hero-inner, .lp-footer-inner { padding-left: 56px; padding-right: 56px; }
+  .lp-body { padding: 32px 56px 22px; gap: 22px; }
+  .lp-hero-inner { padding: 52px 56px 42px; }
+  .lp-title { font-size: 38px; }
+  .course-library { padding: 14px 56px 36px; }
+  .home-dashboard { grid-template-columns: 420px minmax(0,1fr); }
+  .unit-menu-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+}
+
+/* ════ PHONE SMALL (< 380px) ════ */
+@media(max-width: 379px) {
+  .lp-topbar-inner { padding: 0 10px; }
+  .lp-back span { display: none; }
+  .lp-back { padding: 6px 10px; }
+  .lp-title { font-size: 20px; }
+  .lp-hero-illo { width: 68px; height: 68px; border-radius: 16px; }
+  .lp-hero-illo svg { width: 42px; height: 42px; }
+  .unit-menu-grid { grid-template-columns: 1fr; }
+  .lesson-switcher-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+  .sec-tab { padding: 10px 8px; font-size: 10px; }
+}
+
+/* ════ MISC FIXES ════ */
+/* Prevent horizontal overflow */
+.lp-hero, .lp-stats-outer, .sec-nav, .course-library, .lp-body { overflow-x: hidden; }
+
+/* Cleaner display bar stacking */
+@media(max-width: 599px) {
+  .course-display-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .course-display-actions { width: 100%; }
+  .course-view-btn { flex: 1; text-align: center; }
+  .course-library-head { flex-direction: column; align-items: flex-start; }
+  .course-library-note { text-align: left; }
+  .unit-menu-head { flex-direction: column; align-items: flex-start; }
+  .unit-menu-note { text-align: left; }
+}
+
+/* Lesson workspace on tablet: sidebar above main */
+@media(min-width: 600px) and (max-width: 959px) {
+  .lesson-workspace { display: flex; flex-direction: column; gap: 14px; }
+  .lesson-switcher-grid { grid-template-columns: repeat(10, minmax(0,1fr)); }
+  .lesson-nav { grid-template-columns: 1fr 1fr; }
+}
+
+/* Better course card hover on desktop */
+@media(min-width: 960px) {
+  .course-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .unit-menu-btn:hover { transform: translateY(-2px); }
+}
+
+/* Touch: no hover transforms */
+@media(hover: none) {
+  .sec-card:hover, .course-card:hover, .unit-menu-btn:hover,
+  .alert-row:hover, .step-row:hover { transform: none; }
 }
 </style>
 </head>
@@ -2491,7 +2666,7 @@ const COURSE_LIBRARY = [
     id:{
       title:'Pengingat Obat dan Observasi Efek',
       goal:'Memahami bahwa tugas pengasuh adalah mengingatkan dan mencatat, bukan mengubah obat sendiri.',
-      標籤:['Obat','Catatan','Laporan'],
+      tags:['Obat','Catatan','Laporan'],
       points:['Ingatkan obat sesuai instruksi keluarga atau dokter; jangan menghentikan atau menambah obat sendiri.','Catat waktu minum obat, obat yang terlewat, pusing, mengantuk, ruam, atau reaksi lain.','Jika salah obat, lupa obat, atau minum dobel, segera hubungi keluarga atau tenaga medis.']
     },
     en:{
