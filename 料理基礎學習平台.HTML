@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="料理基礎學習平台 v0.7 — 多語言廚藝入門，適合家庭幫傭與廚房初學者">
 <title>料理基礎學習平台 v0.7</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-googleapis">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.19.0/webfont/tabler-icons.min.css">
 <style>
 /* ── Design tokens (GitHub Pages standalone mode) ── */
@@ -62,7 +62,7 @@ body{display:flex;justify-content:center;padding:16px}
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
-.platform{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+.platform{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
 
 /* device bar */
 .dbar{display:flex;align-items:center;gap:6px;padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);flex-wrap:wrap}
@@ -81,7 +81,6 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .tsub{font-size:10px;opacity:.65;color:#fff}
 .tsp{flex:1}
 .tnav{display:flex;gap:2px}
-/* FIX: nav active state now managed via JS */
 .tnb{background:none;border:none;color:rgba(255,255,255,.7);padding:6px 10px;border-radius:var(--border-radius-md);cursor:pointer;font-size:12px;font-family:var(--font-sans);white-space:nowrap;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:1px}
 .tnb .en{font-size:9px;opacity:.6}
 .tnb:hover,.tnb.act{background:rgba(255,255,255,.17);color:#fff}
@@ -129,8 +128,8 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .lp-step.done .lp-lbl{color:#1a7248}
 
 /* body */
-.body{display:flex;min-height:480px}
-.sidebar{width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:10px 0;flex-shrink:0}
+.body{display:flex;min-height:480px;position:relative}
+.sidebar{width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);padding:10px 0;flex-shrink:0;transition:all 0.2s ease}
 .sidebar.gone{display:none}
 .sslbl{font-size:10px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:.6px;text-transform:uppercase;padding:8px 14px 4px}
 .si{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:var(--border-radius-md);cursor:pointer;transition:all .15s;color:var(--color-text-secondary);font-size:12.5px;margin:0 6px;position:relative}
@@ -188,13 +187,13 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .chip{background:rgba(255,255,255,.17);border:0.5px solid rgba(255,255,255,.22);border-radius:10px;padding:2px 8px;font-size:10px;color:#fff}
 .lesbody{padding:12px 14px}
 .topics{display:flex;flex-direction:column;gap:7px}
-.trow{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .15s}
+.trow{display:flex;align-items:center;gap:8px;padding:8px 10px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);cursor:pointer;transition:all .15s}
 .trow:hover{background:var(--color-background-primary);border-color:var(--color-border-secondary)}
-.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .dot-done{background:#1a7248}.dot-cur{background:#8a2800}.dot-next{background:var(--color-border-primary)}
 .ttxt{font-size:12px;color:var(--color-text-primary);line-height:1.4}
 .ten{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
-.ttag{font-size:10px;padding:2px 7px;border-radius:6px;margin-left:auto;white-space:nowrap;flex-shrink:0;align-self:flex-start;min-width:44px;text-align:center}
+.ttag{font-size:10px;padding:2px 7px;border-radius:6px;margin-left:auto;white-space:nowrap;flex-shrink:0;min-width:44px;text-align:center}
 .tag-done{background:var(--color-background-success);color:var(--color-text-success)}
 .tag-cur{background:rgba(138,40,0,.1);color:#8a2800}
 .tag-nx{background:var(--color-background-secondary);color:var(--color-text-tertiary);border:0.5px solid var(--color-border-tertiary)}
@@ -213,18 +212,6 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .saferow.no i{color:var(--color-text-danger)}
 .stxt{color:var(--color-text-primary)}
 .sen{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
-
-/* data cards */
-.drow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:14px}
-.dcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:10px 12px}
-.dcard-hd{display:flex;align-items:center;gap:6px;margin-bottom:8px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.dcard-hd i{font-size:16px;color:var(--color-text-secondary)}
-.dcard-hd span{font-size:12px;font-weight:500;color:var(--color-text-primary)}
-.drow-item{display:flex;align-items:center;justify-content:space-between;padding:3px 0;font-size:12px;border-bottom:0.5px solid var(--color-border-tertiary)}
-.drow-item:last-child{border-bottom:none}
-.dlbl{color:var(--color-text-secondary)}
-.dval{font-weight:500}
-.th{color:#b82000}.tok{color:#1a6030}.twn{color:#8a5000}.tcl{color:#0a4880}
 
 /* quiz */
 .quiz-wrap{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
@@ -247,7 +234,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .cert-sub{font-size:11px;color:var(--color-text-tertiary);margin-bottom:14px}
 .cert-name{font-size:22px;font-weight:500;color:var(--color-text-primary);border-bottom:1px solid var(--color-border-secondary);padding-bottom:10px;margin-bottom:10px}
 .cert-body{font-size:12px;color:var(--color-text-secondary);line-height:1.9}
-.cert-seal{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;font-size:12px;color:#8a6000}
+.cert-seal"><i class="ti ti-rosette" aria-hidden="true"></i> 本證書由料理基礎學習平台頒發</div>
 
 /* quick */
 .quick{display:flex;gap:6px;flex-wrap:wrap;padding-bottom:4px}
@@ -271,12 +258,6 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .kitem .ki-desc{font-size:11px;color:var(--color-text-secondary);margin-top:3px;line-height:1.5}
 .ktip{background:rgba(90,24,0,.04);border:0.5px solid rgba(90,24,0,.15);border-radius:var(--border-radius-md);padding:7px 10px;margin-top:7px;font-size:11.5px;color:var(--color-text-secondary);line-height:1.6}
 .ktip strong{color:#8a2800}
-/* temp table */
-.ttable{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:6px}
-.ttable th{background:var(--color-background-secondary);padding:5px 8px;text-align:left;font-weight:500;color:var(--color-text-primary);border-bottom:0.5px solid var(--color-border-secondary)}
-.ttable td{padding:5px 8px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);vertical-align:top}
-.ttable tr:last-child td{border-bottom:none}
-.ttable td:first-child{color:var(--color-text-primary);font-weight:500}
 
 /* empty / locked state */
 .empty-state{text-align:center;padding:28px 20px;color:var(--color-text-secondary)}
@@ -294,10 +275,10 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 /* footer */
 .footer{background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);padding:9px 18px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--color-text-tertiary);flex-wrap:wrap;gap:4px}
 
-
 /* topic done toggle */
-.ttick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;cursor:pointer;transition:all .2s;background:var(--color-background-secondary)}
+.ttick{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--color-border-secondary);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:transparent;cursor:pointer;transition:all .2s;background:var(--color-background-secondary);margin-left:6px}
 .ttick.checked{background:#1a7248;border-color:#1a7248;color:#fff}
+
 /* lesson tabs */
 .les-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin:-12px -14px 12px;padding:0 14px}
 .les-tab{background:none;border:none;border-bottom:2px solid transparent;padding:8px 12px;font-size:12px;cursor:pointer;color:var(--color-text-secondary);font-family:var(--font-sans);margin-bottom:-0.5px;transition:all .15s;white-space:nowrap}
@@ -306,31 +287,29 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .les-tabpanel{display:none}
 .les-tabpanel.act{display:block}
 
-/* responsive */
-.shell.tablet .thmb,.shell.mobile .thmb{display:flex}
-.shell.tablet .tnav,.shell.mobile .tnav{display:none}
+/* Responsive Shell overrides */
+.shell.mobile .sidebar, .shell.tablet .sidebar { display: none; width: 100%; position: absolute; left: 0; top: 0; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-right: none; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.shell.mobile .sidebar.open, .shell.tablet .sidebar.open { display: block !important; }
+.shell.tablet .thmb, .shell.mobile .thmb{display:flex}
+.shell.tablet .tnav, .shell.mobile .tnav{display:none}
 .shell.mobile .tlang{display:none}
 .shell.mobile .hero-desc{display:none}
-.shell.mobile .sidebar{display:none}
 .shell.mobile .bnav{display:block}
-.shell.mobile .topics{/* single col already */}
-.shell.mobile .footer .fc,.shell.mobile .footer .fr{display:none}
-.shell.tablet .sidebar.gone{display:none}
-.shell.tablet .footer .fc,.shell.tablet .footer .fr{display:none}
+.shell.mobile .footer .fc, .shell.mobile .footer .fr{display:none}
+.shell.tablet .footer .fc, .shell.tablet .footer .fr{display:none}
 .shell.desktop .lgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
 .shell.desktop .mgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
-.shell.desktop .drow{grid-template-columns:repeat(4,minmax(0,1fr))}
 </style>
 
 <div class="platform">
 
 <div class="dbar">
-  <span class="dbar-lbl">裝置</span>
+  <span class="dbar-lbl">裝置模擬</span>
   <button class="dvb" id="btn-mobile" onclick="setDev('mobile')"><i class="ti ti-device-mobile" aria-hidden="true"></i>手機</button>
   <button class="dvb" id="btn-tablet" onclick="setDev('tablet')"><i class="ti ti-device-tablet" aria-hidden="true"></i>平板</button>
   <button class="dvb on" id="btn-desktop" onclick="setDev('desktop')"><i class="ti ti-device-laptop" aria-hidden="true"></i>電腦</button>
   <div class="dbgap"></div>
-  <div class="dbadge"><i class="ti ti-language" aria-hidden="true"></i>v0.7 — 分頁課程 + 逐題勾選 + 多語言</div>
+  <div class="dbadge"><i class="ti ti-language" aria-hidden="true"></i>v0.7 — 穩定運作版</div>
 </div>
 
 <div class="shell desktop" id="shell">
@@ -340,10 +319,9 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
   <button class="thmb" id="hamburger" aria-label="選單" onclick="toggleSB()"><i class="ti ti-menu-2" style="font-size:20px" aria-hidden="true"></i></button>
   <div class="tsp"></div>
   <div class="tnav">
-    <!-- FIX: data-view attributes for active state management -->
     <button class="tnb act" data-view="home" onclick="showView('home')"><span data-i="nav.home">首頁</span><span class="en">Home</span></button>
     <button class="tnb" data-view="levels" onclick="showView('levels')"><span data-i="nav.lessons">課程</span><span class="en">Lessons</span></button>
-    <button class="tnb" data-view="quiz" onclick="showView('quiz')"><span data-i="nav.quiz">測驗</span><span class="en">Quiz</span></button>
+    <button class="tnb" data-view="quiz" onclick="showView('quiz', true)"><span data-i="nav.quiz">測驗</span><span class="en">Quiz</span></button>
     <button class="tnb" data-view="cert" onclick="showView('cert')"><span data-i="nav.cert">證書</span><span class="en">Cert</span></button>
   </div>
   <div class="tlang">
@@ -391,8 +369,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
   <div id="sb-items"></div>
   <div class="sdiv"></div>
   <div class="sslbl" data-i="sidebar.tools">工具</div>
-  <!-- FIX: data-view for bottom nav active state -->
-  <div class="si" data-view="quiz" onclick="showView('quiz')"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></div>
+  <div class="si" data-view="quiz" onclick="showView('quiz', true)"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></div>
   <div class="si" data-view="cert" onclick="showView('cert')"><i class="ti ti-award" aria-hidden="true"></i><span data-i="nav.cert">證書</span></div>
 </div>
 
@@ -402,12 +379,10 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 
 <div class="bnav">
   <div class="bninner">
-    <!-- FIX: data-view for active state management -->
     <button class="bnb act" data-view="home" onclick="showView('home')" aria-label="首頁"><i class="ti ti-home" aria-hidden="true"></i><span data-i="nav.home">首頁</span></button>
     <button class="bnb" data-view="levels" onclick="showView('levels')" aria-label="課程"><i class="ti ti-book" aria-hidden="true"></i><span data-i="nav.lessons">課程</span></button>
-    <button class="bnb" data-view="quiz" onclick="showView('quiz')" aria-label="測驗"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></button>
+    <button class="bnb" data-view="quiz" onclick="showView('quiz', true)" aria-label="測驗"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></button>
     <button class="bnb" data-view="cert" onclick="showView('cert')" aria-label="證書"><i class="ti ti-award" aria-hidden="true"></i><span data-i="nav.cert">證書</span></button>
-    <button class="bnb" aria-label="設定"><i class="ti ti-settings" aria-hidden="true"></i><span data-i="nav.settings">設定</span></button>
   </div>
 </div>
 
@@ -423,7 +398,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 <script>
 function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
 
-/* ── i18n ── */
+/* ── i18n 資料 ── */
 var I18N={
 zh:{
   'nav.home':'首頁','nav.lessons':'課程','nav.quiz':'測驗','nav.cert':'證書','nav.settings':'設定',
@@ -508,7 +483,7 @@ vi:{
 
 function t(key){return(I18N[curLang]||I18N.zh)[key]||key}
 
-/* ── module data ── */
+/* ── 學習課程模組資料 ── */
 var MODS=[
   {lv:1,emoji:'🛡️',done:2,total:4,
    titles:{zh:'廚房安全',en:'Kitchen Safety',id:'Keamanan Dapur',vi:'An toàn bếp'},
@@ -536,10 +511,10 @@ var MODS=[
    topics:[{zh:'綜合題庫測驗（40題）',en:'Comprehensive exam (40 Qs)',s:0}]}
 ];
 
-var curLang='zh',curMod=0,curView='home',sbOK=true;
+var curLang='zh',curMod=0,curView='home',sbOK=true,deviceMode='desktop';
 var quizState={q:0,score:0,answered:false};
 
-/* Expanded quizzes: 3 questions per module */
+/* ── 測驗題庫 ── */
 var QUIZZES=[
   /* Lv1 廚房安全 */
   [
@@ -628,7 +603,7 @@ var QUIZZES=[
    {q:{zh:'烤箱烤雞時，最常用的確認熟度方式是？',en:'When roasting chicken in an oven, the most reliable way to check doneness is?',id:'Saat memanggang ayam di oven, cara terbaik memastikan kematangan adalah?',vi:'Khi nướng gà trong lò, cách tin cậy nhất để kiểm tra độ chín là?'},
     opts:[{zh:'看外皮顏色是否金黃',en:'Check if the skin is golden',id:'Periksa apakah kulit berwarna keemasan',vi:'Kiểm tra da có màu vàng không',ok:false},
           {zh:'用溫度計刺入最厚部位達75°C以上',en:'Insert thermometer into thickest part — must reach 75°C',id:'Masukkan termometer ke bagian paling tebal — harus mencapai 75°C',vi:'Cắm nhiệt kế vào phần dày nhất — phải đạt 75°C',ok:true},
-          {zh:'烤滿標準時間即可',en:'Cook for the standard time',id:'Masak selama waktu standar',vi:'Nấu đủ thời gian tiêu chuẩn',ok:false}],
+          {zh:'烤滿標準時間即可',en:'Cook for the standard time',id:'Masak selama waktu standar',vi:'Nấu đủ時間即可',ok:false}],
     fb:{zh:'正確！中心溫度達75°C才能確保殺滅沙門氏菌等病原體。外皮顏色和時間只能參考，溫度計才是最準確的方式。',en:'Correct! Internal temp of 75°C ensures pathogens like Salmonella are destroyed. Color and time are guides only.',id:'Benar! Suhu internal 75°C memastikan patogen seperti Salmonella hancur.',vi:'Đúng! Nhiệt độ lõi 75°C đảm bảo tiêu diệt vi khuẩn như Salmonella.'}}
   ],
   /* Lv6 食品衛生 */
@@ -646,7 +621,7 @@ var QUIZZES=[
    {q:{zh:'食品中毒四大原因中，下列哪項屬於「汙染」原因？',en:'Among the 4 causes of food poisoning, which is a "contamination" factor?',id:'Di antara 4 penyebab keracunan makanan, mana yang faktor "kontaminasi"?',vi:'Trong 4 nguyên nhân ngộ độc thực phẩm, điều nào là yếu tố "ô nhiễm"?'},
     opts:[{zh:'食物在室溫放置超過2小時',en:'Food left at room temperature for over 2 hours',id:'Makanan dibiarkan di suhu ruang lebih dari 2 jam',vi:'Thức ăn để ở nhiệt độ phòng hơn 2 giờ',ok:false},
           {zh:'生熟食使用同一塊砧板',en:'Using the same board for raw and cooked food',id:'Menggunakan talenan yang sama untuk makanan mentah dan matang',vi:'Dùng chung thớt cho thực phẩm sống và chín',ok:true},
-          {zh:'烹調溫度不足',en:'Insufficient cooking temperature',id:'Suhu memasak tidak cukup',vi:'Nhiệt độ nấu không đủ',ok:false}],
+          {zh:'烹調溫度不足',en:'Insufficient cooking temperature',id:'Suhu memasak tidak cukup',vi:'Nhiệt độ nấu tidak đủ',ok:false}],
     fb:{zh:'正確！生熟同板是最典型的交叉汙染。室溫放置超過2小時屬於「增殖」問題；加熱不足屬「加熱不足」問題。四大原因：汙染、增殖、加熱不足、個人衛生不良。',en:'Correct! Sharing boards is classic contamination. Leaving food at room temp over 2 hours is "proliferation". The 4 causes: contamination, proliferation, insufficient heating, poor personal hygiene.',id:'Benar! Berbagi talenan adalah kontaminasi. Makanan di suhu ruang lebih dari 2 jam adalah "proliferasi". 4 penyebab: kontaminasi, proliferasi, pemanasan tidak cukup, kebersihan buruk.',vi:'Đúng! Dùng chung thớt là ô nhiễm. Để thức ăn ở nhiệt độ phòng hơn 2 giờ là "sinh sôi". 4 nguyên nhân: ô nhiễm, sinh sôi, nhiệt không đủ, vệ sinh kém.'}}
   ],
   /* Lv7 菜單規劃 */
@@ -669,7 +644,7 @@ var QUIZZES=[
   ],
   /* Lv8 結業測驗 */
   [
-   {q:{zh:'下列哪項不屬於廚房基本安全規則？',en:'Which of the following is NOT a basic kitchen safety rule?',id:'Mana yang bukan aturan keselamatan dapur dasar?',vi:'Điều nào không phải quy tắc an toàn bếp cơ bản?'},
+   {q:{zh:'下列哪項不屬於廚房基本安全規則？',en:'Which of the following is NOT a basic kitchen safety rule?',id:'Mana yang bukan aturan keselamatan dapur dasar?',vi:'Điều nào tidak phải quy tắc an toàn bếp cơ bản?'},
     opts:[{zh:'保持地板乾燥',en:'Keep floor dry',id:'Jaga lantai tetap kering',vi:'Giữ sàn khô ráo',ok:false},
           {zh:'炸物時蓋上鍋蓋',en:'Cover pot while deep-frying',id:'Tutup panci saat menggoreng',vi:'Đậy nắp khi chiên ngập dầu',ok:true},
           {zh:'刀具使用後立即收納',en:'Store knives immediately after use',id:'Simpan pisau segera setelah digunakan',vi:'Cất dao ngay sau khi dùng',ok:false}],
@@ -687,6 +662,7 @@ var QUIZZES=[
   ]
 ];
 
+/* ── 知識卡片資料 ── */
 var MOD_KNOWLEDGE=[
   /* Lv1 廚房安全 */
   {
@@ -719,7 +695,7 @@ var MOD_KNOWLEDGE=[
       {icon:'🟢',zh:'小火 Low',en:'Low Heat ~100–140°C',desc:{zh:'適用：慢燉、滷、保溫。讓食材緩慢軟化，湯汁充分入味。',en:'For: braising, soy-stewing, keeping warm. Slow softening, deep flavor absorption.',id:'Untuk: rebus lambat, semur, menghangatkan. Pelunakan lambat, penyerapan rasa mendalam.',vi:'Dùng cho: hầm, kho, giữ ấm. Làm mềm chậm, hương vị ngấm sâu.'}},
       {icon:'🔵',zh:'保溫 Keep Warm',en:'Keep Warm ~60–100°C',desc:{zh:'適用：湯底保溫、蒸蛋定形。不讓食物冷卻，也不繼續烹調。',en:'For: keeping broth warm, setting steamed egg. Maintains temp without further cooking.',id:'Untuk: menjaga kaldu tetap hangat, mengatur telur kukus. Menjaga suhu tanpa memasak lebih lanjut.',vi:'Dùng cho: giữ ấm nước dùng, đặt trứng hấp. Duy trì nhiệt độ mà không nấu thêm.'}}
     ],
-    tip:{zh:'💡 竹筷測油溫：插入油中——無氣泡=油冷，細小氣泡=約160°C（可下料），大量氣泡=約180°C，劇烈冒泡=過熱危險！',en:'💡 Chopstick oil test: no bubbles=cold, small bubbles=~160°C (ready), many bubbles=~180°C, violent=dangerously hot!',id:'💡 Tes sumpit: tanpa gelembung=dingin, gelembung kecil=~160°C (siap), banyak gelembung=~180°C, heboh=terlalu panas!',vi:'💡 Thử đũa: không bong bóng=lạnh, bong bóng nhỏ=~160°C (sẵn sàng), nhiều bong bóng=~180°C, sôi bùng=quá nóng!'}
+    tip:{zh:'💡 竹筷測油溫：插入油中——無氣泡=油冷，細小氣泡=約160°C（可下料），大量氣泡=約180°C，劇烈冒泡=過熱危險！',en:'💡 Chopstick oil test: no bubbles=cold, small bubbles=~160°C (ready), many bubbles=~180°C, violent=dangerously hot!',id:'💡 Tes sumpit: tanpa gelembung=dinin, gelembung kecil=~160°C (siap), banyak gelembung=~180°C, heboh=terlalu panas!',vi:'💡 Thử đũa: không bong bóng=lạnh, bong bóng nhỏ=~160°C (sẵn sàng), nhiều bong bóng=~180°C, sôi bùng=quá nóng!'}
   },
   /* Lv4 食材保存 */
   {
@@ -774,7 +750,7 @@ var MOD_KNOWLEDGE=[
       {icon:'🌡️',zh:'溫度管理',en:'Temperature Control',desc:{zh:'危險帶5–60°C；冷藏3–5°C；冷凍-18°C以下；熟食中心溫度需達75°C以上。',en:'Danger zone 5–60°C; fridge 3–5°C; freezer -18°C; cooked food center must reach 75°C+.',id:'Zona bahaya 5–60°C; kulkas 3–5°C; freezer -18°C; makanan matang harus mencapai 75°C+.',vi:'Vùng nguy hiểm 5–60°C; tủ lạnh 3–5°C; tủ đông -18°C; trung tâm thức ăn chín phải đạt 75°C+.'}},
       {icon:'🎓',zh:'均衡飲食',en:'Balanced Diet',desc:{zh:'蔬菜½盤、蛋白質¼、全穀¼；每週食材多樣；當季食材最新鮮且經濟。',en:'Veg ½ plate, protein ¼, whole grains ¼; rotate proteins weekly; seasonal ingredients are freshest and cheapest.',id:'Sayuran ½ piring, protein ¼, biji utuh ¼; rotasi protein mingguan; bahan musiman paling segar dan murah.',vi:'Rau ½ đĩa, protein ¼, ngũ cốc nguyên hạt ¼; xoay vòng protein hàng tuần; thực phẩm theo mùa tươi và rẻ nhất.'}}
     ],
-    tip:{zh:'💡 恭喜完成全部8個等級！每天在廚房實踐這些原則，安全、衛生、美味缺一不可。',en:'💡 Congratulations on completing all 8 levels! Practice these principles daily in the kitchen — safety, hygiene, and deliciousness go together.',id:'💡 Selamat telah menyelesaikan semua 8 tingkat! Praktikkan prinsip-prinsip ini setiap hari di dapur.',vi:'💡 Chúc mừng đã hoàn thành cả 8 cấp độ! Thực hành các nguyên tắc này hàng ngày trong bếp.'}
+    tip:{zh:'💡 恭喜完成全部8個等級！每天在廚房實踐 these 原則，安全、衛生、美味缺一不可。',en:'💡 Congratulations on completing all 8 levels! Practice these principles daily in the kitchen — safety, hygiene, and deliciousness go together.',id:'💡 Selamat telah menyelesaikan semua 8 tingkat! Praktikkan prinsip-prinsip ini setiap hari di dapur.',vi:'💡 Chúc mừng đã hoàn thành cả 8 cấp độ! Thực hành các nguyên tắc này hàng ngày trong bếp.'}
   }
 ];
 
@@ -794,14 +770,15 @@ function calcPct(){
 
 function updateProgressUI(){
   var p=calcPct();
-  document.getElementById('pfill').style.width=p+'%';
-  document.getElementById('tpfill').style.width=p+'%';
+  var fillEl = document.getElementById('pfill');
+  var tpfillEl = document.getElementById('tpfill');
+  if(fillEl) fillEl.style.width=p+'%';
+  if(tpfillEl) tpfillEl.style.width=p+'%';
   document.getElementById('ppct').textContent=p+'%';
   var bk=p===0?'prog.badge0':p<30?'prog.badge1':p<60?'prog.badge2':p<100?'prog.badge3':'prog.badge4';
   document.getElementById('pbadge').textContent=t(bk);
 }
 
-/* FIX: removed dead 'unlocked' counter variable */
 function buildLevelPath(){
   var html='';
   MODS.forEach(function(m,i){
@@ -812,7 +789,7 @@ function buildLevelPath(){
     var label=m.titles[curLang]||m.titles.zh;
     var icon=isDone?'<i class="ti ti-check" aria-hidden="true" style="font-size:13px"></i>':m.lv;
     var shortLabel=label.length>5?label.substring(0,4)+'…':label;
-    html+='<div class="lp-step '+cls+'" onclick="loadModule('+i+')" title="Level '+m.lv+' '+label+'">';
+    html+='<div class="lp-step '+cls+'" onclick="loadModule('+i+')" title="Level '+m.lv+' '+label+'" tabindex="0" onkeydown="if(event.key===\'Enter\')loadModule('+i+')">';
     html+='<div class="lp-node">'+icon+'</div>';
     html+='<div class="lp-lbl">Lv'+m.lv+'<br>'+shortLabel+'</div>';
     html+='</div>';
@@ -832,7 +809,7 @@ function buildSidebar(){
     if(!isUnlocked){
       html+='<div class="si" style="opacity:.4;pointer-events:none" aria-disabled="true"><i class="ti ti-lock" aria-hidden="true"></i><span>Lv'+m.lv+' '+label+'</span><span style="margin-left:auto;font-size:10px;opacity:.5">'+t('lv.locked')+'</span></div>';
     } else {
-      html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="0"><i class="ti '+getIcon(i)+'" aria-hidden="true"></i><span>Lv'+m.lv+' '+label+'<span class="slvl">'+pct+'%</span></span><span class="sbadge">'+badge+'</span></div>';
+      html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')loadModule('+i+')"><i class="ti '+getIcon(i)+'" aria-hidden="true"></i><span>Lv'+m.lv+' '+label+'<span class="slvl">'+pct+'%</span></span><span class="sbadge">'+badge+'</span></div>';
     }
   });
   document.getElementById('sb-items').innerHTML=html;
@@ -840,7 +817,6 @@ function buildSidebar(){
 
 function getIcon(i){return['ti-shield','ti-cut','ti-flame','ti-snowflake','ti-soup','ti-wash','ti-clipboard-list','ti-award'][i]||'ti-book'}
 
-/* FIX: Language card selection bug fixed — no more stale DOM reference after showView re-renders */
 function renderHome(){
   var html='';
   html+='<div class="sechd"><h2>'+t('sec.lang')+'</h2><div class="ln"></div></div>';
@@ -862,7 +838,7 @@ function renderHome(){
     var pct=m.total>0?Math.round(m.done/m.total*100):0;
     var label=m.titles[curLang]||m.titles.zh;
     var cls='mcard'+(i===curMod?' actm':'')+(isDone?' mdone':'')+(isUnlocked?'':' locked');
-    html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="'+(isUnlocked?0:-1)+'">';
+    html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="'+(isUnlocked?0:-1)+'" onkeydown="if(event.key===\'Enter\' && '+isUnlocked+')loadModule('+i+')">';
     html+='<div class="memoji">'+m.emoji+'</div>';
     html+='<div class="mtitle">'+label+'</div>';
     html+='<div class="men">'+m.titles.en+'</div>';
@@ -876,7 +852,7 @@ function renderHome(){
   html+='</div>';
   html+='<div class="quick">';
   html+='<button class="qbtn pri" onclick="loadModule('+curMod+')">'+t('btn.continue')+'</button>';
-  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='<button class="qbtn" onclick="showView(\'quiz\', true)">'+t('btn.quiz')+'</button>';
   html+='<button class="qbtn" onclick="sendPrompt(\'製作'+MODS[curMod].titles.zh+'中印尼雙語版詳細課程內容\')">'+t('btn.id')+'</button>';
   html+='<button class="qbtn" onclick="sendPrompt(\'製作'+MODS[curMod].titles.zh+'中越雙語版詳細課程內容\')">'+t('btn.vi')+'</button>';
   html+='</div>';
@@ -904,7 +880,7 @@ function renderLesson(idx){
   html+='<button class="les-tab" onclick="switchLesTab(this,\'knowledge\')">'+t('tab.knowledge')+'</button>';
   html+='<button class="les-tab" onclick="switchLesTab(this,\'practice\')">'+t('tab.practice')+'</button>';
   html+='</div>';
-  /* tab: topics */
+  
   html+='<div class="les-tabpanel act" id="les-tab-topics">';
   html+='<div class="topics">';
   m.topics.forEach(function(tp,ti){
@@ -912,18 +888,18 @@ function renderLesson(idx){
     var dot=s===2?'dot-done':(s===1?'dot-cur':'dot-next');
     var tag=s===2?'<span class="ttag tag-done">'+t('tag.done')+'</span>':(s===1?'<span class="ttag tag-cur">'+t('tag.cur')+'</span>':'<span class="ttag tag-nx">'+t('tag.next')+'</span>');
     var checked=s===2;
-    html+='<div class="trow expandable" id="trow-'+idx+'-'+ti+'">';
+    html+='<div class="trow" id="trow-'+idx+'-'+ti+'" onclick="var tick=this.querySelector(\'.ttick\'); if(event.target!==tick) tick.click();">';
     html+='<div class="tdot '+dot+'"></div>';
     html+='<div style="flex:1;min-width:0">';
     html+='<div class="ttxt">'+tp.zh+'</div>';
     html+='<div class="ten">'+tp.en+'</div>';
     html+='</div>';
     html+=tag;
-    html+='<div class="ttick'+(checked?' checked':'')+'" onclick="toggleTopicDone('+idx+','+ti+',this)" title="'+(checked?t('topic.unmark'):t('topic.mark'))+'">'+(checked?'✓':'')+' </div>';
+    html+='<div class="ttick'+(checked?' checked':'')+'" onclick="event.stopPropagation(); toggleTopicDone('+idx+','+ti+',this)" title="'+(checked?t('topic.unmark'):t('topic.mark'))+'">'+(checked?'✓':'')+'</div>';
     html+='</div>';
   });
   html+='</div></div>';
-  /* tab: knowledge */
+  
   html+='<div class="les-tabpanel" id="les-tab-knowledge">';
   var kd=MOD_KNOWLEDGE[idx];
   if(kd){
@@ -940,7 +916,7 @@ function renderLesson(idx){
     html+='<div class="ktip">'+tip+'</div></div></div>';
   }
   html+='</div>';
-  /* tab: practice */
+  
   html+='<div class="les-tabpanel" id="les-tab-practice">';
   html+='<div style="padding:10px 0">';
   html+='<div class="safepanel" style="margin-bottom:10px">';
@@ -955,28 +931,27 @@ function renderLesson(idx){
   });
   html+='</div></div>';
   html+='<div class="quick" style="justify-content:center">';
-  html+='<button class="qbtn pri" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='<button class="qbtn pri" onclick="showView(\'quiz\', true)">'+t('btn.quiz')+'</button>';
   if(idx<7)html+='<button class="qbtn" onclick="loadModule('+(idx+1)+')">下一關 Lv'+(m.lv+1)+' →</button>';
   html+='</div></div></div>';
   html+='</div></div>';
+  
   html+='<div class="quick">';
   html+='<button class="qbtn pri" onclick="markProgress('+idx+')">+1 '+t('tag.done')+' ↗</button>';
-  html+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('btn.quiz')+'</button>';
+  html+='<button class="qbtn" onclick="showView(\'quiz\', true)">'+t('btn.quiz')+'</button>';
   html+='</div>';
   return html;
 }
 
 function switchLesTab(btn,name){
-  /* Use parentElement (les-tabs div) then parentElement (.lesbody) */
   var lesbody=btn.closest('.lesbody');
   if(!lesbody)return;
   lesbody.querySelectorAll('.les-tab').forEach(function(b){b.classList.remove('act')});
   btn.classList.add('act');
   lesbody.querySelectorAll('.les-tabpanel').forEach(function(p){p.classList.remove('act')});
-  var panel=document.getElementById('les-tab-'+name);
+  var panel=lesbody.querySelector('#les-tab-'+name);
   if(panel)panel.classList.add('act');
 }
-
 
 function toggleTopicDone(modIdx,topicIdx,tickEl){
   var m=MODS[modIdx];
@@ -996,18 +971,16 @@ function toggleTopicDone(modIdx,topicIdx,tickEl){
     if(dotEl)dotEl.className='tdot dot-done';
     if(tagEl){tagEl.className='ttag tag-done';tagEl.textContent=t('tag.done');}
   }
-  /* Always recount from source of truth */
   m.done=m.topics.filter(function(tp){return tp.s===2}).length;
   updateProgressUI();buildSidebar();buildLevelPath();
 }
 
 function renderQuiz(){
-  /* FIX: Each module now has its own quiz set; index is capped to available length */
   var qi_set=Math.min(curMod,QUIZZES.length-1);
   var qs=QUIZZES[qi_set]||QUIZZES[0];
   var qi=quizState.q%qs.length;
   var q=qs[qi];
-  var html='<div class="sechd"><h2>'+t('quiz.title')+'</h2><div class="ln"></div></div>';
+  var html='<div class="sechd"><h2>'+t('quiz.title')+' — ' + MODS[curMod].titles[curLang] + '</h2><div class="ln"></div></div>';
   html+='<div class="quiz-prog"><span>'+t('tag.done')+' '+quizState.score+'/'+qs.length+'</span><div class="qptrack"><div class="qpfill" style="width:'+Math.round(quizState.q/qs.length*100)+'%"></div></div><span>'+(qi+1)+'/'+qs.length+'</span></div>';
   html+='<div class="quiz-wrap"><div class="quiz-q">'+(q.q[curLang]||q.q.zh)+'</div>';
   html+='<div class="quiz-opts">';
@@ -1036,15 +1009,14 @@ function renderCert(){
     html+='<span class="cert-badge">🏅</span>';
     html+='<div class="cert-title">'+t('cert.title')+'</div>';
     html+='<div class="cert-sub">'+t('cert.sub')+'</div>';
-    html+='<div class="cert-name">— ✦ —</div>';
+    html+='<div class="cert-name">— ✦ 學習成就確認 ✦ —</div>';
     html+='<div class="cert-body">'+t('cert.body')+'</div>';
-    html+='<div class="cert-seal"><i class="ti ti-rosette" aria-hidden="true"></i>'+t('cert.seal')+'</div>';
+    html+='<div class="cert-seal"><i class="ti ti-rosette" aria-hidden="true"></i> '+t('cert.seal')+'</div>';
     html+='</div>';
   }
   return html;
 }
 
-/* FIX: Active state sync for top nav + bottom nav on every view change */
 function updateNavActive(v){
   document.querySelectorAll('.tnb[data-view]').forEach(function(b){
     b.classList.toggle('act',b.getAttribute('data-view')===v);
@@ -1054,15 +1026,23 @@ function updateNavActive(v){
   });
 }
 
-function showView(v){
+function showView(v, resetQuiz){
   curView=v;
   var c=document.getElementById('content');
-  if(v==='home')c.innerHTML=renderHome();
-  else if(v==='levels')c.innerHTML=renderLesson(curMod);
-  else if(v==='quiz'){quizState={q:0,score:0,answered:false};c.innerHTML=renderQuiz();}
-  else if(v==='cert')c.innerHTML=renderCert();
+  
+  // 關閉行動裝置端的側邊欄抽屜
+  var sb=document.getElementById('sidebar');
+  if(sb) sb.classList.remove('open');
+
+  if(v==='home') c.innerHTML=renderHome();
+  else if(v==='levels') c.innerHTML=renderLesson(curMod);
+  else if(v==='quiz'){
+    if(resetQuiz) { quizState={q:0,score:0,answered:false}; }
+    c.innerHTML=renderQuiz();
+  }
+  else if(v==='cert') c.innerHTML=renderCert();
+  
   buildSidebar();buildLevelPath();updateProgressUI();
-  /* FIX: update nav active states after every view change */
   updateNavActive(v);
 }
 
@@ -1073,12 +1053,10 @@ function loadModule(idx){
 
 function markProgress(idx){
   var m=MODS[idx];
-  /* Find first incomplete topic and mark it done */
   var found=false;
   for(var i=0;i<m.topics.length;i++){
     if((m.topics[i].s||0)!==2){m.topics[i].s=2;found=true;break;}
   }
-  /* Recount from source of truth */
   m.done=m.topics.filter(function(tp){return tp.s===2}).length;
   updateProgressUI();buildSidebar();buildLevelPath();
   showView('levels');
@@ -1089,7 +1067,6 @@ function answerQ(btn,isOk,fbEnc){
   quizState.answered=true;
   btn.classList.add(isOk?'correct':'wrong');
   if(isOk)quizState.score++;
-  /* FIX: disable all options after answering to prevent accidental multi-click */
   btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(function(b){b.setAttribute('disabled','');b.style.cursor='default'});
   var fb=document.getElementById('quiz-fb');
   if(fb)fb.textContent=decodeURIComponent(fbEnc);
@@ -1109,7 +1086,7 @@ function nextQ(){
     scoreHtml+='</div>';
     scoreHtml+='<div class="quick" style="justify-content:center">';
     scoreHtml+='<button class="qbtn pri" onclick="showView(\'home\')">'+t('btn.continue')+'</button>';
-    scoreHtml+='<button class="qbtn" onclick="showView(\'quiz\')">'+t('quiz.retry')+'</button>';
+    scoreHtml+='<button class="qbtn" onclick="showView(\'quiz\', true)">'+t('quiz.retry')+'</button>';
     scoreHtml+='</div>';
     c.innerHTML=scoreHtml;
   } else {
@@ -1117,8 +1094,6 @@ function nextQ(){
   }
 }
 
-/* FIX: setLang no longer causes double-render from inline onclick on lcard;
-   setLangCard handles card UI, setLang handles i18n + view refresh */
 function setLangCard(lang,cardEl){
   document.querySelectorAll('.lcard').forEach(function(c){c.classList.remove('on')});
   if(cardEl)cardEl.classList.add('on');
@@ -1136,26 +1111,43 @@ function setLang(lang,btn){
   }
   applyI18N();
   document.getElementById('p-nm').textContent=I18N[lang]['hero.title']||I18N.zh['hero.title'];
-  buildSidebar();buildLevelPath();updateProgressUI();showView(curView);
+  buildSidebar();buildLevelPath();updateProgressUI();
+  showView(curView, false); // 避免切換語系時將進行到一半的測驗洗掉
 }
 
 function setDev(d){
+  deviceMode = d;
   var s=document.getElementById('shell');
   s.className='shell '+d;
   ['mobile','tablet','desktop'].forEach(function(x){document.getElementById('btn-'+x).className='dvb'+(x===d?' on':'')});
+  
   var sb=document.getElementById('sidebar');
-  sbOK=d==='desktop';
-  sb.style.display=sbOK?'':'none';
-  sb.classList.toggle('gone',!sbOK);
+  if(d==='desktop'){
+    sbOK=true;
+    sb.style.display='';
+    sb.classList.remove('gone','open');
+  } else {
+    sbOK=false;
+    sb.style.display='none';
+    sb.classList.remove('open');
+  }
 }
 
 function toggleSB(){
-  sbOK=!sbOK;
   var sb=document.getElementById('sidebar');
-  sb.style.display=sbOK?'':'none';
-  sb.classList.toggle('gone',!sbOK);
+  if(deviceMode === 'desktop') {
+    sbOK=!sbOK;
+    sb.style.display=sbOK?'':'none';
+    sb.classList.toggle('gone',!sbOK);
+  } else {
+    // 手機與平板端改為 CSS 抽屜 Drawer 樣式切換
+    sb.style.display = '';
+    sb.classList.toggle('open');
+  }
 }
 
+// 首次加載初始化
+setDev('desktop');
 showView('home');
 </script>
 </div>
