@@ -77,6 +77,248 @@ body{
   min-height:100dvh;
   padding-bottom:env(safe-area-inset-bottom,16px);
 }
+
+/* ═══════════════════════════════════════════
+   APP SHELL — SIDEBAR LAYOUT
+   ═══════════════════════════════════════════ */
+
+/* Shell wraps sidebar + main */
+.app-shell {
+  display: flex;
+  min-height: 100dvh;
+}
+
+/* ── Sidebar ── */
+.app-sidebar {
+  width: 256px;
+  flex-shrink: 0;
+  background: linear-gradient(175deg, #063D31 0%, #085041 45%, #0A6652 100%);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  z-index: 300;
+  overflow: hidden;
+  transition: transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow: 4px 0 32px rgba(6,61,49,.25);
+}
+
+/* Mobile: sidebar hidden off-screen by default */
+@media(max-width:959px){
+  .app-sidebar { transform: translateX(-100%); }
+  .app-sidebar.open { transform: translateX(0); }
+}
+
+/* Desktop: sidebar always visible, push main content */
+@media(min-width:960px){
+  .app-main { margin-left: 256px; }
+  .lp-topbar { display: none; } /* hide mobile topbar on desktop */
+}
+
+/* Overlay for mobile sidebar */
+.sidebar-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 290;
+  backdrop-filter: blur(2px);
+}
+.sidebar-overlay.show { display: block; }
+
+/* Sidebar header */
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.10);
+  flex-shrink: 0;
+}
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.sidebar-logo-icon {
+  width: 38px; height: 38px;
+  background: linear-gradient(135deg, rgba(255,255,255,.22), rgba(255,255,255,.10));
+  border: 1.5px solid rgba(255,255,255,.22);
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: #fff;
+  flex-shrink: 0;
+}
+.sidebar-logo-title {
+  font-size: 13px; font-weight: 800; color: #fff; line-height: 1.3;
+}
+.sidebar-logo-sub {
+  font-size: 10px; color: rgba(255,255,255,.5); margin-top: 1px;
+}
+.sidebar-close {
+  display: none;
+  background: rgba(255,255,255,.10);
+  border: none; color: rgba(255,255,255,.7);
+  width: 30px; height: 30px; border-radius: 8px;
+  align-items: center; justify-content: center;
+  font-size: 16px; cursor: pointer;
+}
+@media(max-width:959px){ .sidebar-close { display: flex; } }
+
+/* Sidebar nav */
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.15) transparent;
+}
+.sidebar-nav::-webkit-scrollbar { width: 4px; }
+.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 2px; }
+
+/* Nav category group */
+.sb-group {
+  margin-bottom: 6px;
+}
+.sb-group-label {
+  font-size: 9.5px; font-weight: 800; letter-spacing: .8px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.38);
+  padding: 10px 8px 5px;
+}
+.sb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,.72);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: left;
+  width: 100%;
+  transition: all .16s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sb-item:hover {
+  background: rgba(255,255,255,.10);
+  color: #fff;
+}
+.sb-item.active {
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  font-weight: 700;
+}
+.sb-item-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  transition: all .16s;
+}
+.sb-item.active .sb-item-icon {
+  box-shadow: 0 2px 8px rgba(0,0,0,.2);
+}
+.sb-item-label { flex: 1; min-width: 0; line-height: 1.35; }
+.sb-item-badge {
+  font-size: 9px; font-weight: 800;
+  background: rgba(255,255,255,.15);
+  color: rgba(255,255,255,.7);
+  padding: 2px 7px; border-radius: 20px;
+  flex-shrink: 0;
+}
+.sb-item.active .sb-item-badge {
+  background: rgba(255,255,255,.25);
+  color: #fff;
+}
+.sb-divider {
+  height: 1px;
+  background: rgba(255,255,255,.08);
+  margin: 6px 0;
+}
+
+/* Sidebar footer */
+.sidebar-footer {
+  padding: 14px 14px;
+  border-top: 1px solid rgba(255,255,255,.10);
+  flex-shrink: 0;
+}
+.sidebar-lang-label {
+  font-size: 9.5px; font-weight: 800; letter-spacing: .8px;
+  text-transform: uppercase; color: rgba(255,255,255,.38);
+  margin-bottom: 8px;
+}
+.sidebar-lang-btns {
+  display: flex; gap: 5px;
+}
+.sb-lb {
+  flex: 1; padding: 7px 4px;
+  border-radius: 8px; border: 1px solid rgba(255,255,255,.15);
+  background: transparent; color: rgba(255,255,255,.6);
+  font-family: inherit; font-size: 11px; font-weight: 600;
+  cursor: pointer; transition: all .16s;
+}
+.sb-lb.on {
+  background: rgba(255,255,255,.2);
+  border-color: rgba(255,255,255,.3);
+  color: #fff;
+}
+
+/* ── Main content area ── */
+.app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide old sec-nav — sidebar replaces it */
+.sec-nav { display: none !important; }
+
+/* ── Mobile topbar ── */
+.lp-topbar {
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(29,158,117,.12);
+  display: flex; align-items: center; justify-content: center;
+  height: 56px; position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 2px 16px rgba(6,61,49,.07);
+}
+.lp-topbar-inner {
+  width: 100%; padding: 0 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.lp-menu-btn {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--green-50); border: 1.5px solid var(--green-100);
+  color: var(--green-700); display: flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: all .16s;
+}
+.lp-menu-btn:hover { background: var(--green-100); }
+.lp-topbar-title {
+  flex: 1; font-size: 13px; font-weight: 700; color: var(--gray-900);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.lp-lang-topbar { display: flex; gap: 2px; flex-shrink: 0; }
+
+/* Content area wrapper */
+.lp-content-area {
+  flex: 1;
+}
+
+/* Active section highlight in sidebar */
+.sb-item.sec-active {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+  font-weight: 700;
+}
+
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .lp-action-notice{
   position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));
@@ -1453,15 +1695,15 @@ body { font-size: 15px; }
 
   .sec-tab { font-size: 13px; padding: 14px 18px; min-height: 48px; }
 
-  /* Desktop body: clean 2-col for lesson sections, full-width for quiz + course */
+  /* Desktop body: single column in sidebar layout */
   .lp-body {
     padding: 28px 40px 18px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 18px;
-    max-width: 1280px;
+    max-width: 900px;
   }
-  #quiz-card { grid-column: 1 / -1; }
+  #quiz-card { grid-column: unset; }
 
   .sec-header { padding: 18px 22px; gap: 16px; }
   .sec-icon-wrap { width: 50px; height: 50px; border-radius: 15px; }
@@ -1567,133 +1809,156 @@ body { font-size: 15px; }
 
 <h2 class="sr-only">外籍看護訓練平台 — 課程01 認識長期照護</h2>
 
-<div id="app">
+<!-- Mobile sidebar overlay -->
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-  <!-- Top bar -->
-  <div class="lp-topbar">
-    <div class="lp-topbar-inner">
-      <button class="lp-back" onclick="sendPrompt('返回課程清單')">
-        <i class="ti ti-arrow-left" style="font-size:16px"></i>
-        <span id="back-txt">課程總覽</span>
-      </button>
-      <div class="lp-lang">
-        <button class="lp-lb on" onclick="setLang('zh')" id="lb-zh">中文</button>
-        <button class="lp-lb" onclick="setLang('id')" id="lb-id">ID</button>
-        <button class="lp-lb" onclick="setLang('en')" id="lb-en">EN</button>
-        <button class="lp-lb" onclick="setLang('vi')" id="lb-vi">VI</button>
+<div id="app" class="app-shell">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="app-sidebar" id="app-sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon"><i class="ti ti-first-aid-kit"></i></div>
+        <div class="sidebar-logo-text">
+          <div class="sidebar-logo-title" id="sidebar-brand">看護訓練平台</div>
+          <div class="sidebar-logo-sub" id="sidebar-sub">外籍照護培訓系統</div>
+        </div>
+      </div>
+      <button class="sidebar-close" onclick="closeSidebar()"><i class="ti ti-x"></i></button>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <!-- rendered by JS -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-lang-label" id="sb-lang-label">切換語言</div>
+      <div class="sidebar-lang-btns">
+        <button class="sb-lb on" onclick="setLang('zh')" id="lb-zh">中文</button>
+        <button class="sb-lb" onclick="setLang('id')" id="lb-id">ID</button>
+        <button class="sb-lb" onclick="setLang('en')" id="lb-en">EN</button>
+        <button class="sb-lb" onclick="setLang('vi')" id="lb-vi">VI</button>
       </div>
     </div>
-  </div>
+  </aside>
 
-  <!-- Hero -->
-  <div class="lp-hero">
-    <div class="lp-hero-bg">
-      <div class="lp-hero-dot-grid"></div>
-      <div class="lp-hero-circle1"></div>
-      <div class="lp-hero-circle2"></div>
-      <div class="lp-hero-circle3"></div>
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <div class="app-main">
+
+    <!-- Top bar (mobile + compact) -->
+    <div class="lp-topbar">
+      <div class="lp-topbar-inner">
+        <button class="lp-menu-btn" onclick="openSidebar()" aria-label="開啟選單">
+          <i class="ti ti-menu-2" style="font-size:20px"></i>
+        </button>
+        <div class="lp-topbar-title" id="topbar-title">外籍看護訓練學習平台</div>
+        <div class="lp-lang lp-lang-topbar">
+          <button class="lp-lb on" onclick="setLang('zh')" id="lb-zh-top">中文</button>
+          <button class="lp-lb" onclick="setLang('id')" id="lb-id-top">ID</button>
+          <button class="lp-lb" onclick="setLang('en')" id="lb-en-top">EN</button>
+          <button class="lp-lb" onclick="setLang('vi')" id="lb-vi-top">VI</button>
+        </div>
+      </div>
     </div>
-    <div class="lp-hero-inner">
-      <div class="lp-hero-top">
-        <div class="lp-hero-left">
-          <div class="lp-unit-tag">
-            <i class="ti ti-first-aid-kit" style="font-size:11px"></i>
-            <span id="unit-tag">第一單元・基礎照護認識</span>
+
+    <!-- Hero -->
+    <div class="lp-hero">
+      <div class="lp-hero-bg">
+        <div class="lp-hero-dot-grid"></div>
+        <div class="lp-hero-circle1"></div>
+        <div class="lp-hero-circle2"></div>
+        <div class="lp-hero-circle3"></div>
+      </div>
+      <div class="lp-hero-inner">
+        <div class="lp-hero-top">
+          <div class="lp-hero-left">
+            <div class="lp-unit-tag">
+              <i class="ti ti-first-aid-kit" style="font-size:11px"></i>
+              <span id="unit-tag">第一單元・基礎照護認識</span>
+            </div>
+            <div class="lp-lesson-num" id="lesson-num">課程 01 / 100</div>
+            <div class="lp-title" id="lesson-title">認識長期照護</div>
+            <div class="lp-subtitle" id="lesson-subtitle">Mengenal Perawatan Jangka Panjang・Long-Term Care・Chăm Sóc Dài Hạn</div>
           </div>
-          <div class="lp-lesson-num" id="lesson-num">課程 01 / 100</div>
-          <div class="lp-title" id="lesson-title">認識長期照護</div>
-          <div class="lp-subtitle" id="lesson-subtitle">Mengenal Perawatan Jangka Panjang・Long-Term Care・Chăm Sóc Dài Hạn</div>
+          <div class="lp-hero-illo">
+            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="30" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+              <circle cx="32" cy="20" r="10" fill="rgba(255,255,255,.9)"/>
+              <circle cx="29" cy="19" r="1.4" fill="#085041"/><circle cx="35" cy="19" r="1.4" fill="#085041"/>
+              <path d="M29 22.5 Q32 25 35 22.5" stroke="#085041" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+              <path d="M22 12 Q32 8 42 12 L41 16 H23 Z" fill="#1D9E75"/>
+              <rect x="30" y="8" width="4" height="9" rx="1.5" fill="white" opacity=".95"/>
+              <path d="M18 52 C18 42 46 42 46 52" fill="rgba(255,255,255,.82)"/>
+              <path d="M26 30 L32 35 L38 30" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="none"/>
+              <rect x="30" y="36" width="4" height="12" rx="1.5" fill="#1D9E75"/>
+              <rect x="26" y="40" width="12" height="4" rx="1.5" fill="#1D9E75"/>
+              <path d="M46 18 C46 15.5 43 13 41 15.5 C39 13 36 15.5 36 18 C36 21.5 41 25 41 25 C41 25 46 21.5 46 18Z" fill="#FF7B7B" opacity=".95"/>
+              <circle cx="16" cy="22" r="1.5" fill="rgba(255,255,255,.6)"/>
+              <circle cx="50" cy="30" r="1" fill="rgba(255,255,255,.5)"/>
+              <circle cx="14" cy="38" r="1" fill="rgba(255,255,255,.4)"/>
+            </svg>
+          </div>
         </div>
-        <div class="lp-hero-illo">
-          <!-- Nurse + heart SVG illustration -->
-          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Glow ring -->
-            <circle cx="32" cy="32" r="30" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
-            <!-- Nurse body -->
-            <circle cx="32" cy="20" r="10" fill="rgba(255,255,255,.9)"/>
-            <!-- Face -->
-            <circle cx="29" cy="19" r="1.4" fill="#085041"/>
-            <circle cx="35" cy="19" r="1.4" fill="#085041"/>
-            <path d="M29 22.5 Q32 25 35 22.5" stroke="#085041" stroke-width="1.3" stroke-linecap="round" fill="none"/>
-            <!-- Nurse cap -->
-            <path d="M22 12 Q32 8 42 12 L41 16 H23 Z" fill="#1D9E75"/>
-            <rect x="30" y="8" width="4" height="9" rx="1.5" fill="white" opacity=".95"/>
-            <!-- Uniform / body -->
-            <path d="M18 52 C18 42 46 42 46 52" fill="rgba(255,255,255,.82)"/>
-            <!-- Collar -->
-            <path d="M26 30 L32 35 L38 30" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="none"/>
-            <!-- Cross on chest -->
-            <rect x="30" y="36" width="4" height="12" rx="1.5" fill="#1D9E75"/>
-            <rect x="26" y="40" width="12" height="4" rx="1.5" fill="#1D9E75"/>
-            <!-- Heart floating -->
-            <path d="M46 18 C46 15.5 43 13 41 15.5 C39 13 36 15.5 36 18 C36 21.5 41 25 41 25 C41 25 46 21.5 46 18Z" fill="#FF7B7B" opacity=".95"/>
-            <!-- Stars/sparkles -->
-            <circle cx="16" cy="22" r="1.5" fill="rgba(255,255,255,.6)"/>
-            <circle cx="50" cy="30" r="1" fill="rgba(255,255,255,.5)"/>
-            <circle cx="14" cy="38" r="1" fill="rgba(255,255,255,.4)"/>
-          </svg>
+        <div class="lp-prog-wrap">
+          <div class="lp-prog-info">
+            <div class="lp-prog-label" id="prog-label-txt">學習進度</div>
+            <div class="lp-prog-bg"><div class="lp-prog-fill" style="width:1%"></div></div>
+          </div>
+          <div class="lp-prog-pct">1<span>%</span></div>
         </div>
       </div>
-      <div class="lp-prog-wrap">
-        <div class="lp-prog-info">
-          <div class="lp-prog-label" id="prog-label-txt">學習進度</div>
-          <div class="lp-prog-bg"><div class="lp-prog-fill" style="width:1%"></div></div>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="lp-stats-outer">
+      <div class="lp-stats" id="stats-bar">
+        <div class="lp-stat">
+          <div class="lp-stat-icon-wrap"><i class="ti ti-clock lp-stat-icon"></i></div>
+          <div class="lp-stat-val">300</div>
+          <div class="lp-stat-lbl" data-i18n="statMin">分鐘</div>
         </div>
-        <div class="lp-prog-pct">1<span>%</span></div>
+        <div class="lp-stat">
+          <div class="lp-stat-icon-wrap"><i class="ti ti-list-numbers lp-stat-icon"></i></div>
+          <div class="lp-stat-val">100</div>
+          <div class="lp-stat-lbl" data-i18n="statSec">章節</div>
+        </div>
+        <div class="lp-stat">
+          <div class="lp-stat-icon-wrap"><i class="ti ti-help lp-stat-icon"></i></div>
+          <div class="lp-stat-val" data-quiz>0</div>
+          <div class="lp-stat-lbl" data-i18n="statQuiz">已答題</div>
+        </div>
+        <div class="lp-stat">
+          <div class="lp-stat-icon-wrap"><i class="ti ti-certificate lp-stat-icon"></i></div>
+          <div class="lp-stat-val" data-i18n="statLevel">基礎</div>
+          <div class="lp-stat-lbl" data-i18n="statLevelLbl">難度</div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Stats bar -->
-  <div class="lp-stats-outer">
-    <div class="lp-stats" id="stats-bar">
-    <div class="lp-stat">
-      <div class="lp-stat-icon-wrap"><i class="ti ti-clock lp-stat-icon"></i></div>
-      <div class="lp-stat-val">300</div>
-      <div class="lp-stat-lbl" data-i18n="statMin">分鐘</div>
+    <!-- Body -->
+    <div class="lp-content-area">
+      <!-- Lesson content -->
+      <div class="lp-body" id="lp-body"></div>
+      <!-- Extended courses -->
+      <section class="course-library" id="course-library"></section>
     </div>
-    <div class="lp-stat">
-      <div class="lp-stat-icon-wrap"><i class="ti ti-list-numbers lp-stat-icon"></i></div>
-      <div class="lp-stat-val">100</div>
-      <div class="lp-stat-lbl" data-i18n="statSec">章節</div>
+
+    <!-- Footer nav -->
+    <div class="lp-footer">
+      <div class="lp-footer-inner">
+        <button class="btn-prev" onclick="sendPrompt('上一課')">
+          <i class="ti ti-arrow-left" style="font-size:14px"></i>
+          <span id="btn-prev-txt">上一課</span>
+        </button>
+        <button class="btn-next" onclick="sendPrompt((LANG[lang]||LANG.zh).nextLesson||'下一課：外籍看護的工作範圍')">
+          <span id="btn-next-txt">下一課</span>
+          <i class="ti ti-arrow-right" style="font-size:14px"></i>
+        </button>
+      </div>
     </div>
-    <div class="lp-stat">
-      <div class="lp-stat-icon-wrap"><i class="ti ti-help lp-stat-icon"></i></div>
-      <div class="lp-stat-val" data-quiz>0</div>
-      <div class="lp-stat-lbl" data-i18n="statQuiz">已答題</div>
-    </div>
-    <div class="lp-stat">
-      <div class="lp-stat-icon-wrap"><i class="ti ti-certificate lp-stat-icon"></i></div>
-      <div class="lp-stat-val" data-i18n="statLevel">基礎</div>
-      <div class="lp-stat-lbl" data-i18n="statLevelLbl">難度</div>
-    </div>
-  </div>
-  </div>
 
-  <!-- Section nav -->
-  <div class="sec-nav"><div class="sec-nav-inner-wrap" id="sec-nav"></div></div>
-
-  <!-- Body -->
-  <div class="lp-body" id="lp-body"></div>
-
-  <!-- Extended courses -->
-  <section class="course-library" id="course-library"></section>
-
-  <!-- Footer -->
-  <div class="lp-footer">
-    <div class="lp-footer-inner">
-      <button class="btn-prev" onclick="sendPrompt('上一課')">
-        <i class="ti ti-arrow-left" style="font-size:14px"></i>
-        <span id="btn-prev-txt">上一課</span>
-      </button>
-      <button class="btn-next" onclick="sendPrompt((LANG[lang]||LANG.zh).nextLesson||'下一課：外籍看護的工作範圍')">
-        <span id="btn-next-txt">下一課</span>
-        <i class="ti ti-arrow-right" style="font-size:14px"></i>
-      </button>
-    </div>
-  </div>
-
-</div>
+  </div><!-- /app-main -->
+</div><!-- /app-shell -->
 
 <script>
 // ── LANG strings ──
@@ -1709,8 +1974,33 @@ const LANG = {
     quizCorrectMsg:'答對了！閱讀照護計畫是開始工作前最重要的一步，能避免許多照護失誤。',
     quizWrongMsg:'再想想看。正確答案是「詳讀照護計畫書」，了解長輩狀況才能安全照護。',
     quizNextBtn:'繼續下一課',
-    statMin:'分鐘',statSec:'章節',statQuiz:'測驗',statLevel:'基礎',statLevelLbl:'難度',
-    secMeta:['了解照護工作本質','為什麼這堂課很重要','開始前必做的8步驟','避免這些常見錯誤','學習正確照護方式','立即注意的警示徵兆','何時需要聯絡家屬','緊急就醫的判斷標準','帶走這4個重點']
+    statMin:'分鐘',statSec:'章節',statQuiz:'已答題',statLevel:'基礎',statLevelLbl:'難度',
+    secMeta:['了解照護工作本質','為什麼這堂課很重要','開始前必做的8步驟','避免這些常見錯誤','學習正確照護方式','立即注意的警示徵兆','何時需要聯絡家屬','緊急就醫的判斷標準','帶走這4個重點'],
+    sbBrand:'看護訓練平台', sbSub:'外籍照護培訓系統',
+    sbGroups:[
+      {label:'本課內容', items:[
+        {key:'sec',idx:0,label:'課程主題'},
+        {key:'sec',idx:1,label:'重要性'},
+        {key:'sec',idx:2,label:'操作步驟'},
+      ]},
+      {label:'示範對照', items:[
+        {key:'sec',idx:3,label:'錯誤示範'},
+        {key:'sec',idx:4,label:'正確示範'},
+      ]},
+      {label:'警示與處置', items:[
+        {key:'sec',idx:5,label:'異常警訊'},
+        {key:'sec',idx:6,label:'通知家屬'},
+        {key:'sec',idx:7,label:'送醫時機'},
+      ]},
+      {label:'複習', items:[
+        {key:'sec',idx:8,label:'重點提醒'},
+        {key:'quiz',idx:9,label:'本課測驗'},
+      ]},
+      {label:'課程庫', items:[
+        {key:'courses',label:'所有課程'},
+      ]},
+    ],
+    sbLangLabel:'切換語言',
   },
   id:{
     back:'Daftar Kursus',nextLesson:'Pelajaran Berikutnya: Ruang Lingkup Pekerjaan',unitTag:'Unit 1・Dasar Perawatan',lessonNum:'Pelajaran 01 / 100',
@@ -1724,7 +2014,16 @@ const LANG = {
     quizWrongMsg:'Coba lagi. Jawaban yang benar adalah "Baca rencana perawatan secara detail".',
     quizNextBtn:'Lanjut ke pelajaran berikutnya',
     statMin:'Menit',statSec:'Bagian',statQuiz:'Kuis',statLevel:'Dasar',statLevelLbl:'Level',
-    secMeta:['Memahami hakikat pekerjaan perawatan','Mengapa pelajaran ini penting','8 langkah wajib sebelum mulai','Hindari kesalahan umum ini','Pelajari cara perawatan yang benar','Tanda bahaya yang perlu diperhatikan','Kapan perlu menghubungi keluarga','Kapan harus segera ke rumah sakit','Bawa pulang 4 poin penting ini']
+    secMeta:['Memahami hakikat pekerjaan perawatan','Mengapa pelajaran ini penting','8 langkah wajib sebelum mulai','Hindari kesalahan umum ini','Pelajari cara perawatan yang benar','Tanda bahaya yang perlu diperhatikan','Kapan perlu menghubungi keluarga','Kapan harus segera ke rumah sakit','Bawa pulang 4 poin penting ini'],
+    sbBrand:'Platform Pelatihan', sbSub:'Sistem Pelatihan Pengasuh',
+    sbGroups:[
+      {label:'Isi Pelajaran', items:[{key:'sec',idx:0,label:'Topik'},{key:'sec',idx:1,label:'Kepentingan'},{key:'sec',idx:2,label:'Langkah'},]},
+      {label:'Contoh', items:[{key:'sec',idx:3,label:'Contoh Salah'},{key:'sec',idx:4,label:'Contoh Benar'},]},
+      {label:'Tanda & Tindakan', items:[{key:'sec',idx:5,label:'Tanda Bahaya'},{key:'sec',idx:6,label:'Hub. Keluarga'},{key:'sec',idx:7,label:'Kapan ke RS'},]},
+      {label:'Tinjauan', items:[{key:'sec',idx:8,label:'Poin Penting'},{key:'quiz',idx:9,label:'Kuis'},]},
+      {label:'Perpustakaan', items:[{key:'courses',label:'Semua Kursus'},]},
+    ],
+    sbLangLabel:'Ganti Bahasa',
   },
   en:{
     back:'Course Overview',nextLesson:'Next: Scope of Work for Foreign Caregivers',unitTag:'Unit 1・Basic Care',lessonNum:'Lesson 01 / 100',
@@ -1737,8 +2036,17 @@ const LANG = {
     quizCorrectMsg:'Correct! Reading the care plan before starting is the most important first step.',
     quizWrongMsg:'Not quite. The right answer is "Read the care plan in detail before starting".',
     quizNextBtn:'Continue to next lesson',
-    statMin:'Minutes',statSec:'Sections',statQuiz:'Quiz',statLevel:'Basic',statLevelLbl:'Level',
-    secMeta:['Understand the nature of care work','Why this lesson matters','8 essential steps before you start','Avoid these common mistakes','Learn the correct care approach','Warning signs to watch immediately','When to contact the family','When to seek emergency care','Take these 4 key points away']
+    statMin:'Minutes',statSec:'Sections',statQuiz:'Answered',statLevel:'Basic',statLevelLbl:'Level',
+    secMeta:['Understand the nature of care work','Why this lesson matters','8 essential steps before you start','Avoid these common mistakes','Learn the correct care approach','Warning signs to watch immediately','When to contact the family','When to seek emergency care','Take these 4 key points away'],
+    sbBrand:'Care Training', sbSub:'Foreign Caregiver System',
+    sbGroups:[
+      {label:'Lesson Content', items:[{key:'sec',idx:0,label:'Topic'},{key:'sec',idx:1,label:'Why It Matters'},{key:'sec',idx:2,label:'Steps'},]},
+      {label:'Examples', items:[{key:'sec',idx:3,label:'Wrong Examples'},{key:'sec',idx:4,label:'Right Examples'},]},
+      {label:'Alerts & Actions', items:[{key:'sec',idx:5,label:'Warning Signs'},{key:'sec',idx:6,label:'Notify Family'},{key:'sec',idx:7,label:'Call ER'},]},
+      {label:'Review', items:[{key:'sec',idx:8,label:'Key Reminders'},{key:'quiz',idx:9,label:'Quiz'},]},
+      {label:'Course Library', items:[{key:'courses',label:'All Courses'},]},
+    ],
+    sbLangLabel:'Language',
   },
   vi:{
     back:'Danh sách khóa học',nextLesson:'Tiếp theo: Phạm vi công việc của người chăm sóc',unitTag:'Đơn vị 1・Chăm sóc cơ bản',lessonNum:'Bài 01 / 100',
@@ -1751,8 +2059,17 @@ const LANG = {
     quizCorrectMsg:'Đúng rồi! Đọc kế hoạch chăm sóc trước khi bắt đầu là bước quan trọng nhất.',
     quizWrongMsg:'Chưa đúng. Câu trả lời đúng là "Đọc kỹ kế hoạch chăm sóc trước khi bắt đầu".',
     quizNextBtn:'Tiếp tục bài tiếp theo',
-    statMin:'Phút',statSec:'Mục',statQuiz:'Bài KT',statLevel:'Cơ bản',statLevelLbl:'Cấp độ',
-    secMeta:['Hiểu bản chất công việc chăm sóc','Tại sao bài học này quan trọng','8 bước cần làm trước khi bắt đầu','Tránh những lỗi phổ biến này','Học cách chăm sóc đúng','Dấu hiệu cảnh báo cần chú ý ngay','Khi nào cần liên hệ gia đình','Khi nào cần đến bệnh viện khẩn cấp','Mang theo 4 điểm quan trọng này']
+    statMin:'Phút',statSec:'Mục',statQuiz:'Đã làm',statLevel:'Cơ bản',statLevelLbl:'Cấp độ',
+    secMeta:['Hiểu bản chất công việc chăm sóc','Tại sao bài học này quan trọng','8 bước cần làm trước khi bắt đầu','Tránh những lỗi phổ biến này','Học cách chăm sóc đúng','Dấu hiệu cảnh báo cần chú ý ngay','Khi nào cần liên hệ gia đình','Khi nào cần đến bệnh viện khẩn cấp','Mang theo 4 điểm quan trọng này'],
+    sbBrand:'Đào tạo Chăm sóc', sbSub:'Hệ thống đào tạo nước ngoài',
+    sbGroups:[
+      {label:'Nội dung bài', items:[{key:'sec',idx:0,label:'Chủ đề'},{key:'sec',idx:1,label:'Tại sao'},{key:'sec',idx:2,label:'Các bước'},]},
+      {label:'Ví dụ', items:[{key:'sec',idx:3,label:'Ví dụ sai'},{key:'sec',idx:4,label:'Ví dụ đúng'},]},
+      {label:'Dấu hiệu & Xử lý', items:[{key:'sec',idx:5,label:'Dấu hiệu'},{key:'sec',idx:6,label:'Báo gia đình'},{key:'sec',idx:7,label:'Đến BV'},]},
+      {label:'Ôn tập', items:[{key:'sec',idx:8,label:'Lưu ý'},{key:'quiz',idx:9,label:'Kiểm tra'},]},
+      {label:'Thư viện', items:[{key:'courses',label:'Tất cả khóa học'},]},
+    ],
+    sbLangLabel:'Ngôn ngữ',
   }
 };
 
@@ -2166,6 +2483,108 @@ let lessonQuizState = {};
 let selectedCourseUnit = 1;
 let selectedLessonNo = '01';
 let courseViewMode = 'unit';
+let activeSidebarKey = 'sec-0'; // which sidebar item is active
+
+// ── SIDEBAR ──
+function openSidebar(){
+  document.getElementById('app-sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar(){
+  document.getElementById('app-sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+
+function renderSidebarNav(){
+  const t = LANG[lang] || LANG.zh;
+  // Update brand
+  const brandEl = document.getElementById('sidebar-brand');
+  const subEl = document.getElementById('sidebar-sub');
+  const langLbl = document.getElementById('sb-lang-label');
+  if(brandEl) brandEl.textContent = t.sbBrand || '看護訓練平台';
+  if(subEl) subEl.textContent = t.sbSub || '外籍照護培訓系統';
+  if(langLbl) langLbl.textContent = t.sbLangLabel || '切換語言';
+
+  const SEC_ICONS = ['ti-target','ti-info-circle','ti-list-numbers','ti-circle-x','ti-circle-check','ti-alert-triangle','ti-phone','ti-ambulance','ti-bulb'];
+  const SEC_COLORS = ['#1D9E75','#1565C0','#6C63FF','#C0392B','#1D9E75','#E07B00','#1565C0','#C0392B','#666'];
+  const SEC_BG    = ['#E6F5EF','#E6F1FB','#EEEDFE','#FCEBEB','#E6F5EF','#FFF3DA','#E6F1FB','#FCEBEB','#F1EFE8'];
+
+  const groups = t.sbGroups || [];
+  let html = '';
+  groups.forEach(g => {
+    html += `<div class="sb-group">
+      <div class="sb-group-label">${g.label}</div>`;
+    g.items.forEach(item => {
+      let icon = 'ti-book', bg = '#E6F5EF', color = '#1D9E75';
+      let key = '', label = item.label;
+      if(item.key === 'sec'){
+        icon = SEC_ICONS[item.idx] || 'ti-book';
+        bg = SEC_BG[item.idx] || '#E6F5EF';
+        color = SEC_COLORS[item.idx] || '#1D9E75';
+        key = `sec-${item.idx}`;
+      } else if(item.key === 'quiz'){
+        icon = 'ti-help-circle'; bg = '#EEEDFE'; color = '#6C63FF';
+        key = 'quiz';
+      } else if(item.key === 'courses'){
+        icon = 'ti-books'; bg = '#E6F1FB'; color = '#1565C0';
+        key = 'courses';
+      }
+      const isActive = activeSidebarKey === key;
+      html += `<button class="sb-item${isActive?' sec-active':''}" onclick="sidebarNavigate('${key}',${item.idx !== undefined ? item.idx : -1})">
+        <div class="sb-item-icon" style="background:${bg}">
+          <i class="ti ${icon}" style="color:${color};font-size:14px"></i>
+        </div>
+        <span class="sb-item-label">${label}</span>
+      </button>`;
+    });
+    html += `</div>`;
+  });
+
+  const nav = document.getElementById('sidebar-nav');
+  if(nav) nav.innerHTML = html;
+
+  // Sync lang buttons in sidebar
+  ['zh','id','en','vi'].forEach(l => {
+    const el = document.getElementById('lb-'+l); if(el) el.classList.toggle('on', l===lang);
+    const elTop = document.getElementById('lb-'+l+'-top'); if(elTop) elTop.classList.toggle('on', l===lang);
+  });
+}
+
+function sidebarNavigate(key, idx){
+  activeSidebarKey = key;
+  if(key === 'courses'){
+    // scroll to course library
+    renderSidebarNav();
+    setTimeout(()=>{
+      const el = document.getElementById('course-library');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 60);
+  } else if(key === 'quiz'){
+    // open quiz section
+    openSecs[9] = true;
+    renderBody();
+    renderSidebarNav();
+    setTimeout(()=>{
+      const el = document.getElementById('quiz-card');
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 80);
+  } else if(key.startsWith('sec-')){
+    const i = parseInt(key.replace('sec-',''));
+    // Open this section, close others in same category for clarity
+    openSecs[i] = true;
+    renderBody();
+    renderSidebarNav();
+    setTimeout(()=>{
+      const el = document.getElementById('sec-card-'+i);
+      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 80);
+  }
+  // close sidebar on mobile after navigation
+  if(window.innerWidth < 960) closeSidebar();
+}
+
 
 // ── HELPERS ──
 if(typeof window.sendPrompt !== 'function'){
@@ -2198,9 +2617,7 @@ function setLang(l){
   lang = l;
   quizAnswered = null;
   quizChosen = null;
-  ['zh','id','en','vi'].forEach(x=>document.getElementById('lb-'+x).classList.toggle('on',x===l));
   const t = LANG[l];
-  document.getElementById('back-txt').textContent = t.back;
   document.getElementById('unit-tag').textContent = t.unitTag;
   document.getElementById('lesson-num').textContent = t.lessonNum;
   document.getElementById('lesson-title').textContent = t.title;
@@ -2208,32 +2625,23 @@ function setLang(l){
   document.getElementById('btn-prev-txt').textContent = t.prev;
   document.getElementById('btn-next-txt').textContent = t.next;
   if(document.getElementById('prog-label-txt')) document.getElementById('prog-label-txt').textContent = t.progLabel;
-  // stats
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const k = el.getAttribute('data-i18n');
     if(t[k]) el.textContent = t[k];
   });
-  renderSecNav();
+  renderSidebarNav();
   renderBody();
   renderCourseLibrary();
 }
 
 function renderSecNav(){
-  const t = LANG[lang];
-  const nav = document.getElementById('sec-nav');
-  const tabs = SECTION_META.map((m,i)=>
-    `<button class="sec-tab${openSecs[i]?' on':''}" onclick="toggleSec(${i})">
-      <i class="ti ${m.icon}" style="font-size:13px;color:${openSecs[i]?m.ic:'#999'}"></i>
-      ${t.secs[i]}
-    </button>`
-  ).join('');
-  const quizTab = `<button class="sec-tab${openSecs[9]?' on':''}" onclick="toggleSec(9)">${t.quizLabel}</button>`;
-  nav.innerHTML = tabs + quizTab;
+  renderSidebarNav();
 }
 
 function toggleSec(i){
   openSecs[i] = !openSecs[i];
-  renderSecNav();
+  activeSidebarKey = openSecs[i] ? (i===9 ? 'quiz' : 'sec-'+i) : activeSidebarKey;
+  renderSidebarNav();
   renderBody();
 }
 
@@ -2418,7 +2826,7 @@ function renderBody(){
       }
     }
 
-    html += `<div class="sec-card" data-open="${open}">
+    html += `<div class="sec-card" id="sec-card-${i}" data-open="${open}">
       <div class="sec-header" onclick="toggleSec(${i})">
         <div class="sec-icon-wrap" style="background:${m.bg}">
           <i class="ti ${m.icon}" style="color:${m.ic}"></i>
@@ -3467,7 +3875,7 @@ function renderCourseLibrary(){
 }
 
 // ── INIT ──
-renderSecNav();
+renderSidebarNav();
 renderBody();
 renderCourseLibrary();
 updateHeroProgress();
