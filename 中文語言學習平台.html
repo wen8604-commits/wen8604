@@ -1336,14 +1336,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 
   <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sidebar-search-wrap">
-      <div class="sidebar-search-box">
-        <span class="sidebar-search-icon">🔍</span>
-        <input type="text" class="sidebar-search-input" id="sidebarSearchInput" placeholder="搜尋詞彙單元…" oninput="filterSidebar(this.value)" />
-        <button class="sidebar-search-clear" id="sidebarSearchClear" onclick="clearSidebarSearch()">✕</button>
-      </div>
-    </div>
-    <div class="sidebar-no-results" id="sidebarNoResults">找不到符合的單元 🙁</div>
+
     <div class="sidebar-vol-header vol-1" onclick="toggleVolGroup(this)">
       <div class="sidebar-vol-dot"></div>
       <div class="sidebar-vol-label">第1輯・看護照顧</div>
@@ -9146,53 +9139,6 @@ function toggleVolGroup(headerEl) {
   headerEl.classList.toggle('collapsed');
 }
 
-// ── SIDEBAR: SEARCH / FILTER ──
-function filterSidebar(query) {
-  const sidebar = document.querySelector('.sidebar');
-  const clearBtn = document.getElementById('sidebarSearchClear');
-  const noResults = document.getElementById('sidebarNoResults');
-  const q = query.trim().toLowerCase();
-
-  clearBtn.classList.toggle('show', q.length > 0);
-
-  const headers = sidebar.querySelectorAll('.sidebar-vol-header');
-  const groups = sidebar.querySelectorAll('.sidebar-vol-group');
-
-  if (!q) {
-    sidebar.classList.remove('searching');
-    headers.forEach(h => h.classList.remove('search-hidden'));
-    groups.forEach(g => g.classList.remove('search-hidden'));
-    sidebar.querySelectorAll('.sidebar-item').forEach(item => item.classList.remove('search-hidden'));
-    noResults.classList.remove('show');
-    return;
-  }
-
-  sidebar.classList.add('searching');
-  let anyVisible = false;
-
-  groups.forEach((group, idx) => {
-    const header = headers[idx];
-    let groupHasMatch = false;
-    group.querySelectorAll('.sidebar-item').forEach(item => {
-      const text = item.textContent.toLowerCase();
-      const match = text.includes(q);
-      item.classList.toggle('search-hidden', !match);
-      if (match) groupHasMatch = true;
-    });
-    group.classList.toggle('search-hidden', !groupHasMatch);
-    if (header) header.classList.toggle('search-hidden', !groupHasMatch);
-    if (groupHasMatch) anyVisible = true;
-  });
-
-  noResults.classList.toggle('show', !anyVisible);
-}
-
-function clearSidebarSearch() {
-  const input = document.getElementById('sidebarSearchInput');
-  input.value = '';
-  filterSidebar('');
-  input.focus();
-}
 
 function closeSidebar() {
   document.querySelector('.sidebar').classList.remove('open');
