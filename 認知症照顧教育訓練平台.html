@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>認知症照顧教育訓練平台 v25 · Dementia Care Training Platform</title>
+<title>認知症照顧教育訓練平台 v27 · Dementia Care Training Platform</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@600;900&family=Inter:wght@400;500;600;700&display=swap');
 
@@ -1234,6 +1234,14 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     <button class="nav-item" onclick="showSection('bpsd-hiding')">
       <span class="nav-ico">🔍</span> 藏匿物品
     </button>
+    <button class="nav-item" onclick="showSection('bpsd-aggression')">
+      <span class="nav-ico">🥊</span> 攻擊行為處理
+      <span class="tag tag-red">重要</span>
+    </button>
+    <button class="nav-item" onclick="showSection('pain-assessment')">
+      <span class="nav-ico">🩹</span> 疼痛評估
+      <span class="tag tag-amber">重要</span>
+    </button>
     <button class="nav-item" onclick="showSection('delirium')">
       <span class="nav-ico">⚡</span> 譫妄辨識
       <span class="tag tag-red">重要</span>
@@ -1289,12 +1297,24 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     <button class="nav-item" onclick="showSection('legal-family')">
       <span class="nav-ico">👨‍👩‍👧</span> 家屬聯繫流程
     </button>
+    <button class="nav-item" onclick="showSection('legal-prohibited')">
+      <span class="nav-ico">🚫</span> 高風險行為禁止
+      <span class="tag tag-red">重要</span>
+    </button>
   </div>
 
   <div class="sidebar-section">
     <div class="sidebar-label" data-key="self">自我照顧</div>
     <button class="nav-item" onclick="showSection('caregiver-wellbeing')">
       <span class="nav-ico">💚</span> 看護身心健康
+    </button>
+  </div>
+
+  <div class="sidebar-section">
+    <div class="sidebar-label">照顧記錄</div>
+    <button class="nav-item" onclick="showSection('care-record')">
+      <span class="nav-ico">📝</span> 照顧記錄教學
+      <span class="tag tag-green">新增</span>
     </button>
   </div>
 </nav>
@@ -1541,6 +1561,56 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       </tr>
     </tbody>
   </table>
+
+  <div class="sec-title"><span>🔬</span> 失智症主要類型比較<span class="tx" data-en="Major Types of Dementia Compared" data-vi="So Sánh Các Loại Sa Sút Trí Tuệ" data-id="Perbandingan Jenis Utama Demensia"> · Major Types Compared</span></div>
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">為什麼要了解類型？<span class="tx" data-en="Why Know the Type?" data-vi="Tại Sao Cần Biết Loại?" data-id="Mengapa Perlu Tahu Jenisnya?"> · Why it matters</span></div>
+      <div class="alert-text">不同類型的失智症有不同的<strong>核心症狀</strong>，了解類型可以幫助看護預測病患的特殊需求，並更有效地照顧。</div>
+      <div class="alert-en">Different types of dementia have different core symptoms. Knowing the type helps caregivers anticipate the patient's specific needs and provide better care.</div>
+      <div class="alert-vi">Các loại sa sút trí tuệ khác nhau có triệu chứng cốt lõi khác nhau. Biết loại giúp người chăm sóc dự đoán nhu cầu đặc biệt và chăm sóc hiệu quả hơn.</div>
+      <div class="alert-id">Jenis demensia yang berbeda memiliki gejala inti yang berbeda. Mengetahui jenisnya membantu pengasuh mengantisipasi kebutuhan khusus pasien dan memberikan perawatan yang lebih baik.</div>
+    </div>
+  </div>
+  <div class="info-table-wrap">
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>類型<span class="tx" data-en="Type" data-vi="Loại" data-id="Jenis"> · Type</span></th>
+        <th>核心特徵<span class="tx" data-en="Core Features" data-vi="Đặc Điểm Cốt Lõi" data-id="Ciri Utama"> · Core Features</span></th>
+        <th>退化方式<span class="tx" data-en="Progression" data-vi="Tiến Triển" data-id="Perkembangan"> · Progression</span></th>
+        <th>照護重點<span class="tx" data-en="Care Focus" data-vi="Trọng Tâm Chăm Sóc" data-id="Fokus Perawatan"> · Care Focus</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>🧠 阿茲海默症</strong><br><em data-en="Alzheimer's Disease (60–70%)" data-vi="Bệnh Alzheimer (60–70%)" data-id="Penyakit Alzheimer (60–70%)">Alzheimer's Disease (60–70%)</em></td>
+        <td>記憶退化最明顯，尤其是近期記憶；迷路、忘名字<br><em data-en="Memory loss (especially recent), getting lost, forgetting names" data-vi="Mất trí nhớ (đặc biệt gần đây), bị lạc, quên tên" data-id="Kehilangan memori (terutama baru-baru ini), tersesat, lupa nama">Memory loss, forgetting names</em></td>
+        <td>緩慢持續退化<br><em data-en="Slow, continuous decline" data-vi="Suy giảm chậm, liên tục" data-id="Penurunan lambat dan berkelanjutan">Slow, continuous decline</em></td>
+        <td>建立固定日常規律；重複提醒需有耐心<br><em data-en="Fixed daily routine; patient repetition responses" data-vi="Lịch trình cố định; kiên nhẫn với câu hỏi lặp lại" data-id="Rutinitas harian tetap; sabar dengan pengulangan">Fixed routine; patience</em></td>
+      </tr>
+      <tr>
+        <td><strong>🩸 血管型失智症</strong><br><em data-en="Vascular Dementia (15–20%)" data-vi="Sa Sút Trí Tuệ Mạch Máu (15–20%)" data-id="Demensia Vaskular (15–20%)">Vascular Dementia (15–20%)</em></td>
+        <td>思考速度慢、步態不穩、注意力差；常有中風病史<br><em data-en="Slow thinking, unstable gait, poor attention; often stroke history" data-vi="Suy nghĩ chậm, dáng đi không ổn định, kém tập trung; thường có tiền sử đột quỵ" data-id="Berpikir lambat, jalan tidak stabil, perhatian buruk; sering riwayat stroke">Slow thinking, unstable gait</em></td>
+        <td><strong>階梯式退化</strong>（突然惡化→穩定→再惡化）<br><em data-en="Stepwise decline: sudden worsening then plateau" data-vi="Suy giảm theo bậc: đột ngột xấu hơn rồi ổn định" data-id="Penurunan bertahap: tiba-tiba memburuk lalu stabil">Stepwise decline</em></td>
+        <td>跌倒預防最重要；注意突然惡化（可能再中風）<br><em data-en="Fall prevention critical; watch for sudden worsening (possible new stroke)" data-vi="Phòng ngừa té ngã quan trọng nhất; chú ý xấu đột ngột (có thể đột quỵ mới)" data-id="Pencegahan jatuh kritis; waspadai memburuk mendadak (kemungkinan stroke baru)">Fall prevention; watch sudden changes</em></td>
+      </tr>
+      <tr>
+        <td><strong>👁️ 路易氏體失智症</strong><br><em data-en="Lewy Body Dementia" data-vi="Sa Sút Trí Tuệ Thể Lewy" data-id="Demensia Lewy Body">Lewy Body Dementia</em></td>
+        <td><strong>視幻覺明顯</strong>（看見不存在的人/動物）、睡眠行為異常、肌肉僵硬<br><em data-en="Vivid visual hallucinations, sleep behaviour disorder, muscle rigidity" data-vi="Ảo thị rõ rệt, rối loạn hành vi giấc ngủ, cứng cơ" data-id="Halusinasi visual nyata, gangguan perilaku tidur, kekakuan otot">Vivid visual hallucinations, rigidity</em></td>
+        <td>起伏大，認知好壞不定<br><em data-en="Fluctuating cognition, variable day-to-day" data-vi="Nhận thức dao động, thay đổi từ ngày này sang ngày khác" data-id="Kognisi berfluktuasi, bervariasi dari hari ke hari">Fluctuating cognition</em></td>
+        <td>不否認幻覺內容（患者認為是真實的）；跌倒風險高因肌肉僵硬<br><em data-en="Don't deny hallucinations; high fall risk due to rigidity" data-vi="Không phủ nhận ảo giác; nguy cơ té ngã cao do cứng cơ" data-id="Jangan tolak halusinasi; risiko jatuh tinggi karena kekakuan">Don't deny hallucinations; fall risk</em></td>
+      </tr>
+      <tr>
+        <td><strong>🧩 額顳葉失智症</strong><br><em data-en="Frontotemporal Dementia (FTD)" data-vi="Sa Sút Trí Tuệ Thùy Trán-Thái Dương" data-id="Demensia Frontotemporal (FTD)">Frontotemporal Dementia (FTD)</em></td>
+        <td><strong>行為與人格改變</strong>最明顯：失去禮儀、衝動行為、說話困難；記憶相對較保留<br><em data-en="Personality/behaviour change most prominent: disinhibition, impulsivity; memory relatively preserved" data-vi="Thay đổi hành vi/nhân cách nổi bật nhất: mất ức chế, bốc đồng; trí nhớ tương đối được giữ" data-id="Perubahan perilaku/kepribadian paling menonjol: disinhibisi, impulsivitas; memori relatif masih baik">Behaviour change, disinhibition</em></td>
+        <td>中年發病較多（50–70歲）<br><em data-en="Often earlier onset (50–70 years old)" data-vi="Thường khởi phát sớm hơn (50–70 tuổi)" data-id="Sering onset lebih awal (50–70 tahun)">Often earlier onset</em></td>
+        <td>設定安全界限；行為問題比記憶問題更突出，需更多心理安撫技巧<br><em data-en="Set safety limits; behaviour issues more prominent than memory, more de-escalation skills needed" data-vi="Đặt giới hạn an toàn; vấn đề hành vi nổi bật hơn trí nhớ, cần nhiều kỹ năng xoa dịu hơn" data-id="Tetapkan batas keamanan; masalah perilaku lebih menonjol dari memori, perlu lebih banyak keterampilan de-eskalasi">Safety limits; de-escalation skills</em></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════
@@ -2582,6 +2652,211 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
 </div>
 
 <!-- ════════════════════════════════════
+     BPSD-AGGRESSION  攻擊行為
+════════════════════════════════════ -->
+<div id="bpsd-aggression" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · AGGRESSION</div>
+    <div class="page-title">🥊 攻擊行為處理</div>
+    <div class="page-desc">辨識攻擊行為的根本原因、預防與安全應對策略<span class="L2 en"> · Understanding the root causes of aggressive behaviour, prevention, and safe response strategies</span><span class="L2 vi"> · Hiểu nguyên nhân gốc rễ của hành vi hung hăng, phòng ngừa và chiến lược ứng phó an toàn</span><span class="L2 id"> · Memahami akar penyebab perilaku agresif, pencegahan, dan strategi respons yang aman</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">ℹ️</div>
+    <div class="alert-body">
+      <div class="alert-title">為什麼患者會打人、推人、抓咬？<span class="tx" data-en="Why Do Patients Hit, Push, Scratch, or Bite?" data-vi="Tại Sao Bệnh Nhân Đánh, Đẩy, Cào, Cắn?" data-id="Mengapa Pasien Memukul, Mendorong, Mencakar, Menggigit?"> · Why It Happens</span></div>
+      <div class="alert-text">攻擊行為<strong>幾乎都不是故意的</strong>。患者無法用言語表達不適、恐懼或困惑，於是用肢體動作來「溝通」。常見誘因包括：身體不適或疼痛、感到被威脅（如被強迫換衣、洗澡）、環境吵雜混亂、誤認看護為陌生人或壞人。</div>
+      <div class="alert-en">Aggressive behaviour is almost never intentional. Patients who cannot express discomfort, fear, or confusion in words use their bodies to "communicate" instead. Common triggers: physical discomfort or pain, feeling threatened (e.g. forced changing or bathing), a noisy/chaotic environment, or mistaking the caregiver for a stranger or threat.</div>
+      <div class="alert-vi">Hành vi hung hăng hầu như không bao giờ là cố ý. Bệnh nhân không thể diễn đạt sự khó chịu, sợ hãi hoặc bối rối bằng lời nói nên dùng cơ thể để "giao tiếp". Nguyên nhân thường gặp: khó chịu/đau, cảm thấy bị đe dọa (bị ép thay đồ, tắm), môi trường ồn ào hỗn loạn, hoặc nhầm người chăm sóc là người lạ.</div>
+      <div class="alert-id">Perilaku agresif hampir tidak pernah disengaja. Pasien yang tidak bisa mengungkapkan ketidaknyamanan, ketakutan, atau kebingungan dengan kata-kata akan menggunakan tubuh untuk "berkomunikasi". Pemicu umum: ketidaknyamanan/nyeri fisik, merasa terancam (dipaksa berganti baju, mandi), lingkungan bising/kacau, atau salah mengenali pengasuh sebagai orang asing.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>⚠️</span> 常見誘發情境<span class="tx" data-en="Common Trigger Situations" data-vi="Tình Huống Kích Hoạt Thường Gặp" data-id="Situasi Pemicu Umum"> · Common Triggers</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">🛁</div>
+      <div class="card-title">個人照護時<span class="L2 en"> · During Personal Care</span><span class="L2 vi"> · Khi Chăm Sóc Cá Nhân</span><span class="L2 id"> · Saat Perawatan Pribadi</span></div>
+      <div class="card-body">洗澡、換尿布、換衣服時最容易發生，因為患者感到隱私被侵犯或身體被控制<br><em data-en="Bathing, diaper changes, dressing — patient feels exposed or controlled" data-vi="Tắm rửa, thay tã, thay quần áo — bệnh nhân cảm thấy bị xâm phạm hoặc kiểm soát" data-id="Mandi, ganti popok, berpakaian — pasien merasa terekspos atau dikendalikan">Bathing, diaper changes, dressing</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">😣</div>
+      <div class="card-title">身體不適時<span class="L2 en"> · Physical Discomfort</span><span class="L2 vi"> · Khi Khó Chịu Cơ Thể</span><span class="L2 id"> · Saat Tidak Nyaman Fisik</span></div>
+      <div class="card-body">疼痛、便秘、飢餓、想上廁所卻無法表達，會以攻擊方式表現出來<br><em data-en="Pain, constipation, hunger, or needing the toilet but unable to express it" data-vi="Đau, táo bón, đói, hoặc cần đi toilet nhưng không nói được" data-id="Nyeri, sembelit, lapar, atau perlu ke toilet tapi tidak bisa mengungkapkan">Pain, constipation, hunger, toilet needs</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <div class="card-title">突然靠近或觸碰<span class="L2 en"> · Sudden Approach/Touch</span><span class="L2 vi"> · Tiếp Cận/Chạm Bất Ngờ</span><span class="L2 id"> · Pendekatan/Sentuhan Mendadak</span></div>
+      <div class="card-body">未事先告知就觸碰患者身體，或從患者視線外突然出現，容易引發驚嚇反應<br><em data-en="Touching without warning, or approaching from outside the patient's field of vision" data-vi="Chạm vào mà không báo trước, hoặc tiếp cận từ ngoài tầm nhìn" data-id="Menyentuh tanpa peringatan, atau mendekat dari luar pandangan pasien">Touching without warning</em></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🛑</span> 當下發生時：應對步驟<span class="tx" data-en="In the Moment: Response Steps" data-vi="Khi Xảy Ra: Các Bước Ứng Phó" data-id="Saat Terjadi: Langkah Respons"> · Response Steps</span></div>
+  <ol class="step-list">
+    <li class="step-item"><div class="step-num">1</div><div class="step-body">
+      <div class="step-zh">立刻退後一步，拉開安全距離，保護自己與患者的安全</div>
+      <div class="step-en">Immediately step back to a safe distance — protect both yourself and the patient</div>
+      <div class="step-vi">Lập tức lùi lại một bước để giữ khoảng cách an toàn — bảo vệ cả bạn và bệnh nhân</div>
+      <div class="step-id">Segera mundur selangkah ke jarak yang aman — lindungi diri Anda dan pasien</div>
+      <div class="step-note">不要抓住患者的手或試圖壓制，這會讓情況更糟。</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">2</div><div class="step-body">
+      <div class="step-zh">暫停目前正在做的動作（如停止換衣／洗澡），給患者時間平靜下來</div>
+      <div class="step-en">Stop the current activity (e.g. pause bathing/dressing) and give the patient time to calm down</div>
+      <div class="step-vi">Dừng hoạt động hiện tại (ví dụ tạm dừng tắm/thay đồ) và cho bệnh nhân thời gian bình tĩnh lại</div>
+      <div class="step-id">Hentikan aktivitas saat ini (mis. hentikan mandi/berpakaian) dan beri pasien waktu untuk tenang</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">3</div><div class="step-body">
+      <div class="step-zh">以低沉、緩慢、平靜的聲音說話，不要爭辯或大聲喝止</div>
+      <div class="step-en">Speak in a low, slow, calm voice — do not argue or shout</div>
+      <div class="step-vi">Nói bằng giọng thấp, chậm, bình tĩnh — không cãi lại hoặc quát lớn</div>
+      <div class="step-id">Berbicara dengan suara rendah, lambat, dan tenang — jangan berdebat atau berteriak</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">4</div><div class="step-body">
+      <div class="step-zh">轉移注意力——改變話題、提供患者喜歡的物品或活動</div>
+      <div class="step-en">Redirect attention — change the topic, or offer an item/activity the patient enjoys</div>
+      <div class="step-vi">Chuyển hướng chú ý — đổi chủ đề hoặc đưa đồ vật/hoạt động bệnh nhân yêu thích</div>
+      <div class="step-id">Alihkan perhatian — ganti topik, atau tawarkan benda/aktivitas yang disukai pasien</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">5</div><div class="step-body">
+      <div class="step-zh">事後檢查自己是否受傷，並記錄發生時間、情境與誘因，告知家屬/護理師</div>
+      <div class="step-en">Afterwards, check yourself for injury, and document the time, context, and likely trigger — inform family/nurse</div>
+      <div class="step-vi">Sau đó kiểm tra xem mình có bị thương không, ghi lại thời gian, hoàn cảnh và nguyên nhân — báo gia đình/y tá</div>
+      <div class="step-id">Setelah itu, periksa apakah Anda terluka, dan catat waktu, konteks, dan pemicu — beri tahu keluarga/perawat</div>
+    </div></li>
+  </ol>
+
+  <div class="sec-title"><span>⚠️</span> 正確與錯誤示範<span class="tx" data-en="Do's and Don'ts" data-vi="Nên và Không Nên" data-id="Yang Harus dan Tidak Boleh"> · Do's and Don'ts</span></div>
+  <div class="do-dont-grid">
+    <div class="do-box">
+      <div class="do-header">✅ 正確做法<span class="dd-sec en">Correct approach</span><span class="dd-sec vi">Cách làm đúng</span><span class="dd-sec id">Pendekatan yang benar</span></div>
+      <ul>
+        <li>每次照護前先告知患者接下來要做什麼<div class="step-en">Tell the patient what you are about to do before each care task</div><div class="step-vi">Báo trước cho bệnh nhân biết bạn sẽ làm gì trước mỗi lần chăm sóc</div><div class="step-id">Beri tahu pasien apa yang akan Anda lakukan sebelum setiap perawatan</div></li>
+        <li>動作放慢，給患者反應與配合的時間<div class="step-en">Slow down your movements and give the patient time to respond and cooperate</div><div class="step-vi">Làm chậm lại, cho bệnh nhân thời gian phản ứng và phối hợp</div><div class="step-id">Perlambat gerakan, beri pasien waktu untuk merespons dan bekerja sama</div></li>
+        <li>找出當天的固定誘因（時間、人、地點），盡量避開<div class="step-en">Identify recurring triggers (time, person, place) and try to avoid them</div><div class="step-vi">Xác định nguyên nhân lặp lại (thời gian, người, địa điểm) và tránh nếu có thể</div><div class="step-id">Identifikasi pemicu yang berulang (waktu, orang, tempat) dan hindari jika memungkinkan</div></li>
+        <li>事件發生後記錄並交班，協助找出規律<div class="step-en">Document the incident and hand it off so patterns can be identified</div><div class="step-vi">Ghi lại sự việc và bàn giao để giúp tìm ra quy luật</div><div class="step-id">Catat insiden dan serahkan agar pola dapat diidentifikasi</div></li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">❌ 處理禁忌<span class="tx" data-en="DON'T" data-vi="KHÔNG NÊN" data-id="JANGAN"> · DON'T</span></div>
+      <ul>
+        <li>不可還手、用力抓住、壓制或大聲責罵患者<div class="step-en">Never hit back, forcibly grab, restrain, or shout at the patient</div><div class="step-vi">Không đánh trả, ghì chặt, kiềm chế hoặc quát mắng bệnh nhân</div><div class="step-id">Jangan memukul balik, mencengkeram, mengekang, atau membentak pasien</div></li>
+        <li>不可在患者情緒激動時繼續強行進行原本的照護動作<div class="step-en">Never continue forcing the original care task while the patient is agitated</div><div class="step-vi">Không tiếp tục ép buộc thực hiện việc chăm sóc khi bệnh nhân kích động</div><div class="step-id">Jangan terus memaksakan perawatan saat pasien sedang gelisah</div></li>
+        <li>不可把患者單獨留在可能受傷的環境中（如樓梯口、廚房）<div class="step-en">Never leave the patient alone in an environment where they could be hurt (e.g. near stairs, kitchen)</div><div class="step-vi">Không để bệnh nhân một mình ở nơi có thể bị thương (cầu thang, nhà bếp)</div><div class="step-id">Jangan meninggalkan pasien sendirian di tempat yang berisiko (tangga, dapur)</div></li>
+        <li>不可隱瞞受傷事件不告知家屬<div class="step-en">Never hide an injury incident from the family</div><div class="step-vi">Không che giấu sự việc bị thương mà không báo gia đình</div><div class="step-id">Jangan menyembunyikan insiden cedera dari keluarga</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">需要立即通報的情況<span class="tx" data-en="When to Report Immediately" data-vi="Khi Nào Cần Báo Cáo Ngay" data-id="Kapan Harus Segera Melapor"> · Report Immediately</span></div>
+      <div class="alert-text">攻擊行為造成看護或患者本人受傷（抓傷流血、咬傷、跌倒）｜ 攻擊行為<strong>突然</strong>出現或明顯加劇（可能是疼痛、感染或譫妄）｜ 攻擊頻率持續增加｜ 患者攻擊其他家人或鄰居</div>
+      <div class="alert-en">The caregiver or patient is injured (scratches with bleeding, bites, falls) | Aggression appears <strong>suddenly</strong> or worsens markedly (may indicate pain, infection, or delirium) | Frequency keeps increasing | Patient is aggressive toward other family members or neighbours</div>
+      <div class="alert-vi">Người chăm sóc hoặc bệnh nhân bị thương (cào chảy máu, cắn, ngã) | Hành vi hung hăng xuất hiện <strong>đột ngột</strong> hoặc nặng hơn rõ rệt (có thể do đau, nhiễm trùng hoặc mê sảng) | Tần suất tăng liên tục | Bệnh nhân hung hăng với người khác trong gia đình hoặc hàng xóm</div>
+      <div class="alert-id">Pengasuh atau pasien terluka (cakaran berdarah, gigitan, jatuh) | Agresi muncul <strong>mendadak</strong> atau memburuk tajam (mungkin nyeri, infeksi, atau delirium) | Frekuensi terus meningkat | Pasien agresif terhadap anggota keluarga lain atau tetangga</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     PAIN ASSESSMENT  疼痛評估
+════════════════════════════════════ -->
+<div id="pain-assessment" class="section">
+  <div class="page-header">
+    <div class="eyebrow">BPSD 專章 · PAIN ASSESSMENT</div>
+    <div class="page-title">🩹 疼痛評估</div>
+    <div class="page-desc">認識重度認知症患者表達疼痛的非語言方式，避免誤判為BPSD<span class="L2 en"> · Recognising non-verbal pain signs in advanced dementia, and avoiding misreading them as BPSD</span><span class="L2 vi"> · Nhận biết các dấu hiệu đau không lời ở bệnh nhân sa sút trí tuệ nặng, tránh nhầm với BPSD</span><span class="L2 id"> · Mengenali tanda nyeri non-verbal pada demensia berat, hindari salah mengira sebagai BPSD</span></div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">重要警示：「躁動」可能其實是「疼痛」<span class="tx" data-en="IMPORTANT: 'Agitation' May Actually Be 'Pain'" data-vi="QUAN TRỌNG: 'Kích Động' Có Thể Thực Ra Là 'Đau'" data-id="PENTING: 'Agitasi' Mungkin Sebenarnya 'Nyeri'"> · Agitation May Be Pain</span></div>
+      <div class="alert-text">重度認知症患者常常<strong>無法說出「我痛」</strong>，於是疼痛會被誤認為是BPSD（行為精神症狀）而被忽略。如果患者突然變得躁動、拒食、拒絕照護或夜間哭叫，<strong>先想到「會不會是痛？」</strong>，再考慮其他原因。</div>
+      <div class="alert-en">Patients with advanced dementia often <strong>cannot say "I'm in pain."</strong> As a result, pain is frequently mistaken for BPSD and ignored. If a patient suddenly becomes agitated, refuses food/care, or cries at night, <strong>first ask "could this be pain?"</strong> before considering other causes.</div>
+      <div class="alert-vi">Bệnh nhân sa sút trí tuệ nặng thường <strong>không thể nói "tôi đau"</strong>. Vì vậy đau thường bị nhầm là BPSD và bị bỏ qua. Nếu bệnh nhân bỗng kích động, từ chối ăn/chăm sóc, hoặc khóc đêm, <strong>hãy nghĩ "có phải do đau?"</strong> trước khi nghĩ đến nguyên nhân khác.</div>
+      <div class="alert-id">Pasien demensia berat sering <strong>tidak bisa mengatakan "saya sakit."</strong> Akibatnya, nyeri sering disalahartikan sebagai BPSD dan diabaikan. Jika pasien tiba-tiba gelisah, menolak makan/perawatan, atau menangis di malam hari, <strong>pikirkan dulu "apakah ini nyeri?"</strong> sebelum sebab lain.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>👀</span> 非語言疼痛徵兆<span class="tx" data-en="Non-Verbal Signs of Pain" data-vi="Dấu Hiệu Đau Không Lời" data-id="Tanda Nyeri Non-Verbal"> · Non-Verbal Pain Signs</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">😣</div>
+      <div class="card-title">臉部表情<span class="L2 en"> · Facial Expression</span><span class="L2 vi"> · Nét Mặt</span><span class="L2 id"> · Ekspresi Wajah</span></div>
+      <div class="card-body">皺眉、咬牙、緊閉雙眼、表情扭曲<br><em data-en="Frowning, clenched jaw, eyes tightly shut, grimacing" data-vi="Nhăn mặt, nghiến răng, nhắm chặt mắt, mặt méo mó" data-id="Mengernyit, rahang mengencang, mata terpejam erat, meringis">Frowning, clenched jaw, grimacing</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗣️</div>
+      <div class="card-title">聲音表現<span class="L2 en"> · Vocalisations</span><span class="L2 vi"> · Âm Thanh</span><span class="L2 id"> · Vokalisasi</span></div>
+      <div class="card-body">呻吟、哭叫、嘆氣、夜間異常哭叫<br><em data-en="Moaning, crying out, sighing, abnormal crying at night" data-vi="Rên rỉ, kêu khóc, thở dài, khóc đêm bất thường" data-id="Mengerang, berteriak, mengeluh, menangis abnormal di malam hari">Moaning, crying out, sighing</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏃</div>
+      <div class="card-title">身體動作<span class="L2 en"> · Body Movements</span><span class="L2 vi"> · Cử Động Cơ Thể</span><span class="L2 id"> · Gerakan Tubuh</span></div>
+      <div class="card-body">躁動不安、緊握某部位、避免移動或被觸碰某部位、肢體僵硬<br><em data-en="Restlessness, guarding a body part, avoiding movement/touch, rigidity" data-vi="Bồn chồn, giữ chặt một vùng cơ thể, tránh di chuyển/chạm vào, cứng người" data-id="Gelisah, melindungi bagian tubuh, menghindari gerakan/sentuhan, kaku">Restlessness, guarding a body part</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🍽️</div>
+      <div class="card-title">日常行為改變<span class="L2 en"> · Change in Daily Behaviour</span><span class="L2 vi"> · Thay Đổi Hành Vi Hàng Ngày</span><span class="L2 id"> · Perubahan Perilaku Harian</span></div>
+      <div class="card-body">突然拒食、拒絕洗澡或更衣、抗拒移動或翻身<br><em data-en="Sudden refusal of food, bathing, dressing, or being moved/repositioned" data-vi="Bỗng từ chối ăn, tắm, thay đồ, hoặc di chuyển/xoay người" data-id="Tiba-tiba menolak makan, mandi, berpakaian, atau dipindah/diubah posisi">Sudden refusal of food, bathing</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">😡</div>
+      <div class="card-title">情緒/社交改變<span class="L2 en"> · Mood/Social Change</span><span class="L2 vi"> · Thay Đổi Tâm Trạng/Xã Hội</span><span class="L2 id"> · Perubahan Mood/Sosial</span></div>
+      <div class="card-body">突然變得易怒、攻擊性增加、退縮不說話<br><em data-en="Sudden irritability, increased aggression, withdrawal" data-vi="Bỗng dễ cáu, tăng hung hăng, thu mình" data-id="Tiba-tiba mudah marah, agresi meningkat, menarik diri">Sudden irritability, increased aggression</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">😴</div>
+      <div class="card-title">睡眠改變<span class="L2 en"> · Sleep Changes</span><span class="L2 vi"> · Thay Đổi Giấc Ngủ</span><span class="L2 id"> · Perubahan Tidur</span></div>
+      <div class="card-body">難以入睡、頻繁夜醒、夜間哭叫加劇<br><em data-en="Difficulty falling asleep, frequent waking, increased night-time crying" data-vi="Khó ngủ, thức đêm nhiều lần, khóc đêm tăng" data-id="Sulit tidur, sering terbangun, menangis malam meningkat">Difficulty sleeping, night-time crying</em></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🩺</span> 發現疼痛徵兆時該怎麼做<span class="tx" data-en="What To Do When You Notice Pain Signs" data-vi="Khi Phát Hiện Dấu Hiệu Đau, Phải Làm Gì" data-id="Yang Harus Dilakukan Saat Melihat Tanda Nyeri"> · What To Do</span></div>
+  <ul class="step-list">
+    <li class="step-item"><div class="step-num">1</div><div class="step-body">
+      <div class="step-zh">先排除明顯外部原因：衣物太緊、姿勢不良、尿布太濕、皮膚壓瘡</div>
+      <div class="step-en">First rule out obvious external causes: tight clothing, poor positioning, a wet diaper, or a pressure sore</div>
+      <div class="step-vi">Trước tiên loại trừ nguyên nhân bên ngoài rõ ràng: quần áo quá chật, tư thế xấu, tã quá ướt, loét tỳ đè</div>
+      <div class="step-id">Pertama singkirkan penyebab eksternal yang jelas: pakaian terlalu ketat, posisi buruk, popok terlalu basah, luka tekan</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">2</div><div class="step-body">
+      <div class="step-zh">觀察並記錄：什麼時候開始、什麼動作會誘發或加劇（如翻身、移動某肢體）</div>
+      <div class="step-en">Observe and record: when it started, and what movements trigger or worsen it (e.g. repositioning, moving a limb)</div>
+      <div class="step-vi">Quan sát và ghi lại: bắt đầu khi nào, động tác nào kích hoạt hoặc làm nặng hơn (xoay người, di chuyển chi)</div>
+      <div class="step-id">Amati dan catat: kapan mulai, dan gerakan apa yang memicu/memperburuk (mengubah posisi, menggerakkan anggota tubuh)</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">3</div><div class="step-body">
+      <div class="step-zh">輕柔觸診可疑部位，觀察患者是否出現皺眉、縮回或呻吟反應</div>
+      <div class="step-en">Gently palpate the suspected area and watch for frowning, withdrawal, or moaning</div>
+      <div class="step-vi">Sờ nhẹ vùng nghi ngờ và quan sát xem bệnh nhân có nhăn mặt, co rút hoặc rên không</div>
+      <div class="step-id">Raba lembut area yang dicurigai dan perhatikan apakah pasien mengernyit, menarik diri, atau mengerang</div>
+    </div></li>
+    <li class="step-item"><div class="step-num">4</div><div class="step-body">
+      <div class="step-zh">將觀察到的徵兆（而非猜測的「他在生氣」）告知護理師/家屬，由醫護評估是否需止痛</div>
+      <div class="step-en">Report the observed signs (not just "he seems angry") to the nurse/family so a clinician can assess pain relief needs</div>
+      <div class="step-vi">Báo cáo các dấu hiệu quan sát được (không chỉ là "ông ấy có vẻ giận") cho y tá/gia đình để đánh giá nhu cầu giảm đau</div>
+      <div class="step-id">Laporkan tanda yang diamati (bukan hanya "dia tampak marah") ke perawat/keluarga agar dinilai kebutuhan pereda nyeri</div>
+      <div class="step-note">不可自行給予止痛藥或外用藥膏，須經醫護評估。</div>
+    </div></li>
+  </ul>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">💡</div>
+    <div class="alert-body">
+      <div class="alert-title">常見隱藏疼痛來源<span class="tx" data-en="Common Hidden Sources of Pain" data-vi="Nguồn Đau Tiềm Ẩn Thường Gặp" data-id="Sumber Nyeri Tersembunyi Yang Umum"> · Common Hidden Sources</span></div>
+      <div class="alert-text">便秘 ｜ 牙痛或口腔潰瘍 ｜ 尿布疹或皮膚壓瘡 ｜ 關節炎（關節僵硬腫痛） ｜ 跌倒後未發現的骨折或扭傷 ｜ 泌尿道感染</div>
+      <div class="alert-en">Constipation | Toothache or mouth ulcers | Diaper rash or pressure sores | Arthritis (stiff, swollen joints) | Undetected fracture/sprain after a fall | UTI</div>
+      <div class="alert-vi">Táo bón | Đau răng hoặc loét miệng | Hăm tã hoặc loét tỳ đè | Viêm khớp (khớp cứng, sưng đau) | Gãy/bong gân chưa phát hiện sau ngã | Nhiễm trùng tiết niệu</div>
+      <div class="alert-id">Sembelit | Sakit gigi atau sariawan | Ruam popok atau luka tekan | Artritis (sendi kaku, bengkak) | Patah/keseleo yang tak terdeteksi setelah jatuh | ISK</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
      WANDERING
 ════════════════════════════════════ -->
 <div id="wandering" class="section">
@@ -2783,7 +3058,44 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     </div>
   </div>
 
-  <div class="sec-title"><span>📅</span> 監測頻率建議<span class="tx" data-en="Monitoring Frequency" data-vi="Khuyến Nghị Tần Suất Theo Dõi" data-id="Rekomendasi Frekuensi Pemantauan"> · Monitoring Frequency</span></div>
+  <div class="sec-title"><span>🦠</span> 感染警訊：認知症患者常「不發燒」<span class="tx" data-en="Infection Warning Signs: Often WITHOUT Fever" data-vi="Dấu Hiệu Nhiễm Trùng: Thường KHÔNG Sốt" data-id="Tanda Infeksi: Sering TANPA Demam"> · Infection Warning Signs</span></div>
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">認知症老人感染，常見表現不是發燒<span class="tx" data-en="In Dementia Patients, Infection Often Does NOT Present as Fever" data-vi="Ở Người Sa Sút Trí Tuệ, Nhiễm Trùng Thường KHÔNG Biểu Hiện Bằng Sốt" data-id="Pada Pasien Demensia, Infeksi Sering TIDAK Bermanifestasi Sebagai Demam"> · Infection ≠ Fever</span></div>
+      <div class="alert-text">年長認知症患者感染時，<strong>體溫可能正常或只是微升</strong>，最常見的表現反而是：<strong>突然變得更兇／更躁動</strong>、<strong>突然胡言亂語或意識混亂加重</strong>、<strong>突然不吃飯或拒水</strong>。看到這些變化時，<strong>務必想到「感染」的可能性</strong>，並立即通報。</div>
+      <div class="alert-en">In elderly dementia patients, infection often presents <strong>without a clear fever</strong> — instead the most common signs are: <strong>suddenly becoming more aggressive or agitated</strong>, <strong>sudden confusion or worsening of mental status</strong>, and <strong>sudden refusal of food or water</strong>. If you see these changes, <strong>always consider infection</strong> and report immediately.</div>
+      <div class="alert-vi">Ở người cao tuổi sa sút trí tuệ, nhiễm trùng thường <strong>không kèm sốt rõ rệt</strong> — dấu hiệu thường gặp nhất là: <strong>bỗng trở nên hung hăng/kích động hơn</strong>, <strong>bỗng nói lảm nhảm hoặc lú lẫn nặng hơn</strong>, và <strong>bỗng bỏ ăn hoặc từ chối uống nước</strong>. Khi thấy những thay đổi này, <strong>luôn nghĩ đến khả năng nhiễm trùng</strong> và báo cáo ngay.</div>
+      <div class="alert-id">Pada lansia dengan demensia, infeksi sering muncul <strong>tanpa demam yang jelas</strong> — tanda paling umum justru: <strong>tiba-tiba menjadi lebih agresif/gelisah</strong>, <strong>tiba-tiba bicara ngawur atau kebingungan memburuk</strong>, dan <strong>tiba-tiba menolak makan atau minum</strong>. Jika melihat perubahan ini, <strong>selalu pertimbangkan kemungkinan infeksi</strong> dan laporkan segera.</div>
+    </div>
+  </div>
+
+  <div class="info-table-wrap">
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>感染類型<span class="L2 en"> Infection Type</span><span class="L2 vi"> Loại Nhiễm Trùng</span><span class="L2 id"> Jenis Infeksi</span></th>
+        <th>警訊徵象<span class="L2 en"> Warning Signs</span><span class="L2 vi"> Dấu Hiệu Cảnh Báo</span><span class="L2 id"> Tanda Peringatan</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>泌尿道感染<span class="L2 en"><br>UTI</span><span class="L2 vi"><br>Nhiễm trùng tiết niệu</span><span class="L2 id"><br>ISK</span></strong></td>
+        <td><span class="danger">突然意識混亂加重、躁動、尿液混濁有異味、頻尿或失禁加重、排尿時表情痛苦</span><span class="L2 en"><br>Sudden worsening confusion/agitation, cloudy or foul-smelling urine, increased frequency/incontinence, grimacing when urinating</span><span class="L2 vi"><br>Lú lẫn/kích động đột ngột nặng hơn, nước tiểu đục có mùi hôi, tiểu nhiều/tiểu không kiểm soát hơn, nhăn mặt khi tiểu</span><span class="L2 id"><br>Kebingungan/agitasi mendadak memburuk, urin keruh berbau, frekuensi/inkontinensia meningkat, meringis saat buang air kecil</span></td>
+      </tr>
+      <tr>
+        <td><strong>肺炎<span class="L2 en"><br>Pneumonia</span><span class="L2 vi"><br>Viêm phổi</span><span class="L2 id"><br>Pneumonia</span></strong></td>
+        <td><span class="danger">呼吸變快或變淺、咳嗽（可能無痰）、進食/吞嚥時嗆咳增加、嗜睡或活力明顯下降、嘴唇或指甲發青</span><span class="L2 en"><br>Faster/shallower breathing, cough (may be dry), increased choking when eating/drinking, drowsiness or marked drop in energy, bluish lips/nails</span><span class="L2 vi"><br>Thở nhanh/nông hơn, ho (có thể khan), nghẹn khi ăn/uống nhiều hơn, lờ đờ hoặc giảm sức rõ rệt, môi/đầu ngón tay tím tái</span><span class="L2 id"><br>Napas lebih cepat/dangkal, batuk (mungkin kering), tersedak saat makan/minum meningkat, mengantuk atau energi menurun drastis, bibir/kuku kebiruan</span></td>
+      </tr>
+      <tr>
+        <td><strong>其他常見感染<span class="L2 en"><br>Other Common Infections</span><span class="L2 vi"><br>Nhiễm Trùng Khác Thường Gặp</span><span class="L2 id"><br>Infeksi Umum Lain</span></strong></td>
+        <td>傷口/壓瘡周圍紅腫熱痛或滲液 ｜ 皮膚出現新的紅疹或破損發炎<span class="L2 en"><br>Redness/heat/swelling/discharge around a wound or pressure sore | New rash or inflamed skin breakdown</span><span class="L2 vi"><br>Vùng vết thương/loét tỳ đè đỏ, nóng, sưng, chảy dịch | Phát ban mới hoặc da bị viêm/loét</span><span class="L2 id"><br>Kemerahan/hangat/bengkak/cairan di sekitar luka atau luka tekan | Ruam baru atau kulit meradang/rusak</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="sec-title"><span>📊</span> 監測頻率建議<span class="tx" data-en="Monitoring Frequency" data-vi="Khuyến Nghị Tần Suất Theo Dõi" data-id="Rekomendasi Frekuensi Pemantauan"> · Monitoring Frequency</span></div>
   <table class="info-table">
     <thead><tr><th>項目<span class="tx" data-en="Parameter" data-vi="Thông Số" data-id="Parameter"> · Parameter</span></th><th>頻率<span class="tx" data-en="Frequency" data-vi="Tần Suất" data-id="Frekuensi"> · Frequency</span></th><th>時間點<span class="tx" data-en="Timing" data-vi="Thời Điểm" data-id="Waktu"> · Timing</span></th></tr></thead>
     <tbody>
@@ -2909,6 +3221,28 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
     <div class="page-desc">認知症患者跌倒風險評估與預防措施<span class="L2 en"> · Fall risk assessment and prevention strategies</span><span class="L2 vi"> · Đánh giá nguy cơ té ngã và biện pháp phòng ngừa cho bệnh nhân sa sút trí tuệ</span><span class="L2 id"> · Penilaian risiko jatuh dan tindakan pencegahan untuk pasien demensia</span></div>
   </div>
 
+  <div class="sec-title"><span>📋</span> 跌倒危險因子自我檢核<span class="tx" data-en="Fall Risk Factor Self-Checklist" data-vi="Danh Sách Tự Kiểm Tra Yếu Tố Nguy Cơ Té Ngã" data-id="Daftar Periksa Mandiri Faktor Risiko Jatuh"> · Fall Risk Checklist</span></div>
+  <div class="alert alert-amber">
+    <div class="alert-ico">⚠️</div>
+    <div class="alert-body">
+      <div class="alert-title">看護每週自我評估<span class="tx" data-en="Weekly Self-Assessment by Caregiver" data-vi="Tự Đánh Giá Hàng Tuần Của Người Chăm Sóc" data-id="Penilaian Mandiri Mingguan oleh Pengasuh"> · Weekly Check</span></div>
+      <div class="alert-text">下方任何一項「是」都表示跌倒風險較高，請與家屬討論加強預防措施。</div>
+      <div class="alert-en">Any "Yes" below indicates higher fall risk — discuss with family to strengthen prevention measures.</div>
+      <div class="alert-vi">Bất kỳ câu "Có" nào dưới đây đều cho thấy nguy cơ té ngã cao hơn — hãy thảo luận với gia đình để tăng cường biện pháp phòng ngừa.</div>
+      <div class="alert-id">Setiap jawaban "Ya" di bawah ini menunjukkan risiko jatuh lebih tinggi — diskusikan dengan keluarga untuk memperkuat tindakan pencegahan.</div>
+    </div>
+  </div>
+  <ul class="checklist">
+    <li><div><div class="cl-zh">☐ 最近1個月內曾發生跌倒</div><div class="cl-en" data-en="☐ Had a fall in the past month" data-vi="☐ Đã té ngã trong tháng qua" data-id="☐ Pernah jatuh dalam sebulan terakhir"></div></div></li>
+    <li><div><div class="cl-zh">☐ 夜間頻繁如廁（每晚2次以上）</div><div class="cl-en" data-en="☐ Frequent nighttime toileting (2+ times/night)" data-vi="☐ Đi vệ sinh đêm thường xuyên (2+ lần/đêm)" data-id="☐ Sering ke toilet malam hari (2+ kali/malam)"></div></div></li>
+    <li><div><div class="cl-zh">☐ 有頭暈、站起來時感到不穩</div><div class="cl-en" data-en="☐ Dizziness or unsteadiness when standing up" data-vi="☐ Chóng mặt hoặc không ổn định khi đứng dậy" data-id="☐ Pusing atau tidak stabil saat berdiri"></div></div></li>
+    <li><div><div class="cl-zh">☐ 使用助行器、柺杖或輪椅</div><div class="cl-en" data-en="☐ Uses walker, cane, or wheelchair" data-vi="☐ Dùng khung tập đi, gậy hoặc xe lăn" data-id="☐ Menggunakan alat bantu jalan, tongkat, atau kursi roda"></div></div></li>
+    <li><div><div class="cl-zh">☐ 正在服用安眠藥、鎮靜劑或血壓藥</div><div class="cl-en" data-en="☐ Currently taking sedatives, sleeping pills, or blood pressure medication" data-vi="☐ Đang dùng thuốc ngủ, thuốc an thần hoặc thuốc huyết áp" data-id="☐ Sedang mengonsumsi obat tidur, sedatif, atau obat tekanan darah"></div></div></li>
+    <li><div><div class="cl-zh">☐ 步態不穩或有拖曳步伐（拖腳走路）</div><div class="cl-en" data-en="☐ Unsteady gait or shuffling steps" data-vi="☐ Dáng đi không vững hoặc bước chân kéo lê" data-id="☐ Jalan tidak stabil atau langkah gontai"></div></div></li>
+    <li><div><div class="cl-zh">☐ 認知混亂（不清楚自己在哪裡）</div><div class="cl-en" data-en="☐ Cognitive confusion (doesn't know where they are)" data-vi="☐ Nhầm lẫn nhận thức (không biết mình đang ở đâu)" data-id="☐ Kebingungan kognitif (tidak tahu di mana mereka berada)"></div></div></li>
+    <li><div><div class="cl-zh">☐ 視力不佳或戴眼鏡仍看不清</div><div class="cl-en" data-en="☐ Poor vision even with glasses" data-vi="☐ Thị lực kém ngay cả khi đeo kính" data-id="☐ Penglihatan buruk meski dengan kacamata"></div></div></li>
+  </ul>
+
   <div class="sec-title"><span>🏠</span> 居家環境安全檢核<span class="tx" data-en="Home Safety Checklist" data-vi="Danh Sách Kiểm Tra An Toàn Tại Nhà" data-id="Daftar Periksa Keamanan Rumah"> · Home Safety Checklist</span></div>
   <ul class="checklist">
     <li><div><div class="cl-zh">確保所有走廊和房間無雜物堆積</div><div class="cl-en" data-en="Keep all hallways and rooms clear of clutter" data-vi="Giữ tất cả hành lang và phòng không có vật cản" data-id="Jaga semua lorong dan ruangan bebas dari barang berserakan">Keep all hallways and rooms clear of clutter</div></div></li>
@@ -2993,6 +3327,117 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <div class="card-icon">⏰</div>
       <div class="card-title">T<span class="L2 en"> — Time</span><span class="L2 vi"> — Thời Gian</span><span class="L2 id"> — Waktu</span> 時間</div>
       <div class="card-body">以上任何一項 → 立即撥119<br><em data-en="Any of the above → Call 119 immediately" data-vi="Nếu có bất kỳ dấu hiệu nào → Gọi 119 ngay lập tức" data-id="Jika ada salah satu di atas → Segera hubungi 119">Any of the above → Call 119 immediately</em></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     CARE RECORD MODULE 照顧記錄教學
+════════════════════════════════════ -->
+<div id="care-record" class="section">
+  <div class="page-header">
+    <div class="eyebrow">照顧記錄 · CARE RECORDS</div>
+    <div class="page-title">📝 照顧記錄教學</div>
+    <div class="page-desc">正確的每日照顧記錄對雇主、家屬與醫療團隊極為重要<span class="L2 en"> · Accurate daily care records are vital for employers, family, and the medical team</span><span class="L2 vi"> · Hồ sơ chăm sóc hàng ngày chính xác rất quan trọng cho chủ lao động, gia đình và nhóm y tế</span><span class="L2 id"> · Catatan perawatan harian yang akurat sangat penting bagi pemberi kerja, keluarga, dan tim medis</span></div>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">📋</div>
+    <div class="alert-body">
+      <div class="alert-title">為什麼記錄很重要？<span class="tx" data-en="Why Are Records Important?" data-vi="Tại Sao Hồ Sơ Quan Trọng?" data-id="Mengapa Catatan Penting?"> · Why it matters</span></div>
+      <div class="alert-text">好的記錄可以：① 幫助醫師做出正確診斷 ② 讓家屬了解病患狀況 ③ 發現病情惡化的早期跡象 ④ 保護看護自身（有記錄才有憑據）</div>
+      <div class="alert-en">Good records help: ① Doctors make accurate diagnoses ② Family understand the patient's condition ③ Detect early signs of deterioration ④ Protect the caregiver (documentation is evidence)</div>
+      <div class="alert-vi">Hồ sơ tốt giúp: ① Bác sĩ chẩn đoán chính xác ② Gia đình hiểu tình trạng bệnh nhân ③ Phát hiện dấu hiệu xấu đi sớm ④ Bảo vệ người chăm sóc (tài liệu là bằng chứng)</div>
+      <div class="alert-id">Catatan yang baik membantu: ① Dokter membuat diagnosis yang akurat ② Keluarga memahami kondisi pasien ③ Mendeteksi tanda-tanda memburuk lebih awal ④ Melindungi pengasuh (dokumentasi adalah bukti)</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📊</span> 每日必記錄項目<span class="tx" data-en="Daily Must-Record Items" data-vi="Các Mục Phải Ghi Hàng Ngày" data-id="Item yang Wajib Dicatat Setiap Hari"> · Daily Records</span></div>
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>記錄項目<span class="tx" data-en="Record Item" data-vi="Mục Ghi" data-id="Item Catatan"> · Item</span></th>
+        <th>記錄方式<span class="tx" data-en="How to Record" data-vi="Cách Ghi" data-id="Cara Mencatat"> · How</span></th>
+        <th>通報標準<span class="tx" data-en="When to Report" data-vi="Tiêu Chuẩn Báo Cáo" data-id="Standar Pelaporan"> · Report If</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>🍽️ 進食量</strong><br><em data-en="Food Intake" data-vi="Lượng Ăn" data-id="Asupan Makanan">Food Intake</em></td>
+        <td>每餐記錄：吃了幾成（全部/3/4/1/2/少許/未吃）及食物種類<br><em data-en="Per meal: percentage eaten (all/3/4/half/little/none) and food type" data-vi="Mỗi bữa: phần trăm ăn được và loại thức ăn" data-id="Per makan: persentase dimakan dan jenis makanan">Portion eaten + food type</em></td>
+        <td>吃不到一半超過2餐，或完全不吃超過24小時<br><em data-en="Less than half for 2+ meals, or zero intake over 24 hours" data-vi="Ăn dưới một nửa 2+ bữa, hoặc không ăn gì 24 giờ" data-id="Kurang dari setengah 2+ makan, atau tidak ada asupan 24 jam">Less than half 2+ meals, or zero 24 hrs</em></td>
+      </tr>
+      <tr>
+        <td><strong>💧 飲水量</strong><br><em data-en="Fluid Intake" data-vi="Lượng Nước Uống" data-id="Asupan Cairan">Fluid Intake</em></td>
+        <td>記錄每次給水量（ml）；每日合計是否達1500 ml<br><em data-en="Record each fluid amount (ml); check if daily total reaches 1500 ml" data-vi="Ghi lượng nước mỗi lần (ml); kiểm tra tổng ngày có đạt 1500 ml" data-id="Catat jumlah cairan setiap kali (ml); periksa apakah total harian mencapai 1500 ml">Total daily fluids (target 1500 ml)</em></td>
+        <td>一日飲水量少於800 ml，或拒絕喝水<br><em data-en="Daily fluids less than 800 ml, or refusal to drink" data-vi="Lượng nước hàng ngày dưới 800 ml, hoặc từ chối uống" data-id="Cairan harian kurang dari 800 ml, atau menolak minum">Daily fluids &lt; 800 ml, or refusal</em></td>
+      </tr>
+      <tr>
+        <td><strong>🚽 排便</strong><br><em data-en="Bowel Movement" data-vi="Đại Tiện" data-id="Buang Air Besar">Bowel Movement</em></td>
+        <td>每次排便時間、量（多/中/少）、性狀（正常/稀/硬/血便）<br><em data-en="Time, amount (large/medium/small), consistency (normal/loose/hard/bloody)" data-vi="Thời gian, lượng, tính chất (bình thường/lỏng/cứng/có máu)" data-id="Waktu, jumlah, konsistensi (normal/lembek/keras/berdarah)">Time, amount, consistency</em></td>
+        <td>超過3天未排便、腹瀉超過2次、或血便<br><em data-en="No bowel movement for 3+ days, diarrhoea 2+ times, or blood in stool" data-vi="Không đi đại tiện 3+ ngày, tiêu chảy 2+ lần, hoặc phân có máu" data-id="Tidak BAB 3+ hari, diare 2+ kali, atau darah dalam tinja">No BM 3+ days, diarrhoea, or blood</em></td>
+      </tr>
+      <tr>
+        <td><strong>😴 睡眠</strong><br><em data-en="Sleep" data-vi="Giấc Ngủ" data-id="Tidur">Sleep</em></td>
+        <td>夜間入睡時間、醒來次數、起床時間；白天是否午睡<br><em data-en="Night: sleep time, wake-ups, rise time; daytime napping noted" data-vi="Ban đêm: giờ ngủ, số lần thức, giờ dậy; ghi chú ngủ trưa ban ngày" data-id="Malam: waktu tidur, bangun, waktu bangun pagi; tidur siang dicatat">Sleep/wake times, daytime napping</em></td>
+        <td>連續3晚嚴重失眠，或白天完全無法喚醒<br><em data-en="Severe insomnia for 3+ consecutive nights, or impossible to rouse during day" data-vi="Mất ngủ nặng 3+ đêm liên tiếp, hoặc không thể đánh thức ban ngày" data-id="Insomnia berat 3+ malam berturut-turut, atau tidak bisa dibangunkan siang">3+ nights insomnia, or daytime unrousable</em></td>
+      </tr>
+      <tr>
+        <td><strong>😊 情緒狀態</strong><br><em data-en="Mood" data-vi="Trạng Thái Cảm Xúc" data-id="Kondisi Emosi">Mood</em></td>
+        <td>簡單描述：平靜/焦慮/愉快/易怒/哭泣/冷漠；與前一天比較<br><em data-en="Simple description: calm/anxious/cheerful/irritable/crying/apathetic; compare to previous day" data-vi="Mô tả đơn giản: bình tĩnh/lo lắng/vui vẻ/cáu kỉnh/khóc/thờ ơ; so với ngày hôm trước" data-id="Deskripsi sederhana: tenang/cemas/ceria/mudah marah/menangis/apatis; bandingkan dengan hari sebelumnya">Calm/anxious/irritable/etc., compare daily</em></td>
+        <td>突然明顯情緒改變，或出現恐懼/攻擊行為<br><em data-en="Sudden marked mood change, or fear/aggression appears" data-vi="Thay đổi tâm trạng đột ngột rõ rệt, hoặc xuất hiện sợ hãi/hung hăng" data-id="Perubahan suasana hati mendadak yang nyata, atau rasa takut/agresi muncul">Sudden mood change or aggression</em></td>
+      </tr>
+      <tr>
+        <td><strong>⚠️ 異常事件</strong><br><em data-en="Incidents" data-vi="Sự Cố Bất Thường" data-id="Kejadian Tidak Normal">Incidents</em></td>
+        <td>任何異常：跌倒、嗆咳、拒食、幻覺、攻擊、皮膚發紅等，記錄時間與詳情<br><em data-en="Any incident: fall, choking, food refusal, hallucination, aggression, skin redness — record time and details" data-vi="Mọi sự cố: ngã, nghẹn, từ chối ăn, ảo giác, hung hăng, đỏ da — ghi thời gian và chi tiết" data-id="Insiden apa pun: jatuh, tersedak, penolakan makan, halusinasi, agresi, kemerahan kulit — catat waktu dan detail">Any incident + time + details</em></td>
+        <td>所有異常事件均需立即或當天通報家屬<br><em data-en="All incidents must be reported to family immediately or on the same day" data-vi="Mọi sự cố đều phải báo cáo cho gia đình ngay hoặc trong ngày" data-id="Semua insiden harus dilaporkan ke keluarga segera atau pada hari yang sama">All incidents: same-day report</em></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="sec-title"><span>📝</span> 記錄範本示例<span class="tx" data-en="Sample Record Template" data-vi="Mẫu Ghi Chép Ví Dụ" data-id="Contoh Template Catatan"> · Sample</span></div>
+  <div class="card" style="font-family:monospace;font-size:13px;line-height:1.9;background:var(--surface2);border:1px solid var(--border-mid)">
+    <div style="font-weight:700;margin-bottom:8px;font-family:'Noto Sans TC',sans-serif">📋 每日照顧記錄 — 範本</div>
+    <strong>日期：</strong>2024/01/15（一）&nbsp;&nbsp;<strong>值班看護：</strong>___<br>
+    <strong>早餐（07:30）：</strong>稀飯半碗、蒸蛋（吃了約7成）<br>
+    <strong>飲水（09:00）：</strong>溫水 200 ml<br>
+    <strong>午餐（12:00）：</strong>軟飯、炒青菜、豆腐（吃了約8成）<br>
+    <strong>飲水（14:00）：</strong>果汁 150 ml<br>
+    <strong>下午點心（15:00）：</strong>香蕉泥（全部）<br>
+    <strong>排便（10:30）：</strong>1次，量中等，性狀正常<br>
+    <strong>昨晚睡眠：</strong>22:00入睡，02:00起床1次如廁，06:30起床<br>
+    <strong>今日情緒：</strong>早上平靜，下午稍微焦慮（一直問晚飯時間）<br>
+    <strong>異常事件：</strong>無<br>
+    <strong>今日飲水合計：</strong>約 1350 ml（偏低，明日加強補水）
+  </div>
+
+  <div class="sec-title"><span>💡</span> 記錄技巧<span class="tx" data-en="Recording Tips" data-vi="Mẹo Ghi Chép" data-id="Tips Mencatat"> · Tips</span></div>
+  <div class="card-grid-3">
+    <div class="card">
+      <div class="card-icon">⏱️</div>
+      <div class="card-title">即時記錄<span class="L2 en"> · Record Immediately</span><span class="L2 vi"> · Ghi Ngay</span><span class="L2 id"> · Catat Segera</span></div>
+      <div class="card-body">事發後馬上記錄，不要等到一天結束再回想。記憶會模糊，細節是關鍵。<br><em data-en="Record immediately after events, not at end of day. Memory fades; details matter." data-vi="Ghi ngay sau sự kiện, không để đến cuối ngày. Ký ức mờ dần; chi tiết quan trọng." data-id="Catat segera setelah kejadian, bukan di akhir hari. Memori memudar; detail sangat penting.">Record right away, not at end of day.</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📏</div>
+      <div class="card-title">具體數字<span class="L2 en"> · Be Specific</span><span class="L2 vi"> · Cụ Thể</span><span class="L2 id"> · Spesifik</span></div>
+      <div class="card-body">寫「喝了200 ml」比「喝了一點」好；寫「吃了約七成」比「吃得不多」好。<br><em data-en="'Drank 200 ml' is better than 'drank a little'; '~70%' is better than 'ate less'." data-vi="'Uống 200 ml' tốt hơn 'uống một ít'; 'khoảng 70%' tốt hơn 'ăn ít hơn'." data-id="'Minum 200 ml' lebih baik dari 'minum sedikit'; '~70%' lebih baik dari 'makan sedikit'.">Use numbers, not vague terms.</em></div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔍</div>
+      <div class="card-title">比較前後<span class="L2 en"> · Compare to Yesterday</span><span class="L2 vi"> · So Sánh Hôm Qua</span><span class="L2 id"> · Bandingkan Kemarin</span></div>
+      <div class="card-body">每天記錄要與前一天比較。「今天比昨天更焦慮」、「跌倒後走路更不穩」這類觀察極有價值。<br><em data-en="Compare to yesterday. 'More anxious today than yesterday' or 'less stable since the fall' are valuable observations." data-vi="So sánh với hôm qua. 'Lo lắng hơn hôm nay' hoặc 'kém ổn định hơn sau khi té' là những quan sát quý giá." data-id="Bandingkan dengan kemarin. 'Lebih cemas hari ini' atau 'kurang stabil setelah jatuh' adalah pengamatan yang berharga.">Compare daily changes.</em></div>
+    </div>
+  </div>
+
+  <div class="alert alert-amber">
+    <div class="alert-ico">📤</div>
+    <div class="alert-body">
+      <div class="alert-title">交班時記錄要做什麼？<span class="tx" data-en="What to Do With Records When Handing Over?" data-vi="Phải Làm Gì Với Hồ Sơ Khi Bàn Giao?" data-id="Apa yang Harus Dilakukan dengan Catatan Saat Serah Terima?"> · Handover</span></div>
+      <div class="alert-text">① 口頭說明重要事項給接班者 ② 確認接班者已閱讀記錄 ③ 記錄本放在固定位置（如床頭或護理站），不要帶走 ④ 每週一次讓家屬確認簽名</div>
+      <div class="alert-en">① Verbally brief the next caregiver on key matters ② Confirm they have read the record ③ Keep the record book in a fixed location (e.g. bedside or nursing station) — never take it away ④ Weekly family signature review</div>
+      <div class="alert-vi">① Báo cáo miệng những điểm quan trọng cho người chăm sóc tiếp theo ② Xác nhận họ đã đọc hồ sơ ③ Giữ sổ ghi chép ở vị trí cố định ④ Gia đình ký xác nhận hàng tuần</div>
+      <div class="alert-id">① Briefing lisan ke pengasuh berikutnya ② Konfirmasi mereka sudah membaca catatan ③ Simpan buku catatan di lokasi tetap ④ Keluarga tanda tangan setiap minggu</div>
     </div>
   </div>
 </div>
@@ -3367,6 +3812,52 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <div class="alert-en">If the patient suddenly becomes confused, agitated, or has increased hallucinations — <strong>report immediately</strong> to the nurse or family. Delirium has treatable causes (infection, medication, dehydration).</div>
       <div class="alert-vi">Nếu bệnh nhân đột ngột trở nên lú lẫn, kích động hoặc ảo giác tăng lên — <strong>báo cáo ngay</strong> cho y tá hoặc gia đình. Mê sảng có nguyên nhân có thể điều trị được (nhiễm trùng, thuốc, mất nước).</div>
       <div class="alert-id">Jika pasien tiba-tiba menjadi bingung, gelisah, atau halusinasi meningkat — <strong>laporkan segera</strong> ke perawat atau keluarga. Delirium memiliki penyebab yang bisa diobati (infeksi, obat-obatan, dehidrasi).</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>⏱️</span> 30秒辨別：認知症 vs 譫妄<span class="tx" data-en="30-Second Check: Dementia vs Delirium" data-vi="Kiểm Tra 30 Giây: Sa Sút Trí Tuệ vs Mê Sảng" data-id="Cek 30 Detik: Demensia vs Delirium"> · 30-Second Check</span></div>
+  <div class="info-table-wrap">
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>項目<span class="L2 en"> Item</span><span class="L2 vi"> Mục</span><span class="L2 id"> Item</span></th>
+        <th>🧠 認知症<span class="L2 en"> Dementia</span><span class="L2 vi"> Sa Sút Trí Tuệ</span><span class="L2 id"> Demensia</span></th>
+        <th>⚡ 譫妄<span class="L2 en"> Delirium</span><span class="L2 vi"> Mê Sảng</span><span class="L2 id"> Delirium</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>發生速度</strong><span class="L2 en"><br>Onset</span><span class="L2 vi"><br>Khởi phát</span><span class="L2 id"><br>Onset</span></td>
+        <td><span class="normal">慢慢發生</span><span class="L2 en"><br>Gradual</span><span class="L2 vi"><br>Từ từ</span><span class="L2 id"><br>Bertahap</span></td>
+        <td><span class="danger">突然發生</span><span class="L2 en"><br>Sudden</span><span class="L2 vi"><br>Đột ngột</span><span class="L2 id"><br>Mendadak</span></td>
+      </tr>
+      <tr>
+        <td><strong>時間長短</strong><span class="L2 en"><br>Time Frame</span><span class="L2 vi"><br>Khung thời gian</span><span class="L2 id"><br>Jangka waktu</span></td>
+        <td><span class="normal">數月～數年</span><span class="L2 en"><br>Months–years</span><span class="L2 vi"><br>Vài tháng–năm</span><span class="L2 id"><br>Bulan–tahun</span></td>
+        <td><span class="danger">幾小時～幾天</span><span class="L2 en"><br>Hours–days</span><span class="L2 vi"><br>Vài giờ–ngày</span><span class="L2 id"><br>Jam–hari</span></td>
+      </tr>
+      <tr>
+        <td><strong>可逆性</strong><span class="L2 en"><br>Reversibility</span><span class="L2 vi"><br>Khả năng hồi phục</span><span class="L2 id"><br>Reversibilitas</span></td>
+        <td><span class="normal">通常不可逆</span><span class="L2 en"><br>Usually irreversible</span><span class="L2 vi"><br>Thường không hồi phục</span><span class="L2 id"><br>Biasanya tidak reversibel</span></td>
+        <td><span class="danger">常可逆（治療誘因後可改善）</span><span class="L2 en"><br>Often reversible</span><span class="L2 vi"><br>Thường có thể hồi phục</span><span class="L2 id"><br>Sering reversibel</span></td>
+      </tr>
+      <tr>
+        <td><strong>病程型態</strong><span class="L2 en"><br>Course</span><span class="L2 vi"><br>Diễn biến</span><span class="L2 id"><br>Pola</span></td>
+        <td><span class="normal">穩定退化</span><span class="L2 en"><br>Stable decline</span><span class="L2 vi"><br>Suy giảm ổn định</span><span class="L2 id"><br>Penurunan stabil</span></td>
+        <td><span class="danger">起伏很大，時好時壞</span><span class="L2 en"><br>Fluctuates greatly</span><span class="L2 vi"><br>Dao động nhiều</span><span class="L2 id"><br>Fluktuasi besar</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="alert alert-teal">
+    <div class="alert-ico">💡</div>
+    <div class="alert-body">
+      <div class="alert-title">記住一句話<span class="tx" data-en="Remember This" data-vi="Hãy Nhớ Điều Này" data-id="Ingat Ini"> · Remember This</span></div>
+      <div class="alert-text">如果患者是<strong>「突然」</strong>變嚴重，而不是慢慢變嚴重 —— 這很可能是<strong>譫妄</strong>，不是單純認知症惡化，請<strong>立即通報</strong>。外籍看護最容易把這兩者搞混，這個分辨非常重要。</div>
+      <div class="alert-en">If the patient suddenly gets worse — not gradually — it is likely <strong>delirium</strong>, not just dementia progressing. <strong>Report immediately.</strong> This distinction is critical and often confused.</div>
+      <div class="alert-vi">Nếu bệnh nhân đột ngột trở nặng — không phải từ từ — thì khả năng cao là <strong>mê sảng</strong>, không chỉ là sa sút trí tuệ tiến triển. <strong>Báo cáo ngay.</strong></div>
+      <div class="alert-id">Jika pasien mendadak memburuk — bukan secara bertahap — kemungkinan besar itu <strong>delirium</strong>, bukan sekadar demensia yang memburuk. <strong>Laporkan segera.</strong></div>
     </div>
   </div>
 
@@ -3877,6 +4368,80 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <div class="cl-en" data-en="Record meal intake and any choking episodes" data-vi="Ghi lại lượng ăn và bất kỳ sự cố nghẹn nào" data-id="Catat asupan makan dan kejadian tersedak"></div>
     </li>
   </ul>
+
+  <div class="sec-title"><span>🫁</span> 吸入性肺炎警訊辨識<span class="tx" data-en="Aspiration Pneumonia Warning Signs" data-vi="Nhận Biết Dấu Hiệu Cảnh Báo Viêm Phổi Hít" data-id="Mengenali Tanda Peringatan Pneumonia Aspirasi"> · Aspiration Pneumonia Warnings</span></div>
+  <div class="alert alert-red">
+    <div class="alert-ico">🚨</div>
+    <div class="alert-body">
+      <div class="alert-title">這些症狀可能是吸入性肺炎——立即通報家屬<span class="tx" data-en="These Symptoms May Indicate Aspiration Pneumonia — Report to Family Immediately" data-vi="Các Triệu Chứng Này Có Thể Là Viêm Phổi Hít — Báo Gia Đình Ngay" data-id="Gejala Ini Mungkin Menunjukkan Pneumonia Aspirasi — Laporkan ke Keluarga Segera"> · Report immediately</span></div>
+      <div class="alert-text">吸入性肺炎可在嗆咳後數小時至數天內出現，看護需觀察以下警訊：</div>
+      <div class="alert-en">Aspiration pneumonia can develop hours to days after a choking episode. Watch for these warning signs:</div>
+      <div class="alert-vi">Viêm phổi hít có thể xuất hiện sau vài giờ đến vài ngày sau khi bị nghẹn. Chú ý những dấu hiệu cảnh báo sau:</div>
+      <div class="alert-id">Pneumonia aspirasi dapat berkembang beberapa jam hingga hari setelah tersedak. Perhatikan tanda-tanda peringatan ini:</div>
+    </div>
+  </div>
+  <div class="card-grid-3">
+    <div class="card" style="border-left:4px solid var(--red)">
+      <div class="card-icon">🤧</div>
+      <div class="card-title">進食時或餐後咳嗽<span class="L2 en"> · Coughing During/After Meals</span><span class="L2 vi"> · Ho Khi/Sau Ăn</span><span class="L2 id"> · Batuk Saat/Setelah Makan</span></div>
+      <div class="card-body">進食中或餐後30分鐘內持續咳嗽，或咳嗽有增加趨勢。<br><em data-en="Persistent coughing during or within 30 minutes after meals, or an increasing cough trend." data-vi="Ho liên tục trong hoặc trong vòng 30 phút sau bữa ăn, hoặc xu hướng ho tăng dần." data-id="Batuk terus-menerus selama atau dalam 30 menit setelah makan, atau tren batuk meningkat.">Persistent coughing during or after meals.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red)">
+      <div class="card-icon">🔊</div>
+      <div class="card-title">聲音濕濁或沙啞<span class="L2 en"> · Wet/Gurgling Voice</span><span class="L2 vi"> · Giọng Ướt/Khàn</span><span class="L2 id"> · Suara Basah/Serak</span></div>
+      <div class="card-body">進食後聲音出現「水聲」（gurgling）、沙啞或含糊，表示食物可能進入氣道。<br><em data-en="Wet, gurgling, hoarse or muffled voice after eating suggests food entered the airway." data-vi="Giọng ướt, lục cục, khàn hoặc mờ sau khi ăn cho thấy thức ăn có thể đã vào đường thở." data-id="Suara basah, bergelembung, serak atau muffled setelah makan menunjukkan makanan mungkin masuk ke saluran napas.">Wet or gurgling voice after eating.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber)">
+      <div class="card-icon">🌡️</div>
+      <div class="card-title">發燒（體溫 ≥38°C）<span class="L2 en"> · Fever (≥38°C)</span><span class="L2 vi"> · Sốt (≥38°C)</span><span class="L2 id"> · Demam (≥38°C)</span></div>
+      <div class="card-body">嗆咳後24–72小時內出現發燒，特別是嗆咳嚴重後，需立即通報。<br><em data-en="Fever developing 24–72 hours after a choking episode, especially after severe choking, requires immediate reporting." data-vi="Sốt xuất hiện 24–72 giờ sau khi bị nghẹn nặng cần báo cáo ngay." data-id="Demam yang muncul 24–72 jam setelah tersedak, terutama setelah tersedak parah, perlu dilaporkan segera.">Fever 24–72 hours after choking.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber)">
+      <div class="card-icon">😮‍💨</div>
+      <div class="card-title">痰液增加或帶色<span class="L2 en"> · Increased/Coloured Sputum</span><span class="L2 vi"> · Đờm Tăng Hoặc Có Màu</span><span class="L2 id"> · Dahak Meningkat/Berwarna</span></div>
+      <div class="card-body">痰量突然增加，或痰液呈黃色、綠色（感染徵兆），需通報護士。<br><em data-en="Sudden increase in phlegm, or yellow/green sputum (infection sign) — report to nurse." data-vi="Tăng đột ngột về lượng đờm, hoặc đờm vàng/xanh (dấu hiệu nhiễm trùng) — báo y tá." data-id="Peningkatan mendadak dahak, atau dahak kuning/hijau (tanda infeksi) — laporkan ke perawat.">Increased or yellow/green sputum.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--amber)">
+      <div class="card-icon">💨</div>
+      <div class="card-title">呼吸急促或費力<span class="L2 en"> · Fast or Laboured Breathing</span><span class="L2 vi"> · Thở Nhanh Hoặc Khó Khăn</span><span class="L2 id"> · Napas Cepat atau Susah</span></div>
+      <div class="card-body">呼吸次數增加、喘氣、或呼吸時有喘鳴聲，可能是肺部受損的早期徵兆。<br><em data-en="Increased breathing rate, gasping, or wheezing may be early signs of lung damage." data-vi="Nhịp thở tăng, thở dốc, hoặc thở khò khè có thể là dấu hiệu sớm của tổn thương phổi." data-id="Laju napas meningkat, terengah-engah, atau mengi mungkin menjadi tanda awal kerusakan paru-paru.">Rapid or laboured breathing.</em></div>
+    </div>
+    <div class="card" style="border-left:4px solid var(--red)">
+      <div class="card-icon">😴</div>
+      <div class="card-title">突然精神變差<span class="L2 en"> · Sudden Lethargy</span><span class="L2 vi"> · Đột Ngột Mệt Mỏi</span><span class="L2 id"> · Tiba-Tiba Lesu</span></div>
+      <div class="card-body">嗆咳後精神明顯變差、食慾驟降，可能是全身性感染（敗血症）前兆，需立即通報。<br><em data-en="Sudden worsening of alertness or appetite after choking may signal systemic infection — report immediately." data-vi="Tinh thần và khẩu vị đột ngột giảm sau nghẹn có thể báo hiệu nhiễm trùng toàn thân — báo ngay." data-id="Penurunan mendadak kewaspadaan atau nafsu makan setelah tersedak mungkin menandai infeksi sistemik — laporkan segera.">Sudden deterioration after choking.</em></div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📞</span> 何時通知家屬？何時送醫？<span class="tx" data-en="When to Notify Family? When to Send to Hospital?" data-vi="Khi Nào Thông Báo Gia Đình? Khi Nào Đưa Đi Bệnh Viện?" data-id="Kapan Memberitahu Keluarga? Kapan Perlu ke Rumah Sakit?"> · Escalation Guide</span></div>
+  <div class="info-table-wrap">
+  <table class="info-table">
+    <thead>
+      <tr>
+        <th>情況<span class="tx" data-en="Situation" data-vi="Tình Huống" data-id="Situasi"> · Situation</span></th>
+        <th>處置<span class="tx" data-en="Action" data-vi="Hành Động" data-id="Tindakan"> · Action</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>輕微嗆咳，咳嗽後自行好轉，無其他症狀<br><em data-en="Mild choking that resolves on its own, no other symptoms" data-vi="Nghẹn nhẹ tự khỏi, không có triệu chứng khác" data-id="Tersedak ringan yang sembuh sendiri, tidak ada gejala lain">Mild choking, resolves spontaneously</em></td>
+        <td><span class="badge badge-teal">觀察並記錄</span>，告知家屬<br><em data-en="Observe and document; notify family" data-vi="Quan sát và ghi lại; thông báo gia đình" data-id="Amati dan catat; beritahu keluarga">Observe, document, notify family</em></td>
+      </tr>
+      <tr>
+        <td>嗆咳後持續咳嗽、聲音濕濁，或反覆發生<br><em data-en="Persistent cough or wet voice after choking, or recurrent episodes" data-vi="Ho liên tục hoặc giọng ướt sau nghẹn, hoặc tái phát" data-id="Batuk terus-menerus atau suara basah setelah tersedak, atau berulang">Persistent cough, wet voice, recurrence</em></td>
+        <td><span class="badge badge-amber">⚠️ 立即通知家屬</span>，請護士評估<br><em data-en="Notify family immediately; request nurse assessment" data-vi="Thông báo gia đình ngay; đề nghị y tá đánh giá" data-id="Segera beritahu keluarga; minta penilaian perawat">Notify family immediately</em></td>
+      </tr>
+      <tr>
+        <td>嗆咳後出現發燒（≥38°C）或精神明顯變差<br><em data-en="Fever (≥38°C) or marked deterioration after choking episode" data-vi="Sốt (≥38°C) hoặc suy giảm rõ rệt sau khi nghẹn" data-id="Demam (≥38°C) atau penurunan nyata setelah tersedak">Fever or deterioration after choking</em></td>
+        <td><span class="badge badge-red">🚨 立即送醫</span>，撥打119並通知家屬<br><em data-en="Immediate hospital — call 119 and notify family" data-vi="Đưa đi bệnh viện ngay — gọi 119 và thông báo gia đình" data-id="Langsung ke rumah sakit — hubungi 119 dan beritahu keluarga">Call 119, send to hospital</em></td>
+      </tr>
+      <tr>
+        <td>呼吸困難、喘鳴、嘴唇發紫、意識改變<br><em data-en="Breathing difficulty, wheezing, blue lips, altered consciousness" data-vi="Khó thở, thở khò khè, môi tím, thay đổi ý thức" data-id="Kesulitan bernapas, mengi, bibir biru, perubahan kesadaran">Breathing difficulty, blue lips, altered consciousness</em></td>
+        <td><span class="badge badge-red">🚨 立即撥打119</span>，這是緊急情況<br><em data-en="Call 119 immediately — this is a medical emergency" data-vi="Gọi 119 ngay — đây là tình huống cấp cứu" data-id="Hubungi 119 segera — ini adalah keadaan darurat medis">Call 119 immediately — medical emergency</em></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
 </div>
 
 
@@ -4181,6 +4746,76 @@ html[data-lang="id"] .flow-desc-sec.id { display: block; }
       <tr><td>🔒 手機鎖定<span class="L2 en"><br>Phone lock</span><span class="L2 vi"><br>Khóa điện thoại</span><span class="L2 id"><br>Kunci ponsel</span></td><td>存有患者資料的手機需設定密碼鎖定，防止他人查看<span class="L2 en"><br>Phones containing patient data must be password-locked to prevent unauthorised access</span><span class="L2 vi"><br>Điện thoại có dữ liệu của bệnh nhân phải được khóa mật khẩu để ngăn người khác xem</span><span class="L2 id"><br>Ponsel yang berisi data pasien harus dikunci dengan kata sandi untuk mencegah akses orang lain</span></td></tr>
     </tbody>
   </table>
+</div>
+
+<!-- ════════════════════════════════════
+     LEGAL: 外籍看護高風險行為禁止
+════════════════════════════════════ -->
+<div id="legal-prohibited" class="section">
+  <div class="page-header">
+    <div class="eyebrow">法規與雇主規定 · LEGAL &amp; REGULATIONS</div>
+    <div class="page-title">🚫 外籍看護高風險行為禁止</div>
+    <div class="page-desc">這些行為是常見法律爭議來源，嚴禁觸犯<span class="L2 en"> · These behaviours are common sources of legal disputes — strictly prohibited</span><span class="L2 vi"> · Những hành vi này là nguồn gốc tranh chấp pháp lý thường gặp — nghiêm cấm</span><span class="L2 id"> · Perilaku-perilaku ini adalah sumber sengketa hukum yang umum — dilarang keras</span></div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-ico">⚖️</div>
+    <div class="alert-body">
+      <div class="alert-title">違反以下規定可能觸法，輕則遣返，重則刑事責任<span class="tx" data-en="Violating These Rules May Result in Deportation or Criminal Liability" data-vi="Vi Phạm Những Quy Tắc Này Có Thể Dẫn Đến Trục Xuất Hoặc Trách Nhiệm Hình Sự" data-id="Melanggar Aturan Ini Dapat Mengakibatkan Deportasi atau Tanggung Jawab Pidana"> · Legal consequences</span></div>
+      <div class="alert-text">台灣法律對外籍看護的行為有明確規範。雇主已就以下事項被告知，看護若違反，雇主有權要求終止聘僱並通報主管機關。</div>
+      <div class="alert-en">Taiwan law has clear rules on caregiver conduct. Employers have been informed of the following. If caregivers violate these rules, employers may terminate employment and report to the authorities.</div>
+      <div class="alert-vi">Luật Đài Loan có quy định rõ ràng về hành vi của người chăm sóc. Chủ lao động đã được thông báo về những điều sau. Nếu người chăm sóc vi phạm, chủ lao động có thể chấm dứt hợp đồng và báo cáo cơ quan có thẩm quyền.</div>
+      <div class="alert-id">Hukum Taiwan memiliki aturan yang jelas tentang perilaku pengasuh. Pemberi kerja telah diberi tahu tentang hal-hal berikut. Jika pengasuh melanggar, pemberi kerja dapat mengakhiri pekerjaan dan melaporkan kepada pihak berwenang.</div>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>💊</span> 用藥相關禁止行為<span class="tx" data-en="Prohibited Medication-Related Behaviours" data-vi="Hành Vi Liên Quan Thuốc Bị Cấm" data-id="Perilaku Terkait Obat yang Dilarang"> · Medication Prohibitions</span></div>
+  <div class="do-dont-grid" style="grid-template-columns:1fr">
+    <div class="dont-box">
+      <div class="dont-header">❌ 絕對禁止<span class="tx" data-en="ABSOLUTELY PROHIBITED" data-vi="TUYỆT ĐỐI CẤM" data-id="DILARANG MUTLAK"> · PROHIBITED</span></div>
+      <ul>
+        <li>不得自行給藥（未獲護士或家屬明確授權）<div class="step-en">Never give medication without explicit authorisation from nurse or family</div><div class="step-vi">Không tự ý cho dùng thuốc khi chưa được y tá hoặc gia đình cho phép rõ ràng</div><div class="step-id">Jangan pernah memberikan obat tanpa otorisasi eksplisit dari perawat atau keluarga</div></li>
+        <li>不得自行調整藥量或服藥時間<div class="step-en">Never adjust medication dosage or timing on your own</div><div class="step-vi">Không tự điều chỉnh liều lượng hoặc thời gian dùng thuốc</div><div class="step-id">Jangan pernah menyesuaikan dosis atau waktu pemberian obat sendiri</div></li>
+        <li>不得自行注射任何藥物（含胰島素等）<div class="step-en">Never administer any injection (including insulin) without specific nursing training and authorisation</div><div class="step-vi">Không bao giờ tiêm bất kỳ loại thuốc nào (kể cả insulin) nếu không được đào tạo và ủy quyền cụ thể</div><div class="step-id">Jangan pernah menyuntikkan obat apa pun (termasuk insulin) tanpa pelatihan dan otorisasi keperawatan yang spesifik</div></li>
+        <li>不得自行購買藥物給患者服用（含成藥、補品）<div class="step-en">Never buy or give medicine (including OTC drugs or supplements) to the patient on your own</div><div class="step-vi">Không tự mua hoặc cho bệnh nhân dùng thuốc (kể cả thuốc OTC hoặc thực phẩm bổ sung)</div><div class="step-id">Jangan pernah membeli atau memberikan obat (termasuk obat OTC atau suplemen) sendiri</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>📋</span> 醫療與法律文件禁止行為<span class="tx" data-en="Prohibited Medical/Legal Document Behaviours" data-vi="Hành Vi Liên Quan Tài Liệu Y Tế/Pháp Lý Bị Cấm" data-id="Perilaku Dokumen Medis/Hukum yang Dilarang"> · Document Prohibitions</span></div>
+  <div class="do-dont-grid" style="grid-template-columns:1fr">
+    <div class="dont-box">
+      <div class="dont-header">❌ 絕對禁止<span class="tx" data-en="ABSOLUTELY PROHIBITED" data-vi="TUYỆT ĐỐI CẤM" data-id="DILARANG MUTLAK"> · PROHIBITED</span></div>
+      <ul>
+        <li>不得代替家屬簽署任何醫療同意書<div class="step-en">Never sign any medical consent form on behalf of the family</div><div class="step-vi">Không ký bất kỳ mẫu đồng ý y tế nào thay mặt gia đình</div><div class="step-id">Jangan pernah menandatangani formulir persetujuan medis apa pun atas nama keluarga</div></li>
+        <li>不得代替家屬與醫師做醫療決定<div class="step-en">Never make medical decisions with the doctor on behalf of the family</div><div class="step-vi">Không đưa ra quyết định y tế với bác sĩ thay mặt gia đình</div><div class="step-id">Jangan pernah membuat keputusan medis dengan dokter atas nama keluarga</div></li>
+        <li>不得偽造或更改任何照顧記錄<div class="step-en">Never falsify or alter any care records</div><div class="step-vi">Không bao giờ làm giả hoặc thay đổi bất kỳ hồ sơ chăm sóc nào</div><div class="step-id">Jangan pernah memalsukan atau mengubah catatan perawatan apa pun</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="sec-title"><span>🔒</span> 約束與人身自由禁止行為<span class="tx" data-en="Prohibited Restraint and Freedom Violations" data-vi="Hành Vi Vi Phạm Kiềm Chế và Tự Do Thân Thể Bị Cấm" data-id="Pelanggaran Pengekangan dan Kebebasan yang Dilarang"> · Restraint Prohibitions</span></div>
+  <div class="do-dont-grid" style="grid-template-columns:1fr">
+    <div class="dont-box">
+      <div class="dont-header">❌ 絕對禁止<span class="tx" data-en="ABSOLUTELY PROHIBITED" data-vi="TUYỆT ĐỐI CẤM" data-id="DILARANG MUTLAK"> · PROHIBITED</span></div>
+      <ul>
+        <li>不得擅自對患者進行任何形式的身體約束（含捆綁手腳、鎖門）<div class="step-en">Never physically restrain the patient in any way (including binding limbs or locking doors) without medical authorisation</div><div class="step-vi">Không bao giờ kiềm chế bệnh nhân về thể chất theo bất kỳ cách nào (kể cả buộc tay chân hoặc khóa cửa) khi không có ủy quyền y tế</div><div class="step-id">Jangan pernah menahan pasien secara fisik dengan cara apa pun (termasuk mengikat anggota tubuh atau mengunci pintu) tanpa otorisasi medis</div></li>
+        <li>不得強迫患者服藥（以欺騙或強制方式）<div class="step-en">Never force medication on the patient through deception or coercion</div><div class="step-vi">Không ép buộc bệnh nhân dùng thuốc bằng cách lừa dối hoặc cưỡng bức</div><div class="step-id">Jangan pernah memaksa pasien minum obat melalui penipuan atau paksaan</div></li>
+        <li>不得體罰、恐嚇或辱罵患者（言語或肢體）<div class="step-en">Never physically punish, intimidate or verbally abuse the patient</div><div class="step-vi">Không bao giờ trừng phạt, đe dọa hoặc lăng mạ bằng lời nói hoặc thể chất với bệnh nhân</div><div class="step-id">Jangan pernah menghukum secara fisik, mengintimidasi atau memaki pasien secara verbal</div></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="alert alert-green">
+    <div class="alert-ico">✅</div>
+    <div class="alert-body">
+      <div class="alert-title">遇到不確定情況時的正確做法<span class="tx" data-en="Correct Action When Uncertain" data-vi="Cách Làm Đúng Khi Không Chắc Chắn" data-id="Tindakan yang Benar Saat Tidak Yakin"> · When Unsure</span></div>
+      <div class="alert-text">任何不確定是否允許的行為，<strong>先等待，先詢問家屬或護士</strong>，再行動。寧可晚做，也不要做了再解釋。</div>
+      <div class="alert-en">For any action you are unsure is permitted — <strong>wait and ask the family or nurse first</strong>, then act. It is better to be slow than to have to explain a mistake.</div>
+      <div class="alert-vi">Với bất kỳ hành động nào bạn không chắc có được phép hay không — <strong>hãy đợi và hỏi gia đình hoặc y tá trước</strong>, rồi mới hành động. Chậm mà chắc hơn là phải giải thích lỗi.</div>
+      <div class="alert-id">Untuk tindakan apa pun yang tidak yakin diizinkan — <strong>tunggu dan tanya keluarga atau perawat dulu</strong>, lalu bertindak. Lebih baik lambat daripada harus menjelaskan kesalahan.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════
