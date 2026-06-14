@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEL 情緒照護學習平台 v17 圖文強化版</title>
+<title>SEL 情緒照護學習平台 v20 圖文強化版</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans:wght@400;500;700&family=Noto+Sans+Javanese&display=swap');
 
@@ -112,6 +112,91 @@
   }
   .hero-lang-tag strong { color: var(--text); }
 
+  /* ─── HERO ACTIONS ─── */
+  .hero-actions {
+    display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;
+    margin-top: 8px; margin-bottom: 36px;
+  }
+  .start-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, #0ea5e9 100%);
+    color: #0f172a; border: none; border-radius: 14px;
+    padding: 14px 28px; font-size: 16px; font-weight: 700;
+    cursor: pointer; font-family: var(--font-zh);
+    box-shadow: 0 4px 24px rgba(56,189,248,0.35);
+    transition: transform 0.18s, box-shadow 0.18s;
+    letter-spacing: 0.3px;
+  }
+  .start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(56,189,248,0.5); }
+  .start-btn:active { transform: translateY(0); }
+  .demo-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent;
+    color: var(--text); border: 1.5px solid var(--border); border-radius: 14px;
+    padding: 14px 24px; font-size: 15px; font-weight: 600;
+    cursor: pointer; font-family: var(--font-zh);
+    transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  }
+  .demo-btn:hover { border-color: var(--accent); background: rgba(56,189,248,0.08); transform: translateY(-2px); }
+  .demo-btn:active { transform: translateY(0); }
+
+  /* ─── LEARNING MAP ─── */
+  .learning-map {
+    padding: 32px 24px 8px;
+    max-width: 960px; margin: 0 auto;
+  }
+  .learning-map-title {
+    font-size: 13px; font-weight: 700; letter-spacing: 1.5px;
+    color: var(--text-muted); text-transform: uppercase; margin-bottom: 20px;
+  }
+  .lmap-track {
+    display: flex; align-items: center; gap: 0;
+    overflow-x: auto; padding-bottom: 8px;
+  }
+  .lmap-track::-webkit-scrollbar { height: 4px; }
+  .lmap-track::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .lmap-step {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; flex-shrink: 0; width: 130px; position: relative;
+    cursor: pointer;
+  }
+  .lmap-step:hover .lmap-node { transform: translateY(-3px); }
+  .lmap-node {
+    width: 68px; height: 68px; border-radius: 50%;
+    border: 2px solid var(--step-color);
+    background: rgba(0,0,0,0.25);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 22px; gap: 2px;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    box-shadow: 0 0 0 0 var(--step-color);
+  }
+  .lmap-step:hover .lmap-node {
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+  }
+  .lmap-step.completed .lmap-node { background: rgba(255,255,255,0.06); }
+  .lmap-step.visited .lmap-node {
+    background: rgba(255,255,255,0.1);
+    box-shadow: 0 0 0 3px var(--step-color), 0 4px 20px rgba(0,0,0,0.4);
+  }
+  .lmap-step.visited .lmap-label { color: var(--text); font-weight: 700; }
+  .lmap-step-num {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.5px;
+    color: var(--step-color); font-family: var(--font-en);
+    line-height: 1;
+  }
+  .lmap-label {
+    font-size: 12px; font-weight: 600; text-align: center;
+    color: var(--text-muted); line-height: 1.4;
+    transition: color 0.2s;
+  }
+  .lmap-step:hover .lmap-label { color: var(--text); }
+  .lmap-connector {
+    flex: 1; min-width: 20px; height: 2px;
+    background: linear-gradient(90deg, var(--c-from) 0%, var(--c-to) 100%);
+    opacity: 0.35; flex-shrink: 0; margin-bottom: 28px;
+  }
+
   /* ─── STATS ROW ─── */
   .stats-row {
     display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
@@ -152,6 +237,33 @@
   .sidebar-module.active { border-left-color: var(--current-color); color: var(--text); background: rgba(255,255,255,0.06); }
   .sidebar-module.active .sidebar-module-num { color: var(--current-color); }
   .sidebar-module-num { font-size: 10px; font-weight: 700; opacity: 0.6; margin-bottom: 2px; letter-spacing: 0.8px; transition: color 0.2s; font-family: var(--font-en); }
+
+  /* ─── SIDEBAR STATUS BADGE ─── */
+  .sidebar-status-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 2px 8px; border-radius: 20px;
+    margin-bottom: 4px; font-family: var(--font-en);
+    transition: all 0.25s;
+  }
+  .sidebar-status-badge.status-locked {
+    background: rgba(148,163,184,0.12);
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+  .sidebar-status-badge.status-active {
+    background: rgba(56,189,248,0.15);
+    color: var(--current-color, var(--accent));
+    opacity: 1;
+  }
+  .sidebar-status-badge.status-done {
+    background: rgba(52,211,153,0.15);
+    color: #34d399;
+    opacity: 1;
+  }
+  .sidebar-module.active .sidebar-status-badge.status-active {
+    background: rgba(255,255,255,0.12);
+  }
   .sidebar-module-name { font-size: 13px; font-weight: 500; }
   .sidebar-module-en { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
   .sidebar-progress { height: 3px; background: var(--border); border-radius: 2px; margin-top: 6px; }
@@ -443,6 +555,197 @@
     border-radius: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600;
   }
   .roleplay-role-icon { font-size: 20px; }
+
+  /* Scenario manga strips */
+  .manga-learning {
+    margin: 10px 0 30px;
+    background:
+      radial-gradient(circle at 20% 18%, rgba(255,255,255,0.08) 0 2px, transparent 3px),
+      linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+    background-size: 18px 18px, auto;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .manga-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .manga-head h3 { font-size: 18px; margin-bottom: 6px; }
+  .manga-head p { color: var(--text-muted); font-size: 13px; line-height: 1.7; max-width: 760px; }
+  .manga-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .manga-strip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+  .manga-strip:hover {
+    border-color: var(--current-color);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+    transform: translateY(-2px);
+  }
+  .manga-strip-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.045);
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .manga-strip-title span {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--current-color);
+    color: #06111f;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .manga-panels {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    counter-reset: panelnum;
+  }
+  .manga-panel {
+    --panel-tint: var(--current-color);
+    min-height: 148px;
+    padding: 16px 13px 13px;
+    border-bottom: 1px dashed var(--border);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+      radial-gradient(circle at 86% 14%, var(--panel-tint), transparent 32%);
+    position: relative;
+    overflow: hidden;
+  }
+  .manga-panel.tone-conflict { --panel-tint: #f87171; }
+  .manga-panel.tone-response { --panel-tint: #38bdf8; }
+  .manga-panel.tone-result   { --panel-tint: #34d399; }
+  .manga-panel:last-child { border-bottom: 0; }
+  .manga-panel::after {
+    counter-increment: panelnum;
+    content: counter(panelnum);
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    background: rgba(15,23,42,0.55);
+    border: 1px solid rgba(255,255,255,0.16);
+    color: var(--text-muted);
+    font-size: 10px;
+    font-weight: 800;
+    font-family: var(--font-en);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .manga-panel:not(:last-child)::before {
+    content: '▼';
+    position: absolute;
+    bottom: -9px;
+    right: 14px;
+    font-size: 12px;
+    color: var(--panel-tint);
+    opacity: 0.7;
+    z-index: 3;
+    text-shadow: 0 0 6px rgba(0,0,0,0.6);
+  }
+  .manga-scene {
+    display: grid;
+    grid-template-columns: 58px minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    margin-top: 6px;
+  }
+  .manga-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 18px 18px 22px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 50% 24%, #f8d2b6 0 28%, transparent 29%),
+      linear-gradient(#334155 0 37%, var(--panel-tint) 38% 100%);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18), 0 10px 24px rgba(0,0,0,0.22);
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .manga-bubble {
+    background: rgba(248,250,252,0.96);
+    color: #0f172a;
+    border: 2px solid rgba(15,23,42,0.9);
+    border-radius: 16px;
+    padding: 10px 12px;
+    min-height: 76px;
+    position: relative;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .manga-bubble::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 22px;
+    width: 16px;
+    height: 16px;
+    background: rgba(248,250,252,0.96);
+    border-left: 2px solid rgba(15,23,42,0.9);
+    border-bottom: 2px solid rgba(15,23,42,0.9);
+    transform: rotate(45deg);
+  }
+  .manga-speaker {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 900;
+    color: #334155;
+  }
+  .manga-tone {
+    color: #fff;
+    font-weight: 800;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--panel-tint);
+    letter-spacing: 0.3px;
+  }
+  .manga-line { font-size: 14px; line-height: 1.55; font-weight: 700; overflow-wrap: anywhere; }
+  .manga-lesson {
+    padding: 10px 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.65;
+    background: rgba(255,255,255,0.02);
+  }
+  .manga-lesson strong { color: var(--text); }
 
   /* Quiz section */
   .quiz-section {
@@ -817,6 +1120,12 @@
     }
   }
 
+
+  /* ─── LANGUAGE VISIBILITY: hide .en subtitles on non-English pages ─── */
+  body:not([data-active-lang="en"]) .welcome-card p.en,
+  body:not([data-active-lang="en"]) .unit-section p.en {
+    display: none;
+  }
   @media (max-width: 480px) {
     .nav-logo {
       max-width: none;
@@ -841,6 +1150,37 @@
       align-items: flex-start;
       flex-direction: column;
     }
+    .manga-learning { padding: 12px; }
+    .manga-strip-title { font-size: 13px; }
+    .manga-panel { padding: 16px 10px 10px; }
+    .manga-scene {
+      grid-template-columns: 42px minmax(0,1fr);
+      gap: 8px;
+    }
+    .manga-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px 13px 16px 16px;
+      font-size: 22px;
+    }
+    .manga-bubble {
+      padding: 9px;
+      min-height: 0;
+      border-radius: 12px;
+    }
+    .manga-bubble::before {
+      display: none;
+    }
+    .manga-speaker {
+      flex-wrap: wrap;
+      font-size: 11px;
+      gap: 6px;
+    }
+    .manga-tone {
+      font-size: 10px;
+      padding: 1px 7px;
+    }
+    .manga-line { font-size: 12px; }
   }
 
 
@@ -908,6 +1248,7 @@
     color: var(--text);
     padding: 0 12px;
     font-family: var(--font-zh);
+    font-size: 16px;
   }
   .quiz-bank-actions {
     display: flex;
@@ -960,6 +1301,147 @@
     .quiz-bank-controls { grid-template-columns: 1fr; }
     .quiz-bank-summary { grid-template-columns: 1fr; }
     .quiz-bank-card .quiz-bank-stats { grid-template-columns: 1fr; }
+  }
+
+  /* ── UPGRADED QUIZ HUD ── */
+  .qb-hud {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .qb-hud-left { display: flex; flex-direction: column; gap: 6px; }
+  .qb-hud-meta {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 12px; color: var(--text-muted); font-family: var(--font-en);
+  }
+  .qb-hud-counter {
+    font-size: 13px; font-weight: 700; color: var(--text);
+  }
+  .qb-hud-pct {
+    font-size: 11px; color: var(--text-muted);
+    font-family: var(--font-en);
+  }
+  .qb-hud-bar-wrap {
+    height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+    position: relative;
+  }
+  .qb-hud-bar {
+    height: 100%; border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, #818cf8 100%);
+    transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+  .qb-hud-bar::after {
+    content: '';
+    position: absolute; right: 0; top: 0; bottom: 0; width: 4px;
+    background: rgba(255,255,255,0.5); border-radius: 2px;
+    animation: barPulse 1.2s ease-in-out infinite;
+  }
+  @keyframes barPulse { 0%,100%{opacity:0.5} 50%{opacity:1} }
+
+  /* Live Score Widget */
+  .qb-score-widget {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 2px; min-width: 72px;
+  }
+  .qb-score-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--text-muted); text-transform: uppercase; font-family: var(--font-en);
+  }
+  .qb-score-value {
+    font-size: 28px; font-weight: 800;
+    font-family: var(--font-en);
+    line-height: 1;
+    transition: all 0.3s;
+  }
+  .qb-score-value.bump {
+    animation: scoreBump 0.35s ease;
+  }
+  @keyframes scoreBump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.25); color: #34d399; }
+    100% { transform: scale(1); }
+  }
+  .qb-score-sub {
+    font-size: 11px; color: var(--text-muted); font-family: var(--font-en);
+  }
+  .qb-score-ring {
+    position: relative; width: 64px; height: 64px;
+  }
+  .qb-score-ring svg { position: absolute; inset: 0; }
+  .qb-score-ring-text {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .qb-score-ring-num {
+    font-size: 18px; font-weight: 800; line-height: 1;
+    font-family: var(--font-en);
+    transition: color 0.4s;
+  }
+  .qb-score-ring-denom {
+    font-size: 10px; color: var(--text-muted); font-family: var(--font-en);
+  }
+
+  /* Streak badge */
+  .qb-streak {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700; padding: 2px 8px;
+    border-radius: 20px; background: rgba(251,191,36,0.15);
+    color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);
+    transition: all 0.3s;
+  }
+  .qb-streak.hidden { opacity: 0; pointer-events: none; }
+
+  /* Correct/wrong flash indicator */
+  .qb-answer-flash {
+    position: fixed; top: 80px; right: 24px; z-index: 500;
+    padding: 10px 18px; border-radius: 12px; font-weight: 700; font-size: 14px;
+    pointer-events: none; opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .qb-answer-flash.correct-flash {
+    background: rgba(52,211,153,0.95); color: #0f172a;
+    animation: flashIn 0.9s ease forwards;
+  }
+  .qb-answer-flash.wrong-flash {
+    background: rgba(248,113,113,0.95); color: #fff;
+    animation: flashIn 0.9s ease forwards;
+  }
+  @keyframes flashIn {
+    0% { opacity:0; transform: translateY(-10px) scale(0.9); }
+    20% { opacity:1; transform: translateY(0) scale(1); }
+    70% { opacity:1; }
+    100% { opacity:0; transform: translateY(-6px); }
+  }
+
+  /* Question card with number watermark */
+  .qb-question-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .qb-question-card::before {
+    content: attr(data-qnum);
+    position: absolute; right: 16px; top: 8px;
+    font-size: 64px; font-weight: 800; color: var(--text);
+    opacity: 0.04; line-height: 1; font-family: var(--font-en);
+    pointer-events: none; user-select: none;
+  }
+  .qb-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; align-items: center; }
+
+  @media (max-width: 600px) {
+    .qb-hud { grid-template-columns: 1fr; }
+    .qb-score-ring { width: 48px; height: 48px; }
+    .qb-score-ring-num { font-size: 14px; }
   }
 
 
@@ -1069,11 +1551,81 @@
     font-size: 12px;
     color: var(--text-muted);
   }
+
+
+  /* Illustrated learning scenes */
+  .illustrated-card {
+    min-height: 330px;
+  }
+  .visual-hero-art {
+    width: min(260px, 34vw);
+    min-width: 190px;
+  }
+  .visual-hero-art svg,
+  .visual-illustration svg,
+  .feedback-visual svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .visual-illustration {
+    min-height: 148px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+    border: 1px solid rgba(255,255,255,0.09);
+  }
+  .visual-card .visual-scene {
+    display: none;
+  }
+  .quiz-feedback.visualized {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 14px;
+    align-items: center;
+  }
+  .quiz-feedback.visualized strong {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--text);
+  }
+  .feedback-visual {
+    width: 72px;
+    height: 72px;
+    border-radius: 16px;
+    background: rgba(15,23,42,0.42);
+    border: 1px solid rgba(255,255,255,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  @media (max-width: 900px) {
+    .visual-hero-art {
+      width: 100%;
+      max-width: 280px;
+      min-width: 0;
+    }
+    .illustrated-card {
+      min-height: 0;
+    }
+    .quiz-feedback.visualized {
+      grid-template-columns: 56px minmax(0, 1fr);
+    }
+    .feedback-visual {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+    }
+  }
+
   @media (max-width: 900px) {
     .visual-hero { grid-template-columns: 1fr; }
     .visual-mnemonic { width: fit-content; }
     .visual-cards { grid-template-columns: 1fr; }
     .visual-card { min-height: 0; }
+    .manga-head { flex-direction: column; }
+    .manga-grid { grid-template-columns: 1fr; }
+    .manga-panel { min-height: 0; }
   }
 
 </style>
@@ -1119,6 +1671,45 @@
       <span class="hero-lang-tag"><strong>🇬🇧</strong> English</span>
       <span class="hero-lang-tag"><strong>🇮🇩</strong> Bahasa Indonesia</span>
       <span class="hero-lang-tag"><strong>🇻🇳</strong> Tiếng Việt</span>
+    </div>
+    <div class="hero-actions">
+      <button class="start-btn" onclick="(function(){var el=document.getElementById('welcome');if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}})()">🚀 立即開始學習</button>
+      <button class="demo-btn" onclick="showQuizBank()">🎯 題庫測驗</button>
+    </div>
+  </div><!-- /.hero -->
+  <!-- LEARNING MAP -->
+  <div class="learning-map">
+    <div class="learning-map-title">📍 學習路線圖 · Learning Roadmap</div>
+    <div class="lmap-track">
+      <div class="lmap-step" style="--step-color:var(--m1)" onclick="enterModule(1)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 1</div>🧠</div>
+        <div class="lmap-label">自我覺察</div>
+      </div>
+      <div class="lmap-connector" style="--c-from:var(--m1);--c-to:var(--m2)"></div>
+      <div class="lmap-step" style="--step-color:var(--m2)" onclick="enterModule(2)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 2</div>🤝</div>
+        <div class="lmap-label">人際溝通</div>
+      </div>
+      <div class="lmap-connector" style="--c-from:var(--m2);--c-to:var(--m3)"></div>
+      <div class="lmap-step" style="--step-color:var(--m3)" onclick="enterModule(3)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 3</div>⚖️</div>
+        <div class="lmap-label">工作倫理</div>
+      </div>
+      <div class="lmap-connector" style="--c-from:var(--m3);--c-to:var(--m4)"></div>
+      <div class="lmap-step" style="--step-color:var(--m4)" onclick="enterModule(4)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 4</div>🔍</div>
+        <div class="lmap-label">問題解決</div>
+      </div>
+      <div class="lmap-connector" style="--c-from:var(--m4);--c-to:var(--m5)"></div>
+      <div class="lmap-step" style="--step-color:var(--m5)" onclick="enterModule(5)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 5</div>🌿</div>
+        <div class="lmap-label">壓力調適</div>
+      </div>
+      <div class="lmap-connector" style="--c-from:var(--m5);--c-to:var(--m6)"></div>
+      <div class="lmap-step" style="--step-color:var(--m6)" onclick="enterModule(6)">
+        <div class="lmap-node"><div class="lmap-step-num">STEP 6</div>🌏</div>
+        <div class="lmap-label">跨文化適應</div>
+      </div>
     </div>
   </div>
   <div class="stats-row">
@@ -1196,6 +1787,7 @@
 <!-- MAIN LAYOUT (sidebar + content, hidden until module entered) -->
 <div class="main" id="main-layout" style="display:none">
   <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+  <div class="qb-answer-flash" id="qb-answer-flash"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
@@ -1206,33 +1798,33 @@
       <div class="sidebar-module-en">240 questions · Filtered practice</div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(1)" onkeydown="if(event.key==='Enter')loadModule(1)" style="--current-color:var(--m1)">
-      <div class="sidebar-module-num">MODULE 01</div>
-      <div class="sidebar-module-name" data-zh="自我覺察與情緒管理" data-en="Self-Awareness & Emotions" data-id="Kesadaran Diri & Emosi" data-vi="Tự nhận thức & Cảm xúc">自我覺察與情緒管理</div>
+      <div class="sidebar-status-badge status-locked" id="sb1">🔒 MODULE 01</div>
+      <div class="sidebar-module-name" data-zh="自我覺察與情緒管理" data-en="Self-Awareness & Emotions" data-id="Kesadaran Diri & Emosi" data-vi="Tự nhận thức và Quản lý Cảm xúc">自我覺察與情緒管理</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p1" style="width:0%;background:var(--m1)"></div></div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(2)" onkeydown="if(event.key==='Enter')loadModule(2)" style="--current-color:var(--m2)">
-      <div class="sidebar-module-num">MODULE 02</div>
-      <div class="sidebar-module-name" data-zh="人際溝通與同理心" data-en="Communication & Empathy" data-id="Komunikasi & Empati" data-vi="Giao tiếp & Đồng cảm">人際溝通與同理心</div>
+      <div class="sidebar-status-badge status-locked" id="sb2">🔒 MODULE 02</div>
+      <div class="sidebar-module-name" data-zh="人際溝通與同理心" data-en="Communication & Empathy" data-id="Komunikasi & Empati" data-vi="Giao tiếp Liên cá nhân và Đồng cảm">人際溝通與同理心</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p2" style="width:0%;background:var(--m2)"></div></div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(3)" onkeydown="if(event.key==='Enter')loadModule(3)" style="--current-color:var(--m3)">
-      <div class="sidebar-module-num">MODULE 03</div>
-      <div class="sidebar-module-name" data-zh="責任感與工作倫理" data-en="Responsibility & Work Ethics" data-id="Tanggung Jawab & Etika Kerja" data-vi="Trách nhiệm & Đạo đức nghề nghiệp">責任感與工作倫理</div>
+      <div class="sidebar-status-badge status-locked" id="sb3">🔒 MODULE 03</div>
+      <div class="sidebar-module-name" data-zh="責任感與工作倫理" data-en="Responsibility & Work Ethics" data-id="Tanggung Jawab & Etika Kerja" data-vi="Trách nhiệm và Đạo đức Nghề nghiệp">責任感與工作倫理</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p3" style="width:0%;background:var(--m3)"></div></div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(4)" onkeydown="if(event.key==='Enter')loadModule(4)" style="--current-color:var(--m4)">
-      <div class="sidebar-module-num">MODULE 04</div>
-      <div class="sidebar-module-name" data-zh="問題解決與決策能力" data-en="Problem-Solving & Decision" data-id="Pemecahan Masalah & Keputusan" data-vi="Giải quyết vấn đề & Quyết định">問題解決與決策能力</div>
+      <div class="sidebar-status-badge status-locked" id="sb4">🔒 MODULE 04</div>
+      <div class="sidebar-module-name" data-zh="問題解決與決策能力" data-en="Problem-Solving & Decision" data-id="Pemecahan Masalah & Keputusan" data-vi="Kỹ năng Giải quyết Vấn đề và Ra Quyết định">問題解決與決策能力</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p4" style="width:0%;background:var(--m4)"></div></div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(5)" onkeydown="if(event.key==='Enter')loadModule(5)" style="--current-color:var(--m5)">
-      <div class="sidebar-module-num">MODULE 05</div>
-      <div class="sidebar-module-name" data-zh="壓力調適與自我照顧" data-en="Stress Management & Self-Care" data-id="Manajemen Stres & Perawatan Diri" data-vi="Quản lý stress & Tự chăm sóc">壓力調適與自我照顧</div>
+      <div class="sidebar-status-badge status-locked" id="sb5">🔒 MODULE 05</div>
+      <div class="sidebar-module-name" data-zh="壓力調適與自我照顧" data-en="Stress Management & Self-Care" data-id="Manajemen Stres & Perawatan Diri" data-vi="Quản lý Stress và Tự chăm sóc">壓力調適與自我照顧</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p5" style="width:0%;background:var(--m5)"></div></div>
     </a>
     <a class="sidebar-module" role="button" tabindex="0" onclick="loadModule(6)" onkeydown="if(event.key==='Enter')loadModule(6)" style="--current-color:var(--m6)">
-      <div class="sidebar-module-num">MODULE 06</div>
-      <div class="sidebar-module-name" data-zh="跨文化適應與台灣職場文化" data-en="Cross-Cultural & Taiwan Workplace" data-id="Adaptasi Budaya & Tempat Kerja Taiwan" data-vi="Thích nghi văn hóa & nơi làm việc Đài Loan">跨文化適應與台灣職場文化</div>
+      <div class="sidebar-status-badge status-locked" id="sb6">🔒 MODULE 06</div>
+      <div class="sidebar-module-name" data-zh="跨文化適應與台灣職場文化" data-en="Cross-Cultural & Taiwan Workplace" data-id="Adaptasi Budaya & Tempat Kerja Taiwan" data-vi="Thích nghi đa văn hóa và văn hóa nơi làm việc Đài Loan">跨文化適應與台灣職場文化</div>
       <div class="sidebar-progress"><div class="sidebar-progress-fill" id="p6" style="width:0%;background:var(--m6)"></div></div>
     </a>
   </aside>
@@ -15346,13 +15938,18 @@ function setLang(lang) {
     if (b.getAttribute('data-lang') === lang) b.classList.add('active');
   });
 
-  // Update all data-* text nodes
+  // Update all data-* text nodes (skip elements with child elements to preserve onclick/structure)
   document.querySelectorAll('[data-zh]').forEach(el => {
     const val = el.getAttribute('data-' + lang) || el.getAttribute('data-zh');
-    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
-    else el.textContent = val;
+    if (!val) return;
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.placeholder = val;
+    } else if (el.children.length === 0) {
+      el.textContent = val;
+    }
   });
 
+  updateProgressText();
   if (currentModule === -1) renderQuizBank();
   else if (currentModule > 0) renderModule(currentModule);
 }
@@ -15382,15 +15979,23 @@ function toggleSidebar() {
 
 // ── NAV ──
 function showWelcome() {
-  document.getElementById('hero-section').style.display = 'block';
-  document.getElementById('main-layout').style.display = 'none';
+  const heroEl = document.getElementById('hero-section');
+  const mainEl = document.getElementById('main-layout');
+  const sidebarEl = document.getElementById('sidebar');
+  const overlayEl = document.getElementById('sidebar-overlay');
+  const btnEl = document.getElementById('hamburger-btn');
+  if (heroEl) heroEl.style.display = 'block';
+  if (mainEl) { mainEl.style.display = 'none'; mainEl.classList.remove('sidebar-collapsed'); }
   document.body.classList.remove('is-learning', 'sidebar-lock');
-  document.getElementById('main-layout').classList.remove('sidebar-collapsed');
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sidebar-overlay').classList.remove('open');
-  document.getElementById('hamburger-btn').classList.remove('open');
+  if (sidebarEl) sidebarEl.classList.remove('open');
+  if (overlayEl) overlayEl.classList.remove('open');
+  if (btnEl) btnEl.classList.remove('open');
   currentModule = 0;
   document.querySelectorAll('.sidebar-module').forEach(m => m.classList.remove('active'));
+  // Highlight learning map steps for visited modules
+  document.querySelectorAll('.lmap-step').forEach((step, i) => {
+    step.classList.toggle('visited', completedModules.has(i + 1));
+  });
 }
 
 function closeCompactSidebar() {
@@ -15405,34 +16010,59 @@ function closeCompactSidebar() {
   }
 }
 
-function showQuizBank() {
-  document.getElementById('hero-section').style.display = 'none';
-  document.getElementById('main-layout').style.display = 'grid';
+function showQuizBank(preModule) {
+  const heroEl = document.getElementById('hero-section');
+  const mainEl = document.getElementById('main-layout');
+  if (heroEl) heroEl.style.display = 'none';
+  if (mainEl) mainEl.style.display = 'grid';
   document.body.classList.add('is-learning');
   currentModule = -1;
   document.querySelectorAll('.sidebar-module').forEach(el => el.classList.remove('active'));
   const quizLink = document.querySelector('.sidebar-quiz-link');
   if (quizLink) quizLink.classList.add('active');
+  if (preModule) quizBankState.filters.module = String(preModule);
   renderQuizBank();
   closeCompactSidebar();
 }
 
 function enterModule(n) {
-  document.getElementById('hero-section').style.display = 'none';
-  document.getElementById('main-layout').style.display = 'grid';
+  const heroEl = document.getElementById('hero-section');
+  const mainEl = document.getElementById('main-layout');
+  if (heroEl) heroEl.style.display = 'none';
+  if (mainEl) mainEl.style.display = 'grid';
   document.body.classList.add('is-learning');
   loadModule(n);
 }
 
 // ── LOAD MODULE ──
+function refreshSidebarStatus() {
+  for (let i = 1; i <= 6; i++) {
+    const badge = document.getElementById('sb' + i);
+    if (!badge) continue;
+    const num = String(i).padStart(2, '0');
+    if (completedModules.has(i)) {
+      badge.className = 'sidebar-status-badge status-done';
+      badge.textContent = '✓ MODULE ' + num;
+    } else if (currentModule === i) {
+      badge.className = 'sidebar-status-badge status-active';
+      badge.textContent = '▶ MODULE ' + num;
+    } else {
+      badge.className = 'sidebar-status-badge status-locked';
+      badge.textContent = '🔒 MODULE ' + num;
+    }
+  }
+}
+
 function loadModule(n) {
   if (n < 1 || n > 6) return;
+  if (!modules[n]) return; // guard against missing module data
   currentModule = n;
   const m = modules[n];
   document.querySelectorAll('.sidebar-module').forEach(el => el.classList.remove('active'));
   document.querySelectorAll('.sidebar-module:not(.sidebar-quiz-link)').forEach((el, i) => {
     el.classList.toggle('active', i + 1 === n);
   });
+  refreshSidebarStatus();
   renderModule(n);
   const contentEl = document.getElementById('module-content');
   if (contentEl) contentEl.scrollTop = 0;
@@ -15473,6 +16103,7 @@ function showEmotionDetail(moduleN, idx, cardEl) {
   // Toggle: close if same card clicked again
   const detail = document.getElementById(`emotion-detail-${moduleN}`);
   const textEl = document.getElementById(`emotion-detail-text-${moduleN}`);
+  if (!detail || !textEl) return;
   document.querySelectorAll(`#module-content .emotion-card`).forEach(c => c.classList.remove('active'));
   if (detail.getAttribute('data-open') === String(idx)) {
     detail.classList.remove('show');
@@ -15517,6 +16148,187 @@ function safeValue(value) {
 }
 
 // ── RENDER ──
+
+function ml(zh, en, id, vi) {
+  return { zh, en: en || zh, id: id || en || zh, vi: vi || en || zh };
+}
+
+const scenarioComics = {
+  1: [
+    {
+      title: ml('雇主生氣時', 'When the employer is angry'),
+      lesson: ml('重點：先降溫，再確認。把「被罵」轉成「確認需求」，衝突就會下降。', 'Key point: cool down first, then confirm. Turning blame into clarification lowers conflict.'),
+      panels: [
+        { face:'😡', speaker:ml('雇主', 'Employer'), tone:ml('生氣', 'Angry'), line:ml('我昨天已經說過了！為什麼還做錯？', 'I already told you yesterday! Why is it still wrong?') },
+        { face:'😰', speaker:ml('外籍看護', 'Caregiver'), tone:ml('先穩住', 'Steady'), line:ml('對不起，我再確認一次。您的意思是先做 A，再做 B，對嗎？', 'I am sorry. Let me confirm again: do A first, then B, correct?') },
+        { face:'😊', speaker:ml('結果', 'Result'), tone:ml('同理成功', 'Empathy works'), line:ml('雇主感覺被尊重，雙方把流程寫下來。', 'The employer feels respected, and both write down the steps.') }
+      ]
+    },
+    {
+      title: ml('長者重複詢問', 'Repeated questions'),
+      lesson: ml('重點：重複提問可能是焦慮或認知退化，不一定是故意找麻煩。', 'Key point: repeated questions may come from anxiety or dementia, not intentional trouble.'),
+      panels: [
+        { face:'😵', speaker:ml('長者', 'Elder'), tone:ml('焦慮', 'Anxious'), line:ml('我媽媽在哪裡？她怎麼還沒來？', 'Where is my mother? Why has she not come?') },
+        { face:'🙂', speaker:ml('外籍看護', 'Caregiver'), tone:ml('溫和', 'Gentle'), line:ml('阿公，我陪您坐一下。您是不是很想她？', 'Grandpa, I will sit with you. Are you missing her?') },
+        { face:'🌿', speaker:ml('結果', 'Result'), tone:ml('情緒下降', 'Calmer'), line:ml('長者被聽見後比較安心，看護也減少挫折。', 'The elder feels heard and becomes calmer; the caregiver feels less frustrated.') }
+      ]
+    },
+    {
+      title: ml('被批評後想哭', 'After being criticized'),
+      lesson: ml('重點：先照顧自己的情緒，再用專業語句回到事情本身。', 'Key point: care for your emotion first, then return to the task professionally.'),
+      panels: [
+        { face:'😢', speaker:ml('外籍看護', 'Caregiver'), tone:ml('委屈', 'Hurt'), line:ml('我是不是很差？我好想立刻反駁。', 'Am I doing badly? I want to argue right now.') },
+        { face:'🌬️', speaker:ml('外籍看護', 'Caregiver'), tone:ml('深呼吸', 'Breathe'), line:ml('我先喝水、放慢語速，再問清楚要改善哪裡。', 'I will drink water, slow down, and ask what needs improvement.') },
+        { face:'✅', speaker:ml('結果', 'Result'), tone:ml('可改善', 'Improved'), line:ml('「我了解，我今天會先改善浴室地板。」', '"I understand. I will improve the bathroom floor first today."') }
+      ]
+    }
+  ],
+  2: [
+    {
+      title: ml('聽不清楚指示', 'Unclear instructions'),
+      lesson: ml('重點：不懂不是丟臉；不確認才容易出錯。', 'Key point: not understanding is not shameful; not confirming creates mistakes.'),
+      panels: [
+        { face:'🗣️', speaker:ml('雇主', 'Employer'), tone:ml('很快', 'Fast'), line:ml('等一下先弄那個，再拿去那邊。', 'Do that first, then take it over there.') },
+        { face:'🙋', speaker:ml('外籍看護', 'Caregiver'), tone:ml('確認', 'Confirm'), line:ml('不好意思，我怕理解錯。可以請您再說一次「那個」是哪一個嗎？', 'Sorry, I may misunderstand. Could you repeat what "that" means?') },
+        { face:'🤝', speaker:ml('結果', 'Result'), tone:ml('清楚', 'Clear'), line:ml('雇主重新說明，看護記下重點，工作更順。', 'The employer explains again; the caregiver notes key points and works smoothly.') }
+      ]
+    },
+    {
+      title: ml('長者想家', 'The elder misses family'),
+      lesson: ml('重點：同理不是立刻解決，而是先讓對方感到被理解。', 'Key point: empathy is not solving immediately; it starts with helping someone feel understood.'),
+      panels: [
+        { face:'🥺', speaker:ml('長者', 'Elder'), tone:ml('低落', 'Low'), line:ml('我的孩子都很忙，好像沒有人記得我。', 'My children are busy. It feels like no one remembers me.') },
+        { face:'💛', speaker:ml('外籍看護', 'Caregiver'), tone:ml('同理', 'Empathy'), line:ml('聽起來您很孤單。您想跟我說說孩子小時候的事嗎？', 'It sounds lonely. Would you like to tell me about your children when they were young?') },
+        { face:'😊', speaker:ml('結果', 'Result'), tone:ml('連結', 'Connected'), line:ml('長者開始分享故事，情緒慢慢柔和。', 'The elder starts sharing stories and softens emotionally.') }
+      ]
+    },
+    {
+      title: ml('文化誤會', 'Cultural misunderstanding'),
+      lesson: ml('重點：先問、再說明，不急著判斷誰對誰錯。', 'Key point: ask first, explain next, and avoid judging who is right or wrong.'),
+      panels: [
+        { face:'🤨', speaker:ml('雇主', 'Employer'), tone:ml('疑惑', 'Confused'), line:ml('你說話都不看我，是不是不誠實？', 'You do not look at me when speaking. Are you being dishonest?') },
+        { face:'🙏', speaker:ml('外籍看護', 'Caregiver'), tone:ml('解釋', 'Explain'), line:ml('在我的文化裡，低頭是表示尊重。我會學習在台灣工作時多看著您確認。', 'In my culture, looking down shows respect. I will learn to use more eye contact at work in Taiwan.') },
+        { face:'🌉', speaker:ml('結果', 'Result'), tone:ml('橋樑', 'Bridge'), line:ml('雙方理解差異，信任感增加。', 'Both understand the difference, and trust grows.') }
+      ]
+    }
+  ],
+  3: [
+    {
+      title: ml('不小心打破物品', 'Breaking an item by accident'),
+      lesson: ml('重點：誠實回報比事後被發現更能建立信任。', 'Key point: honest reporting builds more trust than being found out later.'),
+      panels: [
+        { face:'😨', speaker:ml('外籍看護', 'Caregiver'), tone:ml('緊張', 'Nervous'), line:ml('我不小心打破杯子，要不要先藏起來？', 'I broke a cup by accident. Should I hide it?') },
+        { face:'📝', speaker:ml('外籍看護', 'Caregiver'), tone:ml('負責', 'Responsible'), line:ml('我會先清理安全，再向雇主說明發生時間和原因。', 'I will clean safely first, then report when and why it happened.') },
+        { face:'✅', speaker:ml('結果', 'Result'), tone:ml('可信任', 'Trusted'), line:ml('雇主知道看護會誠實處理錯誤。', 'The employer knows the caregiver handles mistakes honestly.') }
+      ]
+    },
+    {
+      title: ml('看到私人文件', 'Seeing private documents'),
+      lesson: ml('重點：隱私是專業界線，看到也不代表可以閱讀或拍照。', 'Key point: privacy is a professional boundary. Seeing does not mean reading or photographing.'),
+      panels: [
+        { face:'📄', speaker:ml('情境', 'Scene'), tone:ml('抽屜打開', 'Drawer open'), line:ml('打掃時看到雇主銀行資料。', 'While cleaning, you see the employer’s bank information.') },
+        { face:'🙈', speaker:ml('外籍看護', 'Caregiver'), tone:ml('守界線', 'Boundary'), line:ml('我不閱讀、不拍照，立刻把文件放回原位。', 'I do not read or photograph it. I put it back immediately.') },
+        { face:'🔒', speaker:ml('結果', 'Result'), tone:ml('保密', 'Private'), line:ml('家庭隱私被保護，專業信任被保留。', 'Family privacy is protected, and professional trust remains.') }
+      ]
+    },
+    {
+      title: ml('長者送貴重戒指', 'An elder offers a valuable ring'),
+      lesson: ml('重點：貴重物品不能私下收，避免金錢與家庭糾紛。', 'Key point: do not privately accept valuables; avoid money and family disputes.'),
+      panels: [
+        { face:'💍', speaker:ml('長者', 'Elder'), tone:ml('好意', 'Kind'), line:ml('這個戒指送你，不用告訴孩子。', 'This ring is for you. Do not tell my children.') },
+        { face:'🙏', speaker:ml('外籍看護', 'Caregiver'), tone:ml('婉拒', 'Decline'), line:ml('謝謝您的心意，但我不能收貴重物品。我會請家人一起確認。', 'Thank you, but I cannot accept valuables. I will ask the family to confirm together.') },
+        { face:'🛡️', speaker:ml('結果', 'Result'), tone:ml('保護雙方', 'Protected'), line:ml('看護保護自己，也保護長者與家庭關係。', 'The caregiver protects herself, the elder, and the family relationship.') }
+      ]
+    }
+  ],
+  4: [
+    {
+      title: ml('家屬指示不同', 'Different family instructions'),
+      lesson: ml('重點：不選邊、不猜測，請主要雇主統一說法。', 'Key point: do not take sides or guess; ask the main employer to align instructions.'),
+      panels: [
+        { face:'😵‍💫', speaker:ml('家屬 A/B', 'Family A/B'), tone:ml('不同說法', 'Conflict'), line:ml('一個說要多吃，一個說要少吃。', 'One says eat more; another says eat less.') },
+        { face:'🙋', speaker:ml('外籍看護', 'Caregiver'), tone:ml('中立', 'Neutral'), line:ml('我先照原本紀錄做，並請主要雇主確認最新方式。', 'I will follow the current record first and ask the main employer to confirm the newest plan.') },
+        { face:'📋', speaker:ml('結果', 'Result'), tone:ml('一致', 'Aligned'), line:ml('照護方式被寫下來，家屬也比較不容易衝突。', 'The care plan is written down, reducing family conflict.') }
+      ]
+    },
+    {
+      title: ml('藥盒標示不同', 'Medicine label mismatch'),
+      lesson: ml('重點：用藥不能猜，任何不一致都要先確認。', 'Key point: never guess medication; confirm any mismatch first.'),
+      panels: [
+        { face:'💊', speaker:ml('情境', 'Scene'), tone:ml('不一致', 'Mismatch'), line:ml('藥盒寫早晚各一顆，但雇主說一次兩顆。', 'The box says one in the morning and evening, but the employer says two at once.') },
+        { face:'📞', speaker:ml('外籍看護', 'Caregiver'), tone:ml('確認', 'Confirm'), line:ml('我先暫停，拍藥盒給雇主確認，必要時請藥師或醫師確認。', 'I pause, send a photo to the employer, and ask a pharmacist or doctor if needed.') },
+        { face:'🩺', speaker:ml('結果', 'Result'), tone:ml('安全', 'Safe'), line:ml('避免用藥錯誤，照護更安全。', 'Medication error is avoided and care becomes safer.') }
+      ]
+    },
+    {
+      title: ml('浴室地板很滑', 'Slippery bathroom floor'),
+      lesson: ml('重點：先處理安全風險，再完成一般工作。', 'Key point: handle safety risks before routine tasks.'),
+      panels: [
+        { face:'⚠️', speaker:ml('情境', 'Scene'), tone:ml('危險', 'Danger'), line:ml('長者準備洗澡，地板還是濕的。', 'The elder is about to bathe, but the floor is still wet.') },
+        { face:'🧽', speaker:ml('外籍看護', 'Caregiver'), tone:ml('先防跌', 'Prevent fall'), line:ml('我先請長者坐好，擦乾地板，放防滑墊。', 'I ask the elder to sit, dry the floor, and place a non-slip mat.') },
+        { face:'🚿', speaker:ml('結果', 'Result'), tone:ml('安全完成', 'Safe'), line:ml('洗澡流程變慢一點，但跌倒風險大幅下降。', 'Bathing is a little slower, but fall risk drops greatly.') }
+      ]
+    }
+  ],
+  5: [
+    {
+      title: ml('睡不好又要上班', 'Working after poor sleep'),
+      lesson: ml('重點：承認狀態不是示弱，是降低照護風險。', 'Key point: acknowledging your condition is not weakness; it lowers care risk.'),
+      panels: [
+        { face:'😴', speaker:ml('外籍看護', 'Caregiver'), tone:ml('疲憊', 'Tired'), line:ml('我只睡四小時，今天很容易分心。', 'I slept only four hours and may be distracted today.') },
+        { face:'🗒️', speaker:ml('外籍看護', 'Caregiver'), tone:ml('先準備', 'Prepare'), line:ml('我先列照護清單，重要事情用鬧鐘提醒，必要時告知雇主。', 'I make a care checklist, set alarms for key tasks, and tell the employer if needed.') },
+        { face:'🔋', speaker:ml('結果', 'Result'), tone:ml('降風險', 'Lower risk'), line:ml('看護不硬撐，錯誤機率下降。', 'The caregiver does not push blindly, and error risk decreases.') }
+      ]
+    },
+    {
+      title: ml('視訊後更想家', 'More homesick after a video call'),
+      lesson: ml('重點：思鄉很正常，可以安排情緒收尾，而不是讓情緒直接進工作。', 'Key point: homesickness is normal; close the emotion before returning to work.'),
+      panels: [
+        { face:'😭', speaker:ml('外籍看護', 'Caregiver'), tone:ml('想家', 'Homesick'), line:ml('跟家人通話後，我更難過了。', 'After calling my family, I feel even sadder.') },
+        { face:'🫶', speaker:ml('外籍看護', 'Caregiver'), tone:ml('照顧自己', 'Self-care'), line:ml('我給自己十分鐘寫下心情，喝水，再回到工作。', 'I give myself ten minutes to write feelings down, drink water, then return to work.') },
+        { face:'🌙', speaker:ml('結果', 'Result'), tone:ml('情緒落地', 'Settled'), line:ml('情緒被接住，比假裝沒事更穩定。', 'The emotion is held, which is steadier than pretending nothing happened.') }
+      ]
+    },
+    {
+      title: ml('休假一直被延後', 'Leave keeps being delayed'),
+      lesson: ml('重點：界線可以溫和表達；清楚紀錄比忍耐到崩潰更好。', 'Key point: boundaries can be expressed gently; clear records are better than collapsing from endurance.'),
+      panels: [
+        { face:'😟', speaker:ml('外籍看護', 'Caregiver'), tone:ml('壓力', 'Pressure'), line:ml('這已經第三次延後休假，我很累。', 'This is the third delayed day off. I am very tired.') },
+        { face:'📆', speaker:ml('外籍看護', 'Caregiver'), tone:ml('溝通', 'Communicate'), line:ml('我想確認下次休假日期，讓我可以恢復體力，也保持照護品質。', 'I would like to confirm the next day off so I can recover and keep care quality.') },
+        { face:'🤝', speaker:ml('結果', 'Result'), tone:ml('有界線', 'Boundary'), line:ml('若仍無法安排，可請仲介或 1955 協助。', 'If it still cannot be arranged, the agency or 1955 can help.') }
+      ]
+    }
+  ],
+  6: [
+    {
+      title: ml('聽懂委婉拒絕', 'Understanding indirect refusal'),
+      lesson: ml('重點：台灣溝通有時很委婉，禮貌確認可以避免誤會。', 'Key point: Taiwanese communication can be indirect; gentle confirmation prevents misunderstanding.'),
+      panels: [
+        { face:'🙂', speaker:ml('雇主', 'Employer'), tone:ml('委婉', 'Indirect'), line:ml('這樣可能不太方便喔。', 'That may not be very convenient.') },
+        { face:'🙋', speaker:ml('外籍看護', 'Caregiver'), tone:ml('確認', 'Confirm'), line:ml('我確認一下，您的意思是這次不要這樣做，對嗎？', 'Let me confirm: do you mean I should not do it this way this time?') },
+        { face:'✅', speaker:ml('結果', 'Result'), tone:ml('理解', 'Understood'), line:ml('看護聽懂真正意思，也保留禮貌。', 'The caregiver understands the real meaning while staying polite.') }
+      ]
+    },
+    {
+      title: ml('神明廳清掃', 'Cleaning near a shrine'),
+      lesson: ml('重點：不懂習俗時先問，尊重比假裝知道更安全。', 'Key point: when you do not know a custom, ask first. Respect is safer than pretending to know.'),
+      panels: [
+        { face:'🕯️', speaker:ml('情境', 'Scene'), tone:ml('宗教空間', 'Sacred space'), line:ml('家中神明廳有供品和香爐。', 'The home shrine has offerings and an incense burner.') },
+        { face:'🙏', speaker:ml('外籍看護', 'Caregiver'), tone:ml('詢問', 'Ask'), line:ml('請問這裡清掃時，有哪些東西不能移動？', 'May I ask what items should not be moved when cleaning here?') },
+        { face:'🌸', speaker:ml('結果', 'Result'), tone:ml('尊重', 'Respect'), line:ml('雇主感覺被尊重，也能清楚告訴注意事項。', 'The employer feels respected and can clearly explain the rules.') }
+      ]
+    },
+    {
+      title: ml('過年家裡很忙', 'Busy home during Lunar New Year'),
+      lesson: ml('重點：節慶會改變家庭節奏，提前確認就不慌。', 'Key point: festivals change household rhythms; confirming early reduces stress.'),
+      panels: [
+        { face:'🧧', speaker:ml('情境', 'Scene'), tone:ml('親友很多', 'Many relatives'), line:ml('過年期間親戚來訪，作息和用餐都改變。', 'During Lunar New Year, relatives visit and schedules and meals change.') },
+        { face:'📋', speaker:ml('外籍看護', 'Caregiver'), tone:ml('提前問', 'Ask early'), line:ml('請問這幾天長者作息和照護安排有需要調整嗎？', 'Do the elder’s schedule and care arrangements need adjustment these days?') },
+        { face:'🎉', speaker:ml('結果', 'Result'), tone:ml('融入', 'Adapted'), line:ml('看護能配合節奏，也用祝福語建立關係。', 'The caregiver adapts to the rhythm and uses greetings to build connection.') }
+      ]
+    }
+  ]
+};
 
 
 const visualLearning = {
@@ -15673,13 +16485,80 @@ const visualLearning = {
 };
 
 
+
+function svgPerson(x, y, shirt, skin, side) {
+  const face = side ? '<path d="M'+(x+9)+' '+(y+18)+' q5 5 10 0" stroke="#334155" stroke-width="2" fill="none"/>' : '<circle cx="'+(x+10)+'" cy="'+(y+16)+'" r="1.7" fill="#334155"/><circle cx="'+(x+22)+'" cy="'+(y+16)+'" r="1.7" fill="#334155"/><path d="M'+(x+12)+' '+(y+25)+' q5 4 10 0" stroke="#334155" stroke-width="2" fill="none"/>';
+  return '<g><circle cx="'+(x+16)+'" cy="'+(y+18)+'" r="15" fill="'+skin+'"/><path d="M'+(x+3)+' '+(y+13)+' q13 -18 29 0 v-7 q-15 -13 -29 0 z" fill="#334155"/>'+face+'<path d="M'+(x-2)+' '+(y+42)+' q18 -18 36 0 v42 h-36 z" fill="'+shirt+'"/><path d="M'+(x+4)+' '+(y+84)+' h9 v28 h-9 zM'+(x+21)+' '+(y+84)+' h9 v28 h-9 z" fill="#475569"/><path d="M'+(x-2)+' '+(y+54)+' q-16 12 -23 28" stroke="'+shirt+'" stroke-width="8" stroke-linecap="round"/><path d="M'+(x+34)+' '+(y+54)+' q16 10 23 27" stroke="'+shirt+'" stroke-width="8" stroke-linecap="round"/></g>';
+}
+
+function svgFrame(inner, accent) {
+  return '<svg viewBox="0 0 320 180" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="sceneBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#172033"/><stop offset="1" stop-color="#0f172a"/></linearGradient><filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#020617" flood-opacity=".28"/></filter></defs><rect width="320" height="180" rx="18" fill="url(#sceneBg)"/><circle cx="278" cy="32" r="48" fill="'+accent+'" opacity=".13"/><circle cx="38" cy="145" r="55" fill="#ffffff" opacity=".045"/><g filter="url(#softShadow)">'+inner+'</g></svg>';
+}
+
+function visualScenarioSvg(moduleN, cardIndex) {
+  const accentMap = {1:'#38bdf8',2:'#a78bfa',3:'#34d399',4:'#fbbf24',5:'#fb7185',6:'#22c55e'};
+  const accent = accentMap[moduleN] || '#38bdf8';
+  const worker = svgPerson(54, 44, '#38bdf8', '#f1c7a8', false);
+  const elder = svgPerson(210, 50, '#94a3b8', '#e7b98f', true);
+  const family = svgPerson(212, 46, '#a78bfa', '#f6c6a7', false);
+  const bed = '<rect x="164" y="102" width="116" height="34" rx="8" fill="#475569"/><rect x="174" y="82" width="48" height="24" rx="8" fill="#e2e8f0"/><rect x="220" y="88" width="62" height="30" rx="8" fill="#7dd3fc"/><rect x="160" y="132" width="128" height="10" rx="5" fill="#1f2937"/>';
+  const phone = '<rect x="232" y="47" width="40" height="70" rx="9" fill="#e2e8f0"/><rect x="238" y="57" width="28" height="45" rx="4" fill="#0f172a"/><circle cx="252" cy="109" r="3" fill="#94a3b8"/>';
+  const clip = '<rect x="205" y="38" width="70" height="90" rx="9" fill="#f8fafc"/><rect x="224" y="31" width="32" height="13" rx="5" fill="#94a3b8"/><path d="M219 61h42M219 80h35M219 99h42" stroke="#475569" stroke-width="5" stroke-linecap="round"/>';
+  const table = '<rect x="102" y="112" width="120" height="16" rx="8" fill="#64748b"/><rect x="116" y="128" width="10" height="34" rx="4" fill="#334155"/><rect x="198" y="128" width="10" height="34" rx="4" fill="#334155"/>';
+  const scenes = {
+    '1-0': '<rect x="136" y="32" width="48" height="116" rx="18" fill="#1e293b"/><circle cx="160" cy="58" r="13" fill="#ef4444"/><circle cx="160" cy="91" r="13" fill="#f59e0b"/><circle cx="160" cy="124" r="13" fill="#22c55e"/>'+worker+elder+'<path d="M103 94 q44 -26 86 -3" stroke="'+accent+'" stroke-width="7" fill="none" stroke-linecap="round"/>',
+    '1-1': worker+'<rect x="128" y="42" width="52" height="48" rx="10" fill="#f8fafc"/><text x="154" y="73" text-anchor="middle" font-size="24" font-weight="800" fill="#0f172a">A</text><rect x="190" y="70" width="52" height="48" rx="10" fill="#fef3c7"/><text x="216" y="101" text-anchor="middle" font-size="24" font-weight="800" fill="#0f172a">B</text><rect x="252" y="98" width="52" height="48" rx="10" fill="#bbf7d0"/><text x="278" y="129" text-anchor="middle" font-size="24" font-weight="800" fill="#0f172a">C</text><path d="M180 67h18M242 95h18" stroke="'+accent+'" stroke-width="6" stroke-linecap="round"/>',
+    '1-2': worker+'<path d="M210 64 q18 -25 36 0 q18 25 -18 55 q-36 -30 -18 -55z" fill="#fb7185"/><path d="M198 42 h58 l-11 -18 h-36 z" fill="#fbbf24"/><path d="M188 133 h82" stroke="'+accent+'" stroke-width="8" stroke-linecap="round"/>',
+    '2-0': worker+family+'<path d="M112 72 q40 -35 88 -4" stroke="'+accent+'" stroke-width="7" fill="none" stroke-linecap="round"/><circle cx="160" cy="65" r="22" fill="#f8fafc"/><path d="M148 63 h24M148 73 h17" stroke="#334155" stroke-width="5" stroke-linecap="round"/>',
+    '2-1': worker+'<rect x="142" y="36" width="132" height="52" rx="18" fill="#f8fafc"/><text x="208" y="68" text-anchor="middle" font-size="19" font-weight="800" fill="#0f172a">I feel...</text><rect x="166" y="105" width="100" height="36" rx="16" fill="#dbeafe"/><text x="216" y="129" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">because</text>',
+    '2-2': worker+family+'<path d="M108 128 C145 82 184 82 222 128" stroke="'+accent+'" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M128 128h74" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/><circle cx="154" cy="88" r="10" fill="#f59e0b"/><circle cx="181" cy="88" r="10" fill="#22c55e"/>',
+    '3-0': worker+'<path d="M206 40 l58 22 v39 c0 34 -24 54 -58 66 c-34 -12 -58 -32 -58 -66 v-39z" fill="#22c55e" opacity=".9"/><path d="M184 96 l18 18 40 -46" stroke="#f8fafc" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+    '3-1': worker+clip+'<path d="M127 84 h52" stroke="'+accent+'" stroke-width="7" stroke-linecap="round"/><circle cx="145" cy="65" r="16" fill="#facc15"/><text x="145" y="71" text-anchor="middle" font-size="18" font-weight="900" fill="#0f172a">$</text>',
+    '3-2': worker+phone+'<path d="M178 53 l32 58 h-64z" fill="#f59e0b"/><text x="178" y="96" text-anchor="middle" font-size="36" font-weight="900" fill="#0f172a">!</text><path d="M89 130 q47 -28 93 -2" stroke="'+accent+'" stroke-width="7" fill="none" stroke-linecap="round"/>',
+    '4-0': worker+'<path d="M136 53 h70 q34 0 34 34 q0 34 -34 34 h-24" stroke="'+accent+'" stroke-width="12" fill="none" stroke-linecap="round"/><circle cx="137" cy="53" r="16" fill="#f8fafc"/><circle cx="240" cy="87" r="16" fill="#fde68a"/><circle cx="182" cy="121" r="16" fill="#bbf7d0"/><text x="137" y="59" text-anchor="middle" font-size="16" font-weight="900" fill="#0f172a">?</text>',
+    '4-1': worker+bed+'<path d="M138 41 l42 76 h-84z" fill="#fbbf24"/><text x="138" y="92" text-anchor="middle" font-size="44" font-weight="900" fill="#0f172a">1</text>',
+    '4-2': worker+'<rect x="158" y="40" width="72" height="45" rx="14" fill="#dbeafe"/><text x="194" y="69" text-anchor="middle" font-size="18" font-weight="800" fill="#1e3a8a">A</text><rect x="214" y="92" width="72" height="45" rx="14" fill="#fef3c7"/><text x="250" y="121" text-anchor="middle" font-size="18" font-weight="800" fill="#92400e">B</text><path d="M194 88 L250 92" stroke="#fb7185" stroke-width="7" stroke-linecap="round"/><path d="M206 88 L184 124" stroke="'+accent+'" stroke-width="6" stroke-linecap="round"/>',
+    '5-0': worker+'<rect x="160" y="64" width="112" height="42" rx="18" fill="#e2e8f0"/><rect x="272" y="76" width="10" height="18" rx="4" fill="#e2e8f0"/><rect x="171" y="73" width="25" height="24" rx="10" fill="#fb7185"/><text x="216" y="130" text-anchor="middle" font-size="22" font-weight="900" fill="#f8fafc">25%</text>',
+    '5-1': worker+'<path d="M192 45 h56 l18 18 v51 h-74z" fill="#f8fafc"/><path d="M202 78 h44M202 96 h31" stroke="#64748b" stroke-width="5" stroke-linecap="round"/><path d="M158 49 q19 -28 38 0" stroke="#fb7185" stroke-width="8" fill="none" stroke-linecap="round"/><text x="220" y="144" text-anchor="middle" font-size="20" font-weight="900" fill="#fb7185">REST</text>',
+    '5-2': worker+'<circle cx="204" cy="66" r="20" fill="#a78bfa"/><circle cx="264" cy="92" r="20" fill="#22c55e"/><circle cx="198" cy="132" r="20" fill="#f59e0b"/><path d="M204 86 L198 112M224 74 L246 86M216 124 L246 101" stroke="#e2e8f0" stroke-width="5" stroke-linecap="round"/><text x="235" y="154" text-anchor="middle" font-size="18" font-weight="900" fill="#f8fafc">SOS</text>',
+    '6-0': worker+table+'<circle cx="210" cy="56" r="34" fill="#f8fafc"/><path d="M210 30 v52M184 56h52" stroke="#334155" stroke-width="4"/><path d="M210 56 l20 -13" stroke="#22c55e" stroke-width="7" stroke-linecap="round"/><text x="210" y="112" text-anchor="middle" font-size="16" font-weight="800" fill="#f8fafc">context</text>',
+    '6-1': worker+family+'<rect x="130" y="42" width="62" height="82" rx="8" fill="#334155"/><rect x="138" y="50" width="46" height="66" rx="4" fill="#0f172a"/><path d="M118 128 h120" stroke="'+accent+'" stroke-width="9" stroke-linecap="round"/><circle cx="161" cy="80" r="13" fill="#f8fafc"/><path d="M154 80h14" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>',
+    '6-2': worker+'<rect x="145" y="38" width="130" height="48" rx="16" fill="#f8fafc"/><text x="210" y="68" text-anchor="middle" font-size="17" font-weight="800" fill="#0f172a">maybe...</text><path d="M206 86 v18" stroke="'+accent+'" stroke-width="5" stroke-linecap="round"/><rect x="155" y="112" width="110" height="36" rx="15" fill="#bbf7d0"/><text x="210" y="136" text-anchor="middle" font-size="15" font-weight="900" fill="#14532d">please ask</text>'
+  };
+  return svgFrame(scenes[moduleN + '-' + cardIndex] || worker + elder, accent);
+}
+
+function renderScenarioIllustration(moduleN, cardIndex) {
+  return '<div class="visual-illustration">' + visualScenarioSvg(moduleN, cardIndex) + '</div>';
+}
+
+function renderHeroIllustration(moduleN) {
+  return '<div class="visual-hero-art">' + visualScenarioSvg(moduleN, 0) + '</div>';
+}
+
+function feedbackIllustration(correct) {
+  const accent = correct ? '#34d399' : '#f59e0b';
+  const symbol = correct ? '<path d="M118 91 l24 24 54 -61" stroke="#f8fafc" stroke-width="18" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' : '<path d="M157 50 v55" stroke="#f8fafc" stroke-width="16" stroke-linecap="round"/><circle cx="157" cy="132" r="9" fill="#f8fafc"/>';
+  return '<svg viewBox="0 0 220 180" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><rect width="220" height="180" rx="30" fill="#0f172a"/><circle cx="110" cy="90" r="62" fill="'+accent+'"/>'+symbol+'<path d="M42 148 q68 24 136 0" stroke="'+accent+'" stroke-width="8" fill="none" stroke-linecap="round" opacity=".55"/></svg>';
+}
+
+function renderQuizFeedbackContent(q, moduleN, correct) {
+  const title = correct
+    ? {zh:'答對了，這個判斷可以用在真實照護場景。', en:'Correct. This judgment can be used in real care situations.', id:'Benar. Penilaian ini dapat dipakai dalam situasi perawatan nyata.', vi:'Đúng. Cách phán đoán này có thể dùng trong tình huống chăm sóc thật.'}
+    : {zh:'先停一下，看圖示提示再複習重點。', en:'Pause and use the visual cue to review the key point.', id:'Berhenti sebentar dan pakai petunjuk gambar untuk mengulang poin penting.', vi:'Tạm dừng và dùng gợi ý hình ảnh để ôn lại điểm chính.'};
+  return '<div class="feedback-visual">' + feedbackIllustration(correct) + '</div><div><strong>' + safeT(title) + '</strong><div>' + safeT(q.feedback) + '</div></div>';
+}
+
+function renderQuizFeedbackHtml(q, moduleN, correct) {
+  return '<div class="quiz-feedback show visualized ' + (correct ? 'good' : 'bad') + '">' + renderQuizFeedbackContent(q, moduleN, correct) + '</div>';
+}
+
 function renderVisualLearning(moduleN) {
   const data = visualLearning[moduleN];
   if (!data) return '';
-  const cardsHtml = data.cards.map(card => {
-    const sceneHtml = card.scene.map(part => part === '→' || part === '↔' || part === '>' || part === '+' || part === '≈' || part === '?' ? '<span class="arrow">' + safeValue(part) + '</span>' : '<span>' + safeValue(part) + '</span>').join('');
+  const cardsHtml = data.cards.map((card, idx) => {
     const stepsHtml = card.steps.map(step => '<span class="visual-step">' + safeT(step) + '</span>').join('');
-    return '<div class="visual-card"><div class="visual-scene">' + sceneHtml + '</div><h4>' + safeT(card.title) + '</h4><p>' + safeT(card.text) + '</p><div class="visual-steps">' + stepsHtml + '</div></div>';
+    return '<div class="visual-card illustrated-card">' + renderScenarioIllustration(moduleN, idx) + '<h4>' + safeT(card.title) + '</h4><p>' + safeT(card.text) + '</p><div class="visual-steps">' + stepsHtml + '</div></div>';
   }).join('');
   return `
     <div class="visual-learning">
@@ -15688,9 +16567,58 @@ function renderVisualLearning(moduleN) {
           <h3>${safeT(data.title)}</h3>
           <p>${safeT(data.intro)}</p>
         </div>
-        <div class="visual-mnemonic">🧠 ${safeT(data.mnemonic)}</div>
+        ${renderHeroIllustration(moduleN)}
+        <div class="visual-mnemonic">${safeT(data.mnemonic)}</div>
       </div>
       <div class="visual-cards">${cardsHtml}</div>
+    </div>
+  `;
+}
+
+function renderScenarioComics(moduleN) {
+  const comics = scenarioComics[moduleN];
+  if (!comics || !comics.length) return '';
+  const labels = {
+    title: ml('情境漫畫', 'Scenario Comics', 'Komik Skenario', 'Truyện tranh tình huống'),
+    intro: ml('每組漫畫用三格呈現：情緒衝突、專業回應、同理溝通成功。先看情境，再模仿可使用的句子。', 'Each comic uses three panels: emotional conflict, professional response, and successful empathetic communication. Watch the situation, then learn the phrases you can use.', 'Setiap komik memakai tiga panel: konflik emosi, respons profesional, dan komunikasi empatik yang berhasil. Lihat situasinya, lalu pelajari kalimat yang bisa digunakan.', 'Mỗi truyện có ba khung: xung đột cảm xúc, phản hồi chuyên nghiệp và giao tiếp đồng cảm thành công. Xem tình huống rồi học các câu có thể dùng.'),
+    lessonPrefix: ml('重點提示', 'Key takeaway', 'Poin penting', 'Điểm chính')
+  };
+  const toneClasses = ['tone-conflict', 'tone-response', 'tone-result'];
+  const strips = comics.map((comic, comicIndex) => {
+    const panels = comic.panels.map((panel, panelIndex) => {
+      const toneClass = toneClasses[panelIndex] || toneClasses[toneClasses.length - 1];
+      return `
+      <div class="manga-panel ${toneClass}">
+        <div class="manga-scene">
+          <div class="manga-avatar">${safeValue(panel.face)}</div>
+          <div class="manga-bubble">
+            <div class="manga-speaker">
+              <span>${safeT(panel.speaker)}</span>
+              <span class="manga-tone">${safeT(panel.tone)}</span>
+            </div>
+            <div class="manga-line">${safeT(panel.line)}</div>
+          </div>
+        </div>
+      </div>
+    `;
+    }).join('');
+    return `
+      <div class="manga-strip">
+        <div class="manga-strip-title"><span>${comicIndex + 1}</span>${safeT(comic.title)}</div>
+        <div class="manga-panels">${panels}</div>
+        <div class="manga-lesson"><strong>${safeT(labels.lessonPrefix)}：</strong>${safeT(comic.lesson)}</div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="manga-learning" style="--current-color:${modules[moduleN].color}">
+      <div class="manga-head">
+        <div>
+          <h3>${safeT(labels.title)}</h3>
+          <p>${safeT(labels.intro)}</p>
+        </div>
+      </div>
+      <div class="manga-grid">${strips}</div>
     </div>
   `;
 }
@@ -15733,6 +16661,7 @@ function renderModule(n) {
   html += `</div>`;
 
   html += renderVisualLearning(n);
+  html += renderScenarioComics(n);
 
   // Key concepts
   const conceptTitle = {zh:'核心概念', en:'Core Concepts', id:'Konsep Inti', vi:'Khái niệm cốt lõi'};
@@ -15796,7 +16725,7 @@ function renderModule(n) {
       html += `
         <div class="unit-section" style="--current-color:${m.color}">
           <div class="unit-header">
-            <span class="unit-num" style="background:rgba(244,114,182,0.1);border-color:${m.color};color:${m.color}">${safeValue(u.num)}</span>
+            <span class="unit-num" style="background:${m.color}1a;border-color:${m.color};color:${m.color}">${safeValue(u.num)}</span>
             <div>
               <div class="unit-title">${safeT(u.title)}</div>
               <div class="unit-subtitle">${safeValue(u.subtitle)}</div>
@@ -15953,40 +16882,37 @@ function renderModule(n) {
       <div class="icon">💡</div>
       <div>
         <strong>${safeT(infoKey)}</strong>
-        <p style="margin-top:6px">${safeT(infoText[n])}</p>
+        <p style="margin-top:6px">${infoText[n] ? safeT(infoText[n]) : ''}</p>
       </div>
     </div>
   `;
 
-  // Quiz
-  const quizTitle = {zh:'練習測驗', en:'Practice Quiz', id:'Kuis Latihan', vi:'Bài kiểm tra thực hành'};
-  const quizSub = {zh:`共 ${m.quiz.length} 題，基礎題 + 情境題`, en:`${m.quiz.length} questions — Basic & Scenario`, id:`${m.quiz.length} soal — Dasar & Skenario`, vi:`${m.quiz.length} câu — Cơ bản & Tình huống`};
+  // Go-to-quiz-bank CTA
+  const quizCtaTitle = {zh:'前往測驗', en:'Take the Quiz', id:'Mulai Kuis', vi:'Vào bài kiểm tra'};
+  const quizCtaSub = {zh:`本模組共 ${m.quiz.length} 題，可在題庫測驗中心練習`, en:`${m.quiz.length} questions for this module available in the Quiz Bank`, id:`${m.quiz.length} soal modul ini tersedia di Pusat Bank Kuis`, vi:`${m.quiz.length} câu hỏi của mô-đun này có trong Ngân hàng câu hỏi`};
+  const quizCtaBtn = {zh:'🎯 前往題庫測驗', en:'🎯 Go to Quiz Bank', id:'🎯 Buka Bank Kuis', vi:'🎯 Đến ngân hàng câu hỏi'};
   html += `
-    <div class="quiz-section" style="--current-color:${m.color}" id="quiz-section-${n}">
-      <h4>🎯 ${safeT(quizTitle)}</h4>
-      <div class="sub">${safeT(quizSub)}</div>
-      <div id="quiz-body-${n}"></div>
+    <div class="quiz-section" style="--current-color:${m.color};text-align:center;padding:32px 28px">
+      <h4 style="font-size:17px;margin-bottom:8px">${safeT(quizCtaTitle)}</h4>
+      <div class="sub" style="color:var(--text-muted);font-size:13px;margin-bottom:20px">${safeT(quizCtaSub)}</div>
+      <button class="quiz-complete-btn" style="font-size:15px;padding:13px 32px;border-radius:12px" onclick="showQuizBank(${n})">${safeT(quizCtaBtn)}</button>
     </div>
   `;
 
   // Module navigation
   const prevLabel = {zh:'← 上一模組', en:'← Previous', id:'← Sebelumnya', vi:'← Trước'};
   const nextLabel = {zh:'下一模組 →', en:'Next →', id:'Berikutnya →', vi:'Tiếp theo →'};
+  const completeLabel = {zh:'完成本模組 ✓', en:'Complete Module ✓', id:'Selesaikan Modul ✓', vi:'Hoàn thành Mô-đun ✓'};
   html += `
     <div class="module-nav">
-      <button class="module-nav-btn" onclick="loadModule(${n-1})" ${n===1?'disabled':''} >${safeT(prevLabel)}</button>
-      <button class="module-nav-btn primary" onclick="loadModule(${n+1})" ${n===6?'disabled':''}>${safeT(nextLabel)}</button>
+      <button class="module-nav-btn" onclick="if(!this.disabled)loadModule(${n-1})" ${n===1?'disabled':''} >${safeT(prevLabel)}</button>
+      <button class="module-nav-btn" onclick="completeModule(${n})" style="border-color:${m.color};color:${m.color}">${safeT(completeLabel)}</button>
+      <button class="module-nav-btn primary" onclick="if(!this.disabled)loadModule(${n+1})" ${n===6?'disabled':''}>${safeT(nextLabel)}</button>
     </div>
   `;
 
   document.getElementById('module-content').innerHTML = html;
   document.documentElement.style.setProperty('--current-color', m.color);
-
-  // Init quiz state only if not already initialized (preserve on lang switch)
-  if (!quizState[n]) {
-    quizState[n] = { current: 0, score: 0, answered: new Array(m.quiz.length).fill(null) };
-  }
-  renderQuizQuestion(n);
 }
 
 // ── QUIZ FUNCTIONS ──
@@ -16166,6 +17092,17 @@ function resetQuizBank() {
   renderQuizBank();
 }
 
+function retryQuizBankWithFilters() {
+  // Re-draw new random set with the same saved filters (DOM selects may be gone)
+  const available = getQuizBankQuestions(quizBankState.filters);
+  const count = Math.min(quizBankState.filters.count, available.length);
+  quizBankState.pool = shuffleQuestions(available).slice(0, count);
+  quizBankState.current = 0;
+  quizBankState.score = 0;
+  quizBankState.answered = new Array(quizBankState.pool.length).fill(null);
+  renderQuizBank();
+}
+
 function renderQuizBankQuestion() {
   const body = document.getElementById('quiz-bank-body');
   if (!body) return;
@@ -16185,6 +17122,65 @@ function renderQuizBankQuestion() {
   const nextBtnLabel = qi < total - 1
     ? {zh:'下一題 →', en:'Next →', id:'Berikutnya →', vi:'Câu tiếp →'}
     : {zh:'查看結果 →', en:'View Results →', id:'Lihat Hasil →', vi:'Xem kết quả →'};
+
+  // HUD labels
+  const hudCounterLabel = {zh:`第 ${qi+1} / ${total} 題`, en:`Q ${qi+1} / ${total}`, id:`Soal ${qi+1} / ${total}`, vi:`Câu ${qi+1} / ${total}`};
+  const hudScoreLabel = {zh:'目前得分', en:'Score', id:'Skor', vi:'Điểm'};
+  const pct = Math.round(((qi) / total) * 100);
+  const scoreColor = quizBankState.score === 0 && qi === 0 ? 'var(--text-muted)'
+    : (quizBankState.answered.filter((a,i) => a !== null && a === quizBankState.pool[i]?.correct).length / Math.max(1, quizBankState.answered.filter(a => a !== null).length)) >= 0.8 ? '#34d399'
+    : (quizBankState.answered.filter((a,i) => a !== null && a === quizBankState.pool[i]?.correct).length / Math.max(1, quizBankState.answered.filter(a => a !== null).length)) >= 0.6 ? '#fbbf24'
+    : '#f87171';
+  const answeredCount = quizBankState.answered.filter(a => a !== null).length;
+  const scorePct = answeredCount > 0 ? Math.round((quizBankState.score / answeredCount) * 100) : 0;
+  // SVG ring
+  const r = 24, cx = 32, cy = 32, circumference = 2 * Math.PI * r;
+  const ringOffset = circumference - (scorePct / 100) * circumference;
+  const ringHtml = `
+    <div class="qb-score-ring">
+      <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="${cx}" cy="${cy}" r="${r}" stroke="var(--border)" stroke-width="5"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" stroke="${scoreColor}" stroke-width="5"
+          stroke-dasharray="${circumference}" stroke-dashoffset="${ringOffset}"
+          stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"
+          style="transition:stroke-dashoffset 0.5s ease,stroke 0.4s"/>
+      </svg>
+      <div class="qb-score-ring-text">
+        <div class="qb-score-ring-num" style="color:${scoreColor}">${quizBankState.score}</div>
+        <div class="qb-score-ring-denom">/${answeredCount||'—'}</div>
+      </div>
+    </div>`;
+
+  // Streak calculation
+  let streak = 0;
+  for (let i = quizBankState.answered.length - 1; i >= 0; i--) {
+    if (quizBankState.answered[i] === null) break;
+    if (quizBankState.answered[i] === quizBankState.pool[i]?.correct) streak++;
+    else break;
+  }
+  const streakHtml = streak >= 2
+    ? `<span class="qb-streak">🔥 ${streak} ${{zh:'連對',en:'streak',id:'beruntun',vi:'liên tiếp'}[currentLang]||'streak'}</span>`
+    : '';
+
+  const hudHtml = `
+    <div class="qb-hud">
+      <div class="qb-hud-left">
+        <div class="qb-hud-meta">
+          <span class="qb-hud-counter">${safeT(hudCounterLabel)}</span>
+          <span class="qb-hud-pct">${pct}%</span>
+          ${streakHtml}
+        </div>
+        <div class="qb-hud-bar-wrap">
+          <div class="qb-hud-bar" style="width:${pct}%"></div>
+        </div>
+      </div>
+      <div class="qb-score-widget">
+        <div class="qb-score-label">${safeT(hudScoreLabel)}</div>
+        ${ringHtml}
+        <div class="qb-score-sub">${scorePct > 0 ? scorePct + '%' : '—'}</div>
+      </div>
+    </div>`;
+
   const letters = ['A','B','C','D'];
   const answeredIdx = quizBankState.answered[qi];
   let optsHtml = '';
@@ -16193,21 +17189,67 @@ function renderQuizBankQuestion() {
     const disabled = answeredIdx === null ? '' : 'disabled';
     optsHtml += '<button class="quiz-opt' + cls + '" data-opt-letter="' + letters[i] + '" onclick="answerQuizBank(' + i + ')" ' + disabled + '>' + safeT(opt) + '</button>';
   });
-  const feedbackHtml = answeredIdx === null ? '' : '<div class="quiz-feedback show ' + (answeredIdx === q.correct ? 'good' : 'bad') + '">' + safeT(q.feedback) + '</div>';
-  body.innerHTML = `
-    <div class="quiz-progress-row">
-      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${Math.round(((qi+1)/total)*100)}%"></div></div>
-      <div class="quiz-progress-label">${qi+1} / ${total}</div>
+  const feedbackHtml = answeredIdx === null ? '' : renderQuizFeedbackHtml(q, q.moduleNo, answeredIdx === q.correct);
+  body.innerHTML = hudHtml + `
+    <div class="qb-question-card" data-qnum="${qi+1}">
+      <div class="qb-badges">
+        <span class="quiz-type-badge quiz-difficulty-intermediate" style="margin-bottom:0">M${q.moduleNo}</span>
+        <span class="quiz-type-badge ${typeClass}" style="margin-bottom:0">${safeT(typeLabel)}</span>
+        <span class="quiz-type-badge ${difficultyClass}" style="margin-bottom:0">${safeT(difficultyLabel)}</span>
+        <span style="font-size:11px;color:var(--text-muted);margin-left:4px">${safeT(moduleTitle)}</span>
+      </div>
+      <div class="quiz-q">${safeT(q.q)}</div>
+      <div class="quiz-opts" id="qb-opts">${optsHtml}</div>
+      ${feedbackHtml}
+      <button class="quiz-next ${answeredIdx!==null?'show':''}" id="quiz-bank-next" onclick="nextQuizBankQuestion()">${safeT(nextBtnLabel)}</button>
     </div>
-    <span class="quiz-type-badge quiz-difficulty-intermediate">Module ${q.moduleNo}</span>
-    <span class="quiz-type-badge ${typeClass}">${safeT(typeLabel)}</span>
-    <span class="quiz-type-badge ${difficultyClass}">${safeT(difficultyLabel)}</span>
-    <div class="sub-note" style="margin:10px 0 8px">${safeT(moduleTitle)}</div>
-    <div class="quiz-q">${safeT(q.q)}</div>
-    <div class="quiz-opts">${optsHtml}</div>
-    ${feedbackHtml}
-    <button class="quiz-next ${answeredIdx!==null?'show':''}" id="quiz-bank-next" onclick="nextQuizBankQuestion()">${safeT(nextBtnLabel)}</button>
   `;
+}
+
+function showAnswerFlash(correct) {
+  const el = document.getElementById('qb-answer-flash');
+  if (!el) return;
+  el.className = 'qb-answer-flash';
+  el.textContent = correct
+    ? ({zh:'✓ 正確！', en:'✓ Correct!', id:'✓ Benar!', vi:'✓ Đúng!'}[currentLang] || '✓')
+    : ({zh:'✗ 錯誤', en:'✗ Wrong', id:'✗ Salah', vi:'✗ Sai'}[currentLang] || '✗');
+  void el.offsetWidth; // reflow
+  el.className = 'qb-answer-flash ' + (correct ? 'correct-flash' : 'wrong-flash');
+}
+
+function updateHudAfterAnswer() {
+  const qi = quizBankState.current;
+  const total = quizBankState.pool.length;
+  // Update progress bar (now showing answered count)
+  const newPct = Math.round(((qi + 1) / total) * 100);
+  const bar = document.querySelector('.qb-hud-bar');
+  if (bar) bar.style.width = newPct + '%';
+  const pctEl = document.querySelector('.qb-hud-pct');
+  if (pctEl) pctEl.textContent = newPct + '%';
+  const counterEl = document.querySelector('.qb-hud-counter');
+  if (counterEl) {
+    const label = {zh:`第 ${qi+1} / ${total} 題`, en:`Q ${qi+1} / ${total}`, id:`Soal ${qi+1} / ${total}`, vi:`Câu ${qi+1} / ${total}`};
+    counterEl.textContent = label[currentLang] || label.zh;
+  }
+  // Update ring score
+  const answeredCount = quizBankState.answered.filter(a => a !== null).length;
+  const scorePct = answeredCount > 0 ? Math.round((quizBankState.score / answeredCount) * 100) : 0;
+  const scoreColor = scorePct >= 80 ? '#34d399' : scorePct >= 60 ? '#fbbf24' : '#f87171';
+  const r = 24, cx = 32, cy = 32, circumference = 2 * Math.PI * r;
+  const ringOffset = circumference - (scorePct / 100) * circumference;
+  const ringCircle = document.querySelector('.qb-score-ring svg circle:nth-child(2)');
+  if (ringCircle) {
+    ringCircle.setAttribute('stroke-dashoffset', ringOffset);
+    ringCircle.setAttribute('stroke', scoreColor);
+  }
+  const ringNum = document.querySelector('.qb-score-ring-num');
+  if (ringNum) { ringNum.textContent = quizBankState.score; ringNum.style.color = scoreColor; }
+  const ringDenom = document.querySelector('.qb-score-ring-denom');
+  if (ringDenom) ringDenom.textContent = '/' + answeredCount;
+  const scoreSub = document.querySelector('.qb-score-sub');
+  if (scoreSub) scoreSub.textContent = scorePct + '%';
+  // Bump animation on score element
+  if (ringNum) { ringNum.classList.remove('bump'); void ringNum.offsetWidth; ringNum.classList.add('bump'); }
 }
 
 function answerQuizBank(selected) {
@@ -16216,7 +17258,31 @@ function answerQuizBank(selected) {
   const q = quizBankState.pool[qi];
   quizBankState.answered[qi] = selected;
   if (selected === q.correct) quizBankState.score += 1;
-  renderQuizBankQuestion();
+
+  // Flash indicator
+  showAnswerFlash(selected === q.correct);
+
+  // Update buttons in place (avoid full re-render / scroll jump)
+  const opts = document.querySelectorAll('#qb-opts .quiz-opt');
+  opts.forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selected) btn.classList.add('wrong');
+  });
+
+  const optsEl = document.getElementById('qb-opts');
+  if (optsEl) {
+    const fb = document.createElement('div');
+    fb.className = 'quiz-feedback show visualized ' + (selected === q.correct ? 'good' : 'bad');
+    fb.innerHTML = renderQuizFeedbackContent(q, q.moduleNo, selected === q.correct);
+    optsEl.after(fb);
+  }
+
+  const nextBtn = document.getElementById('quiz-bank-next');
+  if (nextBtn) nextBtn.classList.add('show');
+
+  // Update HUD live (without re-render)
+  updateHudAfterAnswer();
 }
 
 function nextQuizBankQuestion() {
@@ -16227,6 +17293,8 @@ function nextQuizBankQuestion() {
 function renderQuizBankScore() {
   const body = document.getElementById('quiz-bank-body');
   if (!body) return;
+  // Snapshot filters before we destroy the filter DOM
+  const savedFilters = Object.assign({}, quizBankState.filters);
   const total = quizBankState.pool.length;
   const score = quizBankState.score;
   const pct = total ? Math.round((score / total) * 100) : 0;
@@ -16254,7 +17322,7 @@ function renderQuizBankScore() {
       <div class="quiz-score-breakdown">
         ${['basic','intermediate','advanced'].map(d => '<div class="quiz-score-item"><div class="quiz-score-item-num">' + difficultyCorrect[d] + '/' + difficultyTotals[d] + '</div><div class="quiz-score-item-label">' + safeT(getDifficultyLabel(d)) + '</div></div>').join('')}
       </div>
-      <button class="quiz-retry-btn" onclick="startQuizBank()">${safeT(retry)}</button>
+      <button class="quiz-retry-btn" onclick="retryQuizBankWithFilters()">${safeT(retry)}</button>
       <button class="quiz-complete-btn" onclick="resetQuizBank()">${safeT(back)}</button>
     </div>
   `;
@@ -16295,7 +17363,7 @@ function renderQuizQuestion(moduleN) {
   const optLetters = ['A','B','C','D'];
   q.opts.forEach((opt, i) => {
     const disabledAttr = state.answered[qi] !== null ? 'disabled' : '';
-    optsHtml += `<button class="quiz-opt" id="qopt-${moduleN}-${i}" data-opt-letter="${optLetters[i]||i+1}" onclick="answerQuiz(${i}, ${moduleN})" ${disabledAttr}>${safeT(opt)}</button>`;
+    optsHtml += `<button class="quiz-opt" id="qopt-${moduleN}-${i}" data-opt-letter="${optLetters[i]||i+1}" aria-label="${optLetters[i]||i+1}" onclick="answerQuiz(${i}, ${moduleN})" ${disabledAttr}>${safeT(opt)}</button>`;
   });
 
   // If already answered, restore state
@@ -16303,7 +17371,7 @@ function renderQuizQuestion(moduleN) {
   let feedbackHtml = '';
   if (answeredIdx !== null) {
     const wasCorrect = answeredIdx === q.correct;
-    feedbackHtml = `<div class="quiz-feedback show ${wasCorrect?'good':'bad'}">${safeT(q.feedback)}</div>`;
+    feedbackHtml = renderQuizFeedbackHtml(q, moduleN, wasCorrect);
   }
 
   const container = document.getElementById(`quiz-body-${moduleN}`);
@@ -16381,7 +17449,7 @@ function renderQuizScore(moduleN) {
         </div>
         <div class="quiz-score-item">
           <div class="quiz-score-item-num" style="color:var(--current-color)">${pct}%</div>
-          <div class="quiz-score-item-label">${safeValue({zh:'得分率',en:'Score',id:'Skor',vi:'Tỷ lệ'}[lang] || '得分率')}</div>
+          <div class="quiz-score-item-label">${safeT({zh:'得分率',en:'Score Rate',id:'Tingkat skor',vi:'Tỷ lệ điểm'})}</div>
         </div>
       </div>
       <div class="quiz-score-actions">
@@ -16414,8 +17482,9 @@ function answerQuiz(selected, moduleN) {
 
   const optsEl = document.getElementById(`quiz-opts-${moduleN}`);
   const fb = document.createElement('div');
-  fb.className = 'quiz-feedback show ' + (selected === correct ? 'good' : 'bad');
-  fb.textContent = t(q.feedback);
+  fb.className = 'quiz-feedback show visualized ' + (selected === correct ? 'good' : 'bad');
+  const feedbackHtml = renderQuizFeedbackContent(q, moduleN, selected === correct);
+  fb.innerHTML = feedbackHtml;
   optsEl.after(fb);
 
   const nextBtn = document.getElementById(`quiz-next-${moduleN}`);
@@ -16458,24 +17527,43 @@ function completeModule(n) {
   completedModules.add(n);
   updateProgress(n, 100);
   updateProgressText();
+  refreshSidebarStatus();
   // Re-render header to show 已完成 status
   const headerMeta = document.querySelector('.module-header .meta-tag:last-child');
   if (headerMeta) {
     const lang = currentLang;
     headerMeta.textContent = '🏆 ' + (lang==='zh'?'已完成':lang==='en'?'Completed':lang==='id'?'Selesai':'Hoàn thành');
   }
-  if (n < 6) loadModule(n + 1);
+  if (n < 6) {
+    loadModule(n + 1);
+  } else {
+    // All modules done — show congrats then return to welcome
+    const contentEl = document.getElementById('module-content');
+    if (contentEl) {
+      const lang = currentLang;
+      const congratsMsg = {zh:'🎊 恭喜完成所有模組！即將返回首頁…', en:'🎊 Congratulations! All modules complete. Returning to home…', id:'🎊 Selamat! Semua modul selesai. Kembali ke beranda…', vi:'🎊 Chúc mừng! Bạn đã hoàn thành tất cả mô-đun. Đang về trang chủ…'};
+      const banner = document.createElement('div');
+      banner.className = 'info-box';
+      banner.style.cssText = 'margin-top:20px;background:rgba(52,211,153,0.1);border-color:rgba(52,211,153,0.3)';
+      banner.innerHTML = '<div class="icon">🎊</div><div><p>' + (congratsMsg[lang] || congratsMsg.zh) + '</p></div>';
+      contentEl.prepend(banner);
+    }
+    const goHome = setTimeout(() => {
+      if (currentModule === n) showWelcome();
+    }, 2000);
+  }
 }
 
 function updateProgress(n, pct) {
   const el = document.getElementById('p' + n);
-  if (el) el.style.width = Math.max(parseInt(el.style.width || 0), pct) + '%';
+  if (el) el.style.width = Math.max(parseFloat(el.style.width) || 0, pct) + '%';
 }
 
 function updateProgressText() {
   const count = completedModules.size;
   const labels = {zh:`${count} / 6 完成`, en:`${count} / 6 Completed`, id:`${count} / 6 Selesai`, vi:`${count} / 6 Hoàn thành`};
-  document.getElementById('progress-text').textContent = labels[currentLang] || labels.zh;
+  const ptEl = document.getElementById('progress-text');
+  if (ptEl) ptEl.textContent = labels[currentLang] || labels.zh;
 }
 
 // Init
