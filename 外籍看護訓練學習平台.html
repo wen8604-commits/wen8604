@@ -33,45 +33,7 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gray-900);font-size:15px}
 
-/* ═══════ LAYOUT SHELL ═══════ */
-.shell{min-height:100dvh;display:flex;flex-direction:column}
-
-/* ═══════ MAIN AREA ═══════ */
-.main-area{flex:1;min-width:0;display:flex;flex-direction:column}
-
-/* ── Persistent header ── */
-.topbar{
-  background:#fff;border-bottom:1.5px solid var(--gray-200);
-  height:56px;display:flex;align-items:center;
-  padding:0 20px;gap:12px;position:sticky;top:0;z-index:200;
-  box-shadow:0 2px 8px rgba(0,0,0,.07);flex-shrink:0;
-}
-.topbar-brand{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
-.topbar-brand-icon{
-  width:36px;height:36px;border-radius:10px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--g800),var(--g500));
-  display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:17px;
-}
-.topbar-brand-text{display:flex;flex-direction:column}
-.topbar-brand-name{font-size:14px;font-weight:800;color:var(--gray-900);line-height:1.25}
-.topbar-brand-sub{font-size:10px;color:var(--gray-500);margin-top:1px}
-@media(max-width:479px){.topbar-brand-sub{display:none}}
-.topbar-spacer{flex:1}
-.topbar-lang{display:flex;gap:4px}
-.topbar-lb{
-  padding:5px 10px;border-radius:7px;border:1.5px solid var(--gray-200);
-  background:#fff;font-family:var(--font);font-size:11.5px;font-weight:700;
-  color:var(--gray-500);cursor:pointer;transition:all .14s;min-height:30px;
-  -webkit-tap-highlight-color:transparent;
-}
-.topbar-lb.on{background:var(--g700);border-color:var(--g700);color:#fff}
-.topbar-lb:hover:not(.on){background:var(--gray-50);border-color:var(--gray-300)}
-
-/* ── Content wrapper ── */
-.content{flex:1;padding:20px 16px 48px;max-width:980px;margin:0 auto;width:100%}
-@media(min-width:600px){.content{padding:24px 28px 56px}}
-@media(min-width:960px){.content{padding:28px 40px 60px}}
+/* Layout replaced by sidebar CSS above */
 
 /* ═══════ HOME ═══════ */
 .home-header{margin-bottom:22px}
@@ -601,51 +563,339 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 .lesson-info-pill-icon{font-size:20px;line-height:1}
 .lesson-info-pill-label{font-size:10px;font-weight:800;color:var(--gray-500);letter-spacing:.3px;text-transform:uppercase}
 .lesson-info-pill-val{font-size:13px;font-weight:700;color:var(--gray-900);margin-top:1px}
+
+/* ═══════ SIDEBAR LAYOUT ═══════ */
+.app-layout{display:flex;min-height:100dvh;flex-direction:column}
+.app-body{display:flex;flex:1;min-height:0;overflow:hidden}
+
+/* Sidebar */
+.sidebar{
+  width:260px;flex-shrink:0;background:#fff;
+  border-right:1.5px solid var(--gray-200);
+  display:flex;flex-direction:column;
+  overflow:hidden;transition:transform .25s ease;
+  position:relative;z-index:100;
+}
+.sidebar-header{
+  padding:14px 16px 12px;border-bottom:1.5px solid var(--gray-100);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.sidebar-brand-icon{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--g800),var(--g500));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:16px;
+}
+.sidebar-brand-text{flex:1;min-width:0}
+.sidebar-brand-name{font-size:13px;font-weight:800;color:var(--gray-900);line-height:1.2}
+.sidebar-brand-sub{font-size:10px;color:var(--gray-500);margin-top:2px}
+
+/* Sidebar main tabs */
+.sidebar-tabs{display:flex;padding:10px 10px 0;gap:4px;flex-shrink:0}
+.sidebar-tab{
+  flex:1;padding:7px 6px;border-radius:8px;border:none;background:none;
+  font-family:var(--font);font-size:11.5px;font-weight:700;color:var(--gray-500);
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-tab.on{background:var(--g50);color:var(--g700)}
+.sidebar-tab.quiz-t.on{background:var(--purple-50);color:var(--purple-700)}
+.sidebar-tab-badge{
+  font-size:9.5px;font-weight:800;
+  background:var(--gray-100);color:var(--gray-500);
+  border-radius:20px;padding:1px 5px;
+}
+.sidebar-tab.on .sidebar-tab-badge{background:var(--g100);color:var(--g700)}
+.sidebar-tab.quiz-t.on .sidebar-tab-badge{background:var(--purple-100);color:var(--purple-700)}
+
+/* Sidebar progress mini */
+.sidebar-progress{
+  margin:10px 10px 0;padding:10px 12px;background:var(--g50);
+  border:1px solid var(--g100);border-radius:10px;flex-shrink:0;
+}
+.sidebar-progress-label{font-size:10px;font-weight:800;color:var(--g700);margin-bottom:6px;letter-spacing:.3px;text-transform:uppercase}
+.sidebar-progress-stats{display:flex;gap:0;margin-bottom:7px}
+.sidebar-progress-stat{flex:1;text-align:center}
+.sidebar-progress-stat-val{font-size:16px;font-weight:900;color:var(--g800);line-height:1}
+.sidebar-progress-stat-lbl{font-size:9px;color:var(--gray-500);font-weight:600;margin-top:2px}
+.sidebar-progress-bar-bg{background:rgba(0,0,0,.08);border-radius:4px;height:5px;overflow:hidden}
+.sidebar-progress-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--g700),var(--g400));transition:width .4s}
+
+/* Sidebar nav scroll area */
+.sidebar-nav{flex:1;overflow-y:auto;padding:10px 8px 20px;overscroll-behavior:contain}
+.sidebar-nav::-webkit-scrollbar{width:3px}
+.sidebar-nav::-webkit-scrollbar-track{background:transparent}
+.sidebar-nav::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:3px}
+
+/* Unit group */
+.sidebar-unit-group{margin-bottom:4px;border-radius:10px;overflow:hidden;border:1px solid var(--gray-100)}
+.sidebar-unit-btn{
+  width:100%;display:flex;align-items:center;gap:9px;
+  padding:9px 10px;background:#fff;border:none;cursor:pointer;
+  font-family:var(--font);text-align:left;transition:background .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-unit-btn:hover{background:var(--gray-50)}
+.sidebar-unit-btn.active{background:var(--g50)}
+.sidebar-unit-icon{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;
+}
+.sidebar-unit-info{flex:1;min-width:0}
+.sidebar-unit-name{font-size:12px;font-weight:800;color:var(--gray-900);line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sidebar-unit-meta{font-size:10px;color:var(--gray-400);margin-top:1px;display:flex;align-items:center;gap:4px}
+.sidebar-unit-chevron{color:var(--gray-400);font-size:14px;flex-shrink:0;transition:transform .2s}
+.sidebar-unit-btn.open .sidebar-unit-chevron{transform:rotate(90deg)}
+
+/* Lesson items under unit */
+.sidebar-lessons{background:var(--gray-50);border-top:1px solid var(--gray-100)}
+.sidebar-lesson-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px 7px 16px;
+  cursor:pointer;transition:background .12s;border:none;background:none;
+  width:100%;font-family:var(--font);text-align:left;
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-lesson-item:hover{background:var(--gray-100)}
+.sidebar-lesson-item.active{background:var(--g50)}
+.sidebar-lesson-dot{
+  width:16px;height:16px;border-radius:4px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:8px;
+}
+.sidebar-lesson-dot.correct{background:var(--g100);color:var(--g700)}
+.sidebar-lesson-dot.wrong{background:var(--red-100);color:var(--red-700)}
+.sidebar-lesson-dot.pending{background:var(--gray-200);color:var(--gray-400)}
+.sidebar-lesson-title{font-size:11.5px;color:var(--gray-700);line-height:1.35;flex:1;font-weight:600}
+.sidebar-lesson-item.active .sidebar-lesson-title{color:var(--g800);font-weight:800}
+
+/* Sidebar quiz section */
+.sidebar-quiz-menu{padding:4px}
+.sidebar-quiz-item{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;
+  cursor:pointer;border:none;background:none;width:100%;font-family:var(--font);
+  text-align:left;transition:background .12s;
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-quiz-item:hover{background:var(--purple-50)}
+.sidebar-quiz-item.active{background:var(--purple-50)}
+.sidebar-quiz-item-icon{
+  width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#fff;background:linear-gradient(135deg,var(--purple-700),#8B5CF6);
+}
+.sidebar-quiz-item-name{font-size:12px;font-weight:700;color:var(--gray-800);line-height:1.3}
+.sidebar-quiz-item-meta{font-size:10px;color:var(--gray-400);margin-top:1px}
+.sidebar-quiz-unit-list{padding:4px}
+.sidebar-quiz-unit-item{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;
+  cursor:pointer;border:none;background:none;width:100%;font-family:var(--font);
+  text-align:left;transition:background .12s;-webkit-tap-highlight-color:transparent;
+}
+.sidebar-quiz-unit-item:hover{background:var(--purple-50)}
+.sidebar-quiz-unit-item-dot{
+  width:22px;height:22px;border-radius:6px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;
+}
+.sidebar-quiz-unit-item-name{font-size:11.5px;font-weight:700;color:var(--gray-700);flex:1;line-height:1.3}
+
+/* Sidebar footer - lang switcher */
+.sidebar-footer{
+  border-top:1.5px solid var(--gray-100);padding:10px 10px;
+  flex-shrink:0;display:flex;align-items:center;gap:6px;
+}
+.sidebar-footer-label{font-size:10px;font-weight:700;color:var(--gray-400);flex-shrink:0}
+.sidebar-lang-btns{display:flex;gap:4px;flex:1}
+.sidebar-lb{
+  flex:1;padding:5px 4px;border-radius:6px;border:1.5px solid var(--gray-200);
+  background:#fff;font-family:var(--font);font-size:17px;font-weight:700;
+  color:var(--gray-500);cursor:pointer;transition:all .14s;
+  -webkit-tap-highlight-color:transparent;text-align:center;line-height:1.2;
+}
+.sidebar-lb.on{background:var(--g700);border-color:var(--g700);color:#fff}
+.sidebar-lb:hover:not(.on){background:var(--gray-50)}
+.sidebar-reset-btn{
+  display:flex;align-items:center;gap:4px;padding:5px 8px;border-radius:6px;
+  font-size:10px;font-weight:700;color:var(--gray-400);background:none;border:none;
+  cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap;
+}
+.sidebar-reset-btn:hover{color:var(--red-700);background:var(--red-50)}
+
+/* Topbar (mobile only) */
+.topbar{
+  display:none;
+  background:#fff;border-bottom:1.5px solid var(--gray-200);
+  height:52px;align-items:center;
+  padding:0 16px;gap:12px;position:sticky;top:0;z-index:300;
+  box-shadow:0 2px 8px rgba(0,0,0,.07);flex-shrink:0;
+}
+.topbar-brand{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer}
+.topbar-brand-icon{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--g800),var(--g500));
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:16px;
+}
+.topbar-brand-text{display:flex;flex-direction:column}
+.topbar-brand-name{font-size:13px;font-weight:800;color:var(--gray-900);line-height:1.25}
+.topbar-brand-sub{font-size:10px;color:var(--gray-500);margin-top:1px}
+.topbar-spacer{flex:1}
+.topbar-menu-btn{
+  width:36px;height:36px;border-radius:9px;border:1.5px solid var(--gray-200);
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--gray-600);font-size:18px;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.topbar-lang{display:flex;gap:3px}
+.topbar-lb{
+  padding:5px 7px;border-radius:7px;border:1.5px solid var(--gray-200);
+  background:#fff;font-family:var(--font);font-size:18px;font-weight:700;
+  color:var(--gray-500);cursor:pointer;transition:all .14s;
+  -webkit-tap-highlight-color:transparent;line-height:1.2;
+}
+.topbar-lb.on{background:var(--g700);border-color:var(--g700);color:#fff}
+
+/* subnav — mobile tab bar */
+.subnav{display:none}
+
+/* Main content area */
+.main-area{flex:1;min-width:0;overflow-y:auto;display:flex;flex-direction:column;background:#EFF2F7}
+.content{flex:1;padding:24px 20px 56px;max-width:960px;margin:0 auto;width:100%}
+
+/* Mobile sidebar overlay */
+.sidebar-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);
+  z-index:200;opacity:0;transition:opacity .25s;
+}
+.sidebar-overlay.show{display:block;opacity:1}
+
+/* Sidebar section divider */
+.sidebar-section-label{
+  font-size:9.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  color:var(--gray-400);padding:10px 12px 5px;
+}
+
+/* ── Mobile ── */
+@media(max-width:767px){
+  .topbar{display:flex}
+  .sidebar{
+    position:fixed;left:0;top:0;bottom:0;z-index:250;
+    transform:translateX(-100%);box-shadow:var(--sh-lg);
+  }
+  .sidebar.open{transform:translateX(0)}
+  .app-body{padding-top:0}
+}
+@media(min-width:768px){
+  .app-layout{overflow:hidden;height:100dvh}
+  .app-body{overflow:hidden}
+  .sidebar{height:100%;overflow:hidden}
+  .main-area{height:100%;overflow-y:auto}
+}
+@media(min-width:768px) and (max-width:1023px){
+  .sidebar{width:220px}
+  .content{padding:20px 18px 48px}
+}
+@media(min-width:1024px){
+  .content{padding:28px 36px 60px}
+}
+
 </style>
 </head>
 <body>
 <h1 class="sr-only">外籍看護訓練學習平台</h1>
 
-<div class="shell">
-
-  <!-- ══ HEADER ══ -->
-  <header class="topbar">
-    <div class="topbar-brand" onclick="goHome()" title="回首頁">
+<div class="app-layout">
+  <!-- Mobile topbar -->
+  <header class="topbar" id="mobile-topbar">
+    <button class="topbar-menu-btn" onclick="toggleSidebar()" aria-label="選單">
+      <i class="ti ti-menu-2"></i>
+    </button>
+    <div class="topbar-brand" onclick="goHome();closeSidebar()">
       <div class="topbar-brand-icon"><i class="ti ti-first-aid-kit"></i></div>
       <div class="topbar-brand-text">
         <div class="topbar-brand-name" id="topbar-brand-name">看護訓練平台</div>
-        <div class="topbar-brand-sub" id="topbar-brand-sub">外籍照護培訓系統</div>
       </div>
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-lang">
-      <button class="topbar-lb on" id="tb-lb-zh" onclick="setLang('zh')">中文</button>
-      <button class="topbar-lb" id="tb-lb-id" onclick="setLang('id')">ID</button>
-      <button class="topbar-lb" id="tb-lb-en" onclick="setLang('en')">EN</button>
-      <button class="topbar-lb" id="tb-lb-vi" onclick="setLang('vi')">VI</button>
+      <button class="topbar-lb on" id="tb-lb-zh" onclick="setLang('zh')">🇹🇼</button>
+      <button class="topbar-lb" id="tb-lb-id" onclick="setLang('id')">🇮🇩</button>
+      <button class="topbar-lb" id="tb-lb-en" onclick="setLang('en')">🇺🇸</button>
+      <button class="topbar-lb" id="tb-lb-vi" onclick="setLang('vi')">🇻🇳</button>
     </div>
   </header>
 
-  <!-- ══ SUB-NAV ══ -->
-  <nav class="subnav" id="subnav">
-    <button class="subnav-tab on" id="tab-course" onclick="switchTab('course')">
-      <i class="ti ti-books" style="font-size:15px"></i>
-      <span id="tab-course-label">課程教材</span>
-      <span class="subnav-tab-badge" id="tab-course-badge">100</span>
-    </button>
-    <button class="subnav-tab quiz-tab" id="tab-quiz" onclick="switchTab('quiz')">
-      <i class="ti ti-help-circle" style="font-size:15px"></i>
-      <span id="tab-quiz-label">測驗中心</span>
-      <span class="subnav-tab-badge" id="tab-quiz-badge">400 題</span>
-    </button>
-  </nav>
-  <div class="main-area">
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
-    <!-- Content -->
-    <div class="content" id="main-content"></div>
+  <div class="app-body">
+    <!-- ══ SIDEBAR ══ -->
+    <aside class="sidebar" id="sidebar">
+      <!-- Brand -->
+      <div class="sidebar-header">
+        <div class="sidebar-brand-icon"><i class="ti ti-first-aid-kit"></i></div>
+        <div class="sidebar-brand-text">
+          <div class="sidebar-brand-name" id="sb-brand-name">看護訓練平台</div>
+          <div class="sidebar-brand-sub" id="sb-brand-sub">外籍照護培訓系統</div>
+        </div>
+      </div>
+      <!-- Main tabs -->
+      <div class="sidebar-tabs">
+        <button class="sidebar-tab on" id="sb-tab-course" onclick="switchTab('course');closeSidebar()">
+          <i class="ti ti-books" style="font-size:14px"></i>
+          <span id="sb-tab-course-label">課程</span>
+          <span class="sidebar-tab-badge" id="sb-tab-course-badge">100</span>
+        </button>
+        <button class="sidebar-tab quiz-t" id="sb-tab-quiz" onclick="switchTab('quiz');closeSidebar()">
+          <i class="ti ti-help-circle" style="font-size:14px"></i>
+          <span id="sb-tab-quiz-label">測驗</span>
+          <span class="sidebar-tab-badge" id="sb-tab-quiz-badge">400題</span>
+        </button>
+      </div>
+      <!-- Mini progress -->
+      <div class="sidebar-progress" id="sb-progress" style="display:none">
+        <div class="sidebar-progress-label" id="sb-progress-label">整體進度</div>
+        <div class="sidebar-progress-stats">
+          <div class="sidebar-progress-stat">
+            <div class="sidebar-progress-stat-val" id="sb-stat-answered">0</div>
+            <div class="sidebar-progress-stat-lbl" id="sb-stat-answered-lbl">已答</div>
+          </div>
+          <div class="sidebar-progress-stat">
+            <div class="sidebar-progress-stat-val" id="sb-stat-correct">0</div>
+            <div class="sidebar-progress-stat-lbl" id="sb-stat-correct-lbl">答對</div>
+          </div>
+          <div class="sidebar-progress-stat">
+            <div class="sidebar-progress-stat-val" id="sb-stat-pct">0%</div>
+            <div class="sidebar-progress-stat-lbl" id="sb-stat-pct-lbl">正確率</div>
+          </div>
+        </div>
+        <div class="sidebar-progress-bar-bg">
+          <div class="sidebar-progress-bar-fill" id="sb-progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+      <!-- Nav -->
+      <div class="sidebar-nav" id="sb-nav"></div>
+      <!-- Footer: lang + reset -->
+      <div class="sidebar-footer">
+        <span class="sidebar-footer-label" id="sb-lang-label">語言</span>
+        <div class="sidebar-lang-btns">
+          <button class="sidebar-lb on" id="sb-lb-zh" onclick="setLang('zh')">🇹🇼</button>
+          <button class="sidebar-lb" id="sb-lb-id" onclick="setLang('id')">🇮🇩</button>
+          <button class="sidebar-lb" id="sb-lb-en" onclick="setLang('en')">🇺🇸</button>
+          <button class="sidebar-lb" id="sb-lb-vi" onclick="setLang('vi')">🇻🇳</button>
+        </div>
+        <button class="sidebar-reset-btn" onclick="resetProgress()" title="重置進度">
+          <i class="ti ti-refresh" style="font-size:12px"></i>
+        </button>
+      </div>
+    </aside>
 
-  </div><!-- /main-area -->
-</div><!-- /shell -->
+    <!-- ══ MAIN ══ -->
+    <div class="main-area">
+      <div class="content" id="main-content"></div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════
@@ -1152,7 +1402,10 @@ function closeSidebar(){}
 function setLang(l){
   lang = l;
   ['zh','id','en','vi'].forEach(x=>{
-    document.getElementById('tb-lb-'+x).classList.toggle('on', x===l);
+    const m = document.getElementById('tb-lb-'+x);
+    if(m) m.classList.toggle('on', x===l);
+    const s = document.getElementById('sb-lb-'+x);
+    if(s) s.classList.toggle('on', x===l);
   });
   syncQuizStateLanguage();
   renderSidebar();
@@ -2091,38 +2344,179 @@ function getLangPack(){
   return packs[lang] || packs.zh;
 }
 
-// ── RENDER HEADER ──
+// ── RENDER SIDEBAR ──
+function toggleSidebar(){
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  if(!sb) return;
+  const isOpen = sb.classList.contains('open');
+  sb.classList.toggle('open', !isOpen);
+  if(ov) ov.classList.toggle('show', !isOpen);
+}
+function closeSidebar(){
+  const sb = document.getElementById('sidebar');
+  const ov = document.getElementById('sidebar-overlay');
+  if(sb) sb.classList.remove('open');
+  if(ov) ov.classList.remove('show');
+}
+
 function renderSidebar(){
   const cp = UI_COPY[lang] || UI_COPY.zh;
-  const nameEl = document.getElementById('topbar-brand-name');
-  const subEl  = document.getElementById('topbar-brand-sub');
-  if(nameEl) nameEl.textContent = cp.brandName;
-  if(subEl)  subEl.textContent  = cp.brandSub;
-  // Update subnav labels
-  const tCL = document.getElementById('tab-course-label');
-  const tQL = document.getElementById('tab-quiz-label');
-  const tCB = document.getElementById('tab-course-badge');
-  const tQB = document.getElementById('tab-quiz-badge');
-  if(tCL) tCL.textContent = cp.tabCourse||'課程教材';
-  if(tQL) tQL.textContent = cp.tabQuiz||'測驗中心';
-  if(tCB) tCB.textContent = '100';
-  if(tQB) tQB.textContent = (cp.tabQuizBadge||'400 題');
-  // Sync active tab
-  const tc = document.getElementById('tab-course');
-  const tq = document.getElementById('tab-quiz');
-  if(tc) tc.classList.toggle('on', mainTab==='course');
-  if(tq) tq.classList.toggle('on', mainTab==='quiz');
+  const units = getCourseUnits();
+  const st = getStats();
+
+  // Brand
+  ['topbar-brand-name','sb-brand-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=cp.brandName});
+  const sbSub = document.getElementById('sb-brand-sub');
+  if(sbSub) sbSub.textContent = cp.brandSub;
+
+  // Mobile lang buttons
+  ['zh','id','en','vi'].forEach(l=>{
+    const el=document.getElementById('tb-lb-'+l);
+    if(el) el.classList.toggle('on', lang===l);
+  });
+
+  // Sidebar tabs
+  const stc = document.getElementById('sb-tab-course');
+  const stq = document.getElementById('sb-tab-quiz');
+  if(stc){stc.classList.toggle('on', mainTab==='course'); const l=stc.querySelector('#sb-tab-course-label');if(l)l.textContent=cp.tabCourse||'課程';}
+  if(stq){stq.classList.toggle('on', mainTab==='quiz'); const l=stq.querySelector('#sb-tab-quiz-label');if(l)l.textContent=cp.tabQuiz||'測驗';}
+  const sqb = document.getElementById('sb-tab-quiz-badge');
+  if(sqb) sqb.textContent = cp.tabQuizBadge||'400題';
+
+  // Sidebar lang buttons
+  ['zh','id','en','vi'].forEach(l=>{
+    const el=document.getElementById('sb-lb-'+l);
+    if(el) el.classList.toggle('on', lang===l);
+  });
+
+  // Sidebar lang label
+  const ll = document.getElementById('sb-lang-label');
+  if(ll) ll.textContent = cp.langLabel||'語言';
+
+  // Mini progress
+  const progEl = document.getElementById('sb-progress');
+  if(progEl){
+    if(st.answered > 0){
+      progEl.style.display='';
+      const pl = document.getElementById('sb-progress-label');
+      if(pl) pl.textContent = cp.overallProgress||'整體進度';
+      const sa = document.getElementById('sb-stat-answered'); if(sa) sa.textContent=st.answered;
+      const sc = document.getElementById('sb-stat-correct'); if(sc) sc.textContent=st.correct;
+      const sp = document.getElementById('sb-stat-pct'); if(sp) sp.textContent=st.correctRate+'%';
+      const salf = document.getElementById('sb-stat-answered-lbl'); if(salf) salf.textContent=cp.completed||'已答';
+      const sclf = document.getElementById('sb-stat-correct-lbl'); if(sclf) sclf.textContent=cp.correct||'答對';
+      const spf = document.getElementById('sb-stat-pct-lbl'); if(spf) spf.textContent=cp.accuracy||'正確率';
+      const fill = document.getElementById('sb-progress-fill'); if(fill) fill.style.width=st.completeRate+'%';
+    } else {
+      progEl.style.display='none';
+    }
+  }
+
+  // Build nav
+  const nav = document.getElementById('sb-nav');
+  if(!nav) return;
+
+  if(mainTab==='course'){
+    let navHtml = '';
+    units.forEach(u=>{
+      const us = getUnitStats(u);
+      const isActiveUnit = currentView==='unit' && currentUnitNo===u.no;
+      const isOpenUnit = openUnitNos.has(u.no) || isActiveUnit;
+      navHtml += `<div class="sidebar-unit-group">
+        <button class="sidebar-unit-btn ${isActiveUnit?'active':''} ${isOpenUnit?'open':''}"
+          onclick="toggleSidebarUnit(${u.no})">
+          <div class="sidebar-unit-icon" style="background:${u.solid||u.color.split(',')[1]||'var(--g700)'}"><i class="ti ${u.icon}" style="font-size:13px"></i></div>
+          <div class="sidebar-unit-info">
+            <div class="sidebar-unit-name">U${u.no} ${u.title}</div>
+            <div class="sidebar-unit-meta">
+              ${us.answered>0?`<span style="color:var(--g700);font-weight:800">${us.answered}</span>/<span>${us.total}</span>`:`<span>${us.total} ${cp.lessons||'課'}</span>`}
+            </div>
+          </div>
+          <i class="ti ti-chevron-right sidebar-unit-chevron"></i>
+        </button>`;
+      if(isOpenUnit){
+        navHtml += '<div class="sidebar-lessons">';
+        u.lessons.forEach((title,idx)=>{
+          const lno = lessonKey(u.no, idx);
+          const chosen = lessonQuizState[lno];
+          const hasAns = Number.isInteger(chosen);
+          const isCorr = hasAns && chosen === getQuiz(u,title,idx,lno).correct;
+          const dotClass = hasAns?(isCorr?'correct':'wrong'):'pending';
+          const dotIcon = hasAns?(isCorr?'✓':'✗'):String(idx+1);
+          const isActive = currentLessonNo===lno && isActiveUnit;
+          navHtml += `<button class="sidebar-lesson-item ${isActive?'active':''}"
+            onclick="openUnitLesson(${u.no},${idx})">
+            <span class="sidebar-lesson-dot ${dotClass}">${dotIcon}</span>
+            <span class="sidebar-lesson-title">${title}</span>
+          </button>`;
+        });
+        navHtml += '</div>';
+      }
+      navHtml += '</div>';
+    });
+    nav.innerHTML = navHtml;
+  } else {
+    // Quiz nav
+    nav.innerHTML = `
+    <div class="sidebar-quiz-menu">
+      <div class="sidebar-section-label">${cp.qcModeTitle||'測驗模式'}</div>
+      <button class="sidebar-quiz-item ${currentView==='quiz-center'?'active':''}" onclick="switchTab('quiz');closeSidebar()">
+        <div class="sidebar-quiz-item-icon"><i class="ti ti-layout-grid" style="font-size:15px"></i></div>
+        <div>
+          <div class="sidebar-quiz-item-name">${cp.qcTitle||'整合測驗中心'}</div>
+          <div class="sidebar-quiz-item-meta">${cp.tabQuizBadge||'400題'}</div>
+        </div>
+      </button>
+      <div class="sidebar-section-label">${cp.qcSelectUnit||'單元練習'}</div>
+      <div class="sidebar-quiz-unit-list">
+        ${units.map(u=>{
+          const us=getUnitStats(u);
+          return `<button class="sidebar-quiz-unit-item" onclick="openQuiz(${u.no});closeSidebar()">
+            <div class="sidebar-quiz-unit-item-dot" style="background:${u.solid||'var(--g700)'}">${u.no}</div>
+            <div class="sidebar-quiz-unit-item-name">${u.title}</div>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+}
+
+// Track which unit nodes are expanded in sidebar
+let openUnitNos = new Set();
+
+function toggleSidebarUnit(no){
+  if(openUnitNos.has(no)) openUnitNos.delete(no);
+  else openUnitNos.add(no);
+  renderSidebar();
+}
+
+function openUnitLesson(unitNo, lessonIdx){
+  openUnitNos.add(unitNo);
+  currentView = 'unit';
+  mainTab = 'course';
+  currentUnitNo = unitNo;
+  const units = getCourseUnits();
+  const unit = units.find(u=>u.no===unitNo);
+  if(unit){
+    currentLessonNo = lessonKey(unitNo, lessonIdx);
+  }
+  renderSidebar();
+  renderUnitViewWithLesson(lessonIdx);
+  closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── TAB SWITCH ──
 function switchTab(tab){
   mainTab = tab;
-  renderSidebar();
   if(tab === 'course'){
-    if(currentView === 'quiz') currentView = 'home';
+    if(currentView === 'quiz' || currentView === 'quiz-center') currentView = 'home';
+    renderSidebar();
     renderMain();
   } else {
     currentView = 'quiz-center';
+    renderSidebar();
     renderQuizCenter();
   }
   window.scrollTo({top:0,behavior:'smooth'});
@@ -2226,11 +2620,13 @@ function openUnit(no){
   currentView = 'unit';
   mainTab = 'course';
   currentUnitNo = no;
+  openUnitNos.add(no);
   const units = getCourseUnits();
   const unit = units.find(u=>u.no===no) || units[0];
   currentLessonNo = lessonKey(no, 0);
   renderSidebar();
   renderUnitView();
+  closeSidebar();
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
@@ -2240,6 +2636,7 @@ function goHome(){
   currentLessonNo = lessonKey(currentUnitNo, 0);
   renderSidebar();
   renderHome();
+  closeSidebar();
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
@@ -2295,6 +2692,25 @@ function renderUnitView(){
 
   html += `</div>`;
   document.getElementById('main-content').innerHTML = html;
+}
+
+function renderUnitViewWithLesson(lessonIdx){
+  renderUnitView();
+  // After rendering, expand the target lesson
+  const units = getCourseUnits();
+  const unit = units.find(u=>u.no===currentUnitNo);
+  if(unit && lessonIdx < unit.lessons.length){
+    const lno = lessonKey(currentUnitNo, lessonIdx);
+    currentLessonNo = lno;
+    // Find and click the lesson row
+    setTimeout(()=>{
+      const rows = document.querySelectorAll('[data-lno]');
+      rows.forEach(r=>{if(r.dataset.lno===String(lno)){
+        r.click();
+        r.scrollIntoView({behavior:'smooth',block:'nearest'});
+      }});
+    },50);
+  }
 }
 
 function renderLessonRow(unit, title, idx, lno, isOpen, totalLessons, cp){
