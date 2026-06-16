@@ -3,7 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>外籍看護一週工作時間表 — 客製化精靈</title>
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="看護時間表">
+<meta name="application-name" content="看護時間表">
+<meta name="theme-color" content="#1a1f2e">
+<meta name="description" content="外籍看護一週工作時間表客製化精靈 — 快速產出專業照護排程">
+<title>外籍看護一週工作時間表 — 客製化精靈 v20</title>
+<link rel="manifest" href="data:application/json;charset=utf-8,%7B%22name%22%3A%22%E5%A4%96%E7%B1%8D%E7%9C%8B%E8%AD%B7%E4%B8%80%E9%80%B1%E5%B7%A5%E4%BD%9C%E6%99%82%E9%96%93%E8%A1%A8%22%2C%22short_name%22%3A%22%E7%9C%8B%E8%AD%B7%E6%99%82%E9%96%93%E8%A1%A8%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f7f9fc%22%2C%22theme_color%22%3A%22%231a1f2e%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%252096%252096'%253E%253Crect%2520width%3D'96'%2520height%3D'96'%2520rx%3D'20'%2520fill%3D'%25231a1f2e'%2F%253E%253Ctext%2520x%3D'48'%2520y%3D'66'%2520font-size%3D'56'%2520text-anchor%3D'middle'%253E%25F0%259F%2593%2585%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22any%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -19,13 +27,19 @@
   --danger: #dc2626;
   --radius: 10px;
   --topbar-h: 52px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
-body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;}
+body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none;}
+html,body{overflow-x:hidden;}
+button,[role="button"]{touch-action:manipulation;}
 
 /* ── TOP BAR ── */
-.topbar{background:var(--ink);color:#fff;padding:0 20px;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.topbar{background:var(--ink);color:#fff;padding:0 20px;padding-left:max(20px,var(--safe-left));padding-right:max(20px,var(--safe-right));height:calc(var(--topbar-h) + var(--safe-top));padding-top:var(--safe-top);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
 .topbar-brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .topbar-sub{font-size:11px;opacity:.6;white-space:nowrap;}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
@@ -172,8 +186,8 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 #btn-show-preview.visible{display:flex;}
 #btn-show-preview:hover{background:#374151;}
 @media(max-width:639px){
-  #live-preview-panel{bottom:72px;right:8px;width:calc(100vw - 16px);max-width:340px;}
-  #btn-show-preview{bottom:72px;}
+  #live-preview-panel{bottom:calc(72px + var(--safe-bottom));right:max(8px,var(--safe-right));width:calc(100vw - 16px - var(--safe-left) - var(--safe-right));max-width:340px;}
+  #btn-show-preview{bottom:calc(72px + var(--safe-bottom));}
 }
 
 /* ── TASK EDITOR ── */
@@ -249,7 +263,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .restore-btn:active{opacity:.7;}
 
 /* ── MOBILE BOTTOM TAB BAR ── */
-#mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:1px solid var(--border);box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:4px 0;padding-bottom:max(4px, env(safe-area-inset-bottom));}
+#mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:1px solid var(--border);box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:4px 0;padding-bottom:max(4px,env(safe-area-inset-bottom));padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);}
 .mtab-list{display:flex;align-items:stretch;}
 .mtab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 2px 5px;gap:3px;cursor:pointer;border:none;background:transparent;font-family:inherit;color:var(--muted);font-size:10px;font-weight:500;transition:color .15s;min-height:54px;-webkit-tap-highlight-color:transparent;position:relative;}
 .mtab.active{color:var(--accent);}
@@ -305,30 +319,36 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   :root{--topbar-h:48px;}
   #mobile-tab-bar{display:block;}
   .progress-bar{display:none;}
-  .topbar{padding:0 14px;}
+  .topbar{padding:0 14px;padding-left:max(14px,var(--safe-left));padding-right:max(14px,var(--safe-right));}
   .topbar-brand{font-size:13px;}
   .topbar-sub{display:none;}
-  .wizard-body{padding:12px 12px 110px;max-width:100%;}
+  .wizard-body{padding:12px 12px calc(110px + var(--safe-bottom));max-width:100%;padding-left:max(12px,var(--safe-left));padding-right:max(12px,var(--safe-right));}
   .section-card{margin-bottom:12px;}
-  .section-card-head{padding:12px 14px;}
+  .section-card-head{padding:12px 14px;min-height:56px;}/* Larger touch target */
   .section-body{padding:14px 14px;}
   .form-row{grid-template-columns:1fr;gap:10px;}
   .form-input,.form-select,.form-textarea{padding:11px 12px;font-size:16px;/* 16px prevents iOS zoom */}
-  .chip-option{padding:8px 14px;font-size:13px;}
+  .chip-option{padding:9px 16px;font-size:13px;min-height:44px;display:inline-flex;align-items:center;}
   .toggle-row{flex-wrap:wrap;gap:8px;padding:12px 12px;}
   .toggle-label{flex:1;min-width:0;}
   .toggle-row .time-inputs-wrap{width:100%;display:flex;align-items:center;gap:6px;order:3;}
   .time-edit-input{flex:1;font-size:16px;padding:8px 10px;width:auto;}
   .theme-grid{grid-template-columns:repeat(3,1fr);}
   .wizard-nav{flex-direction:column-reverse;gap:10px;padding-top:16px;margin-top:20px;}
-  .btn-prev,.btn-next,.btn-generate{width:100%;justify-content:center;padding:14px 20px;font-size:15px;}
+  .btn-prev,.btn-next,.btn-generate{width:100%;justify-content:center;padding:15px 20px;font-size:15px;min-height:52px;}
   .summary-grid{grid-template-columns:1fr 1fr;}
   .output-frame{min-height:400px;}
   .output-header{padding:16px 18px;}
   .output-title{font-size:16px;}
-  .btn-out{padding:8px 14px;font-size:12px;}
+  .btn-out{padding:10px 14px;font-size:12px;min-height:44px;}
   .info-box{font-size:12.5px;padding:10px 12px;}
-  #save-toast{bottom:70px;right:12px;}
+  #save-toast{bottom:calc(70px + var(--safe-bottom));right:12px;}
+  /* Landscape mobile */
+  @media(orientation:landscape){
+    :root{--topbar-h:40px;}
+    .wizard-body{padding-top:8px;}
+    #mobile-tab-bar .mtab{min-height:44px;padding:5px 2px 3px;}
+  }
 }
 
 /* ── SMALL MOBILE <390px ── */
@@ -348,49 +368,23 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 /* ── PRINT ── */
 @media print{
   @page{size:A4 landscape;margin:10mm 12mm 10mm 12mm;}
-  /* iOS/macOS Safari: force color output */
-  *{
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-    color-adjust:exact !important;
-  }
-  /* Hide all wizard chrome; keep only the output iframe */
-  .topbar,.progress-bar,.side-nav,#mobile-tab-bar,#save-toast,
-  #restore-banner,.wizard-nav,.btn-prev,.btn-next,.btn-generate,
-  .btn-out,.btn-out-edit,.output-actions,.output-header,
-  .step-page:not(.active),.section-card-head .section-toggle-icon,
-  #live-preview-panel,#btn-show-preview,
-  .wizard-body .step-page, .wizard-shell .wizard-body{
-    display:none !important;
-  }
-  html,body{
-    background:#fff !important;
-    margin:0 !important;
-    padding:0 !important;
-    font-size:11px !important;
-    -webkit-text-size-adjust:100% !important;
-  }
+  .topbar,.progress-bar,.side-nav,#mobile-tab-bar,#save-toast,#restore-banner,.wizard-nav,.btn-prev,.btn-next,.btn-generate,.btn-out,.btn-out-edit,.output-actions,.step-page:not(.active),.section-card-head .section-toggle-icon{display:none !important;}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  html,body{background:#fff !important;margin:0 !important;padding:0 !important;font-size:11px !important;}
   .wizard-shell{display:block !important;}
-  /* Show only the output section */
-  #outputSection{
-    display:block !important;
-    padding:0 !important;
-    margin:0 !important;
-  }
-  .output-frame-wrap{
-    border:none !important;
-    border-radius:0 !important;
-    overflow:visible !important;
-  }
-  /* On iOS, iframes don't print inline — expand to visible page */
-  .output-frame{
-    width:100% !important;
-    min-height:100vh !important;
-    border:none !important;
-    display:block !important;
-  }
-  /* Safety: if output is not yet generated, hide the empty frame */
-  #outputSection:not([style*="block"]){display:none !important;}
+  .wizard-body{max-width:100% !important;padding:0 !important;margin:0 !important;}
+  .step-page{display:block !important;}
+  .section-card{border:1px solid #ccc !important;border-radius:6px !important;margin-bottom:12px !important;page-break-inside:avoid !important;break-inside:avoid !important;}
+  .section-body,.section-body.hidden{display:block !important;padding:10px 12px !important;}
+  .section-card-head{background:#f0f4f8 !important;padding:8px 12px !important;border-bottom:1px solid #ddd !important;}
+  .toggle-row{border:1px solid #ccc !important;border-radius:6px !important;padding:6px 10px !important;margin-bottom:5px !important;}
+  .toggle-row.on{background:#f0f4ff !important;border-color:#93c5fd !important;}
+  .form-row{display:grid !important;grid-template-columns:repeat(2,1fr) !important;gap:6px 14px !important;margin-bottom:8px !important;}
+  .form-input,.form-select,.form-textarea{border:1px solid #bbb !important;border-radius:4px !important;padding:4px 8px !important;font-size:11px !important;background:#fff !important;width:100% !important;}
+  .form-label{font-size:10px !important;font-weight:700 !important;color:#555 !important;}
+  #outputSection{display:block !important;page-break-before:always !important;}
+  .output-frame-wrap{border:none !important;}
+  .output-frame{min-height:auto !important;height:auto !important;}
 }
 </style>
 </head>
@@ -408,11 +402,11 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- TOP BAR -->
 <div class="topbar">
   <div style="min-width:0;flex:1;">
-    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈</div>
+    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈 v20</div>
     <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
   </div>
   <div class="topbar-right">
-    <button class="tlbtn" onclick="handleTopbarPrint()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
+    <button class="tlbtn" onclick="window.print()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
       🖨️ <span>列印/PDF</span>
     </button>
   </div>
@@ -1869,12 +1863,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
   <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px;">
-    💡 建議使用下方表單內的 <strong>「🖨️ 列印 / 存PDF」</strong> 按鈕，以確保只列印時間表本身。<span id="ios-print-note" style="display:none;"> 📱 iOS / iPadOS 會開啟新分頁，請點「列印」或使用 <strong>分享 ➜ 列印</strong>。</span>
-    <script>
-      if(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)){
-        document.getElementById('ios-print-note').style.display='inline';
-      }
-    </script>
+    💡 建議使用下方表單內的 <strong>「🖨️ 列印 / 存PDF」</strong> 按鈕，以確保只列印時間表本身。
   </div>
   <div class="output-frame-wrap">
     <iframe id="outputFrame" class="output-frame"></iframe>
@@ -2455,94 +2444,12 @@ function downloadOutput() {
 function printOutput() {
   const iframe = document.getElementById('outputFrame');
   if (!iframe) return;
-
-  // ── Detect iOS / iPadOS ──────────────────────────────────────────
-  // iOS Safari cannot print iframe content; open in new tab instead.
-  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-  if (isIOS) {
-    const content = iframe.srcdoc || '';
-    if (!content) { alert('請先點擊「生成時間表」，再列印。'); return; }
-
-    // Inject iOS hint bar + auto-print prompt into the generated HTML
-    const iosContent = content
-      .replace('</head>',
-        `<meta name="apple-mobile-web-app-capable" content="yes">
-<style>
-@media not print {
-  #ios-hint{position:fixed;top:0;left:0;right:0;z-index:9999;
-    background:#1a1f2e;color:#fff;padding:10px 14px;
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    font-family:'Noto Sans TC',sans-serif;font-size:13px;line-height:1.4;}
-  #ios-hint strong{color:#fbbf24;}
-  #ios-hint button{background:#fff;color:#1a1f2e;border:none;border-radius:6px;
-    padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;
-    white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
-  body{padding-top:52px;}
-}
-@media print{#ios-hint{display:none!important;}body{padding-top:0!important;}}
-</style></head>`)
-      .replace('<body>',
-        `<body>
-<div id="ios-hint">
-  <span>📱 iOS：點「<strong>列印</strong>」或使用下方 <strong>分享 ➜ 列印</strong></span>
-  <button onclick="window.print()">🖨️ 列印 / PDF</button>
-</div>`);
-
-    const blob = new Blob([iosContent], { type: 'text/html;charset=utf-8' });
-    const url  = URL.createObjectURL(blob);
-    const win  = window.open(url, '_blank');
-    if (!win) {
-      // Pop-up blocked — write directly
-      const w = window.open('', '_blank');
-      if (w) { w.document.write(iosContent); w.document.close(); }
-    }
-    setTimeout(() => URL.revokeObjectURL(url), 120000);
-    return;
-  }
-
-  // ── Desktop / Android Chrome ──────────────────────────────────────
-  if (iframe.contentDocument &&
-      iframe.contentDocument.body &&
-      iframe.contentDocument.body.innerHTML) {
+  // 確保 iframe 已載入內容後再列印
+  if (iframe.contentDocument && iframe.contentDocument.body && iframe.contentDocument.body.innerHTML) {
     iframe.contentWindow.print();
   } else {
     iframe.onload = () => { iframe.contentWindow.print(); iframe.onload = null; };
   }
-}
-
-/* ══ TOPBAR PRINT (iOS aware) ══ */
-function handleTopbarPrint() {
-  const outSection = document.getElementById('outputSection');
-  const hasOutput = outSection && outSection.style.display === 'block';
-
-  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
-  if (!hasOutput) {
-    if (isIOS) {
-      showIosPrintToast('請先生成時間表，再使用列印功能');
-    } else {
-      alert('請先在步驟六點擊「生成時間表」，再列印。');
-    }
-    return;
-  }
-  printOutput();
-}
-
-function showIosPrintToast(msg) {
-  let el = document.getElementById('ios-toast');
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'ios-toast';
-    el.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#1a1f2e;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.3);white-space:nowrap;pointer-events:none;transition:opacity .3s;';
-    document.body.appendChild(el);
-  }
-  el.textContent = msg;
-  el.style.opacity = '1';
-  clearTimeout(el._t);
-  el._t = setTimeout(() => { el.style.opacity = '0'; }, 2800);
 }
 
 /* ══ BUILD HTML ══ */
@@ -3171,24 +3078,10 @@ th{background:${t.pri};color:#fff;font-size:${fontSize-1}px;font-weight:700;text
 }
 @media print{
   @page{size:${pageSize};margin:${pageMargin};}
-  /* iOS Safari / macOS Safari: force color & image printing */
-  *{
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-    color-adjust:exact !important;
-  }
-  body{font-size:${fontSize}px !important;-webkit-text-size-adjust:100% !important;}
+  *{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
+  body{font-size:${fontSize}px !important;}
   .no-print{display:none !important;}
   .doc-footer{border-top:1px solid #e0e0e0;}
-  /* Prevent table cells from splitting across pages */
-  tr{page-break-inside:avoid;break-inside:avoid;}
-  table{page-break-inside:auto;}
-  /* Ensure background colors print on all browsers */
-  th,td{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}
-  /* iOS hint bar (injected by printOutput) — always hidden in print */
-  #ios-hint{display:none !important;}
-  /* Remove overflow hidden so full table renders */
-  .schedule-wrap{overflow:visible !important;}
 }
 </style>
 </head>
@@ -3471,7 +3364,7 @@ function buildDCReportHTML() {
       </div>`
     ).join('');
     return `<tr>
-      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:nowrap;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
+      <td style="font-weight:700;font-size:12px;padding:8px 10px;background:${t.alight};white-space:normal;word-break:break-word;vertical-align:middle;">${ss.icon} ${roomLabel}</td>
       <td style="padding:8px 10px;font-size:11px;">${itemsHtml}</td>
       <td style="padding:8px 10px;font-size:11px;text-align:center;color:${t.plight};font-weight:700;vertical-align:middle;">${esc(freq)}</td>
       <td style="padding:8px 10px;font-size:11px;color:#555;vertical-align:middle;">${note || '—'}</td>
@@ -3537,9 +3430,9 @@ ${spaceRows ? `
 <table>
   <thead>
     <tr style="background:${t.plight};color:#fff;font-size:11px;">
-      <th style="padding:7px 10px;width:100px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
+      <th style="padding:7px 10px;width:130px;min-width:120px;">${ui('colRoom')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colRoomSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colItems')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colItemsSub')}</span></th>
-      <th style="padding:7px 10px;width:95px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
+      <th style="padding:7px 10px;width:110px;min-width:100px;">${ui('colFreq')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colFreqSub')}</span></th>
       <th style="padding:7px 10px;">${ui('colNote')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colNoteSub')}</span></th>
       <th style="padding:7px 10px;width:50px;text-align:center;">${ui('colDone')}<br><span style="font-size:9px;font-weight:400;opacity:.8;">${ui('colDoneSub')}</span></th>
     </tr>
@@ -3627,9 +3520,6 @@ function collectState() {
   const state = { ts: Date.now(), step: currentStep, fields: {}, chips: {}, toggles: {}, customSlots: [], theme: selectedTheme, slotId };
   ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name','cfg-start-date','cfg-issue-date','cfg-footer-note',
    'cfg-sig-note','sig-label-1','sig-label-2','sig-label-3','sig-label-4',
-   // Step 2 sub-option text fields
-   'rehab-freq','walk-note','hosp-dept','hosp-freq','hosp-note',
-   'tv-note','music-note','craft-note','social-note','clean-weekly-note',
    // Step 3 大掃除 notes
    'dc-kitchen-note','dc-bathroom-note','dc-living-note','dc-bedroom-note','dc-balcony-note',
    'dc-weekly-note','dc-weekly-time-s','dc-weekly-time-e',
@@ -3640,10 +3530,6 @@ function collectState() {
   ['cfg-care-level','cfg-days','cfg-layout','cfg-day-axis','cfg-cell-content','cfg-note-row','cfg-lang','cfg-flags',
    'cfg-fontsize','cfg-rowheight','cfg-zebra','cfg-pagenum',
    'cfg-sig-count','cfg-sig-style','cfg-sig-date',
-   // Step 2 sub-option chips
-   'rehab-type','rehab-location','walk-place','walk-aid','hosp-type','hosp-transport',
-   'tv-type','music-type','music-device','reading-type','craft-type','social-type',
-   'clean-morning-items','clean-noon-items','clean-evening-items','clean-weekly-items','clean-weekly-freq',
    // Step 3 大掃除
    'dc-kitchen-items','dc-kitchen-freq','dc-bathroom-items','dc-bathroom-freq',
    'dc-living-items','dc-living-freq','dc-bedroom-items','dc-bedroom-freq',
@@ -3679,7 +3565,7 @@ function collectState() {
     const list = document.getElementById('task-list-' + secId);
     if (!list) return;
     const tasks = [];
-    list.querySelectorAll('input[type=text]').forEach(inp => { if (inp.value.trim()) tasks.push(inp.value); });
+    list.querySelectorAll('input[type=text]').forEach(inp => tasks.push(inp.value));
     state.slotTasks[secId] = tasks;
   });
   state.customSlots = getCustomSlots();
@@ -4017,8 +3903,8 @@ function updateLivePreview() {
     's-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
     's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
     's-bedtime':'就寢照護','s-night':'夜間巡視',
-    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
-    's-craft':'手工藝/益智','s-social':'家人/社交互動',
+    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
+    's-craft':'手工藝','s-social':'家人互動',
     's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
     's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
   };
@@ -4070,9 +3956,9 @@ function hidePreviewPanel() {
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  // 注意：先注入 slot day UIs（緊接 toggle-row 後），再注入 task editors
-  // （task editors 用 row.after() 插入，會推到 slot day UI 前方，最終順序：toggle-row → task-editor → slot-days-wrap）
+  // Inject slot day restriction UIs first (inserted right after toggle-row)
   injectSlotDayUIs();
+  // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
   injectTaskEditors();
   // cfg-start-date is optional — no auto-fill
 
@@ -4120,6 +4006,128 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 <button id="btn-show-preview" onclick="showPreviewPanel()">📋 時段預覽</button>
+
+<!-- ══ PWA INSTALL BANNER ══ -->
+<style>
+#pwa-banner{display:none;position:fixed;bottom:0;left:0;right:0;z-index:9000;background:var(--ink);color:#fff;padding:12px 16px;padding-bottom:max(12px,env(safe-area-inset-bottom));padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right));align-items:center;gap:12px;box-shadow:0 -4px 24px rgba(0,0,0,.3);transform:translateY(100%);transition:transform .35s cubic-bezier(.25,.8,.25,1);}
+#pwa-banner.show{transform:translateY(0);}
+.pwa-icon{font-size:28px;flex-shrink:0;}
+.pwa-text{flex:1;min-width:0;}
+.pwa-text strong{display:block;font-size:14px;margin-bottom:2px;}
+.pwa-text small{font-size:11px;opacity:.7;line-height:1.3;display:block;}
+.pwa-btn-install{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+.pwa-btn-dismiss{background:transparent;border:1.5px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+#offline-toast{position:fixed;top:calc(var(--topbar-h) + env(safe-area-inset-top,0px) + 8px);left:50%;transform:translateX(-50%) translateY(-80px);z-index:9001;background:#dc2626;color:#fff;border-radius:24px;padding:8px 18px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:transform .3s;white-space:nowrap;pointer-events:none;}
+#offline-toast.show{transform:translateX(-50%) translateY(0);}
+#offline-toast.online{background:var(--success);}
+/* Tablet improvements */
+@media(min-width:640px) and (max-width:1099px){
+  .chip-option{min-height:40px;display:inline-flex;align-items:center;}
+  .section-card-head{min-height:56px;}
+}
+/* Reduced motion */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms !important;transition-duration:0.01ms !important;}
+}
+/* iOS standalone mode adjustments */
+@media(display-mode:standalone){
+  .topbar{background:var(--ink);}
+}
+/* Desktop scrollbar & focus */
+@media(min-width:1100px){
+  .side-nav::-webkit-scrollbar{width:4px;}
+  .side-nav::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .chip-option:focus-visible,.tlbtn:focus-visible,.btn-prev:focus-visible,.btn-next:focus-visible,.btn-generate:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+}
+</style>
+<div id="pwa-banner">
+  <div class="pwa-icon">📅</div>
+  <div class="pwa-text">
+    <strong>安裝為手機 App</strong>
+    <small>加到主畫面・離線使用・更快啟動</small>
+  </div>
+  <button class="pwa-btn-install" id="pwa-install-btn">安裝</button>
+  <button class="pwa-btn-dismiss" id="pwa-dismiss-btn">✕</button>
+</div>
+<div id="offline-toast">📡 離線模式 — 資料已暫存</div>
+
+<script>
+/* ══ PWA INSTALL PROMPT ══ */
+let deferredInstallPrompt = null;
+const pwaBanner = document.getElementById('pwa-banner');
+const pwaInstallBtn = document.getElementById('pwa-install-btn');
+const pwaDismissBtn = document.getElementById('pwa-dismiss-btn');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  if (!sessionStorage.getItem('pwa-dismissed')) {
+    setTimeout(() => {
+      if (pwaBanner) { pwaBanner.style.display = 'flex'; setTimeout(()=>pwaBanner.classList.add('show'),50); }
+    }, 3500);
+  }
+});
+
+if (pwaInstallBtn) pwaInstallBtn.addEventListener('click', async () => {
+  if (!deferredInstallPrompt) return;
+  pwaBanner.classList.remove('show');
+  deferredInstallPrompt.prompt();
+  const { outcome } = await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  setTimeout(()=>{ pwaBanner.style.display='none'; }, 400);
+});
+
+if (pwaDismissBtn) pwaDismissBtn.addEventListener('click', () => {
+  pwaBanner.classList.remove('show');
+  sessionStorage.setItem('pwa-dismissed','1');
+  setTimeout(()=>{ pwaBanner.style.display='none'; }, 400);
+});
+
+window.addEventListener('appinstalled', () => {
+  if (pwaBanner) pwaBanner.style.display = 'none';
+  deferredInstallPrompt = null;
+});
+
+/* ══ OFFLINE / ONLINE ══ */
+const offlineToast = document.getElementById('offline-toast');
+function showNetworkStatus(online) {
+  if (!offlineToast) return;
+  offlineToast.textContent = online ? '✅ 已重新連線' : '📡 離線模式 — 資料已暫存';
+  offlineToast.className = online ? 'show online' : 'show';
+  clearTimeout(offlineToast._t);
+  offlineToast._t = setTimeout(()=>{ offlineToast.className = online ? 'online' : ''; }, 3000);
+}
+window.addEventListener('offline', ()=>showNetworkStatus(false));
+window.addEventListener('online', ()=>showNetworkStatus(true));
+
+/* ══ SERVICE WORKER (inline blob SW for offline caching) ══ */
+if ('serviceWorker' in navigator) {
+  const swSrc = `
+const CACHE='schedule-wizard-v20';
+self.addEventListener('install', e=>{
+  e.waitUntil(caches.open(CACHE).then(c=>c.add(self.location.origin+self.location.pathname)).then(()=>self.skipWaiting()));
+});
+self.addEventListener('activate', e=>{
+  e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+});
+self.addEventListener('fetch', e=>{
+  if(e.request.method!=='GET')return;
+  e.respondWith(caches.match(e.request).then(cached=>{
+    const net=fetch(e.request).then(res=>{
+      if(res&&res.ok&&res.type==='basic')caches.open(CACHE).then(c=>c.put(e.request,res.clone()));
+      return res;
+    }).catch(()=>cached||new Response('Offline',{status:503}));
+    return cached||net;
+  }));
+});
+`;
+  try {
+    const blob = new Blob([swSrc], {type:'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(()=>{});
+  } catch(e){}
+}
+</script>
 
 </body>
 </html>
