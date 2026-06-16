@@ -5115,177 +5115,389 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
   (function(){
     var scenarios = [
       {
-        id: 1, tag: "遊走", tagEn: "Wandering", tagColor: "#7c3aed",
-        zh: "長者突然起身說：「我要回家！」但他其實就在自己家裡。",
-        en: "The elder suddenly gets up: 'I want to go home!' — but they are already at home.",
-        vi: "Người cao tuổi đứng dậy: 'Tôi muốn về nhà!' — nhưng họ đang ở nhà rồi.",
-        id_: "Lansia tiba-tiba berdiri: 'Saya mau pulang!' — padahal sudah di rumah sendiri.",
-        key_zh: "核心原則：不否認感受、不糾正事實、回應情緒背後的需求（安全感）。",
-        key_en: "Don't deny feelings, don't correct facts — respond to the emotional need (safety).",
+        id: 1,
+        tag:   { zh:"遊走",     en:"Wandering",  vi:"Lang thang",    id:"Berkeliaran" },
+        tagColor: "#7c3aed",
+        sit:   {
+          zh: "長者突然起身說：「我要回家！」但他其實就在自己家裡。",
+          en: "The elder suddenly gets up: 'I want to go home!' — but they are already at home.",
+          vi: "Người cao tuổi đứng dậy: 'Tôi muốn về nhà!' — nhưng họ đang ở nhà rồi.",
+          id: "Lansia tiba-tiba berdiri: 'Saya mau pulang!' — padahal sudah di rumah sendiri."
+        },
+        key: {
+          zh: "核心原則：不否認感受、不糾正事實、回應情緒背後的需求（安全感）。",
+          en: "Don't deny feelings, don't correct facts — respond to the emotional need (safety).",
+          vi: "Nguyên tắc cốt lõi: Không phủ nhận cảm xúc, không sửa sự thật — đáp ứng nhu cầu cảm xúc (an toàn).",
+          id: "Prinsip utama: Jangan menyangkal perasaan, jangan mengoreksi fakta — respons kebutuhan emosional (rasa aman)."
+        },
         opts: [
-          { zh:"「您就在家裡啊！」直接糾正。", en:"'You're already home!' Correct directly.", correct:false,
-            why_zh:"直接糾正讓長者感到被否定，通常引發更激烈的抗拒。", why_en:"Correcting directly makes them feel dismissed — triggers stronger resistance." },
-          { zh:"「您想回家，是因為想念什麼嗎？」然後輕輕引導去坐下喝茶。", en:"'You want to go home — is there something you miss?' Gently guide them to sit and have tea.", correct:true,
-            why_zh:"「回家」代表安全感需求。先回應情緒，再轉移注意，是最有效的方式。", why_en:"'Home' means safety. Respond to the feeling first, then redirect — most effective approach." },
-          { zh:"「現在不行，等一下！」", en:"'Not now, wait a moment!'", correct:false,
-            why_zh:"長者無法理解「等一下」，拒絕只增加焦慮。", why_en:"They can't process 'wait' — refusal only escalates anxiety." }
+          {
+            zh:"「您就在家裡啊！」直接糾正。",
+            en:"'You're already home!' Correct directly.",
+            vi:"'Bạn đang ở nhà rồi!' Sửa thẳng.",
+            id:"'Kamu sudah di rumah!' Langsung mengoreksi.",
+            correct:false,
+            why:{
+              zh:"直接糾正讓長者感到被否定，通常引發更激烈的抗拒。",
+              en:"Correcting directly makes them feel dismissed — triggers stronger resistance.",
+              vi:"Sửa thẳng khiến người cao tuổi cảm thấy bị phủ nhận — thường gây phản ứng mạnh hơn.",
+              id:"Mengoreksi langsung membuat mereka merasa ditolak — memicu perlawanan yang lebih kuat."
+            }
+          },
+          {
+            zh:"「您想回家，是因為想念什麼嗎？」然後輕輕引導去坐下喝茶。",
+            en:"'You want to go home — is there something you miss?' Gently guide them to sit and have tea.",
+            vi:"'Bạn muốn về nhà — bạn đang nhớ điều gì?' Nhẹ nhàng dẫn ngồi uống trà.",
+            id:"'Kamu ingin pulang — ada yang kamu rindukan?' Perlahan ajak duduk minum teh.",
+            correct:true,
+            why:{
+              zh:"「回家」代表安全感需求。先回應情緒，再轉移注意，是最有效的方式。",
+              en:"'Home' means safety. Respond to the feeling first, then redirect — most effective approach.",
+              vi:"'Về nhà' có nghĩa là nhu cầu an toàn. Đáp ứng cảm xúc trước, rồi chuyển hướng — cách hiệu quả nhất.",
+              id:"'Pulang' berarti kebutuhan rasa aman. Respons perasaan dulu, lalu alihkan perhatian — pendekatan paling efektif."
+            }
+          },
+          {
+            zh:"「現在不行，等一下！」",
+            en:"'Not now, wait a moment!'",
+            vi:"'Bây giờ chưa được, chờ một chút!'",
+            id:"'Sekarang tidak bisa, tunggu sebentar!'",
+            correct:false,
+            why:{
+              zh:"長者無法理解「等一下」，拒絕只增加焦慮。",
+              en:"They can't process 'wait' — refusal only escalates anxiety.",
+              vi:"Người cao tuổi không thể hiểu 'chờ một chút' — từ chối chỉ làm tăng lo lắng.",
+              id:"Mereka tidak bisa memproses 'tunggu' — penolakan hanya meningkatkan kecemasan."
+            }
+          }
         ]
       },
       {
-        id: 2, tag: "妄想指控", tagEn: "Accusation", tagColor: "#b91c1c",
-        zh: "長者突然說：「你偷我的錢！我的錢不見了！」",
-        en: "The elder suddenly says: 'You stole my money! My money is missing!'",
-        vi: "Người cao tuổi đột ngột nói: 'Anh/chị ăn cắp tiền của tôi! Tiền mất rồi!'",
-        id_: "Lansia tiba-tiba berkata: 'Kamu mencuri uangku! Uangku hilang!'",
-        key_zh: "核心原則：妄想是腦部疾病症狀，不是故意找麻煩。回應情緒，提供協助，不爭辯對錯。",
-        key_en: "Delusions are a symptom of brain disease. Respond to emotion, offer help, don't argue about facts.",
+        id: 2,
+        tag:   { zh:"妄想指控", en:"Accusation", vi:"Ảo tưởng buộc tội", id:"Delusi Tuduhan" },
+        tagColor: "#b91c1c",
+        sit:   {
+          zh: "長者突然說：「你偷我的錢！我的錢不見了！」",
+          en: "The elder suddenly says: 'You stole my money! My money is missing!'",
+          vi: "Người cao tuổi đột ngột nói: 'Anh/chị ăn cắp tiền của tôi! Tiền mất rồi!'",
+          id: "Lansia tiba-tiba berkata: 'Kamu mencuri uangku! Uangku hilang!'"
+        },
+        key: {
+          zh: "核心原則：妄想是腦部疾病症狀，不是故意找麻煩。回應情緒，提供協助，不爭辯對錯。",
+          en: "Delusions are a symptom of brain disease. Respond to emotion, offer help, don't argue about facts.",
+          vi: "Ảo tưởng là triệu chứng bệnh não. Đáp ứng cảm xúc, hỗ trợ, không tranh luận đúng sai.",
+          id: "Delusi adalah gejala penyakit otak. Respons emosi, tawarkan bantuan, jangan berdebat soal fakta."
+        },
         opts: [
-          { zh:"「我沒有偷！您自己放的！」堅決否認。", en:"'I didn't steal! You put it there yourself!' Firmly deny.", correct:false,
-            why_zh:"爭辯讓長者更確信你在說謊，引發情緒升溫甚至攻擊。", why_en:"Arguing makes them more convinced you're lying — escalates and may trigger aggression." },
-          { zh:"「錢不見了，您一定很擔心。我們一起去找找看。」", en:"'The money is missing — you must be worried. Let me help you look for it.'", correct:true,
-            why_zh:"先承認情緒，再提供行動。找到後長者通常平靜，比爭論有效百倍。", why_en:"Acknowledge the worry, then offer action. Finding it usually calms them — far more effective than debate." },
-          { zh:"「您老是這樣！」不耐煩地走開。", en:"'You always say this!' Walk away impatiently.", correct:false,
-            why_zh:"負面語氣讓長者感到被攻擊，指控行為反而更頻繁。", why_en:"Negative tone makes them feel attacked — accusations become more frequent." }
+          {
+            zh:"「我沒有偷！您自己放的！」堅決否認。",
+            en:"'I didn't steal! You put it there yourself!' Firmly deny.",
+            vi:"'Tôi không ăn cắp! Bạn tự để đó!' Phủ nhận kiên quyết.",
+            id:"'Saya tidak mencuri! Kamu sendiri yang meletakkannya!' Tegas menyangkal.",
+            correct:false,
+            why:{
+              zh:"爭辯讓長者更確信你在說謊，引發情緒升溫甚至攻擊。",
+              en:"Arguing makes them more convinced you're lying — escalates and may trigger aggression.",
+              vi:"Tranh luận khiến người cao tuổi càng tin bạn đang nói dối — leo thang và có thể gây hung hăng.",
+              id:"Berdebat membuat mereka semakin yakin kamu berbohong — meningkat dan bisa memicu agresi."
+            }
+          },
+          {
+            zh:"「錢不見了，您一定很擔心。我們一起去找找看。」",
+            en:"'The money is missing — you must be worried. Let me help you look for it.'",
+            vi:"'Tiền mất rồi — bạn chắc lo lắng lắm. Để tôi giúp tìm.'",
+            id:"'Uangnya hilang — pasti kamu khawatir. Mari kita cari bersama.'",
+            correct:true,
+            why:{
+              zh:"先承認情緒，再提供行動。找到後長者通常平靜，比爭論有效百倍。",
+              en:"Acknowledge the worry, then offer action. Finding it usually calms them — far more effective than debate.",
+              vi:"Thừa nhận lo lắng, rồi đề xuất hành động. Tìm thấy thường giúp bình tĩnh — hiệu quả hơn tranh luận nhiều.",
+              id:"Akui kekhawatiran, lalu tawarkan tindakan. Menemukannya biasanya menenangkan — jauh lebih efektif dari debat."
+            }
+          },
+          {
+            zh:"「您老是這樣！」不耐煩地走開。",
+            en:"'You always say this!' Walk away impatiently.",
+            vi:"'Bạn lúc nào cũng thế này!' Bỏ đi thiếu kiên nhẫn.",
+            id:"'Kamu selalu begini!' Pergi dengan tidak sabar.",
+            correct:false,
+            why:{
+              zh:"負面語氣讓長者感到被攻擊，指控行為反而更頻繁。",
+              en:"Negative tone makes them feel attacked — accusations become more frequent.",
+              vi:"Giọng điệu tiêu cực khiến người cao tuổi cảm thấy bị tấn công — cáo buộc càng thường xuyên hơn.",
+              id:"Nada negatif membuat mereka merasa diserang — tuduhan menjadi semakin sering."
+            }
+          }
         ]
       },
       {
-        id: 3, tag: "時間迷失", tagEn: "Time Confusion", tagColor: "#0369a1",
-        zh: "長者哭著問：「我媽媽去哪裡了？」——媽媽已過世數十年。",
-        en: "The elder is crying: 'Where is my mother?' — their mother passed away decades ago.",
-        vi: "Người cao tuổi khóc: 'Mẹ tôi đâu?' — mẹ đã mất vài chục năm rồi.",
-        id_: "Lansia menangis: 'Di mana ibu saya?' — ibunya sudah meninggal puluhan tahun lalu.",
-        key_zh: "核心原則：不需要告知痛苦的事實。回應「情緒」，不回應「事實」。",
-        key_en: "You don't need to deliver painful truths. Respond to the emotion, not the factual error.",
+        id: 3,
+        tag:   { zh:"時間迷失", en:"Time Confusion", vi:"Lạc thời gian", id:"Kebingungan Waktu" },
+        tagColor: "#0369a1",
+        sit:   {
+          zh: "長者哭著問：「我媽媽去哪裡了？」——媽媽已過世數十年。",
+          en: "The elder is crying: 'Where is my mother?' — their mother passed away decades ago.",
+          vi: "Người cao tuổi khóc: 'Mẹ tôi đâu?' — mẹ đã mất vài chục năm rồi.",
+          id: "Lansia menangis: 'Di mana ibu saya?' — ibunya sudah meninggal puluhan tahun lalu."
+        },
+        key: {
+          zh: "核心原則：不需要告知痛苦的事實。回應「情緒」，不回應「事實」。",
+          en: "You don't need to deliver painful truths. Respond to the emotion, not the factual error.",
+          vi: "Không cần nói sự thật đau lòng. Đáp ứng 'cảm xúc', không đáp ứng 'sự thật'.",
+          id: "Tidak perlu menyampaikan kebenaran yang menyakitkan. Respons 'emosi', bukan 'fakta'."
+        },
         opts: [
-          { zh:"「您媽媽已經過世了。」如實告知。", en:"'Your mother has passed away.' Tell the truth directly.", correct:false,
-            why_zh:"每次告知等於讓長者經歷一次新的喪親之痛。這是最常見的殘忍錯誤。", why_en:"Every time you tell them, it's like the first bereavement. The most common harmful mistake in dementia care." },
-          { zh:"「媽媽現在沒辦法來，但您很安全，我在陪著您。您最想媽媽的什麼？」", en:"'Mother can't come right now, but you're safe and I'm with you. What do you miss most about her?'", correct:true,
-            why_zh:"不說謊、也不說實情，回應情感。請他說說媽媽，可將悲傷轉為溫暖的回憶。", why_en:"Don't lie but don't deliver painful truth either. Asking about her turns grief into warm memories." },
-          { zh:"「您在做夢，先去吃飯。」", en:"'You're dreaming — let's go eat.'", correct:false,
-            why_zh:"完全忽視情緒，長者會反覆詢問或情緒崩潰。", why_en:"Completely ignores the emotional need — leads to repeated asking or emotional breakdown." }
+          {
+            zh:"「您媽媽已經過世了。」如實告知。",
+            en:"'Your mother has passed away.' Tell the truth directly.",
+            vi:"'Mẹ bạn đã mất rồi.' Nói thật thẳng.",
+            id:"'Ibu kamu sudah meninggal.' Sampaikan kebenaran langsung.",
+            correct:false,
+            why:{
+              zh:"每次告知等於讓長者經歷一次新的喪親之痛。這是最常見的殘忍錯誤。",
+              en:"Every time you tell them, it's like the first bereavement. The most common harmful mistake in dementia care.",
+              vi:"Mỗi lần nói là như lần đầu mất mẹ. Đây là lỗi tàn nhẫn phổ biến nhất trong chăm sóc sa sút trí tuệ.",
+              id:"Setiap kali disampaikan, rasanya seperti kehilangan pertama kali. Kesalahan paling umum dan berbahaya dalam perawatan demensia."
+            }
+          },
+          {
+            zh:"「媽媽現在沒辦法來，但您很安全，我在陪著您。您最想媽媽的什麼？」",
+            en:"'Mother can't come right now, but you're safe and I'm with you. What do you miss most about her?'",
+            vi:"'Mẹ bây giờ không đến được, nhưng bạn an toàn và tôi ở bên. Bạn nhớ mẹ điều gì nhất?'",
+            id:"'Ibu tidak bisa datang sekarang, tapi kamu aman dan saya menemanimu. Apa yang paling kamu rindukan dari ibu?'",
+            correct:true,
+            why:{
+              zh:"不說謊、也不說實情，回應情感。請他說說媽媽，可將悲傷轉為溫暖的回憶。",
+              en:"Don't lie but don't deliver painful truth either. Asking about her turns grief into warm memories.",
+              vi:"Không nói dối, cũng không nói sự thật đau lòng. Hỏi về mẹ chuyển nỗi buồn thành ký ức ấm áp.",
+              id:"Tidak berbohong tapi tidak menyampaikan kebenaran yang menyakitkan. Bertanya tentang ibu mengubah kesedihan menjadi kenangan hangat."
+            }
+          },
+          {
+            zh:"「您在做夢，先去吃飯。」",
+            en:"'You're dreaming — let's go eat.'",
+            vi:"'Bạn đang mơ — đi ăn thôi.'",
+            id:"'Kamu sedang bermimpi — ayo makan dulu.'",
+            correct:false,
+            why:{
+              zh:"完全忽視情緒，長者會反覆詢問或情緒崩潰。",
+              en:"Completely ignores the emotional need — leads to repeated asking or emotional breakdown.",
+              vi:"Hoàn toàn bỏ qua nhu cầu cảm xúc — dẫn đến hỏi lặp lại hoặc suy sụp cảm xúc.",
+              id:"Sepenuhnya mengabaikan kebutuhan emosional — menyebabkan pertanyaan berulang atau breakdown emosional."
+            }
+          }
         ]
       },
       {
-        id: 4, tag: "拒絕照護", tagEn: "Care Refusal", tagColor: "#0f766e",
-        zh: "幫長者洗澡時，長者大喊：「不要碰我！走開！你是誰！」並開始推打。",
-        en: "While helping bathe, the elder shouts: 'Don't touch me! Go away! Who are you!' and starts pushing.",
-        vi: "Khi giúp tắm, người cao tuổi hét: 'Đừng chạm! Đi ra! Anh là ai!' và bắt đầu xô đẩy.",
-        id_: "Saat membantu mandi, lansia berteriak: 'Jangan sentuh! Pergi! Kamu siapa!' dan mendorong.",
-        key_zh: "核心原則：推打是「求救訊號」，不是故意攻擊。停止、退後、重建信任，是唯一有效方式。",
-        key_en: "Pushing is a distress signal, not deliberate aggression. Stop, step back, rebuild trust — the only effective response.",
+        id: 4,
+        tag:   { zh:"拒絕照護", en:"Care Refusal", vi:"Từ chối chăm sóc", id:"Penolakan Perawatan" },
+        tagColor: "#0f766e",
+        sit:   {
+          zh: "幫長者洗澡時，長者大喊：「不要碰我！走開！你是誰！」並開始推打。",
+          en: "While helping bathe, the elder shouts: 'Don't touch me! Go away! Who are you!' and starts pushing.",
+          vi: "Khi giúp tắm, người cao tuổi hét: 'Đừng chạm! Đi ra! Anh là ai!' và bắt đầu xô đẩy.",
+          id: "Saat membantu mandi, lansia berteriak: 'Jangan sentuh! Pergi! Kamu siapa!' dan mendorong."
+        },
+        key: {
+          zh: "核心原則：推打是「求救訊號」，不是故意攻擊。停止、退後、重建信任，是唯一有效方式。",
+          en: "Pushing is a distress signal, not deliberate aggression. Stop, step back, rebuild trust — the only effective response.",
+          vi: "Xô đẩy là 'tín hiệu cầu cứu', không phải tấn công có chủ ý. Dừng lại, lùi ra, xây dựng lại niềm tin — cách duy nhất hiệu quả.",
+          id: "Mendorong adalah 'sinyal minta tolong', bukan serangan sengaja. Berhenti, mundur, bangun kembali kepercayaan — satu-satunya respons efektif."
+        },
         opts: [
-          { zh:"繼續完成洗澡，不然等會更難洗。", en:"Continue the bath — it'll be harder later.", correct:false,
-            why_zh:"強行繼續讓長者將洗澡與「被侵犯」連結，下次更難配合，也可能造成受傷。", why_en:"Forcing through links bathing with violation — next time is even harder and risks injury." },
-          { zh:"立刻停下來，退後，低聲說：「對不起嚇到您了。我是XX，來幫您洗澡，您很安全。」", en:"Stop immediately, step back, say softly: 'Sorry I startled you. I'm [name], here to help. You're safe.'", correct:true,
-            why_zh:"停止是第一優先。退後減少威脅感。低聲說名字重建熟悉與信任。等平靜後再繼續，比硬撐更快完成。", why_en:"Stopping is the priority. Stepping back reduces threat. Saying your name softly rebuilds trust. Waiting for calm is faster overall." },
-          { zh:"「再這樣就叫家人來！」大聲警告。", en:"'Behave or I'll call your family!' Warn loudly.", correct:false,
-            why_zh:"威脅引發更強防衛反應。長者只感受到被攻擊的恐懼，情況升級。", why_en:"Threatening triggers stronger defence. They only feel fear of being attacked — escalation." }
+          {
+            zh:"繼續完成洗澡，不然等會更難洗。",
+            en:"Continue the bath — it'll be harder later.",
+            vi:"Tiếp tục tắm — lát nữa sẽ khó hơn.",
+            id:"Lanjutkan mandi — nanti akan lebih sulit.",
+            correct:false,
+            why:{
+              zh:"強行繼續讓長者將洗澡與「被侵犯」連結，下次更難配合，也可能造成受傷。",
+              en:"Forcing through links bathing with violation — next time is even harder and risks injury.",
+              vi:"Tiếp tục ép buộc liên kết tắm với 'bị xâm phạm' — lần sau càng khó hơn và có nguy cơ bị thương.",
+              id:"Memaksakan menghubungkan mandi dengan 'dilanggar' — kali berikutnya lebih sulit dan berisiko cedera."
+            }
+          },
+          {
+            zh:"立刻停下來，退後，低聲說：「對不起嚇到您了。我是XX，來幫您洗澡，您很安全。」",
+            en:"Stop immediately, step back, say softly: 'Sorry I startled you. I'm [name], here to help. You're safe.'",
+            vi:"Dừng ngay, lùi ra, nói nhẹ nhàng: 'Xin lỗi làm bạn giật mình. Tôi là [tên], đến giúp bạn. Bạn an toàn.'",
+            id:"Berhenti segera, mundur, ucapkan lembut: 'Maaf mengejutkanmu. Saya [nama], di sini untuk membantu. Kamu aman.'",
+            correct:true,
+            why:{
+              zh:"停止是第一優先。退後減少威脅感。低聲說名字重建熟悉與信任。等平靜後再繼續，比硬撐更快完成。",
+              en:"Stopping is the priority. Stepping back reduces threat. Saying your name softly rebuilds trust. Waiting for calm is faster overall.",
+              vi:"Dừng lại là ưu tiên đầu tiên. Lùi ra giảm cảm giác bị đe dọa. Nói tên nhẹ nhàng tái tạo sự quen thuộc và tin tưởng. Chờ bình tĩnh rồi tiếp tục sẽ nhanh hơn.",
+              id:"Berhenti adalah prioritas pertama. Mundur mengurangi rasa terancam. Menyebut nama dengan lembut membangun kembali kepercayaan. Menunggu tenang lalu melanjutkan lebih cepat keseluruhan."
+            }
+          },
+          {
+            zh:"「再這樣就叫家人來！」大聲警告。",
+            en:"'Behave or I'll call your family!' Warn loudly.",
+            vi:"'Nếu tiếp tục thế này tôi sẽ gọi gia đình!' Cảnh báo to.",
+            id:"'Kalau begini terus saya panggil keluarga!' Beri peringatan keras.",
+            correct:false,
+            why:{
+              zh:"威脅引發更強防衛反應。長者只感受到被攻擊的恐懼，情況升級。",
+              en:"Threatening triggers stronger defence. They only feel fear of being attacked — escalation.",
+              vi:"Đe dọa kích hoạt phản ứng phòng thủ mạnh hơn. Người cao tuổi chỉ cảm thấy sợ bị tấn công — leo thang.",
+              id:"Ancaman memicu pertahanan yang lebih kuat. Mereka hanya merasakan ketakutan diserang — eskalasi."
+            }
+          }
         ]
       },
       {
-        id: 5, tag: "重複詢問", tagEn: "Repetition", tagColor: "#b45309",
-        zh: "長者10分鐘內第五次問：「今天幾號？」你已經回答了四次。",
-        en: "The elder asks 'What's today's date?' for the fifth time in 10 minutes. You've answered four times.",
-        vi: "Người cao tuổi hỏi 'Hôm nay mấy?' lần thứ 5 trong 10 phút. Bạn đã trả lời 4 lần.",
-        id_: "Lansia bertanya 'Tanggal berapa?' untuk ke-5 kali dalam 10 menit. Anda sudah menjawab 4 kali.",
-        key_zh: "核心原則：重複詢問不是故意，是記憶功能受損。環境輔助（日曆、白板）比重複回答更根本。",
-        key_en: "Repetition is not intentional — it's memory impairment. Environmental aids (calendar, whiteboard) are more fundamental than repeated answers.",
+        id: 5,
+        tag:   { zh:"重複詢問", en:"Repetition", vi:"Hỏi lặp lại", id:"Pertanyaan Berulang" },
+        tagColor: "#b45309",
+        sit:   {
+          zh: "長者10分鐘內第五次問：「今天幾號？」你已經回答了四次。",
+          en: "The elder asks 'What's today's date?' for the fifth time in 10 minutes. You've answered four times.",
+          vi: "Người cao tuổi hỏi 'Hôm nay mấy?' lần thứ 5 trong 10 phút. Bạn đã trả lời 4 lần.",
+          id: "Lansia bertanya 'Tanggal berapa?' untuk ke-5 kali dalam 10 menit. Anda sudah menjawab 4 kali."
+        },
+        key: {
+          zh: "核心原則：重複詢問不是故意，是記憶功能受損。環境輔助（日曆、白板）比重複回答更根本。",
+          en: "Repetition is not intentional — it's memory impairment. Environmental aids (calendar, whiteboard) are more fundamental than repeated answers.",
+          vi: "Hỏi lặp lại không phải cố ý — đó là suy giảm trí nhớ. Hỗ trợ môi trường (lịch, bảng trắng) căn bản hơn trả lời lặp lại.",
+          id: "Pengulangan bukan disengaja — itu gangguan memori. Alat bantu lingkungan (kalender, papan tulis) lebih mendasar dari jawaban berulang."
+        },
         opts: [
-          { zh:"「我說過四次了！」不耐煩地回應。", en:"'I've told you four times!' Respond impatiently.", correct:false,
-            why_zh:"長者不是沒聽，是腦部無法儲存短期記憶。指責讓長者感到羞辱，重複詢問不會停止。", why_en:"They're not ignoring you — the brain can't store short-term memory. Reproach causes shame; repetition won't stop." },
-          { zh:"耐心回答第五次，再在長者看得到的地方放一張日曆讓她自己能查。", en:"Answer patiently, then place a visible calendar nearby so they can check it themselves.", correct:true,
-            why_zh:"每次詢問對長者都是第一次。耐心回答是基本尊重。主動放日曆讓環境協助記憶，是根本解法。", why_en:"Each time genuinely feels like the first time. Answering is respect. A visible calendar lets the environment support memory — the real solution." },
-          { zh:"假裝沒聽到，繼續做自己的事。", en:"Pretend not to hear and continue your own tasks.", correct:false,
-            why_zh:"被忽視增加焦慮，可能升級為更激烈的求助方式。", why_en:"Being ignored increases anxiety — may escalate to louder, more physical attention-seeking." }
+          {
+            zh:"「我說過四次了！」不耐煩地回應。",
+            en:"'I've told you four times!' Respond impatiently.",
+            vi:"'Tôi đã nói 4 lần rồi!' Trả lời thiếu kiên nhẫn.",
+            id:"'Saya sudah bilang empat kali!' Menjawab dengan tidak sabar.",
+            correct:false,
+            why:{
+              zh:"長者不是沒聽，是腦部無法儲存短期記憶。指責讓長者感到羞辱，重複詢問不會停止。",
+              en:"They're not ignoring you — the brain can't store short-term memory. Reproach causes shame; repetition won't stop.",
+              vi:"Họ không phớt lờ — não không thể lưu trữ trí nhớ ngắn hạn. Trách móc gây xấu hổ; hỏi lặp lại sẽ không dừng.",
+              id:"Mereka tidak mengabaikan — otak tidak bisa menyimpan memori jangka pendek. Teguran menyebabkan rasa malu; pengulangan tidak akan berhenti."
+            }
+          },
+          {
+            zh:"耐心回答第五次，再在長者看得到的地方放一張日曆讓她自己能查。",
+            en:"Answer patiently, then place a visible calendar nearby so they can check it themselves.",
+            vi:"Kiên nhẫn trả lời lần thứ 5, rồi đặt lịch ở nơi người cao tuổi nhìn thấy để tự tra.",
+            id:"Jawab dengan sabar, lalu letakkan kalender di tempat yang terlihat agar mereka bisa memeriksa sendiri.",
+            correct:true,
+            why:{
+              zh:"每次詢問對長者都是第一次。耐心回答是基本尊重。主動放日曆讓環境協助記憶，是根本解法。",
+              en:"Each time genuinely feels like the first time. Answering is respect. A visible calendar lets the environment support memory — the real solution.",
+              vi:"Mỗi lần hỏi với họ đều là lần đầu tiên. Trả lời là sự tôn trọng cơ bản. Đặt lịch để môi trường hỗ trợ trí nhớ — đó là giải pháp căn bản.",
+              id:"Setiap pertanyaan bagi mereka adalah yang pertama kalinya. Menjawab adalah rasa hormat dasar. Kalender yang terlihat membuat lingkungan mendukung memori — solusi sesungguhnya."
+            }
+          },
+          {
+            zh:"假裝沒聽到，繼續做自己的事。",
+            en:"Pretend not to hear and continue your own tasks.",
+            vi:"Giả vờ không nghe và tiếp tục làm việc của mình.",
+            id:"Pura-pura tidak mendengar dan terus melakukan pekerjaan sendiri.",
+            correct:false,
+            why:{
+              zh:"被忽視增加焦慮，可能升級為更激烈的求助方式。",
+              en:"Being ignored increases anxiety — may escalate to louder, more physical attention-seeking.",
+              vi:"Bị phớt lờ làm tăng lo lắng — có thể leo thang thành cách tìm kiếm sự chú ý mạnh hơn.",
+              id:"Diabaikan meningkatkan kecemasan — dapat meningkat menjadi pencarian perhatian yang lebih keras dan fisik."
+            }
+          }
         ]
       },
       {
-        id: 6, tag: "幻覺應對", tagEn: "Hallucination", tagColor: "#7c3aed",
-        zh: "長者指著空無一人的角落說：「那裡有個陌生人一直看著我，我很害怕！」",
-        en: "The elder points to an empty corner: 'There's a stranger staring at me! I'm so scared!'",
-        vi: "Người cao tuổi chỉ góc phòng trống: 'Có người lạ nhìn tôi! Tôi rất sợ!'",
-        id_: "Lansia menunjuk sudut kosong: 'Ada orang asing di sana menatap saya! Saya sangat takut!'",
-        key_zh: "核心原則：不肯定、也不否認幻覺。回應「害怕」的情緒，建立「安全感」——這是唯二需要做的事。",
-        key_en: "Neither confirm nor deny the hallucination. Respond to the fear and build safety — those are the only two things needed.",
+        id: 6,
+        tag:   { zh:"幻覺應對", en:"Hallucination", vi:"Xử lý ảo giác", id:"Menangani Halusinasi" },
+        tagColor: "#7c3aed",
+        sit:   {
+          zh: "長者指著空無一人的角落說：「那裡有個陌生人一直看著我，我很害怕！」",
+          en: "The elder points to an empty corner: 'There's a stranger staring at me! I'm so scared!'",
+          vi: "Người cao tuổi chỉ góc phòng trống: 'Có người lạ nhìn tôi! Tôi rất sợ!'",
+          id: "Lansia menunjuk sudut kosong: 'Ada orang asing di sana menatap saya! Saya sangat takut!'"
+        },
+        key: {
+          zh: "核心原則：不肯定、也不否認幻覺。回應「害怕」的情緒，建立「安全感」——這是唯二需要做的事。",
+          en: "Neither confirm nor deny the hallucination. Respond to the fear and build safety — those are the only two things needed.",
+          vi: "Không xác nhận, cũng không phủ nhận ảo giác. Đáp ứng cảm xúc 'sợ hãi', xây dựng 'an toàn' — đó là hai điều duy nhất cần làm.",
+          id: "Tidak mengkonfirmasi, tidak juga menyangkal halusinasi. Respons emosi 'takut', bangun 'rasa aman' — itulah dua hal yang hanya perlu dilakukan."
+        },
         opts: [
-          { zh:"「那裡什麼都沒有，您在想像！」明確否認。", en:"'There's nothing there — you're imagining it!'", correct:false,
-            why_zh:"對長者來說那個人是真實的。否認讓長者覺得連看護也不相信我，恐懼與孤立感加重。", why_en:"To the elder it's completely real. Denial makes them feel not even believed — fear and isolation deepen." },
-          { zh:"「您覺得害怕，我來陪您。」走到長者身邊坐下，查看環境後說：「我看過了，這裡很安全。」", en:"'You're scared — I'm here with you.' Sit beside them, look around, then say: 'I've checked — it's safe here.'", correct:true,
-            why_zh:"不肯定幻覺、也不否認。先回應恐懼，再用行動建立安全感。這是認知症照護最精準的幻覺處理方式。", why_en:"Don't confirm or deny. Respond to fear first, then use action to build safety — the most precise approach to hallucinations in dementia care." },
-          { zh:"「我去把他趕走！」假裝去角落趕人再回來說「他走了」。", en:"'I'll chase him away!' Pretend to shoo the corner, then say 'He's gone.'", correct:false,
-            why_zh:"出發點好，但確認了幻覺的存在，可能強化妄想。長期使用效果越來越差。", why_en:"Well-intentioned but confirms the hallucination — may reinforce the delusion. Effectiveness decreases over time." }
+          {
+            zh:"「那裡什麼都沒有，您在想像！」明確否認。",
+            en:"'There's nothing there — you're imagining it!'",
+            vi:"'Ở đó không có gì — bạn đang tưởng tượng!'",
+            id:"'Tidak ada apa-apa di sana — kamu hanya berimajinasi!'",
+            correct:false,
+            why:{
+              zh:"對長者來說那個人是真實的。否認讓長者覺得連看護也不相信我，恐懼與孤立感加重。",
+              en:"To the elder it's completely real. Denial makes them feel not even believed — fear and isolation deepen.",
+              vi:"Với người cao tuổi, người đó là thật. Phủ nhận khiến họ cảm thấy ngay cả người chăm sóc cũng không tin mình — sợ hãi và cô lập càng nặng.",
+              id:"Bagi lansia itu sepenuhnya nyata. Penyangkalan membuat mereka merasa bahkan pengasuh pun tidak percaya — ketakutan dan isolasi semakin dalam."
+            }
+          },
+          {
+            zh:"「您覺得害怕，我來陪您。」走到長者身邊坐下，查看環境後說：「我看過了，這裡很安全。」",
+            en:"'You're scared — I'm here with you.' Sit beside them, look around, then say: 'I've checked — it's safe here.'",
+            vi:"'Bạn đang sợ — tôi ở đây với bạn.' Ngồi bên, nhìn quanh, rồi nói: 'Tôi đã kiểm tra — nơi này an toàn.'",
+            id:"'Kamu takut — saya di sini bersamamu.' Duduk di sisinya, lihat sekeliling, lalu katakan: 'Saya sudah periksa — di sini aman.'",
+            correct:true,
+            why:{
+              zh:"不肯定幻覺、也不否認。先回應恐懼，再用行動建立安全感。這是認知症照護最精準的幻覺處理方式。",
+              en:"Don't confirm or deny. Respond to fear first, then use action to build safety — the most precise approach to hallucinations in dementia care.",
+              vi:"Không xác nhận cũng không phủ nhận. Đáp ứng nỗi sợ trước, rồi dùng hành động xây dựng an toàn — cách xử lý ảo giác chính xác nhất trong chăm sóc sa sút trí tuệ.",
+              id:"Jangan konfirmasi atau sangkal. Respons ketakutan dulu, lalu gunakan tindakan untuk membangun rasa aman — pendekatan paling tepat untuk halusinasi dalam perawatan demensia."
+            }
+          },
+          {
+            zh:"「我去把他趕走！」假裝去角落趕人再回來說「他走了」。",
+            en:"'I'll chase him away!' Pretend to shoo the corner, then say 'He's gone.'",
+            vi:"'Tôi sẽ đuổi anh ta đi!' Giả vờ đuổi góc phòng rồi nói 'Anh ta đi rồi.'",
+            id:"'Saya akan mengusirnya!' Pura-pura mengusir sudut, lalu katakan 'Dia sudah pergi.'",
+            correct:false,
+            why:{
+              zh:"出發點好，但確認了幻覺的存在，可能強化妄想。長期使用效果越來越差。",
+              en:"Well-intentioned but confirms the hallucination — may reinforce the delusion. Effectiveness decreases over time.",
+              vi:"Ý định tốt nhưng xác nhận ảo giác — có thể củng cố ảo tưởng. Hiệu quả giảm dần theo thời gian.",
+              id:"Niat baik tapi mengkonfirmasi halusinasi — bisa memperkuat delusi. Efektivitas menurun seiring waktu."
+            }
+          }
         ]
       }
     ];
 
     var revealed = {};
 
+    // UI strings for all 4 languages
+    var UI = {
+      zh: { sit:"情境", respond:"你會怎麼說？", correct:"✓ 正確", avoid:"✗ 避免", other:"○", retry:"重新作答", tap:"點選選項作答", case:"案例" },
+      en: { sit:"Situation", respond:"How do you respond?", correct:"✓ Correct", avoid:"✗ Avoid", other:"○", retry:"Try again", tap:"Tap an option to answer", case:"Case" },
+      vi: { sit:"Tình huống", respond:"Bạn sẽ nói gì?", correct:"✓ Đúng", avoid:"✗ Tránh", other:"○", retry:"Thử lại", tap:"Chọn một đáp án", case:"Tình huống" },
+      id: { sit:"Situasi", respond:"Apa yang akan kamu katakan?", correct:"✓ Benar", avoid:"✗ Hindari", other:"○", retry:"Coba lagi", tap:"Pilih satu jawaban", case:"Kasus" }
+    };
+
     function getLang(){
-      var active = document.querySelector('[id^="btn-"]:not([style*="display:none"])');
-      var body = document.body;
-      if(body && body.className){
-        if(body.className.indexOf('lang-en')>-1) return 'en';
-        if(body.className.indexOf('lang-vi')>-1) return 'vi';
-        if(body.className.indexOf('lang-id')>-1) return 'id';
-      }
-      var enBtn = document.getElementById('btn-en');
-      if(enBtn && window.getComputedStyle(enBtn).fontWeight === '700') return 'en';
+      var lang = document.documentElement.getAttribute('data-lang');
+      if(lang === 'en' || lang === 'vi' || lang === 'id') return lang;
       return 'zh';
     }
 
-    function txt(s, field){
-      var lang = getLang();
-      if(lang==='en') return s[field+'_en']||s['en']||s[field+'_zh']||s[field];
-      if(lang==='vi') return s[field+'_vi']||s['vi']||s[field+'_zh']||s[field];
-      if(lang==='id') return s[field+'_id_']||s['id_']||s[field+'_zh']||s[field];
-      return s[field+'_zh']||s[field];
-    }
-
-    function sitTxt(s){
-      var lang = getLang();
-      if(lang==='en') return s.en;
-      if(lang==='vi') return s.vi;
-      if(lang==='id') return s.id_;
-      return s.zh;
-    }
-
-    function optTxt(opt){
-      var lang = getLang();
-      if(lang==='en') return opt.en;
-      if(lang==='vi') return opt.vi||opt.en;
-      if(lang==='id') return opt.id_||opt.en;
-      return opt.zh;
-    }
-
-    function whyTxt(opt){
-      var lang = getLang();
-      if(lang==='en') return opt.why_en;
-      if(lang==='vi') return opt.why_vi||opt.why_en;
-      if(lang==='id') return opt.why_id_||opt.why_en;
-      return opt.why_zh;
-    }
-
-    function keyTxt(s){
-      var lang = getLang();
-      if(lang==='en') return s.key_en;
-      return s.key_zh;
-    }
-
     function render(){
+      var lang = getLang();
+      var ui = UI[lang] || UI.zh;
       var app = document.getElementById('scenario-app');
       if(!app) return;
       var html = '<div style="display:flex;flex-direction:column;gap:20px">';
       scenarios.forEach(function(s){
         var rev = revealed[s.id];
+        var tagLabel = s.tag[lang] || s.tag.zh;
         html += '<div style="background:var(--surface,#fff);border:0.5px solid var(--border,#e2e2e0);border-radius:12px;overflow:hidden">';
         html += '<div style="padding:14px 16px 0;display:flex;align-items:center;gap:10px">';
-        html += '<span style="background:'+s.tagColor+'1a;color:'+s.tagColor+';border:1px solid '+s.tagColor+'55;border-radius:6px;font-size:12px;font-weight:600;padding:3px 10px">案例 '+s.id+' · '+s.tag+' / '+s.tagEn+'</span>';
+        html += '<span style="background:'+s.tagColor+'1a;color:'+s.tagColor+';border:1px solid '+s.tagColor+'55;border-radius:6px;font-size:12px;font-weight:600;padding:3px 10px">'+ui.case+' '+s.id+' · '+tagLabel+'</span>';
         html += '</div>';
         html += '<div style="padding:12px 16px 16px">';
         html += '<div style="background:var(--surface2,#f5f5f3);border-left:4px solid '+s.tagColor+';border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:14px;font-size:14px;line-height:1.6">';
-        html += '<span style="font-size:11px;font-weight:600;color:'+s.tagColor+';text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">情境 · Situation</span>';
-        html += sitTxt(s)+'</div>';
-        html += '<div style="font-size:13px;font-weight:600;color:var(--ink2,#666);margin-bottom:8px">你會怎麼說？ · How do you respond?</div>';
+        html += '<span style="font-size:11px;font-weight:600;color:'+s.tagColor+';text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:4px">'+ui.sit+'</span>';
+        html += (s.sit[lang] || s.sit.zh)+'</div>';
+        html += '<div style="font-size:13px;font-weight:600;color:var(--ink2,#666);margin-bottom:8px">'+ui.respond+'</div>';
         html += '<div style="display:flex;flex-direction:column;gap:8px">';
         s.opts.forEach(function(opt, oi){
           var showResult = rev != null;
@@ -5304,25 +5516,27 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
           html += '>';
           html += '<div style="font-size:13px;line-height:1.55">';
           if(showResult){
-            if(opt.correct) html += '<span style="color:#15803d;font-weight:700">✓ 正確 Correct · </span>';
-            else if(chosen) html += '<span style="color:#dc2626;font-weight:700">✗ 避免 Avoid · </span>';
-            else html += '<span style="color:var(--ink2,#888)">○ · </span>';
+            if(opt.correct) html += '<span style="color:#15803d;font-weight:700">'+ui.correct+' · </span>';
+            else if(chosen) html += '<span style="color:#dc2626;font-weight:700">'+ui.avoid+' · </span>';
+            else html += '<span style="color:var(--ink2,#888)">'+ui.other+' · </span>';
           } else {
             html += '<span style="color:var(--ink2,#666);font-weight:600">'+['A','B','C'][oi]+'．</span> ';
           }
-          html += optTxt(opt)+'</div>';
+          html += (opt[lang] || opt.zh)+'</div>';
           if(showResult && (chosen || opt.correct)){
-            html += '<div style="margin-top:7px;padding-top:7px;border-top:1px solid '+(opt.correct?'#86efac':'#fca5a5')+';font-size:12px;color:'+(opt.correct?'#166534':'#7f1d1d')+';line-height:1.5">'+whyTxt(opt)+'</div>';
+            var why = opt.why ? (opt.why[lang] || opt.why.zh) : '';
+            html += '<div style="margin-top:7px;padding-top:7px;border-top:1px solid '+(opt.correct?'#86efac':'#fca5a5')+';font-size:12px;color:'+(opt.correct?'#166534':'#7f1d1d')+';line-height:1.5">'+why+'</div>';
           }
           html += '</div>';
         });
         html += '</div>';
         if(rev){
+          var keyStr = s.key ? (s.key[lang] || s.key.zh) : '';
           html += '<div style="margin-top:12px;padding:10px 14px;background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;font-size:13px;line-height:1.5">';
-          html += '<strong style="color:#1d4ed8">🔑 </strong><span style="color:#1e3a8a">'+keyTxt(s)+'</span></div>';
-          html += '<div style="text-align:center;padding:8px 0 0"><button onclick="window.__rs('+s.id+')" style="font-size:12px;color:var(--ink2,#666);background:none;border:none;cursor:pointer;text-decoration:underline">重新作答 · Try again</button></div>';
+          html += '<strong style="color:#1d4ed8">🔑 </strong><span style="color:#1e3a8a">'+keyStr+'</span></div>';
+          html += '<div style="text-align:center;padding:8px 0 0"><button onclick="window.__rs('+s.id+')" style="font-size:12px;color:var(--ink2,#666);background:none;border:none;cursor:pointer;text-decoration:underline">'+ui.retry+'</button></div>';
         } else {
-          html += '<div style="text-align:center;padding:6px 0 0;font-size:12px;color:var(--ink2,#999)">點選選項作答 · Tap an option to answer</div>';
+          html += '<div style="text-align:center;padding:6px 0 0;font-size:12px;color:var(--ink2,#999)">'+ui.tap+'</div>';
         }
         html += '</div></div>';
       });
@@ -5332,6 +5546,9 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
 
     window.__sp = function(sid, oi){ revealed[sid]={chosen:oi}; render(); };
     window.__rs = function(sid){ delete revealed[sid]; render(); };
+    // Register with global language-switch hook
+    var _prevQuizRender = window.__quizRender;
+    window.__quizRender = function(){ if(_prevQuizRender) _prevQuizRender(); render(); };
     render();
   })();
   </script>
@@ -5555,7 +5772,27 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
 
   <div class="do-dont-grid">
     <div class="do-box">
-      <div class="do-header">✅ 用藥安全原則<span class="tx" data-en="Medication Safety" data-vi="An Toàn Dùng Thuốc" data-id="Keamanan Obat"> · Medication Safety</span>
+      <div class="do-header">✅ 用藥安全原則<span class="tx" data-en="Medication Safety" data-vi="An Toàn Dùng Thuốc" data-id="Keamanan Obat"> · Medication Safety</span></div>
+      <ul>
+        <li>按時給藥，確認病患吞下後才離開<div class="step-en">Give medication on time; confirm swallowed before leaving</div><div class="step-vi">Cho uống thuốc đúng giờ, xác nhận đã nuốt rồi mới rời đi</div><div class="step-id">Berikan obat tepat waktu, pastikan ditelan sebelum meninggalkan pasien</div></li>
+        <li>所有藥物上鎖保存<div class="step-en">Keep all medications in a locked storage</div><div class="step-vi">Cất giữ tất cả thuốc trong tủ khóa</div><div class="step-id">Simpan semua obat dalam tempat terkunci</div></li>
+        <li>發現漏藥立即聯絡家屬/護理師<div class="step-en">If a dose is missed, immediately contact family/nurse</div><div class="step-vi">Nếu phát hiện quên thuốc, lập tức liên hệ gia đình/y tá</div><div class="step-id">Jika ada obat terlewat, segera hubungi keluarga/perawat</div></li>
+        <li>觀察並記錄新藥副作用<div class="step-en">Observe and record side effects from new medications</div><div class="step-vi">Quan sát và ghi lại tác dụng phụ của thuốc mới</div><div class="step-id">Amati dan catat efek samping obat baru</div></li>
+        <li>給藥時保持坐姿，喝足夠的水送服<div class="step-en">Patient should sit upright and drink enough water when taking medication</div><div class="step-vi">Khi uống thuốc, giữ tư thế ngồi và uống đủ nước</div><div class="step-id">Saat minum obat, jaga posisi duduk dan minum air yang cukup</div></li>
+      </ul>
+    </div>
+    <div class="dont-box">
+      <div class="dont-header">❌ 嚴禁行為<span class="tx" data-en="Strictly Prohibited" data-vi="Nghiêm Cấm" data-id="Sangat Dilarang"> · Strictly Prohibited</span></div>
+      <ul>
+        <li>不可自行停藥或更換藥物<div class="step-en">Never stop or change medication without physician approval</div><div class="step-vi">Không tự ý ngừng hoặc thay đổi thuốc</div><div class="step-id">Jangan menghentikan atau mengganti obat sendiri</div></li>
+        <li>不可在未獲醫師同意前磨碎藥物<div class="step-en">Never crush medication without a doctor's approval</div><div class="step-vi">Không nghiền thuốc khi chưa được bác sĩ đồng ý</div><div class="step-id">Jangan menghaluskan obat tanpa izin dokter</div></li>
+        <li>不可將藥物放在病患易取得處<div class="step-en">Never store medication where the patient can easily reach it</div><div class="step-vi">Không để thuốc ở nơi bệnh nhân dễ lấy được</div><div class="step-id">Jangan letakkan obat di tempat yang mudah dijangkau pasien</div></li>
+        <li>不可同時給多種藥混入食物<div class="step-en">Never mix multiple medications into food at the same time</div><div class="step-vi">Không trộn nhiều loại thuốc vào thức ăn cùng lúc</div><div class="step-id">Jangan mencampur beberapa obat sekaligus ke dalam makanan</div></li>
+        <li>不可忽視用藥後的異常反應<div class="step-en">Never ignore abnormal reactions after giving medication</div><div class="step-vi">Không bỏ qua phản ứng bất thường sau khi dùng thuốc</div><div class="step-id">Jangan abaikan reaksi tidak normal setelah minum obat</div></li>
+      </ul>
+    </div>
+  </div>
+
   <div class="sec-title"><span>⚠️</span> 常見藥物副作用辨識<span class="tx" data-en="Common Drug Side Effects to Identify" data-vi="Nhận Biết Tác Dụng Phụ Thuốc Thường Gặp" data-id="Mengenali Efek Samping Obat Umum"> · Side Effects</span></div>
   <div class="info-table-wrap">
   <table class="info-table">
@@ -5579,26 +5816,6 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
     <div class="card"><div class="card-icon">💧</div><div class="card-title">吞嚥困難時<span class="L2 en"> · When Swallowing is Difficult</span><span class="L2 vi"> · Khi Khó Nuốt</span><span class="L2 id"> · Saat Sulit Menelan</span></div><div class="card-body">先詢問護理師是否可將藥片磨碎或溶於水。<strong>切勿自行磨碎</strong>緩釋錠、腸溶錠。液體製劑或膠囊藥粉是常見替代方案。<div class="step-en">First ask the nurse whether tablets can be crushed or dissolved. <strong>Never crush</strong> extended-release or enteric-coated tablets yourself. Liquid formulations or capsule powder are common alternatives.</div><div class="step-vi">Hỏi y tá trước xem có thể nghiền nát thuốc hoặc hòa tan trong nước không. <strong>Không bao giờ tự nghiền</strong> thuốc giải phóng chậm hoặc bao tan trong ruột. Dạng lỏng hoặc bột nang là các giải pháp thay thế phổ biến.</div><div class="step-id">Tanya perawat terlebih dahulu apakah tablet bisa digerus atau dilarutkan. <strong>Jangan pernah menggerus sendiri</strong> tablet extended-release atau enteric-coated. Formulasi cair atau serbuk kapsul adalah alternatif umum.</div></div></div>
     <div class="card"><div class="card-icon">🤦</div><div class="card-title">拒絕服藥時<span class="L2 en"> · When Refusing Medication</span><span class="L2 vi"> · Khi Từ Chối Uống Thuốc</span><span class="L2 id"> · Saat Menolak Minum Obat</span></div><div class="card-body">先了解拒絕原因：味苦？吞嚥困難？不信任？換時機再試，或請家屬協助。<strong>嚴禁</strong>在未告知下將藥物混入食物（剝奪知情同意權）。通報護理師尋求解決方案。<div class="step-en">First understand the reason for refusal: bitter taste? Swallowing difficulty? Distrust? Try at a different time or ask family to help. <strong>Strictly prohibited</strong> to mix medication into food without telling the patient (violates informed consent). Report to nurse for solutions.</div><div class="step-vi">Trước tiên hiểu lý do từ chối: vị đắng? Khó nuốt? Không tin tưởng? Thử vào thời điểm khác hoặc nhờ gia đình giúp. <strong>Nghiêm cấm</strong> trộn thuốc vào thức ăn mà không thông báo (vi phạm quyền được thông tin). Báo cho y tá để tìm giải pháp.</div><div class="step-id">Pertama pahami alasan penolakan: rasa pahit? Sulit menelan? Ketidakpercayaan? Coba di waktu berbeda atau minta keluarga membantu. <strong>Dilarang keras</strong> mencampur obat ke dalam makanan tanpa memberitahu pasien (melanggar persetujuan berdasarkan informasi). Laporkan ke perawat untuk solusi.</div></div></div>
     <div class="card"><div class="card-icon">📋</div><div class="card-title">用藥記錄<span class="L2 en"> · Medication Record</span><span class="L2 vi"> · Ghi Chép Dùng Thuốc</span><span class="L2 id"> · Catatan Obat</span></div><div class="card-body">每次給藥後立即記錄：時間、藥名、劑量、病患是否成功服下。若有漏藥：記錄原因，<strong>立即通報護理師</strong>，由護理師決定是否補服，<strong>不可自行判斷。</strong><div class="step-en">Record immediately after each dose: time, drug name, dose, whether patient successfully took it. For missed doses: record the reason, <strong>report to nurse immediately</strong>; nurse decides whether to make up the dose — <strong>never decide yourself.</strong></div><div class="step-vi">Ghi lại ngay sau mỗi lần dùng thuốc: thời gian, tên thuốc, liều lượng, người bệnh có uống thành công không. Nếu quên thuốc: ghi lý do, <strong>báo ngay cho y tá</strong>; y tá quyết định có bù liều không — <strong>không được tự quyết định.</strong></div><div class="step-id">Catat segera setelah setiap dosis: waktu, nama obat, dosis, apakah pasien berhasil meminumnya. Untuk dosis terlewat: catat alasannya, <strong>laporkan ke perawat segera</strong>; perawat memutuskan apakah perlu dosis pengganti — <strong>jangan pernah memutuskan sendiri.</strong></div></div></div>
-  </div>
-</div>
-      <ul>
-        <li>按時給藥，確認病患吞下後才離開<div class="step-en">Give medication on time; confirm swallowed before leaving</div><div class="step-vi">Cho uống thuốc đúng giờ, xác nhận đã nuốt rồi mới rời đi</div><div class="step-id">Berikan obat tepat waktu, pastikan ditelan sebelum meninggalkan pasien</div></li>
-        <li>所有藥物上鎖保存<div class="step-en">Keep all medications in a locked storage</div><div class="step-vi">Cất giữ tất cả thuốc trong tủ khóa</div><div class="step-id">Simpan semua obat dalam tempat terkunci</div></li>
-        <li>發現漏藥立即聯絡家屬/護理師<div class="step-en">If a dose is missed, immediately contact family/nurse</div><div class="step-vi">Nếu phát hiện quên thuốc, lập tức liên hệ gia đình/y tá</div><div class="step-id">Jika ada obat terlewat, segera hubungi keluarga/perawat</div></li>
-        <li>觀察並記錄新藥副作用<div class="step-en">Observe and record side effects from new medications</div><div class="step-vi">Quan sát và ghi lại tác dụng phụ của thuốc mới</div><div class="step-id">Amati dan catat efek samping obat baru</div></li>
-        <li>給藥時保持坐姿，喝足夠的水送服<div class="step-en">Patient should sit upright and drink enough water when taking medication</div><div class="step-vi">Khi uống thuốc, giữ tư thế ngồi và uống đủ nước</div><div class="step-id">Saat minum obat, jaga posisi duduk dan minum air yang cukup</div></li>
-      </ul>
-    </div>
-    <div class="dont-box">
-      <div class="dont-header">❌ 嚴禁行為<span class="tx" data-en="Strictly Prohibited" data-vi="Nghiêm Cấm" data-id="Sangat Dilarang"> · Strictly Prohibited</span></div>
-      <ul>
-        <li>不可自行停藥或更換藥物<div class="step-en">Never stop or change medication without physician approval</div><div class="step-vi">Không tự ý ngừng hoặc thay đổi thuốc</div><div class="step-id">Jangan menghentikan atau mengganti obat sendiri</div></li>
-        <li>不可在未獲醫師同意前磨碎藥物<div class="step-en">Never crush medication without a doctor's approval</div><div class="step-vi">Không nghiền thuốc khi chưa được bác sĩ đồng ý</div><div class="step-id">Jangan menghaluskan obat tanpa izin dokter</div></li>
-        <li>不可將藥物放在病患易取得處<div class="step-en">Never store medication where the patient can easily reach it</div><div class="step-vi">Không để thuốc ở nơi bệnh nhân dễ lấy được</div><div class="step-id">Jangan letakkan obat di tempat yang mudah dijangkau pasien</div></li>
-        <li>不可同時給多種藥混入食物<div class="step-en">Never mix multiple medications into food at the same time</div><div class="step-vi">Không trộn nhiều loại thuốc vào thức ăn cùng lúc</div><div class="step-id">Jangan mencampur beberapa obat sekaligus ke dalam makanan</div></li>
-        <li>不可忽視用藥後的異常反應<div class="step-en">Never ignore abnormal reactions after giving medication</div><div class="step-vi">Không bỏ qua phản ứng bất thường sau khi dùng thuốc</div><div class="step-id">Jangan abaikan reaksi tidak normal setelah minum obat</div></li>
-      </ul>
-    </div>
   </div>
 
   <div class="sec-title"><span>⚠️</span> 常見認知症藥物副作用<span class="tx" data-en="Common Side Effects to Watch" data-vi="Tác Dụng Phụ Thường Gặp Của Thuốc Sa Sút Trí Tuệ" data-id="Efek Samping Umum Obat Demensia Yang Perlu Diwaspadai"> · Common Side Effects to Watch</span></div>
