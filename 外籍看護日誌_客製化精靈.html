@@ -2669,7 +2669,7 @@ function buildLogHTML() {
     const wStyle = w === '100%' ? 'width:100%;box-sizing:border-box;' : `width:${w};`;
     return `<input style="border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;${wStyle}" type="text" placeholder="${placeholder}">`;
   }
-  function inpNum(w, placeholder='0') {
+  function inpNum(w, placeholder='') {
     return `<input style="border:none;border-bottom:1.5px solid #ccc;font-family:inherit;font-size:${Math.max(10,fs-1)}px;width:${w};text-align:center;" type="number" min="0" placeholder="${placeholder}">`;
   }
 
