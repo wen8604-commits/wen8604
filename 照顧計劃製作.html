@@ -2,32 +2,8 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>照顧計劃製作</title>
-
-<!-- PWA Meta Tags -->
-<meta name="application-name" content="照顧計劃製作">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="照顧計劃">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#265040">
-<meta name="description" content="照顧計劃製作工具 · 支援中文、印尼文、英文、越南文 · 聘外看就上手">
-<meta name="msapplication-TileColor" content="#265040">
-<meta name="msapplication-tap-highlight" content="no">
-
-<!-- Open Graph -->
-<meta property="og:title" content="照顧計劃製作">
-<meta property="og:description" content="聘外看就上手 · 多語照顧計劃產生器">
-<meta property="og:type" content="website">
-
-<!-- Apple Touch Icons (inline SVG data URI) -->
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='36' fill='%23265040'/%3E%3Ctext x='90' y='125' font-size='100' text-anchor='middle' font-family='sans-serif'%3E🏥%3C/text%3E%3C/svg%3E">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23265040'/%3E%3Ctext x='16' y='24' font-size='20' text-anchor='middle' font-family='sans-serif'%3E🏥%3C/text%3E%3C/svg%3E">
-
-<!-- PWA Manifest (inline) -->
-<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%E7%85%A7%E9%A1%A7%E8%A8%88%E5%8A%83%E8%A3%BD%E4%BD%9C%22%2C%22short_name%22%3A%22%E7%85%A7%E9%A1%A7%E8%A8%88%E5%8A%83%22%2C%22description%22%3A%22%E8%81%98%E5%A4%96%E7%9C%8B%E5%B0%B1%E4%B8%8A%E6%89%8B%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23efe9dc%22%2C%22theme_color%22%3A%22%23265040%22%2C%22orientation%22%3A%22portrait-primary%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520192%2520192'%253E%253Crect%2520width%3D'192'%2520height%3D'192'%2520rx%3D'38'%2520fill%3D'%2523265040'%2F%253E%253Ctext%2520x%3D'96'%2520y%3D'140'%2520font-size%3D'120'%2520text-anchor%3D'middle'%2520font-family%3D'sans-serif'%253E%25F0%259F%25A5%25A1%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1027,40 +1003,6 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
 /* 橫向矮螢幕（手機橫放）：標題列不黏頂避免佔空間 */
 @media (max-height: 460px) and (orientation: landscape) {
   header { position: static; }
-}
-
-/* ── 平板雙欄佈局 (≥768px 且有足夠高度) ── */
-@media (min-width: 768px) and (min-height: 600px) {
-  /* 平板上表單區域可以顯示得更緊湊 */
-  .vital-chips { grid-template-columns: repeat(6, 1fr); }
-  .schedule-grid { grid-template-columns: repeat(3, 1fr); }
-}
-
-/* ── PWA 安裝橫幅遮擋底部操作列補償 ── */
-body.pwa-banner-visible {
-  padding-bottom: calc(80px + env(safe-area-inset-bottom) + 80px);
-}
-@media (max-width: 640px) {
-  body.pwa-banner-visible {
-    padding-bottom: calc(96px + env(safe-area-inset-bottom) + 80px);
-  }
-}
-
-/* ── 額外觸控優化 ── */
-html {
-  /* 防止 iOS Safari 雙擊縮放，但保留 pinch-zoom */
-  touch-action: manipulation;
-}
-
-/* 可捲動區域加速 */
-.plan-wrap, .wrap {
-  -webkit-overflow-scrolling: touch;
-}
-
-/* ── iOS 安全區域 ── */
-.action-bar {
-  padding-left: max(14px, env(safe-area-inset-left));
-  padding-right: max(14px, env(safe-area-inset-right));
 }
 
 /* ── Print Layout ── */
@@ -3858,8 +3800,6 @@ function applyLang() {
     };
     _allergyInput.placeholder = _allergyPh[lang] || "例：盤尼西林、海鮮（輸入後自動翻譯）";
   }
-  // Sync PWA banner language
-  if (typeof window.updatePwaBannerLang === 'function') window.updatePwaBannerLang(lang);
 }
 
 /* 【修復 Bug #6】語言切換後同步更新輸出區的按鈕與標籤文字
@@ -5057,187 +4997,6 @@ attachAutoSaveListeners();
     </div>
   </div>
 </div>
-
-<!-- ── PWA 安裝提示橫幅 ── -->
-<div id="pwaInstallBanner" style="
-  display:none;
-  position:fixed;
-  bottom:0;left:0;right:0;
-  background:linear-gradient(135deg,#1e3c2e,#265040);
-  color:#fff;
-  padding:14px 16px calc(14px + env(safe-area-inset-bottom));
-  z-index:9998;
-  box-shadow:0 -4px 24px rgba(0,0,0,.2);
-  animation:slideUpBanner .35s ease;
-">
-  <style>
-    @keyframes slideUpBanner{from{transform:translateY(100%)}to{transform:translateY(0)}}
-    #pwaInstallBanner .pwa-inner{display:flex;align-items:center;gap:12px;max-width:600px;margin:0 auto}
-    #pwaInstallBanner .pwa-icon{font-size:2rem;flex-shrink:0;line-height:1}
-    #pwaInstallBanner .pwa-text{flex:1;min-width:0}
-    #pwaInstallBanner .pwa-title{font-weight:700;font-size:.95rem;margin-bottom:2px}
-    #pwaInstallBanner .pwa-sub{font-size:.78rem;opacity:.8;line-height:1.4}
-    #pwaInstallBanner .pwa-actions{display:flex;gap:8px;flex-shrink:0}
-    #pwaInstallBtn{background:#fff;color:#265040;border:none;border-radius:8px;padding:9px 18px;font-size:.85rem;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
-    #pwaDismissBtn{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:9px 14px;font-size:.85rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap}
-    @media(max-width:480px){
-      #pwaInstallBanner .pwa-inner{flex-wrap:wrap;gap:10px}
-      #pwaInstallBanner .pwa-actions{width:100%;justify-content:flex-end}
-    }
-  </style>
-  <div class="pwa-inner">
-    <div class="pwa-icon">📲</div>
-    <div class="pwa-text">
-      <div class="pwa-title" id="pwaBannerTitle">安裝到主屏幕 / Install App</div>
-      <div class="pwa-sub" id="pwaBannerSub">離線可用・無需網路・像 APP 一樣使用</div>
-    </div>
-    <div class="pwa-actions">
-      <button id="pwaInstallBtn">安裝</button>
-      <button id="pwaDismissBtn">✕</button>
-    </div>
-  </div>
-</div>
-
-<!-- iOS 安裝說明 Modal -->
-<div id="pwaIosModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:flex-end;justify-content:center;padding:0">
-  <div style="background:#fff;border-radius:20px 20px 0 0;padding:28px 24px calc(28px + env(safe-area-inset-bottom));max-width:480px;width:100%;box-shadow:0 -8px 40px rgba(0,0,0,.2)">
-    <div style="font-size:1.1rem;font-weight:700;color:#1b1710;margin-bottom:16px;display:flex;align-items:center;gap:10px">
-      <span>📱</span> 安裝到 iPhone 主屏幕
-    </div>
-    <ol style="padding-left:20px;font-size:.9rem;line-height:2;color:#4a4236">
-      <li>點擊底部工具列的 <strong>「分享」</strong> 按鈕 <span style="background:#f3f3f3;border:1px solid #ddd;border-radius:5px;padding:2px 8px;font-size:.8rem">⬆️</span></li>
-      <li>向下捲動選擇 <strong>「加入主畫面」</strong></li>
-      <li>點擊右上角 <strong>「新增」</strong> 完成安裝</li>
-    </ol>
-    <div style="margin-top:6px;padding:10px 14px;background:#f0f8f0;border-radius:10px;font-size:.82rem;color:#265040">
-      ✓ 安裝後即可離線使用，資料儲存在本機
-    </div>
-    <button onclick="document.getElementById('pwaIosModal').style.display='none'" style="margin-top:16px;width:100%;padding:13px;background:#265040;color:#fff;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;font-family:inherit">
-      我知道了
-    </button>
-  </div>
-</div>
-
-<script>
-/* ============================================================
-   PWA Installation Logic
-   ============================================================ */
-(function() {
-  let deferredPrompt = null;
-  const banner = document.getElementById('pwaInstallBanner');
-  const installBtn = document.getElementById('pwaInstallBtn');
-  const dismissBtn = document.getElementById('pwaDismissBtn');
-  const iosModal = document.getElementById('pwaIosModal');
-
-  // Don't show if already installed or dismissed recently
-  const dismissed = localStorage.getItem('pwa_dismissed');
-  if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 3600 * 1000) return;
-
-  // Detect iOS
-  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
-    || window.navigator.standalone;
-
-  if (isInStandaloneMode) return; // Already installed
-
-  // Android / Chrome: capture beforeinstallprompt
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    // Show banner after 3 seconds
-    setTimeout(() => { banner.style.display = 'block'; }, 3000);
-  });
-
-  installBtn && installBtn.addEventListener('click', async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      banner.style.display = 'none';
-    } else if (isIos) {
-      banner.style.display = 'none';
-      iosModal.style.display = 'flex';
-    }
-  });
-
-  dismissBtn && dismissBtn.addEventListener('click', () => {
-    banner.style.display = 'none';
-    localStorage.setItem('pwa_dismissed', Date.now().toString());
-  });
-
-  // iOS: show banner after 5s
-  if (isIos && !isInStandaloneMode) {
-    setTimeout(() => {
-      installBtn && (installBtn.textContent = '查看說明');
-      banner.style.display = 'block';
-    }, 5000);
-  }
-
-  // Update banner text based on app language
-  window.updatePwaBannerLang = function(l) {
-    const titles = { zh: '安裝到主屏幕', id: 'Pasang ke Layar Utama', en: 'Install App', vi: 'Cài đặt ứng dụng' };
-    const subs = {
-      zh: '離線可用・無需網路・像 APP 一樣使用',
-      id: 'Gunakan offline · Seperti aplikasi native',
-      en: 'Works offline · No internet needed · Like a native app',
-      vi: 'Dùng offline · Không cần mạng · Như ứng dụng thật'
-    };
-    const installLabels = { zh: '安裝', id: 'Pasang', en: 'Install', vi: 'Cài đặt' };
-    const t = document.getElementById('pwaBannerTitle');
-    const s = document.getElementById('pwaBannerSub');
-    if (t) t.textContent = titles[l] || titles.zh;
-    if (s) s.textContent = subs[l] || subs.zh;
-    if (installBtn) installBtn.textContent = installLabels[l] || installLabels.zh;
-  };
-})();
-
-/* ============================================================
-   Service Worker Registration (enables offline + installability)
-   ============================================================ */
-if ('serviceWorker' in navigator) {
-  // Inline Service Worker via Blob URL
-  const swCode = `
-const CACHE = 'care-plan-v30';
-const ASSETS = [location.href];
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting())
-  );
-});
-
-self.addEventListener('activate', e => {
-  e.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
-    ).then(() => self.clients.claim())
-  );
-});
-
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      if (cached) return cached;
-      return fetch(e.request).then(resp => {
-        if (resp && resp.status === 200 && resp.type === 'basic') {
-          const clone = resp.clone();
-          caches.open(CACHE).then(c => c.put(e.request, clone));
-        }
-        return resp;
-      }).catch(() => cached);
-    })
-  );
-});
-`;
-  try {
-    const blob = new Blob([swCode], { type: 'application/javascript' });
-    const swUrl = URL.createObjectURL(blob);
-    navigator.serviceWorker.register(swUrl, { scope: './' })
-      .catch(e => console.log('SW register failed:', e));
-  } catch(e) { /* Blob SW not supported in some contexts */ }
-}
-</script>
 
 </body>
 </html>
