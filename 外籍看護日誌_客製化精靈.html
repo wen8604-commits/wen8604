@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<title>外籍看護日誌 — 客製化設定精靈 v8</title>
+<title>外籍看護日誌 — 客製化設定精靈 v10</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -994,11 +994,14 @@ body{
 <div class="topbar">
   <div>
     <div class="topbar-brand">📋 外籍看護工作日誌 — 客製化精靈</div>
-    <div class="topbar-sub">Caregiver Log Customization Wizard v8</div>
+    <div class="topbar-sub">Caregiver Log Customization Wizard v10</div>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
     <button class="tlbtn" onclick="wizardPrint()" title="列印 / 儲存 PDF" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
       🖨️ <span style="font-size:11px;">列印/PDF</span>
+    </button>
+    <button class="tlbtn" onclick="clearAllData()" title="清除全部設定" style="background:rgba(255,80,80,.25);border-color:rgba(255,150,150,.5);display:flex;align-items:center;gap:5px;">
+      🗑️ <span style="font-size:11px;">清除設定</span>
     </button>
     <div class="topbar-lang">
       <button class="tlbtn active" data-lang="zh" onclick="setWizLang('zh')">中文</button>
@@ -2247,7 +2250,29 @@ function addDrug() {
       </div>
       <div class="form-group">
         <label class="form-label">備注 <span class="optional">選填</span></label>
-        <input class="form-input" type="text" placeholder="例：飯後服用" id="d${id}-note">
+        <input class="form-input" type="text" placeholder="例：備注說明" id="d${id}-note">
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:4px;">
+      <div class="form-group" style="flex:1 1 100%;">
+        <label class="form-label">服藥提醒 <span class="optional">可複選</span></label>
+        <div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:4px;">
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="d${id}-f-before"> 飯前
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="d${id}-f-after"> 飯後
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="d${id}-f-sleep"> 睡前
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+            <input type="checkbox" id="d${id}-f-prn"> 必要時服用
+          </label>
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;color:#dc2626;font-weight:600;">
+            <input type="checkbox" id="d${id}-f-nodrop"> ⚠️ 禁止漏服
+          </label>
+        </div>
       </div>
     </div>
   `;
@@ -2264,7 +2289,14 @@ function getDrugs() {
     const dose = (document.getElementById(`d${id}-dose`)?.value || '').trim();
     const time = (document.getElementById(`d${id}-time`)?.value || '').trim();
     const note = (document.getElementById(`d${id}-note`)?.value || '').trim();
-    if (name) result.push({name, dose, time, note});
+    const flags = {
+      before:  document.getElementById(`d${id}-f-before`)?.checked  || false,
+      after:   document.getElementById(`d${id}-f-after`)?.checked   || false,
+      sleep:   document.getElementById(`d${id}-f-sleep`)?.checked   || false,
+      prn:     document.getElementById(`d${id}-f-prn`)?.checked     || false,
+      nodrop:  document.getElementById(`d${id}-f-nodrop`)?.checked  || false,
+    };
+    if (name) result.push({name, dose, time, note, flags});
   });
   return result;
 }
@@ -2534,6 +2566,16 @@ function buildLogHTML() {
     if (drugDisplay === 'table') {
       const cbCol = drugCB ? `<th style="width:34px;background:${theme.pri};color:white;padding:7px;border:1px solid ${theme.pri};">✓</th>` : '';
       const cbBodyCol = () => drugCB ? `<td style="text-align:center;border:1px solid #ddd;"><input type="checkbox"></td>` : '';
+      const flagLabels = (d) => {
+        const f = d.flags || {};
+        const tags = [];
+        if (f.before) tags.push(`<span style="background:#dbeafe;color:#1d4ed8;border-radius:3px;padding:1px 5px;font-size:${Math.max(9,fs-3)}px;">飯前</span>`);
+        if (f.after)  tags.push(`<span style="background:#dcfce7;color:#15803d;border-radius:3px;padding:1px 5px;font-size:${Math.max(9,fs-3)}px;">飯後</span>`);
+        if (f.sleep)  tags.push(`<span style="background:#ede9fe;color:#7c3aed;border-radius:3px;padding:1px 5px;font-size:${Math.max(9,fs-3)}px;">睡前</span>`);
+        if (f.prn)    tags.push(`<span style="background:#fef9c3;color:#854d0e;border-radius:3px;padding:1px 5px;font-size:${Math.max(9,fs-3)}px;">必要時</span>`);
+        if (f.nodrop) tags.push(`<span style="background:#fee2e2;color:#dc2626;border-radius:3px;padding:1px 5px;font-size:${Math.max(9,fs-3)}px;font-weight:700;">⚠️禁漏服</span>`);
+        return tags.join(' ');
+      };
       drugHTML = `
       <div class="no-break" style="border:2px solid ${theme.pri};border-radius:8px;margin-bottom:14px;overflow:hidden;">
         <div style="background:${theme.pri};color:white;padding:8px 14px;font-weight:700;font-size:${fs}px;">
@@ -2545,6 +2587,7 @@ function buildLogHTML() {
             ${TH('text-align:left;', '藥物名稱','Drug Name','Nama Obat','Tên thuốc')}
             ${TH('text-align:center;width:70px;', '劑量','Dose','Dosis','Liều')}
             ${TH('text-align:center;width:80px;', '時間','Time','Waktu','Giờ')}
+            ${TH('text-align:left;', '提醒','Reminder','Pengingat','Nhắc nhở')}
             ${TH('text-align:left;', '備注','Note','Ket.','Ghi chú')}
           </tr></thead>
           <tbody>
@@ -2553,6 +2596,7 @@ function buildLogHTML() {
               <td style="padding:${rowPad};border:1px solid #ddd;font-weight:600;">${d.name}</td>
               <td style="padding:${rowPad};border:1px solid #ddd;text-align:center;">${d.dose||'—'}</td>
               <td style="padding:${rowPad};border:1px solid #ddd;text-align:center;">${d.time||'—'}</td>
+              <td style="padding:${rowPad};border:1px solid #ddd;">${flagLabels(d)}</td>
               <td style="padding:${rowPad};border:1px solid #ddd;">${d.note||''}</td>
             </tr>`).join('')}
           </tbody>
@@ -2571,6 +2615,7 @@ function buildLogHTML() {
             ${d.dose?`<span style="color:#666;">${d.dose}</span>`:''}
             ${d.time?`<span style="background:${theme.pri}22;border-radius:4px;padding:1px 6px;font-size:${Math.max(9,fs-2)}px;">${d.time}</span>`:''}
             ${d.note?`<span style="color:#888;font-size:${Math.max(9,fs-2)}px;">${d.note}</span>`:''}
+            ${flagLabels(d)?`<span style="display:inline-flex;gap:3px;flex-wrap:wrap;">${flagLabels(d)}</span>`:''}
           </div>`).join('')}
         </div>
       </div>`;
@@ -3215,6 +3260,13 @@ if(window.location.search.indexOf('print=1')>-1){
    AUTO-SAVE SYSTEM
 ══════════════════════════════════════ */
 const SAVE_KEY = 'nurselog_wizard_v6';
+
+  function clearAllData() {
+    if (confirm('確定要清除所有設定？\n此操作無法復原。')) {
+      localStorage.removeItem(SAVE_KEY);
+      location.reload();
+    }
+  }
 let saveTimer = null;
 let lastSaveHash = '';
 
@@ -3466,7 +3518,29 @@ function applyState(state) {
           </div>
           <div class="form-group">
             <label class="form-label">備注 <span class="optional">選填</span></label>
-            <input class="form-input" type="text" placeholder="例：飯後服用" id="d${id}-note">
+            <input class="form-input" type="text" placeholder="例：備注說明" id="d${id}-note">
+          </div>
+        </div>
+        <div class="form-row" style="margin-top:4px;">
+          <div class="form-group" style="flex:1 1 100%;">
+            <label class="form-label">服藥提醒 <span class="optional">可複選</span></label>
+            <div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:4px;">
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="d${id}-f-before"> 飯前
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="d${id}-f-after"> 飯後
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="d${id}-f-sleep"> 睡前
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;">
+                <input type="checkbox" id="d${id}-f-prn"> 必要時服用
+              </label>
+              <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer;color:#dc2626;font-weight:600;">
+                <input type="checkbox" id="d${id}-f-nodrop"> ⚠️ 禁止漏服
+              </label>
+            </div>
           </div>
         </div>
       `;
@@ -3479,6 +3553,11 @@ function applyState(state) {
       if (doseEl) doseEl.value = d.dose || '';
       if (timeEl) timeEl.value = d.time || '';
       if (noteEl) noteEl.value = d.note || '';
+      if (d.flags) {
+        const fl = d.flags;
+        const cb = (k) => { const el = document.getElementById(`d${id}-f-${k}`); if(el) el.checked = !!fl[k]; };
+        ['before','after','sleep','prn','nodrop'].forEach(cb);
+      }
     });
   }
 }
@@ -3637,7 +3716,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (raw) {
       const state = JSON.parse(raw);
       // Only show restore if saved less than 24h ago and not dismissed
-      if (state.ts && (Date.now() - state.ts) < 86400000 && !state._dismissed) {
+      if (state.ts && (Date.now() - state.ts) < 2592000000 && !state._dismissed) {
         document.getElementById('restore-banner').style.display = 'flex';
       } else {
         localStorage.removeItem(SAVE_KEY);
