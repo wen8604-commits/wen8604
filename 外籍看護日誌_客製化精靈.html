@@ -1126,6 +1126,20 @@ body{
       </div>
       <div class="form-row">
         <div class="form-group">
+          <label class="form-label">日期欄位呈現方式</label>
+          <div class="chip-group" id="cfg-date-mode">
+            <div class="chip-option selected" data-val="auto" onclick="toggleChip(this,'cfg-date-mode','single');updateDateModeUI()">自動帶入日期</div>
+            <div class="chip-option" data-val="blank-line" onclick="toggleChip(this,'cfg-date-mode','single');updateDateModeUI()">留白手寫（橫線）</div>
+            <div class="chip-option" data-val="blank-input" onclick="toggleChip(this,'cfg-date-mode','single');updateDateModeUI()">留白手寫（底線欄位）</div>
+          </div>
+        </div>
+        <div class="form-group" id="cfg-log-date-wrap">
+          <label class="form-label">日誌日期 <span class="optional">選填，預設為今天</span></label>
+          <input class="form-input" id="cfg-log-date" type="date">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
           <label class="form-label">備注文字（印於頁尾）<span class="optional">選填</span></label>
           <input class="form-input" id="cfg-footer-note" type="text" placeholder="例：本表單需每日繳回家屬">
         </div>
@@ -2089,6 +2103,14 @@ function toggleChip(el, groupId, mode) {
   scheduleSave();
 }
 
+/* Show/hide the date-picker field depending on whether the date should
+   be auto-filled or left blank for handwriting */
+function updateDateModeUI() {
+  const mode = getChipVal('cfg-date-mode') || 'auto';
+  const wrap = document.getElementById('cfg-log-date-wrap');
+  if (wrap) wrap.style.display = (mode === 'auto') ? '' : 'none';
+}
+
 /* ══════════════════════════════════════
    SECTION TOGGLES
 ══════════════════════════════════════ */
@@ -2316,6 +2338,7 @@ function buildSummary() {
 
   grid.innerHTML = `
     <div class="summary-item"><div class="summary-item-label">機構 / 名稱</div><div class="summary-item-value">${(document.getElementById('cfg-org-name')?.value||'').trim()||'（未填）'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">日誌日期</div><div class="summary-item-value">${(() => { const m = getChipVal('cfg-date-mode')||'auto'; if (m==='blank-line') return '留白手寫（橫線）'; if (m==='blank-input') return '留白手寫（底線欄位）'; return (document.getElementById('cfg-log-date')?.value||'').trim()||'（今天）'; })()}</div></div>
     <div class="summary-item"><div class="summary-item-label">主語言</div><div class="summary-item-value">${{zh:'中文',en:'English',id:'Bahasa',vi:'Tiếng Việt'}[document.getElementById('cfg-lang')?.value]||'中文'}</div></div>
     <div class="summary-item"><div class="summary-item-label">主題色彩</div><div class="summary-item-value" style="display:flex;align-items:center;gap:6px;"><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:${getTheme().pri}"></span>${selectedTheme}</div></div>
     <div class="summary-item"><div class="summary-item-label">字體大小</div><div class="summary-item-value">${getChipVal('cfg-fontsize')||'13'}px</div></div>
@@ -2469,6 +2492,8 @@ function buildLogHTML() {
   const orgAddr     = (document.getElementById('cfg-org-addr')?.value||'').trim();
   const patientName = (document.getElementById('cfg-patient-name')?.value||'').trim();
   const caregiverName=(document.getElementById('cfg-caregiver-name')?.value||'').trim();
+  const dateMode    = getChipVal('cfg-date-mode') || 'auto';
+  const logDate     = (document.getElementById('cfg-log-date')?.value||'').trim() || new Date().toISOString().split('T')[0];
   const footerNote  = (document.getElementById('cfg-footer-note')?.value||'').trim();
   const mainLang    = document.getElementById('cfg-lang')?.value || 'zh';
   const subLangs    = getChipVals('cfg-sublang').filter(v => v !== 'none' && v !== mainLang);
@@ -2724,6 +2749,82 @@ function buildLogHTML() {
       .map(c => c.textContent.trim());
   }
 
+  const CHIP_I18N = {
+    '起床狀況': ['Waking Condition','Kondisi Bangun','Tình trạng thức dậy'],
+    '口腔清潔': ['Oral Care','Kebersihan Mulut','Vệ sinh răng miệng'],
+    '臉部清潔': ['Face Cleaning','Membersihkan Wajah','Rửa mặt'],
+    '更衣': ['Dressing','Berganti Pakaian','Thay quần áo'],
+    '梳洗頭髮': ['Hair Grooming','Menyisir Rambut','Chải đầu'],
+    '協助站立': ['Assist Standing','Bantu Berdiri','Hỗ trợ đứng'],
+    '輪椅移位': ['Wheelchair Transfer','Pindah ke Kursi Roda','Chuyển sang xe lăn'],
+    '飲食內容': ['Menu','Menu Makanan','Thực đơn'],
+    '食量（多/少/拒食）': ['Intake (More/Less/Refused)','Porsi (Banyak/Sedikit/Menolak)','Lượng ăn (Nhiều/Ít/Bỏ ăn)'],
+    '飲水量（ml）': ['Water Intake (ml)','Air Minum (ml)','Lượng nước (ml)'],
+    '早餐用藥': ['Breakfast Medication','Obat Sarapan','Thuốc bữa sáng'],
+    '噎嗆狀況': ['Choking','Tersedak','Bị sặc'],
+    '血糖（飯前）': ['Blood Sugar (Before Meal)','Gula Darah (Sebelum Makan)','Đường huyết (trước ăn)'],
+    '血糖（飯後）': ['Blood Sugar (After Meal)','Gula Darah (Sesudah Makan)','Đường huyết (sau ăn)'],
+    '正常': ['Normal','Normal','Bình thường'],
+    '軟食': ['Soft Food','Makanan Lunak','Thức ăn mềm'],
+    '剪碎': ['Minced','Dipotong Kecil','Cắt nhỏ'],
+    '糊狀': ['Pureed','Bubur/Pure','Dạng nhuyễn'],
+    '活動種類': ['Activity Type','Jenis Kegiatan','Loại hoạt động'],
+    '活動時長（分）': ['Duration (min)','Durasi (menit)','Thời gian (phút)'],
+    '用藥記錄': ['Medication Record','Catatan Obat','Ghi chú thuốc'],
+    '復健項目': ['Rehab Item','Item Rehabilitasi','Mục phục hồi chức năng'],
+    '翻身記錄': ['Repositioning Record','Catatan Ubah Posisi','Ghi chú đổi tư thế'],
+    '心情狀況': ['Mood','Kondisi Mood','Tâm trạng'],
+    '訪客記錄': ['Visitor Record','Catatan Tamu','Ghi chú khách thăm'],
+    '散步': ['Walking','Jalan-jalan','Đi bộ'],
+    '復健運動': ['Rehab Exercise','Olahraga Rehabilitasi','Tập phục hồi chức năng'],
+    '看電視': ['Watching TV','Menonton TV','Xem TV'],
+    '曬太陽': ['Sun Exposure','Berjemur','Tắm nắng'],
+    '社交活動': ['Social Activity','Kegiatan Sosial','Hoạt động xã hội'],
+    '午餐用藥': ['Lunch Medication','Obat Makan Siang','Thuốc bữa trưa'],
+    '睡眠狀況': ['Sleep Condition','Kondisi Tidur','Tình trạng ngủ'],
+    '實際入睡時間': ['Actual Sleep Time','Waktu Tidur Aktual','Giờ ngủ thực tế'],
+    '如廁（午休中）': ['Toileting (During Nap)','BAB/BAK (Saat Tidur Siang)','Đi vệ sinh (trong giờ nghỉ trưa)'],
+    '熟睡': ['Deep Sleep','Tidur Lelap','Ngủ sâu'],
+    '淺眠': ['Light Sleep','Tidur Tidak Nyenyak','Ngủ không sâu'],
+    '未入睡': ['Could Not Sleep','Tidak Bisa Tidur','Không ngủ được'],
+    '躁動': ['Restless','Gelisah','Bứt rứt khó chịu'],
+    '點心記錄': ['Snack Record','Catatan Camilan','Ghi chú ăn vặt'],
+    '沐浴/擦澡': ['Bathing/Sponge Bath','Mandi/Lap Badan','Tắm/Lau người'],
+    '皮膚狀況': ['Skin Condition','Kondisi Kulit','Tình trạng da'],
+    '娛樂活動': ['Recreational Activity','Kegiatan Hiburan','Hoạt động giải trí'],
+    '下午用藥': ['Afternoon Medication','Obat Sore','Thuốc buổi chiều'],
+    '淋浴': ['Shower','Mandi Shower','Tắm vòi sen'],
+    '盆浴': ['Tub Bath','Mandi Rendam','Tắm bồn'],
+    '擦澡': ['Sponge Bath','Lap Badan','Lau người'],
+    '洗頭': ['Hair Wash','Cuci Rambut','Gội đầu'],
+    '晚餐用藥': ['Dinner Medication','Obat Makan Malam','Thuốc bữa tối'],
+    '晚間用藥': ['Evening Medication','Obat Malam','Thuốc buổi tối'],
+    '就寢準備': ['Bedtime Preparation','Persiapan Tidur','Chuẩn bị đi ngủ'],
+    '換尿布/成人紙褲': ['Diaper Change','Ganti Popok/Diaper Dewasa','Thay tã/Bỉm'],
+    '情緒狀況': ['Emotional State','Kondisi Emosi','Tình trạng cảm xúc'],
+    '末次排尿': ['Last Urination','BAK Terakhir','Lần đi tiểu cuối'],
+    '記錄入睡時間': ['Record Sleep Time','Catat Waktu Tidur','Ghi giờ ngủ'],
+    '記錄血壓（睡前）': ['Record BP (Before Bed)','Catat Tensi (Sblm Tidur)','Ghi huyết áp (trước khi ngủ)'],
+    '記錄體溫（睡前）': ['Record Temp (Before Bed)','Catat Suhu (Sblm Tidur)','Ghi nhiệt độ (trước khi ngủ)'],
+    '翻身記錄（含時間）': ['Repositioning (with time)','Ubah Posisi (dgn waktu)','Đổi tư thế (kèm giờ)'],
+    '夜間如廁次數': ['Night Toileting Count','Jumlah BAK Malam','Số lần đi vệ sinh đêm'],
+    '夜間嗆咳': ['Night Choking','Tersedak Malam','Sặc về đêm'],
+    '夜間異常狀況': ['Night Abnormality','Kondisi Tidak Normal Malam','Bất thường về đêm'],
+    '夜間用藥': ['Night Medication','Obat Malam','Thuốc ban đêm'],
+    '換尿布記錄': ['Diaper Change Record','Catatan Ganti Popok','Ghi chú thay tã'],
+    '每1小時': ['Every 1 hour','Setiap 1 jam','Mỗi 1 giờ'],
+    '每2小時': ['Every 2 hours','Setiap 2 jam','Mỗi 2 giờ'],
+    '每3小時': ['Every 3 hours','Setiap 3 jam','Mỗi 3 giờ'],
+    '依需求': ['As Needed','Sesuai Kebutuhan','Theo nhu cầu'],
+  };
+
+  // Translate a chip's Chinese label according to mainLang/subLangs; falls back to original text if not in dictionary
+  function chipLabel(name) {
+    const t = CHIP_I18N[name];
+    if (!t) return name;
+    return Bi(name, t[0], t[1], t[2]);
+  }
+
   const CARE_DEFS = {
     'care-morning': { label: ['晨間照護','Morning Care','Perawatan Pagi','Chăm sóc sáng'], type: 'generic' },
     'care-breakfast': { label: ['早餐','Breakfast','Sarapan','Bữa sáng'], type: 'meal' },
@@ -2742,7 +2843,7 @@ function buildLogHTML() {
     if (!chips.length) return '';
     return chips.map(name =>
       `<label style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:6px;white-space:nowrap;margin-bottom:2px;">
-        <input type="checkbox" style="accent-color:${theme.pri};"> ${name}
+        <input type="checkbox" style="accent-color:${theme.pri};"> ${chipLabel(name)}
       </label>`
     ).join('');
   }
@@ -2770,7 +2871,7 @@ function buildLogHTML() {
     const texKey = key + '-texture';
     const textureChips = getDetailChips(texKey);
     const texLine = textureChips.length
-      ? textureChips.map(t=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${t}</label>`).join('')
+      ? textureChips.map(t=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${chipLabel(t)}</label>`).join('')
       : '';
     return `<tr style="background:${bg}">
       ${timeTD(tp)}
@@ -2824,7 +2925,7 @@ function buildLogHTML() {
       ${careLabelTD(...def.label)}
       <td style="padding:${rowPad};vertical-align:top;">
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;">
-          ${qualityOpts.map(q=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${q}</label>`).join('')}
+          ${qualityOpts.map(q=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;margin-right:4px;"><input type="checkbox" style="accent-color:${theme.pri};"> ${chipLabel(q)}</label>`).join('')}
         </div>
         ${showItems.includes('實際入睡時間')?`<div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;">
           <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('入睡時間','Sleep time','Waktu tidur','Giờ ngủ')}：</span>
@@ -2862,7 +2963,7 @@ function buildLogHTML() {
       ${careLabelTD('夜間照護','Night Care','Perawatan Malam','Chăm sóc đêm')}
       <td style="padding:${rowPad};vertical-align:top;">
         ${showTurn?`<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:4px;">
-          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('翻身','Reposition','Pindah','Đổi tư thế')}${turnFreq?` (${turnFreq})`:''}：</span>
+          <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('翻身','Reposition','Pindah','Đổi tư thế')}${turnFreq?` (${chipLabel(turnFreq)})`:''}：</span>
           ${inpNum('36px')} ${Bi('次','x','kali','lần')}
           <span style="font-size:${Math.max(9,fs-2)}px;color:#aaa;">${Bi('時間紀錄','Times','Waktu','Giờ')}：</span>${inpText('100px','__:__ / __:__')}
         </div>`:''}
@@ -2906,14 +3007,14 @@ function buildLogHTML() {
       <td style="padding:${rowPad};vertical-align:top;">
         ${chips.length ? `<div style="display:flex;flex-wrap:wrap;gap:5px 6px;margin-bottom:6px;">
           ${chips.map(name=>`<label style="display:inline-flex;align-items:center;gap:3px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;white-space:nowrap;">
-            <input type="checkbox" style="accent-color:${theme.pri};"> ${name}
+            <input type="checkbox" style="accent-color:${theme.pri};"> ${chipLabel(name)}
           </label>`).join('')}
         </div>` : `<div style="display:flex;flex-wrap:wrap;gap:5px 10px;margin-bottom:6px;">
           ${cb('完成','Done','Selesai','Hoàn thành')}
         </div>`}
         ${subChips.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
           ${subChips.map(s=>`<label style="display:inline-flex;align-items:center;gap:2px;cursor:pointer;font-size:${Math.max(9,fs-2)}px;padding:2px 8px;border:1px solid #ddd;border-radius:10px;">
-            <input type="checkbox" style="accent-color:${theme.pri};"> ${s}
+            <input type="checkbox" style="accent-color:${theme.pri};"> ${chipLabel(s)}
           </label>`).join('')}
         </div>` : ''}
         <div style="margin-top:4px;display:flex;align-items:center;gap:4px;">
@@ -3222,7 +3323,12 @@ if(window.location.search.indexOf('print=1')>-1){
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;background:#eaf2fb;border-left:5px solid ${theme.pri};border-radius:6px;padding:14px 16px;margin-bottom:16px;">
     <div style="display:flex;align-items:center;gap:6px;">
       <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;">${B('日期','Date','Tanggal','Ngày')}：</span>
-      <input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="date" value="${new Date().toISOString().split('T')[0]}">
+      ${dateMode === 'auto'
+        ? `<input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="date" value="${logDate}">`
+        : dateMode === 'blank-input'
+        ? `<input style="flex:1;border:none;border-bottom:1.5px solid ${theme.pri};padding:3px 4px;font-size:${fs}px;background:transparent;font-family:inherit;" type="text" placeholder="____ 年 ____ 月 ____ 日">`
+        : `<span style="flex:1;display:inline-block;border-bottom:1.5px solid ${theme.pri};min-height:${fs+8}px;">&nbsp;</span>`
+      }
     </div>
     <div style="display:flex;align-items:flex-start;flex-wrap:wrap;gap:4px;grid-column:1/-1;">
       <span style="font-weight:700;color:${theme.pri};font-size:${Math.max(10,fs-1)}px;min-width:70px;padding-top:2px;">${B('天氣','Weather','Cuaca','Thời tiết')}：</span>
@@ -3283,7 +3389,7 @@ function collectState() {
   };
 
   // Plain text/select fields
-  ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name',
+  ['cfg-org-name','cfg-org-addr','cfg-patient-name','cfg-caregiver-name','cfg-log-date',
    'cfg-footer-note','cfg-lang','cfg-hospital','cfg-hospital-tel',
    'cfg-doctor-name','cfg-doctor-tel','cfg-med-id','cfg-allergy',
    'cfg-custom-slots'].forEach(id => {
@@ -3294,7 +3400,7 @@ function collectState() {
   // All chip groups
   ['cfg-sublang','cfg-care-level','cfg-tubes','cfg-feed-type','cfg-mobility',
    'cfg-fontsize','cfg-margin','cfg-rowheight','cfg-timecol','cfg-zebra',
-   'cfg-flags','cfg-blood-type','cfg-drug-display','cfg-drug-checkbox'].forEach(gid => {
+   'cfg-flags','cfg-blood-type','cfg-drug-display','cfg-drug-checkbox','cfg-date-mode'].forEach(gid => {
     const el = document.getElementById(gid);
     if (el) {
       state.chips[gid] = [...el.querySelectorAll('.chip-option.selected')].map(c => c.dataset.val);
@@ -3560,6 +3666,9 @@ function applyState(state) {
       }
     });
   }
+
+  // Sync date field visibility with restored date-mode setting
+  updateDateModeUI();
 }
 
 function showToast(msg, saving=false) {
