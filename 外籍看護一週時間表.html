@@ -153,6 +153,28 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .sd-chip:hover{border-color:#f59e0b;}
 .sd-chip.selected{background:#f59e0b;border-color:#f59e0b;color:#fff;font-weight:600;}
 
+/* ── CARE TASK TEMPLATES ── */
+.care-template-panel{border:1.5px solid #bfdbfe;background:#f8fbff;border-radius:10px;padding:14px;margin-bottom:16px;}
+.care-template-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px;}
+.care-template-title{font-weight:800;font-size:14px;color:#1e3a8a;display:flex;align-items:center;gap:7px;}
+.care-template-sub{font-size:12px;color:#475569;line-height:1.5;margin-top:3px;}
+.care-template-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.care-template-card{background:#fff;border:1.5px solid #dbeafe;border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;min-height:170px;}
+.care-template-card:hover{border-color:#93c5fd;box-shadow:0 2px 10px rgba(37,99,235,.08);}
+.care-template-name{font-size:13px;font-weight:800;color:#111827;display:flex;align-items:center;gap:6px;}
+.care-template-desc{font-size:11.5px;color:#64748b;line-height:1.5;min-height:34px;}
+.care-template-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.care-template-tag{background:#eef2ff;color:#3730a3;border-radius:999px;padding:3px 8px;font-size:10.5px;font-weight:700;}
+.care-template-slots{font-size:11px;color:#475569;line-height:1.55;flex:1;}
+.btn-apply-template{border:none;background:#2563eb;color:#fff;border-radius:7px;padding:8px 12px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;width:100%;-webkit-tap-highlight-color:transparent;}
+.btn-apply-template:hover{background:#1d4ed8;}
+.btn-apply-template:active{background:#1e40af;}
+@media(max-width:760px){
+  .care-template-grid{grid-template-columns:1fr;}
+  .care-template-card{min-height:auto;}
+  .care-template-head{display:block;}
+}
+
 /* ── LIVE PREVIEW PANEL ── */
 #live-preview-panel{display:none;position:fixed;bottom:16px;right:16px;z-index:300;width:280px;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.14);overflow:hidden;transition:box-shadow .2s;}
 #live-preview-panel.visible{display:block;}
@@ -614,6 +636,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- ══════════════ STEP 2: TIME SLOTS ══════════════ -->
 <div class="step-page" id="step-2">
   <div class="info-box">🕐 設定每日工作時段，開啟的時段會出現在週表欄位中。可直接修改時間，關閉的時段不顯示。</div>
+  <div id="care-template-library"></div>
 
   <div class="section-card">
     <div class="section-card-head" onclick="toggleCard(this)">
@@ -1958,6 +1981,9 @@ function toggleChip(el, groupId, mode) {
   if (groupId === 'cfg-sig-count') {
     updateSigLabelInputs(parseInt(el.dataset.val) || 2);
   }
+  if (groupId === 'cfg-lang' && typeof injectCareTemplateLibrary === 'function') {
+    injectCareTemplateLibrary();
+  }
 }
 
 /* ══ TASK EDITOR ══ */
@@ -1993,6 +2019,363 @@ const DEFAULT_TASKS = {
   's-craft':         ['準備材料/道具','陪同進行活動','鼓勵完成、收拾'],
   's-social':        ['準備互動環境','陪同家屬/視訊','記錄互動情況'],
 };
+
+const CARE_TASK_TEMPLATES = {
+  stroke: {
+    icon: '🧠',
+    name: '中風照護模板',
+    desc: '適合肢體無力、復健中、需要規律翻身與被動關節活動的照護情境。',
+    tags: ['翻身', '復健', '按摩', '關節活動'],
+    slots: {
+      's-nap': ['翻身','確認肢體擺位','記錄翻身時間'],
+      's-rehab': ['復健','按摩','關節活動','記錄復健反應'],
+      's-vital-pm': ['觀察肢體無力或麻木','記錄異常狀況']
+    }
+  },
+  dementia: {
+    icon: '💬',
+    name: '認知症模板',
+    desc: '適合容易混淆時間地點、需要陪伴互動與安全散步的照護情境。',
+    tags: ['定向活動', '記憶訓練', '陪伴散步'],
+    slots: {
+      's-morning-act': ['定向活動','記憶訓練','陪伴聊天'],
+      's-walk': ['陪伴散步','觀察情緒與疲累','返家後補充水分'],
+      's-evening': ['協助回顧今日活動','安撫情緒','準備安靜就寢環境']
+    }
+  },
+  bedridden: {
+    icon: '🛏️',
+    name: '臥床模板',
+    desc: '適合長時間臥床、需預防壓瘡、拍背與尿布更換的照護情境。',
+    tags: ['壓瘡檢查', '拍背', '尿布更換'],
+    slots: {
+      's-nap': ['翻身排程','壓瘡檢查','拍背'],
+      's-bedtime': ['尿布更換','皮膚清潔','就寢安置'],
+      's-night': ['夜間翻身','尿布更換','觀察呼吸與皮膚狀況']
+    }
+  }
+};
+
+const CARE_TEMPLATE_SLOT_LABELS = {
+  's-morning-act':'上午活動',
+  's-rehab':'復健訓練',
+  's-walk':'戶外散步',
+  's-nap':'午休陪伴',
+  's-vital-pm':'下午生命徵象',
+  's-evening':'晚間活動',
+  's-bedtime':'就寢照護',
+  's-night':'夜間巡視'
+};
+
+const CARE_TEMPLATE_I18N = {
+  'zh-id': {
+    ui: {
+      title: '照護任務模板庫 / Pustaka Template Tugas Perawatan',
+      sub: '新手家屬可先套用常見照護情境，再依醫囑或家中習慣微調工作細項。套用時會保留目前內容，只補上缺少的任務。 / Keluarga dapat memakai template umum terlebih dahulu, lalu menyesuaikan sesuai instruksi dokter atau kebiasaan rumah. Saat diterapkan, isi yang sudah ada tetap disimpan dan hanya tugas yang belum ada akan ditambahkan.',
+      apply: '套用模板 / Terapkan',
+      applied: '已套用',
+      added: '新增',
+      items: '個工作細項',
+      exists: '已在目前設定中'
+    },
+    slotLabels: {
+      's-morning-act':'上午活動 / Aktivitas Pagi',
+      's-rehab':'復健訓練 / Latihan Rehabilitasi',
+      's-walk':'戶外散步 / Jalan Udara Segar',
+      's-nap':'午休陪伴 / Istirahat Siang',
+      's-vital-pm':'下午生命徵象 / Tanda Vital Sore',
+      's-evening':'晚間活動 / Aktivitas Malam',
+      's-bedtime':'就寢照護 / Persiapan Tidur',
+      's-night':'夜間巡視 / Patroli Malam'
+    },
+    templates: {
+      stroke: {
+        name: '中風照護模板 / Template Perawatan Stroke',
+        desc: '適合肢體無力、復健中、需要規律翻身與被動關節活動的照護情境。 / Untuk pasien dengan kelemahan anggota tubuh, sedang rehabilitasi, dan perlu ubah posisi serta latihan rentang gerak pasif secara rutin.',
+        tags: ['翻身 / Ubah posisi', '復健 / Rehabilitasi', '按摩 / Pijat ringan', '關節活動 / Latihan sendi']
+      },
+      dementia: {
+        name: '認知症模板 / Template Demensia',
+        desc: '適合容易混淆時間地點、需要陪伴互動與安全散步的照護情境。 / Untuk pasien yang mudah bingung waktu/tempat dan membutuhkan pendampingan, interaksi, serta jalan aman.',
+        tags: ['定向活動 / Orientasi', '記憶訓練 / Latihan memori', '陪伴散步 / Jalan ditemani']
+      },
+      bedridden: {
+        name: '臥床模板 / Template Pasien Tirah Baring',
+        desc: '適合長時間臥床、需預防壓瘡、拍背與尿布更換的照護情境。 / Untuk pasien yang lama berbaring dan perlu pencegahan luka tekan, tepuk punggung, serta ganti popok.',
+        tags: ['壓瘡檢查 / Cek luka tekan', '拍背 / Tepuk punggung', '尿布更換 / Ganti popok']
+      }
+    }
+  },
+  'zh-vi': {
+    ui: {
+      title: '照護任務模板庫 / Thư Viện Mẫu Công Việc Chăm Sóc',
+      sub: '新手家屬可先套用常見照護情境，再依醫囑或家中習慣微調工作細項。套用時會保留目前內容，只補上缺少的任務。 / Gia đình mới sử dụng có thể chọn mẫu chăm sóc thường gặp trước, rồi chỉnh theo dặn dò của bác sĩ hoặc thói quen trong nhà. Khi áp dụng, nội dung hiện có được giữ lại và chỉ thêm việc còn thiếu.',
+      apply: '套用模板 / Áp dụng mẫu',
+      applied: '已套用',
+      added: '新增',
+      items: '個工作細項',
+      exists: '已在目前設定中'
+    },
+    slotLabels: {
+      's-morning-act':'上午活動 / Hoạt Động Sáng',
+      's-rehab':'復健訓練 / Tập Phục Hồi',
+      's-walk':'戶外散步 / Đi Bộ Ngoài Trời',
+      's-nap':'午休陪伴 / Nghỉ Trưa',
+      's-vital-pm':'下午生命徵象 / Sinh Hiệu Chiều',
+      's-evening':'晚間活動 / Hoạt Động Tối',
+      's-bedtime':'就寢照護 / Chuẩn Bị Ngủ',
+      's-night':'夜間巡視 / Tuần Tra Đêm'
+    },
+    templates: {
+      stroke: {
+        name: '中風照護模板 / Mẫu Chăm Sóc Sau Đột Quỵ',
+        desc: '適合肢體無力、復健中、需要規律翻身與被動關節活動的照護情境。 / Phù hợp với người yếu tay chân, đang phục hồi chức năng, cần trở mình định kỳ và vận động khớp thụ động.',
+        tags: ['翻身 / Trở mình', '復健 / Phục hồi', '按摩 / Xoa bóp nhẹ', '關節活動 / Vận động khớp']
+      },
+      dementia: {
+        name: '認知症模板 / Mẫu Chăm Sóc Sa Sút Trí Tuệ',
+        desc: '適合容易混淆時間地點、需要陪伴互動與安全散步的照護情境。 / Phù hợp với người dễ nhầm lẫn thời gian, địa điểm và cần đồng hành, tương tác, đi bộ an toàn.',
+        tags: ['定向活動 / Định hướng', '記憶訓練 / Luyện trí nhớ', '陪伴散步 / Đi bộ cùng']
+      },
+      bedridden: {
+        name: '臥床模板 / Mẫu Chăm Sóc Người Nằm Giường',
+        desc: '適合長時間臥床、需預防壓瘡、拍背與尿布更換的照護情境。 / Phù hợp với người nằm giường lâu, cần phòng loét tì đè, vỗ lưng và thay tã.',
+        tags: ['壓瘡檢查 / Kiểm tra loét tì đè', '拍背 / Vỗ lưng', '尿布更換 / Thay tã']
+      }
+    }
+  },
+  'zh-en': {
+    ui: {
+      title: '照護任務模板庫 / Care Task Template Library',
+      sub: '新手家屬可先套用常見照護情境，再依醫囑或家中習慣微調工作細項。套用時會保留目前內容，只補上缺少的任務。 / Families can start with a common care template, then adjust details based on medical instructions or household routines. Applying a template keeps existing entries and only adds missing tasks.',
+      apply: '套用模板 / Apply Template',
+      applied: '已套用',
+      added: '新增',
+      items: '個工作細項',
+      exists: '已在目前設定中'
+    },
+    slotLabels: {
+      's-morning-act':'上午活動 / Morning Activity',
+      's-rehab':'復健訓練 / Rehabilitation',
+      's-walk':'戶外散步 / Outdoor Walk',
+      's-nap':'午休陪伴 / Afternoon Rest',
+      's-vital-pm':'下午生命徵象 / PM Vitals',
+      's-evening':'晚間活動 / Evening Activity',
+      's-bedtime':'就寢照護 / Bedtime Care',
+      's-night':'夜間巡視 / Night Check'
+    },
+    templates: {
+      stroke: {
+        name: '中風照護模板 / Stroke Care Template',
+        desc: '適合肢體無力、復健中、需要規律翻身與被動關節活動的照護情境。 / For limb weakness, rehabilitation routines, scheduled repositioning, and passive range-of-motion care.',
+        tags: ['翻身 / Repositioning', '復健 / Rehab', '按摩 / Massage', '關節活動 / Joint ROM']
+      },
+      dementia: {
+        name: '認知症模板 / Dementia Care Template',
+        desc: '適合容易混淆時間地點、需要陪伴互動與安全散步的照護情境。 / For orientation support, memory practice, companionship, and safe accompanied walks.',
+        tags: ['定向活動 / Orientation', '記憶訓練 / Memory training', '陪伴散步 / Accompanied walk']
+      },
+      bedridden: {
+        name: '臥床模板 / Bedridden Care Template',
+        desc: '適合長時間臥床、需預防壓瘡、拍背與尿布更換的照護情境。 / For long-term bed rest, pressure sore prevention, back patting, and diaper changes.',
+        tags: ['壓瘡檢查 / Pressure sore check', '拍背 / Back patting', '尿布更換 / Diaper change']
+      }
+    }
+  }
+};
+
+const CARE_TEMPLATE_TASK_TRANSLATIONS = {
+  'zh-id': {
+    '翻身':'翻身 / Ubah posisi tubuh',
+    '確認肢體擺位':'確認肢體擺位 / Pastikan posisi anggota tubuh',
+    '記錄翻身時間':'記錄翻身時間 / Catat waktu ubah posisi',
+    '復健':'復健 / Rehabilitasi',
+    '按摩':'按摩 / Pijat ringan',
+    '關節活動':'關節活動 / Latihan gerak sendi',
+    '記錄復健反應':'記錄復健反應 / Catat respons rehabilitasi',
+    '觀察肢體無力或麻木':'觀察肢體無力或麻木 / Amati kelemahan atau kebas anggota tubuh',
+    '記錄異常狀況':'記錄異常狀況 / Catat kondisi tidak normal',
+    '定向活動':'定向活動 / Latihan orientasi',
+    '記憶訓練':'記憶訓練 / Latihan memori',
+    '陪伴聊天':'陪伴聊天 / Temani berbicara',
+    '陪伴散步':'陪伴散步 / Temani berjalan',
+    '觀察情緒與疲累':'觀察情緒與疲累 / Amati emosi dan kelelahan',
+    '返家後補充水分':'返家後補充水分 / Beri minum setelah kembali',
+    '協助回顧今日活動':'協助回顧今日活動 / Bantu mengingat kegiatan hari ini',
+    '安撫情緒':'安撫情緒 / Tenangkan emosi',
+    '準備安靜就寢環境':'準備安靜就寢環境 / Siapkan lingkungan tidur yang tenang',
+    '壓瘡檢查':'壓瘡檢查 / Cek luka tekan',
+    '拍背':'拍背 / Tepuk punggung',
+    '尿布更換':'尿布更換 / Ganti popok',
+    '皮膚清潔':'皮膚清潔 / Bersihkan kulit',
+    '夜間翻身':'夜間翻身 / Ubah posisi malam hari',
+    '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Amati napas dan kondisi kulit'
+  },
+  'zh-vi': {
+    '翻身':'翻身 / Trở mình',
+    '確認肢體擺位':'確認肢體擺位 / Kiểm tra tư thế tay chân',
+    '記錄翻身時間':'記錄翻身時間 / Ghi giờ trở mình',
+    '復健':'復健 / Phục hồi chức năng',
+    '按摩':'按摩 / Xoa bóp nhẹ',
+    '關節活動':'關節活動 / Vận động khớp',
+    '記錄復健反應':'記錄復健反應 / Ghi phản ứng khi phục hồi',
+    '觀察肢體無力或麻木':'觀察肢體無力或麻木 / Theo dõi yếu hoặc tê tay chân',
+    '記錄異常狀況':'記錄異常狀況 / Ghi tình trạng bất thường',
+    '定向活動':'定向活動 / Hoạt động định hướng',
+    '記憶訓練':'記憶訓練 / Luyện trí nhớ',
+    '陪伴聊天':'陪伴聊天 / Trò chuyện cùng',
+    '陪伴散步':'陪伴散步 / Đi bộ cùng',
+    '觀察情緒與疲累':'觀察情緒與疲累 / Theo dõi tâm trạng và mệt mỏi',
+    '返家後補充水分':'返家後補充水分 / Uống nước sau khi về nhà',
+    '協助回顧今日活動':'協助回顧今日活動 / Hỗ trợ nhớ lại hoạt động hôm nay',
+    '安撫情緒':'安撫情緒 / Trấn an cảm xúc',
+    '準備安靜就寢環境':'準備安靜就寢環境 / Chuẩn bị môi trường ngủ yên tĩnh',
+    '壓瘡檢查':'壓瘡檢查 / Kiểm tra loét tì đè',
+    '拍背':'拍背 / Vỗ lưng',
+    '尿布更換':'尿布更換 / Thay tã',
+    '皮膚清潔':'皮膚清潔 / Vệ sinh da',
+    '夜間翻身':'夜間翻身 / Trở mình ban đêm',
+    '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Theo dõi hô hấp và tình trạng da'
+  },
+  'zh-en': {
+    '翻身':'翻身 / Reposition',
+    '確認肢體擺位':'確認肢體擺位 / Check limb positioning',
+    '記錄翻身時間':'記錄翻身時間 / Log repositioning time',
+    '復健':'復健 / Rehabilitation',
+    '按摩':'按摩 / Massage',
+    '關節活動':'關節活動 / Joint range-of-motion',
+    '記錄復健反應':'記錄復健反應 / Log rehab response',
+    '觀察肢體無力或麻木':'觀察肢體無力或麻木 / Watch for limb weakness or numbness',
+    '記錄異常狀況':'記錄異常狀況 / Log abnormal conditions',
+    '定向活動':'定向活動 / Orientation activity',
+    '記憶訓練':'記憶訓練 / Memory training',
+    '陪伴聊天':'陪伴聊天 / Conversation companionship',
+    '陪伴散步':'陪伴散步 / Accompanied walk',
+    '觀察情緒與疲累':'觀察情緒與疲累 / Observe mood and fatigue',
+    '返家後補充水分':'返家後補充水分 / Hydrate after returning home',
+    '協助回顧今日活動':'協助回顧今日活動 / Review today’s activities',
+    '安撫情緒':'安撫情緒 / Soothe emotions',
+    '準備安靜就寢環境':'準備安靜就寢環境 / Prepare a quiet sleep environment',
+    '壓瘡檢查':'壓瘡檢查 / Pressure sore check',
+    '拍背':'拍背 / Back patting',
+    '尿布更換':'尿布更換 / Diaper change',
+    '皮膚清潔':'皮膚清潔 / Skin cleaning',
+    '夜間翻身':'夜間翻身 / Night repositioning',
+    '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Observe breathing and skin condition'
+  }
+};
+
+function careTplEsc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function getCareTemplateLang() {
+  return (typeof getChipVal === 'function' && getChipVal('cfg-lang')) || 'zh';
+}
+
+function careTemplateTaskText(task, lang) {
+  return (CARE_TEMPLATE_TASK_TRANSLATIONS[lang] && CARE_TEMPLATE_TASK_TRANSLATIONS[lang][task]) || task;
+}
+
+function renderCareTemplateCard(key, tpl) {
+  const lang = getCareTemplateLang();
+  const pack = CARE_TEMPLATE_I18N[lang] || {};
+  const localized = (pack.templates && pack.templates[key]) || {};
+  const tags = (localized.tags || tpl.tags).map(tag => `<span class="care-template-tag">${careTplEsc(tag)}</span>`).join('');
+  const slotLines = Object.entries(tpl.slots).map(([secId, tasks]) => {
+    const label = (pack.slotLabels && pack.slotLabels[secId]) || CARE_TEMPLATE_SLOT_LABELS[secId] || secId;
+    return `<div><strong>${careTplEsc(label)}：</strong>${tasks.map(task => careTplEsc(careTemplateTaskText(task, lang))).join('、')}</div>`;
+  }).join('');
+  return `
+    <div class="care-template-card" data-template-key="${careTplEsc(key)}">
+      <div class="care-template-name">${tpl.icon} ${careTplEsc(localized.name || tpl.name)}</div>
+      <div class="care-template-desc">${careTplEsc(localized.desc || tpl.desc)}</div>
+      <div class="care-template-tags">${tags}</div>
+      <div class="care-template-slots">${slotLines}</div>
+      <button class="btn-apply-template" onclick="applyCareTaskTemplate('${key}')">${careTplEsc((pack.ui && pack.ui.apply) || '套用模板')}</button>
+    </div>`;
+}
+
+function injectCareTemplateLibrary() {
+  const host = document.getElementById('care-template-library');
+  if (!host) return;
+  const lang = getCareTemplateLang();
+  const ui = (CARE_TEMPLATE_I18N[lang] && CARE_TEMPLATE_I18N[lang].ui) || {};
+  const cards = Object.entries(CARE_TASK_TEMPLATES).map(([key, tpl]) => renderCareTemplateCard(key, tpl)).join('');
+  host.innerHTML = `
+    <div class="care-template-panel">
+      <div class="care-template-head">
+        <div>
+          <div class="care-template-title">${careTplEsc(ui.title || '照護任務模板庫')} <span class="badge-new">NEW</span></div>
+          <div class="care-template-sub">${careTplEsc(ui.sub || '新手家屬可先套用常見照護情境，再依醫囑或家中習慣微調工作細項。套用時會保留目前內容，只補上缺少的任務。')}</div>
+        </div>
+      </div>
+      <div class="care-template-grid">${cards}</div>
+    </div>`;
+}
+
+function enableSlotForTemplate(secId) {
+  const row = document.querySelector(`[data-sec="${secId}"]`);
+  if (!row) return;
+  const cb = row.querySelector('input[type="checkbox"]');
+  if (cb && !cb.checked) {
+    cb.checked = true;
+    toggleRow(cb, secId);
+  } else {
+    row.classList.add('on');
+    row.querySelectorAll('.time-edit-input').forEach(inp => {
+      inp.disabled = false;
+      inp.style.opacity = '1';
+    });
+  }
+}
+
+function appendTemplateTasks(secId, tasks) {
+  const list = document.getElementById('task-list-' + secId);
+  if (!list) return 0;
+  const existing = [];
+  list.querySelectorAll('input[type=text]').forEach(inp => {
+    const value = inp.value.trim();
+    if (value) existing.push(value);
+  });
+  let added = 0;
+  tasks.forEach((task, i) => {
+    if (existing.includes(task)) return;
+    const div = document.createElement('div');
+    div.innerHTML = taskRowHTML(secId, 'tpl-' + Date.now() + '-' + i, task);
+    list.appendChild(div.firstElementChild);
+    existing.push(task);
+    added++;
+  });
+  return added;
+}
+
+function openTaskEditorForTemplate(secId) {
+  const wrap = document.getElementById('task-editor-' + secId);
+  const btn = document.getElementById('task-btn-' + secId);
+  if (!wrap || !btn || wrap.classList.contains('open')) return;
+  wrap.classList.add('open');
+  btn.classList.add('open');
+  const arrow = btn.querySelector('.arrow');
+  if (arrow) arrow.textContent = '▾';
+}
+
+function applyCareTaskTemplate(key) {
+  const tpl = CARE_TASK_TEMPLATES[key];
+  if (!tpl) return;
+  const lang = getCareTemplateLang();
+  const ui = (CARE_TEMPLATE_I18N[lang] && CARE_TEMPLATE_I18N[lang].ui) || {};
+  const tplName = ((CARE_TEMPLATE_I18N[lang] && CARE_TEMPLATE_I18N[lang].templates && CARE_TEMPLATE_I18N[lang].templates[key]) || {}).name || tpl.name;
+  let added = 0;
+  Object.entries(tpl.slots).forEach(([secId, tasks]) => {
+    enableSlotForTemplate(secId);
+    added += appendTemplateTasks(secId, tasks);
+    openTaskEditorForTemplate(secId);
+  });
+  scheduleSave();
+  schedulePreviewUpdate();
+  showToast(added ? `✅ ${ui.applied || '已套用'}「${tplName}」，${ui.added || '新增'} ${added} ${ui.items || '個工作細項'}` : `✅ 「${tplName}」${ui.exists || '已在目前設定中'}`);
+}
 
 function buildTaskEditor(secId) {
   const defaults = DEFAULT_TASKS[secId] || [];
@@ -2250,17 +2633,50 @@ function calcSlotMinutes(secId) {
 }
 
 function buildWorkHoursStats() {
-  const EN_LABELS = {
-    '晨間照護':'Morning Care','早餐':'Breakfast','早間用藥':'AM Meds',
-    '上午生命徵象':'AM Vitals','上午活動':'Morning Activity','復健訓練':'Rehab',
-    '戶外散步':'Outdoor Walk','外出就醫':'Medical Visit','午餐':'Lunch',
-    '午間用藥':'Noon Meds','午休陪伴':'Afternoon Rest','下午生命徵象':'PM Vitals',
-    '下午活動':'Afternoon Activity','晚餐':'Dinner','晚間用藥':'PM Meds',
-    '晚間活動':'Evening Activity','就寢照護':'Bedtime Care','夜間巡視':'Night Check',
-    '早班打掃':'Morning Clean','午班打掃':'Noon Clean','晚班打掃':'Evening Clean',
-    '週間大掃除':'Weekly Deep Clean','看電視':'TV Viewing','聽音樂':'Music',
-    '閱讀/報紙':'Reading','手工藝/益智':'Craft','家人/社交互動':'Social',
+  const lang = getChipVal('cfg-lang') || 'zh';
+  const PREVIEW_UI = {
+    zh: { statsSub:'Daily Work Hours', totalSub:'Total Daily', careSub:'Care Work', cleanSub:'Cleaning', leisureSub:'Leisure', details:'各時段明細', detailsSub:'Time Slot Details', itemUnit:'項', none:'尚未設定任何時段 / No slots configured' },
+    'zh-id': { statsSub:'Total Jam Kerja Harian', totalSub:'Total Harian', careSub:'Perawatan', cleanSub:'Kebersihan', leisureSub:'Pendampingan', details:'各時段明細', detailsSub:'Rincian Waktu Kerja', itemUnit:'項', none:'尚未設定任何時段 / Belum ada jadwal waktu' },
+    'zh-vi': { statsSub:'Tổng Giờ Làm Mỗi Ngày', totalSub:'Tổng Mỗi Ngày', careSub:'Chăm Sóc', cleanSub:'Dọn Dẹp', leisureSub:'Đồng Hành', details:'各時段明細', detailsSub:'Chi Tiết Khung Giờ', itemUnit:'項', none:'尚未設定任何時段 / Chưa đặt khung giờ' },
+    'zh-en': { statsSub:'Daily Work Hours', totalSub:'Total Daily', careSub:'Care Work', cleanSub:'Cleaning', leisureSub:'Leisure', details:'各時段明細', detailsSub:'Time Slot Details', itemUnit:'項', none:'尚未設定任何時段 / No slots configured' }
   };
+  const SLOT_FOREIGN_LABELS = {
+    'zh-id': {
+      '晨間照護':'Perawatan Pagi','早餐':'Sarapan','早間用藥':'Obat Pagi',
+      '上午生命徵象':'Tanda Vital Pagi','上午活動':'Aktivitas Pagi','復健訓練':'Latihan Rehabilitasi',
+      '戶外散步':'Jalan Udara Segar','外出就醫':'Kunjungan Dokter','午餐':'Makan Siang',
+      '午間用藥':'Obat Siang','午休陪伴':'Istirahat Siang','下午生命徵象':'Tanda Vital Sore',
+      '下午活動':'Aktivitas Sore','晚餐':'Makan Malam','晚間用藥':'Obat Malam',
+      '晚間活動':'Aktivitas Malam','就寢照護':'Persiapan Tidur','夜間巡視':'Patroli Malam',
+      '早班打掃':'Bersih Pagi','午班打掃':'Bersih Siang','晚班打掃':'Bersih Malam',
+      '週間大掃除':'Bersih Mingguan','看電視':'Nonton TV','聽音樂':'Mendengarkan Musik',
+      '閱讀/報紙':'Membaca Koran','手工藝/益智':'Keterampilan/Puzzle','家人/社交互動':'Interaksi Keluarga'
+    },
+    'zh-vi': {
+      '晨間照護':'Chăm Sóc Buổi Sáng','早餐':'Bữa Sáng','早間用藥':'Uống Thuốc Sáng',
+      '上午生命徵象':'Sinh Hiệu Sáng','上午活動':'Hoạt Động Sáng','復健訓練':'Tập Phục Hồi',
+      '戶外散步':'Đi Bộ Ngoài Trời','外出就醫':'Đi Khám Bệnh','午餐':'Bữa Trưa',
+      '午間用藥':'Uống Thuốc Trưa','午休陪伴':'Nghỉ Trưa','下午生命徵象':'Sinh Hiệu Chiều',
+      '下午活動':'Hoạt Động Chiều','晚餐':'Bữa Tối','晚間用藥':'Uống Thuốc Tối',
+      '晚間活動':'Hoạt Động Tối','就寢照護':'Chuẩn Bị Ngủ','夜間巡視':'Tuần Tra Đêm',
+      '早班打掃':'Dọn Dẹp Sáng','午班打掃':'Dọn Dẹp Trưa','晚班打掃':'Dọn Dẹp Tối',
+      '週間大掃除':'Tổng Vệ Sinh Tuần','看電視':'Xem Tivi','聽音樂':'Nghe Nhạc',
+      '閱讀/報紙':'Đọc Báo/Sách','手工藝/益智':'Thủ Công/Giải Trí','家人/社交互動':'Giao Lưu Gia Đình'
+    },
+    'zh-en': {
+      '晨間照護':'Morning Care','早餐':'Breakfast','早間用藥':'AM Meds',
+      '上午生命徵象':'AM Vitals','上午活動':'Morning Activity','復健訓練':'Rehab',
+      '戶外散步':'Outdoor Walk','外出就醫':'Medical Visit','午餐':'Lunch',
+      '午間用藥':'Noon Meds','午休陪伴':'Afternoon Rest','下午生命徵象':'PM Vitals',
+      '下午活動':'Afternoon Activity','晚餐':'Dinner','晚間用藥':'PM Meds',
+      '晚間活動':'Evening Activity','就寢照護':'Bedtime Care','夜間巡視':'Night Check',
+      '早班打掃':'Morning Clean','午班打掃':'Noon Clean','晚班打掃':'Evening Clean',
+      '週間大掃除':'Weekly Deep Clean','看電視':'TV Viewing','聽音樂':'Music',
+      '閱讀/報紙':'Reading','手工藝/益智':'Craft','家人/社交互動':'Social'
+    }
+  };
+  const previewUI = PREVIEW_UI[lang] || PREVIEW_UI.zh;
+  const foreignLabels = SLOT_FOREIGN_LABELS[lang] || {};
   const ALL_SLOTS = [
     { key:'s-morning', label:'晨間照護' },
     { key:'s-breakfast', label:'早餐' },
@@ -2303,7 +2719,7 @@ function buildWorkHoursStats() {
       const h = Math.floor(mins / 60), m = mins % 60;
       const timeStr = h > 0 ? (m > 0 ? `${h}h${m}m` : `${h}h`) : `${m}m`;
       slotRows.push(`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #e5e7eb;font-size:12px;">
-        <span style="color:#374151;">${s.label}${EN_LABELS[s.label] ? '<span style="font-size:10px;color:#9ca3af;margin-left:4px;">/ '+EN_LABELS[s.label]+'</span>' : ''}</span>
+        <span style="color:#374151;">${s.label}${foreignLabels[s.label] ? '<span style="font-size:10px;color:#9ca3af;margin-left:4px;">/ '+foreignLabels[s.label]+'</span>' : ''}</span>
         <span style="font-weight:600;color:#1a5276;">${timeStr}</span>
       </div>`);
     }
@@ -2312,28 +2728,28 @@ function buildWorkHoursStats() {
   return `
   <div style="margin-top:16px;border:1.5px solid #bfdbfe;border-radius:10px;overflow:hidden;">
     <div style="background:#1d4ed8;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;">
-      ⏱️ 每日工作時間統計 <span style="font-size:12px;font-weight:400;opacity:.85;letter-spacing:.2px;">Daily Work Hours</span>
+      ⏱️ 每日工作時間統計 <span style="font-size:12px;font-weight:400;opacity:.85;letter-spacing:.2px;">${previewUI.statsSub}</span>
     </div>
     <div style="padding:14px 16px;">
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px;">
         <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">每日合計<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Total Daily</div></div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">每日合計<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.totalSub}</div></div>
           <div style="font-size:18px;font-weight:900;color:#1d4ed8;">${fmtH(totalMins)}</div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">照護工作<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Care Work</div></div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">照護工作<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.careSub}</div></div>
           <div style="font-size:18px;font-weight:900;color:#059669;">${fmtH(careMins)}</div>
         </div>
         <div style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🧹 打掃整理<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Cleaning</div></div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🧹 打掃整理<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.cleanSub}</div></div>
           <div style="font-size:18px;font-weight:900;color:#047857;">${fmtH(cleanMins)}</div>
         </div>
         <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🎮 休閒陪伴<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">Leisure</div></div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🎮 休閒陪伴<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.leisureSub}</div></div>
           <div style="font-size:18px;font-weight:900;color:#7c3aed;">${fmtH(leisureMins)}</div>
         </div>
       </div>
-      ${slotRows.length > 0 ? `<details style="cursor:pointer;"><summary style="font-size:12px;font-weight:700;color:#374151;padding:4px 0;list-style:none;display:flex;align-items:center;gap:4px;"><span>▸</span> 各時段明細 / Time Slot Details (${slotRows.length} 項)</summary><div style="margin-top:8px;">${slotRows.join('')}</div></details>` : '<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px 0;">尚未設定任何時段 / No slots configured</div>'}
+      ${slotRows.length > 0 ? `<details style="cursor:pointer;"><summary style="font-size:12px;font-weight:700;color:#374151;padding:4px 0;list-style:none;display:flex;align-items:center;gap:4px;"><span>▸</span> ${previewUI.details} / ${previewUI.detailsSub} (${slotRows.length} ${previewUI.itemUnit})</summary><div style="margin-top:8px;">${slotRows.join('')}</div></details>` : `<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px 0;">${previewUI.none}</div>`}
     </div>
   </div>`;
 }
@@ -2466,6 +2882,129 @@ function buildScheduleHTML() {
     return d.toLocaleDateString('zh-TW');
   }
   const issueDate = formatIssueDate(issueDateRaw);
+  const LANG_UI = {
+    zh: {
+      htmlLang: 'zh-TW',
+      patientLabel: '被照護者',
+      caregiverLabel: '看護',
+      issueDateLabel: '制定日',
+      pageLabel: '第 1 頁',
+      printHint: '點擊右側按鈕以列印或存成 PDF',
+      printButton: '列印 / 存PDF',
+      familyConfirm: '家屬簽認：___________________',
+      sigTitle: '確認簽名',
+      sigDate: '日期',
+      sigNote: '備注',
+      limitedSuffix: '限定',
+      dateInvalid: '日期格式無效',
+      dateAutoMonday: '起始日非星期一，已自動調整為',
+      statsTitle: '每日工作時間統計',
+      statsSub: 'Daily Work Hours',
+      statsCalc: '（以設定時段計算）',
+      totalDaily: '每日合計',
+      totalDailySub: 'Total Daily',
+      careWork: '照護工作',
+      careWorkSub: 'Care Work',
+      cleanWork: '打掃整理',
+      cleanWorkSub: 'Cleaning',
+      leisureWork: '休閒陪伴',
+      leisureWorkSub: 'Leisure',
+      hoursHeader: '時數 / Hrs',
+      days: {0:'星期日',1:'星期一',2:'星期二',3:'星期三',4:'星期四',5:'星期五',6:'星期六'},
+      dayShort: {0:'日',1:'一',2:'二',3:'三',4:'四',5:'五',6:'六'}
+    },
+    'zh-id': {
+      htmlLang: 'id',
+      patientLabel: '被照護者 / Pasien',
+      caregiverLabel: '看護 / Perawat',
+      issueDateLabel: '制定日 / Tanggal',
+      pageLabel: 'Halaman 1',
+      printHint: 'Klik tombol di kanan untuk mencetak atau menyimpan PDF',
+      printButton: 'Cetak / Simpan PDF',
+      familyConfirm: '家屬簽認 / Konfirmasi keluarga：___________________',
+      sigTitle: '確認簽名 / Konfirmasi tanda tangan',
+      sigDate: '日期 / Tanggal',
+      sigNote: '備注 / Catatan',
+      limitedSuffix: '限定 / Khusus',
+      dateInvalid: '日期格式無效 / Format tanggal tidak valid',
+      dateAutoMonday: '起始日非星期一，已自動調整為 / Tanggal mulai bukan Senin, disesuaikan ke',
+      statsTitle: '每日工作時間統計',
+      statsSub: 'Total Jam Kerja Harian',
+      statsCalc: '（以設定時段計算 / dihitung dari jadwal waktu）',
+      totalDaily: '每日合計',
+      totalDailySub: 'Total Harian',
+      careWork: '照護工作',
+      careWorkSub: 'Perawatan',
+      cleanWork: '打掃整理',
+      cleanWorkSub: 'Kebersihan',
+      leisureWork: '休閒陪伴',
+      leisureWorkSub: 'Pendampingan',
+      hoursHeader: '時數 / Jam',
+      days: {0:'星期日 / Minggu',1:'星期一 / Senin',2:'星期二 / Selasa',3:'星期三 / Rabu',4:'星期四 / Kamis',5:'星期五 / Jumat',6:'星期六 / Sabtu'},
+      dayShort: {0:'日/Minggu',1:'一/Senin',2:'二/Selasa',3:'三/Rabu',4:'四/Kamis',5:'五/Jumat',6:'六/Sabtu'}
+    },
+    'zh-vi': {
+      htmlLang: 'vi',
+      patientLabel: '被照護者 / Người được chăm sóc',
+      caregiverLabel: '看護 / Người chăm sóc',
+      issueDateLabel: '制定日 / Ngày lập',
+      pageLabel: 'Trang 1',
+      printHint: 'Bấm nút bên phải để in hoặc lưu PDF',
+      printButton: 'In / Lưu PDF',
+      familyConfirm: '家屬簽認 / Gia đình xác nhận：___________________',
+      sigTitle: '確認簽名 / Xác nhận chữ ký',
+      sigDate: '日期 / Ngày',
+      sigNote: '備注 / Ghi chú',
+      limitedSuffix: '限定 / Chỉ định',
+      dateInvalid: '日期格式無效 / Định dạng ngày không hợp lệ',
+      dateAutoMonday: '起始日非星期一，已自動調整為 / Ngày bắt đầu không phải thứ Hai, đã chỉnh thành',
+      statsTitle: '每日工作時間統計',
+      statsSub: 'Tổng Giờ Làm Mỗi Ngày',
+      statsCalc: '（以設定時段計算 / tính theo khung giờ đã đặt）',
+      totalDaily: '每日合計',
+      totalDailySub: 'Tổng Mỗi Ngày',
+      careWork: '照護工作',
+      careWorkSub: 'Chăm Sóc',
+      cleanWork: '打掃整理',
+      cleanWorkSub: 'Dọn Dẹp',
+      leisureWork: '休閒陪伴',
+      leisureWorkSub: 'Đồng Hành',
+      hoursHeader: '時數 / Giờ',
+      days: {0:'星期日 / Chủ Nhật',1:'星期一 / Thứ Hai',2:'星期二 / Thứ Ba',3:'星期三 / Thứ Tư',4:'星期四 / Thứ Năm',5:'星期五 / Thứ Sáu',6:'星期六 / Thứ Bảy'},
+      dayShort: {0:'日/Chủ Nhật',1:'一/Thứ Hai',2:'二/Thứ Ba',3:'三/Thứ Tư',4:'四/Thứ Năm',5:'五/Thứ Sáu',6:'六/Thứ Bảy'}
+    },
+    'zh-en': {
+      htmlLang: 'en',
+      patientLabel: '被照護者 / Patient',
+      caregiverLabel: '看護 / Caregiver',
+      issueDateLabel: '制定日 / Date Issued',
+      pageLabel: 'Page 1',
+      printHint: 'Click the button on the right to print or save as PDF',
+      printButton: 'Print / Save PDF',
+      familyConfirm: '家屬簽認 / Family confirmation：___________________',
+      sigTitle: '確認簽名 / Signature confirmation',
+      sigDate: '日期 / Date',
+      sigNote: '備注 / Notes',
+      limitedSuffix: '限定 / Limited',
+      dateInvalid: '日期格式無效 / Invalid date format',
+      dateAutoMonday: '起始日非星期一，已自動調整為 / Start date was not Monday, adjusted to',
+      statsTitle: '每日工作時間統計',
+      statsSub: 'Daily Work Hours',
+      statsCalc: '（以設定時段計算 / based on configured time slots）',
+      totalDaily: '每日合計',
+      totalDailySub: 'Total Daily',
+      careWork: '照護工作',
+      careWorkSub: 'Care Work',
+      cleanWork: '打掃整理',
+      cleanWorkSub: 'Cleaning',
+      leisureWork: '休閒陪伴',
+      leisureWorkSub: 'Leisure',
+      hoursHeader: '時數 / Hrs',
+      days: {0:'星期日 / Sunday',1:'星期一 / Monday',2:'星期二 / Tuesday',3:'星期三 / Wednesday',4:'星期四 / Thursday',5:'星期五 / Friday',6:'星期六 / Saturday'},
+      dayShort: {0:'日/Sun',1:'一/Mon',2:'二/Tue',3:'三/Wed',4:'四/Thu',5:'五/Fri',6:'六/Sat'}
+    }
+  };
+  const uiText = LANG_UI[lang] || LANG_UI.zh;
 
   // Signature settings
   const sigEnabled  = document.getElementById('cfg-sig-enable')?.checked || false;
@@ -2485,12 +3024,12 @@ function buildScheduleHTML() {
       const box = sigStyle === 'box'
         ? `<div style="border:1.5px solid ${t.pri};border-radius:6px;min-height:44px;margin-top:4px;"></div>`
         : `<div class="sig-line"></div>`;
-      const datePart = sigShowDate ? `<div class="sig-cell-date">日期：_______/__/__ </div>` : '';
+      const datePart = sigShowDate ? `<div class="sig-cell-date">${uiText.sigDate}：_______/__/__ </div>` : '';
       return `<div class="sig-cell">${datePart}<div class="sig-cell-label">${lbl}</div>${box}</div>`;
     }).join('');
-    const noteHtml = sigNote ? `<div style="font-size:${fontSize-2}px;color:#888;margin-top:8px;">備注：${sigNote}</div>` : '';
+    const noteHtml = sigNote ? `<div style="font-size:${fontSize-2}px;color:#888;margin-top:8px;">${uiText.sigNote}：${sigNote}</div>` : '';
     return `<div class="sig-area">
-      <div class="sig-area-title">✍️ 確認簽名</div>
+      <div class="sig-area-title">✍️ ${uiText.sigTitle}</div>
       <div class="sig-grid" style="grid-template-columns:${cols};">${cells}</div>
       ${noteHtml}
     </div>`;
@@ -2502,12 +3041,12 @@ function buildScheduleHTML() {
   if (startDateStr) {
     const d = new Date(startDateStr + 'T00:00:00');
     if (isNaN(d.getTime())) {
-      dateWarning = '⚠️ 日期格式無效';
+      dateWarning = '⚠️ ' + uiText.dateInvalid;
     } else if (d.getDay() !== 1) {
       // Snap to nearest Monday
       const dayOffset = d.getDay() === 0 ? -6 : 1 - d.getDay();
       d.setDate(d.getDate() + dayOffset);
-      dateWarning = `⚠️ 起始日非星期一，已自動調整為 ${d.getMonth()+1}/${d.getDate()}`;
+      dateWarning = `⚠️ ${uiText.dateAutoMonday} ${d.getMonth()+1}/${d.getDate()}`;
     }
     for (let i = 0; i < 7; i++) {
       const dd = new Date(d);
@@ -2702,6 +3241,19 @@ function buildScheduleHTML() {
     return BL[lang].tasks[subKey];
   }
   const blUI = (lang !== 'zh' && BL[lang]) ? BL[lang] : null;
+  function resolveTasksForSlot(slot) {
+    const userTasks = getSlotTasks(slot.key);
+    const translatedDefaults = blTasks(slot.subKey);
+    if (!translatedDefaults) return userTasks;
+
+    const defaultTasks = DEFAULT_TASKS[slot.key] || [];
+    return userTasks.map(task => {
+      const idx = defaultTasks.findIndex(def => String(def).trim() === String(task).trim());
+      if (idx >= 0 && translatedDefaults[idx]) return translatedDefaults[idx];
+      const templateTranslated = CARE_TEMPLATE_TASK_TRANSLATIONS[lang] && CARE_TEMPLATE_TASK_TRANSLATIONS[lang][String(task).trim()];
+      return templateTranslated || task;
+    });
+  }
   // old subLang kept for fallback (not used anymore)
   const subLang = {};
 
@@ -2766,13 +3318,13 @@ function buildScheduleHTML() {
 
   // Build date label for each day
   function dayLabel(d) {
-    const wn = dayNamesShort[d];
-    if (!startDateStr || weekDates.length === 0) return '星期' + wn;
+    const wn = uiText.days[d] || ('星期' + dayNamesShort[d]);
+    if (!startDateStr || weekDates.length === 0) return wn;
     // find correct offset: Mon=1 -> index 0, Tue=2->1...Sun=0->6
     const offset = d === 0 ? 6 : d - 1;
     const dt = weekDates[offset];
-    if (!dt) return '星期' + wn;
-    return `星期${wn}<br><span style="font-size:0.85em;font-weight:400;">${(dt.getMonth()+1)}/${dt.getDate()}</span>`;
+    if (!dt) return wn;
+    return `${wn}<br><span style="font-size:0.85em;font-weight:400;">${(dt.getMonth()+1)}/${dt.getDate()}</span>`;
   }
 
   // flags
@@ -2788,8 +3340,8 @@ function buildScheduleHTML() {
 
   // subtitle
   let subtitleParts = [];
-  if (patientName) subtitleParts.push('被照護者：' + patientName);
-  if (caregiverName) subtitleParts.push('看護：' + caregiverName);
+  if (patientName) subtitleParts.push(uiText.patientLabel + '：' + patientName);
+  if (caregiverName) subtitleParts.push(uiText.caregiverLabel + '：' + caregiverName);
   if (startDateStr && weekDates.length) {
     const endDate = weekDates[weekDates.length - 1];
     subtitleParts.push(`${weekDates[0].getFullYear()}年${weekDates[0].getMonth()+1}月${weekDates[0].getDate()}日 – ${endDate.getMonth()+1}月${endDate.getDate()}日`);
@@ -2819,18 +3371,14 @@ function buildScheduleHTML() {
         ? `<div class="slot-name bi-name">${biName}</div>`
         : `<div class="slot-name">${slot.zh}</div>`;
       const rowBg = zebra && si % 2 === 0 ? `style="background:${t.hrow}"` : '';
-      // Use bilingual tasks only if user hasn't modified the default tasks
-      const userTasks = getSlotTasks(slot.key);
-      const defaultForKey = DEFAULT_TASKS[slot.key] || [];
-      const userModified = JSON.stringify(userTasks) !== JSON.stringify(defaultForKey);
-      const resolvedTasks = (!userModified && blTasks(slot.subKey)) ? blTasks(slot.subKey) : userTasks;
+      const resolvedTasks = resolveTasksForSlot(slot);
 
       tableHtml += `<tr ${rowBg}>
         <td class="td-slot">
           ${slotNameHtml}
           ${timeRange ? `<div class="slot-time">${timeRange}</div>` : ''}
           ${slot.desc && !cellContent.includes('tasks') ? `<div class="slot-desc">${slot.desc}</div>` : ''}
-          ${slot.days && slot.days.length > 0 ? `<div style="font-size:${fontSize-3}px;color:#888;margin-top:2px;">★ ${slot.days.map(d=>(['日','一','二','三','四','五','六'][parseInt(d)])).join('、')} 限定</div>` : ''}
+          ${slot.days && slot.days.length > 0 ? `<div style="font-size:${fontSize-3}px;color:#888;margin-top:2px;">★ ${slot.days.map(d=>(uiText.dayShort[parseInt(d)] || ['日','一','二','三','四','五','六'][parseInt(d)])).join('、')} ${uiText.limitedSuffix}</div>` : ''}
         </td>
         ${activeDays.map(d => {
           // Check if this custom slot applies to this day
@@ -2881,10 +3429,7 @@ function buildScheduleHTML() {
           }
           const completeLabel = blUI ? blUI.complete : '☐ 已完成';
           const signLabel = blUI ? blUI.sign : '簽名：_______';
-          const userTasks2 = getSlotTasks(slot.key);
-          const defaultForKey2 = DEFAULT_TASKS[slot.key] || [];
-          const userModified2 = JSON.stringify(userTasks2) !== JSON.stringify(defaultForKey2);
-          const resolvedTasks = (!userModified2 && blTasks(slot.subKey)) ? blTasks(slot.subKey) : userTasks2;
+          const resolvedTasks = resolveTasksForSlot(slot);
           const taskHtml = cellContent.includes('tasks') && resolvedTasks.length
             ? resolvedTasks.map(tk => `<div class="task-item">${cellContent.includes('check') ? '<span class="chk">☐</span>' : ''}${esc(tk)}</div>`).join('')
             : (cellContent.includes('check') ? `<div class="task-item">${completeLabel}</div>` : '');
@@ -2916,18 +3461,6 @@ function buildScheduleHTML() {
     return m;
   }
   function fmtMins(m) { const h=Math.floor(m/60),r=m%60; return h>0?(r>0?`${h}h${r}m`:`${h}h`):`${r}m`; }
-  const STATS_EN_MAP = {
-    's-morning':'Morning Care','s-breakfast':'Breakfast','s-med-am':'AM Meds',
-    's-vital-am':'AM Vitals','s-morning-act':'Morning Activity','s-rehab':'Rehab',
-    's-walk':'Outdoor Walk','s-hospital':'Medical Visit','s-lunch':'Lunch',
-    's-med-noon':'Noon Meds','s-nap':'Afternoon Rest','s-vital-pm':'PM Vitals',
-    's-afternoon-act':'Afternoon Activity','s-dinner':'Dinner','s-med-pm':'PM Meds',
-    's-evening':'Evening Activity','s-bedtime':'Bedtime Care','s-night':'Night Check',
-    's-clean-morning':'Morning Clean','s-clean-noon':'Noon Clean',
-    's-clean-evening':'Evening Clean','s-clean-weekly':'Weekly Deep Clean',
-    's-tv':'TV Viewing','s-music':'Music','s-reading':'Reading',
-    's-craft':'Craft','s-social':'Social',
-  };
   const STAT_SLOTS = [
     { key:'s-morning', label:'晨間照護', cat:'care' }, { key:'s-breakfast', label:'早餐', cat:'care' },
     { key:'s-med-am', label:'早間用藥', cat:'care' }, { key:'s-vital-am', label:'上午生命徵象', cat:'care' },
@@ -2944,43 +3477,48 @@ function buildScheduleHTML() {
     { key:'s-reading', label:'閱讀/報紙', cat:'leisure' }, { key:'s-craft', label:'手工藝/益智', cat:'leisure' },
     { key:'s-social', label:'家人/社交互動', cat:'leisure' },
   ];
+  function statLabelHtml(statSlot) {
+    const slotDef = activeSlots.find(slot => slot.key === statSlot.key);
+    const biName = slotDef ? blSlotName(slotDef.subKey) : null;
+    return biName ? `<span class="bi-name">${biName}</span>` : esc(statSlot.label);
+  }
   let totalM=0, careM=0, cleanM=0, leisureM=0;
   const statRows=[];
   STAT_SLOTS.forEach(s => {
     if (!getSecEnabled(s.key)) return;
     const m = calcSlotMinsLocal(s.key);
     totalM+=m; if(s.cat==='care')careM+=m; else if(s.cat==='clean')cleanM+=m; else leisureM+=m;
-    if(m>0) statRows.push(`<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;">${s.label}${STATS_EN_MAP[s.key]?'<span style="font-size:'+(fontSize-3)+'px;color:#9ca3af;margin-left:4px;">/ '+STATS_EN_MAP[s.key]+'</span>':''}</td><td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(m)}</td></tr>`);
+    if(m>0) statRows.push(`<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;">${statLabelHtml(s)}</td><td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(m)}</td></tr>`);
   });
   const statsHtml = statRows.length === 0 ? '' : `
 <div style="margin-top:14px;border:1.5px solid ${t.pri};border-radius:8px;overflow:hidden;page-break-inside:avoid;">
   <div style="background:${t.pri};color:#fff;padding:8px 14px;font-weight:700;font-size:${fontSize}px;display:flex;align-items:center;justify-content:space-between;">
-    <span>⏱️ 每日工作時間統計 <span style="font-size:${fontSize-2}px;font-weight:400;opacity:.85;letter-spacing:.2px;">Daily Work Hours</span></span>
-    <span style="font-size:${fontSize-2}px;opacity:.8;">（以設定時段計算）</span>
+    <span>⏱️ ${uiText.statsTitle} <span style="font-size:${fontSize-2}px;font-weight:400;opacity:.85;letter-spacing:.2px;">${uiText.statsSub}</span></span>
+    <span style="font-size:${fontSize-2}px;opacity:.8;">${uiText.statsCalc}</span>
   </div>
   <div style="padding:12px 14px;background:${t.alight};">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">每日合計<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Total Daily</div></div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${uiText.totalDaily}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.totalDailySub}</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:${t.pri};">${fmtMins(totalM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">照護工作<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Care Work</div></div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${uiText.careWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.careWorkSub}</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#059669;">${fmtMins(careM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🧹 打掃整理<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Cleaning</div></div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🧹 ${uiText.cleanWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.cleanWorkSub}</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#047857;">${fmtMins(cleanM)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🎮 休閒陪伴<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">Leisure</div></div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🎮 ${uiText.leisureWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.leisureWorkSub}</div></div>
         <div style="font-size:${fontSize+3}px;font-weight:900;color:#7c3aed;">${fmtMins(leisureM)}</div>
       </div>
     </div>
     <table style="width:100%;border-collapse:collapse;">
       <tr style="background:${t.plight};color:#fff;">
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">工作時段 / Time Slot</th>
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:80px;">時數 / Hrs</th>
+        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">${blUI ? blUI.headerSlot : '工作時段'}</th>
+        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:80px;">${uiText.hoursHeader}</th>
       </tr>
       ${statRows.join('')}
     </table>
@@ -2988,10 +3526,10 @@ function buildScheduleHTML() {
 </div>`;
 
   return `<!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="${uiText.htmlLang}">
 <head>
 <meta charset="UTF-8">
-<title>外籍看護一週工作時間表</title>
+<title>${docTitleZh}${blUI ? ' - ' + blUI.docTitle : ''}</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 @page { size:${pageSize}; margin:${pageMargin}; }
@@ -3068,20 +3606,20 @@ th{background:${t.pri};color:#fff;font-size:${fontSize-1}px;font-weight:700;text
 <body>
 
 <div class="no-print" style="background:#f0f4ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 16px;margin-bottom:12px;font-size:12px;color:#1e40af;display:flex;align-items:center;justify-content:space-between;">
-  <span>💡 點擊右側按鈕以列印或存成 PDF</span>
-  <button class="print-btn" onclick="window.print()">🖨️ 列印 / 存PDF</button>
+  <span>💡 ${uiText.printHint}</span>
+  <button class="print-btn" onclick="window.print()">🖨️ ${uiText.printButton}</button>
 </div>
 
 <div class="doc-header">
   <div class="doc-header-left">
     <div class="doc-title">${flagHtml} ${docTitleZh}${docTitleBi}</div>
     ${subtitleParts.length ? `<div class="doc-subtitle">${subtitleParts.join('　')}</div>` : ''}
-    <div class="doc-meta">制定日：${issueDate}</div>
+    <div class="doc-meta">${uiText.issueDateLabel}：${issueDate}</div>
   </div>
   <div class="doc-header-right">
     ${orgName ? `<div class="doc-org">${orgName}</div>` : ''}
     ${orgAddr ? `<div>${orgAddr}</div>` : ''}
-    ${pageNum ? `<div style="margin-top:4px;">第 1 頁</div>` : ''}
+    ${pageNum ? `<div style="margin-top:4px;">${uiText.pageLabel}</div>` : ''}
   </div>
 </div>
 
@@ -3093,7 +3631,7 @@ th{background:${t.pri};color:#fff;font-size:${fontSize-1}px;font-weight:700;text
 
 <div class="doc-footer">
   <span>${footerNote || (blUI ? blUI.footerDefault : '如有任何狀況異常，請立即通知家屬或緊急聯絡人。')}</span>
-  <span class="no-print" style="color:#bbb;">家屬簽認：___________________</span>
+  <span class="no-print" style="color:#bbb;">${uiText.familyConfirm}</span>
 </div>
 
 ${buildSigHTML()}
@@ -3940,6 +4478,7 @@ document.addEventListener('DOMContentLoaded', () => {
   injectSlotDayUIs();
   // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
   injectTaskEditors();
+  injectCareTemplateLibrary();
   // cfg-start-date is optional — no auto-fill
 
   document.querySelectorAll('.time-edit-input').forEach(inp => {
