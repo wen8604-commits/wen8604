@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://og-image.vercel.app; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://og-image.vercel.app;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="料理基礎學習平台 v0.47 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
+<meta name="description" content="料理基礎學習平台 v0.49 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
 <meta name="keywords" content="料理,廚房安全,刀工,火候,食品衛生,烹調,學習平台,多語言,家庭幫傭">
 <meta name="author" content="Culinary Basics Learning Platform">
 <meta name="theme-color" content="#5a1800">
 
 <!-- Open Graph / Social sharing -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="料理基礎學習平台 v0.47">
+<meta property="og:title" content="料理基礎學習平台 v0.49">
 <meta property="og:description" content="多語言廚藝入門：廚房安全・刀工基礎・火候控制・食品衛生 — 200 題測驗，自由學習，無關卡無證書">
 <meta property="og:image" content="https://og-image.vercel.app/料理基礎學習平台.png?theme=light&md=1&fontSize=100px&images=🍜">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="料理基礎學習平台 v0.47">
+<meta name="twitter:title" content="料理基礎學習平台 v0.49">
 <meta name="twitter:description" content="繁中・EN・ID・VI 四語言廚藝入門，200 題測驗，自由學習">
 
-<title>料理基礎學習平台 v0.47</title>
+<title>料理基礎學習平台 v0.49</title>
 
 <!-- Favicon (emoji) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
@@ -87,7 +87,7 @@ body{display:flex;flex-direction:column;align-items:stretch}
 </head>
 <body>
 <div class="platform-wrapper">
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.47 — 自由點選課程，無關卡無證書</h2>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.49 — 自由點選課程，無關卡無證書</h2>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
@@ -203,8 +203,9 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .men{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
 .mlvl{display:inline-block;font-size:9.5px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:6px;padding:2px 7px;margin-top:6px;border:0.5px solid var(--color-border-tertiary)}
 .mcnt{font-size:11px;color:var(--color-text-secondary);margin-top:6px}
-.mbar{display:none}
-.mfill{display:none}
+.mbar{display:block;width:100%;height:3px;background:var(--color-background-tertiary);border-radius:2px;margin-top:8px;overflow:hidden}
+.mfill{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#5a1800,#8a3000);transition:width .4s cubic-bezier(.4,0,.2,1)}
+.mcard.mdone .mfill{background:linear-gradient(90deg,#1a7248,#2a9a60)}
 
 /* lesson & topics */
 .lesson{background:var(--color-background-primary);border:1px solid var(--color-border-secondary);border-radius:16px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
@@ -507,6 +508,39 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 /* ── body font bump ── */
 body{font-size:14.5px}
 
+
+/* ── v0.49 新增：Streak 連續天數條 ── */
+.streak-bar{display:flex;align-items:center;gap:10px;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);border-radius:14px;padding:10px 14px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.streak-flame{font-size:24px;flex-shrink:0;animation:flameWiggle 2s ease-in-out infinite}
+@keyframes flameWiggle{0%,100%{transform:rotate(-5deg) scale(1)}50%{transform:rotate(5deg) scale(1.1)}}
+.streak-info{flex:1;min-width:0}
+.streak-count{font-size:18px;font-weight:700;color:#c0392b;line-height:1}
+.streak-label{font-size:10.5px;color:var(--color-text-tertiary);margin-top:1px}
+.streak-dots{display:flex;gap:4px;margin-top:5px}
+.streak-dot{width:10px;height:10px;border-radius:50%;background:var(--color-background-tertiary);border:1px solid var(--color-border-secondary)}
+.streak-dot.lit{background:#e74c3c;border-color:#c0392b;box-shadow:0 0 4px rgba(192,57,43,.4)}
+.streak-dot.today{background:#ff6b35;border-color:#e74c3c;box-shadow:0 0 6px rgba(255,107,53,.5)}
+.streak-best{font-size:10px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:8px;padding:3px 8px;white-space:nowrap}
+/* ── v0.49 新增：Hero 圓形進度環 ── */
+.hero-ring-wrap{display:flex;align-items:center;gap:12px;margin-top:8px}
+.hero-ring{flex-shrink:0}
+.hero-ring svg circle{transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)}
+/* ── v0.49 新增：底部導航角標 ── */
+.bnb-badge{position:absolute;top:2px;right:6px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;min-width:16px;text-align:center;line-height:15px;display:none;border:1.5px solid var(--color-background-primary)}
+.bnb-badge.show{display:block}
+/* ── v0.49 新增：學習總覽 模組格 ── */
+.cert-mod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+.cert-mod-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:9px}
+.cert-mod-item.done{border-color:rgba(26,114,72,.4);background:rgba(26,114,72,.03)}
+.cert-mod-emoji{font-size:18px;flex-shrink:0}
+.cert-mod-info{flex:1;min-width:0}
+.cert-mod-name{font-size:11.5px;font-weight:500;color:var(--color-text-primary);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cert-mod-prog{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+.cert-mod-bar-wrap{width:100%;height:3px;background:var(--color-background-tertiary);border-radius:2px;margin-top:4px;overflow:hidden}
+.cert-mod-bar-fill{height:100%;border-radius:2px;background:#5a1800;transition:width .4s}
+.cert-mod-item.done .cert-mod-bar-fill{background:#1a7248}
+.cert-mod-check{font-size:14px;color:#1a7248;flex-shrink:0}
+
 </style>
 <noscript>
 <div class="noscript-warn" style="display:block">⚠️ 本學習平台需要啟用 JavaScript 才能正常運作，請在瀏覽器設定中啟用 JS 後重新整理頁面。<br>This platform requires JavaScript. Please enable it and refresh.</div>
@@ -558,6 +592,19 @@ body{font-size:14.5px}
         <div class="hero-prog-bar"><div class="hero-prog-fill" id="hero-prog-fill" style="width:0%"></div></div>
         <span class="hero-prog-label" id="hero-prog-label">整體 0%</span>
       </div>
+      <!-- v0.49: hero ring progress -->
+      <div class="hero-ring-wrap" id="hero-ring-wrap" style="margin-top:8px">
+        <svg class="hero-ring" width="52" height="52" viewBox="0 0 52 52">
+          <circle class="hero-ring-track" cx="26" cy="26" r="21"/>
+          <circle class="hero-ring-fill" id="hero-ring-fill" cx="26" cy="26" r="21"
+            stroke-dasharray="131.95" stroke-dashoffset="131.95"/>
+          <text x="26" y="26" class="hero-ring-pct" id="hero-ring-pct" font-size="10" font-family="-apple-system,sans-serif" font-weight="700" fill="#fff" text-anchor="middle" dominant-baseline="central">0%</text>
+        </svg>
+        <div class="hero-ring-info">
+          <div class="hero-ring-title" id="hero-ring-title" style="font-size:12px;font-weight:600;color:#fff">學習進度</div>
+          <div class="hero-ring-sub" id="hero-ring-sub" style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px">0 / 103 主題完成</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -583,7 +630,7 @@ body{font-size:14.5px}
   <div class="bninner">
     <button class="bnb act" data-view="home" onclick="showView('home')" aria-label="首頁" data-i-label="nav.home"><i class="ti ti-home" aria-hidden="true"></i><span data-i="nav.home">首頁</span></button>
     <button class="bnb" data-view="levels" onclick="showView('levels')" aria-label="課程" data-i-label="nav.lessons"><i class="ti ti-book" aria-hidden="true"></i><span data-i="nav.lessons">課程</span></button>
-    <button class="bnb" data-view="quizcenter" onclick="showView('quizcenter')" aria-label="測驗" data-i-label="nav.quiz"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span></button>
+    <button class="bnb" id="bnb-quiz" data-view="quizcenter" onclick="showView('quizcenter')" aria-label="測驗" data-i-label="nav.quiz"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span data-i="nav.quiz">測驗</span><span class="bnb-badge" id="bnb-quiz-badge"></span></button>
     <button class="bnb" data-view="cert" onclick="showView('cert')" aria-label="總覽" data-i-label="nav.cert"><i class="ti ti-chart-bar" aria-hidden="true"></i><span data-i="nav.cert">總覽</span></button>
   </div>
 </div>
@@ -591,14 +638,14 @@ body{font-size:14.5px}
 <div class="footer">
   <span id="footer-version"></span>
   <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
-  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言</span>
+  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.49</span>
 </div>
 
 </div>
 </div>
 
 <script>
-var APP_VERSION='0.47';
+var APP_VERSION='0.49';
 function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
 // ── 版本號統一注入 ──
 (function(){
@@ -2050,6 +2097,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'濕手直接操作電器',en:'Operating appliances with wet hands',id:'Mengoperasikan peralatan dengan tangan basah',vi:'Vận hành thiết bị điện bằng tay ướt'},
       {ok:false,zh:'燙傷後塗牙膏或醬油',en:'Applying toothpaste or soy sauce on burns',id:'Mengoleskan pasta gigi atau kecap pada luka bakar',vi:'Bôi kem đánh răng hoặc nước tương lên vết bỏng'}
     ],
+    chart:{
+      title:{zh:'廚房事故類型佔比（%）',en:'Kitchen Accident Types (%)',id:'Jenis Kecelakaan Dapur (%)',vi:'Loại tai nạn bếp (%)'},
+      bars:[
+        {zh:'燙傷／燒傷',en:'Burns/Scalds',id:'Luka Bakar',vi:'Bỏng',emoji:'🔥',value:38,unit:'%',color:'#c0392b'},
+        {zh:'刀傷／割傷',en:'Cuts/Lacerations',id:'Luka Potong',vi:'Vết cắt',emoji:'🔪',value:27,unit:'%',color:'#e67e22'},
+        {zh:'滑倒跌傷',en:'Slips & Falls',id:'Jatuh Terpeleset',vi:'Trơn ngã',emoji:'💧',value:22,unit:'%',color:'#2980b9'},
+        {zh:'用電事故',en:'Electrical Accidents',id:'Kecelakaan Listrik',vi:'Tai nạn điện',emoji:'⚡',value:8,unit:'%',color:'#8e44ad'},
+        {zh:'其他',en:'Other',id:'Lainnya',vi:'Khác',emoji:'📌',value:5,unit:'%',color:'#7f8c8d'}
+      ],
+      note:{zh:'💡 燙傷與刀傷合計佔所有廚房事故逾六成，正確的操作習慣是最有效的預防手段。',en:'💡 Burns and cuts account for over 60% of kitchen accidents — correct habits are the best prevention.',id:'💡 Luka bakar dan luka potong lebih dari 60% kecelakaan dapur.',vi:'💡 Bỏng và vết cắt chiếm hơn 60% tai nạn bếp.'}
+    },
     tip:{zh:'💡 每天開工前「SAFE 四秒確認」：S=Stove關閉？A=Appliances無異常？F=Floor乾燥？E=Exit通道暢通？——30秒養成習慣，終身廚房零事故。',en:'💡 Daily \"SAFE check\" before cooking: S=Stove off? A=Appliances normal? F=Floor dry? E=Exit clear? 30 seconds becomes a lifelong habit.',id:'💡 Pemeriksaan \"SAFE\" harian sebelum memasak: S=Kompor mati? A=Peralatan normal? F=Lantai kering? E=Keluar jelas?',vi:'💡 Kiểm tra \"SAFE\" hàng ngày trước khi nấu: S=Bếp tắt? A=Thiết bị bình thường? F=Sàn khô? E=Lối thoát thông?'}
   },
   /* Lv2 刀工基礎 ── 大幅擴充 */
@@ -2161,6 +2219,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'刀具泡在水槽中',en:'Soaking knives in the sink',id:'Merendam pisau di wastafel',vi:'Ngâm dao trong bồn rửa'},
       {ok:false,zh:'手指平放在食材上（未採用貓爪式）',en:'Laying fingers flat on food instead of using claw grip',id:'Meratakan jari di atas bahan makanan (bukan claw grip)',vi:'Để ngón tay phẳng trên thực phẩm thay vì dùng claw grip'}
     ],
+    chart:{
+      title:{zh:'各刀工技法難度與使用頻率',en:'Knife Skill Difficulty vs. Frequency',id:'Kesulitan & Frekuensi Teknik Pisau',vi:'Độ khó & Tần suất kỹ thuật dao'},
+      bars:[
+        {zh:'切片',en:'Slicing',id:'Mengiris',vi:'Thái lát',emoji:'🥒',value:95,unit:'%常用',color:'#2980b9'},
+        {zh:'切丁',en:'Dicing',id:'Memotong Dadu',vi:'Thái hạt lựu',emoji:'🧅',value:80,unit:'%常用',color:'#27ae60'},
+        {zh:'剁碎',en:'Mincing',id:'Mencincang',vi:'Băm',emoji:'🧄',value:70,unit:'%常用',color:'#e67e22'},
+        {zh:'去骨',en:'Deboning',id:'Membuang Tulang',vi:'Lọc xương',emoji:'🍗',value:40,unit:'%常用',color:'#8e44ad'},
+        {zh:'切絲',en:'Julienne',id:'Memotong Tipis',vi:'Thái sợi',emoji:'🥕',value:65,unit:'%常用',color:'#c0392b'}
+      ],
+      note:{zh:'💡 切片是最基礎且最常用的刀工，建議初學者從切黃瓜片開始每日練習。',en:'💡 Slicing is the most fundamental and common skill — beginners should practice cucumber slices daily.',id:'💡 Mengiris adalah teknik paling dasar dan umum — pemula harus berlatih setiap hari dengan mentimun.',vi:'💡 Thái lát là kỹ thuật cơ bản và phổ biến nhất — người mới nên luyện tập mỗi ngày với dưa leo.'}
+    },
     tip:{zh:'💡 刀工練習黃金三法則：①慢→準→快（先求準確再提速）。②每天練習比偶爾練習效果好3倍。③切大黃瓜是最佳基礎練習——食材大、好拿、練習貓爪式節奏感。',en:'💡 3 Golden Rules of Knife Practice: ①Slow → Accurate → Fast. ②Daily practice 3× more effective than occasional. ③Cucumber is the best beginner practice — large, easy to hold, great for claw rhythm.',id:'💡 3 Aturan Emas: ①Lambat → Akurat → Cepat. ②Latihan harian 3× lebih efektif. ③Mentimun adalah latihan pemula terbaik.',vi:'💡 3 quy tắc vàng luyện dao: ①Chậm → Chính xác → Nhanh. ②Luyện hàng ngày hiệu quả gấp 3. ③Dưa leo là bài tập tốt nhất cho người mới.'}
   },
   /* Lv3 火候控制 ── 大幅擴充 */
@@ -2253,6 +2322,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'炸物時蓋上鍋蓋（蒸汽積累危險）',en:'Covering pot during deep-frying (steam buildup danger)'},
       {ok:false,zh:'不鏽鋼鍋未預熱就下食材（黏鍋）',en:'Adding food to cold stainless pan (food sticks)'}
     ],
+    chart:{
+      title:{zh:'各烹調法建議油溫／鍋溫（°C）',en:'Recommended Temperature by Cooking Method (°C)',id:'Suhu yang Disarankan per Metode Memasak (°C)',vi:'Nhiệt độ khuyến nghị theo phương pháp nấu (°C)'},
+      bars:[
+        {zh:'保溫',en:'Keep Warm',id:'Pemanas',vi:'Giữ ấm',emoji:'🔵',value:80,unit:'°C',color:'#3498db'},
+        {zh:'燉滷（小火）',en:'Braise (Low)',id:'Rebus (Api Kecil)',vi:'Hầm (Lửa nhỏ)',emoji:'🟢',value:120,unit:'°C',color:'#27ae60'},
+        {zh:'煎炒（中火）',en:'Pan-fry (Med)',id:'Goreng (Sedang)',vi:'Chiên (Lửa vừa)',emoji:'🟡',value:160,unit:'°C',color:'#f39c12'},
+        {zh:'油炸（中大火）',en:'Deep-fry',id:'Goreng Rendam',vi:'Chiên ngập',emoji:'🟠',value:180,unit:'°C',color:'#e67e22'},
+        {zh:'大火爆炒',en:'High-heat Stir-fry',id:'Tumis Api Besar',vi:'Xào lửa lớn',emoji:'🔴',value:220,unit:'°C',color:'#c0392b'}
+      ],
+      note:{zh:'⚠️ 油溫超過250°C會自燃冒白煙，請立即關小火！',en:'⚠️ Oil auto-ignites above 250°C and produces white smoke — reduce heat immediately!',id:'⚠️ Minyak terbakar otomatis di atas 250°C dan menghasilkan asap putih — kurangi panas segera!',vi:'⚠️ Dầu tự bốc cháy trên 250°C và sinh khói trắng — giảm lửa ngay!'}
+    },
     tip:{zh:'💡 「鍋熱油冷食材新」是炒出鑊氣的關鍵：①大火把鍋燒到冒煙。②再下冷油搖均。③油溫升起後立刻下食材大火快炒。這樣食材不黏鍋、快速上色、保留鮮脆！',en:'💡 \"Hot pan, cool oil, fresh ingredients\" — the secret to wok hei: ①Heat pan until it smokes on high. ②Add cold oil and swirl. ③Once oil shimmers, add ingredients and stir-fry fast. Result: nothing sticks, quick browning, crispy texture!',id:'💡 \"Wajan panas, minyak dingin, bahan segar\" — rahasia wok hei: ①Panaskan wajan sampai berasap. ②Tambah minyak dingin. ③Segera tambah bahan dan tumis cepat.',vi:'💡 \"Chảo nóng, dầu nguội, nguyên liệu tươi\" — bí quyết wok hei: ①Đun nóng chảo đến khi bốc khói. ②Cho dầu lạnh vào xoáy đều. ③Khi dầu nóng, cho nguyên liệu vào xào nhanh.'}
   },
   /* Lv4 食材保存 ── 大幅擴充 */
@@ -2360,6 +2440,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'解凍後的食材重複冷凍',en:'Refreezing food that has already been thawed'},
       {ok:false,zh:'門架放置生肉或雞蛋',en:'Storing raw meat or eggs on door shelf'}
     ],
+    chart:{
+      title:{zh:'常見食材安全保存天數',en:'Safe Storage Days for Common Ingredients',id:'Hari Penyimpanan Aman Bahan Umum',vi:'Số ngày bảo quản an toàn nguyên liệu phổ biến'},
+      bars:[
+        {zh:'新鮮葉菜',en:'Leafy Greens',id:'Sayuran Hijau',vi:'Rau lá',emoji:'🥬',value:3,unit:'天/days',color:'#27ae60'},
+        {zh:'生雞肉',en:'Raw Chicken',id:'Ayam Mentah',vi:'Thịt gà sống',emoji:'🍗',value:2,unit:'天/days',color:'#e74c3c'},
+        {zh:'生豬牛肉',en:'Raw Pork/Beef',id:'Daging Babi/Sapi',vi:'Thịt heo/bò sống',emoji:'🥩',value:3,unit:'天/days',color:'#c0392b'},
+        {zh:'新鮮魚類',en:'Fresh Fish',id:'Ikan Segar',vi:'Cá tươi',emoji:'🐟',value:1,unit:'天/days',color:'#2980b9'},
+        {zh:'雞蛋',en:'Eggs',id:'Telur',vi:'Trứng',emoji:'🥚',value:21,unit:'天/days',color:'#f39c12'},
+        {zh:'豆腐',en:'Tofu',id:'Tahu',vi:'Đậu phụ',emoji:'🤍',value:3,unit:'天/days',color:'#8e44ad'}
+      ],
+      note:{zh:'💡 以上為冷藏（≤4°C）參考天數；冷凍(-18°C)可延長2–6個月。購入後務必標示日期。',en:'💡 Above figures are for refrigeration (≤4°C). Freezing (-18°C) extends shelf life 2–6 months. Always label with purchase date.',id:'💡 Angka di atas untuk pendinginan (≤4°C). Pembekuan (-18°C) memperpanjang 2-6 bulan. Selalu beri label tanggal pembelian.',vi:'💡 Các con số trên áp dụng cho làm lạnh (≤4°C). Đông lạnh (-18°C) có thể kéo dài 2–6 tháng. Luôn ghi nhãn ngày mua.'}
+    },
     tip:{zh:'💡 保存食材的「FIFO 原則」（先進先出）：新買的食材放後面，舊的移前面，每次從最前面取用。在食材上貼日期標籤，這個習慣可以減少家庭食材浪費30%以上！',en:'💡 FIFO (First In, First Out): put new items behind, old ones in front, always take from the front. Label food with dates — this habit alone can cut household food waste by 30%+!',id:'💡 FIFO (First In, First Out): letakkan barang baru di belakang, lama di depan. Beri label tanggal — kebiasaan ini bisa mengurangi pemborosan makanan 30%+!',vi:'💡 Nguyên tắc FIFO (nhập trước xuất trước): để đồ mới phía sau, cũ phía trước. Ghi nhãn ngày — thói quen này giúp giảm lãng phí thực phẩm hơn 30%!'}
   },
   /* Lv5 烹調方法 ── 擴充 */
@@ -2467,6 +2559,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'未擦乾的食材直接放入熱油（水油爆炸性噴濺）',en:'Adding wet food directly to hot oil (water causes explosive splattering)'},
       {ok:false,zh:'憑外觀顏色判斷雞肉是否熟透（應以溫度計為準）',en:'Judging chicken doneness by color alone (always verify with a thermometer)'}
     ],
+    chart:{
+      title:{zh:'各烹調法保留營養素比率（%）',en:'Nutrient Retention by Cooking Method (%)',id:'Retensi Nutrisi per Metode Memasak (%)',vi:'Tỷ lệ giữ dưỡng chất theo phương pháp nấu (%)'},
+      bars:[
+        {zh:'蒸',en:'Steaming',id:'Mengukus',vi:'Hấp',emoji:'🫗',value:92,unit:'%',color:'#27ae60'},
+        {zh:'燉滷',en:'Braising',id:'Merebus Pelan',vi:'Hầm',emoji:'🍲',value:85,unit:'%',color:'#2980b9'},
+        {zh:'大火快炒',en:'Stir-frying',id:'Menumis',vi:'Xào nhanh',emoji:'🥘',value:78,unit:'%',color:'#f39c12'},
+        {zh:'煎',en:'Pan-frying',id:'Menggoreng Kering',vi:'Chiên áp chảo',emoji:'🍳',value:70,unit:'%',color:'#e67e22'},
+        {zh:'油炸',en:'Deep-frying',id:'Menggoreng',vi:'Chiên ngập',emoji:'🍟',value:55,unit:'%',color:'#c0392b'},
+        {zh:'烤',en:'Roasting',id:'Memanggang',vi:'Nướng',emoji:'🔥',value:65,unit:'%',color:'#8e44ad'}
+      ],
+      note:{zh:'💡 蒸法保留最多維生素與礦物質，是最健康的烹調方式之一。',en:'💡 Steaming retains the most vitamins and minerals — one of the healthiest cooking methods.',id:'💡 Mengukus mempertahankan paling banyak vitamin dan mineral — salah satu metode memasak paling sehat.',vi:'💡 Hấp giữ lại nhiều vitamin và khoáng chất nhất — một trong những phương pháp nấu ăn lành mạnh nhất.'}
+    },
     tip:{zh:'💡 烹調方式選擇口訣：「嫩炒蒸、韌燉滷、薄煎烤、炸酥脆」。健康優先選蒸，鮮味優先選炒，軟爛入味選燉，外皮酥脆選炸。依食材質地和目標口感靈活搭配！',en:'💡 Cooking method mantra: \"Tender→stir-fry/steam; Tough→braise; Thin→pan-fry/roast; Crispy→deep-fry.\" Health first=steam; fresh flavor=stir-fry; tender and savory=braise; crunch=fry. Choose by texture goal!',id:'💡 Tips: \"Lembut→tumis/kukus; Keras→rebus; Tipis→goreng/panggang; Renyah→goreng rendam.\" Pilih berdasarkan tekstur yang diinginkan!',vi:'💡 Mẹo: \"Non→xào/hấp; Dai→hầm; Mỏng→chiên/nướng; Giòn→chiên ngập.\" Sức khỏe=hấp; hương vị tươi=xào; mềm đậm=hầm; giòn=chiên. Chọn theo mục tiêu kết cấu!'}
   },
   /* Lv6 食品衛生 ── 擴充 */
@@ -2598,6 +2702,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'熟食在室溫放置超過2小時',en:'Leaving cooked food at room temperature for over 2 hours'},
       {ok:false,zh:'身體不適（發燒、腹瀉）時繼續烹調食物',en:'Continuing to cook while sick (fever, diarrhea) — risk of spreading illness'}
     ],
+    chart:{
+      title:{zh:'食物中毒常見原因分佈（%）',en:'Common Causes of Food Poisoning (%)',id:'Distribusi Penyebab Keracunan Makanan (%)',vi:'Phân bố nguyên nhân ngộ độc thực phẩm (%)'},
+      bars:[
+        {zh:'未充分加熱',en:'Insufficient Heating',id:'Tidak Dipanaskan Cukup',vi:'Gia nhiệt không đủ',emoji:'🌡️',value:34,unit:'%',color:'#c0392b'},
+        {zh:'交叉汙染',en:'Cross-contamination',id:'Kontaminasi Silang',vi:'Ô nhiễm chéo',emoji:'🔄',value:26,unit:'%',color:'#e67e22'},
+        {zh:'食材過期變質',en:'Expired Ingredients',id:'Bahan Kedaluwarsa',vi:'Nguyên liệu hết hạn',emoji:'📅',value:18,unit:'%',color:'#8e44ad'},
+        {zh:'不衛生的手與器具',en:'Unclean Hands/Utensils',id:'Tangan/Peralatan Kotor',vi:'Tay/Dụng cụ không sạch',emoji:'🙌',value:15,unit:'%',color:'#2980b9'},
+        {zh:'不當保存溫度',en:'Wrong Storage Temp',id:'Suhu Penyimpanan Salah',vi:'Nhiệt độ bảo quản sai',emoji:'❄️',value:7,unit:'%',color:'#27ae60'}
+      ],
+      note:{zh:'💡 洗手、分色砧板與充分加熱這三項習慣，可預防超過75%的廚房食物中毒事故。',en:'💡 Handwashing, color-coded boards, and sufficient heating alone prevent over 75% of kitchen food poisoning incidents.',id:'💡 Mencuci tangan, talenan berkode warna, dan pemanasan cukup dapat mencegah lebih dari 75% keracunan makanan dapur.',vi:'💡 Rửa tay, thớt phân màu và gia nhiệt đủ có thể phòng ngừa hơn 75% vụ ngộ độc thực phẩm trong bếp.'}
+    },
     tip:{zh:'💡 食安三原則記憶法「洗分煮」：洗=徹底洗手、清潔廚具；分=生熟食分開、分色砧板；煮=烹調達足夠溫度（75°C）。每次下廚前三秒鐘想一下這三個字，可以預防9成以上的食中毒事故。',en:'💡 Food safety mantra: \"CLEAN · SEPARATE · COOK\". Clean=thorough handwashing and equipment cleaning. Separate=raw from cooked, color-coded boards. Cook=reach safe temperatures (75°C center). Think these 3 words for 3 seconds before every cooking session — prevents 90%+ of food poisoning.',id:'💡 Mantra keamanan pangan: \"BERSIH · PISAH · MASAK\". Bersih=cuci tangan dan peralatan. Pisah=mentah dari matang. Masak=suhu aman (75°C). Pikirkan 3 kata ini sebelum memasak.',vi:'💡 Khẩu hiệu an toàn thực phẩm: \"SẠCH · TÁCH · NẤU\". Sạch=rửa tay và dụng cụ. Tách=sống khỏi chín. Nấu=đạt nhiệt độ an toàn (75°C). Nghĩ 3 từ này trước mỗi lần nấu.'}
   },
   /* Lv7 菜單規劃 ── 擴充 */
@@ -2735,6 +2850,16 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'連續一週吃同樣蛋白質（如每天雞肉）',en:'Eating the same protein source every day for a week (nutritionally unbalanced)'},
       {ok:false,zh:'完全依賴促銷商品決定菜單（忽略均衡與家人需求）',en:'Letting only sale items determine the menu (ignores balance and dietary needs)'}
     ],
+    chart:{
+      title:{zh:'均衡餐盤各類食物建議佔比',en:'Recommended Plate Proportions for a Balanced Meal',id:'Proporsi Piring Seimbang yang Direkomendasikan',vi:'Tỷ lệ đĩa ăn cân bằng được khuyến nghị'},
+      bars:[
+        {zh:'全穀雜糧（主食）',en:'Whole Grains (Staple)',id:'Biji-bijian Utuh',vi:'Ngũ cốc nguyên cám',emoji:'🍚',value:35,unit:'%',color:'#f39c12'},
+        {zh:'蔬菜',en:'Vegetables',id:'Sayuran',vi:'Rau củ',emoji:'🥦',value:30,unit:'%',color:'#27ae60'},
+        {zh:'豆魚蛋肉（蛋白質）',en:'Protein (Beans/Fish/Egg/Meat)',id:'Protein (Kacang/Ikan/Telur/Daging)',vi:'Đạm (Đậu/Cá/Trứng/Thịt)',emoji:'🐟',value:25,unit:'%',color:'#2980b9'},
+        {zh:'水果',en:'Fruit',id:'Buah',vi:'Trái cây',emoji:'🍎',value:10,unit:'%',color:'#e74c3c'}
+      ],
+      note:{zh:'💡 台灣衛福部「我的餐盤」指引：蔬菜佔最大比例，主食次之，蛋白質第三，水果最少。',en:'💡 Taiwan Ministry of Health "My Plate" guidelines: Vegetables largest, followed by grains, then protein, then fruit.',id:'💡 Panduan "Piring Saya" Kementerian Kesehatan Taiwan: Sayuran terbanyak, disusul biji-bijian, lalu protein, lalu buah.',vi:'💡 Hướng dẫn "Đĩa ăn của tôi" của Bộ Y tế Đài Loan: Rau nhiều nhất, tiếp đến là ngũ cốc, rồi đạm, rồi trái cây.'}
+    },
     tip:{zh:'💡 每週固定一天（推薦週日下午）執行「菜單規劃三步驟」：①10分鐘決定7天主菜。②10分鐘搭配蔬菜與烹調方式。③10分鐘列採購清單。每週只需30分鐘，可節省15%以上飲食費用、減少30%食材浪費，是最具CP值的廚房管理習慣。',en:'💡 Every week on a fixed day (recommend Sunday afternoon), run the \"3-step menu plan\": ①10 min: decide 7-day main protein. ②10 min: pair vegetables and cooking methods. ③10 min: write shopping list. Just 30 min a week saves 15%+ on food bills and reduces waste by 30% — the highest-ROI kitchen habit.',id:'💡 Setiap minggu pada hari tetap (rekomendasi Minggu sore), lakukan \"3 langkah perencanaan menu\": ①10 menit: tentukan protein utama 7 hari. ②10 menit: padukan sayuran dan metode memasak. ③10 menit: tulis daftar belanja. Hanya 30 menit/minggu untuk hemat 15%+ biaya makan.',vi:'💡 Mỗi tuần một ngày cố định (gợi ý chiều Chủ nhật), thực hiện \"3 bước lên thực đơn\": ①10 phút: quyết định protein chính 7 ngày. ②10 phút: kết hợp rau và phương pháp nấu. ③10 phút: viết danh sách mua sắm. Chỉ 30 phút/tuần tiết kiệm 15%+ chi phí thực phẩm.'}
   },
   /* Lv8 台灣家庭常見料理 ── 知識卡片 */
@@ -2835,6 +2960,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'蒸蛋用大火且鍋蓋密封，導致表面出現大量蜂窩坑洞',en:'Steaming eggs on high heat with a sealed lid, causing honeycomb pitting on the surface'},
       {ok:false,zh:'老滷水用完後直接室溫放涼靜置，未煮沸殺菌',en:'Leaving old braising liquid to cool at room temperature without boiling to sterilize it'}
     ],
+    chart:{
+      title:{zh:'台灣家庭料理最常用調味料排行',en:'Top Seasonings in Taiwanese Home Cooking',id:'Bumbu Terpopuler dalam Masakan Rumah Taiwan',vi:'Gia vị phổ biến nhất trong nấu ăn gia đình Đài Loan'},
+      bars:[
+        {zh:'醬油',en:'Soy Sauce',id:'Kecap Asin',vi:'Nước tương',emoji:'🫙',value:95,unit:'%廚房',color:'#5a1800'},
+        {zh:'米酒',en:'Rice Wine',id:'Arak Beras',vi:'Rượu gạo',emoji:'🍶',value:82,unit:'%廚房',color:'#2980b9'},
+        {zh:'香油（麻油）',en:'Sesame Oil',id:'Minyak Wijen',vi:'Dầu mè',emoji:'🫒',value:76,unit:'%廚房',color:'#e67e22'},
+        {zh:'蒜頭',en:'Garlic',id:'Bawang Putih',vi:'Tỏi',emoji:'🧄',value:90,unit:'%廚房',color:'#8e44ad'},
+        {zh:'薑',en:'Ginger',id:'Jahe',vi:'Gừng',emoji:'🫚',value:85,unit:'%廚房',color:'#27ae60'},
+        {zh:'九層塔',en:'Thai Basil',id:'Kemangi',vi:'Húng quế Thái',emoji:'🌿',value:60,unit:'%廚房',color:'#16a085'}
+      ],
+      note:{zh:'💡 醬油、米酒、麻油是台式料理的「黃金三元素」，掌握三者比例即可做出大多數台灣家常菜。',en:'💡 Soy sauce, rice wine, and sesame oil are the "golden trinity" of Taiwanese cooking — master their ratios to unlock most home recipes.',id:'💡 Kecap asin, arak beras, dan minyak wijen adalah "tritunggal emas" masakan Taiwan.',vi:'💡 Nước tương, rượu gạo và dầu mè là "bộ ba vàng" của ẩm thực Đài Loan.'}
+    },
     tip:{zh:'💡 台灣家庭料理的精髓在於「新鮮食材＋簡單調味＋掌握火候」。三杯的麻油香、控肉的滷汁光澤、蒸蛋的嫩滑、清蒸魚的熱油爆香——每一道菜背後都是台灣幾代家庭廚房的智慧積累。食材新鮮是前提，技法正確是橋梁，用心料理是靈魂。',en:"💡 The essence of Taiwanese home cooking is 'fresh ingredients + simple seasoning + mastering heat.' The sesame fragrance of Three-Cup dishes, the glossy braising sauce of braised pork belly, the silky smoothness of steamed eggs, the hot-oil bloom of steamed fish — behind each dish is the accumulated wisdom of generations of Taiwanese home kitchens. Fresh ingredients are the premise, correct technique is the bridge, and cooking with care is the soul.",id:'💡 Esensi masakan rumah Taiwan adalah "bahan segar + bumbu sederhana + menguasai api." Aroma wijen dalam masakan Tiga Cangkir, kilap saus braised pork, kelembutan telur kukus, wangi minyak panas ikan kukus — di balik setiap hidangan adalah kebijaksanaan dapur rumah tangga Taiwan lintas generasi.',vi:'💡 Tinh hoa ẩm thực gia đình Đài Loan là "nguyên liệu tươi + gia vị đơn giản + kiểm soát lửa". Hương dầu mè trong món Ba Ly, nước kho bóng mịn của thịt kho tàu, sự mềm mịn của trứng hấp, hương bùng khi rưới dầu nóng lên cá hấp — mỗi món đều là trí tuệ tích lũy của nhiều thế hệ bếp gia đình Đài Loan.'}
   },
   /* Lv9 醃漬與醬料調味 ── 新增 */
@@ -3019,6 +3156,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'醃漬蔬菜未完全浸泡於醃汁中',en:'Leaving pickled vegetables not fully submerged in brine'},
       {ok:false,zh:'醬料出現發霉只刮除表面繼續使用',en:'Scraping mold off sauce and continuing to use it'}
     ],
+    chart:{
+      title:{zh:'常見醬汁鹽度比較（每100ml含鈉mg）',en:'Sodium Content of Common Sauces (mg/100ml)',id:'Kandungan Natrium Saus Umum (mg/100ml)',vi:'Hàm lượng natri trong các loại nước sốt (mg/100ml)'},
+      bars:[
+        {zh:'魚露',en:'Fish Sauce',id:'Saus Ikan',vi:'Nước mắm',emoji:'🐠',value:5600,unit:'mg',color:'#c0392b'},
+        {zh:'醬油',en:'Soy Sauce',id:'Kecap Asin',vi:'Nước tương',emoji:'🫙',value:5700,unit:'mg',color:'#8e44ad'},
+        {zh:'蠔油',en:'Oyster Sauce',id:'Saus Tiram',vi:'Dầu hào',emoji:'🦪',value:2800,unit:'mg',color:'#e67e22'},
+        {zh:'味噌醬',en:'Miso Paste',id:'Pasta Miso',vi:'Tương miso',emoji:'🥣',value:3600,unit:'mg',color:'#f39c12'},
+        {zh:'番茄醬',en:'Ketchup',id:'Saus Tomat',vi:'Tương cà',emoji:'🍅',value:960,unit:'mg',color:'#e74c3c'},
+        {zh:'醋',en:'Vinegar',id:'Cuka',vi:'Giấm',emoji:'🍶',value:5,unit:'mg',color:'#27ae60'}
+      ],
+      note:{zh:'💡 長者料理建議優先選用低鈉醬油或稀釋後使用，醋是低鈉提鮮的好替代品。',en:'💡 For senior meals, choose low-sodium soy sauce or dilute before use. Vinegar is an excellent low-sodium flavor enhancer.',id:'💡 Untuk masakan lansia, pilih kecap rendah sodium atau encerkan. Cuka adalah peningkat rasa rendah sodium yang sangat baik.',vi:'💡 Với bữa ăn cho người cao tuổi, chọn nước tương ít muối hoặc pha loãng. Giấm là chất tăng vị tốt với lượng natri thấp.'}
+    },
     tip:{zh:'💡 調味小口訣「先少後多、邊煮邊嚐」：起鍋前才做最後調味，因為水分蒸發會讓味道變濃。醃漬與發酵則謹記「乾淨、密封、控制溫度與鹽度」三大原則，安全與美味才能兼顧。',en:'💡 Seasoning rule of thumb: \"start light, taste as you go\" — finalize seasoning near the end since flavors concentrate as liquid evaporates. For pickling/fermenting, remember \"clean, sealed, control temperature and salt\" for both safety and flavor.',id:'💡 Aturan bumbu: \"mulai sedikit, cicipi terus\" — koreksi rasa terakhir karena rasa makin pekat saat air menguap. Untuk acar/fermentasi, ingat \"bersih, kedap, kontrol suhu dan garam\" demi keamanan dan rasa.',vi:'💡 Quy tắc nêm gia vị: \"bắt đầu ít, nếm liên tục\" — nêm lại lần cuối vì vị sẽ đậm hơn khi nước bốc hơi. Với ngâm chua/lên men, nhớ \"sạch, kín, kiểm soát nhiệt độ và muối\" để vừa an toàn vừa ngon.'}
   },
   /* Lv10 蔬食料理入門 ── 新增 */
@@ -3143,6 +3292,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'僅用鹽和糖調味，忽略鮮味來源導致味道單薄',en:'Seasoning only with salt and sugar while ignoring umami sources, resulting in flat flavor'},
       {ok:false,zh:'長期全素飲食卻未留意B12、鐵、鈣等營養素補充',en:'Following a vegan diet long-term without attention to B12, iron, and calcium intake'}
     ],
+    chart:{
+      title:{zh:'植物性食物蛋白質含量（每100g，克）',en:'Protein Content in Plant Foods (per 100g, grams)',id:'Kandungan Protein Makanan Nabati (per 100g, gram)',vi:'Hàm lượng protein thực phẩm thực vật (mỗi 100g, gram)'},
+      bars:[
+        {zh:'黃豆（乾）',en:'Dried Soybeans',id:'Kedelai Kering',vi:'Đậu nành khô',emoji:'🫘',value:36,unit:'g',color:'#e67e22'},
+        {zh:'豆腐皮',en:'Tofu Skin',id:'Kulit Tahu',vi:'Da đậu phụ',emoji:'🧀',value:25,unit:'g',color:'#f39c12'},
+        {zh:'鷹嘴豆',en:'Chickpeas',id:'Kacang Arab',vi:'Đậu chickpea',emoji:'🟡',value:19,unit:'g',color:'#27ae60'},
+        {zh:'板豆腐',en:'Firm Tofu',id:'Tahu Keras',vi:'Đậu phụ cứng',emoji:'⬜',value:8,unit:'g',color:'#2980b9'},
+        {zh:'豆漿',en:'Soy Milk',id:'Susu Kedelai',vi:'Sữa đậu nành',emoji:'🥛',value:3,unit:'g',color:'#8e44ad'},
+        {zh:'花生',en:'Peanuts',id:'Kacang Tanah',vi:'Lạc (đậu phộng)',emoji:'🥜',value:26,unit:'g',color:'#c0392b'}
+      ],
+      note:{zh:'💡 黃豆及其製品是植物性蛋白質的最佳來源，含有所有必需氨基酸，是全素食者的核心蛋白質食材。',en:'💡 Soybeans and their products are the best plant-based protein source, containing all essential amino acids — a core protein for vegans.',id:'💡 Kedelai dan produk olahannya adalah sumber protein nabati terbaik, mengandung semua asam amino esensial.',vi:'💡 Đậu nành và các sản phẩm từ đậu nành là nguồn protein thực vật tốt nhất, chứa đầy đủ axit amin thiết yếu.'}
+    },
     tip:{zh:'💡 蔬食料理的關鍵在於「處理」與「層次」：豆腐先處理去水才能煎出金黃外殼；善用味噌、香菇、昆布等天然鮮味來源疊加風味，就能做出不輸肉類的濃郁口感。同時別忘了關注B12、鐵、鈣、Omega-3等營養素，讓蔬食既美味又均衡。',en:'💡 The key to plant-based cooking is \"preparation\" and \"layering\": pre-treating tofu to remove water lets it pan-fry to a golden crust; layering natural umami sources like miso, shiitake, and kombu creates depth that rivals meat dishes. Don\'t forget to track B12, iron, calcium, and Omega-3 for a tasty and balanced plant-based diet.',id:'💡 Kunci masak nabati adalah \"persiapan\" dan \"lapisan rasa\": tahu yang diproses dulu menghasilkan kulit emas saat digoreng; melapisi sumber umami alami seperti miso, shiitake, dan kombu menciptakan kedalaman rasa setara daging. Jangan lupa perhatikan B12, zat besi, kalsium, dan Omega-3 untuk diet nabati yang lezat dan seimbang.',vi:'💡 Bí quyết nấu ăn thuần chay là \"sơ chế\" và \"tạo tầng vị\": đậu phụ được sơ chế trước sẽ có lớp vỏ vàng giòn khi chiên; kết hợp các nguồn umami tự nhiên như miso, nấm shiitake và kombu tạo độ đậm đà sánh ngang món thịt. Đừng quên chú ý B12, sắt, canxi và Omega-3 để chế độ ăn thuần chay vừa ngon vừa cân bằng.'}
   },
   /* Lv11 高湯與湯品基礎 ── 新增 */
@@ -3222,6 +3383,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'蔬菜高湯加入大量花椰菜或高麗菜',en:'Adding lots of broccoli or cabbage to vegetable stock'},
       {ok:false,zh:'整批高湯反覆加熱多次後才用完',en:'Repeatedly reheating the whole batch of stock before using it up'}
     ],
+    chart:{
+      title:{zh:'各類高湯熬製時間參考（小時）',en:'Stock Simmering Time Reference (Hours)',id:'Referensi Waktu Merebus Kaldu (Jam)',vi:'Thời gian hầm nước dùng tham khảo (giờ)'},
+      bars:[
+        {zh:'蔬菜高湯',en:'Vegetable Stock',id:'Kaldu Sayuran',vi:'Nước dùng rau',emoji:'🥕',value:1,unit:'hr',color:'#27ae60'},
+        {zh:'雞高湯',en:'Chicken Stock',id:'Kaldu Ayam',vi:'Nước dùng gà',emoji:'🍗',value:3,unit:'hr',color:'#f39c12'},
+        {zh:'豬大骨湯',en:'Pork Bone Broth',id:'Kaldu Tulang Babi',vi:'Nước dùng xương heo',emoji:'🦴',value:4,unit:'hr',color:'#e67e22'},
+        {zh:'牛骨湯',en:'Beef Bone Broth',id:'Kaldu Tulang Sapi',vi:'Nước dùng xương bò',emoji:'🥩',value:8,unit:'hr',color:'#c0392b'},
+        {zh:'魚高湯',en:'Fish Stock',id:'Kaldu Ikan',vi:'Nước dùng cá',emoji:'🐟',value:0.5,unit:'hr',color:'#2980b9'}
+      ],
+      note:{zh:'💡 魚高湯只需30分鐘，久煮反而變苦。蔬菜高湯最快，最適合當日製作使用。',en:'💡 Fish stock needs only 30 minutes — longer simmering turns it bitter. Vegetable stock is the quickest and ideal for same-day use.',id:'💡 Kaldu ikan hanya butuh 30 menit — terlalu lama merebus jadi pahit. Kaldu sayuran adalah yang tercepat.',vi:'💡 Nước dùng cá chỉ cần 30 phút — hầm lâu hơn sẽ bị đắng. Nước dùng rau là nhanh nhất và lý tưởng để dùng trong ngày.'}
+    },
     tip:{zh:'💡 一鍋好湯的關鍵口訣「冷水起、小火滾、勤撈沫、晚下鹽」：冷水下鍋讓風味慢慢釋出，小火維持清澈，隨時撈除浮沫雜質，最後才調味，就能熬出清澈鮮美的高湯，是中西式湯品共通的基本功。',en:'💡 The golden rule for great stock: \"cold start, gentle simmer, skim often, season last\" — starting with cold water lets flavors release slowly, gentle heat keeps it clear, regular skimming removes impurities, and seasoning at the end gives a clear, flavorful stock. This is a universal foundation for both Chinese and Western soups.',id:'💡 Kunci kaldu enak: \"mulai dingin, mendidih perlahan, sering angkat buih, garam di akhir\" — air dingin membuat rasa keluar perlahan, api kecil menjaga kejernihan, angkat buih secara rutin, dan beri garam di akhir untuk kaldu jernih dan gurih. Ini dasar universal untuk sup gaya Tionghoa maupun Barat.',vi:'💡 Bí quyết nước dùng ngon: \"bắt đầu lạnh, sôi lăn tăn, hớt bọt thường xuyên, nêm muối cuối cùng\" — nước lạnh giúp hương vị tan ra chậm, lửa nhỏ giữ độ trong, hớt bọt thường xuyên loại bỏ tạp chất, và nêm gia vị cuối cùng cho nước dùng trong và đậm đà. Đây là nền tảng chung cho cả súp kiểu Trung và Tây.'}
   },
   /* Lv12 食材辨識與採購 ── 新增 */
@@ -3413,6 +3585,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'看到促銷生鮮食材就大量購買囤積',en:'Stockpiling fresh perishables just because they are on sale'},
       {ok:false,zh:'忽略食品標籤上的有效日期與保存方式',en:'Ignoring the expiry date and storage instructions on food labels'}
     ],
+    chart:{
+      title:{zh:'新鮮食材辨識三大指標評分（滿分5）',en:'Freshness Assessment Scores by Category (out of 5)',id:'Skor Penilaian Kesegaran per Kategori (dari 5)',vi:'Điểm đánh giá độ tươi theo hạng mục (tối đa 5)'},
+      bars:[
+        {zh:'外觀色澤',en:'Color & Appearance',id:'Warna & Penampilan',vi:'Màu sắc & Ngoại quan',emoji:'👁️',value:5,unit:'/5',color:'#e67e22'},
+        {zh:'氣味新鮮',en:'Fresh Aroma',id:'Aroma Segar',vi:'Mùi tươi',emoji:'👃',value:5,unit:'/5',color:'#27ae60'},
+        {zh:'觸感彈性',en:'Texture & Firmness',id:'Tekstur & Kekenyalan',vi:'Độ đàn hồi khi chạm',emoji:'🤏',value:4,unit:'/5',color:'#2980b9'},
+        {zh:'有效日期',en:'Expiry Date Check',id:'Cek Tanggal Kedaluwarsa',vi:'Kiểm tra hạn sử dụng',emoji:'📅',value:5,unit:'/5',color:'#8e44ad'},
+        {zh:'產地標示',en:'Origin Labeling',id:'Label Asal Produk',vi:'Nhãn xuất xứ',emoji:'🏷️',value:3,unit:'/5',color:'#c0392b'}
+      ],
+      note:{zh:'💡 採購時同時確認這五項指標，是確保食材安全與品質的最有效方法。',en:'💡 Checking all five indicators when shopping is the most effective way to ensure ingredient safety and quality.',id:'💡 Memeriksa kelima indikator ini saat belanja adalah cara paling efektif untuk memastikan keamanan dan kualitas bahan.',vi:'💡 Kiểm tra cả năm chỉ số khi mua sắm là cách hiệu quả nhất để đảm bảo an toàn và chất lượng nguyên liệu.'}
+    },
     tip:{zh:'💡 採購三步驟口訣「看標籤、比單價、列清單」：出門前先列好清單與預算，到場後用單位價格比較商品，並隨手檢查有效日期與新鮮度三大指標（看色澤、摸軟硬、聞氣味），就能用最划算的價格買到最新鮮的食材。',en:'💡 The 3-step shopping rule: \"check labels, compare unit prices, follow your list\" — make a list and budget before you go, compare unit prices in-store, and check expiry dates plus the 3 freshness signs (color, firmness, smell) to get the freshest ingredients at the best value.',id:'💡 Aturan belanja 3 langkah: \"cek label, bandingkan harga per unit, ikuti daftar\" — buat daftar dan anggaran sebelum berangkat, bandingkan harga per unit di toko, dan periksa tanggal kedaluwarsa serta 3 tanda kesegaran (warna, kekerasan, aroma) untuk mendapatkan bahan paling segar dengan harga terbaik.',vi:'💡 Quy tắc mua sắm 3 bước: \"kiểm tra nhãn, so sánh giá đơn vị, theo danh sách\" — lập danh sách và ngân sách trước khi đi, so sánh giá đơn vị tại cửa hàng, và kiểm tra ngày hết hạn cùng 3 dấu hiệu tươi (màu, độ cứng, mùi) để mua được nguyên liệu tươi nhất với giá tốt nhất.'}
   },
   /* Lv13 烘焙入門 */
@@ -3595,6 +3778,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'烘焙材料以體積（杯）代替重量（克）隨意替換',en:'Using volume measurements (cups) instead of weight (grams) for baking ingredients'},
       {ok:false,zh:'將冷藏直取的硬奶油直接與材料混合，導致結塊無法乳化',en:'Using cold butter straight from the fridge, causing lumps and preventing emulsification'}
     ],
+    chart:{
+      title:{zh:'常見烘焙失敗原因分佈（%）',en:'Common Baking Failure Causes (%)',id:'Penyebab Kegagalan Memanggang Umum (%)',vi:'Nguyên nhân thất bại phổ biến khi làm bánh (%)'},
+      bars:[
+        {zh:'材料比例錯誤',en:'Wrong Ingredient Ratios',id:'Rasio Bahan Salah',vi:'Tỷ lệ nguyên liệu sai',emoji:'⚖️',value:32,unit:'%',color:'#c0392b'},
+        {zh:'烤箱溫度不對',en:'Wrong Oven Temperature',id:'Suhu Oven Salah',vi:'Nhiệt độ lò sai',emoji:'🌡️',value:25,unit:'%',color:'#e67e22'},
+        {zh:'過度攪拌出筋',en:'Over-mixing (Gluten)',id:'Terlalu Banyak Diaduk',vi:'Khuấy quá nhiều (Gluten)',emoji:'🔄',value:18,unit:'%',color:'#8e44ad'},
+        {zh:'食材未回溫',en:'Ingredients Not at Room Temp',id:'Bahan Belum Suhu Ruang',vi:'Nguyên liệu chưa ở nhiệt độ phòng',emoji:'🧈',value:14,unit:'%',color:'#2980b9'},
+        {zh:'其他（模具、時間等）',en:'Other (Pan, Timing, etc.)',id:'Lain-lain (Loyang, Waktu)',vi:'Khác (Khuôn, Thời gian)',emoji:'📌',value:11,unit:'%',color:'#27ae60'}
+      ],
+      note:{zh:'💡 超過一半的烘焙失敗來自「比例錯誤」與「溫度問題」——電子秤與烤箱溫度計是最值得投資的兩樣工具。',en:'💡 Over half of baking failures come from "wrong ratios" and "temperature issues" — a kitchen scale and oven thermometer are the two most valuable tools to invest in.',id:'💡 Lebih dari setengah kegagalan memanggang berasal dari "rasio salah" dan "masalah suhu" — timbangan dapur dan termometer oven adalah dua alat paling berharga.',vi:'💡 Hơn một nửa thất bại khi làm bánh đến từ "tỷ lệ sai" và "vấn đề nhiệt độ" — cân nhà bếp và nhiệt kế lò là hai dụng cụ đáng đầu tư nhất.'}
+    },
     tip:{zh:'💡 烘焙黃金原則：「配方是命令，不是建議」。初學者切勿隨意增減材料，尤其是泡打粉與小蘇打——多一點不會更鬆，反而可能造成苦味與塌陷。熟悉基礎後，再逐步嘗試修改配方。',
      en:"💡 Golden rule of baking: \"the recipe is a command, not a suggestion.\" Never arbitrarily add or reduce leavening agents — more doesn\'t mean fluffier, it causes bitterness and collapse. Master the basics first, then experiment with variations.",
      id:'💡 Aturan emas memanggang: \"resep adalah perintah, bukan saran.\" Jangan sembarangan menambah atau mengurangi bahan pengembang — lebih banyak bukan berarti lebih mengembang, malah menyebabkan pahit dan runtuh.',
@@ -3712,6 +3906,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'選擇過多需要同時顧爐火的料理，無法兼顧所有菜餚',en:'Choosing too many dishes that all require active attention on the stove at the same time'},
       {ok:false,zh:'擺盤用過多裝飾但影響食材味道與用餐體驗',en:'Over-decorating the plate in ways that compromise the taste or dining experience'}
     ],
+    chart:{
+      title:{zh:'宴客備料時間分配建議（%）',en:'Party Prep Time Allocation (%)',id:'Alokasi Waktu Persiapan Pesta (%)',vi:'Phân bổ thời gian chuẩn bị tiệc (%)'},
+      bars:[
+        {zh:'D-2 菜單規劃採購',en:'D-2: Planning & Shopping',id:'D-2: Perencanaan & Belanja',vi:'D-2: Lên kế hoạch & Mua sắm',emoji:'📅',value:20,unit:'%時間',color:'#27ae60'},
+        {zh:'D-1 醃漬備料',en:'D-1: Marinating & Prep',id:'D-1: Marinasi & Persiapan',vi:'D-1: Ướp & Sơ chế',emoji:'🧂',value:35,unit:'%時間',color:'#2980b9'},
+        {zh:'D-Day 烹調',en:'D-Day: Cooking',id:'Hari-H: Memasak',vi:'Hôm đó: Nấu ăn',emoji:'👨‍🍳',value:30,unit:'%時間',color:'#e67e22'},
+        {zh:'擺盤上桌',en:'Plating & Service',id:'Plating & Sajian',vi:'Bày trí & Phục vụ',emoji:'🍽️',value:10,unit:'%時間',color:'#8e44ad'},
+        {zh:'清理收尾',en:'Cleanup & Wrap-up',id:'Bersih-bersih',vi:'Dọn dẹp & Kết thúc',emoji:'🧹',value:5,unit:'%時間',color:'#7f8c8d'}
+      ],
+      note:{zh:'💡 提前一天完成最多備料，宴客當天只需最後組合與加熱，讓主人也能輕鬆享受宴會。',en:'💡 Do most prep the day before — on the party day, you only need final assembly and heating, letting the host enjoy the gathering too.',id:'💡 Lakukan sebagian besar persiapan sehari sebelumnya — di hari pesta, hanya perlu perakitan akhir dan pemanasan.',vi:'💡 Làm hầu hết công đoạn sơ chế vào ngày hôm trước — ngày tiệc chỉ cần ghép và hâm nóng, để chủ nhà cũng có thể tận hưởng bữa tiệc.'}
+    },
     tip:{zh:'💡 宴客最高原則：「讓主人也能享受宴會」。如果廚師在廚房忙到無法與賓客互動，就失去了宴客的意義。善用提前備料、冷熱搭配與時間規劃，讓自己在上菜日從容自在，才能創造真正美好的宴客體驗。',
      en:"💡 The ultimate rule of entertaining: \"the host should enjoy the party too.\" If you\'re so busy in the kitchen that you can\'t interact with guests, the whole purpose is lost. Use advance prep, hot/cold balance, and smart timing to stay calm on the day — that\'s what creates a truly memorable gathering.",
      id:'💡 Aturan utama menjamu tamu: \"tuan rumah pun harus menikmati pesta.\" Jika Anda terlalu sibuk di dapur hingga tidak bisa berinteraksi dengan tamu, seluruh tujuannya hilang. Gunakan persiapan awal, keseimbangan panas/dingin, dan perencanaan waktu untuk tetap tenang di hari H.',
@@ -3833,6 +4038,19 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'冰箱存放混亂，生肉與熟食同層存放未分隔',en:'Disorganized refrigerator storage with raw meat and cooked food on the same shelf without separation'},
       {ok:false,zh:'廚房清潔只擦拭表面，忽略砧板、刀具、抹布的定期消毒',en:'Cleaning only visible surfaces without regularly disinfecting cutting boards, knives, and cloths'}
     ],
+    chart:{
+      title:{zh:'HACCP七大原則重要性評分（滿分10）',en:'HACCP 7 Principles — Importance Score (out of 10)',id:'Skor Kepentingan 7 Prinsip HACCP (dari 10)',vi:'Điểm quan trọng 7 nguyên tắc HACCP (tối đa 10)'},
+      bars:[
+        {zh:'①危害分析',en:'①Hazard Analysis',id:'①Analisis Bahaya',vi:'①Phân tích mối nguy',emoji:'🔍',value:10,unit:'/10',color:'#c0392b'},
+        {zh:'②確認CCP',en:'②Identify CCPs',id:'②Identifikasi CCP',vi:'②Xác định CCP',emoji:'📍',value:9,unit:'/10',color:'#e67e22'},
+        {zh:'③管制界限',en:'③Critical Limits',id:'③Batas Kritis',vi:'③Giới hạn tới hạn',emoji:'🎯',value:9,unit:'/10',color:'#f39c12'},
+        {zh:'④監測系統',en:'④Monitoring System',id:'④Sistem Pemantauan',vi:'④Hệ thống giám sát',emoji:'📊',value:8,unit:'/10',color:'#27ae60'},
+        {zh:'⑤矯正措施',en:'⑤Corrective Actions',id:'⑤Tindakan Korektif',vi:'⑤Biện pháp khắc phục',emoji:'🔧',value:8,unit:'/10',color:'#2980b9'},
+        {zh:'⑥驗證程序',en:'⑥Verification',id:'⑥Verifikasi',vi:'⑥Xác minh',emoji:'✅',value:7,unit:'/10',color:'#8e44ad'},
+        {zh:'⑦記錄管理',en:'⑦Record Keeping',id:'⑦Pencatatan',vi:'⑦Lưu hồ sơ',emoji:'📋',value:7,unit:'/10',color:'#7f8c8d'}
+      ],
+      note:{zh:'💡 HACCP前三步「危害分析→CCP→管制界限」構成整個系統的基礎，必須最先且最嚴謹地完成。',en:'💡 The first three HACCP steps — hazard analysis, CCP identification, and critical limits — form the foundation and must be completed first with the greatest rigor.',id:'💡 Tiga langkah HACCP pertama — analisis bahaya, CCP, dan batas kritis — membentuk fondasi sistem dan harus diselesaikan pertama dengan ketelitian tertinggi.',vi:'💡 Ba bước HACCP đầu tiên — phân tích mối nguy, CCP và giới hạn tới hạn — tạo nền tảng cho hệ thống và phải hoàn thành trước với độ nghiêm ngặt cao nhất.'}
+    },
     tip:{zh:'💡 HACCP的精髓在於「預防」而非「事後補救」。與其在食安事故發生後追查原因，不如在每個關鍵步驟事先設防。即使是家庭廚房，落實分色砧板、溫度管理與FIFO，就已掌握HACCP最核心的精神。',
      en:"💡 The essence of HACCP is prevention, not reaction. Rather than tracing the cause after a food safety incident, set defenses at every critical step beforehand. Even in a home kitchen, using color-coded boards, managing temperatures, and applying FIFO captures the core spirit of HACCP.",
      id:'💡 Inti HACCP adalah pencegahan, bukan reaksi. Daripada melacak penyebab setelah insiden keamanan pangan, pasang pertahanan di setiap langkah kritis sebelumnya. Bahkan di dapur rumah, menggunakan talenan berkode warna, mengelola suhu, dan menerapkan FIFO sudah mencerminkan semangat inti HACCP.',
@@ -3954,6 +4172,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'為腎臟病患補充市售「綜合維他命」（可能含高磷、高鉀成分）',en:'Giving CKD patients commercial multivitamins without checking (may contain high phosphorus or potassium)'},
       {ok:false,zh:'以「吃一點無妨」的心態忽視長者的飲食限制（如腎臟病的限鉀原則）',en:'Ignoring senior dietary restrictions (e.g. CKD potassium limits) with an "a little won\'t hurt" attitude'}
     ],
+    chart:{
+      title:{zh:'長者每日營養素建議攝取量（相對標準成人比）',en:'Senior Daily Nutrient Needs vs Standard Adults',id:'Kebutuhan Gizi Harian Lansia vs Orang Dewasa Standar',vi:'Nhu cầu dinh dưỡng hàng ngày của người cao tuổi so với người lớn bình thường'},
+      bars:[
+        {zh:'蛋白質',en:'Protein',id:'Protein',vi:'Protein',emoji:'🥩',value:130,unit:'%標準',color:'#e67e22'},
+        {zh:'鈣質',en:'Calcium',id:'Kalsium',vi:'Canxi',emoji:'🦴',value:120,unit:'%標準',color:'#2980b9'},
+        {zh:'維生素D',en:'Vitamin D',id:'Vitamin D',vi:'Vitamin D',emoji:'☀️',value:150,unit:'%標準',color:'#f39c12'},
+        {zh:'膳食纖維',en:'Dietary Fiber',id:'Serat Pangan',vi:'Chất xơ',emoji:'🥦',value:100,unit:'%標準',color:'#27ae60'},
+        {zh:'鈉攝取上限',en:'Sodium Limit',id:'Batas Natrium',vi:'Giới hạn Natri',emoji:'🧂',value:75,unit:'%標準',color:'#8e44ad'},
+        {zh:'熱量需求',en:'Calorie Needs',id:'Kebutuhan Kalori',vi:'Nhu cầu calo',emoji:'⚡',value:80,unit:'%標準',color:'#7f8c8d'}
+      ],
+      note:{zh:'💡 長者需要「高蛋白、高鈣、低鈉、低熱量」的飲食設計，與一般成人存在顯著差異。',en:'💡 Seniors need a "high protein, high calcium, low sodium, low calorie" dietary design — significantly different from standard adults.',id:'💡 Lansia memerlukan desain diet "protein tinggi, kalsium tinggi, natrium rendah, kalori rendah" — berbeda signifikan dari orang dewasa biasa.',vi:'💡 Người cao tuổi cần thiết kế chế độ ăn "protein cao, canxi cao, natri thấp, calo thấp" — khác đáng kể so với người lớn bình thường.'}
+    },
     tip:{zh:'💡 長者餐的核心不只是「好消化」，更是「有尊嚴的飲食體驗」。即使是軟食，也要注意擺盤色彩與食物原形，讓長者仍能感受到飲食的樂趣。定期詢問長者的飲食喜好與身體狀況，才能持續提供真正符合需求的餐食。',
      en:"💡 The heart of senior cooking isn\'t just digestibility — it\'s a dignified dining experience. Even soft foods should be plated with color and recognizable shapes so seniors can still enjoy eating. Regularly asking about their preferences and health conditions ensures meals continue to truly meet their needs.",
      id:'💡 Inti dari masakan lansia bukan hanya mudah dicerna, tetapi juga pengalaman makan yang bermartabat. Bahkan makanan lunak harus disajikan dengan warna dan bentuk yang dapat dikenali agar lansia masih dapat menikmati makan. Tanyakan secara rutin preferensi dan kondisi kesehatan mereka untuk terus menyediakan makanan yang benar-benar sesuai.',
@@ -4075,6 +4305,18 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'對雇主的料理指示不懂但假裝理解，依自己的理解執行',en:'Pretending to understand employer\'s cooking instructions when unsure, then acting on your own interpretation'},
       {ok:false,zh:'剩菜自行帶走或丟棄，未向雇主詢問剩菜的處理方式',en:'Taking or discarding leftovers without asking the employer how they should be handled'}
     ],
+    chart:{
+      title:{zh:'家庭幫傭每日廚房工作時間分配',en:'Daily Kitchen Time Allocation for Household Helpers',id:'Alokasi Waktu Dapur Harian untuk Asisten Rumah Tangga',vi:'Phân bổ thời gian bếp hàng ngày cho người giúp việc'},
+      bars:[
+        {zh:'早餐製作',en:'Breakfast Prep',id:'Persiapan Sarapan',vi:'Chuẩn bị bữa sáng',emoji:'🌅',value:45,unit:'分/min',color:'#f39c12'},
+        {zh:'便當製作',en:'Bento Prep',id:'Persiapan Bekal',vi:'Chuẩn bị cơm hộp',emoji:'🍱',value:40,unit:'分/min',color:'#27ae60'},
+        {zh:'午餐規劃',en:'Lunch Prep',id:'Persiapan Makan Siang',vi:'Chuẩn bị bữa trưa',emoji:'☀️',value:50,unit:'分/min',color:'#e67e22'},
+        {zh:'採購與備料',en:'Shopping & Prep',id:'Belanja & Persiapan',vi:'Mua sắm & Sơ chế',emoji:'🛒',value:60,unit:'分/min',color:'#2980b9'},
+        {zh:'晚餐製作',en:'Dinner Prep',id:'Persiapan Makan Malam',vi:'Chuẩn bị bữa tối',emoji:'🌙',value:75,unit:'分/min',color:'#8e44ad'},
+        {zh:'廚房清理',en:'Kitchen Cleanup',id:'Membersihkan Dapur',vi:'Dọn dẹp bếp',emoji:'🧹',value:30,unit:'分/min',color:'#7f8c8d'}
+      ],
+      note:{zh:'💡 提前一晚將蔬菜切好冷藏，可讓隔天早晨節省約15分鐘，是家庭幫傭最實用的時間管理技巧。',en:'💡 Pre-cutting vegetables the night before and refrigerating them saves about 15 minutes the next morning — the most practical time-management tip for household helpers.',id:'💡 Memotong sayuran malam sebelumnya dan menyimpan di kulkas menghemat sekitar 15 menit esok pagi.',vi:'💡 Thái rau vào tối hôm trước và để ngăn mát giúp tiết kiệm khoảng 15 phút vào buổi sáng hôm sau.'}
+    },
     tip:{zh:'💡 優秀的家庭幫傭廚師有三項核心素養：①廚藝技能（持續學習當地料理）②溝通能力（清楚表達、主動詢問）③職業誠信（財務透明、承諾必守）。廚藝可以透過練習快速提升，但誠信與溝通才是建立長期信任關係、讓自己在職場上不可取代的根本。',
      en:"💡 An excellent household cooking helper has three core qualities: ① Culinary skills (continuously learning local cuisine) ② Communication ability (express clearly, ask proactively) ③ Professional integrity (financial transparency, keeping commitments). Cooking skills can improve quickly through practice, but integrity and communication are what build long-term trust and make you irreplaceable in the workplace.",
      id:'💡 Pembantu masak rumah tangga yang unggul memiliki tiga kualitas inti: ① Keterampilan memasak (terus belajar masakan lokal) ② Kemampuan komunikasi (ungkapkan dengan jelas, tanya secara proaktif) ③ Integritas profesional (transparansi keuangan, menepati komitmen). Keterampilan memasak dapat ditingkatkan dengan cepat melalui latihan, tetapi integritas dan komunikasi yang membangun kepercayaan jangka panjang.',
@@ -4146,6 +4388,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'腎臟病患者補充市售綜合維他命（可能含高磷、高鉀成分）',en:'Giving CKD patients commercial multivitamins without checking (may contain high phosphorus or potassium)'},
       {ok:false,zh:'在泥狀餐中混入不同質地食物（如帶顆粒的果醬）',en:'Adding different-texture components to purée (e.g. chunky jam with seeds)'}
     ],
+    chart:{
+      title:{zh:'長照餐食質地分級與適用對象',en:'Long-Term Care Meal Texture Levels & Target Groups',id:'Tingkatan Tekstur Makanan Perawatan Jangka Panjang',vi:'Cấp độ kết cấu bữa ăn chăm sóc dài hạn & Đối tượng áp dụng'},
+      bars:[
+        {zh:'一般飲食',en:'Regular Diet',id:'Diet Reguler',vi:'Chế độ ăn thông thường',emoji:'🍚',value:100,unit:'%自理',color:'#27ae60'},
+        {zh:'軟質餐',en:'Soft Diet',id:'Diet Lunak',vi:'Chế độ ăn mềm',emoji:'🥣',value:80,unit:'%自理',color:'#2980b9'},
+        {zh:'碎食餐',en:'Minced Diet',id:'Diet Cincang',vi:'Chế độ ăn xay nhỏ',emoji:'🍲',value:55,unit:'%自理',color:'#f39c12'},
+        {zh:'泥狀餐',en:'Purée Diet',id:'Diet Puree',vi:'Chế độ ăn dạng xay nhuyễn',emoji:'🥫',value:30,unit:'%自理',color:'#e67e22'},
+        {zh:'半流質',en:'Semi-Liquid',id:'Semi-Cair',vi:'Bán lỏng',emoji:'🥤',value:15,unit:'%自理',color:'#e74c3c'}
+      ],
+      note:{zh:'💡 吞嚥功能評估應由語言治療師或醫師執行，廚師根據指定等級製作，切勿自行判斷更改食物質地。',en:'💡 Swallowing function assessment should be conducted by a speech therapist or physician. Cooks prepare meals based on the prescribed level — never change texture without professional guidance.',id:'💡 Penilaian fungsi menelan harus dilakukan oleh terapis wicara atau dokter. Juru masak menyiapkan makanan sesuai tingkat yang ditentukan.',vi:'💡 Đánh giá chức năng nuốt nên do nhà trị liệu ngôn ngữ hoặc bác sĩ thực hiện. Đầu bếp chuẩn bị bữa ăn theo cấp độ được chỉ định — không tự thay đổi kết cấu thức ăn.'}
+    },
     tip:{zh:'💡 長照餐飲的核心是「安全第一、尊嚴第二」：安全是指預防嗆咳吸入性肺炎（長照機構第一死因之一）；尊嚴是指讓長輩仍能感受到飲食的樂趣——即使是泥狀餐，也可以用模具塑形成食材原形，讓長輩看到「這是魚」「這是青菜」，維持進食的期待與愉悅感。每一口食物都是生活品質的體現。',
      en:"💡 The core of long-term care catering is 'safety first, dignity second': safety means preventing aspiration pneumonia (one of the top causes of death in care facilities); dignity means letting seniors still enjoy the pleasure of eating — even purée meals can be shaped with moulds to resemble the original food, so seniors can see 'this is fish', 'this is vegetables', maintaining anticipation and joy at mealtimes. Every bite reflects quality of life.",
      id:'💡 Inti dari katering perawatan jangka panjang adalah "keamanan dulu, martabat kedua": keamanan berarti mencegah pneumonia aspirasi; martabat berarti membiarkan lansia masih merasakan kesenangan makan — bahkan makanan pure bisa dibentuk seperti makanan aslinya.',
@@ -4226,6 +4479,17 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'見到食材缺貨自行替換，未事先通知雇主',en:'Substituting out-of-stock ingredients without notifying the employer in advance'},
       {ok:false,zh:'未確認家庭成員過敏原，使用含過敏原食材烹調',en:'Cooking with allergen-containing ingredients without first confirming family members\' allergies'}
     ],
+    chart:{
+      title:{zh:'廚房溝通失誤常見類型（%）',en:'Common Kitchen Communication Errors (%)',id:'Jenis Kesalahan Komunikasi Dapur Umum (%)',vi:'Loại lỗi giao tiếp bếp phổ biến (%)'},
+      bars:[
+        {zh:'食材量詞誤解',en:'Misunderstanding Quantity Terms',id:'Salah Paham Istilah Kuantitas',vi:'Hiểu sai thuật ngữ định lượng',emoji:'⚖️',value:28,unit:'%',color:'#c0392b'},
+        {zh:'口頭交辦聽錯',en:'Mishearing Verbal Instructions',id:'Instruksi Verbal Salah Dengar',vi:'Nghe nhầm hướng dẫn bằng lời',emoji:'👂',value:24,unit:'%',color:'#e67e22'},
+        {zh:'採購清單看錯',en:'Misreading Shopping List',id:'Salah Baca Daftar Belanja',vi:'Đọc nhầm danh sách mua sắm',emoji:'📋',value:20,unit:'%',color:'#f39c12'},
+        {zh:'過敏禁忌未確認',en:'Allergy Not Verified',id:'Alergi Tidak Dikonfirmasi',vi:'Không xác nhận dị ứng',emoji:'⚠️',value:18,unit:'%',color:'#8e44ad'},
+        {zh:'口味偏好溝通不足',en:'Taste Preferences Not Communicated',id:'Preferensi Rasa Tidak Dikomunikasikan',vi:'Thiếu giao tiếp về sở thích vị giác',emoji:'😋',value:10,unit:'%',color:'#2980b9'}
+      ],
+      note:{zh:'💡 不確定時主動問清楚，是廚房溝通最重要的習慣。沉默不問往往是錯誤的開始。',en:'💡 Asking when uncertain is the most important kitchen communication habit. Staying silent is often where mistakes begin.',id:'💡 Bertanya saat tidak yakin adalah kebiasaan komunikasi dapur terpenting. Diam seringkali menjadi awal dari kesalahan.',vi:'💡 Hỏi khi không chắc là thói quen giao tiếp bếp quan trọng nhất. Im lặng thường là khởi đầu của những sai lầm.'}
+    },
     tip:{zh:'💡 語言是最強大的廚房工具。即使語言尚未完全流利，「誠實溝通的態度」本身就是最高的職業素養——雇主最能接受的不是完美的中文，而是「我不確定，我可以再確認嗎？」這句話。建議每週學習3–5個新廚房詞彙並實際使用，三個月後廚房溝通能力會有顯著提升。',
      en:"💡 Language is the most powerful kitchen tool. Even without perfect fluency, 'an attitude of honest communication\' is itself the highest professional quality — what employers most appreciate is not perfect Chinese, but the phrase 'I\'m not sure, may I confirm?' Learning 3–5 new kitchen vocabulary words per week and using them in practice will lead to significant improvement in kitchen communication skills within three months.",
      id:'💡 Bahasa adalah alat dapur yang paling kuat. Bahkan tanpa kelancaran sempurna, "sikap komunikasi yang jujur" adalah kualitas profesional tertinggi — yang paling dihargai majikan bukan bahasa Mandarin yang sempurna, tetapi kalimat "Saya tidak yakin, boleh saya konfirmasi?".',
@@ -4327,12 +4591,1147 @@ var MOD_KNOWLEDGE=[
       {ok:false,zh:'食物過敏症狀出現時，給予抗組織胺藥片或飲水，認為可以自行緩解',en:'When allergy symptoms appear, giving antihistamine tablets or water and thinking it will resolve on its own'},
       {ok:false,zh:'在不確定成分的情況下，仍烹調「應該沒問題」的料理給過敏者食用',en:'Cooking for an allergy sufferer with uncertain ingredients, assuming "it should be fine"'}
     ],
+    chart:{
+      title:{zh:'台灣11大過敏原過敏人口比例（%）',en:'Taiwan\'s 11 Allergens — Affected Population (%)',id:'11 Alergen Utama Taiwan — Populasi Terdampak (%)',vi:'11 chất gây dị ứng chính của Đài Loan — Dân số bị ảnh hưởng (%)'},
+      bars:[
+        {zh:'蝦蟹（甲殼類）',en:'Shrimp/Crab (Crustacean)',id:'Udang/Kepiting',vi:'Tôm/Cua (Giáp xác)',emoji:'🦐',value:6.8,unit:'%',color:'#e74c3c'},
+        {zh:'花生',en:'Peanut',id:'Kacang Tanah',vi:'Lạc (Đậu phộng)',emoji:'🥜',value:5.2,unit:'%',color:'#c0392b'},
+        {zh:'牛奶',en:'Milk',id:'Susu',vi:'Sữa',emoji:'🥛',value:4.5,unit:'%',color:'#3498db'},
+        {zh:'雞蛋',en:'Egg',id:'Telur',vi:'Trứng',emoji:'🥚',value:3.8,unit:'%',color:'#f39c12'},
+        {zh:'小麥（麩質）',en:'Wheat (Gluten)',id:'Gandum (Gluten)',vi:'Lúa mì (Gluten)',emoji:'🌾',value:2.1,unit:'%',color:'#e67e22'},
+        {zh:'黃豆',en:'Soy',id:'Kedelai',vi:'Đậu nành',emoji:'🫘',value:1.5,unit:'%',color:'#27ae60'}
+      ],
+      note:{zh:'💡 甲殼類與花生過敏是台灣最常見的兩種食物過敏，且均可能引起嚴重過敏反應（過敏性休克），廚房工作者必須格外謹慎。',en:'💡 Crustacean and peanut allergies are the two most common food allergies in Taiwan, and both can cause severe anaphylaxis. Kitchen workers must be extra vigilant.',id:'💡 Alergi udang/kepiting dan kacang tanah adalah dua alergi makanan paling umum di Taiwan, dan keduanya dapat menyebabkan anafilaksis berat.',vi:'💡 Dị ứng giáp xác và lạc là hai dị ứng thực phẩm phổ biến nhất tại Đài Loan và đều có thể gây sốc phản vệ nặng — người làm bếp phải đặc biệt cẩn thận.'}
+    },
     tip:{zh:'💡 食物過敏的黃金守則：「寧可問清楚，不要猜。」在過敏管理中，任何猜測都是風險。即使是「很可能沒有」的過敏原也必須確認。廚房工作者對過敏的正確態度是：把每一個過敏聲明當作生命攸關的資訊認真對待——因為對某些人來說，它確實就是。',
      en:"💡 The golden rule of food allergy management: 'Ask rather than guess.' Any assumption in allergen management is a risk. Even a 'very unlikely\' allergen must be confirmed. The correct kitchen attitude toward allergy is to treat every allergy declaration as life-critical information — because for some people, it truly is.",
      id:'💡 Aturan emas manajemen alergi makanan: "Tanya daripada menebak." Setiap asumsi dalam manajemen alergen adalah risiko. Bahkan alergen yang "sangat kecil kemungkinannya" harus dikonfirmasi. Perlakukan setiap deklarasi alergi sebagai informasi kritis.',
      vi:'💡 Quy tắc vàng quản lý dị ứng thực phẩm: "Hỏi thay vì đoán." Bất kỳ phỏng đoán nào trong quản lý chất gây dị ứng đều là rủi ro. Ngay cả chất gây dị ứng "rất ít có khả năng" cũng phải xác nhận. Hãy coi mọi tuyên bố dị ứng như thông tin quan trọng liên quan đến tính mạng — vì với một số người, đó thực sự là vậy.'}
   }
 ];
+
+/* v0.50 教學內容補強：20 modules lesson enrichment
+   原始資料不覆蓋；在畫面渲染前，把補充教學段落合併到 MOD_KNOWLEDGE。 */
+var LESSON_ENRICHMENTS=[
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "安全優先順序",
+          "en": "Safety priority",
+          "id": "Prioritas keselamatan",
+          "vi": "Ưu tiên an toàn"
+        },
+        "body": {
+          "zh": "進廚房先確認地面乾燥、瓦斯關閉狀態、刀具位置與逃生動線。只要遇到火、油、電、蒸氣，就先停手、關火或斷電，再處理食材，避免一邊煮一邊救急。",
+          "en": "Before cooking, check dry floors, gas knobs, knife positions, and exits. When fire, oil, electricity, or steam is involved, stop first, turn off heat or power, then handle food.",
+          "id": "Sebelum memasak, periksa lantai kering, kenop gas, posisi pisau, dan jalur keluar. Jika ada api, minyak, listrik, atau uap panas, berhenti dulu dan matikan panas atau listrik.",
+          "vi": "Trước khi nấu, kiểm tra sàn khô, núm gas, vị trí dao và lối thoát. Khi có lửa, dầu, điện hoặc hơi nóng, hãy dừng lại và tắt lửa hoặc điện trước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "燙傷與割傷處理",
+          "en": "Burns and cuts",
+          "id": "Luka bakar dan luka potong",
+          "vi": "Bỏng và đứt tay"
+        },
+        "body": {
+          "zh": "燙傷先用流動冷水沖 15 到 20 分鐘，不抹牙膏、醬油或油膏。割傷先加壓止血、清潔包紮；傷口深、出血不止或接觸生肉海鮮時，要告知雇主並就醫。",
+          "en": "Cool burns under running water for 15 to 20 minutes; do not apply toothpaste, soy sauce, or ointment. For cuts, press to stop bleeding, clean, cover, and report deep or contaminated wounds.",
+          "id": "Dinginkan luka bakar dengan air mengalir 15 sampai 20 menit. Jangan gunakan pasta gigi, kecap, atau minyak. Luka dalam atau kotor harus dilaporkan dan diperiksa.",
+          "vi": "Làm mát vết bỏng bằng nước chảy 15 đến 20 phút. Không bôi kem đánh răng, nước tương hoặc dầu. Vết cắt sâu hoặc bẩn cần báo chủ nhà và đi khám."
+        }
+      },
+      {
+        "heading": {
+          "zh": "收尾檢查",
+          "en": "Closing check",
+          "id": "Pemeriksaan akhir",
+          "vi": "Kiểm tra cuối"
+        },
+        "body": {
+          "zh": "離開廚房前做三件事：瓦斯與電器關閉、熱鍋熱油移到安全處、地面與流理台擦乾。這個收尾習慣比事後補救更重要。",
+          "en": "Before leaving the kitchen, turn off gas and appliances, move hot pans and oil to safe positions, and wipe floors and counters dry. This habit prevents most accidents.",
+          "id": "Sebelum meninggalkan dapur, matikan gas dan alat listrik, pindahkan panci atau minyak panas ke tempat aman, lalu keringkan lantai dan meja.",
+          "vi": "Trước khi rời bếp, tắt gas và thiết bị điện, đặt nồi hoặc dầu nóng ở nơi an toàn, lau khô sàn và mặt bàn."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "握刀與站姿",
+          "en": "Grip and stance",
+          "id": "Pegangan dan posisi",
+          "vi": "Cầm dao và tư thế"
+        },
+        "body": {
+          "zh": "握刀時拇指與食指夾住刀身根部，另一手做貓爪手保護指尖。身體站穩、砧板墊濕布防滑，切菜時不要把刀尖朝向自己或他人。",
+          "en": "Pinch the blade near the handle with thumb and index finger, and use a claw grip with the other hand. Stand firmly and place a damp towel under the board.",
+          "id": "Jepit pangkal pisau dengan ibu jari dan telunjuk, tangan lain membentuk cakar. Berdiri stabil dan beri kain lembap di bawah talenan.",
+          "vi": "Kẹp phần gần cán dao bằng ngón cái và ngón trỏ, tay còn lại giữ kiểu móng vuốt. Đứng vững và lót khăn ẩm dưới thớt."
+        }
+      },
+      {
+        "heading": {
+          "zh": "切法與用途",
+          "en": "Cuts and uses",
+          "id": "Jenis potongan",
+          "vi": "Kiểu cắt"
+        },
+        "body": {
+          "zh": "切絲適合快炒與涼拌，切丁適合炒飯、湯料與餡料，切片適合肉片、菇類與瓜類。大小越一致，受熱越平均，口感也越穩定。",
+          "en": "Julienne is good for stir-fry and salads, dice for fried rice and fillings, and slices for meat, mushrooms, and gourds. Even size means even cooking.",
+          "id": "Iris korek cocok untuk tumis dan salad, dadu untuk nasi goreng atau isian, irisan untuk daging dan jamur. Ukuran seragam membuat matang merata.",
+          "vi": "Cắt sợi dùng cho xào và trộn, cắt hạt lựu cho cơm chiên hoặc nhân, cắt lát cho thịt và nấm. Kích thước đều giúp chín đều."
+        }
+      },
+      {
+        "heading": {
+          "zh": "刀具保養",
+          "en": "Knife care",
+          "id": "Perawatan pisau",
+          "vi": "Bảo quản dao"
+        },
+        "body": {
+          "zh": "刀具用後立刻清洗擦乾，不泡水、不丟進水槽深處。鈍刀比利刀危險，因為需要更大力氣；發現刀鈍或缺角要告知雇主處理。",
+          "en": "Wash and dry knives immediately. Do not soak them or hide them in the sink. A dull knife is more dangerous because it needs more force.",
+          "id": "Cuci dan keringkan pisau segera. Jangan direndam atau ditaruh di dasar wastafel. Pisau tumpul lebih berbahaya karena perlu tenaga besar.",
+          "vi": "Rửa và lau khô dao ngay sau khi dùng. Không ngâm dao hoặc để sâu trong bồn rửa. Dao cùn nguy hiểm hơn vì phải dùng lực mạnh."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "大中小火判斷",
+          "en": "Heat levels",
+          "id": "Tingkat api",
+          "vi": "Mức lửa"
+        },
+        "body": {
+          "zh": "大火用於快速升溫與鎖色，中火用於穩定煎煮，小火用於燉煮與保溫。判斷火候不要只看旋鈕，要看鍋中聲音、蒸氣、油紋與食材變化。",
+          "en": "High heat raises temperature and sets color, medium heat keeps steady cooking, and low heat is for simmering or holding. Judge by sound, steam, oil shimmer, and food changes.",
+          "id": "Api besar untuk cepat panas dan warna, api sedang untuk memasak stabil, api kecil untuk merebus pelan. Lihat suara, uap, kilau minyak, dan perubahan bahan.",
+          "vi": "Lửa lớn để tăng nhiệt và giữ màu, lửa vừa để nấu ổn định, lửa nhỏ để hầm hoặc giữ nóng. Quan sát âm thanh, hơi, dầu và nguyên liệu."
+        }
+      },
+      {
+        "heading": {
+          "zh": "溫度與食安",
+          "en": "Temperature and safety",
+          "id": "Suhu dan keamanan",
+          "vi": "Nhiệt độ và an toàn"
+        },
+        "body": {
+          "zh": "肉類、家禽與再加熱熟食要達安全中心溫度。家用料理若沒有溫度計，至少要確認肉汁清澈、中心不粉紅、湯品完全滾沸後再轉小火。",
+          "en": "Meat, poultry, and reheated foods must reach safe internal temperatures. Without a thermometer, confirm clear juices, no pink center, and full boiling before simmering.",
+          "id": "Daging, unggas, dan makanan yang dipanaskan ulang harus mencapai suhu aman. Tanpa termometer, pastikan matang sampai tengah dan sup mendidih penuh.",
+          "vi": "Thịt, gia cầm và món hâm lại phải đạt nhiệt độ an toàn bên trong. Nếu không có nhiệt kế, kiểm tra chín giữa và súp sôi kỹ."
+        }
+      },
+      {
+        "heading": {
+          "zh": "避免過火",
+          "en": "Avoid overcooking",
+          "id": "Hindari terlalu matang",
+          "vi": "Tránh nấu quá lửa"
+        },
+        "body": {
+          "zh": "過火常見原因是鍋太熱、食材太少、離鍋太久。聞到焦味、油煙變大或鍋底黏住時，要先降火或離火，再加水或醬料調整。",
+          "en": "Overcooking often comes from an overheated pan, too little food, or leaving the stove. When burning smell, heavy smoke, or sticking appears, reduce heat first.",
+          "id": "Terlalu matang sering karena wajan terlalu panas, bahan terlalu sedikit, atau ditinggal. Jika bau gosong atau asap banyak, kecilkan api dulu.",
+          "vi": "Quá lửa thường do chảo quá nóng, ít nguyên liệu hoặc rời bếp. Khi có mùi cháy, khói nhiều hoặc dính đáy, hạ lửa trước."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "先進先出",
+          "en": "First in, first out",
+          "id": "Masuk dulu, keluar dulu",
+          "vi": "Vào trước dùng trước"
+        },
+        "body": {
+          "zh": "採買回來先把舊食材放前面、新食材放後面，標示日期。冰箱不是保險箱，熟食通常 2 到 3 天內吃完，開封食品要盡快使用。",
+          "en": "Place older food in front and newer food behind, and label dates. A refrigerator is not a safe forever box; cooked food is usually best within 2 to 3 days.",
+          "id": "Letakkan bahan lama di depan dan bahan baru di belakang, beri tanggal. Kulkas bukan tempat simpan selamanya; makanan matang sebaiknya habis 2 sampai 3 hari.",
+          "vi": "Đặt thực phẩm cũ phía trước, mới phía sau và ghi ngày. Tủ lạnh không giữ mãi; món chín nên dùng trong 2 đến 3 ngày."
+        }
+      },
+      {
+        "heading": {
+          "zh": "分層保存",
+          "en": "Storage layers",
+          "id": "Lapisan penyimpanan",
+          "vi": "Sắp xếp theo tầng"
+        },
+        "body": {
+          "zh": "冰箱由上到下建議放即食熟食、蔬果、半成品、最下層放生肉海鮮。生食一定密封，避免滴汁污染下方或旁邊食物。",
+          "en": "From top to bottom: ready-to-eat cooked food, produce, prepared items, then raw meat and seafood at the bottom. Seal raw food to prevent dripping.",
+          "id": "Dari atas ke bawah: makanan matang siap makan, sayur buah, bahan siap masak, lalu daging atau seafood mentah di bawah. Semua bahan mentah harus tertutup.",
+          "vi": "Từ trên xuống: món chín ăn liền, rau quả, bán thành phẩm, thịt và hải sản sống ở dưới cùng. Đậy kín đồ sống để tránh nhỏ nước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "危險溫度帶",
+          "en": "Danger zone",
+          "id": "Zona bahaya",
+          "vi": "Vùng nguy hiểm"
+        },
+        "body": {
+          "zh": "5 到 60°C 是細菌容易增殖的危險溫度帶。熱食要保持 60°C 以上，冷食要保持 5°C 以下，室溫放置累計不要超過 2 小時。",
+          "en": "Bacteria grow quickly between 5 and 60°C. Keep hot food above 60°C, cold food below 5°C, and do not leave food at room temperature over 2 hours total.",
+          "id": "Bakteri cepat tumbuh pada 5 sampai 60°C. Makanan panas di atas 60°C, makanan dingin di bawah 5°C, jangan di suhu ruang lebih dari total 2 jam.",
+          "vi": "Vi khuẩn phát triển nhanh ở 5 đến 60°C. Giữ món nóng trên 60°C, món lạnh dưới 5°C, không để ngoài nhiệt độ phòng quá tổng 2 giờ."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "方法看食材",
+          "en": "Match method to ingredient",
+          "id": "Metode sesuai bahan",
+          "vi": "Chọn cách nấu theo nguyên liệu"
+        },
+        "body": {
+          "zh": "嫩葉菜、薄肉片適合快炒；厚肉、筋多部位適合燉滷；魚、蛋、蔬菜適合蒸；需要酥脆口感才選煎炸或烤。",
+          "en": "Leafy vegetables and thin meat suit stir-fry; tough cuts suit braising; fish, eggs, and vegetables suit steaming; choose frying or roasting for crispness.",
+          "id": "Sayur daun dan daging tipis cocok ditumis; daging berserat cocok direbus pelan; ikan, telur, dan sayur cocok dikukus; goreng atau panggang untuk renyah.",
+          "vi": "Rau lá và thịt mỏng hợp xào; thịt dai hợp hầm kho; cá, trứng, rau hợp hấp; chiên hoặc nướng khi cần giòn."
+        }
+      },
+      {
+        "heading": {
+          "zh": "方法看目的",
+          "en": "Match method to goal",
+          "id": "Metode sesuai tujuan",
+          "vi": "Chọn theo mục tiêu"
+        },
+        "body": {
+          "zh": "想保留營養與清爽味道選蒸，想香氣濃厚選煎炒烤，想軟嫩入味選燉滷。先決定成品口感，再選工具、火力與時間。",
+          "en": "Choose steaming for freshness and nutrition, frying or roasting for aroma, and braising for tenderness and deep flavor. Decide texture before heat and time.",
+          "id": "Pilih kukus untuk segar dan bergizi, tumis atau panggang untuk aroma, rebus pelan untuk empuk dan meresap. Tentukan tekstur dulu.",
+          "vi": "Chọn hấp để giữ vị tươi và dinh dưỡng, chiên xào nướng để thơm, hầm kho để mềm và thấm vị. Quyết định kết cấu trước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "常見失敗修正",
+          "en": "Fix common failures",
+          "id": "Memperbaiki kegagalan",
+          "vi": "Sửa lỗi thường gặp"
+        },
+        "body": {
+          "zh": "炒菜出水代表鍋不夠熱或一次放太多；煎肉黏鍋代表太早翻；燉湯混濁可能是大滾太久。先找原因，再調整火力與批次。",
+          "en": "Watery stir-fry means low pan heat or overcrowding; sticking meat means flipping too early; cloudy soup may mean boiling too hard. Adjust heat and batch size.",
+          "id": "Tumis berair berarti wajan kurang panas atau terlalu penuh; daging lengket berarti terlalu cepat dibalik; sup keruh bisa karena mendidih terlalu kuat.",
+          "vi": "Xào ra nước là chảo chưa đủ nóng hoặc quá nhiều đồ; thịt dính là lật quá sớm; súp đục có thể do sôi quá mạnh."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "四個污染來源",
+          "en": "Four contamination sources",
+          "id": "Empat sumber kontaminasi",
+          "vi": "Bốn nguồn ô nhiễm"
+        },
+        "body": {
+          "zh": "食品衛生要防生物性、化學性、物理性與過敏原污染。家庭廚房最常見的是生熟交叉污染、清潔劑殘留、碎玻璃金屬與過敏原混入。",
+          "en": "Food hygiene prevents biological, chemical, physical, and allergen contamination. Home kitchens most often face raw-cooked cross-contact and residue risks.",
+          "id": "Kebersihan pangan mencegah kontaminasi biologis, kimia, fisik, dan alergen. Di rumah paling sering terjadi kontak silang makanan mentah dan matang.",
+          "vi": "Vệ sinh thực phẩm ngăn ô nhiễm sinh học, hóa học, vật lý và dị ứng. Bếp gia đình thường gặp lây nhiễm chéo sống chín."
+        }
+      },
+      {
+        "heading": {
+          "zh": "洗手時機",
+          "en": "When to wash hands",
+          "id": "Waktu cuci tangan",
+          "vi": "Khi nào rửa tay"
+        },
+        "body": {
+          "zh": "處理生肉海鮮後、上廁所後、摸手機錢包後、打噴嚏咳嗽後、倒垃圾後都要洗手。手套不能取代洗手，髒手套也會污染食物。",
+          "en": "Wash after raw meat or seafood, bathroom use, touching phone or money, coughing, sneezing, or trash handling. Gloves do not replace handwashing.",
+          "id": "Cuci tangan setelah menangani daging mentah, dari toilet, menyentuh ponsel atau uang, batuk, bersin, atau membuang sampah. Sarung tangan bukan pengganti cuci tangan.",
+          "vi": "Rửa tay sau khi xử lý thịt sống, đi vệ sinh, chạm điện thoại hoặc tiền, ho, hắt hơi hoặc đổ rác. Găng tay không thay thế rửa tay."
+        }
+      },
+      {
+        "heading": {
+          "zh": "清潔與消毒",
+          "en": "Clean then sanitize",
+          "id": "Bersihkan lalu sanitasi",
+          "vi": "Làm sạch rồi khử khuẩn"
+        },
+        "body": {
+          "zh": "清潔是去除油污與食物殘渣，消毒是降低病菌。先清潔再消毒才有效；消毒液濃度與接觸時間要照產品標示，不可隨意混用清潔劑。",
+          "en": "Cleaning removes grease and food residue; sanitizing reduces germs. Sanitize only after cleaning, and follow product concentration and contact time.",
+          "id": "Membersihkan menghilangkan minyak dan sisa makanan; sanitasi menurunkan kuman. Sanitasi efektif setelah dibersihkan dan sesuai petunjuk produk.",
+          "vi": "Làm sạch loại bỏ dầu và vụn thức ăn; khử khuẩn giảm vi khuẩn. Phải làm sạch trước, dùng đúng nồng độ và thời gian."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "營養均衡",
+          "en": "Balanced menu",
+          "id": "Menu seimbang",
+          "vi": "Thực đơn cân bằng"
+        },
+        "body": {
+          "zh": "家庭菜單可用「主食、蛋白質、蔬菜、湯品或水果」檢查。每餐不一定豪華，但要避免只有澱粉或只有肉，讓顏色與口感有變化。",
+          "en": "Check each meal for staple food, protein, vegetables, and soup or fruit. Meals need not be fancy, but should avoid being only starch or only meat.",
+          "id": "Periksa makanan: karbohidrat, protein, sayur, dan sup atau buah. Tidak harus mewah, tetapi jangan hanya nasi atau hanya daging.",
+          "vi": "Kiểm tra mỗi bữa có tinh bột, đạm, rau và canh hoặc trái cây. Không cần cầu kỳ nhưng tránh chỉ có tinh bột hoặc chỉ có thịt."
+        }
+      },
+      {
+        "heading": {
+          "zh": "時間規劃",
+          "en": "Time planning",
+          "id": "Perencanaan waktu",
+          "vi": "Sắp xếp thời gian"
+        },
+        "body": {
+          "zh": "先做需要久煮的湯與燉菜，再處理洗切，最後做快炒與煎蛋。把「久、冷、快」排好，出餐時溫度與品質會更穩。",
+          "en": "Start long soups or stews first, then washing and cutting, and finish with quick stir-fries or eggs. Plan long, cold, and quick tasks in order.",
+          "id": "Mulai dari sup atau semur yang lama, lalu cuci potong, terakhir tumis cepat atau telur. Urutkan tugas lama, dingin, dan cepat.",
+          "vi": "Bắt đầu món canh hoặc hầm lâu, sau đó rửa cắt, cuối cùng xào nhanh hoặc làm trứng. Sắp xếp món lâu, nguội và nhanh."
+        }
+      },
+      {
+        "heading": {
+          "zh": "預算與剩食",
+          "en": "Budget and leftovers",
+          "id": "Anggaran dan sisa makanan",
+          "vi": "Ngân sách và đồ thừa"
+        },
+        "body": {
+          "zh": "菜單規劃要看冰箱現有食材與保存期限。容易壞的先用，剩菜可變炒飯、湯麵或便當配菜，但再加熱必須熱透。",
+          "en": "Plan around what is already in the refrigerator and expiration dates. Use perishable items first; leftovers can become fried rice, noodle soup, or lunch sides.",
+          "id": "Rencanakan dari bahan yang sudah ada dan tanggal kedaluwarsa. Gunakan bahan mudah rusak dulu; sisa makanan harus dipanaskan sampai benar-benar panas.",
+          "vi": "Lập thực đơn theo thực phẩm đang có và hạn dùng. Dùng đồ dễ hỏng trước; đồ thừa có thể làm cơm chiên hoặc mì, nhưng phải hâm nóng kỹ."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "家常味核心",
+          "en": "Taiwan home flavor",
+          "id": "Rasa rumahan Taiwan",
+          "vi": "Hương vị gia đình Đài Loan"
+        },
+        "body": {
+          "zh": "台灣家常菜常用蔥、薑、蒜、醬油、米酒、糖與白胡椒建立香氣。先爆香再下主料，醬油沿鍋邊下更容易產生香味。",
+          "en": "Taiwanese home cooking often uses scallion, ginger, garlic, soy sauce, rice wine, sugar, and white pepper. Aromatics first, then main ingredients.",
+          "id": "Masakan rumah Taiwan sering memakai daun bawang, jahe, bawang putih, kecap asin, arak masak, gula, dan lada putih. Tumis bumbu dulu.",
+          "vi": "Món gia đình Đài Loan thường dùng hành, gừng, tỏi, nước tương, rượu gạo, đường và tiêu trắng. Phi thơm trước rồi cho nguyên liệu chính."
+        }
+      },
+      {
+        "heading": {
+          "zh": "常見菜色邏輯",
+          "en": "Dish logic",
+          "id": "Logika masakan",
+          "vi": "Logic món ăn"
+        },
+        "body": {
+          "zh": "滷肉重點是先煸香油脂再加醬汁慢煮；炒青菜重點是大火快炒；蒸魚重點是新鮮、去腥與時間短。掌握邏輯比背食譜更有用。",
+          "en": "Braised pork needs rendered fat and slow sauce cooking; greens need high heat and speed; steamed fish needs freshness, deodorizing, and short timing.",
+          "id": "Daging kecap perlu lemak ditumis harum lalu direbus pelan; sayur perlu api besar cepat; ikan kukus perlu segar dan waktu singkat.",
+          "vi": "Thịt kho cần rang mỡ thơm rồi kho chậm; rau xào cần lửa lớn nhanh; cá hấp cần tươi, khử mùi và thời gian ngắn."
+        }
+      },
+      {
+        "heading": {
+          "zh": "口味調整",
+          "en": "Adjusting taste",
+          "id": "Menyesuaikan rasa",
+          "vi": "Điều chỉnh vị"
+        },
+        "body": {
+          "zh": "台灣家庭常說「不要太鹹、不要太油、清淡一點」。調味時先少量，多次試味；太鹹可加水、蔬菜或豆腐稀釋，不要直接再加糖硬蓋。",
+          "en": "Families may ask for less salty, less oily, or lighter food. Season gradually and taste often; dilute overly salty food with water, vegetables, or tofu.",
+          "id": "Keluarga sering minta tidak terlalu asin, tidak berminyak, atau lebih ringan. Bumbui sedikit-sedikit dan cicipi; encerkan jika terlalu asin.",
+          "vi": "Gia đình có thể yêu cầu ít mặn, ít dầu hoặc thanh hơn. Nêm từng ít và nếm nhiều lần; món quá mặn có thể pha loãng bằng nước, rau hoặc đậu phụ."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "醃漬目的",
+          "en": "Purpose of marinating",
+          "id": "Tujuan marinasi",
+          "vi": "Mục đích ướp"
+        },
+        "body": {
+          "zh": "醃漬不是只為了變鹹，而是去腥、入味、保水與改善口感。肉類可用鹽、糖、酒、醬油與少量澱粉；海鮮醃太久會出水變硬。",
+          "en": "Marinating is not only saltiness; it reduces odor, adds flavor, keeps moisture, and improves texture. Seafood should not marinate too long.",
+          "id": "Marinasi bukan hanya membuat asin, tetapi mengurangi bau, memberi rasa, menjaga air, dan memperbaiki tekstur. Seafood jangan terlalu lama.",
+          "vi": "Ướp không chỉ để mặn mà để khử mùi, thấm vị, giữ nước và cải thiện kết cấu. Hải sản không nên ướp quá lâu."
+        }
+      },
+      {
+        "heading": {
+          "zh": "醬料平衡",
+          "en": "Sauce balance",
+          "id": "Keseimbangan saus",
+          "vi": "Cân bằng nước sốt"
+        },
+        "body": {
+          "zh": "好吃的醬料通常有鹹、甜、酸、香、辣或鮮的平衡。調醬先做小碗試味，再倒入鍋中；酸味與香油多在最後加入，香氣較明顯。",
+          "en": "Good sauces balance salty, sweet, sour, aromatic, spicy, or umami notes. Mix and taste in a small bowl before adding to the pan.",
+          "id": "Saus enak menyeimbangkan asin, manis, asam, harum, pedas, atau gurih. Campur dan cicipi di mangkuk kecil sebelum masuk wajan.",
+          "vi": "Nước sốt ngon cân bằng mặn, ngọt, chua, thơm, cay hoặc umami. Pha thử trong bát nhỏ rồi mới cho vào chảo."
+        }
+      },
+      {
+        "heading": {
+          "zh": "保存安全",
+          "en": "Storage safety",
+          "id": "Keamanan penyimpanan",
+          "vi": "An toàn bảo quản"
+        },
+        "body": {
+          "zh": "自製醬料與醃肉要冷藏密封，取用時用乾淨湯匙。醃過生肉的醬汁不能直接當熟食沾醬，必須煮滾後才可再利用。",
+          "en": "Keep homemade sauces and marinated meats sealed in the refrigerator. Sauce that touched raw meat cannot be used as dip unless boiled thoroughly.",
+          "id": "Saus buatan dan daging marinasi harus tertutup di kulkas. Saus bekas daging mentah tidak boleh jadi saus celup kecuali direbus matang.",
+          "vi": "Nước sốt tự làm và thịt ướp phải đậy kín trong tủ lạnh. Sốt đã chạm thịt sống không dùng chấm trực tiếp, phải đun sôi kỹ."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "蛋白質替代",
+          "en": "Protein sources",
+          "id": "Sumber protein",
+          "vi": "Nguồn đạm"
+        },
+        "body": {
+          "zh": "蔬食料理要注意蛋白質來源，可用豆腐、豆干、豆包、毛豆、蛋、奶或菇類搭配。只吃青菜容易不飽，也可能營養不足。",
+          "en": "Vegetarian meals need protein: tofu, dried tofu, bean curd sheets, edamame, eggs, dairy, or mushrooms. Vegetables alone may not be filling enough.",
+          "id": "Masakan vegetarian perlu protein: tahu, tahu kering, kulit tahu, edamame, telur, susu, atau jamur. Sayur saja mungkin kurang kenyang.",
+          "vi": "Món chay cần nguồn đạm như đậu phụ, đậu hũ khô, váng đậu, đậu nành Nhật, trứng, sữa hoặc nấm. Chỉ rau có thể không đủ no."
+        }
+      },
+      {
+        "heading": {
+          "zh": "做出香氣",
+          "en": "Build aroma",
+          "id": "Membangun aroma",
+          "vi": "Tạo mùi thơm"
+        },
+        "body": {
+          "zh": "蔬食少了肉香，可用煎香豆腐、炒香菇類、烤蔬菜、芝麻油、白胡椒與昆布高湯增加層次。先把水分炒乾，香氣才出得來。",
+          "en": "Without meat aroma, use browned tofu, sautéed mushrooms, roasted vegetables, sesame oil, white pepper, and kombu broth. Cook off water first.",
+          "id": "Tanpa aroma daging, gunakan tahu goreng kecokelatan, jamur tumis, sayur panggang, minyak wijen, lada putih, dan kaldu kombu.",
+          "vi": "Không có mùi thịt, dùng đậu phụ áp chảo, nấm xào, rau nướng, dầu mè, tiêu trắng và nước dùng kombu. Xào khô nước trước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "飲食限制確認",
+          "en": "Confirm restrictions",
+          "id": "Pastikan batasan",
+          "vi": "Xác nhận kiêng kỵ"
+        },
+        "body": {
+          "zh": "素食有全素、蛋奶素、五辛素等差異。煮之前要確認是否可用蛋、奶、蔥蒜、酒、魚露、蠔油或動物高湯。",
+          "en": "Vegetarian rules vary: vegan, ovo-lacto, or no pungent vegetables. Confirm eggs, dairy, scallion, garlic, wine, fish sauce, oyster sauce, and animal broth.",
+          "id": "Aturan vegetarian berbeda: vegan, telur-susu, atau tanpa bawang. Tanyakan telur, susu, bawang, arak, saus ikan, saus tiram, dan kaldu hewani.",
+          "vi": "Ăn chay có nhiều kiểu: thuần chay, trứng sữa, hoặc không hành tỏi. Hỏi trước về trứng, sữa, hành tỏi, rượu, nước mắm, dầu hào và nước dùng thịt."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "高湯基本比例",
+          "en": "Stock basics",
+          "id": "Dasar kaldu",
+          "vi": "Cơ bản nước dùng"
+        },
+        "body": {
+          "zh": "高湯重點是食材、水量、時間與火力。雞骨、豬骨要先汆燙去血水；蔬菜高湯不宜久煮，通常 30 到 45 分鐘即可。",
+          "en": "Stock depends on ingredients, water, time, and heat. Blanch chicken or pork bones first; vegetable stock should not cook too long, usually 30 to 45 minutes.",
+          "id": "Kaldu bergantung pada bahan, air, waktu, dan api. Tulang ayam atau babi perlu direbus sebentar dulu; kaldu sayur cukup 30 sampai 45 menit.",
+          "vi": "Nước dùng phụ thuộc nguyên liệu, nước, thời gian và lửa. Xương gà hoặc heo cần chần trước; nước rau thường chỉ 30 đến 45 phút."
+        }
+      },
+      {
+        "heading": {
+          "zh": "清湯與濃湯",
+          "en": "Clear vs thick soup",
+          "id": "Sup bening dan kental",
+          "vi": "Canh trong và súp đặc"
+        },
+        "body": {
+          "zh": "清湯要小火微滾、少攪動並撈浮沫；濃湯可用較強火力釋出膠質或用馬鈴薯、南瓜、豆類打濃。兩者目的不同，不是越濃越好。",
+          "en": "Clear soup needs gentle simmering, little stirring, and skimming. Thick soup can use stronger heat or blended potato, pumpkin, or beans.",
+          "id": "Sup bening perlu api kecil, sedikit diaduk, dan buang busa. Sup kental bisa memakai api lebih kuat atau kentang, labu, kacang yang dihaluskan.",
+          "vi": "Canh trong cần lửa nhỏ, ít khuấy và vớt bọt. Súp đặc có thể dùng lửa mạnh hơn hoặc xay khoai tây, bí đỏ, đậu."
+        }
+      },
+      {
+        "heading": {
+          "zh": "保存與再加熱",
+          "en": "Storage and reheating",
+          "id": "Simpan dan panaskan ulang",
+          "vi": "Bảo quản và hâm lại"
+        },
+        "body": {
+          "zh": "高湯煮好要快速降溫分裝冷藏或冷凍。再次使用要煮滾；如果有酸味、黏稠異常、冒泡或異味，不要試味，直接丟棄。",
+          "en": "Cool stock quickly, portion it, then refrigerate or freeze. Boil again before use. Discard if sour, slimy, fizzy, or smelly.",
+          "id": "Dinginkan kaldu cepat, bagi porsi, lalu simpan di kulkas atau freezer. Didihkan sebelum dipakai. Buang jika asam, berlendir, berbuih, atau bau.",
+          "vi": "Làm nguội nhanh, chia phần rồi để lạnh hoặc đông lạnh. Đun sôi lại trước khi dùng. Bỏ nếu chua, nhớt, sủi bọt hoặc có mùi lạ."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "新鮮度判斷",
+          "en": "Freshness check",
+          "id": "Cek kesegaran",
+          "vi": "Kiểm tra độ tươi"
+        },
+        "body": {
+          "zh": "魚要眼睛清澈、魚鰓鮮紅、肉有彈性；肉類顏色自然、無酸臭黏滑；蔬菜葉片挺、切口不黑、不大量出水。",
+          "en": "Fish should have clear eyes, red gills, and springy flesh. Meat should look natural, not sour or slimy. Vegetables should be firm and not watery.",
+          "id": "Ikan: mata jernih, insang merah, daging kenyal. Daging: warna alami, tidak asam atau berlendir. Sayur: segar, potongan tidak hitam.",
+          "vi": "Cá cần mắt trong, mang đỏ, thịt đàn hồi. Thịt có màu tự nhiên, không chua hoặc nhớt. Rau lá tươi, vết cắt không đen."
+        }
+      },
+      {
+        "heading": {
+          "zh": "採購順序",
+          "en": "Shopping order",
+          "id": "Urutan belanja",
+          "vi": "Thứ tự mua"
+        },
+        "body": {
+          "zh": "先買乾貨與常溫食品，再買蔬果，最後買冷藏冷凍與生鮮肉品。回家後先處理冷藏冷凍品，縮短離開低溫的時間。",
+          "en": "Buy dry and shelf-stable items first, produce next, and refrigerated, frozen, raw meat last. Put cold items away first when home.",
+          "id": "Beli bahan kering dulu, lalu sayur buah, terakhir bahan dingin, beku, dan daging mentah. Sampai rumah, simpan bahan dingin terlebih dahulu.",
+          "vi": "Mua đồ khô trước, rồi rau quả, cuối cùng đồ lạnh, đông lạnh và thịt sống. Về nhà cất đồ lạnh trước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "標示閱讀",
+          "en": "Read labels",
+          "id": "Baca label",
+          "vi": "Đọc nhãn"
+        },
+        "body": {
+          "zh": "包裝食品要看有效日期、保存方式、過敏原、營養標示與產地。特價品也要確認是否快過期、包裝是否破損或膨罐。",
+          "en": "Check expiration date, storage method, allergens, nutrition facts, and origin. For discounted items, check near-expiry dates, damaged packaging, or swollen cans.",
+          "id": "Periksa tanggal, cara simpan, alergen, gizi, dan asal. Barang diskon tetap harus dicek apakah hampir kedaluwarsa, kemasan rusak, atau kaleng menggembung.",
+          "vi": "Xem hạn dùng, cách bảo quản, dị ứng, dinh dưỡng và xuất xứ. Hàng giảm giá cần kiểm tra hạn gần hết, bao bì hư hoặc lon phồng."
+        }
+      }
+    ]
+  },
+  {
+    "items": [
+      {
+        "icon": "⚖️",
+        "zh": "精準秤量",
+        "en": "Accurate weighing",
+        "id": "Menimbang akurat",
+        "vi": "Cân chính xác"
+      },
+      {
+        "icon": "🌡️",
+        "zh": "預熱烤箱",
+        "en": "Preheat oven",
+        "id": "Panaskan oven",
+        "vi": "Làm nóng lò"
+      },
+      {
+        "icon": "🥣",
+        "zh": "乾濕分拌",
+        "en": "Mix dry and wet separately",
+        "id": "Campur kering dan basah terpisah",
+        "vi": "Trộn khô và ướt riêng"
+      },
+      {
+        "icon": "⏱️",
+        "zh": "控制時間",
+        "en": "Control timing",
+        "id": "Kontrol waktu",
+        "vi": "Kiểm soát thời gian"
+      },
+      {
+        "icon": "🧊",
+        "zh": "完全冷卻再包裝",
+        "en": "Cool before packing",
+        "id": "Dinginkan sebelum dikemas",
+        "vi": "Để nguội rồi đóng gói"
+      }
+    ],
+    "sections": [
+      {
+        "heading": {
+          "zh": "量重比目測重要",
+          "en": "Weighing matters",
+          "id": "Menimbang itu penting",
+          "vi": "Cân đo quan trọng"
+        },
+        "body": {
+          "zh": "烘焙像小型實驗，麵粉、糖、油、水與酵母比例會直接影響結果。盡量用電子秤，不要只用湯匙或目測。",
+          "en": "Baking is like a small experiment. Flour, sugar, oil, water, and yeast ratios change the result. Use a scale instead of guessing.",
+          "id": "Baking seperti percobaan kecil. Rasio tepung, gula, minyak, air, dan ragi menentukan hasil. Gunakan timbangan, jangan kira-kira.",
+          "vi": "Làm bánh giống thí nghiệm nhỏ. Tỷ lệ bột, đường, dầu, nước và men quyết định kết quả. Nên dùng cân điện tử."
+        }
+      },
+      {
+        "heading": {
+          "zh": "預熱與溫度",
+          "en": "Preheat and temperature",
+          "id": "Panaskan oven",
+          "vi": "Làm nóng lò"
+        },
+        "body": {
+          "zh": "烤箱要先預熱，放入前確認溫度穩定。家用烤箱常有溫差，若上色太快可降溫或蓋鋁箔，中心未熟則延長時間。",
+          "en": "Preheat the oven and make sure temperature is stable. Home ovens vary; lower heat or cover with foil if browning too fast.",
+          "id": "Oven harus dipanaskan lebih dulu dan suhunya stabil. Jika warna terlalu cepat gelap, turunkan suhu atau tutup foil.",
+          "vi": "Cần làm nóng lò trước và giữ nhiệt ổn định. Nếu mặt bánh vàng quá nhanh, hạ nhiệt hoặc phủ giấy bạc."
+        }
+      },
+      {
+        "heading": {
+          "zh": "冷卻與保存",
+          "en": "Cooling and storage",
+          "id": "Dinginkan dan simpan",
+          "vi": "Làm nguội và bảo quản"
+        },
+        "body": {
+          "zh": "蛋糕、餅乾、麵包出爐後要依種類冷卻。未冷卻就密封會回潮，奶油或鮮奶油類甜點需冷藏並注意保存期限。",
+          "en": "Cool cakes, cookies, and bread properly. Sealing before cooling causes moisture. Cream desserts need refrigeration and date control.",
+          "id": "Kue, biskuit, dan roti perlu didinginkan sesuai jenisnya. Jika ditutup saat panas akan lembap. Kue krim harus masuk kulkas.",
+          "vi": "Bánh, bánh quy và bánh mì cần nguội đúng cách. Đậy kín khi còn nóng sẽ bị ẩm. Bánh kem phải để lạnh."
+        }
+      }
+    ]
+  },
+  {
+    "items": [
+      {
+        "icon": "📋",
+        "zh": "菜單排序",
+        "en": "Menu sequencing",
+        "id": "Urutan menu",
+        "vi": "Sắp xếp thực đơn"
+      },
+      {
+        "icon": "👥",
+        "zh": "份量估算",
+        "en": "Portion estimate",
+        "id": "Perkiraan porsi",
+        "vi": "Ước lượng khẩu phần"
+      },
+      {
+        "icon": "🔥",
+        "zh": "熱菜保溫",
+        "en": "Keep hot dishes warm",
+        "id": "Jaga makanan panas",
+        "vi": "Giữ món nóng"
+      },
+      {
+        "icon": "🥢",
+        "zh": "擺盤動線",
+        "en": "Plating workflow",
+        "id": "Alur plating",
+        "vi": "Quy trình bày món"
+      },
+      {
+        "icon": "🧼",
+        "zh": "宴後清潔",
+        "en": "After-meal cleanup",
+        "id": "Bersih setelah jamuan",
+        "vi": "Dọn sau bữa tiệc"
+      }
+    ],
+    "sections": [
+      {
+        "heading": {
+          "zh": "宴客菜單節奏",
+          "en": "Serving rhythm",
+          "id": "Ritme jamuan",
+          "vi": "Nhịp phục vụ"
+        },
+        "body": {
+          "zh": "宴客菜單要有冷菜、熱菜、主食、湯品與甜點的節奏。先安排可提前完成的菜，再安排需要現炒現炸的菜，避免開餐時手忙腳亂。",
+          "en": "A guest menu needs cold dishes, hot dishes, staple food, soup, and dessert rhythm. Prepare make-ahead dishes first and leave quick dishes for last.",
+          "id": "Menu tamu perlu hidangan dingin, panas, karbohidrat, sup, dan pencuci mulut. Siapkan yang bisa dibuat dulu, sisakan tumis atau goreng untuk akhir.",
+          "vi": "Thực đơn đãi khách cần món nguội, món nóng, tinh bột, canh và tráng miệng. Làm trước món chuẩn bị được, để món xào chiên sau cùng."
+        }
+      },
+      {
+        "heading": {
+          "zh": "份量估算",
+          "en": "Portion planning",
+          "id": "Perkiraan porsi",
+          "vi": "Ước lượng khẩu phần"
+        },
+        "body": {
+          "zh": "宴客份量通常以人數加一到兩人備量估算。菜色多時每道份量可小一點；有長者或兒童時，要增加軟質、不辣、少油的選項。",
+          "en": "Estimate portions by guest count plus one or two extra servings. With many dishes, each can be smaller. Add soft, mild, less oily options for elders or children.",
+          "id": "Hitung porsi sesuai jumlah tamu ditambah satu atau dua porsi. Jika banyak menu, tiap porsi bisa lebih kecil. Sediakan pilihan lembut untuk lansia atau anak.",
+          "vi": "Tính theo số khách cộng thêm một đến hai phần. Nhiều món thì mỗi món có thể ít hơn. Có người già hoặc trẻ em nên có món mềm, ít cay, ít dầu."
+        }
+      },
+      {
+        "heading": {
+          "zh": "出餐與保溫",
+          "en": "Serving and holding",
+          "id": "Sajikan dan jaga hangat",
+          "vi": "Ra món và giữ nóng"
+        },
+        "body": {
+          "zh": "宴客最怕熱菜冷掉與動線混亂。可用蒸鍋、保溫鍋或烤箱低溫保溫，但酥炸品不要悶蓋，否則會變軟。",
+          "en": "Hot dishes getting cold and messy workflow are common problems. Use steamer, warmer, or low oven heat, but do not cover crispy fried food tightly.",
+          "id": "Masalah jamuan adalah makanan panas jadi dingin dan alur kacau. Gunakan kukusan, penghangat, atau oven suhu rendah, tetapi gorengan renyah jangan ditutup rapat.",
+          "vi": "Vấn đề khi đãi khách là món nóng bị nguội và quy trình rối. Dùng nồi hấp, nồi giữ nhiệt hoặc lò nhiệt thấp, nhưng đồ chiên giòn không đậy kín."
+        }
+      }
+    ]
+  },
+  {
+    "items": [
+      {
+        "icon": "🔎",
+        "zh": "找出危害",
+        "en": "Identify hazards",
+        "id": "Cari bahaya",
+        "vi": "Tìm mối nguy"
+      },
+      {
+        "icon": "🌡️",
+        "zh": "控制溫度",
+        "en": "Control temperature",
+        "id": "Kendalikan suhu",
+        "vi": "Kiểm soát nhiệt độ"
+      },
+      {
+        "icon": "🥩",
+        "zh": "生熟分開",
+        "en": "Separate raw and cooked",
+        "id": "Pisahkan mentah matang",
+        "vi": "Tách sống chín"
+      },
+      {
+        "icon": "🧾",
+        "zh": "紀錄異常",
+        "en": "Record problems",
+        "id": "Catat masalah",
+        "vi": "Ghi bất thường"
+      },
+      {
+        "icon": "📣",
+        "zh": "立即回報",
+        "en": "Report immediately",
+        "id": "Laporkan segera",
+        "vi": "Báo ngay"
+      }
+    ],
+    "sections": [
+      {
+        "heading": {
+          "zh": "HACCP核心想法",
+          "en": "HACCP idea",
+          "id": "Ide HACCP",
+          "vi": "Ý tưởng HACCP"
+        },
+        "body": {
+          "zh": "HACCP不是背名詞，而是先找出危害，再決定哪個步驟一定要控制。家庭廚房可把「採買、保存、前處理、烹調、供餐」當作流程檢查。",
+          "en": "HACCP is not memorizing terms. It identifies hazards and decides which steps must be controlled. In a home kitchen, check buying, storage, prep, cooking, and service.",
+          "id": "HACCP bukan menghafal istilah. Cari bahaya lalu tentukan langkah yang wajib dikendalikan: belanja, simpan, persiapan, masak, dan penyajian.",
+          "vi": "HACCP không chỉ học thuật ngữ. Cần tìm mối nguy rồi xác định bước phải kiểm soát: mua, bảo quản, sơ chế, nấu và phục vụ."
+        }
+      },
+      {
+        "heading": {
+          "zh": "關鍵管制點",
+          "en": "Critical points",
+          "id": "Titik kendali penting",
+          "vi": "Điểm kiểm soát quan trọng"
+        },
+        "body": {
+          "zh": "家用情境最常見的關鍵點是冷藏溫度、中心加熱溫度、生熟分開與再加熱。這些點一失控，食物中毒風險就會快速上升。",
+          "en": "Common home critical points are refrigerator temperature, internal cooking temperature, raw-cooked separation, and reheating. If these fail, food poisoning risk rises.",
+          "id": "Di rumah, titik penting adalah suhu kulkas, suhu matang bagian tengah, pemisahan mentah matang, dan pemanasan ulang.",
+          "vi": "Ở gia đình, điểm quan trọng là nhiệt độ tủ lạnh, nhiệt độ lõi khi nấu, tách sống chín và hâm nóng lại."
+        }
+      },
+      {
+        "heading": {
+          "zh": "紀錄與回報",
+          "en": "Record and report",
+          "id": "Catat dan laporkan",
+          "vi": "Ghi chép và báo cáo"
+        },
+        "body": {
+          "zh": "若冰箱故障、停電、食材異味或有人吃後不舒服，要記下時間、食材、處理方式並立刻告知雇主。紀錄不是找責任，是幫助快速判斷風險。",
+          "en": "If the refrigerator fails, power goes out, food smells bad, or someone feels sick after eating, record time, food, handling, and report immediately.",
+          "id": "Jika kulkas rusak, listrik padam, makanan berbau, atau ada yang sakit setelah makan, catat waktu, bahan, cara penanganan, dan segera laporkan.",
+          "vi": "Nếu tủ lạnh hỏng, mất điện, thực phẩm có mùi hoặc có người khó chịu sau ăn, ghi thời gian, món, cách xử lý và báo ngay."
+        }
+      }
+    ]
+  },
+  {
+    "items": [
+      {
+        "icon": "🥄",
+        "zh": "質地分級",
+        "en": "Texture levels",
+        "id": "Tingkat tekstur",
+        "vi": "Mức kết cấu"
+      },
+      {
+        "icon": "🍳",
+        "zh": "高營養密度",
+        "en": "Nutrient density",
+        "id": "Padat gizi",
+        "vi": "Đậm đặc dinh dưỡng"
+      },
+      {
+        "icon": "💧",
+        "zh": "吞嚥安全",
+        "en": "Swallowing safety",
+        "id": "Keamanan menelan",
+        "vi": "An toàn nuốt"
+      },
+      {
+        "icon": "🪑",
+        "zh": "坐姿用餐",
+        "en": "Eating posture",
+        "id": "Posisi makan",
+        "vi": "Tư thế ăn"
+      },
+      {
+        "icon": "👀",
+        "zh": "觀察反應",
+        "en": "Observe response",
+        "id": "Amati respons",
+        "vi": "Quan sát phản ứng"
+      }
+    ],
+    "sections": [
+      {
+        "heading": {
+          "zh": "質地調整",
+          "en": "Texture adjustment",
+          "id": "Penyesuaian tekstur",
+          "vi": "Điều chỉnh kết cấu"
+        },
+        "body": {
+          "zh": "長者餐不只是煮軟，要依咀嚼與吞嚥能力調整：切小、煮嫩、打碎、泥狀或增稠。避免乾硬、黏牙、帶刺帶骨與容易嗆咳的食物。",
+          "en": "Elder meals are not just soft; adjust to chewing and swallowing ability: small cuts, tender cooking, minced, pureed, or thickened. Avoid dry, sticky, bones, and choking risks.",
+          "id": "Makanan lansia bukan hanya empuk. Sesuaikan dengan kemampuan mengunyah dan menelan: potong kecil, masak lembut, cincang, haluskan, atau kental.",
+          "vi": "Món cho người già không chỉ mềm. Cần theo khả năng nhai nuốt: cắt nhỏ, nấu mềm, băm, xay nhuyễn hoặc làm đặc."
+        }
+      },
+      {
+        "heading": {
+          "zh": "營養密度",
+          "en": "Nutrient density",
+          "id": "Kepadatan gizi",
+          "vi": "Mật độ dinh dưỡng"
+        },
+        "body": {
+          "zh": "長者食量可能變小，所以每一口要有營養。可用蛋、豆腐、魚、絞肉、奶製品與好油增加蛋白質與熱量，避免只有稀飯配醬菜。",
+          "en": "Older adults may eat less, so each bite should carry nutrition. Use eggs, tofu, fish, minced meat, dairy, and healthy oils for protein and energy.",
+          "id": "Lansia mungkin makan sedikit, jadi tiap suap perlu bergizi. Gunakan telur, tahu, ikan, daging cincang, susu, dan minyak baik.",
+          "vi": "Người già có thể ăn ít, nên mỗi miếng cần đủ chất. Dùng trứng, đậu phụ, cá, thịt băm, sữa và dầu tốt."
+        }
+      },
+      {
+        "heading": {
+          "zh": "用餐觀察",
+          "en": "Mealtime observation",
+          "id": "Observasi saat makan",
+          "vi": "Quan sát khi ăn"
+        },
+        "body": {
+          "zh": "注意是否咳嗽、含飯、流口水、吃很久、聲音變濕或體重下降。這些可能是吞嚥或營養警訊，要回報家屬或照護人員。",
+          "en": "Watch for coughing, pocketing food, drooling, very slow eating, wet voice, or weight loss. These may signal swallowing or nutrition problems.",
+          "id": "Perhatikan batuk, makanan disimpan di pipi, air liur, makan sangat lama, suara basah, atau berat turun. Ini perlu dilaporkan.",
+          "vi": "Chú ý ho, ngậm thức ăn, chảy nước bọt, ăn rất lâu, giọng ướt hoặc sụt cân. Đây có thể là dấu hiệu nuốt hoặc dinh dưỡng."
+        }
+      }
+    ]
+  },
+  {
+    "items": [
+      {
+        "icon": "❓",
+        "zh": "先問清楚",
+        "en": "Ask first",
+        "id": "Tanya dulu",
+        "vi": "Hỏi trước"
+      },
+      {
+        "icon": "🧺",
+        "zh": "備料分類",
+        "en": "Group ingredients",
+        "id": "Kelompokkan bahan",
+        "vi": "Phân loại nguyên liệu"
+      },
+      {
+        "icon": "🍽️",
+        "zh": "準時出餐",
+        "en": "Serve on time",
+        "id": "Sajikan tepat waktu",
+        "vi": "Ra món đúng giờ"
+      },
+      {
+        "icon": "🧽",
+        "zh": "邊做邊清",
+        "en": "Clean as you go",
+        "id": "Bersihkan sambil kerja",
+        "vi": "Vừa làm vừa dọn"
+      },
+      {
+        "icon": "📣",
+        "zh": "完成回報",
+        "en": "Report completion",
+        "id": "Lapor selesai",
+        "vi": "Báo hoàn thành"
+      }
+    ],
+    "sections": [
+      {
+        "heading": {
+          "zh": "先問需求",
+          "en": "Ask needs first",
+          "id": "Tanya kebutuhan dulu",
+          "vi": "Hỏi nhu cầu trước"
+        },
+        "body": {
+          "zh": "家庭幫傭做菜前要先確認人數、用餐時間、忌口、口味、預算與冰箱現有食材。確認清楚，比做很多菜但不合需求更重要。",
+          "en": "Before cooking for a household, confirm headcount, meal time, restrictions, taste, budget, and available ingredients. Clear confirmation matters more than making many dishes.",
+          "id": "Sebelum memasak, pastikan jumlah orang, waktu makan, pantangan, selera, anggaran, dan bahan yang ada. Konfirmasi lebih penting daripada banyak menu.",
+          "vi": "Trước khi nấu cho gia đình, xác nhận số người, giờ ăn, kiêng kỵ, khẩu vị, ngân sách và nguyên liệu có sẵn. Xác nhận rõ quan trọng hơn nấu nhiều."
+        }
+      },
+      {
+        "heading": {
+          "zh": "工作動線",
+          "en": "Workflow",
+          "id": "Alur kerja",
+          "vi": "Quy trình làm việc"
+        },
+        "body": {
+          "zh": "家庭廚房空間有限，要先洗切備料、分類擺放，再依久煮、快炒、擺盤順序操作。邊做邊清潔，避免鍋具與垃圾堆滿工作檯。",
+          "en": "Home kitchens are small. Wash and cut first, group ingredients, then cook long dishes, quick dishes, and plating in order. Clean as you go.",
+          "id": "Dapur rumah terbatas. Cuci potong dulu, kelompokkan bahan, lalu masak dari yang lama, cepat, dan plating. Bersihkan sambil bekerja.",
+          "vi": "Bếp gia đình thường nhỏ. Rửa cắt trước, phân loại nguyên liệu, rồi nấu món lâu, món nhanh và bày đĩa. Vừa làm vừa dọn."
+        }
+      },
+      {
+        "heading": {
+          "zh": "交接回報",
+          "en": "Handover report",
+          "id": "Laporan setelah kerja",
+          "vi": "Bàn giao sau nấu"
+        },
+        "body": {
+          "zh": "做完後回報剩菜、剩料、需要補買的東西與任何異常，例如瓦斯味、冰箱不冷、食材快過期。這會讓雇主覺得安心，也避免下次出錯。",
+          "en": "After cooking, report leftovers, remaining ingredients, items to buy, and issues such as gas smell, refrigerator not cold, or food near expiry.",
+          "id": "Setelah memasak, laporkan sisa makanan, sisa bahan, yang perlu dibeli, dan masalah seperti bau gas, kulkas tidak dingin, atau bahan hampir kedaluwarsa.",
+          "vi": "Sau khi nấu, báo đồ thừa, nguyên liệu còn lại, thứ cần mua và bất thường như mùi gas, tủ lạnh không lạnh hoặc thực phẩm gần hết hạn."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "照護餐目標",
+          "en": "Care meal goals",
+          "id": "Tujuan makanan perawatan",
+          "vi": "Mục tiêu bữa ăn chăm sóc"
+        },
+        "body": {
+          "zh": "長照餐要同時照顧安全、營養、吞嚥、疾病限制與尊嚴。不是把食物全部打成泥就好，而是讓使用者能安全、願意、吃得夠。",
+          "en": "Care meals balance safety, nutrition, swallowing, medical restrictions, and dignity. It is not enough to puree everything; the person must eat safely and willingly.",
+          "id": "Makanan long-term care harus aman, bergizi, sesuai kemampuan menelan, batasan penyakit, dan tetap bermartabat. Tidak cukup hanya diblender.",
+          "vi": "Bữa ăn chăm sóc cần an toàn, dinh dưỡng, phù hợp nuốt, bệnh lý và tôn trọng. Không chỉ xay nhuyễn mọi thứ."
+        }
+      },
+      {
+        "heading": {
+          "zh": "疾病飲食配合",
+          "en": "Medical diets",
+          "id": "Diet penyakit",
+          "vi": "Chế độ bệnh lý"
+        },
+        "body": {
+          "zh": "糖尿病、腎臟病、高血壓、痛風或術後飲食都有不同限制。不要自行大幅調整鹽、糖、蛋白質或水分，應照家屬或醫療人員指示。",
+          "en": "Diabetes, kidney disease, hypertension, gout, and post-surgery diets differ. Do not change salt, sugar, protein, or fluid greatly without instructions.",
+          "id": "Diabetes, penyakit ginjal, hipertensi, asam urat, dan pasca operasi punya aturan berbeda. Jangan mengubah garam, gula, protein, atau cairan tanpa instruksi.",
+          "vi": "Tiểu đường, bệnh thận, cao huyết áp, gout hoặc sau phẫu thuật có giới hạn khác nhau. Không tự ý đổi muối, đường, đạm hoặc nước."
+        }
+      },
+      {
+        "heading": {
+          "zh": "食慾與呈現",
+          "en": "Appetite and presentation",
+          "id": "Nafsu makan dan tampilan",
+          "vi": "Cảm giác ngon miệng"
+        },
+        "body": {
+          "zh": "長照餐也需要顏色、香氣與熟悉味道。可用分格盤、少量多餐、漂亮擺盤與適合溫度，增加願意進食的機會。",
+          "en": "Care meals still need color, aroma, and familiar taste. Use divided plates, small frequent meals, neat plating, and proper temperature.",
+          "id": "Makanan perawatan tetap perlu warna, aroma, dan rasa yang dikenal. Gunakan piring sekat, porsi kecil sering, plating rapi, dan suhu tepat.",
+          "vi": "Bữa ăn chăm sóc vẫn cần màu sắc, mùi thơm và vị quen thuộc. Dùng khay chia ngăn, bữa nhỏ nhiều lần, bày đẹp và nhiệt độ phù hợp."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "確認比猜測重要",
+          "en": "Confirm, do not guess",
+          "id": "Konfirmasi, jangan menebak",
+          "vi": "Xác nhận, không đoán"
+        },
+        "body": {
+          "zh": "外籍幫傭遇到不確定的食材、口味或禁忌時，不要猜。可用照片、手勢、翻譯軟體與簡短句子確認，例如「這個可以放嗎？」",
+          "en": "When unsure about ingredients, taste, or restrictions, do not guess. Use photos, gestures, translation apps, and short sentences such as “Can I add this?”",
+          "id": "Jika tidak yakin bahan, rasa, atau pantangan, jangan menebak. Gunakan foto, isyarat, aplikasi terjemahan, dan kalimat pendek.",
+          "vi": "Khi không chắc về nguyên liệu, khẩu vị hoặc kiêng kỵ, đừng đoán. Dùng ảnh, cử chỉ, ứng dụng dịch và câu ngắn."
+        }
+      },
+      {
+        "heading": {
+          "zh": "回報方式",
+          "en": "How to report",
+          "id": "Cara melapor",
+          "vi": "Cách báo cáo"
+        },
+        "body": {
+          "zh": "回報要包含狀況、已做處理、需要雇主決定的事。例：魚有異味，我先放冷藏沒有煮，請問要丟掉還是退貨？",
+          "en": "A report should include the situation, what you already did, and what decision is needed. Example: “The fish smells odd; I kept it cold. Discard or return?”",
+          "id": "Laporan berisi keadaan, tindakan yang sudah dilakukan, dan keputusan yang dibutuhkan. Contoh: ikan berbau, saya simpan dingin, dibuang atau dikembalikan?",
+          "vi": "Báo cáo gồm tình huống, việc đã làm và quyết định cần chủ nhà. Ví dụ: cá có mùi lạ, tôi đã để lạnh, bỏ hay đổi trả?"
+        }
+      },
+      {
+        "heading": {
+          "zh": "避免衝突",
+          "en": "Avoid conflict",
+          "id": "Hindari konflik",
+          "vi": "Tránh xung đột"
+        },
+        "body": {
+          "zh": "口味不合時不要說「你錯了」，可說「我下次少鹽一點，可以嗎？」或「請問你喜歡軟一點還是脆一點？」把問題變成選擇題。",
+          "en": "When taste is not right, avoid “you are wrong.” Say, “Next time I can use less salt, is that okay?” or ask for a texture choice.",
+          "id": "Jika rasa tidak cocok, jangan berkata “Anda salah.” Katakan, “Lain kali saya kurangi garam, boleh?” atau tanyakan pilihan tekstur.",
+          "vi": "Khi khẩu vị chưa đúng, tránh nói “bạn sai”. Có thể nói “Lần sau tôi giảm muối nhé?” hoặc hỏi thích mềm hay giòn."
+        }
+      }
+    ]
+  },
+  {
+    "sections": [
+      {
+        "heading": {
+          "zh": "過敏不是挑食",
+          "en": "Allergy is not picky eating",
+          "id": "Alergi bukan pilih-pilih",
+          "vi": "Dị ứng không phải kén ăn"
+        },
+        "body": {
+          "zh": "食物過敏可能造成蕁麻疹、呼吸困難、嘔吐、血壓下降甚至休克。不能用「吃一點看看」測試，也不能把過敏原挑掉就算安全。",
+          "en": "Food allergy can cause hives, breathing trouble, vomiting, low blood pressure, or shock. Never “try a little” or simply remove visible allergen pieces.",
+          "id": "Alergi makanan bisa menyebabkan gatal, sulit napas, muntah, tekanan darah turun, bahkan syok. Jangan mencoba sedikit atau hanya membuang bagian terlihat.",
+          "vi": "Dị ứng thực phẩm có thể gây mề đay, khó thở, nôn, tụt huyết áp hoặc sốc. Không thử ăn một chút hoặc chỉ gắp bỏ chất dị ứng."
+        }
+      },
+      {
+        "heading": {
+          "zh": "交叉接觸",
+          "en": "Cross-contact",
+          "id": "Kontak silang",
+          "vi": "Lây nhiễm chéo dị ứng"
+        },
+        "body": {
+          "zh": "同一把刀、砧板、油鍋、夾子或醬料瓶都可能讓過敏原轉移。過敏者餐點要先做、用乾淨器具、分開盛裝與標示。",
+          "en": "The same knife, board, oil, tongs, or sauce bottle can transfer allergens. Prepare allergic meals first, with clean tools, separate serving, and labels.",
+          "id": "Pisau, talenan, minyak, penjepit, atau botol saus yang sama bisa memindahkan alergen. Masak makanan alergi lebih dulu dengan alat bersih dan terpisah.",
+          "vi": "Dao, thớt, dầu, kẹp hoặc chai sốt chung có thể truyền chất dị ứng. Làm phần người dị ứng trước, dùng dụng cụ sạch và để riêng."
+        }
+      },
+      {
+        "heading": {
+          "zh": "標示與急救",
+          "en": "Labels and emergency",
+          "id": "Label dan darurat",
+          "vi": "Nhãn và cấp cứu"
+        },
+        "body": {
+          "zh": "購買包裝食品要看「含有」與「可能含有」標示。若誤食後出現呼吸困難、臉唇腫、全身疹或意識不清，立刻通知雇主並叫救護車。",
+          "en": "Read “contains” and “may contain” labels. If accidental exposure causes breathing trouble, swelling, widespread rash, or confusion, tell the employer and call emergency help.",
+          "id": "Baca label “mengandung” dan “mungkin mengandung”. Jika sulit napas, bengkak, ruam luas, atau bingung setelah makan, segera beri tahu majikan dan panggil bantuan.",
+          "vi": "Đọc nhãn “có chứa” và “có thể chứa”. Nếu sau ăn khó thở, sưng mặt môi, nổi ban toàn thân hoặc lơ mơ, báo chủ nhà và gọi cấp cứu ngay."
+        }
+      }
+    ]
+  }
+];
+(function(){
+  LESSON_ENRICHMENTS.forEach(function(extra, idx){
+    var kd=MOD_KNOWLEDGE[idx];
+    if(!kd)return;
+    if(extra.sections&&extra.sections.length){
+      kd.sections=extra.sections.concat(kd.sections||[]);
+    }
+    if(extra.items&&extra.items.length&&(!kd.items||!kd.items.length)){
+      kd.items=extra.items;
+    }
+  });
+})();
+
 
 function applyI18N(){
   document.querySelectorAll('[data-i]').forEach(function(el){
@@ -4359,6 +5758,29 @@ function updateProgressUI(){
   var label=document.getElementById('hero-prog-label');
   if(fill) fill.style.width=p+'%';
   if(label) label.textContent=t('prog.label')+p+'%';
+  // v0.49: update hero ring
+  var ringFill=document.getElementById('hero-ring-fill');
+  var ringPct=document.getElementById('hero-ring-pct');
+  var ringTitle=document.getElementById('hero-ring-title');
+  var ringSub=document.getElementById('hero-ring-sub');
+  if(ringFill){
+    var circ=2*Math.PI*21; // r=21
+    var offset=circ*(1-p/100);
+    ringFill.style.strokeDasharray=circ.toFixed(2);
+    ringFill.style.strokeDashoffset=offset.toFixed(2);
+    // color by progress
+    ringFill.style.stroke=p>=100?'#2ecc71':p>=50?'#ff8c42':'#ff6b35';
+  }
+  if(ringPct) ringPct.textContent=p+'%';
+  if(ringTitle){var progLabels={zh:'學習進度',en:'Learning Progress',id:'Kemajuan Belajar',vi:'Tiến độ học'};ringTitle.textContent=progLabels[curLang]||progLabels.zh;}
+  var doneUnits=0,totUnits=0;MODS.forEach(function(m){doneUnits+=getDoneCount(m);totUnits+=getTotal(m);});
+  if(ringSub){var subLabels={zh:doneUnits+' / '+totUnits+' 主題完成',en:doneUnits+' / '+totUnits+' topics done',id:doneUnits+' / '+totUnits+' topik selesai',vi:doneUnits+' / '+totUnits+' chủ đề hoàn thành'};ringSub.textContent=subLabels[curLang]||subLabels.zh;}
+  // v0.49: update quiz badge
+  var weakCount=0;Object.keys(qcState.weakData||{}).forEach(function(mi){Object.keys(qcState.weakData[mi]).forEach(function(qi){if((qcState.weakData[mi][qi].wrong||0)>0)weakCount++;});});
+  var badge=document.getElementById('bnb-quiz-badge');
+  if(badge){if(weakCount>0){badge.textContent=weakCount>9?'9+':weakCount;badge.classList.add('show');}else{badge.classList.remove('show');}}
+  // v0.49: record streak today
+  recordStreak();
 }
 
 function buildLevelPath(){ /* removed — replaced by sidebar progress */ }
@@ -4386,6 +5808,31 @@ function getIcon(i){return['ti-shield','ti-cut','ti-flame','ti-snowflake','ti-so
 
 function renderHome(){
   var html='';
+
+  // ── v0.49: Streak 連續學習天數 ──
+  var sd=getStreakData();
+  var streakLabels={zh:'連續學習天',en:'Day streak',id:'Hari berturut-turut',vi:'Ngày liên tiếp'};
+  var bestLabels={zh:'最長',en:'Best',id:'Terbaik',vi:'Tốt nhất'};
+  html+='<div class="streak-bar">';
+  html+='<div class="streak-flame">🔥</div>';
+  html+='<div class="streak-info">';
+  html+='<div class="streak-count">'+sd.current+'</div>';
+  html+='<div class="streak-label">'+(streakLabels[curLang]||streakLabels.zh)+'</div>';
+  // 7 dots for last 7 days
+  html+='<div class="streak-dots">';
+  for(var di=6;di>=0;di--){
+    var dayAgo=di;
+    var ts=Date.now()-dayAgo*86400000;
+    var dayKey=new Date(ts).toISOString().slice(0,10);
+    var isToday=(dayAgo===0);
+    var isLit=sd.days.indexOf(dayKey)>=0;
+    var dc='streak-dot'+(isToday&&isLit?' today':isLit?' lit':'');
+    html+='<div class="'+dc+'" title="'+dayKey+'"></div>';
+  }
+  html+='</div>';
+  html+='</div>';
+  html+='<div class="streak-best">'+( bestLabels[curLang]||'Best' )+' '+sd.best+'🔥</div>';
+  html+='</div>';
 
   // ── 語言選擇 ──
   html+='<div class=\"sechd\"><h2>'+t('sec.lang')+'</h2><div class=\"ln\"></div></div>';
@@ -4415,6 +5862,7 @@ function renderHome(){
     html+='<div class="men">'+m.titles.en+'</div>';
     html+='<div class="mlvl">'+t('lesson.topic')+' '+m.lv+'</div>';
     html+='<div class="mcnt">'+done+' / '+tot+' '+t('tag.done')+'</div>';
+    html+='<div class="mbar"><div class="mfill" style="width:'+pct+'%"></div></div>';
     if(isDone) html+='<div class="mcheck"><i class="ti ti-circle-check" aria-hidden="true"></i></div>';
     html+='</div>';
   });
@@ -4540,6 +5988,30 @@ function renderLesson(idx){
         html+='</tr>';
       });
       html+='</tbody></table></div>';
+    }
+    // chart if present — horizontal bar chart rendered in pure HTML/CSS
+    if(kd.chart){
+      var ct=kd.chart;
+      var ctitle=pick(ct.title);
+      var maxVal=0;
+      ct.bars.forEach(function(b){if(b.value>maxVal)maxVal=b.value;});
+      html+='<div class=\"kdiagram\" style=\"margin-top:8px\">';
+      html+='<div class=\"kdiagram-title\">📊 '+ctitle+'</div>';
+      html+='<div style=\"display:flex;flex-direction:column;gap:6px;margin-top:6px\">';
+      ct.bars.forEach(function(b){
+        var pct2=maxVal>0?Math.round(b.value/maxVal*100):0;
+        var label=pick(b);
+        var col=b.color||'#5a1800';
+        var valLabel=b.unit?b.value+' '+b.unit:b.value;
+        html+='<div style=\"display:flex;align-items:center;gap:8px\">';
+        html+='<div style=\"width:90px;flex-shrink:0;font-size:10.5px;color:var(--color-text-secondary);text-align:right;line-height:1.3\">'+b.emoji+' '+label+'</div>';
+        html+='<div style=\"flex:1;height:22px;background:var(--color-background-tertiary);border-radius:4px;overflow:hidden;position:relative\">';
+        html+='<div style=\"height:100%;width:'+pct2+'%;background:'+col+';border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)\"></div>';
+        html+='<span style=\"position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--color-text-secondary);font-weight:500\">'+valLabel+'</span>';
+        html+='</div></div>';
+      });
+      if(ct.note){html+='<div style=\"margin-top:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 10px;font-size:10.5px;color:var(--color-text-secondary)\">'+pick(ct.note)+'</div>';}
+      html+='</div></div>';
     }
     var tip=pick(kd.tip);
     html+='<div class=\"ktip\">'+tip+'</div></div></div>';
@@ -4714,26 +6186,25 @@ function renderCert(){
   html+='</div>';
   html+='</div>';
 
-  // ── 各模組進度列 ──
-  html+='<div class=\"sechd\"><h2>'+t('cert.progress')+'</h2><div class=\"ln\"></div></div>';
+  // ── v0.49: 各模組進度格 (grid layout) ──
+  html+='<div class="sechd"><h2>'+t('cert.progress')+'</h2><div class="ln"></div></div>';
+  html+='<div class="cert-mod-grid">';
   MODS.forEach(function(m,i){
     var label=m.titles[curLang]||m.titles.zh;
     var mDone=getDoneCount(m);var mTot=getTotal(m);
     var pct=mTot>0?Math.round(mDone/mTot*100):0;
     var isDone=isModDone(m);
-    var barColor=isDone?'#1a7248':'#8a2800';
-    html+='<div onclick=\"loadModule('+i+')\" role=\"button\" tabindex=\"0\" style=\"display:flex;align-items:center;gap:10px;padding:9px 11px;background:var(--color-background-primary);border:0.5px solid var(--color-border-'+(isDone?'success':'tertiary')+');border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .15s\" onmouseover=\"this.style.borderColor=\'var(--color-border-primary)\'\" onmouseout=\"this.style.borderColor=\'var(--color-border-'+(isDone?'success':'tertiary')+')\'\">';
-    html+='<div style=\"font-size:22px;flex-shrink:0\">'+m.emoji+'</div>';
-    html+='<div style=\"flex:1;min-width:0\">';
-    html+='<div style=\"display:flex;align-items:center;gap:6px\">';
-    html+='<span style=\"font-size:12px;font-weight:500;color:var(--color-text-primary)\">'+t('lesson.topic')+m.lv+' '+label+'</span>';
-    if(isDone) html+='<i class=\"ti ti-circle-check\" style=\"font-size:13px;color:#1a7248\" aria-hidden=\"true\"></i>';
+    html+='<div class="cert-mod-item'+(isDone?' done':'')+'" onclick="loadModule('+i+')" role="button" tabindex="0" style="cursor:pointer">';
+    html+='<div class="cert-mod-emoji">'+m.emoji+'</div>';
+    html+='<div class="cert-mod-info">';
+    html+='<div class="cert-mod-name">'+label+'</div>';
+    html+='<div class="cert-mod-prog">'+mDone+'/'+mTot+' ('+pct+'%)</div>';
+    html+='<div class="cert-mod-bar-wrap"><div class="cert-mod-bar-fill" style="width:'+pct+'%"></div></div>';
     html+='</div>';
-    html+='<div style=\"font-size:11px;color:var(--color-text-secondary);margin-top:2px\">'+mDone+' / '+mTot+' '+t('cert.unit')+'</div>';
-    html+='</div>';
-    html+='<div style=\"font-size:12px;font-weight:600;color:'+(isDone?'#1a7248':'#8a2800')+';flex-shrink:0;min-width:36px;text-align:right\">'+pct+'%</div>';
+    if(isDone) html+='<span class="cert-mod-check">✓</span>';
     html+='</div>';
   });
+  html+='</div>';
 
   html+='<div class=\"quick\" style=\"justify-content:center;margin-top:8px\">';
   html+='<button class=\"qbtn pri\" onclick=\"showView(\'home\')\">'+t('btn.continue')+'</button>';
@@ -4928,6 +6399,37 @@ function updateStatCounts(){
 }
 
 // ── P4 LocalStorage 進度保存與載入（schemaVersion 防升級炸裂）──
+/* ── v0.49: Streak 連續學習天數 ── */
+var STREAK_KEY='culinary_streak_v1';
+function getStreakData(){
+  try{
+    var raw=localStorage.getItem(STREAK_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {current:0,best:0,days:[]};
+}
+function recordStreak(){
+  try{
+    var sd=getStreakData();
+    var today=new Date().toISOString().slice(0,10);
+    if(sd.days.indexOf(today)>=0) return; // already recorded today
+    sd.days.push(today);
+    // keep last 60 days
+    sd.days=sd.days.slice(-60);
+    // recalc current streak
+    var streak=0;
+    var d=new Date();
+    for(var i=0;i<60;i++){
+      var key=new Date(d.getTime()-i*86400000).toISOString().slice(0,10);
+      if(sd.days.indexOf(key)>=0) streak++;
+      else if(i>0) break; // streak broken
+    }
+    sd.current=streak;
+    sd.best=Math.max(sd.best||0,streak);
+    localStorage.setItem(STREAK_KEY,JSON.stringify(sd));
+  }catch(e){}
+}
+
 var LS_KEY='culinary_platform_progress';
 var LS_SCHEMA_VERSION=1;
 function saveProgress(){
@@ -5237,9 +6739,11 @@ toggleTopicDone=function(modIdx,topicIdx,tickEl){
 // 首次加載初始化（GitHub Pages: 自動偵測裝置）
 loadProgress();
 qcLoadData();
+recordStreak();       // v0.49: record today for streak
 autoDetectDevice();   // 依真實視窗寬度選擇 mobile/tablet/desktop
 showView('home');
 updateStatCounts();
+updateProgressUI();   // v0.49: drive ring & badge on startup
 </script>
 </div>
 </body>
