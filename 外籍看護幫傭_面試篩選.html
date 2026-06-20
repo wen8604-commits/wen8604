@@ -1,0 +1,2985 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>外籍看護幫傭 面試篩選工具 | Foreign Caregiver & Domestic Helper Interview Screening</title>
+<style>
+:root {
+  --primary: #1a5490;
+  --primary-light: #e6f1fb;
+  --primary-mid: #378add;
+  --accent: #0f6e56;
+  --accent-light: #e1f5ee;
+  --warn: #ba7517;
+  --warn-light: #faeeda;
+  --danger: #a32d2d;
+  --danger-light: #fcebeb;
+  --success: #3b6d11;
+  --success-light: #eaf3de;
+  --text: #2c2c2a;
+  --text-sec: #5f5e5a;
+  --text-hint: #888780;
+  --border: rgba(0,0,0,0.12);
+  --border-med: rgba(0,0,0,0.22);
+  --bg: #ffffff;
+  --bg-sec: #f4f3ef;
+  --bg-ter: #eceae4;
+  --radius: 10px;
+  --radius-lg: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary: #85b7eb;
+    --primary-light: #042c53;
+    --primary-mid: #378add;
+    --accent: #5dcaa5;
+    --accent-light: #04342c;
+    --warn: #ef9f27;
+    --warn-light: #412402;
+    --danger: #f09595;
+    --danger-light: #501313;
+    --success: #97c459;
+    --success-light: #173404;
+    --text: #d3d1c7;
+    --text-sec: #b4b2a9;
+    --text-hint: #888780;
+    --border: rgba(255,255,255,0.14);
+    --border-med: rgba(255,255,255,0.25);
+    --bg: #1e1e1c;
+    --bg-sec: #28271f;
+    --bg-ter: #323028;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, 'Noto Sans TC', 'Noto Sans', sans-serif;
+  background: var(--bg-ter);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.app-header {
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.app-title {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.app-sub {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 1px;
+}
+.lang-btns {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.lang-btn {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.35);
+  background: transparent;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.lang-btn.active { background: rgba(255,255,255,0.25); }
+.lang-btn:hover { background: rgba(255,255,255,0.18); }
+
+.tab-bar {
+  display: flex;
+  background: var(--bg);
+  border-bottom: 0.5px solid var(--border);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 11px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-sec);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  transition: color 0.15s;
+}
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.main { padding: 14px 14px 80px; max-width: 680px; margin: 0 auto; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 18px 0 8px;
+}
+.section-label:first-child { margin-top: 4px; }
+
+.card {
+  background: var(--bg);
+  border-radius: var(--radius-lg);
+  border: 0.5px solid var(--border);
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+.card-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.badge-danger { background: var(--danger-light); color: var(--danger); }
+.badge-warn { background: var(--warn-light); color: var(--warn); }
+.badge-ok { background: var(--success-light); color: var(--success); }
+.badge-info { background: var(--primary-light); color: var(--primary); }
+
+.checklist { list-style: none; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.checklist li:last-child { border-bottom: none; padding-bottom: 0; }
+.check-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border-med);
+  flex-shrink: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: background 0.12s, border-color 0.12s;
+  background: var(--bg);
+}
+.check-box.checked { background: var(--accent); border-color: var(--accent); }
+.check-box.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+
+.q-item {
+  background: var(--bg-sec);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--primary);
+}
+.q-text { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.q-note { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+.q-good { color: var(--success); font-size: 12px; margin-top: 4px; }
+.q-bad { color: var(--danger); font-size: 12px; margin-top: 4px; }
+.q-item.warn { border-left-color: var(--warn); }
+.q-item.danger { border-left-color: var(--danger); }
+
+.phase-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.phase-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.phase-title { font-size: 15px; font-weight: 600; }
+.phase-time { font-size: 11px; color: var(--text-hint); }
+
+.score-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.score-card {
+  background: var(--bg-sec);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+}
+.score-label { font-size: 11px; color: var(--text-sec); margin-bottom: 6px; }
+.score-weight { font-size: 10px; color: var(--text-hint); }
+.score-stars {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  margin: 6px 0 4px;
+}
+.star {
+  width: 20px; height: 20px;
+  border-radius: 3px;
+  border: 1.5px solid var(--border-med);
+  cursor: pointer;
+  background: var(--bg);
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-hint);
+  transition: background 0.1s;
+}
+.star.filled { background: var(--warn); border-color: var(--warn); color: #fff; }
+.score-val { font-size: 18px; font-weight: 700; color: var(--primary); }
+
+.total-bar {
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-top: 14px;
+  text-align: center;
+}
+.total-num { font-size: 36px; font-weight: 700; color: var(--primary); }
+.total-label { font-size: 13px; color: var(--text-sec); margin-top: 2px; }
+.verdict { font-size: 15px; font-weight: 600; margin-top: 8px; padding: 8px 16px; border-radius: 20px; display: inline-block; }
+.verdict-pass { background: var(--success-light); color: var(--success); }
+.verdict-fail { background: var(--danger-light); color: var(--danger); }
+.verdict-check { background: var(--warn-light); color: var(--warn); }
+
+.alert-box {
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  border-left: 3px solid;
+}
+.alert-danger { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+.alert-warn { background: var(--warn-light); border-color: var(--warn); color: var(--warn); }
+.alert-ok { background: var(--success-light); border-color: var(--success); color: var(--success); }
+.alert-title { font-weight: 700; margin-bottom: 4px; }
+.alert-body { color: var(--text); font-size: 13px; }
+
+.flag-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border-med);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 3px 3px 3px 0;
+  background: var(--bg);
+  color: var(--text-sec);
+  transition: background 0.12s;
+}
+.flag-toggle.flagged-red { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+.flag-toggle.flagged-yellow { background: var(--warn-light); border-color: var(--warn); color: var(--warn); }
+
+.progress-bar-wrap {
+  background: var(--bg-sec);
+  border-radius: 4px;
+  height: 5px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--primary);
+  transition: width 0.3s;
+}
+
+.note-area {
+  width: 100%;
+  min-height: 70px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-med);
+  padding: 10px 12px;
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.note-area:focus { outline: 2px solid var(--primary); }
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.9; }
+.btn-secondary {
+  display: block;
+  width: 100%;
+  padding: 11px;
+  border-radius: var(--radius);
+  background: var(--bg-sec);
+  color: var(--text);
+  border: 0.5px solid var(--border-med);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+  font-family: inherit;
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.interview-timer {
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border);
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.timer-display { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--primary); }
+.timer-btns { display: flex; gap: 6px; }
+.timer-btn {
+  padding: 6px 14px;
+  border-radius: 7px;
+  border: 0.5px solid var(--border-med);
+  background: var(--bg-sec);
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 400px) { .two-col { grid-template-columns: 1fr; } }
+
+.divider { height: 0.5px; background: var(--border); margin: 14px 0; }
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 14px;
+}
+.summary-row:last-child { border-bottom: none; }
+.summary-row-label { color: var(--text-sec); }
+.summary-row-val { font-weight: 600; }
+
+.candidate-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-sec);
+  margin-bottom: 4px;
+}
+.candidate-form input, .candidate-form select {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-med);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 10px;
+}
+.candidate-form input:focus, .candidate-form select:focus {
+  outline: 2px solid var(--primary);
+}
+
+.tip-bubble {
+  background: var(--primary-light);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--primary);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.tip-bubble b { color: var(--primary); }
+
+.vetolist { list-style: none; }
+.vetolist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--border);
+  font-size: 13px;
+  color: var(--danger);
+}
+.vetolist li:last-child { border-bottom: none; }
+.vetolist li::before { content: '✘'; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+.print-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+  padding: 12px 20px;
+  border-radius: 50px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  font-family: inherit;
+  z-index: 50;
+}
+
+@media (min-width: 500px) {
+  .main { padding: 18px 20px 90px; }
+  .score-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media print {
+  .app-header, .tab-bar, .print-btn, .timer-btns, .btn-primary, .btn-secondary, .autosave-status { display: none !important; }
+  .tab-content { display: block !important; }
+  body { background: #fff; }
+  .card { border: 1px solid #ddd; page-break-inside: avoid; }
+}
+.autosave-status {
+  font-size: 10px;
+  opacity: 0.75;
+  margin-top: 4px;
+  min-height: 12px;
+  transition: opacity 0.3s;
+}
+.grade-badge-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.grade-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.grade-S { background: #0f6e56; }
+.grade-A { background: #1a5490; }
+.grade-B { background: #ba7517; }
+.grade-C { background: #a32d2d; }
+.grade-desc { font-size: 12px; color: var(--text-sec); text-align: left; }
+.grade-desc b { color: var(--text); }
+.risk-row { display:flex; align-items:center; gap:14px; }
+.risk-dial { width:70px; height:70px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:20px; font-weight:800; color:#fff; }
+.risk-low-dial { background: var(--success); }
+.risk-mid-dial { background: var(--warn); }
+.risk-high-dial { background: var(--danger); }
+.risk-info-title { font-size:14px; font-weight:700; margin-bottom:3px; }
+.risk-low-text { color: var(--success); }
+.risk-mid-text { color: var(--warn); }
+.risk-high-text { color: var(--danger); }
+.risk-info-desc { font-size:12px; color: var(--text-sec); line-height:1.5; }
+.risk-bar-wrap { background: var(--bg-sec); border-radius:4px; height:6px; margin-top:10px; overflow:hidden; }
+.risk-bar-fill { height:100%; border-radius:4px; transition: width 0.3s; }
+.compare-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 12px; }
+.compare-table { border-collapse: collapse; width: 100%; min-width: 480px; background: var(--bg); border-radius: var(--radius-lg); overflow: hidden; }
+.compare-table th, .compare-table td { padding: 9px 12px; font-size: 13px; border-bottom: 0.5px solid var(--border); text-align: left; white-space: nowrap; }
+.compare-table th { background: var(--bg-sec); color: var(--text-sec); font-weight: 600; position: sticky; top: 0; }
+.compare-table td:first-child, .compare-table th:first-child { color: var(--text-hint); font-weight: 600; position: sticky; left: 0; background: var(--bg-sec); }
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-col-best { background: var(--success-light); }
+.compare-remove-btn { background: none; border: none; color: var(--danger); font-size: 12px; cursor: pointer; padding: 2px 6px; }
+.compare-empty { font-size: 13px; color: var(--text-hint); padding: 18px 0; text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-top">
+    <div>
+      <div class="app-title" id="h-title">外籍看護幫傭 面試篩選工具</div>
+      <div class="app-sub" id="h-sub">看護工・家庭幫傭適用 · 新引進＆承接轉出 · 雇主實務版</div>
+    </div>
+    <div class="lang-btns">
+      <button class="lang-btn active" onclick="setLang('zh')">中</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" onclick="setLang('vi')">VI</button>
+    </div>
+  </div>
+  <div id="autosave-status" class="autosave-status"></div>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('setup')" id="tb-setup" data-key="tab_setup">候選人資訊</button>
+  <button class="tab-btn" onclick="switchTab('resume')" id="tb-resume" data-key="tab_resume">履歷審查</button>
+  <button class="tab-btn" onclick="switchTab('interview')" id="tb-interview" data-key="tab_interview">視訊面試</button>
+  <button class="tab-btn" onclick="switchTab('traps')" id="tb-traps" data-key="tab_traps">陷阱問題</button>
+  <button class="tab-btn" onclick="switchTab('score')" id="tb-score" data-key="tab_score">評分結果</button>
+  <button class="tab-btn" onclick="switchTab('compare')" id="tb-compare" data-key="tab_compare">候選人比較</button>
+</div>
+
+<div class="main">
+
+<!-- TAB 1: Setup -->
+<div class="tab-content active" id="tab-setup">
+  <p class="section-label" data-key="sl_candidate">候選人基本資料</p>
+  <div class="card">
+    <div class="candidate-form">
+      <label data-key="f_name">姓名</label>
+      <input type="text" id="f-name" placeholder="候選人姓名" oninput="saveState()">
+      <label data-key="f_nationality">國籍</label>
+      <select id="f-nationality" onchange="saveState()">
+        <option value="">-- 選擇 --</option>
+        <option value="indonesia">🇮🇩 印尼 Indonesia</option>
+        <option value="vietnam">🇻🇳 越南 Vietnam</option>
+        <option value="philippines">🇵🇭 菲律賓 Philippines</option>
+        <option value="thailand">🇹🇭 泰國 Thailand</option>
+      </select>
+      <label data-key="f_type">聘僱類型</label>
+      <select id="f-type" onchange="toggleTransferExtra(); saveState();">
+        <option value="new">新引進 (New hire)</option>
+        <option value="transfer">承接轉出 (Transfer)</option>
+      </select>
+      <label data-key="f_worktype">主要工作性質</label>
+      <select id="f-worktype" onchange="toggleWorktypeExtra(); saveState();">
+        <option value="" data-key="wt_none">-- 請選擇 --</option>
+        <option value="caregiver" data-key="wt_caregiver">🏥 看護工（醫療／生活照護為主）</option>
+        <option value="helper" data-key="wt_helper">🧹 家庭幫傭（家事為主，不含看護）</option>
+        <option value="mixed" data-key="wt_mixed">🔄 看護兼幫傭（混合型）</option>
+      </select>
+      <label data-key="f_date">面試日期</label>
+      <input type="date" id="f-date" onchange="saveState()">
+      <label data-key="f_agency">仲介公司</label>
+      <input type="text" id="f-agency" placeholder="仲介名稱" oninput="saveState()">
+      <label data-key="f_recid">面試編號</label>
+      <input type="text" id="f-recid" placeholder="例：2026-0621-A01" oninput="saveState()">
+      <label data-key="f_recfile">錄影檔名稱</label>
+      <input type="text" id="f-recfile" placeholder="例：interview_2026_0621.mp4" oninput="saveState()">
+      <label data-key="f_reclink">雲端連結</label>
+      <input type="url" id="f-reclink" placeholder="例：https://drive.google.com/..." oninput="saveState()">
+      <label data-key="f_caretype">主要照護類型</label>
+      <select id="f-caretype" onchange="buildCareTypeQuestions(); saveState();">
+        <option value="" data-key="ct_none">-- 一般照護（無特殊類型）--</option>
+        <option value="dementia" data-key="ct_dementia">🧠 失智症照護</option>
+        <option value="stroke" data-key="ct_stroke">🦽 中風／復健照護</option>
+        <option value="bedridden" data-key="ct_bedridden">🛏️ 臥床／長照照護</option>
+        <option value="cancer" data-key="ct_cancer">🎗️ 癌症／安寧照護</option>
+        <option value="parkinson" data-key="ct_parkinson">🤲 巴金森氏症照護</option>
+        <option value="tubefeeding" data-key="ct_tubefeeding">🍽️ 管灌（鼻胃管）照護</option>
+        <option value="tracheostomy" data-key="ct_tracheostomy">🫁 氣切照護</option>
+        <option value="dialysis" data-key="ct_dialysis">🩸 洗腎患者照護</option>
+        <option value="pressureulcer" data-key="ct_pressureulcer">🩹 臥床褥瘡照護</option>
+        <option value="diabetes" data-key="ct_diabetes">💉 糖尿病照護</option>
+      </select>
+      <label data-key="f_photo">候選人照片（選填）</label>
+      <div id="photo-upload-area" style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+        <div id="photo-preview-wrap" style="width:64px; height:64px; border-radius:10px; border:1.5px dashed var(--border-med); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; cursor:pointer; background:var(--bg-sec);" onclick="document.getElementById('f-photo').click()">
+          <img id="photo-preview-img" src="" style="width:100%; height:100%; object-fit:cover; display:none;">
+          <span id="photo-preview-icon" style="font-size:22px; color:var(--text-hint);">📷</span>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:12px; color:var(--text-sec);" data-key="photo_hint">點擊上傳照片，將顯示於 PDF 報告</div>
+          <button type="button" class="btn-secondary" id="photo-remove-btn" style="display:none; margin-top:6px; padding:6px 10px; font-size:12px;" onclick="removePhoto()" data-key="photo_remove">移除照片</button>
+        </div>
+        <input type="file" id="f-photo" accept="image/*" style="display:none;" onchange="handlePhotoUpload(this)">
+      </div>
+    </div>
+  </div>
+
+  <p class="section-label" data-key="sl_notes">面試前注意事項</p>
+
+  <div class="alert-box alert-danger">
+    <div class="alert-title" data-key="att_key">⚠️ 核心原則</div>
+    <div class="alert-body" data-key="att_body">面試是雇主唯一的主動篩選機會。一旦簽約後，主導權將大幅削弱。寧可多花時間，也不要倉促決定。</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title" data-key="prep_title">面試前準備清單</div>
+    <ul class="checklist" id="prep-list">
+      <li><span class="check-box" data-cb-id="prep1" onclick="toggleCheck(this)"></span><span data-key="prep1">確認視訊軟體可用（LINE / Zoom / Teams）</span></li>
+      <li><span class="check-box" data-cb-id="prep2" onclick="toggleCheck(this)"></span><span data-key="prep2">收到候選人履歷並已預讀</span></li>
+      <li><span class="check-box" data-cb-id="prep3" onclick="toggleCheck(this)"></span><span data-key="prep3">準備好這份面試問題表</span></li>
+      <li><span class="check-box" data-cb-id="prep4" onclick="toggleCheck(this)"></span><span data-key="prep4">安排約 30–45 分鐘不受打擾的時段</span></li>
+      <li><span class="check-box" data-cb-id="prep5" onclick="toggleCheck(this)"></span><span data-key="prep5">若需翻譯，確認翻譯員已待命</span></li>
+      <li><span class="check-box" data-cb-id="prep6" onclick="toggleCheck(this)"></span><span data-key="prep6">若承接轉出：已取得前雇主聯絡方式</span></li>
+    </ul>
+  </div>
+
+  <div class="tip-bubble" data-key="tip_transfer">
+    💡 <b>承接轉出特別注意：</b>務必詢問前雇主轉出真實原因，資深移工可能難管理或已有壞習慣。
+  </div>
+
+  <div id="transfer-extra" style="display:none;">
+    <p class="section-label" data-key="sl_transfer">承接面試七項查核（轉換雇主專用）</p>
+    <div class="card">
+      <ul class="checklist" id="transfer-checklist">
+        <li><span class="check-box" data-cb-id="tr1" onclick="toggleCheck(this)"></span><span data-key="tr1">轉換原因：是雇主提出還是移工主動要求？有無未解勞資糾紛？</span></li>
+        <li><span class="check-box" data-cb-id="tr2" onclick="toggleCheck(this)"></span><span data-key="tr2">在台紀錄：有無逃跑紀錄、裁罰、勞健保是否正常、居留效期</span></li>
+        <li><span class="check-box" data-cb-id="tr3" onclick="toggleCheck(this)"></span><span data-key="tr3">健康狀況：距上次健檢超過6個月，要求補做健檢</span></li>
+        <li><span class="check-box" data-cb-id="tr4" onclick="toggleCheck(this)"></span><span data-key="tr4">照護能力：與前雇主照護型態是否相近，有無適應問題</span></li>
+        <li><span class="check-box" data-cb-id="tr5" onclick="toggleCheck(this)"></span><span data-key="tr5">情緒狀態：轉換期間有無明顯情緒困擾或財務壓力</span></li>
+        <li><span class="check-box" data-cb-id="tr6" onclick="toggleCheck(this)"></span><span data-key="tr6">新合約條件：工作內容/薪資/休假/住宿差異已逐條說明</span></li>
+        <li><span class="check-box" data-cb-id="tr7" onclick="toggleCheck(this)"></span><span data-key="tr7">法律文件：轉換同意書、新聘僱許可辦理進度，避免空窗期</span></li>
+      </ul>
+    </div>
+    <p class="section-label" data-key="sl_transferq">承接面試加問問題</p>
+    <div class="card" id="transfer-questions"></div>
+  </div>
+
+  <div id="helper-section" style="display:none;">
+    <p class="section-label" data-key="sl_helper">幫傭篩選注意事項</p>
+
+    <div class="alert-box alert-warn">
+      <div class="alert-title" data-key="helper_key">🧹 幫傭聘僱核心提醒</div>
+      <div class="alert-body" data-key="helper_body">家庭幫傭工作以日常家事與生活協助為主，篩選重點與醫療看護不同：更重視「誠信與財物信任」、「工作範圍界定」與「生活習慣磨合」，建議聘僱前逐項確認，避免日後爭議。</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title" data-key="helper_title">幫傭篩選查核清單</div>
+      <ul class="checklist" id="helper-checklist">
+        <li><span class="check-box" data-cb-id="hp1" onclick="toggleCheck(this)"></span><span data-key="hp1">工作範圍：清潔／洗衣／採購／烹飪／接送／照顧兒童或寵物等項目已逐條列入合約，避免日後「沒講過」的爭議</span></li>
+        <li><span class="check-box" data-cb-id="hp2" onclick="toggleCheck(this)"></span><span data-key="hp2">誠信與財物：詢問如何處理現金、貴重物品、鑰匙與保險箱，留意回答是否迴避或前後矛盾</span></li>
+        <li><span class="check-box" data-cb-id="hp3" onclick="toggleCheck(this)"></span><span data-key="hp3">家電操作：洗衣機、烘衣機、瓦斯爐、電鍋、烤箱、吸塵器等是否會使用，有無安全顧慮</span></li>
+        <li><span class="check-box" data-cb-id="hp4" onclick="toggleCheck(this)"></span><span data-key="hp4">飲食與宗教禁忌：飲食限制（如不食豬肉／需清真食材）、祈禱或禮拜時間需求是否能配合家中作息</span></li>
+        <li><span class="check-box" data-cb-id="hp5" onclick="toggleCheck(this)"></span><span data-key="hp5">衛生習慣：個人衛生、食物處理衛生觀念、過敏史（食材／清潔用品）</span></li>
+        <li><span class="check-box" data-cb-id="hp6" onclick="toggleCheck(this)"></span><span data-key="hp6">兒童／寵物照顧：若涉及看小孩或寵物，確認其經驗、意願與處理突發狀況的方式</span></li>
+        <li><span class="check-box" data-cb-id="hp7" onclick="toggleCheck(this)"></span><span data-key="hp7">外出與採購：是否能單獨外出採買、議價與認路能力，是否需要交通接送或騎乘代步工具</span></li>
+        <li><span class="check-box" data-cb-id="hp8" onclick="toggleCheck(this)"></span><span data-key="hp8">人身安全與互動界線：說明家中成員結構（含單身男性雇主或僅女性雇主情境），事先溝通起居與互動界線，保障雙方</span></li>
+        <li><span class="check-box" data-cb-id="hp9" onclick="toggleCheck(this)"></span><span data-key="hp9">工時與休假：明確告知每日工作時間、休假日、加班計算方式，避免聘僱後產生勞資糾紛</span></li>
+      </ul>
+    </div>
+
+    <div class="tip-bubble" data-key="helper_tip">💡 <b>幫傭面試提示：</b>誠信問題不易從履歷看出，建議在面試中以情境提問（如「發現東西不見了會怎麼做」）觀察反應，而非直接質問「你會不會偷東西」。</div>
+  </div>
+
+
+  <button class="btn-primary" onclick="switchTab('resume')" data-key="btn_next_resume">下一步：履歷審查 →</button>
+</div>
+
+<!-- TAB 2: Resume Review -->
+<div class="tab-content" id="tab-resume">
+  <p class="section-label" data-key="sl_resume">履歷紅旗檢查</p>
+
+  <div class="card">
+    <div class="card-title" data-key="rt_title">工作經歷審查</div>
+    <div class="q-item danger">
+      <div class="q-text" data-key="rt_q1">換雇主超過 3 位（3年內）？</div>
+      <div class="q-note" data-key="rt_q1n">高流動率，需進一步了解離職原因與適應狀況</div>
+    </div>
+    <div class="q-item warn">
+      <div class="q-text" data-key="rt_q2">轉換原因含糊其辭 / 頻繁「雙方同意轉出」？</div>
+      <div class="q-note" data-key="rt_q2n">可能隱瞞問題行為</div>
+    </div>
+    <div class="q-item warn">
+      <div class="q-text" data-key="rt_q3">僅有工廠/工業工作經驗，無照護經歷？</div>
+      <div class="q-note" data-key="rt_q3n">需進一步確認長期從事照護工作的意願</div>
+    </div>
+    <div class="q-item danger">
+      <div class="q-text" data-key="rt_q4">拒絕提供前雇主聯絡方式？</div>
+      <div class="q-note" data-key="rt_q4n">直接紅旗，履歷可能造假</div>
+    </div>
+    <div class="q-item warn">
+      <div class="q-text" data-key="rt_q5">年齡較輕且為首次海外工作？</div>
+      <div class="q-note" data-key="rt_q5n">需額外評估其海外生活與工作適應能力</div>
+    </div>
+  </div>
+
+  <p class="section-label" data-key="sl_fakecv">常見履歷造假手法</p>
+
+  <div class="alert-box alert-warn">
+    <div class="alert-title" data-key="fake_title">⚠️ 小心這些手法</div>
+    <ul style="margin-top:6px; padding-left:16px; font-size:13px; color:var(--text); line-height:1.7;">
+      <li data-key="fake1"><b>幽靈履歷：</b>條件完美但不真實，拿到簽約就消失</li>
+      <li data-key="fake2"><b>美化經歷：</b>刪除短期或試用失敗的工作紀錄</li>
+      <li data-key="fake3"><b>健康或個人重大狀況未主動揭露：</b>可能影響工作安排與排班規劃</li>
+    </ul>
+    <div style="margin-top:8px; font-size:13px; color:var(--text);" data-key="fake_action">
+      <b>對策：</b>堅持要求「前雇主推薦信」並親自致電確認
+    </div>
+  </div>
+
+  <p class="section-label" data-key="sl_redflag">我的紅旗記錄</p>
+  <div class="card">
+    <div style="margin-bottom:8px; font-size:13px; color:var(--text-sec);" data-key="flag_inst">點擊標記此候選人的警訊（可複選）</div>
+    <div id="flag-buttons"></div>
+  </div>
+
+  <button class="btn-primary" onclick="switchTab('interview')" data-key="btn_next_interview">下一步：視訊面試 →</button>
+</div>
+
+<!-- TAB 3: Interview -->
+<div class="tab-content" id="tab-interview">
+
+  <div class="interview-timer">
+    <div>
+      <div style="font-size:12px; color:var(--text-sec);" data-key="timer_label">面試計時</div>
+      <div class="timer-display" id="timer-display">00:00</div>
+    </div>
+    <div class="timer-btns">
+      <button class="timer-btn" onclick="toggleTimer()" id="timer-toggle-btn" data-key="timer_start">開始</button>
+      <button class="timer-btn" onclick="resetTimer()" data-key="timer_reset">重置</button>
+    </div>
+  </div>
+
+  <!-- Phase 1 -->
+  <div class="card">
+    <div class="phase-header">
+      <div class="phase-num">1</div>
+      <div>
+        <div class="phase-title" data-key="ph1_title">開場觀察</div>
+        <div class="phase-time" data-key="ph1_time">0–5 分鐘</div>
+      </div>
+    </div>
+    <div class="tip-bubble" data-key="ph1_tip">觀察第一印象：儀容整潔、準時上線、眼神交流</div>
+    <ul class="checklist">
+      <li><span class="check-box" data-cb-id="p1c1" onclick="toggleCheck(this)"></span><span data-key="p1c1">儀容整潔，衣著得體</span></li>
+      <li><span class="check-box" data-cb-id="p1c2" onclick="toggleCheck(this)"></span><span data-key="p1c2">準時進入視訊</span></li>
+      <li><span class="check-box" data-cb-id="p1c3" onclick="toggleCheck(this)"></span><span data-key="p1c3">背景環境安靜，無閒雜人等</span></li>
+      <li><span class="check-box" data-cb-id="p1c4" onclick="toggleCheck(this)"></span><span data-key="p1c4">眼神自然，無頻繁看旁邊（有人提詞？）</span></li>
+    </ul>
+  </div>
+
+  <!-- Phase 2 -->
+  <div class="card">
+    <div class="phase-header">
+      <div class="phase-num">2</div>
+      <div>
+        <div class="phase-title" data-key="ph2_title">語言能力測試</div>
+        <div class="phase-time" data-key="ph2_time">5–10 分鐘</div>
+      </div>
+    </div>
+    <div id="ph2-questions"></div>
+  </div>
+
+  <!-- Phase 3 -->
+  <div class="card">
+    <div class="phase-header">
+      <div class="phase-num">3</div>
+      <div>
+        <div class="phase-title" data-key="ph3_title">專業技能考核</div>
+        <div class="phase-time" data-key="ph3_time">10–20 分鐘</div>
+      </div>
+    </div>
+    <div id="ph3-questions"></div>
+  </div>
+
+  <!-- Phase 4 -->
+  <div class="card">
+    <div class="phase-header">
+      <div class="phase-num">4</div>
+      <div>
+        <div class="phase-title" data-key="ph4_title">工作意願確認</div>
+        <div class="phase-time" data-key="ph4_time">20–25 分鐘</div>
+      </div>
+    </div>
+    <div id="ph4-questions"></div>
+  </div>
+
+  <!-- Phase 5 -->
+  <div class="card">
+    <div class="phase-header">
+      <div class="phase-num">5</div>
+      <div>
+        <div class="phase-title" data-key="ph5_title">壓力情境測試</div>
+        <div class="phase-time" data-key="ph5_time">25–30 分鐘</div>
+      </div>
+    </div>
+    <div id="ph5-questions"></div>
+  </div>
+
+  <div id="helper-task-section" style="display:none;">
+    <p class="section-label" data-key="sl_helpertask">家事能力與誠信測試</p>
+    <div class="card">
+      <div class="card-title" data-key="helpertask_title">🧹 家事技能與誠信情境測試</div>
+      <div id="helper-task-questions"></div>
+    </div>
+  </div>
+
+  <div id="care-type-section" style="display:none;">
+    <p class="section-label" id="sl_caretype_label" data-key="sl_caretype">照護類型專項評估</p>
+    <div class="card">
+      <div class="card-title" id="caretype-title"></div>
+      <div id="care-type-questions"></div>
+    </div>
+  </div>
+
+  <p class="section-label" data-key="sl_notes2">面試記錄</p>
+  <div class="card">
+    <div style="font-size:12px; color:var(--text-sec); margin-bottom:6px;" data-key="note_inst">記錄重要觀察（行為、回答、疑點）</div>
+    <textarea class="note-area" id="interview-notes" placeholder="..." oninput="updateSummary(); saveState();"></textarea>
+  </div>
+
+  <button class="btn-primary" onclick="switchTab('traps')" data-key="btn_next_traps">下一步：陷阱問題 →</button>
+</div>
+
+<!-- TAB 4: Trap Questions -->
+<div class="tab-content" id="tab-traps">
+
+  <div class="tip-bubble" data-key="trap_intro">穿插以下問題測試誠實度與真實意圖。觀察反應速度與前後一致性。</div>
+
+  <p class="section-label" data-key="sl_trap1">邏輯矛盾測試</p>
+  <div class="card">
+    <div id="trap1-content"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_trap2">忠誠度測試</p>
+  <div class="card">
+    <div id="trap2-content"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_trap3">金錢觀測試</p>
+  <div class="card">
+    <div id="trap3-content"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_trap4">反客為主警訊</p>
+  <div class="card">
+    <div class="card-title" data-key="trap4_title">面試中若移工主動問以下問題，注意時機</div>
+    <div id="trap4-content"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_body">肢體語言判讀</p>
+  <div class="card">
+    <div id="body-lang-content"></div>
+  </div>
+
+  <button class="btn-primary" onclick="switchTab('score')" data-key="btn_next_score">下一步：評分結果 →</button>
+</div>
+
+<!-- TAB 5: Score -->
+<div class="tab-content" id="tab-score">
+
+  <p class="section-label" data-key="sl_score">五項評分（每項 1–5 分）</p>
+  <div class="score-grid" id="score-grid"></div>
+
+  <div class="total-bar" id="total-bar">
+    <div class="total-num" id="total-score">—</div>
+    <div class="total-label" data-key="total_label">綜合評分（滿分 5.0）</div>
+    <div id="verdict-box"></div>
+    <div id="grade-badge"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_radar">能力雷達圖</p>
+  <div class="card">
+    <div id="radar-chart-wrap" style="display:flex; justify-content:center;"></div>
+  </div>
+
+  <p class="section-label" data-key="sl_risk">錄取風險指數</p>
+  <div class="card" id="risk-box"></div>
+
+  <p class="section-label" data-key="sl_veto">一票否決條件（任一成立即淘汰）</p>
+  <div class="card">
+    <ul class="vetolist" id="veto-list"></ul>
+  </div>
+
+  <div id="veto-check-area" style="margin-bottom:10px;"></div>
+
+  <p class="section-label" data-key="sl_script">建議話術</p>
+  <div id="scripts-content"></div>
+
+  <p class="section-label" data-key="sl_followup">面試後追蹤 SOP</p>
+  <div class="card">
+    <ul class="checklist">
+      <li><span class="check-box" data-cb-id="fu1" onclick="toggleCheck(this)"></span><span data-key="fu1">面試結束2小時內：填寫評分表，趁印象鮮明完成紀錄（保存至少2年）</span></li>
+      <li><span class="check-box" data-cb-id="fu2" onclick="toggleCheck(this)"></span><span data-key="fu2">24小時內：告知仲介初步意向，不建議當場簽約</span></li>
+      <li><span class="check-box" data-cb-id="fu3" onclick="toggleCheck(this)"></span><span data-key="fu3">錄取後3工作天：確認移工本人最終意願，開始辦理入境文件</span></li>
+      <li><span class="check-box" data-cb-id="fu4" onclick="toggleCheck(this)"></span><span data-key="fu4">到台後第7天：仲介首次電訪，確認雙方適應狀況</span></li>
+      <li><span class="check-box" data-cb-id="fu5" onclick="toggleCheck(this)"></span><span data-key="fu5">到台後第30天：觀察期正式評估，必要時啟動更換程序</span></li>
+    </ul>
+  </div>
+
+  <div class="alert-box alert-warn">
+    <div class="alert-title" data-key="legal_title">⚠️ 法律提醒</div>
+    <div class="alert-body" data-key="legal_body">錄影需事先取得移工與仲介雙方同意；不得詢問工作必要性以外的隱私（如財產、政治傾向）；不得承諾超出合理範圍的條件；外籍看護有權拒絕面試，仲介不得施壓。</div>
+    <div class="alert-body" data-key="legal_prohibited" style="margin-top:8px;">為降低歧視風險，面試中應避免詢問：宗教信仰細節、政治立場、婚姻規劃、生育計畫。如有照護工作確實需要的相關安排（如宗教飲食禁忌），可僅就工作必要範圍說明並詢問。</div>
+  </div>
+
+  <p class="section-label" data-key="sl_summary">面試摘要</p>
+  <div class="card" id="summary-box">
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_name">候選人</span>
+      <span class="summary-row-val" id="sum-name">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_nat">國籍</span>
+      <span class="summary-row-val" id="sum-nat">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_type">類型</span>
+      <span class="summary-row-val" id="sum-type">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_flags">紅旗數</span>
+      <span class="summary-row-val" id="sum-flags">0</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_score2">綜合分數</span>
+      <span class="summary-row-val" id="sum-score">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-row-label" data-key="sum_verdict">建議</span>
+      <span class="summary-row-val" id="sum-verdict">—</span>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:12px; color:var(--text-sec); margin-bottom:5px;" data-key="sum_note_label">面試備注</div>
+    <div style="font-size:13px; color:var(--text);" id="sum-notes">—</div>
+  </div>
+
+  <button class="btn-secondary" onclick="window.print()" data-key="btn_print">列印 / 匯出報告</button>
+  <button class="btn-secondary" onclick="exportPDF()" data-key="btn_pdf">📄 下載 PDF 報告</button>
+  <button class="btn-primary" onclick="addToCompare()" data-key="btn_add_compare">➕ 加入比較名單</button>
+  <button class="btn-secondary" onclick="resetAll()" data-key="btn_reset">重新開始新面試</button>
+
+</div>
+
+<!-- TAB 6: Compare -->
+<div class="tab-content" id="tab-compare">
+  <p class="section-label" data-key="sl_compare">多候選人比較表</p>
+  <div id="compare-wrap"></div>
+  <button class="btn-secondary" onclick="clearCompare()" data-key="cmp_clear">清空比較名單</button>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+const LANGS = {
+  zh: {
+    tab_setup:'候選人資訊', tab_resume:'履歷審查', tab_interview:'視訊面試', tab_traps:'陷阱問題', tab_score:'評分結果',
+    sl_candidate:'候選人基本資料', sl_notes:'面試前注意事項', sl_resume:'履歷紅旗檢查', sl_fakecv:'常見履歷造假手法',
+    sl_redflag:'我的紅旗記錄', sl_notes2:'面試記錄', sl_trap1:'邏輯矛盾測試', sl_trap2:'忠誠度測試',
+    sl_trap3:'金錢觀測試', sl_trap4:'反客為主警訊', sl_body:'肢體語言判讀', sl_score:'五項評分（每項 1–5 分）',
+    sl_veto:'一票否決條件（任一成立即淘汰）', sl_script:'建議話術', sl_summary:'面試摘要',
+    sl_followup:'面試後追蹤 SOP', legal_title:'⚠️ 法律提醒',
+    legal_body:'錄影需事先取得移工與仲介雙方同意；不得詢問工作必要性以外的隱私（如財產、政治傾向）；不得承諾超出合理範圍的條件；外籍看護有權拒絕面試，仲介不得施壓。',
+    legal_prohibited:'為降低歧視風險，面試中應避免詢問：宗教信仰細節、政治立場、婚姻規劃、生育計畫。如有照護工作確實需要的相關安排（如宗教飲食禁忌），可僅就工作必要範圍說明並詢問。',
+    fu1:'面試結束2小時內：填寫評分表，趁印象鮮明完成紀錄（保存至少2年）',
+    fu2:'24小時內：告知仲介初步意向，不建議當場簽約',
+    fu3:'錄取後3工作天：確認移工本人最終意願，開始辦理入境文件',
+    fu4:'到台後第7天：仲介首次電訪，確認雙方適應狀況',
+    fu5:'到台後第30天：觀察期正式評估，必要時啟動更換程序',
+    att_key:'⚠️ 核心原則', att_body:'面試是雇主唯一的主動篩選機會。一旦簽約後，主導權將大幅削弱。寧可多花時間，也不要倉促決定。',
+    prep_title:'面試前準備清單',
+    prep1:'確認視訊軟體可用（LINE / Zoom / Teams）',
+    prep2:'收到候選人履歷並已預讀',
+    prep3:'準備好這份面試問題表',
+    prep4:'安排約 30–45 分鐘不受打擾的時段',
+    prep5:'若需翻譯，確認翻譯員已待命',
+    prep6:'若承接轉出：已取得前雇主聯絡方式',
+    tip_transfer:'💡 <b>承接轉出特別注意：</b>務必詢問前雇主轉出真實原因，資深移工可能難管理或已有壞習慣。',
+    sl_transfer:'承接面試七項查核（轉換雇主專用）', sl_transferq:'承接面試加問問題',
+    tr1:'轉換原因：是雇主提出還是移工主動要求？有無未解勞資糾紛？',
+    tr2:'在台紀錄：有無逃跑紀錄、裁罰、勞健保是否正常、居留效期',
+    tr3:'健康狀況：距上次健檢超過6個月，要求補做健檢',
+    tr4:'照護能力：與前雇主照護型態是否相近，有無適應問題',
+    tr5:'情緒狀態：轉換期間有無明顯情緒困擾或財務壓力',
+    tr6:'新合約條件：工作內容/薪資/休假/住宿差異已逐條說明',
+    tr7:'法律文件：轉換同意書、新聘僱許可辦理進度，避免空窗期',
+    f_worktype:'主要工作性質', wt_none:'-- 請選擇 --', wt_caregiver:'🏥 看護工（醫療／生活照護為主）', wt_helper:'🧹 家庭幫傭（家事為主，不含看護）', wt_mixed:'🔄 看護兼幫傭（混合型）',
+    sl_helper:'幫傭篩選注意事項',
+    helper_key:'🧹 幫傭聘僱核心提醒',
+    helper_body:'家庭幫傭工作以日常家事與生活協助為主，篩選重點與醫療看護不同：更重視「誠信與財物信任」、「工作範圍界定」與「生活習慣磨合」，建議聘僱前逐項確認，避免日後爭議。',
+    helper_title:'幫傭篩選查核清單',
+    hp1:'工作範圍：清潔／洗衣／採購／烹飪／接送／照顧兒童或寵物等項目已逐條列入合約，避免日後「沒講過」的爭議',
+    hp2:'誠信與財物：詢問如何處理現金、貴重物品、鑰匙與保險箱，留意回答是否迴避或前後矛盾',
+    hp3:'家電操作：洗衣機、烘衣機、瓦斯爐、電鍋、烤箱、吸塵器等是否會使用，有無安全顧慮',
+    hp4:'飲食與宗教禁忌：飲食限制（如不食豬肉／需清真食材）、祈禱或禮拜時間需求是否能配合家中作息',
+    hp5:'衛生習慣：個人衛生、食物處理衛生觀念、過敏史（食材／清潔用品）',
+    hp6:'兒童／寵物照顧：若涉及看小孩或寵物，確認其經驗、意願與處理突發狀況的方式',
+    hp7:'外出與採購：是否能單獨外出採買、議價與認路能力，是否需要交通接送或騎乘代步工具',
+    hp8:'人身安全與互動界線：說明家中成員結構（含單身男性雇主或僅女性雇主情境），事先溝通起居與互動界線，保障雙方',
+    hp9:'工時與休假：明確告知每日工作時間、休假日、加班計算方式，避免聘僱後產生勞資糾紛',
+    helper_tip:'💡 <b>幫傭面試提示：</b>誠信問題不易從履歷看出，建議在面試中以情境提問（如「發現東西不見了會怎麼做」）觀察反應，而非直接質問「你會不會偷東西」。',
+    sl_helpertask:'家事能力與誠信測試', helpertask_title:'🧹 家事技能與誠信情境測試',
+    btn_next_resume:'下一步：履歷審查 →', btn_next_interview:'下一步：視訊面試 →',
+    btn_next_traps:'下一步：陷阱問題 →', btn_next_score:'下一步：評分結果 →',
+    rt_title:'工作經歷審查',
+    rt_q1:'換雇主超過 3 位（3年內）？', rt_q1n:'高流動率，需進一步了解離職原因與適應狀況',
+    rt_q2:'轉換原因含糊其辭 / 頻繁「雙方同意轉出」？', rt_q2n:'可能隱瞞問題行為',
+    rt_q3:'僅有工廠/工業工作經驗，無照護經歷？', rt_q3n:'需進一步確認長期從事照護工作的意願',
+    rt_q4:'拒絕提供前雇主聯絡方式？', rt_q4n:'直接紅旗，履歷可能造假',
+    rt_q5:'年齡較輕且為首次海外工作？', rt_q5n:'需額外評估其海外生活與工作適應能力',
+    fake_title:'⚠️ 小心這些手法', fake_action:'<b>對策：</b>堅持要求「前雇主推薦信」並親自致電確認',
+    fake1:'<b>幽靈履歷：</b>條件完美但不真實，拿到簽約就消失',
+    fake2:'<b>美化經歷：</b>刪除短期或試用失敗的工作紀錄',
+    fake3:'<b>健康或個人重大狀況未主動揭露：</b>可能影響工作安排與排班規劃',
+    flag_inst:'點擊標記此候選人的警訊（可複選）',
+    timer_label:'面試計時', timer_start:'開始', timer_reset:'重置',
+    ph1_title:'開場觀察', ph1_time:'0–5 分鐘',
+    ph1_tip:'觀察第一印象：儀容整潔、準時上線、眼神交流',
+    p1c1:'儀容整潔，衣著得體', p1c2:'準時進入視訊',
+    p1c3:'背景環境安靜，無閒雜人等', p1c4:'眼神自然，無頻繁看旁邊（有人提詞？）',
+    ph2_title:'語言能力測試', ph2_time:'5–10 分鐘',
+    ph3_title:'專業技能考核', ph3_time:'10–20 分鐘',
+    ph4_title:'工作意願確認', ph4_time:'20–25 分鐘',
+    ph5_title:'壓力情境測試', ph5_time:'25–30 分鐘',
+    note_inst:'記錄重要觀察（行為、回答、疑點）',
+    trap_intro:'穿插以下問題測試誠實度與真實意圖。觀察反應速度與前後一致性。',
+    trap4_title:'面試中若移工主動問以下問題，注意時機',
+    total_label:'綜合評分（滿分 5.0）',
+    sum_name:'候選人', sum_nat:'國籍', sum_type:'類型', sum_flags:'紅旗數', sum_score2:'綜合分數', sum_verdict:'建議',
+    sum_note_label:'面試備注',
+    btn_print:'列印 / 匯出報告', btn_reset:'重新開始新面試',
+    f_name:'姓名', f_nationality:'國籍', f_type:'聘僱類型', f_date:'面試日期', f_agency:'仲介公司',
+    h_title:'外籍看護幫傭 面試篩選工具',
+    h_sub:'看護工・家庭幫傭適用 · 新引進＆承接轉出 · 雇主實務版',
+    f_caretype:'主要照護類型', ct_none:'-- 一般照護（無特殊類型）--', ct_dementia:'🧠 失智症照護', ct_stroke:'🦽 中風／復健照護', ct_bedridden:'🛏️ 臥床／長照照護', ct_cancer:'🎗️ 癌症／安寧照護', ct_parkinson:'🤲 巴金森氏症照護', ct_tubefeeding:'🍽️ 管灌（鼻胃管）照護', ct_tracheostomy:'🫁 氣切照護', ct_dialysis:'🩸 洗腎患者照護', ct_pressureulcer:'🩹 臥床褥瘡照護', ct_diabetes:'💉 糖尿病照護',
+    sl_caretype:'照護類型專項評估', btn_pdf:'📄 下載 PDF 報告',
+    sl_radar:'能力雷達圖', radar_lang:'中文能力', radar_skill:'照護能力', radar_attitude:'配合度', radar_stress:'穩定性', radar_honest:'誠信度',
+    sl_risk:'錄取風險指數', risk_low:'低風險', risk_mid:'中風險', risk_high:'高風險', risk_desc_low:'警訊少、評分穩定，可優先考慮錄取', risk_desc_mid:'有部分疑慮，建議再次面談或加強查核', risk_desc_high:'警訊多或踩到否決條件，不建議錄取',
+    f_photo:'候選人照片（選填）', photo_hint:'點擊上傳照片，將顯示於 PDF 報告', photo_remove:'移除照片',
+    f_recid:'面試編號', f_recfile:'錄影檔名稱', f_reclink:'雲端連結',
+    tab_compare:'候選人比較', sl_compare:'多候選人比較表', btn_add_compare:'➕ 加入比較名單', compare_added:'已加入比較名單',
+    cmp_name:'候選人', cmp_nat:'國籍', cmp_type:'類型', cmp_flags:'紅旗數', cmp_score:'綜合評分', cmp_grade:'分級', cmp_risk:'風險指數', cmp_verdict:'建議', cmp_empty:'尚未加入任何候選人，請至「評分結果」頁點擊「加入比較名單」', cmp_clear:'清空比較名單', cmp_remove:'移除', cmp_best:'★ 最佳',
+  },
+  en: {
+    tab_setup:'Candidate Info', tab_resume:'Resume Check', tab_interview:'Video Interview', tab_traps:'Trap Questions', tab_score:'Score & Result',
+    sl_candidate:'Candidate Basic Info', sl_notes:'Pre-Interview Notes', sl_resume:'Resume Red Flags', sl_fakecv:'Common Resume Fraud',
+    sl_redflag:'My Red Flags', sl_notes2:'Interview Notes', sl_trap1:'Logic Consistency Test', sl_trap2:'Loyalty Test',
+    sl_trap3:'Financial Values Test', sl_trap4:'Attitude Warnings', sl_body:'Body Language Reading', sl_score:'5 Scoring Dimensions (1–5 each)',
+    sl_veto:'Instant Disqualifiers (any one = reject)', sl_script:'Suggested Scripts', sl_summary:'Interview Summary',
+    sl_followup:'Post-Interview Follow-Up SOP', legal_title:'⚠️ Legal Reminders',
+    legal_body:'Recording requires prior consent from both the worker and the agency; do not ask about privacy beyond job necessity (e.g. assets, political views); do not promise terms beyond what is reasonable; the worker has the right to decline the interview and the agency must not pressure them.',
+    legal_prohibited:'To reduce discrimination risk, avoid asking about: religious belief details, political affiliation, marriage plans, or childbearing plans. If a caregiving arrangement genuinely requires related information (e.g. religious dietary restrictions), limit questions strictly to what the job requires.',
+    fu1:'Within 2 hours of the interview: fill in the score sheet while memory is fresh (keep records for at least 2 years)',
+    fu2:'Within 24 hours: tell the agency your initial decision; signing on the spot is not recommended',
+    fu3:'Within 3 working days of hiring: confirm the worker\'s final consent, start entry paperwork',
+    fu4:'Day 7 after arrival: agency\'s first check-in call to confirm both sides are adjusting well',
+    fu5:'Day 30 after arrival: formal observation-period review; start the replacement process if needed',
+    att_key:'⚠️ Core Principle', att_body:'The interview is your ONLY proactive screening opportunity. Once the contract is signed, your leverage greatly diminishes. Take your time — do not rush this decision.',
+    prep_title:'Pre-Interview Checklist',
+    prep1:'Confirm video platform works (LINE / Zoom / Teams)',
+    prep2:'Received and pre-read candidate\'s resume',
+    prep3:'This interview question sheet is ready',
+    prep4:'Scheduled 30–45 min uninterrupted block',
+    prep5:'If translation needed, confirm interpreter is on standby',
+    prep6:'For transfers: obtained previous employer\'s contact',
+    tip_transfer:'💡 <b>For transfers:</b> Always verify the real reason the previous employer released them. Experienced workers may be harder to manage or bring bad habits.',
+    sl_transfer:'7-Point Transfer-Case Check (for employer-transfer candidates)', sl_transferq:'Additional Questions for Transfer Cases',
+    tr1:'Transfer reason: did the employer or the worker initiate it? Any unresolved labor dispute?',
+    tr2:'Record in Taiwan: any history of running away, penalties, normal labor/health insurance, residency validity',
+    tr3:'Health status: if last checkup was over 6 months ago, require a new one',
+    tr4:'Caregiving fit: is the care type similar to the previous employer? Any adaptation issues?',
+    tr5:'Emotional state: any clear distress or financial pressure during the transfer period',
+    tr6:'New contract terms: duties/salary/days off/housing differences explained item by item',
+    tr7:'Legal documents: transfer consent form, new work permit progress, avoid any gap in legal status',
+    f_worktype:'Primary Job Type', wt_none:'-- Please select --', wt_caregiver:'🏥 Caregiver (medical / daily care focus)', wt_helper:'🧹 Domestic Helper (housework focus, no caregiving)', wt_mixed:'🔄 Caregiver + Helper (mixed role)',
+    sl_helper:'Domestic Helper Screening Considerations',
+    helper_key:'🧹 Core Reminders for Hiring a Domestic Helper',
+    helper_body:'Domestic helper work centers on daily housework and household support, so screening priorities differ from medical caregiving: pay extra attention to honesty & trust with property, clearly defining the scope of work, and adjusting to household habits. Confirm each point before hiring to avoid disputes later.',
+    helper_title:'Domestic Helper Screening Checklist',
+    hp1:'Scope of work: cleaning / laundry / grocery shopping / cooking / pickup-dropoff / child or pet care are all itemized in the contract, to avoid "that was never agreed" disputes later',
+    hp2:'Honesty & property: ask how they would handle cash, valuables, keys, and the safe; watch for evasive or inconsistent answers',
+    hp3:'Appliance use: can they operate the washer, dryer, gas stove, rice cooker, oven, vacuum, etc.? Any safety concerns?',
+    hp4:'Dietary & religious needs: dietary restrictions (e.g. no pork / needs halal food), prayer or worship time — can these fit the household routine?',
+    hp5:'Hygiene habits: personal hygiene, food-handling hygiene awareness, allergy history (food / cleaning products)',
+    hp6:'Childcare / pet care: if children or pets are involved, confirm their experience, willingness, and how they handle emergencies',
+    hp7:'Errands & shopping: can they go out alone to shop, bargain, and find their way? Do they need transport or a bicycle/scooter?',
+    hp8:'Personal safety & boundaries: explain the household composition (including single male employer or female-only household situations) and communicate living/interaction boundaries in advance to protect both sides',
+    hp9:'Working hours & days off: clearly state daily working hours, days off, and overtime calculation to avoid labor disputes after hiring',
+    helper_tip:'💡 <b>Helper interview tip:</b> Honesty issues rarely show up on a resume. Use situational questions during the interview (e.g. "what would you do if something went missing") to observe their reaction, rather than asking directly "would you steal."',
+    sl_helpertask:'Domestic Skills & Honesty Test', helpertask_title:'🧹 Domestic Skills & Honesty Scenario Test',
+    btn_next_resume:'Next: Resume Check →', btn_next_interview:'Next: Video Interview →',
+    btn_next_traps:'Next: Trap Questions →', btn_next_score:'Next: Score & Result →',
+    rt_title:'Work History Review',
+    rt_q1:'More than 3 employers within 3 years?', rt_q1n:'High turnover — worth exploring reasons for leaving and adjustment history',
+    rt_q2:'Vague transfer reasons / frequent "mutual agreement" transfers?', rt_q2n:'May be hiding problem behavior',
+    rt_q3:'Only factory/industrial experience, no caregiving history?', rt_q3n:'Worth confirming their genuine interest in long-term caregiving work',
+    rt_q4:'Refuses to provide previous employer contact?', rt_q4n:'Direct red flag — resume may be falsified',
+    rt_q5:'Younger candidate working abroad for the first time?', rt_q5n:'Worth an extra assessment of adaptability to living and working abroad',
+    fake_title:'⚠️ Watch for These Tactics', fake_action:'<b>Counter:</b> Insist on a reference letter from previous employer and call to verify yourself',
+    fake1:'<b>Ghost resume:</b> Perfect on paper but falsified — disappears after signing',
+    fake2:'<b>Embellished history:</b> Short-term or failed probation jobs deleted',
+    fake3:'<b>Undisclosed health or major personal circumstances:</b> May affect work arrangements and scheduling',
+    flag_inst:'Tap to flag warning signs for this candidate (multiple allowed)',
+    timer_label:'Interview Timer', timer_start:'Start', timer_reset:'Reset',
+    ph1_title:'Opening Observation', ph1_time:'0–5 min',
+    ph1_tip:'Observe first impression: appearance, punctuality, eye contact',
+    p1c1:'Clean appearance, appropriate attire', p1c2:'Joined video on time',
+    p1c3:'Quiet background, no other people visible', p1c4:'Natural eye contact, not looking sideways (someone coaching?)',
+    ph2_title:'Language Ability Test', ph2_time:'5–10 min',
+    ph3_title:'Professional Skills Assessment', ph3_time:'10–20 min',
+    ph4_title:'Work Motivation & Willingness', ph4_time:'20–25 min',
+    ph5_title:'Stress & Scenario Test', ph5_time:'25–30 min',
+    note_inst:'Record key observations (behavior, answers, doubts)',
+    trap_intro:'Weave in these questions to test honesty and true intentions. Watch response speed and consistency.',
+    trap4_title:'If the candidate proactively asks these questions, note the timing',
+    total_label:'Overall Score (max 5.0)',
+    sum_name:'Candidate', sum_nat:'Nationality', sum_type:'Type', sum_flags:'Red Flags', sum_score2:'Overall Score', sum_verdict:'Recommendation',
+    sum_note_label:'Interview Notes',
+    btn_print:'Print / Export Report', btn_reset:'Start New Interview',
+    f_name:'Name', f_nationality:'Nationality', f_type:'Hire Type', f_date:'Interview Date', f_agency:'Agency',
+    h_title:'Foreign Caregiver & Domestic Helper Interview Screening Tool',
+    h_sub:'For caregivers & domestic helpers · New hires & transfers · Employer edition',
+    f_caretype:'Primary Care Type', ct_none:'-- General Care (none) --', ct_dementia:'🧠 Dementia Care', ct_stroke:'🦽 Stroke / Rehab Care', ct_bedridden:'🛏️ Bedridden / Long-term Care', ct_cancer:'🎗️ Cancer / Hospice Care', ct_parkinson:'🤲 Parkinson\'s Care', ct_tubefeeding:'🍽️ Tube (NG) Feeding Care', ct_tracheostomy:'🫁 Tracheostomy Care', ct_dialysis:'🩸 Dialysis Patient Care', ct_pressureulcer:'🩹 Bedridden Pressure Ulcer Care', ct_diabetes:'💉 Diabetes Care',
+    sl_caretype:'Care-Type Specialized Assessment', btn_pdf:'📄 Download PDF Report',
+    sl_radar:'Ability Radar Chart', radar_lang:'Chinese Ability', radar_skill:'Caregiving Skill', radar_attitude:'Cooperation', radar_stress:'Stability', radar_honest:'Honesty',
+    sl_risk:'Hiring Risk Index', risk_low:'Low Risk', risk_mid:'Medium Risk', risk_high:'High Risk', risk_desc_low:'Few warning signs, stable scores — good candidate to prioritize', risk_desc_mid:'Some concerns — consider another interview or extra verification', risk_desc_high:'Many warning signs or hit a disqualifier — not recommended',
+    f_photo:'Candidate Photo (optional)', photo_hint:'Tap to upload a photo, shown in the PDF report', photo_remove:'Remove photo',
+    f_recid:'Interview ID', f_recfile:'Recording File Name', f_reclink:'Cloud Link',
+    tab_compare:'Compare', sl_compare:'Multi-Candidate Comparison', btn_add_compare:'➕ Add to Comparison', compare_added:'Added to comparison list',
+    cmp_name:'Candidate', cmp_nat:'Nationality', cmp_type:'Type', cmp_flags:'Red Flags', cmp_score:'Overall Score', cmp_grade:'Grade', cmp_risk:'Risk Index', cmp_verdict:'Recommendation', cmp_empty:'No candidates added yet — go to the Score tab and tap "Add to Comparison"', cmp_clear:'Clear comparison list', cmp_remove:'Remove', cmp_best:'★ Best',
+  },
+  id: {
+    tab_setup:'Info Kandidat', tab_resume:'Cek Riwayat', tab_interview:'Wawancara Video', tab_traps:'Pertanyaan Jebakan', tab_score:'Penilaian',
+    sl_candidate:'Data Dasar Kandidat', sl_notes:'Catatan Pra-Wawancara', sl_resume:'Tanda Bahaya Riwayat', sl_fakecv:'Penipuan CV Umum',
+    sl_redflag:'Catatan Bendera Merah', sl_notes2:'Catatan Wawancara', sl_trap1:'Tes Konsistensi Logika', sl_trap2:'Tes Loyalitas',
+    sl_trap3:'Tes Pandangan Keuangan', sl_trap4:'Peringatan Sikap', sl_body:'Membaca Bahasa Tubuh', sl_score:'5 Kriteria Penilaian (1–5 tiap)',
+    sl_veto:'Syarat Diskualifikasi (satu saja = tolak)', sl_script:'Skrip yang Disarankan', sl_summary:'Ringkasan Wawancara',
+    att_key:'⚠️ Prinsip Utama', att_body:'Wawancara adalah SATU-SATUNYA kesempatan seleksi aktif Anda. Setelah kontrak ditandatangani, kekuatan tawar Anda sangat berkurang. Luangkan waktu — jangan terburu-buru.',
+    prep_title:'Daftar Periksa Pra-Wawancara',
+    prep1:'Konfirmasi platform video berfungsi (LINE / Zoom / Teams)',
+    prep2:'Sudah menerima dan membaca CV kandidat',
+    prep3:'Lembar pertanyaan wawancara ini sudah siap',
+    prep4:'Jadwalkan 30–45 menit tanpa gangguan',
+    prep5:'Jika perlu penerjemah, pastikan sudah siap',
+    prep6:'Untuk transfer: sudah mendapat kontak majikan sebelumnya',
+    tip_transfer:'💡 <b>Untuk transfer:</b> Selalu verifikasi alasan sebenarnya majikan sebelumnya melepaskan mereka.',
+    btn_next_resume:'Berikutnya: Cek Riwayat →', btn_next_interview:'Berikutnya: Wawancara Video →',
+    btn_next_traps:'Berikutnya: Pertanyaan Jebakan →', btn_next_score:'Berikutnya: Penilaian →',
+    rt_title:'Tinjauan Riwayat Kerja',
+    legal_title:'⚠️ Pengingat Hukum',
+    legal_body:'Perekaman memerlukan persetujuan terlebih dahulu dari pekerja dan agen; jangan menanyakan hal pribadi di luar kebutuhan kerja (misalnya aset, pandangan politik); jangan menjanjikan kondisi di luar batas wajar; pekerja migran berhak menolak wawancara dan agen tidak boleh memberi tekanan.',
+    legal_prohibited:'Untuk mengurangi risiko diskriminasi, hindari menanyakan: detail keyakinan agama, afiliasi politik, rencana pernikahan, atau rencana memiliki anak. Jika kebutuhan perawatan memang memerlukan informasi terkait (misalnya pantangan makanan keagamaan), batasi pertanyaan hanya pada hal yang diperlukan untuk pekerjaan.',
+    rt_q1:'Lebih dari 3 majikan dalam 3 tahun?', rt_q1n:'Pergantian tinggi — perlu ditelusuri alasan keluar kerja dan riwayat adaptasi',
+    rt_q2:'Alasan pindah tidak jelas / sering "kesepakatan bersama"?', rt_q2n:'Mungkin menyembunyikan perilaku bermasalah',
+    rt_q3:'Hanya pengalaman pabrik, tidak ada pengalaman perawatan?', rt_q3n:'Perlu dipastikan lebih lanjut minat jangka panjangnya untuk bekerja di bidang perawatan',
+    rt_q4:'Menolak memberikan kontak majikan sebelumnya?', rt_q4n:'Bendera merah langsung — CV mungkin dipalsukan',
+    rt_q5:'Usia lebih muda dan baru pertama kali kerja di luar negeri?', rt_q5n:'Perlu evaluasi tambahan untuk kemampuan adaptasi hidup dan kerja di luar negeri',
+    fake_title:'⚠️ Waspadai Taktik Ini', fake_action:'<b>Solusi:</b> Minta surat referensi dari majikan sebelumnya dan hubungi sendiri untuk verifikasi',
+    fake1:'<b>CV hantu:</b> Sempurna di atas kertas tapi dipalsukan',
+    fake2:'<b>Riwayat diperindah:</b> Pekerjaan singkat atau probasi gagal dihapus',
+    fake3:'<b>Kondisi kesehatan atau pribadi penting yang tidak diungkapkan:</b> Dapat memengaruhi pengaturan dan penjadwalan kerja',
+    flag_inst:'Ketuk untuk menandai peringatan kandidat ini (boleh pilih banyak)',
+    timer_label:'Timer Wawancara', timer_start:'Mulai', timer_reset:'Reset',
+    ph1_title:'Observasi Pembuka', ph1_time:'0–5 menit',
+    ph1_tip:'Amati kesan pertama: penampilan, ketepatan waktu, kontak mata',
+    p1c1:'Penampilan bersih, pakaian pantas', p1c2:'Bergabung tepat waktu',
+    p1c3:'Latar belakang tenang, tidak ada orang lain', p1c4:'Kontak mata alami, tidak sering melihat samping (ada yang membimbing?)',
+    ph2_title:'Tes Kemampuan Bahasa', ph2_time:'5–10 menit',
+    ph3_title:'Penilaian Keahlian Profesional', ph3_time:'10–20 menit',
+    ph4_title:'Motivasi & Kesediaan Kerja', ph4_time:'20–25 menit',
+    ph5_title:'Tes Tekanan & Skenario', ph5_time:'25–30 menit',
+    note_inst:'Catat observasi penting (perilaku, jawaban, keraguan)',
+    trap_intro:'Sisipkan pertanyaan ini untuk menguji kejujuran dan niat sebenarnya. Perhatikan kecepatan respons dan konsistensi.',
+    trap4_title:'Jika kandidat bertanya ini secara proaktif, catat waktunya',
+    total_label:'Nilai Keseluruhan (maks 5.0)',
+    sum_name:'Kandidat', sum_nat:'Kebangsaan', sum_type:'Jenis', sum_flags:'Bendera Merah', sum_score2:'Nilai Keseluruhan', sum_verdict:'Rekomendasi',
+    sum_note_label:'Catatan Wawancara',
+    btn_print:'Cetak / Ekspor Laporan', btn_reset:'Mulai Wawancara Baru',
+    f_name:'Nama', f_nationality:'Kebangsaan', f_type:'Jenis Rekrut', f_date:'Tanggal Wawancara', f_agency:'Agen',
+    h_title:'Alat Seleksi Wawancara Perawat & Asisten Rumah Tangga Asing',
+    h_sub:'Untuk perawat & asisten rumah tangga · Rekrutan baru & transfer · Edisi majikan',
+    f_caretype:'Jenis Perawatan Utama', ct_none:'-- Perawatan Umum (tanpa jenis khusus) --', ct_dementia:'🧠 Perawatan Demensia', ct_stroke:'🦽 Perawatan Stroke/Rehab', ct_bedridden:'🛏️ Perawatan Terbaring/Jangka Panjang', ct_cancer:'🎗️ Perawatan Kanker/Hospis', ct_parkinson:'🤲 Perawatan Parkinson', ct_tubefeeding:'🍽️ Perawatan Selang Makan (NGT)', ct_tracheostomy:'🫁 Perawatan Trakeostomi', ct_dialysis:'🩸 Perawatan Pasien Cuci Darah', ct_pressureulcer:'🩹 Perawatan Luka Tekan (Terbaring)', ct_diabetes:'💉 Perawatan Diabetes',
+    sl_caretype:'Penilaian Khusus Jenis Perawatan', btn_pdf:'📄 Unduh Laporan PDF',
+    sl_radar:'Grafik Radar Kemampuan', radar_lang:'Kemampuan Bahasa Mandarin', radar_skill:'Kemampuan Perawatan', radar_attitude:'Kerjasama', radar_stress:'Stabilitas', radar_honest:'Kejujuran',
+    sl_risk:'Indeks Risiko Perekrutan', risk_low:'Risiko Rendah', risk_mid:'Risiko Sedang', risk_high:'Risiko Tinggi', risk_desc_low:'Sedikit tanda bahaya, nilai stabil — kandidat baik untuk diprioritaskan', risk_desc_mid:'Ada kekhawatiran — pertimbangkan wawancara lagi atau verifikasi tambahan', risk_desc_high:'Banyak tanda bahaya atau diskualifikasi — tidak disarankan',
+    f_photo:'Foto Kandidat (opsional)', photo_hint:'Ketuk untuk unggah foto, ditampilkan di laporan PDF', photo_remove:'Hapus foto',
+    f_recid:'ID Wawancara', f_recfile:'Nama File Rekaman', f_reclink:'Tautan Cloud',
+    tab_compare:'Bandingkan', sl_compare:'Perbandingan Multi-Kandidat', btn_add_compare:'➕ Tambah ke Perbandingan', compare_added:'Ditambahkan ke daftar perbandingan',
+    cmp_name:'Kandidat', cmp_nat:'Kebangsaan', cmp_type:'Jenis', cmp_flags:'Bendera Merah', cmp_score:'Nilai Keseluruhan', cmp_grade:'Tingkat', cmp_risk:'Indeks Risiko', cmp_verdict:'Rekomendasi', cmp_empty:'Belum ada kandidat ditambahkan — buka tab Penilaian lalu ketuk "Tambah ke Perbandingan"', cmp_clear:'Hapus daftar perbandingan', cmp_remove:'Hapus', cmp_best:'★ Terbaik',
+  },
+  vi: {
+    tab_setup:'Thông tin ứng viên', tab_resume:'Kiểm tra hồ sơ', tab_interview:'Phỏng vấn video', tab_traps:'Câu hỏi bẫy', tab_score:'Chấm điểm',
+    sl_candidate:'Thông tin cơ bản ứng viên', sl_notes:'Ghi chú trước phỏng vấn', sl_resume:'Dấu hiệu cảnh báo hồ sơ', sl_fakecv:'Gian lận CV phổ biến',
+    sl_redflag:'Cờ đỏ của tôi', sl_notes2:'Ghi chú phỏng vấn', sl_trap1:'Kiểm tra nhất quán logic', sl_trap2:'Kiểm tra lòng trung thành',
+    sl_trap3:'Kiểm tra quan điểm tài chính', sl_trap4:'Cảnh báo thái độ', sl_body:'Đọc ngôn ngữ cơ thể', sl_score:'5 tiêu chí chấm điểm (1–5 mỗi tiêu chí)',
+    sl_veto:'Điều kiện loại ngay (một cái là loại)', sl_script:'Kịch bản đề xuất', sl_summary:'Tóm tắt phỏng vấn',
+    att_key:'⚠️ Nguyên tắc cốt lõi', att_body:'Phỏng vấn là cơ hội sàng lọc chủ động DUY NHẤT của bạn. Một khi ký hợp đồng, đòn bẩy của bạn giảm đáng kể. Hãy dành thời gian — đừng vội vàng.',
+    prep_title:'Danh sách kiểm tra trước phỏng vấn',
+    prep1:'Xác nhận nền tảng video hoạt động (LINE / Zoom / Teams)',
+    prep2:'Đã nhận và đọc trước CV của ứng viên',
+    prep3:'Bảng câu hỏi phỏng vấn này đã sẵn sàng',
+    prep4:'Dành 30–45 phút không bị gián đoạn',
+    prep5:'Nếu cần phiên dịch, xác nhận đã sẵn sàng',
+    prep6:'Với chuyển tiếp: đã có thông tin liên hệ chủ cũ',
+    tip_transfer:'💡 <b>Với chuyển tiếp:</b> Luôn xác minh lý do thực sự chủ cũ thả họ ra.',
+    btn_next_resume:'Tiếp theo: Kiểm tra hồ sơ →', btn_next_interview:'Tiếp theo: Phỏng vấn video →',
+    btn_next_traps:'Tiếp theo: Câu hỏi bẫy →', btn_next_score:'Tiếp theo: Chấm điểm →',
+    rt_title:'Xem xét lịch sử làm việc',
+    legal_title:'⚠️ Lưu ý pháp lý',
+    legal_body:'Việc ghi hình cần có sự đồng ý trước của cả người lao động và công ty môi giới; không hỏi về đời tư ngoài phạm vi cần thiết cho công việc (ví dụ: tài sản, quan điểm chính trị); không hứa hẹn các điều kiện vượt quá phạm vi hợp lý; người lao động nước ngoài có quyền từ chối phỏng vấn và công ty môi giới không được gây áp lực.',
+    legal_prohibited:'Để giảm rủi ro phân biệt đối xử, nên tránh hỏi về: chi tiết tín ngưỡng tôn giáo, quan điểm chính trị, kế hoạch hôn nhân, kế hoạch sinh con. Nếu công việc chăm sóc thực sự cần thông tin liên quan (ví dụ: kiêng kỵ ăn uống theo tôn giáo), chỉ nên hỏi trong phạm vi cần thiết cho công việc.',
+    rt_q1:'Hơn 3 chủ trong 3 năm?', rt_q1n:'Thay đổi nhiều — cần tìm hiểu thêm lý do nghỉ việc và khả năng thích nghi',
+    rt_q2:'Lý do chuyển vị mơ hồ / thường "thỏa thuận chung"?', rt_q2n:'Có thể che giấu hành vi có vấn đề',
+    rt_q3:'Chỉ có kinh nghiệm nhà máy, không có kinh nghiệm chăm sóc?', rt_q3n:'Cần xác nhận thêm về mong muốn làm việc chăm sóc lâu dài',
+    rt_q4:'Từ chối cung cấp thông tin liên hệ chủ cũ?', rt_q4n:'Cờ đỏ trực tiếp — CV có thể bị giả mạo',
+    rt_q5:'Tuổi còn trẻ và lần đầu làm việc ở nước ngoài?', rt_q5n:'Cần đánh giá thêm khả năng thích nghi với cuộc sống và công việc ở nước ngoài',
+    fake_title:'⚠️ Cảnh giác những chiến thuật này', fake_action:'<b>Đối phó:</b> Yêu cầu thư giới thiệu từ chủ cũ và tự gọi điện xác minh',
+    fake1:'<b>CV ma:</b> Hoàn hảo trên giấy nhưng giả mạo',
+    fake2:'<b>Lịch sử tô vẽ:</b> Công việc ngắn hạn hoặc thử việc thất bại bị xóa',
+    fake3:'<b>Tình trạng sức khỏe hoặc cá nhân quan trọng chưa được tiết lộ:</b> Có thể ảnh hưởng đến sắp xếp và lịch làm việc',
+    flag_inst:'Nhấp để gắn cờ cảnh báo cho ứng viên này (có thể chọn nhiều)',
+    timer_label:'Đồng hồ phỏng vấn', timer_start:'Bắt đầu', timer_reset:'Đặt lại',
+    ph1_title:'Quan sát ban đầu', ph1_time:'0–5 phút',
+    ph1_tip:'Quan sát ấn tượng đầu tiên: ngoại hình, đúng giờ, giao tiếp mắt',
+    p1c1:'Ngoại hình gọn gàng, trang phục phù hợp', p1c2:'Tham gia video đúng giờ',
+    p1c3:'Phông nền yên tĩnh, không có người khác', p1c4:'Giao tiếp mắt tự nhiên, không nhìn sang bên (ai đó hướng dẫn?)',
+    ph2_title:'Kiểm tra khả năng ngôn ngữ', ph2_time:'5–10 phút',
+    ph3_title:'Đánh giá kỹ năng chuyên môn', ph3_time:'10–20 phút',
+    ph4_title:'Động lực & sẵn sàng làm việc', ph4_time:'20–25 phút',
+    ph5_title:'Kiểm tra áp lực & tình huống', ph5_time:'25–30 phút',
+    note_inst:'Ghi lại các quan sát quan trọng (hành vi, câu trả lời, nghi ngờ)',
+    trap_intro:'Xen kẽ các câu hỏi này để kiểm tra sự trung thực và ý định thực sự. Chú ý tốc độ phản hồi và nhất quán.',
+    trap4_title:'Nếu ứng viên chủ động hỏi những điều này, hãy ghi nhận thời điểm',
+    total_label:'Điểm tổng thể (tối đa 5.0)',
+    sum_name:'Ứng viên', sum_nat:'Quốc tịch', sum_type:'Loại', sum_flags:'Cờ đỏ', sum_score2:'Điểm tổng', sum_verdict:'Khuyến nghị',
+    sum_note_label:'Ghi chú phỏng vấn',
+    btn_print:'In / Xuất báo cáo', btn_reset:'Bắt đầu phỏng vấn mới',
+    f_name:'Tên', f_nationality:'Quốc tịch', f_type:'Loại tuyển dụng', f_date:'Ngày phỏng vấn', f_agency:'Công ty môi giới',
+    h_title:'Công cụ phỏng vấn tuyển chọn người chăm sóc & giúp việc nước ngoài',
+    h_sub:'Dành cho người chăm sóc & giúp việc · Người mới & chuyển tiếp · Phiên bản chủ sử dụng lao động',
+    f_caretype:'Loại Chăm Sóc Chính', ct_none:'-- Chăm sóc thông thường (không đặc biệt) --', ct_dementia:'🧠 Chăm sóc Sa sút trí tuệ', ct_stroke:'🦽 Chăm sóc Đột quỵ/Phục hồi', ct_bedridden:'🛏️ Chăm sóc Nằm liệt/Dài hạn', ct_cancer:'🎗️ Chăm sóc Ung thư/Giảm nhẹ', ct_parkinson:'🤲 Chăm sóc Parkinson', ct_tubefeeding:'🍽️ Chăm sóc Ống thông mũi-dạ dày', ct_tracheostomy:'🫁 Chăm sóc Mở khí quản', ct_dialysis:'🩸 Chăm sóc Bệnh nhân Chạy thận', ct_pressureulcer:'🩹 Chăm sóc Loét tì đè (Nằm liệt)', ct_diabetes:'💉 Chăm sóc Tiểu đường',
+    sl_caretype:'Đánh giá Chuyên biệt theo Loại Chăm Sóc', btn_pdf:'📄 Tải Báo cáo PDF',
+    sl_radar:'Biểu đồ Radar Năng lực', radar_lang:'Khả năng tiếng Trung', radar_skill:'Kỹ năng Chăm sóc', radar_attitude:'Hợp tác', radar_stress:'Ổn định', radar_honest:'Trung thực',
+    sl_risk:'Chỉ số Rủi ro Tuyển dụng', risk_low:'Rủi ro thấp', risk_mid:'Rủi ro trung bình', risk_high:'Rủi ro cao', risk_desc_low:'Ít cảnh báo, điểm số ổn định — ứng viên tốt nên ưu tiên', risk_desc_mid:'Có một số lo ngại — nên phỏng vấn lại hoặc xác minh thêm', risk_desc_high:'Nhiều cảnh báo hoặc bị loại — không khuyến nghị',
+    f_photo:'Ảnh ứng viên (tùy chọn)', photo_hint:'Nhấn để tải ảnh lên, hiển thị trong báo cáo PDF', photo_remove:'Xóa ảnh',
+    f_recid:'Mã phỏng vấn', f_recfile:'Tên file ghi hình', f_reclink:'Liên kết đám mây',
+    tab_compare:'So sánh', sl_compare:'So sánh nhiều ứng viên', btn_add_compare:'➕ Thêm vào so sánh', compare_added:'Đã thêm vào danh sách so sánh',
+    cmp_name:'Ứng viên', cmp_nat:'Quốc tịch', cmp_type:'Loại', cmp_flags:'Cờ đỏ', cmp_score:'Điểm tổng', cmp_grade:'Xếp hạng', cmp_risk:'Chỉ số rủi ro', cmp_verdict:'Khuyến nghị', cmp_empty:'Chưa có ứng viên nào — vào tab Chấm điểm và nhấn "Thêm vào so sánh"', cmp_clear:'Xóa danh sách so sánh', cmp_remove:'Xóa', cmp_best:'★ Tốt nhất',
+  }
+};
+
+const CONTENT = {
+  flags: {
+    zh: [
+      {label:'3位以上雇主', type:'red'},
+      {label:'轉換原因不清', type:'red'},
+      {label:'拒提推薦信', type:'red'},
+      {label:'僅工廠經驗', type:'yellow'},
+      {label:'年齡<23歲', type:'yellow'},
+      {label:'仲介在旁提詞', type:'red'},
+      {label:'承接轉出', type:'yellow'},
+      {label:'前後回答矛盾', type:'red'},
+      {label:'對照護表現排斥', type:'red'},
+      {label:'迴避財物誠信問題', type:'red'},
+      {label:'不會操作基本家電', type:'yellow'},
+      {label:'拒絕說明家事經驗', type:'yellow'},
+    ],
+    en: [
+      {label:'3+ employers', type:'red'},
+      {label:'Unclear transfer reason', type:'red'},
+      {label:'Refuses reference', type:'red'},
+      {label:'Factory only exp.', type:'yellow'},
+      {label:'Under 23 yrs old', type:'yellow'},
+      {label:'Agent coaching', type:'red'},
+      {label:'Transfer case', type:'yellow'},
+      {label:'Contradictory answers', type:'red'},
+      {label:'Aversion to care tasks', type:'red'},
+      {label:'Evasive on property/honesty', type:'red'},
+      {label:"Can't use basic appliances", type:'yellow'},
+      {label:'Avoids housework questions', type:'yellow'},
+    ],
+    id: [
+      {label:'3+ majikan', type:'red'},
+      {label:'Alasan pindah tidak jelas', type:'red'},
+      {label:'Tolak referensi', type:'red'},
+      {label:'Hanya pengalaman pabrik', type:'yellow'},
+      {label:'Di bawah 23 tahun', type:'yellow'},
+      {label:'Agen membimbing', type:'red'},
+      {label:'Kasus transfer', type:'yellow'},
+      {label:'Jawaban kontradiksi', type:'red'},
+      {label:'Enggan merawat', type:'red'},
+      {label:'Menghindari soal harta/kejujuran', type:'red'},
+      {label:'Tidak bisa pakai alat dasar', type:'yellow'},
+      {label:'Menghindari soal pekerjaan rumah', type:'yellow'},
+    ],
+    vi: [
+      {label:'3+ chủ lao động', type:'red'},
+      {label:'Lý do chuyển không rõ', type:'red'},
+      {label:'Từ chối thư giới thiệu', type:'red'},
+      {label:'Chỉ có KN nhà máy', type:'yellow'},
+      {label:'Dưới 23 tuổi', type:'yellow'},
+      {label:'Môi giới hướng dẫn', type:'red'},
+      {label:'Trường hợp chuyển tiếp', type:'yellow'},
+      {label:'Câu trả lời mâu thuẫn', type:'red'},
+      {label:'Không muốn chăm sóc', type:'red'},
+      {label:'Né tránh vấn đề tài sản/trung thực', type:'red'},
+      {label:'Không biết dùng thiết bị cơ bản', type:'yellow'},
+      {label:'Né tránh câu hỏi việc nhà', type:'yellow'},
+    ]
+  },
+  ph2: {
+    zh: [
+      {q:'「你之前照顧的阿公/阿嬤幾歲？有什麼病？」', good:'✓ 能具體說明年齡與病況', bad:'✗ 說「我不知道」或完全無法回答'},
+      {q:'「你會煮什麼台灣菜？說幾道。」', good:'✓ 能舉出具體菜名', bad:'✗ 答非所問或答「都會」但說不出來'},
+      {q:'「如果阿嬤跌倒了，你會怎麼做？」', good:'✓ 先扶起、檢查受傷、通知家屬', bad:'✗ 說「我打電話給仲介」'},
+    ],
+    en: [
+      {q:'"How old was the elderly person you cared for before? What illness did they have?"', good:'✓ Can describe specifically', bad:'✗ Says "I don\'t know" or cannot answer'},
+      {q:'"What Taiwanese dishes can you cook? Name a few."', good:'✓ Can name specific dishes', bad:'✗ Says "I can cook everything" but cannot name any'},
+      {q:'"If grandmother falls, what would you do?"', good:'✓ Help her up, check for injuries, notify family', bad:'✗ Says "I\'ll call the agency"'},
+    ],
+    id: [
+      {q:'"Berapa usia orang tua yang Anda rawat sebelumnya? Apa penyakitnya?"', good:'✓ Dapat menjelaskan secara spesifik', bad:'✗ Berkata "Saya tidak tahu" atau tidak bisa menjawab'},
+      {q:'"Masakan Taiwan apa yang bisa Anda masak? Sebutkan beberapa."', good:'✓ Dapat menyebutkan nama masakan tertentu', bad:'✗ Berkata "Semua bisa" tapi tidak bisa menyebutkan'},
+      {q:'"Jika nenek jatuh, apa yang akan Anda lakukan?"', good:'✓ Membantu berdiri, periksa cedera, hubungi keluarga', bad:'✗ Berkata "Saya akan menelepon agen"'},
+    ],
+    vi: [
+      {q:'"Người cao tuổi bạn chăm sóc trước đây bao nhiêu tuổi? Bệnh gì?"', good:'✓ Có thể mô tả cụ thể', bad:'✗ Nói "Tôi không biết" hoặc không thể trả lời'},
+      {q:'"Bạn có thể nấu những món Đài Loan nào? Kể ra vài món."', good:'✓ Có thể kể tên các món cụ thể', bad:'✗ Nói "Tôi nấu được tất cả" nhưng không kể được'},
+      {q:'"Nếu bà ngã, bạn sẽ làm gì?"', good:'✓ Đỡ dậy, kiểm tra vết thương, thông báo gia đình', bad:'✗ Nói "Tôi sẽ gọi môi giới"'},
+    ]
+  },
+  ph3: {
+    zh: [
+      {q:'「如何幫臥床的人翻身？請比劃一下。」', good:'✓ 提到防褥瘡、2小時翻身', bad:'✗ 完全沒有概念'},
+      {q:'「怎麼餵食吞嚥有困難的長輩？」', good:'✓ 提到坐正、小口慢餵、防嗆咳', bad:'✗ 說「用湯匙喂」但沒有安全概念'},
+      {q:'「幫長輩洗澡時，最重要的注意事項是什麼？」', good:'✓ 提到水溫、防滑、保暖、速度不能太快', bad:'✗ 說不出來任何要點'},
+      {q:'「會使用血壓計嗎？請說明如何量血壓。」', good:'✓ 能說出基本步驟（坐定、手臂放鬆等）', bad:'✗ 從未使用過任何醫療器材'},
+    ],
+    en: [
+      {q:'"How do you help a bedridden person turn over? Please demonstrate."', good:'✓ Mentions bedsore prevention, 2-hour turning', bad:'✗ Completely no idea'},
+      {q:'"How do you feed an elderly person with swallowing difficulty?"', good:'✓ Mentions upright position, small bites slowly, aspiration prevention', bad:'✗ Just says "use a spoon" with no safety concept'},
+      {q:'"When bathing an elderly person, what are the most important precautions?"', good:'✓ Mentions water temperature, non-slip, warmth, not too fast', bad:'✗ Cannot state any key points'},
+      {q:'"Can you use a blood pressure monitor? Please explain the steps."', good:'✓ Can explain basic steps (seated, arm relaxed, etc.)', bad:'✗ Has never used any medical device'},
+    ],
+    id: [
+      {q:'"Bagaimana cara membalik orang yang terbaring di tempat tidur? Tolong demonstrasikan."', good:'✓ Menyebut pencegahan luka tekan, pembalikan tiap 2 jam', bad:'✗ Sama sekali tidak tahu'},
+      {q:'"Bagaimana cara memberi makan lansia yang sulit menelan?"', good:'✓ Menyebut posisi tegak, suapan kecil perlahan, pencegahan tersedak', bad:'✗ Hanya berkata "pakai sendok" tanpa konsep keamanan'},
+      {q:'"Saat memandikan lansia, apa saja yang perlu diperhatikan?"', good:'✓ Menyebut suhu air, anti-selip, kehangatan, tidak terlalu cepat', bad:'✗ Tidak bisa menyebutkan poin utama apapun'},
+      {q:'"Bisakah Anda menggunakan tensimeter? Tolong jelaskan langkah-langkahnya."', good:'✓ Bisa menjelaskan langkah dasar (duduk, lengan rileks, dll.)', bad:'✗ Belum pernah menggunakan alat medis apapun'},
+    ],
+    vi: [
+      {q:'"Làm thế nào để lật người nằm liệt trên giường? Hãy mô phỏng."', good:'✓ Đề cập ngăn ngừa lở loét, lật mỗi 2 giờ', bad:'✗ Hoàn toàn không biết'},
+      {q:'"Làm thế nào cho người cao tuổi khó nuốt ăn?"', good:'✓ Đề cập tư thế thẳng đứng, miếng nhỏ chậm rãi, ngăn sặc', bad:'✗ Chỉ nói "dùng thìa" không có khái niệm an toàn'},
+      {q:'"Khi tắm cho người cao tuổi, những điều quan trọng nhất cần lưu ý là gì?"', good:'✓ Đề cập nhiệt độ nước, chống trượt, giữ ấm, không quá nhanh', bad:'✗ Không thể nêu bất kỳ điểm chính nào'},
+      {q:'"Bạn có thể dùng máy đo huyết áp không? Hãy giải thích các bước."', good:'✓ Có thể giải thích các bước cơ bản (ngồi thẳng, thư giãn tay, v.v.)', bad:'✗ Chưa bao giờ dùng thiết bị y tế nào'},
+    ]
+  },
+  ph4: {
+    zh: [
+      {q:'Q1: 「你為什麼要來台灣工作？」', good:'✓ 賺錢養家、還債、學習技能', bad:'✗「聽說很輕鬆」「想去工廠但先來家庭」'},
+      {q:'Q2: 「你知道我家長輩的狀況嗎？」（先誠實告知照護難度）', good:'✓ 願意接受挑戰、主動詢問細節', bad:'✗ 立即露出難色、討價還價'},
+      {q:'Q3: 「你能接受24小時同房照顧嗎？」', good:'✓ 理解並接受', bad:'✗ 堅持要獨立房間、拒絕同房'},
+      {q:'Q4（必問）: 「宗教信仰或飲食上有什麼限制嗎？」', good:'✓ 清楚說明（清真／吃素／節日需求），方便雇主提前安排', bad:'✗ 隱瞞或事後才提出，造成日後衝突'},
+    ],
+    en: [
+      {q:'Q1: "Why do you want to work in Taiwan?"', good:'✓ Support family, pay debts, learn skills', bad:'✗ "I heard it\'s easy" / "I want a factory but starting here first"'},
+      {q:'Q2: "Do you know about my elderly family member\'s condition?" (First honestly describe the care difficulty)', good:'✓ Willing to take on the challenge, asks for details', bad:'✗ Immediately shows reluctance, negotiates conditions'},
+      {q:'Q3: "Can you accept 24-hour care sharing the same room?"', good:'✓ Understands and accepts', bad:'✗ Insists on private room, refuses shared room'},
+      {q:'Q4 (must-ask): "Do you have any religious or dietary restrictions?"', good:'✓ Clearly states needs (halal / vegetarian / holidays) so the employer can plan ahead', bad:'✗ Hides it or raises it later, causing conflict down the road'},
+    ],
+    id: [
+      {q:'P1: "Mengapa Anda ingin bekerja di Taiwan?"', good:'✓ Menghidupi keluarga, bayar utang, belajar keterampilan', bad:'✗ "Katanya mudah" / "Mau ke pabrik tapi mulai dari sini dulu"'},
+      {q:'P2: "Apakah Anda tahu kondisi anggota keluarga lansia saya?" (Pertama ceritakan kesulitan perawatan dengan jujur)', good:'✓ Bersedia menghadapi tantangan, bertanya untuk detail', bad:'✗ Langsung menunjukkan keengganan, bernegosiasi kondisi'},
+      {q:'P3: "Bisakah Anda menerima perawatan 24 jam berbagi kamar?"', good:'✓ Memahami dan menerima', bad:'✗ Ngotot kamar pribadi, menolak berbagi kamar'},
+      {q:'P4 (wajib ditanya): "Apakah ada batasan agama atau makanan?"', good:'✓ Menjelaskan jelas (halal / vegetarian / hari raya) agar majikan bisa bersiap', bad:'✗ Menyembunyikannya atau baru disampaikan kemudian, menimbulkan konflik'},
+    ],
+    vi: [
+      {q:'C1: "Tại sao bạn muốn làm việc ở Đài Loan?"', good:'✓ Nuôi gia đình, trả nợ, học kỹ năng', bad:'✗ "Nghe nói dễ lắm" / "Muốn vào nhà máy nhưng bắt đầu ở đây trước"'},
+      {q:'C2: "Bạn có biết tình trạng của người cao tuổi trong gia đình tôi không?" (Trước tiên hãy thành thật mô tả độ khó của việc chăm sóc)', good:'✓ Sẵn sàng đối mặt thử thách, hỏi thêm chi tiết', bad:'✗ Ngay lập tức tỏ ra ngần ngại, thương lượng điều kiện'},
+      {q:'C3: "Bạn có thể chấp nhận chăm sóc 24 giờ cùng phòng không?"', good:'✓ Hiểu và chấp nhận', bad:'✗ Nhất quyết đòi phòng riêng, từ chối chung phòng'},
+      {q:'C4 (bắt buộc hỏi): "Bạn có hạn chế tôn giáo hoặc ăn uống nào không?"', good:'✓ Nói rõ nhu cầu (halal / ăn chay / ngày lễ) để chủ nhà chuẩn bị trước', bad:'✗ Giấu giếm hoặc nói ra sau, gây xung đột về sau'},
+    ]
+  },
+  ph5: {
+    zh: [
+      {q:'情境1: 「如果阿嬤半夜大便在床上，你會怎麼辦？」', good:'✓ 冷靜處理、清潔更換', bad:'✗ 表現噁心、拒絕'},
+      {q:'情境2: 「你很累想休息，但阿嬤一直叫你，怎麼辦？」', good:'✓ 耐心安撫、尋求幫助', bad:'✗「我要休息」「不理她」'},
+      {q:'情境3: 「朋友叫你一起去工廠工作，薪水比較高，你怎麼辦？」', good:'✓「我會遵守合約」', bad:'✗「看情況」「可能會考慮」'},
+    ],
+    en: [
+      {q:'Scenario 1: "If grandmother has a bowel movement in bed at night, what would you do?"', good:'✓ Calmly clean and change her', bad:'✗ Shows disgust, refuses'},
+      {q:'Scenario 2: "You\'re very tired and want to rest, but grandmother keeps calling you. What do you do?"', good:'✓ Patiently comfort her, seek help', bad:'✗ "I need to rest" / "Ignore her"'},
+      {q:'Scenario 3: "Friends invite you to work at a factory with higher pay. What do you do?"', good:'✓ "I will honor the contract"', bad:'✗ "Depends" / "I might consider it"'},
+    ],
+    id: [
+      {q:'Skenario 1: "Jika nenek buang air besar di tempat tidur tengah malam, apa yang Anda lakukan?"', good:'✓ Membersihkan dan mengganti dengan tenang', bad:'✗ Menunjukkan jijik, menolak'},
+      {q:'Skenario 2: "Anda sangat lelah dan ingin istirahat, tapi nenek terus memanggil Anda. Apa yang Anda lakukan?"', good:'✓ Sabar menghibur, mencari bantuan', bad:'✗ "Saya perlu istirahat" / "Abaikan saja"'},
+      {q:'Skenario 3: "Teman mengajak Anda bekerja di pabrik dengan gaji lebih tinggi. Apa yang Anda lakukan?"', good:'✓ "Saya akan menghormati kontrak"', bad:'✗ "Tergantung" / "Mungkin akan saya pertimbangkan"'},
+    ],
+    vi: [
+      {q:'Tình huống 1: "Nếu bà đi vệ sinh ra giường vào ban đêm, bạn sẽ làm gì?"', good:'✓ Bình tĩnh vệ sinh và thay ga', bad:'✗ Tỏ ra kinh tởm, từ chối'},
+      {q:'Tình huống 2: "Bạn rất mệt muốn nghỉ, nhưng bà cứ gọi bạn. Bạn làm gì?"', good:'✓ Kiên nhẫn an ủi, tìm kiếm sự giúp đỡ', bad:'✗ "Tôi cần nghỉ" / "Không quan tâm"'},
+      {q:'Tình huống 3: "Bạn bè rủ bạn đến nhà máy làm việc với lương cao hơn. Bạn làm gì?"', good:'✓ "Tôi sẽ tôn trọng hợp đồng"', bad:'✗ "Tùy" / "Tôi có thể sẽ xem xét"'},
+    ]
+  },
+  transferQ: {
+    zh: [
+      {q:'「你為什麼離開上份工作？」', good:'✓ 合約到期 / 被照顧者過世 / 家庭回國', bad:'✗ 說法含糊、跟家屬「不合」但說不出具體原因'},
+      {q:'「你在上份工作遇到最大的困難是什麼？怎麼解決的？」', good:'✓ 說出具體困難及解法，展現成熟度', bad:'✗ 全部怪罪前雇主，無法說出自己如何應對'},
+      {q:'「你和上一個雇主現在關係如何？可以請他們作為參考人嗎？」', good:'✓ 主動提供聯絡方式，態度坦然', bad:'✗ 拒絕提供 / 說「失聯了」/ 情緒明顯緊張'},
+      {q:'「你知道轉換雇主有哪些規定嗎？」', good:'✓ 了解需經主管機關核准，知道自己處於轉換期', bad:'✗ 不清楚流程，或誤以為可以「自由選擇雇主」'},
+    ],
+    en: [
+      {q:'"Why did you leave your last job?"', good:'✓ Contract ended / care recipient passed away / family returned home', bad:'✗ Vague answers, "didn\'t get along" with no specific reason'},
+      {q:'"What was the hardest part of your last job? How did you handle it?"', good:'✓ Describes a specific difficulty and how it was resolved — shows maturity', bad:'✗ Blames the previous employer entirely, can\'t explain their own response'},
+      {q:'"How is your relationship with your previous employer now? Can they be a reference?"', good:'✓ Offers contact info readily, calm demeanor', bad:'✗ Refuses / says "lost contact" / visibly tense'},
+      {q:'"Do you know the rules for transferring employers?"', good:'✓ Understands it requires government approval and that they\'re in a transfer period', bad:'✗ Unclear on the process, or mistakenly thinks they can "freely choose" an employer'},
+    ]
+  },
+  traps: {
+    zh: {
+      t1: {
+        intro: '技巧：前後呼應同一問題，看答案是否一致',
+        q: '開場問：「你以前照顧的阿嬤能自己走路嗎？」\n→ 20分鐘後再問：「所以你之前需要幫她推輪椅嗎？」',
+        note: '若前後矛盾 → 履歷造假或記憶混亂'
+      },
+      t2: {
+        q: '「如果來台灣3個月後，你發現工廠薪水比較高，你會怎麼做？」',
+        good: '✓「我會遵守合約」「我選擇來台就不會後悔」',
+        bad: '✗「看情況」「可能會跟老闆討論」→ 已有轉換打算'
+      },
+      t3: {
+        q: '「你來台灣想存多少錢？打算怎麼用？」',
+        good: '✓ 具體目標（蓋房子、子女教育、還債）',
+        bad: '✗「越多越好」「想買名牌包」→ 金錢不滿容易逃跑'
+      },
+      t4_items: ['「你們家有WiFi嗎？訊號好嗎？」', '「我可以有自己的房間嗎？」', '「可以每個禮拜天都休假嗎？」', '「你們會給加班費嗎？」'],
+      t4_note: '這些問題本身合理，但在初次面試就咄咄逼人 → 姿態過高，未來難管理',
+      body: [
+        {item:'眼神接觸', ok:'直視點頭、自然對視', bad:'頻繁閃避、眼神飄移 → 可能說謊'},
+        {item:'面部表情', ok:'微笑自然、表情豐富', bad:'僵硬、皮笑肉不笑 → 演戲或不情願'},
+        {item:'回答速度', ok:'思考後流暢作答', bad:'過快（背稿）或過慢（編造）→ 不真實'},
+        {item:'肢體動作', ok:'坐姿端正、手勢自然', bad:'頻繁摸鼻子、交叉手臂 → 防衛或說謊'},
+        {item:'旁人干擾', ok:'獨自受訪、環境安靜', bad:'頻繁看旁邊、有人在場 → 有人提詞'},
+        {item:'難題反應', ok:'承認不確定、願意詢問補充', bad:'立刻轉移話題、只說「都可以」「沒問題」→ 可能答應做不到的事'},
+        {item:'提到照護難度時', ok:'表現關心、主動詢問細節', bad:'表情瞬間收緊、略顯不耐 → 可能無法接受工作強度'},
+      ]
+    },
+    en: {
+      t1: {
+        intro: 'Technique: Ask the same question twice, check if answers are consistent',
+        q: 'Opening: "Could the elderly person you cared for before walk on their own?"\n→ 20 min later: "So did you need to push a wheelchair for them before?"',
+        note: 'If contradictory → resume may be falsified or candidate is confused'
+      },
+      t2: {
+        q: '"If 3 months after arriving in Taiwan, you find factory pay is higher — what would you do?"',
+        good: '✓ "I will honor my contract" / "I chose Taiwan and won\'t regret it"',
+        bad: '✗ "Depends" / "I might discuss it with the employer" → already planning to switch'
+      },
+      t3: {
+        q: '"How much money do you want to save in Taiwan? What will you use it for?"',
+        good: '✓ Specific goal (build house, children\'s education, pay debt)',
+        bad: '✗ "As much as possible" / "I want to buy luxury bags" → financial dissatisfaction → likely to run'
+      },
+      t4_items: ['"Do you have WiFi at home? Is the signal good?"', '"Can I have my own room?"', '"Can I have every Sunday off?"', '"Will you pay overtime?"'],
+      t4_note: 'These questions are individually reasonable, but asking aggressively in the first interview = overly assertive attitude → hard to manage',
+      body: [
+        {item:'Eye contact', ok:'Direct gaze, natural eye contact', bad:'Frequent avoidance, wandering gaze → possibly lying'},
+        {item:'Facial expression', ok:'Natural smile, expressive', bad:'Stiff, fake smile → performing or unwilling'},
+        {item:'Response speed', ok:'Thinks then answers fluently', bad:'Too fast (scripted) or too slow (making up) → not genuine'},
+        {item:'Body movement', ok:'Upright posture, natural gestures', bad:'Touching nose frequently, crossed arms → defensive or lying'},
+        {item:'Third-party interference', ok:'Alone, quiet environment', bad:'Often looks sideways, someone present → being coached'},
+        {item:'Reaction to hard questions', ok:'Admits uncertainty, asks for clarification', bad:'Instantly changes topic, only says "sure, no problem" → may be agreeing to things they can\'t do'},
+        {item:'When care difficulty is mentioned', ok:'Shows concern, asks for details', bad:'Face tightens or shows impatience → may not handle the workload'},
+      ]
+    },
+    id: {
+      t1: {
+        intro: 'Teknik: Tanyakan pertanyaan yang sama dua kali, cek apakah jawabannya konsisten',
+        q: 'Awal: "Bisakah lansia yang Anda rawat sebelumnya berjalan sendiri?"\n→ 20 menit kemudian: "Jadi Anda perlu mendorong kursi roda sebelumnya?"',
+        note: 'Jika kontradiksi → CV mungkin dipalsukan atau kandidat bingung'
+      },
+      t2: {
+        q: '"Jika 3 bulan setelah tiba di Taiwan, Anda menemukan gaji pabrik lebih tinggi — apa yang Anda lakukan?"',
+        good: '✓ "Saya akan menghormati kontrak saya" / "Saya memilih Taiwan dan tidak akan menyesal"',
+        bad: '✗ "Tergantung" / "Saya mungkin akan diskusi dengan majikan" → sudah berencana pindah'
+      },
+      t3: {
+        q: '"Berapa banyak uang yang ingin Anda tabung di Taiwan? Untuk apa?"',
+        good: '✓ Tujuan spesifik (bangun rumah, pendidikan anak, bayar utang)',
+        bad: '✗ "Sebanyak mungkin" / "Ingin beli tas mewah" → ketidakpuasan finansial → kemungkinan kabur'
+      },
+      t4_items: ['"Apakah rumah Anda punya WiFi? Sinyalnya bagus?"', '"Bisakah saya punya kamar sendiri?"', '"Bisakah saya libur setiap Minggu?"', '"Apakah Anda membayar lembur?"'],
+      t4_note: 'Pertanyaan-pertanyaan ini wajar secara individual, tetapi menanyakannya secara agresif di wawancara pertama = sikap terlalu asertif → sulit dikelola',
+      body: [
+        {item:'Kontak mata', ok:'Tatap langsung, kontak mata alami', bad:'Sering menghindar, tatapan mengembara → mungkin berbohong'},
+        {item:'Ekspresi wajah', ok:'Senyum alami, ekspresif', bad:'Kaku, senyum palsu → berpura-pura atau enggan'},
+        {item:'Kecepatan respons', ok:'Berpikir lalu menjawab lancar', bad:'Terlalu cepat (hafalan) atau terlalu lambat (mengarang) → tidak tulus'},
+        {item:'Gerakan tubuh', ok:'Postur tegak, gerakan tangan alami', bad:'Sering menyentuh hidung, lengan bersilang → defensif atau berbohong'},
+        {item:'Interferensi pihak ketiga', ok:'Sendiri, lingkungan tenang', bad:'Sering melihat ke samping, ada seseorang → sedang dibimbing'},
+        {item:'Reaksi pertanyaan sulit', ok:'Mengakui tidak yakin, bertanya untuk penjelasan', bad:'Langsung mengganti topik, hanya bilang "boleh saja" → mungkin menyetujui hal yang tak bisa dilakukan'},
+        {item:'Saat kesulitan perawatan disebut', ok:'Menunjukkan perhatian, bertanya detail', bad:'Wajah tiba-tiba tegang atau tak sabar → mungkin tak sanggup beban kerja'},
+      ]
+    },
+    vi: {
+      t1: {
+        intro: 'Kỹ thuật: Hỏi cùng một câu hỏi hai lần, kiểm tra xem câu trả lời có nhất quán không',
+        q: 'Đầu: "Người cao tuổi bạn chăm sóc trước đây có thể tự đi không?"\n→ 20 phút sau: "Vậy bạn cần đẩy xe lăn cho họ không?"',
+        note: 'Nếu mâu thuẫn → CV có thể bị giả mạo hoặc ứng viên bị nhầm lẫn'
+      },
+      t2: {
+        q: '"Nếu 3 tháng sau khi đến Đài Loan, bạn thấy lương nhà máy cao hơn — bạn sẽ làm gì?"',
+        good: '✓ "Tôi sẽ tôn trọng hợp đồng" / "Tôi đã chọn Đài Loan và sẽ không hối tiếc"',
+        bad: '✗ "Tùy" / "Tôi có thể sẽ thảo luận với chủ" → đã có kế hoạch chuyển đổi'
+      },
+      t3: {
+        q: '"Bạn muốn tiết kiệm bao nhiêu tiền ở Đài Loan? Để làm gì?"',
+        good: '✓ Mục tiêu cụ thể (xây nhà, giáo dục con cái, trả nợ)',
+        bad: '✗ "Càng nhiều càng tốt" / "Muốn mua túi xách hàng hiệu" → không hài lòng về tài chính → có thể bỏ trốn'
+      },
+      t4_items: ['"Nhà bạn có WiFi không? Tín hiệu có tốt không?"', '"Tôi có thể có phòng riêng không?"', '"Tôi có thể nghỉ mỗi Chủ nhật không?"', '"Bạn có trả thêm giờ không?"'],
+      t4_note: 'Những câu hỏi này riêng lẻ là hợp lý, nhưng hỏi hung hăng trong buổi phỏng vấn đầu tiên = thái độ quá quyết đoán → khó quản lý',
+      body: [
+        {item:'Giao tiếp mắt', ok:'Nhìn thẳng, giao tiếp mắt tự nhiên', bad:'Thường tránh nhìn, mắt đảo → có thể nói dối'},
+        {item:'Biểu cảm khuôn mặt', ok:'Nụ cười tự nhiên, biểu cảm phong phú', bad:'Cứng đờ, cười giả → đang diễn hoặc không muốn'},
+        {item:'Tốc độ trả lời', ok:'Suy nghĩ rồi trả lời trôi chảy', bad:'Quá nhanh (học thuộc) hoặc quá chậm (bịa) → không thật'},
+        {item:'Cử chỉ cơ thể', ok:'Tư thế thẳng đứng, cử chỉ tay tự nhiên', bad:'Thường sờ mũi, khoanh tay → phòng thủ hoặc nói dối'},
+        {item:'Can thiệp bên thứ ba', ok:'Một mình, môi trường yên tĩnh', bad:'Thường nhìn sang bên, có người ở gần → đang được hướng dẫn'},
+        {item:'Phản ứng câu hỏi khó', ok:'Thừa nhận không chắc, hỏi thêm chi tiết', bad:'Lập tức đổi chủ đề, chỉ nói "được hết" → có thể đồng ý điều không làm nổi'},
+        {item:'Khi nhắc đến độ khó chăm sóc', ok:'Tỏ ra quan tâm, hỏi thêm chi tiết', bad:'Mặt căng thẳng hoặc khó chịu → có thể không chịu nổi cường độ'},
+      ]
+    }
+  },
+  /* 評分權重依「主要工作性質」動態調整：
+     看護工 → 語言15% / 專業技能40% / 耐心態度25% / 配合度20%
+     家庭幫傭 → 誠信40% / 家務能力30% / 溝通能力20% / 其他10%
+     混合型 → 兩者平均
+     未選擇 → 原始平衡權重 */
+  scores: {
+    zh: {
+      '': [
+        {label:'品格誠信', weight:0.30, key:'honest'},
+        {label:'照護能力', weight:0.30, key:'skill'},
+        {label:'中文／語言能力', weight:0.15, key:'lang'},
+        {label:'穩定性（抗壓／久任）', weight:0.15, key:'stress'},
+        {label:'配合度（態度／意願）', weight:0.10, key:'attitude'},
+      ],
+      caregiver: [
+        {label:'語言能力', weight:0.15, key:'lang'},
+        {label:'專業技能', weight:0.40, key:'skill'},
+        {label:'耐心態度', weight:0.25, key:'attitude'},
+        {label:'配合度', weight:0.20, key:'stress'},
+        {label:'品格誠信（參考）', weight:0, key:'honest'},
+      ],
+      helper: [
+        {label:'誠信', weight:0.40, key:'honest'},
+        {label:'家務能力', weight:0.30, key:'skill'},
+        {label:'溝通能力', weight:0.20, key:'lang'},
+        {label:'其他（配合度）', weight:0.05, key:'attitude'},
+        {label:'其他（穩定度）', weight:0.05, key:'stress'},
+      ],
+      mixed: [
+        {label:'品格誠信', weight:0.20, key:'honest'},
+        {label:'專業／家務能力', weight:0.35, key:'skill'},
+        {label:'語言／溝通能力', weight:0.175, key:'lang'},
+        {label:'耐心態度', weight:0.15, key:'attitude'},
+        {label:'配合度／穩定度', weight:0.125, key:'stress'},
+      ],
+      stroke: [
+        {label:'專業技能', weight:0.40, key:'skill'},
+        {label:'溝通能力', weight:0.25, key:'lang'},
+        {label:'工作意願', weight:0.20, key:'attitude'},
+        {label:'其他（穩定度）', weight:0.15, key:'stress'},
+        {label:'品格誠信（參考）', weight:0, key:'honest'},
+      ],
+      dementia: [
+        {label:'耐心', weight:0.35, key:'attitude'},
+        {label:'情緒管理', weight:0.35, key:'stress'},
+        {label:'技能', weight:0.20, key:'skill'},
+        {label:'其他', weight:0.10, key:'honest'},
+        {label:'語言能力（參考）', weight:0, key:'lang'},
+      ],
+    },
+    en: {
+      '': [
+        {label:'Character & Honesty', weight:0.30, key:'honest'},
+        {label:'Caregiving Competence', weight:0.30, key:'skill'},
+        {label:'Chinese / Language Ability', weight:0.15, key:'lang'},
+        {label:'Stability (stress tolerance)', weight:0.15, key:'stress'},
+        {label:'Cooperation (attitude)', weight:0.10, key:'attitude'},
+      ],
+      caregiver: [
+        {label:'Language Ability', weight:0.15, key:'lang'},
+        {label:'Professional Skill', weight:0.40, key:'skill'},
+        {label:'Patience & Attitude', weight:0.25, key:'attitude'},
+        {label:'Cooperation', weight:0.20, key:'stress'},
+        {label:'Honesty (reference)', weight:0, key:'honest'},
+      ],
+      helper: [
+        {label:'Honesty', weight:0.40, key:'honest'},
+        {label:'Housework Ability', weight:0.30, key:'skill'},
+        {label:'Communication', weight:0.20, key:'lang'},
+        {label:'Other (Cooperation)', weight:0.05, key:'attitude'},
+        {label:'Other (Stability)', weight:0.05, key:'stress'},
+      ],
+      mixed: [
+        {label:'Character & Honesty', weight:0.20, key:'honest'},
+        {label:'Professional/Housework Skill', weight:0.35, key:'skill'},
+        {label:'Language/Communication', weight:0.175, key:'lang'},
+        {label:'Patience & Attitude', weight:0.15, key:'attitude'},
+        {label:'Cooperation/Stability', weight:0.125, key:'stress'},
+      ],
+      stroke: [
+        {label:'Professional Skill', weight:0.40, key:'skill'},
+        {label:'Communication', weight:0.25, key:'lang'},
+        {label:'Work Motivation', weight:0.20, key:'attitude'},
+        {label:'Other (Stability)', weight:0.15, key:'stress'},
+        {label:'Honesty (reference)', weight:0, key:'honest'},
+      ],
+      dementia: [
+        {label:'Patience', weight:0.35, key:'attitude'},
+        {label:'Emotional Regulation', weight:0.35, key:'stress'},
+        {label:'Skill', weight:0.20, key:'skill'},
+        {label:'Other', weight:0.10, key:'honest'},
+        {label:'Language Ability (reference)', weight:0, key:'lang'},
+      ],
+    },
+    id: {
+      '': [
+        {label:'Karakter & Kejujuran', weight:0.30, key:'honest'},
+        {label:'Kompetensi Perawatan', weight:0.30, key:'skill'},
+        {label:'Kemampuan Bahasa Mandarin', weight:0.15, key:'lang'},
+        {label:'Stabilitas (toleransi stres)', weight:0.15, key:'stress'},
+        {label:'Kerja Sama (sikap)', weight:0.10, key:'attitude'},
+      ],
+      caregiver: [
+        {label:'Kemampuan Bahasa', weight:0.15, key:'lang'},
+        {label:'Keterampilan Profesional', weight:0.40, key:'skill'},
+        {label:'Kesabaran & Sikap', weight:0.25, key:'attitude'},
+        {label:'Kerja Sama', weight:0.20, key:'stress'},
+        {label:'Kejujuran (referensi)', weight:0, key:'honest'},
+      ],
+      helper: [
+        {label:'Kejujuran', weight:0.40, key:'honest'},
+        {label:'Kemampuan Rumah Tangga', weight:0.30, key:'skill'},
+        {label:'Komunikasi', weight:0.20, key:'lang'},
+        {label:'Lainnya (Kerja Sama)', weight:0.05, key:'attitude'},
+        {label:'Lainnya (Stabilitas)', weight:0.05, key:'stress'},
+      ],
+      mixed: [
+        {label:'Karakter & Kejujuran', weight:0.20, key:'honest'},
+        {label:'Keterampilan Profesional/Rumah Tangga', weight:0.35, key:'skill'},
+        {label:'Bahasa/Komunikasi', weight:0.175, key:'lang'},
+        {label:'Kesabaran & Sikap', weight:0.15, key:'attitude'},
+        {label:'Kerja Sama/Stabilitas', weight:0.125, key:'stress'},
+      ],
+      stroke: [
+        {label:'Keterampilan Profesional', weight:0.40, key:'skill'},
+        {label:'Komunikasi', weight:0.25, key:'lang'},
+        {label:'Motivasi Kerja', weight:0.20, key:'attitude'},
+        {label:'Lainnya (Stabilitas)', weight:0.15, key:'stress'},
+        {label:'Kejujuran (referensi)', weight:0, key:'honest'},
+      ],
+      dementia: [
+        {label:'Kesabaran', weight:0.35, key:'attitude'},
+        {label:'Pengendalian Emosi', weight:0.35, key:'stress'},
+        {label:'Keterampilan', weight:0.20, key:'skill'},
+        {label:'Lainnya', weight:0.10, key:'honest'},
+        {label:'Kemampuan Bahasa (referensi)', weight:0, key:'lang'},
+      ],
+    },
+    vi: {
+      '': [
+        {label:'Phẩm chất & Trung thực', weight:0.30, key:'honest'},
+        {label:'Năng lực chăm sóc', weight:0.30, key:'skill'},
+        {label:'Khả năng tiếng Trung', weight:0.15, key:'lang'},
+        {label:'Ổn định (chịu áp lực)', weight:0.15, key:'stress'},
+        {label:'Hợp tác (thái độ)', weight:0.10, key:'attitude'},
+      ],
+      caregiver: [
+        {label:'Khả năng ngôn ngữ', weight:0.15, key:'lang'},
+        {label:'Kỹ năng chuyên môn', weight:0.40, key:'skill'},
+        {label:'Kiên nhẫn & Thái độ', weight:0.25, key:'attitude'},
+        {label:'Hợp tác', weight:0.20, key:'stress'},
+        {label:'Trung thực (tham khảo)', weight:0, key:'honest'},
+      ],
+      helper: [
+        {label:'Trung thực', weight:0.40, key:'honest'},
+        {label:'Năng lực việc nhà', weight:0.30, key:'skill'},
+        {label:'Giao tiếp', weight:0.20, key:'lang'},
+        {label:'Khác (Hợp tác)', weight:0.05, key:'attitude'},
+        {label:'Khác (Ổn định)', weight:0.05, key:'stress'},
+      ],
+      mixed: [
+        {label:'Phẩm chất & Trung thực', weight:0.20, key:'honest'},
+        {label:'Kỹ năng chuyên môn/việc nhà', weight:0.35, key:'skill'},
+        {label:'Ngôn ngữ/Giao tiếp', weight:0.175, key:'lang'},
+        {label:'Kiên nhẫn & Thái độ', weight:0.15, key:'attitude'},
+        {label:'Hợp tác/Ổn định', weight:0.125, key:'stress'},
+      ],
+      stroke: [
+        {label:'Kỹ năng chuyên môn', weight:0.40, key:'skill'},
+        {label:'Giao tiếp', weight:0.25, key:'lang'},
+        {label:'Tinh thần làm việc', weight:0.20, key:'attitude'},
+        {label:'Khác (Ổn định)', weight:0.15, key:'stress'},
+        {label:'Trung thực (tham khảo)', weight:0, key:'honest'},
+      ],
+      dementia: [
+        {label:'Kiên nhẫn', weight:0.35, key:'attitude'},
+        {label:'Kiểm soát cảm xúc', weight:0.35, key:'stress'},
+        {label:'Kỹ năng', weight:0.20, key:'skill'},
+        {label:'Khác', weight:0.10, key:'honest'},
+        {label:'Khả năng ngôn ngữ (tham khảo)', weight:0, key:'lang'},
+      ],
+    }
+  },
+  veto: {
+    zh: ['履歷造假被當場拆穿', '明確表示「想去工廠」或「先來家庭看看」', '語言完全無法溝通（基本中文都聽不懂）', '面試時有明顯提詞痕跡（仲介在旁操控）', '對照護工作表現出強烈排斥或噁心感', '陷阱題測試中明確透露已有轉換或逃跑打算', '對財物誠信問題迴避或說謊，或自承曾因偷竊／誠信問題被解雇'],
+    en: ['Resume fraud caught on the spot', 'Explicitly stated "I want factory work" or "just trying this first"', 'Complete language barrier (cannot understand basic Chinese)', 'Obvious coaching/prompting during interview (agent controlling)', 'Strong aversion or disgust toward care tasks', 'Trap questions reveal an existing plan to transfer or run away', 'Evasive or dishonest about handling money/valuables, or admits to being dismissed before for theft/integrity issues'],
+    id: ['Penipuan CV tertangkap basah', 'Secara eksplisit menyatakan "Saya ingin kerja pabrik" atau "coba dulu"', 'Hambatan bahasa total (tidak bisa memahami bahasa dasar)', 'Pembimbingan jelas selama wawancara (agen mengendalikan)', 'Keengganan atau jijik kuat terhadap tugas perawatan', 'Pertanyaan jebakan mengungkap rencana pindah/kabur yang sudah ada', 'Menghindar atau berbohong soal menangani uang/barang berharga, atau mengakui pernah dipecat karena pencurian/masalah kejujuran'],
+    vi: ['Gian lận CV bị phát hiện tại chỗ', 'Nói rõ ràng "Tôi muốn làm nhà máy" hoặc "thử xem đã"', 'Rào cản ngôn ngữ hoàn toàn (không hiểu tiếng cơ bản)', 'Được hướng dẫn rõ ràng trong phỏng vấn (môi giới kiểm soát)', 'Phản đối mạnh hoặc kinh tởm với công việc chăm sóc', 'Câu hỏi bẫy cho thấy đã có kế hoạch chuyển việc hoặc bỏ trốn', 'Né tránh hoặc nói dối về tiền/vật có giá trị, hoặc tự nhận đã từng bị sa thải vì trộm cắp/vấn đề trung thực']
+  },
+  scripts: {
+    zh: [
+      {title:'婉拒不適任者', body:'「謝謝今天的安排，但這位看護的（語言能力/經驗/態度）不太符合我們家的需求。可以再安排其他人選嗎？」\n\n⚠️ 避免說：「她太醜」「我不喜歡她」→ 以客觀條件為理由'},
+      {title:'條件式接受', body:'「我對這位看護的（語言/態度）還算滿意，但有幾點需要事先確認：她能接受24小時同房照顧嗎？她了解我家長輩是（失智/臥床）嗎？她願意簽署至少1年不轉出的承諾嗎？」'},
+      {title:'堅定接受', body:'「我們決定聘請。請準備合約，我需要確認：觀察期長度、不適任更換機制、逃跑違約賠償條款、服務費明細與退費辦法。」'},
+    ],
+    en: [
+      {title:'Declining politely', body:'"Thank you for arranging today. However, this candidate\'s (language ability / experience / attitude) doesn\'t quite fit our family\'s needs. Could you arrange other candidates?"\n\n⚠️ Avoid saying personal comments — use objective criteria'},
+      {title:'Conditional acceptance', body:'"I\'m somewhat satisfied with this candidate\'s (language / attitude), but I need to confirm a few points first: Can she accept 24-hour shared-room care? Does she understand our elderly member\'s condition? Is she willing to sign a minimum 1-year no-transfer commitment?"'},
+      {title:'Firm acceptance', body:'"We\'ve decided to hire. Please prepare the contract. I need to confirm: observation period terms, replacement mechanism for unsatisfactory performance, runaway/breach compensation clauses, service fee breakdown and refund policy."'},
+    ],
+    id: [
+      {title:'Menolak dengan sopan', body:'"Terima kasih atas pengaturan hari ini. Namun, (kemampuan bahasa / pengalaman / sikap) kandidat ini tidak cukup sesuai kebutuhan keluarga kami. Bisakah Anda mengatur kandidat lain?"\n\n⚠️ Hindari komentar pribadi — gunakan kriteria objektif'},
+      {title:'Penerimaan bersyarat', body:'"Saya cukup puas dengan (bahasa / sikap) kandidat ini, tapi ada beberapa poin yang perlu dikonfirmasi: Bisakah dia menerima perawatan 24 jam berbagi kamar? Apakah dia memahami kondisi lansia kami? Apakah dia bersedia menandatangani komitmen minimal 1 tahun tanpa transfer?"'},
+      {title:'Penerimaan tegas', body:'"Kami memutuskan untuk merekrut. Tolong siapkan kontraknya. Saya perlu mengkonfirmasi: syarat masa observasi, mekanisme penggantian untuk kinerja tidak memuaskan, klausul kompensasi kabur/pelanggaran, rincian biaya layanan dan kebijakan pengembalian."'},
+    ],
+    vi: [
+      {title:'Từ chối lịch sự', body:'"Cảm ơn về sự sắp xếp hôm nay. Tuy nhiên, (khả năng ngôn ngữ / kinh nghiệm / thái độ) của ứng viên này không phù hợp lắm với nhu cầu gia đình chúng tôi. Bạn có thể sắp xếp các ứng viên khác không?"\n\n⚠️ Tránh nhận xét cá nhân — dùng tiêu chí khách quan'},
+      {title:'Chấp nhận có điều kiện', body:'"Tôi khá hài lòng với (ngôn ngữ / thái độ) của ứng viên này, nhưng tôi cần xác nhận một vài điểm: Cô ấy có thể chấp nhận chăm sóc 24 giờ chung phòng không? Cô ấy có hiểu tình trạng của người cao tuổi trong gia đình chúng tôi không? Cô ấy có sẵn sàng ký cam kết tối thiểu 1 năm không chuyển tiếp không?"'},
+      {title:'Chấp nhận dứt khoát', body:'"Chúng tôi đã quyết định thuê. Hãy chuẩn bị hợp đồng. Tôi cần xác nhận: điều khoản thời gian thử việc, cơ chế thay thế khi không đạt yêu cầu, điều khoản bồi thường khi bỏ trốn/vi phạm, chi tiết phí dịch vụ và chính sách hoàn tiền."'},
+    ]
+  },
+  careTypes: {
+    zh: {
+      dementia: {
+        title: '🧠 失智症照護專項評估',
+        items: [
+          {q:'「如果阿公一直說要回家，但其實他已經在家，你會怎麼處理？」', good:'✓ 提到不直接糾正、轉移注意力、同理安撫', bad:'✗ 說會強硬糾正或直接忽略'},
+          {q:'「半夜阿嬤突然起床要出門（遊走），你會怎麼做？」', good:'✓ 陪伴觀察、不強拉硬拖、確保安全、適度引導回房', bad:'✗ 完全沒概念，或說會鎖門／綁住'},
+          {q:'「長輩出現躁動、罵人甚至打人（BPSD），你會怎麼回應？」', good:'✓ 保持冷靜、不還手、先離開緩衝、事後記錄回報', bad:'✗ 說會生氣回嘴或處罰長輩'},
+          {q:'「你知道『順著他說』這種溝通方式嗎？什麼時候會用？」', good:'✓ 能舉例說明何時用順應式溝通而非硬糾正', bad:'✗ 完全沒聽過，也答不出來'},
+        ]
+      },
+      stroke: {
+        title: '🦽 中風照護專業版（移位／輪椅／翻身／褥瘡／復健／感染／緊急判斷）',
+        items: [
+          {q:'「協助偏癱長輩從床上移位到輪椅，你會怎麼做？」', good:'✓ 提到健側施力、防跌倒、運用技巧而非蠻力', bad:'✗ 說用蠻力直接抱起來'},
+          {q:'「長輩是右側偏癱（右手右腳無力），協助穿衣、上下床、走路時你會特別注意什麼？」', good:'✓ 知道穿衣「先患側後健側」、脫衣「先健側後患側」、輪椅／床鋪健側（左側）靠近以利施力、攙扶站在患側保護', bad:'✗ 不知道患側健側差異，或穿脫衣順序錯誤、攙扶站位錯誤'},
+          {q:'「輪椅與床之間的轉位，你會怎麼擺位（角度、距離、煞車）？需要兩人協助時你會怎麼配合？」', good:'✓ 輪椅與床呈30–45度角靠近健側、移除腳踏板、雙邊煞車鎖死，體重較重或全癱者主動提議兩人協助並說明分工', bad:'✗ 沒有角度概念，或忘記煞車，需要協助時不會主動反映'},
+          {q:'「輪椅使用時，你會注意哪些安全細節（煞車、移位板、姿勢）？」', good:'✓ 提到上下車前先煞車鎖死、必要時用移位板、定時調整坐姿避免歪斜', bad:'✗ 完全沒概念，或說不需要特別注意'},
+          {q:'「臥床或久坐的長輩，多久協助翻身/變換姿勢一次？怎麼做？」', good:'✓ 至少每2小時一次、採30度側臥、避免拖拉摩擦皮膚', bad:'✗ 沒有時間概念，或說用拖拉的方式移動'},
+          {q:'「你怎麼預防褥瘡？如果皮膚已經有發紅或破皮，你會怎麼處理？」', good:'✓ 提到減壓墊、皮膚檢查、保持乾爽，發現紅腫立即回報不自行處理', bad:'✗ 完全沒概念，或說擦藥就好不用回報'},
+          {q:'「復健運動你知道哪些基本動作？會怎麼配合治療師的指示？」', good:'✓ 提到關節活動、肢體擺位、預防攣縮，並會記錄與遵循治療師指示', bad:'✗ 完全沒概念，或說自己會就好不用聽治療師的'},
+          {q:'「如果發現長輩患肢出現紅、腫、熱、痛（可能蜂窩性組織炎徵兆），你會怎麼處理？」', good:'✓ 提高警覺立即回報家屬／盡快就醫，不可自行冰敷或推拿患處', bad:'✗ 沒概念，或說推拿按摩看看就好'},
+          {q:'「若發現長輩突然臉歪、講話不清、單側無力，你會怎麼處理？」', good:'✓ 立即通報家屬／送醫，懷疑中風惡化，記得發作時間以利急救判斷', bad:'✗ 說等等看再說，或不知道要記錄時間'},
+          {q:'「長輩吞嚥困難合併中風，你會怎麼準備食物？」', good:'✓ 提到軟質／糊狀、增稠劑、小口慢餵、坐直進食', bad:'✗ 說正常飲食即可'},
+        ]
+      },
+      bedridden: {
+        title: '🛏️ 臥床／長照照護專項評估',
+        items: [
+          {q:'「臥床長輩怎麼預防褥瘡？多久翻身一次？」', good:'✓ 至少2小時翻身、皮膚檢查、使用減壓墊', bad:'✗ 沒有時間概念'},
+          {q:'「你會抽痰嗎？請說明基本流程與注意事項。」', good:'✓ 提到無菌操作、抽吸時間限制、觀察生命徵象', bad:'✗ 完全沒做過也不了解風險'},
+          {q:'「長輩有鼻胃管／管灌，你知道灌食注意事項嗎？」', good:'✓ 提到坐起30–45度、灌食前回抽、速度不能太快', bad:'✗ 完全沒概念'},
+          {q:'「協助臥床長輩翻身擺位，你會注意什麼？」', good:'✓ 提到身體力學、必要時雙人協助、保護管路', bad:'✗ 完全沒概念'},
+        ]
+      },
+      cancer: {
+        title: '🎗️ 癌症／安寧照護專項評估',
+        items: [
+          {q:'「長輩因疾病出現疼痛，但家屬要求先觀察不馬上用藥，你會怎麼做？」', good:'✓ 記錄疼痛狀況、回報家屬與醫護、不自行給藥', bad:'✗ 自行判斷給藥，或直接忽略'},
+          {q:'「安寧照護中，你認為照顧者最重要的角色是什麼？」', good:'✓ 提到陪伴、舒適照護、尊重病人意願', bad:'✗ 只談治癒，或無法理解安寧概念'},
+          {q:'「面對病情變化或臨終徵象，你會如何應對？」', good:'✓ 保持冷靜、立即通報家屬與醫護、給予陪伴', bad:'✗ 驚慌失措或選擇迴避'},
+          {q:'「長期照顧重症長輩，你如何調適自己的情緒？」', good:'✓ 能說出紓壓方式、願意與雇主溝通需求', bad:'✗ 說不會有壓力，或完全答不出來'},
+        ]
+      },
+      parkinson: {
+        title: '🤲 巴金森氏症照護專項評估',
+        items: [
+          {q:'「長輩走路會突然『凍結』（不能跨步），你會怎麼協助？」', good:'✓ 提到口令引導、地上放標記物、不強拉，給予時間', bad:'✗ 完全沒概念，或說用力拉著走'},
+          {q:'「長輩服用左多巴（巴金森藥物）的時間和吃飯時間有沒有關係？你會怎麼安排？」', good:'✓ 知道需準時服藥、部分藥物建議空腹或避開高蛋白餐，會留意服藥時間記錄', bad:'✗ 完全不知道服藥與進食的關係，或常忘記/任意延後給藥'},
+          {q:'「長輩手抖得厲害，吃飯、洗澡你會怎麼協助但又讓他保有自主？」', good:'✓ 提到適度協助但鼓勵自己動手、使用防滑餐具、耐心等待不催促', bad:'✗ 直接全部代勞剝奪自主，或表現不耐煩'},
+          {q:'「如果長輩突然出現吞嚥嗆咳或講話含糊加重，你會怎麼處理？」', good:'✓ 立即停止進食、坐直拍背、回報家屬與醫護，必要時記錄惡化情形', bad:'✗ 沒有警覺心，或繼續餵食'},
+        ]
+      },
+      tubefeeding: {
+        title: '🍽️ 管灌（鼻胃管）照護專項評估',
+        items: [
+          {q:'「灌食前你會做哪些確認動作？」', good:'✓ 提到確認管路位置（回抽胃液／聽診）、坐起30–45度、檢查殘餘量', bad:'✗ 完全沒概念，或說直接灌就好'},
+          {q:'「灌食的速度和量你會怎麼掌握？太快會有什麼風險？」', good:'✓ 知道應緩慢灌入、分次少量，太快恐造成嘔吐／嗆咳／脹氣', bad:'✗ 沒有時間概念，或說越快越好'},
+          {q:'「灌食後要注意什麼？多久才能讓長輩躺平？」', good:'✓ 提到灌食後維持坐姿至少30分鐘才能躺平，避免逆流嗆咳', bad:'✗ 說灌完馬上躺下沒關係'},
+          {q:'「如果發現鼻胃管滑脫或管路阻塞，你會怎麼處理？」', good:'✓ 立即停止灌食、回報家屬／護理人員，不自行重新插管', bad:'✗ 自己嘗試重新插入，或不處理繼續灌食'},
+        ]
+      },
+      tracheostomy: {
+        title: '🫁 氣切照護專項評估',
+        items: [
+          {q:'「氣切造口你會怎麼清潔？多久換一次紗布？」', good:'✓ 提到無菌／清潔操作、觀察分泌物與皮膚狀況、定期更換紗布', bad:'✗ 完全沒概念，或說很少清潔'},
+          {q:'「你會抽痰嗎？抽痰時要注意哪些事？」', good:'✓ 提到無菌操作、抽吸時間限制（約10–15秒）、抽吸前後觀察生命徵象與血氧', bad:'✗ 沒做過也不了解風險，或說用力抽久一點比較乾淨'},
+          {q:'「如果發現氣切套管脫出或痰液突然變濃稠變色，你會怎麼處理？」', good:'✓ 保持冷靜、立即回報家屬／送醫，套管脫出不自行硬塞回去', bad:'✗ 自己嘗試把套管塞回去，或不當一回事'},
+          {q:'「氣切照護上你會怎麼預防感染？」', good:'✓ 提到勤洗手、傷口換藥消毒、避免水進入造口', bad:'✗ 完全沒概念'},
+        ]
+      },
+      dialysis: {
+        title: '🩸 洗腎患者照護專項評估',
+        items: [
+          {q:'「洗腎患者的飲食有什麼特別要注意的地方？」', good:'✓ 提到限水、限鉀、限磷、限鈉，會配合醫囑準備餐食', bad:'✗ 說正常飲食即可，完全沒概念'},
+          {q:'「血液透析患者的廔管（瘻管）你會怎麼保護？」', good:'✓ 提到該側手臂不量血壓不抽血不提重物、觀察是否有震顫感、避免壓迫', bad:'✗ 完全沒概念，或說沒什麼需要特別注意'},
+          {q:'「長輩洗腎後常感到疲倦或低血壓，你會怎麼照顧？」', good:'✓ 提到讓其休息、留意頭暈跌倒風險、緩慢改變姿勢', bad:'✗ 沒概念，或照常要求活動'},
+          {q:'「如果發現長輩水腫、呼吸喘或体重突然增加，你會怎麼處理？」', good:'✓ 提高警覺、記錄並回報家屬／醫護，懷疑水分蓄積', bad:'✗ 沒有警覺心，不會聯想到洗腎相關問題'},
+        ]
+      },
+      pressureulcer: {
+        title: '🩹 臥床褥瘡照護專項評估',
+        items: [
+          {q:'「你怎麼分辨褥瘡的嚴重程度（從輕微發紅到傷口）？」', good:'✓ 能大致描述從皮膚發紅不退、破皮、到深層潰瘍的進展概念，異常會回報', bad:'✗ 完全分不清楚，或認為只是普通紅疹不用理會'},
+          {q:'「臥床長輩你會多久翻身一次？特別容易出現褥瘡的部位有哪些？」', good:'✓ 至少每2小時翻身一次，提到骨突處如薦骨、腳跟、髖部、後腦', bad:'✗ 沒有時間概念，也說不出好發部位'},
+          {q:'「已經出現的傷口你會怎麼處理？」', good:'✓ 提到保持傷口清潔乾燥、依指示換藥，不自行塗抹偏方藥膏，異常滲液或異味立即回報', bad:'✗ 自行塗抹不明藥膏，或完全不處理'},
+          {q:'「如何透過床墊、姿勢擺位降低褥瘡風險？」', good:'✓ 提到使用減壓床墊／氣墊床、適當擺位墊枕分散壓力、保持皮膚乾爽', bad:'✗ 完全沒概念'},
+        ]
+      },
+      diabetes: {
+        title: '💉 糖尿病照護專項評估',
+        items: [
+          {q:'「你會怎麼安排糖尿病長輩的三餐？」', good:'✓ 提到定時定量、控制醣類攝取、少糖少精緻澱粉，會配合醫囑', bad:'✗ 說正常吃就好，完全沒概念'},
+          {q:'「如果長輩出現冒冷汗、發抖、意識不清（疑似低血糖），你會怎麼處理？」', good:'✓ 立即給予含糖食物或飲料、就近觀察、必要時送醫，事後回報', bad:'✗ 沒概念，或要求繼續活動不處理'},
+          {q:'「你會幫忙測血糖或打胰島素嗎？對相關流程了解多少？」', good:'✓ 誠實說明熟悉與不熟悉之處，知道需依醫囑時間執行、用後正確丟棄針具', bad:'✗ 逞強說都會但講不出基本流程'},
+          {q:'「糖尿病長輩的足部你會特別注意什麼？」', good:'✓ 提到每天檢查足部有無傷口破皮、避免赤腳、選擇合適鞋襪', bad:'✗ 完全沒概念，認為不需要特別注意'},
+        ]
+      }
+    },
+    en: {
+      dementia: {
+        title: '🧠 Dementia Care Assessment',
+        items: [
+          {q:'"Grandpa keeps saying he wants to go home, but he is already home. What would you do?"', good:'✓ Mentions not directly correcting, redistraction, empathetic reassurance', bad:'✗ Says will firmly correct or ignore him'},
+          {q:'"Grandma suddenly gets up at night wanting to go out (wandering). What would you do?"', good:'✓ Accompany and observe, no forceful pulling, ensure safety, gently guide back', bad:'✗ No idea, or says will lock doors / restrain her'},
+          {q:'"The elder becomes agitated, scolds or even hits (BPSD). How would you respond?"', good:'✓ Stay calm, do not fight back, step back to de-escalate, document and report', bad:'✗ Says will get angry back or punish the elder'},
+          {q:'"Do you know the \'going along with it\' communication approach? When would you use it?"', good:'✓ Can give an example of when to use it instead of direct correction', bad:'✗ Never heard of it, cannot answer'},
+        ]
+      },
+      stroke: {
+        title: '🦽 Stroke Care Pro Module (transfers / wheelchair / repositioning / pressure ulcers / rehab / infection / emergency)',
+        items: [
+          {q:'"How would you help a hemiplegic elder transfer from bed to wheelchair?"', good:'✓ Mentions using the stronger side, fall prevention, technique over brute force', bad:'✗ Says will just lift with force'},
+          {q:'"The elder has right-sided hemiplegia (weak right arm and leg). What do you pay special attention to when dressing, getting out of bed, or walking?"', good:'✓ Knows "affected side first" when dressing and "stronger side first" when undressing, positions the wheelchair/bed on the stronger (left) side for leverage, stands on the affected side when assisting to protect it', bad:'✗ Doesn\'t distinguish affected vs. stronger side, gets the dressing order wrong, or stands on the wrong side when assisting'},
+          {q:'"How would you position the wheelchair and bed for a transfer (angle, distance, brakes)? How would you assist if two people are needed?"', good:'✓ Positions wheelchair at 30–45° on the stronger side, removes footrests, locks both brakes, proactively suggests two-person assist and coordinates roles for a heavier or fully paralyzed patient', bad:'✗ No concept of angle, forgets to lock brakes, or doesn\'t speak up when help is needed'},
+          {q:'"What safety details do you watch for when using a wheelchair (brakes, transfer board, posture)?"', good:'✓ Mentions locking brakes before transfers, using a transfer board when needed, adjusting posture regularly to avoid slumping', bad:'✗ No idea, or says nothing special is needed'},
+          {q:'"How often do you reposition a bedridden or seated elder? What is the technique?"', good:'✓ At least every 2 hours, 30° side-lying position, avoid dragging/friction on skin', bad:'✗ No concept of timing, or says will just drag them'},
+          {q:'"How do you prevent pressure ulcers? If skin is already red or broken, what would you do?"', good:'✓ Mentions pressure-relief cushion, skin checks, keeping skin dry; reports redness immediately rather than treating it themselves', bad:'✗ No idea, or says just apply ointment without reporting'},
+          {q:'"What basic rehab exercises do you know? How would you follow a therapist\'s instructions?"', good:'✓ Mentions joint mobility, limb positioning, contracture prevention, and records/follows therapist guidance', bad:'✗ No idea, or says they don\'t need to follow the therapist'},
+          {q:'"If you notice redness, swelling, heat, and pain on the affected limb (possible cellulitis sign), what would you do?"', good:'✓ Stays alert, reports to family/seeks medical care promptly, does not ice or massage the area', bad:'✗ No idea, or says will just massage it'},
+          {q:'"If you notice sudden facial drooping, slurred speech, or one-sided weakness, what would you do?"', good:'✓ Immediately notify family/seek medical care, suspect stroke worsening, note the onset time for emergency assessment', bad:'✗ Says will wait and see, or doesn\'t know to record the time'},
+          {q:'"The elder has swallowing difficulty after stroke. How would you prepare food?"', good:'✓ Mentions soft/pureed food, thickener, small slow bites, upright posture while eating', bad:'✗ Says regular diet is fine'},
+        ]
+      },
+      bedridden: {
+        title: '🛏️ Bedridden / Long-Term Care Assessment',
+        items: [
+          {q:'"How do you prevent bedsores in a bedridden elder? How often do you reposition them?"', good:'✓ At least every 2 hours, skin checks, pressure-relief cushion', bad:'✗ No concept of timing'},
+          {q:'"Can you do suctioning? Please explain the basic procedure and precautions."', good:'✓ Mentions sterile technique, time limits, monitoring vital signs', bad:'✗ Never done it, unaware of risks'},
+          {q:'"The elder has a feeding tube. What precautions do you know for tube feeding?"', good:'✓ Mentions 30–45° upright position, aspirate before feeding, not too fast', bad:'✗ No idea at all'},
+          {q:'"What do you pay attention to when repositioning a bedridden elder?"', good:'✓ Mentions body mechanics, two-person assist when needed, protecting tubing', bad:'✗ No idea at all'},
+        ]
+      },
+      cancer: {
+        title: '🎗️ Cancer / Hospice Care Assessment',
+        items: [
+          {q:'"The elder has pain but the family wants to observe first instead of medicating right away. What would you do?"', good:'✓ Document pain, report to family/medical staff, do not medicate on your own', bad:'✗ Decides to medicate on own judgment, or ignores it'},
+          {q:'"In hospice care, what do you think is the caregiver\'s most important role?"', good:'✓ Mentions companionship, comfort care, respecting patient\'s wishes', bad:'✗ Only talks about cure, or cannot grasp the hospice concept'},
+          {q:'"How would you respond to changes in condition or signs near end of life?"', good:'✓ Stay calm, immediately notify family/medical staff, provide companionship', bad:'✗ Panics or avoids the situation'},
+          {q:'"How do you manage your own emotions while long-term caring for a seriously ill elder?"', good:'✓ Can describe coping methods, willing to communicate needs to employer', bad:'✗ Says there is no stress, or cannot answer'},
+        ]
+      },
+      parkinson: {
+        title: '🤲 Parkinson\'s Care Assessment',
+        items: [
+          {q:'"The elder suddenly \'freezes\' while walking (cannot take a step). How would you help?"', good:'✓ Mentions verbal cueing, placing a marker on the floor, no forceful pulling, allowing time', bad:'✗ No idea, or says will pull them forcefully'},
+          {q:'"Does the timing of Levodopa (Parkinson\'s medication) relate to mealtimes? How would you schedule it?"', good:'✓ Knows medication must be on time, some doses are best on an empty stomach or away from high-protein meals, keeps a timing log', bad:'✗ No idea of the medication-food relationship, or often forgets/delays doses'},
+          {q:'"The elder has severe hand tremors. How would you assist with eating or bathing while preserving their independence?"', good:'✓ Mentions moderate assistance while encouraging self-reliance, non-slip utensils, patience without rushing', bad:'✗ Takes over completely, or shows impatience'},
+          {q:'"If the elder suddenly chokes while swallowing or their speech becomes noticeably more slurred, what would you do?"', good:'✓ Stop feeding immediately, sit upright and pat back, report to family/medical staff, document any worsening', bad:'✗ No alertness, or continues feeding'},
+        ]
+      },
+      tubefeeding: {
+        title: '🍽️ Tube (NG) Feeding Care Assessment',
+        items: [
+          {q:'"What checks do you do before tube feeding?"', good:'✓ Mentions confirming tube position (aspirate/auscultate), 30–45° upright position, checking residual volume', bad:'✗ No idea, or says just feed directly'},
+          {q:'"How do you control feeding speed and amount? What are the risks of feeding too fast?"', good:'✓ Knows to feed slowly in small amounts; too fast may cause vomiting/choking/bloating', bad:'✗ No concept of timing, or says faster is better'},
+          {q:'"What do you watch for after feeding? How long before the elder can lie flat?"', good:'✓ Mentions keeping upright for at least 30 minutes after feeding to avoid reflux/choking', bad:'✗ Says lying down right after feeding is fine'},
+          {q:'"If you find the NG tube has slipped out or is blocked, what would you do?"', good:'✓ Stop feeding immediately, report to family/nurse, does not reinsert the tube themselves', bad:'✗ Tries to reinsert it themselves, or ignores it and keeps feeding'},
+        ]
+      },
+      tracheostomy: {
+        title: '🫁 Tracheostomy Care Assessment',
+        items: [
+          {q:'"How do you clean the tracheostomy stoma? How often do you change the gauze?"', good:'✓ Mentions sterile/clean technique, monitoring secretions and skin condition, regular gauze changes', bad:'✗ No idea, or says it is rarely cleaned'},
+          {q:'"Can you do suctioning? What do you pay attention to during suctioning?"', good:'✓ Mentions sterile technique, suction time limit (about 10–15 seconds), checking vital signs/oxygen before and after', bad:'✗ Never done it, unaware of risks, or says suction longer for thoroughness'},
+          {q:'"If the tracheostomy tube comes out, or secretions suddenly become thicker or change color, what would you do?"', good:'✓ Stay calm, report to family/seek medical care immediately, does not force the tube back in', bad:'✗ Tries to push the tube back in themselves, or ignores it'},
+          {q:'"How do you prevent infection in tracheostomy care?"', good:'✓ Mentions frequent handwashing, wound dressing/disinfection, keeping water out of the stoma', bad:'✗ No idea at all'},
+        ]
+      },
+      dialysis: {
+        title: '🩸 Dialysis Patient Care Assessment',
+        items: [
+          {q:'"What dietary restrictions does a dialysis patient need?"', good:'✓ Mentions fluid, potassium, phosphorus, and sodium restrictions, and follows medical instructions for meals', bad:'✗ Says normal diet is fine, no idea at all'},
+          {q:'"How would you protect the dialysis fistula (access site) on a hemodialysis patient\'s arm?"', good:'✓ Mentions no blood pressure measurement/blood draws/heavy lifting on that arm, checking for a thrill (vibration), avoiding pressure', bad:'✗ No idea, or says nothing special is needed'},
+          {q:'"The elder often feels fatigued or has low blood pressure after dialysis. How would you care for them?"', good:'✓ Mentions letting them rest, watching for dizziness/fall risk, changing position slowly', bad:'✗ No idea, or asks them to keep moving as usual'},
+          {q:'"If you notice swelling, shortness of breath, or sudden weight gain, what would you do?"', good:'✓ Stay alert, document and report to family/medical staff, suspect fluid overload', bad:'✗ No alertness, does not connect it to dialysis-related issues'},
+        ]
+      },
+      pressureulcer: {
+        title: '🩹 Bedridden Pressure Ulcer Care Assessment',
+        items: [
+          {q:'"How do you tell the severity of a pressure ulcer (from mild redness to an open wound)?"', good:'✓ Can roughly describe progression from non-blanching redness, to broken skin, to deep ulcer, and reports anything abnormal', bad:'✗ Cannot tell the difference at all, or thinks it is just a rash and ignores it'},
+          {q:'"How often do you reposition a bedridden elder? Which areas are most prone to pressure ulcers?"', good:'✓ At least every 2 hours, mentions bony areas like sacrum, heels, hips, back of head', bad:'✗ No concept of timing, cannot name prone areas'},
+          {q:'"How would you handle an existing wound?"', good:'✓ Mentions keeping the wound clean and dry, dressing changes as instructed, never applying unverified home remedies, reports abnormal discharge or odor immediately', bad:'✗ Applies unknown ointments on their own, or does nothing at all'},
+          {q:'"How would you use mattresses and positioning to reduce pressure ulcer risk?"', good:'✓ Mentions pressure-relief/air mattress, positioning cushions to distribute pressure, keeping skin dry', bad:'✗ No idea at all'},
+        ]
+      },
+      diabetes: {
+        title: '💉 Diabetes Care Assessment',
+        items: [
+          {q:'"How would you plan meals for a diabetic elder?"', good:'✓ Mentions regular meal times and portions, controlling carbohydrate intake, less sugar/refined starch, follows medical advice', bad:'✗ Says normal eating is fine, no idea at all'},
+          {q:'"If the elder shows cold sweat, shaking, or confusion (possible hypoglycemia), what would you do?"', good:'✓ Immediately gives sugary food/drink, monitors closely, seeks medical care if needed, reports afterward', bad:'✗ No idea, or tells them to keep being active without addressing it'},
+          {q:'"Would you help check blood sugar or give insulin injections? How familiar are you with the process?"', good:'✓ Honestly states what they know and don\'t know, knows doses follow a medical schedule, disposes of needles properly', bad:'✗ Insists they know everything but cannot explain the basic procedure'},
+          {q:'"What would you pay special attention to regarding a diabetic elder\'s feet?"', good:'✓ Mentions checking feet daily for wounds/broken skin, avoiding bare feet, choosing proper footwear', bad:'✗ No idea at all, thinks no special attention is needed'},
+        ]
+      }
+    }
+  },
+  helperQ: {
+    zh: [
+      {q:'「請說明你平常打掃房間和浴室的流程？大概多久打掃一次？」', good:'✓ 能具體說出步驟與頻率，邏輯清楚', bad:'✗ 答非所問或說「都可以」卻說不出細節'},
+      {q:'「衣物送洗前你會怎麼分類？深色淺色、材質會分開洗嗎？」', good:'✓ 知道分色、分材質、過敏衣物特別處理', bad:'✗ 完全沒有分類概念，說全部一起洗'},
+      {q:'「你會做哪些台灣家常菜？舉3道你最常做的。」', good:'✓ 能具體舉出菜名與做法大概', bad:'✗ 說「都會」但講不出任何一道菜名'},
+      {q:'「如果在打掃時不小心打破家裡的東西，你會怎麼處理？」', good:'✓ 主動告知雇主、表示願意賠償或負責，態度誠實', bad:'✗ 表示會藏起來不講，或反應閃躲'},
+      {q:'「如果有一天你發現家裡的錢或物品不見了，你會怎麼做？」', good:'✓ 表示會立刻告知雇主、協助釐清狀況，不迴避', bad:'✗ 表情慌張、迴避問題或說「不知道、跟我沒關係」講太快'},
+      {q:'「洗衣機、瓦斯爐、電鍋這些家電你都會用嗎？有沒有不熟悉的？」', good:'✓ 誠實說明熟悉與不熟悉的部分，願意學習', bad:'✗ 逞強說都會，但細問操作流程卻講不出來'},
+      {q:'「如果雇主家有人吃素或有飲食禁忌，你會怎麼準備餐點？」', good:'✓ 表示會配合並另外準備、注意食材區分', bad:'✗ 表示不在意或覺得麻煩不想配合'},
+      {q:'「假設你要單獨外出買菜，你會怎麼安排路線與議價？」', good:'✓ 有條理地說明會先確認清單、比價、認路方式', bad:'✗ 完全沒概念，或表示不敢/不願意單獨外出'},
+    ],
+    en: [
+      {q:'"Please describe how you usually clean a room and bathroom. How often do you clean?"', good:'✓ Can clearly describe steps and frequency', bad:'✗ Off-topic, or says "anything is fine" but gives no detail'},
+      {q:'"How do you sort laundry before washing? Do you separate by color or fabric type?"', good:'✓ Knows to separate by color/fabric, handles allergenic items with care', bad:'✗ No sorting concept at all, says everything goes together'},
+      {q:'"What Taiwanese home dishes can you cook? Name 3 you make most often."', good:'✓ Can name specific dishes and roughly describe how to make them', bad:'✗ Says "I can cook anything" but cannot name a single dish'},
+      {q:'"If you accidentally break something while cleaning, what would you do?"', good:'✓ Proactively tells the employer, offers to take responsibility, honest attitude', bad:'✗ Says they would hide it, or reacts evasively'},
+      {q:'"If you ever notice money or an item missing from the house, what would you do?"', good:'✓ Says they would tell the employer immediately and help clarify, no avoidance', bad:'✗ Looks flustered, avoids the question, or rushes to say "I don\'t know, not my problem"'},
+      {q:'"Can you operate the washing machine, gas stove, and rice cooker? Is there anything you are not familiar with?"', good:'✓ Honestly states what they know and don\'t know, willing to learn', bad:'✗ Insists they know everything but cannot explain the actual steps when asked'},
+      {q:'"If someone in the household is vegetarian or has dietary restrictions, how would you prepare meals?"', good:'✓ Says they would accommodate and prepare separately, careful about ingredients', bad:'✗ Says they don\'t care or finds it too troublesome to accommodate'},
+      {q:'"If you had to go grocery shopping alone, how would you plan your route and negotiate prices?"', good:'✓ Describes a clear approach: checking a list, comparing prices, knowing the way', bad:'✗ No idea at all, or says they are unwilling/afraid to go out alone'},
+    ]
+  },
+};
+let currentLang = 'zh';
+let currentTab = 'setup';
+let flagState = {};
+let scoreState = {lang:0, skill:0, attitude:0, stress:0, honest:0};
+let timerRunning = false;
+let timerSeconds = 0;
+let timerInterval = null;
+let vetoChecks = {};
+let careTypeKey = '';
+let lastSaveTime = null;
+let saveDebounceTimer = null;
+let candidatePhoto = null;
+
+function t(key) { return LANGS[currentLang][key] || LANGS.zh[key] || key; }
+
+function getWorktype() {
+  const sel = document.getElementById('f-worktype');
+  return sel ? sel.value : '';
+}
+
+function getScoreConfig() {
+  const wt = getWorktype();
+  const byLang = CONTENT.scores[currentLang] || CONTENT.scores.zh;
+  if (wt === 'caregiver' && (careTypeKey === 'stroke' || careTypeKey === 'dementia') && byLang[careTypeKey]) {
+    return byLang[careTypeKey];
+  }
+  return byLang[wt] || byLang[''];
+}
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('h-title').textContent = t('h_title');
+  document.getElementById('h-sub').textContent = t('h_sub');
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (LANGS[lang][key]) el.innerHTML = LANGS[lang][key];
+  });
+  buildFlagButtons();
+  buildInterviewQuestions();
+  buildTransferQuestions();
+  buildTraps();
+  buildScoreGrid();  buildVeto();
+  buildScripts();
+  buildCareTypeQuestions();
+  buildHelperTaskQuestions();
+  updateSummary();
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const key = b.dataset.key;
+    if (key && LANGS[lang][key]) b.textContent = LANGS[lang][key];
+  });
+  document.getElementById('timer-toggle-btn').textContent = timerRunning ? (lang==='zh'?'暫停':lang==='en'?'Pause':lang==='id'?'Jeda':'Dừng') : t('timer_start');
+  renderCompareTable();
+  saveState();
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  document.getElementById('tb-'+tab).classList.add('active');
+  if (tab === 'score') updateSummary();
+  if (tab === 'compare') renderCompareTable();
+}
+
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  saveState();
+}
+
+function buildFlagButtons() {
+  const flags = CONTENT.flags[currentLang] || CONTENT.flags.zh;
+  const cont = document.getElementById('flag-buttons');
+  cont.innerHTML = '';
+  flags.forEach((f, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'flag-toggle' + (flagState[i] ? (f.type==='red' ? ' flagged-red' : ' flagged-yellow') : '');
+    btn.textContent = (f.type==='red'?'🚩 ':'⚠️ ') + f.label;
+    btn.onclick = () => {
+      flagState[i] = !flagState[i];
+      btn.className = 'flag-toggle' + (flagState[i] ? (f.type==='red' ? ' flagged-red' : ' flagged-yellow') : '');
+      updateSummary();
+      saveState();
+    };
+    cont.appendChild(btn);
+  });
+}
+
+function buildQItems(containerId, questions) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  cont.innerHTML = '';
+  questions.forEach(q => {
+    const d = document.createElement('div');
+    d.className = 'q-item';
+    d.innerHTML = `<div class="q-text">${q.q}</div>` +
+      (q.good ? `<div class="q-good">${q.good}</div>` : '') +
+      (q.bad ? `<div class="q-bad">${q.bad}</div>` : '') +
+      (q.note ? `<div class="q-note">${q.note}</div>` : '');
+    cont.appendChild(d);
+  });
+}
+
+function buildTransferQuestions() {
+  buildQItems('transfer-questions', CONTENT.transferQ[currentLang] || CONTENT.transferQ.zh);
+}
+
+function buildCareTypeQuestions() {
+  const sel = document.getElementById('f-caretype');
+  const key = sel ? sel.value : '';
+  careTypeKey = key;
+  const section = document.getElementById('care-type-section');
+  if (!key) {
+    if (section) section.style.display = 'none';
+    return;
+  }
+  const data = (CONTENT.careTypes[currentLang] && CONTENT.careTypes[currentLang][key]) || CONTENT.careTypes.zh[key];
+  if (!data) { if (section) section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  document.getElementById('caretype-title').textContent = data.title;
+  buildQItems('care-type-questions', data.items);
+}
+
+function toggleTransferExtra() {
+  const type = document.getElementById('f-type').value;
+  document.getElementById('transfer-extra').style.display = (type === 'transfer') ? 'block' : 'none';
+}
+
+function toggleWorktypeExtra() {
+  const sel = document.getElementById('f-worktype');
+  const wt = sel ? sel.value : '';
+  const showHelper = (wt === 'helper' || wt === 'mixed');
+  const helperSection = document.getElementById('helper-section');
+  const helperTaskSection = document.getElementById('helper-task-section');
+  if (helperSection) helperSection.style.display = showHelper ? 'block' : 'none';
+  if (helperTaskSection) helperTaskSection.style.display = showHelper ? 'block' : 'none';
+  buildHelperTaskQuestions();
+  buildScoreGrid();
+}
+
+function buildHelperTaskQuestions() {
+  const sel = document.getElementById('f-worktype');
+  const wt = sel ? sel.value : '';
+  if (wt !== 'helper' && wt !== 'mixed') return;
+  buildQItems('helper-task-questions', CONTENT.helperQ[currentLang] || CONTENT.helperQ.zh);
+}
+
+function buildInterviewQuestions() {
+  buildQItems('ph2-questions', CONTENT.ph2[currentLang] || CONTENT.ph2.zh);
+  buildQItems('ph3-questions', CONTENT.ph3[currentLang] || CONTENT.ph3.zh);
+  buildQItems('ph4-questions', CONTENT.ph4[currentLang] || CONTENT.ph4.zh);
+  buildQItems('ph5-questions', CONTENT.ph5[currentLang] || CONTENT.ph5.zh);
+}
+
+function buildTraps() {
+  const tr = CONTENT.traps[currentLang] || CONTENT.traps.zh;
+  
+  document.getElementById('trap1-content').innerHTML = `
+    <div style="font-size:12px; color:var(--text-sec); margin-bottom:8px;">${tr.t1.intro}</div>
+    <div class="q-item"><div class="q-text" style="white-space:pre-line">${tr.t1.q}</div><div class="q-bad">${tr.t1.note}</div></div>`;
+  
+  document.getElementById('trap2-content').innerHTML = `
+    <div class="q-item"><div class="q-text">${tr.t2.q}</div><div class="q-good">${tr.t2.good}</div><div class="q-bad">${tr.t2.bad}</div></div>`;
+  
+  document.getElementById('trap3-content').innerHTML = `
+    <div class="q-item"><div class="q-text">${tr.t3.q}</div><div class="q-good">${tr.t3.good}</div><div class="q-bad">${tr.t3.bad}</div></div>`;
+  
+  let t4html = '';
+  tr.t4_items.forEach(item => {
+    t4html += `<div style="padding:7px 0; border-bottom:0.5px solid var(--border); font-size:13px; color:var(--danger);">⚠️ ${item}</div>`;
+  });
+  t4html += `<div style="margin-top:8px; font-size:12px; color:var(--text-sec);">${tr.t4_note}</div>`;
+  document.getElementById('trap4-content').innerHTML = t4html;
+  
+  let bodyhtml = '';
+  tr.body.forEach(b => {
+    bodyhtml += `<div class="summary-row"><div><div style="font-weight:600; font-size:13px;">${b.item}</div><div style="font-size:11px; color:var(--success);">${b.ok}</div><div style="font-size:11px; color:var(--danger);">${b.bad}</div></div></div>`;
+  });
+  document.getElementById('body-lang-content').innerHTML = bodyhtml;
+}
+
+function buildScoreGrid() {
+  const scores = getScoreConfig();
+  const cont = document.getElementById('score-grid');
+  cont.innerHTML = '';
+  scores.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'score-card';
+    let stars = '';
+    for (let i=1; i<=5; i++) {
+      stars += `<div class="star ${scoreState[s.key]>=i?'filled':''}" onclick="setScore('${s.key}',${i})" data-key-star="${s.key}-${i}">${i}</div>`;
+    }
+    const weightLabel = Math.round(s.weight*100) + '%';
+    card.innerHTML = `<div class="score-label">${s.label}</div><div class="score-weight">${weightLabel}</div><div class="score-stars">${stars}</div><div class="score-val" id="score-val-${s.key}">${scoreState[s.key] || '—'}</div>`;
+    cont.appendChild(card);
+  });
+  updateTotal();
+}
+
+function setScore(key, val) {
+  scoreState[key] = val;
+  document.querySelectorAll(`[data-key-star^="${key}-"]`).forEach(el => {
+    const starVal = parseInt(el.dataset.keyStar.split('-')[1]);
+    el.classList.toggle('filled', val >= starVal);
+  });
+  const valEl = document.getElementById(`score-val-${key}`);
+  if (valEl) valEl.textContent = val;
+  updateTotal();
+  saveState();
+}
+
+function updateTotal() {
+  // 加權評分：依「主要工作性質」動態調整權重（見 CONTENT.scores）
+  const config = getScoreConfig();
+  const weights = {};
+  config.forEach(s => { weights[s.key] = s.weight; });
+  let total = 0;
+  let hasAll = true;
+  for (const k in weights) {
+    if (weights[k] > 0 && !scoreState[k]) { hasAll = false; break; }
+    total += (scoreState[k] || 0) * weights[k];
+  }
+  const el = document.getElementById('total-score');
+  const verdictBox = document.getElementById('verdict-box');
+  const gradeBox = document.getElementById('grade-badge');
+  if (!hasAll) {
+    el.textContent = '—';
+    verdictBox.innerHTML = '';
+    if (gradeBox) gradeBox.innerHTML = '';
+    buildRadarChart();
+    updateSummary();
+    return;
+  }
+  el.textContent = total.toFixed(2);
+  const verdicts = {
+    zh: {pass:'✅ 強烈推薦', ok:'✅ 可錄取（需列出待觀察事項）', check:'⚠️ 審慎評估，建議再安排一次面試', fail:'❌ 不建議錄取'},
+    en: {pass:'✅ Strongly recommend', ok:'✅ Acceptable (note items to watch)', check:'⚠️ Proceed with caution, consider another interview', fail:'❌ Not recommended'},
+    id: {pass:'✅ Sangat direkomendasikan', ok:'✅ Bisa diterima (catat hal yang perlu diawasi)', check:'⚠️ Pertimbangkan hati-hati, sarankan wawancara ulang', fail:'❌ Tidak direkomendasikan'},
+    vi: {pass:'✅ Khuyến nghị mạnh mẽ', ok:'✅ Có thể nhận (ghi chú điểm cần theo dõi)', check:'⚠️ Xem xét thận trọng, nên phỏng vấn lại', fail:'❌ Không khuyến nghị'}
+  };
+  const v = verdicts[currentLang] || verdicts.zh;
+  let cls, txt;
+  if (total >= 4.0) { cls = 'verdict-pass'; txt = v.pass; }
+  else if (total >= 3.5) { cls = 'verdict-pass'; txt = v.ok; }
+  else if (total >= 3.0) { cls = 'verdict-check'; txt = v.check; }
+  else { cls = 'verdict-fail'; txt = v.fail; }
+  verdictBox.innerHTML = `<div class="verdict ${cls}">${txt}</div>`;
+  if (gradeBox) gradeBox.innerHTML = renderGradeBadge(total);
+  buildRadarChart();
+  updateSummary();
+}
+
+function computeGrade(total) {
+  const hasVeto = Object.values(vetoChecks).some(Boolean);
+  const descs = {
+    zh: {S:'可直接錄取', A:'優先錄取', B:'可觀察（建議再面談一次）', C:'不建議錄取'},
+    en: {S:'Recommend immediate hire', A:'Priority hire', B:'Watch list (interview again)', C:'Not recommended'},
+    id: {S:'Rekomendasi langsung terima', A:'Prioritas diterima', B:'Daftar pantau (wawancara lagi)', C:'Tidak direkomendasikan'},
+    vi: {S:'Khuyến nghị nhận ngay', A:'Ưu tiên nhận', B:'Cần theo dõi (phỏng vấn lại)', C:'Không khuyến nghị'}
+  };
+  const d = descs[currentLang] || descs.zh;
+  if (hasVeto) return {grade:'C', desc: d.C};
+  if (total >= 4.3) return {grade:'S', desc: d.S};
+  if (total >= 3.8) return {grade:'A', desc: d.A};
+  if (total >= 3.2) return {grade:'B', desc: d.B};
+  return {grade:'C', desc: d.C};
+}
+
+function renderGradeBadge(total) {
+  const g = computeGrade(total);
+  const labels = {zh:'能力分級', en:'Grade', id:'Tingkat', vi:'Xếp hạng'};
+  const label = labels[currentLang] || labels.zh;
+  return `<div class="grade-badge-wrap"><div class="grade-pill grade-${g.grade}">${g.grade}</div><div class="grade-desc"><b>${label} ${g.grade}</b><br>${g.desc}</div></div>`;
+}
+
+function buildVeto() {
+  const vetos = CONTENT.veto[currentLang] || CONTENT.veto.zh;
+  const cont = document.getElementById('veto-list');
+  cont.innerHTML = '';
+  vetos.forEach((v, i) => {
+    const li = document.createElement('li');
+    li.textContent = v;
+    cont.appendChild(li);
+  });
+  
+  const checkArea = document.getElementById('veto-check-area');
+  checkArea.innerHTML = `<div class="card"><div class="card-title" style="font-size:13px;">${currentLang==='zh'?'確認是否有一票否決情況':currentLang==='en'?'Confirm if any instant disqualifier applies':currentLang==='id'?'Konfirmasi apakah ada diskualifikasi langsung':'Xác nhận nếu có điều kiện loại ngay'}</div><ul class="checklist" id="veto-check-list"></ul></div>`;
+  const vlist = document.getElementById('veto-check-list');
+  vetos.forEach((v, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<span class="check-box ${vetoChecks[i]?'checked':''}" onclick="toggleVeto(${i},this)"></span><span style="color:var(--danger)">${v}</span>`;
+    vlist.appendChild(li);
+  });
+}
+
+function toggleVeto(i, el) {
+  vetoChecks[i] = !vetoChecks[i];
+  el.classList.toggle('checked');
+  updateTotal();
+  updateSummary();
+  saveState();
+}
+
+function buildScripts() {
+  const scripts = CONTENT.scripts[currentLang] || CONTENT.scripts.zh;
+  const cont = document.getElementById('scripts-content');
+  cont.innerHTML = '';
+  scripts.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.marginBottom = '10px';
+    card.innerHTML = `<div class="card-title" style="font-size:13px;">${s.title}</div><div style="font-size:13px; color:var(--text); line-height:1.6; white-space:pre-line;">${s.body}</div>`;
+    cont.appendChild(card);
+  });
+}
+
+function updateSummary() {
+  const natMap = {indonesia:'🇮🇩 印尼 / Indonesia', vietnam:'🇻🇳 越南 / Vietnam', philippines:'🇵🇭 菲律賓 / Philippines', thailand:'🇹🇭 泰國 / Thailand'};
+  const typeMap = {new:{zh:'新引進',en:'New hire',id:'Rekrutan baru',vi:'Mới tuyển'}, transfer:{zh:'承接轉出',en:'Transfer',id:'Transfer',vi:'Chuyển tiếp'}};
+  const name = document.getElementById('f-name').value || '—';
+  const nat = document.getElementById('f-nationality').value;
+  const type = document.getElementById('f-type').value;
+  document.getElementById('sum-name').textContent = name;
+  document.getElementById('sum-nat').textContent = nat ? (natMap[nat]||nat) : '—';
+  document.getElementById('sum-type').textContent = typeMap[type] ? (typeMap[type][currentLang]||typeMap[type].zh) : '—';
+  const redCount = Object.values(flagState).filter(Boolean).length;
+  document.getElementById('sum-flags').textContent = redCount;
+  document.getElementById('sum-flags').style.color = redCount > 0 ? 'var(--danger)' : 'var(--success)';
+  const scoreEl = document.getElementById('total-score');
+  document.getElementById('sum-score').textContent = scoreEl ? scoreEl.textContent : '—';
+  const verdictEl = document.querySelector('#verdict-box .verdict');
+  document.getElementById('sum-verdict').textContent = verdictEl ? verdictEl.textContent : '—';
+  const notes = document.getElementById('interview-notes');
+  document.getElementById('sum-notes').textContent = notes && notes.value ? notes.value : '—';
+  renderRiskIndex();
+}
+
+function buildRadarChart() {
+  const wrap = document.getElementById('radar-chart-wrap');
+  if (!wrap) return;
+  const dims = [
+    {key:'lang', label:t('radar_lang')},
+    {key:'skill', label:t('radar_skill')},
+    {key:'attitude', label:t('radar_attitude')},
+    {key:'stress', label:t('radar_stress')},
+    {key:'honest', label:t('radar_honest')}
+  ];
+  const cx = 140, cy = 130, R = 92, n = dims.length;
+  const angle = i => (-Math.PI/2) + i * (2*Math.PI/n);
+  function pt(i, val) {
+    const r = (val/5) * R;
+    return [cx + r*Math.cos(angle(i)), cy + r*Math.sin(angle(i))];
+  }
+  let gridPolys = '';
+  for (let ring=1; ring<=5; ring++) {
+    const pts = dims.map((d,i) => pt(i, ring).join(',')).join(' ');
+    gridPolys += `<polygon points="${pts}" fill="none" stroke="var(--border)" stroke-width="1"/>`;
+  }
+  let axes = '';
+  let labels = '';
+  dims.forEach((d,i) => {
+    const [x,y] = pt(i,5);
+    axes += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`;
+    const lx = cx + (R+24)*Math.cos(angle(i));
+    const ly = cy + (R+24)*Math.sin(angle(i));
+    const anchor = Math.cos(angle(i)) > 0.3 ? 'start' : (Math.cos(angle(i)) < -0.3 ? 'end' : 'middle');
+    labels += `<text x="${lx}" y="${ly}" font-size="11" fill="var(--text-sec)" text-anchor="${anchor}" dominant-baseline="middle">${d.label}</text>`;
+  });
+  const hasAny = dims.some(d => scoreState[d.key]);
+  const dataPts = dims.map((d,i) => pt(i, scoreState[d.key] || 0).join(',')).join(' ');
+  const dataPoly = hasAny ? `<polygon points="${dataPts}" fill="var(--primary)" fill-opacity="0.28" stroke="var(--primary)" stroke-width="2"/>` : '';
+  let dots = '';
+  if (hasAny) {
+    dims.forEach((d,i) => {
+      const [x,y] = pt(i, scoreState[d.key] || 0);
+      dots += `<circle cx="${x}" cy="${y}" r="3" fill="var(--primary)"/>`;
+    });
+  }
+  wrap.innerHTML = `<svg viewBox="0 0 280 260" width="280" height="260">${gridPolys}${axes}${dataPoly}${dots}${labels}</svg>`;
+}
+
+function computeRiskIndex() {
+  const redCount = Object.values(flagState).filter(Boolean).length;
+  const vetoCount = Object.values(vetoChecks).filter(Boolean).length;
+  const totalEl = document.getElementById('total-score');
+  const total = totalEl && totalEl.textContent !== '—' ? parseFloat(totalEl.textContent) : null;
+  let score = redCount * 12 + vetoCount * 40;
+  if (total !== null) score += Math.max(0, (4.0 - total)) * 18;
+  score = Math.min(100, Math.round(score));
+  let level;
+  if (score >= 51) level = 'high';
+  else if (score >= 21) level = 'mid';
+  else level = 'low';
+  return { score, level, redCount, vetoCount };
+}
+
+function renderRiskIndex() {
+  const box = document.getElementById('risk-box');
+  if (!box) return;
+  const r = computeRiskIndex();
+  const levelLabel = { low: t('risk_low'), mid: t('risk_mid'), high: t('risk_high') }[r.level];
+  const levelDesc = { low: t('risk_desc_low'), mid: t('risk_desc_mid'), high: t('risk_desc_high') }[r.level];
+  const barColor = { low: 'var(--success)', mid: 'var(--warn)', high: 'var(--danger)' }[r.level];
+  box.innerHTML = `
+    <div class="risk-row">
+      <div class="risk-dial risk-${r.level}-dial">${r.score}</div>
+      <div style="flex:1;">
+        <div class="risk-info-title risk-${r.level}-text">${levelLabel}</div>
+        <div class="risk-info-desc">${levelDesc}</div>
+      </div>
+    </div>
+    <div class="risk-bar-wrap"><div class="risk-bar-fill" style="width:${r.score}%; background:${barColor};"></div></div>`;
+}
+
+/* ============ 多候選人比較 ============ */
+const COMPARE_KEY = 'caregiver_compare_v1';
+
+function loadCompareList() {
+  try {
+    const raw = localStorage.getItem(COMPARE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) { return []; }
+}
+
+function saveCompareList(list) {
+  try { localStorage.setItem(COMPARE_KEY, JSON.stringify(list)); } catch (e) {}
+}
+
+function addToCompare() {
+  const natMap = {indonesia:'🇮🇩 Indonesia', vietnam:'🇻🇳 Vietnam', philippines:'🇵🇭 Philippines', thailand:'🇹🇭 Thailand'};
+  const typeMap = {new:{zh:'新引進',en:'New hire',id:'Rekrutan baru',vi:'Mới tuyển'}, transfer:{zh:'承接轉出',en:'Transfer',id:'Transfer',vi:'Chuyển tiếp'}};
+  const totalEl = document.getElementById('total-score');
+  const total = totalEl ? totalEl.textContent : '—';
+  const grade = (total !== '—') ? computeGrade(parseFloat(total)) : null;
+  const risk = computeRiskIndex();
+  const verdictEl = document.querySelector('#verdict-box .verdict');
+  const name = document.getElementById('f-name').value || ('—' + (loadCompareList().length + 1));
+  const nat = document.getElementById('f-nationality').value;
+  const type = document.getElementById('f-type').value;
+  const entry = {
+    id: 'c' + Date.now(),
+    name,
+    nat: nat ? (natMap[nat] || nat) : '—',
+    type: typeMap[type] ? (typeMap[type][currentLang] || typeMap[type].zh) : '—',
+    flags: Object.values(flagState).filter(Boolean).length,
+    total,
+    grade: grade ? grade.grade : '—',
+    risk: risk.score,
+    riskLevel: risk.level,
+    verdict: verdictEl ? verdictEl.textContent : '—'
+  };
+  const list = loadCompareList();
+  list.push(entry);
+  saveCompareList(list);
+  switchTab('compare');
+  renderCompareTable();
+}
+
+function removeCompareEntry(id) {
+  const list = loadCompareList().filter(e => e.id !== id);
+  saveCompareList(list);
+  renderCompareTable();
+}
+
+function clearCompare() {
+  const confirmText = {zh:'確定要清空所有比較名單嗎？', en:'Clear the entire comparison list?', id:'Hapus seluruh daftar perbandingan?', vi:'Xóa toàn bộ danh sách so sánh?'};
+  if (!confirm(confirmText[currentLang] || confirmText.zh)) return;
+  saveCompareList([]);
+  renderCompareTable();
+}
+
+function renderCompareTable() {
+  const wrap = document.getElementById('compare-wrap');
+  if (!wrap) return;
+  const list = loadCompareList();
+  if (!list.length) {
+    wrap.innerHTML = `<div class="compare-empty">${t('cmp_empty')}</div>`;
+    return;
+  }
+  let bestIdx = -1, bestVal = -1;
+  list.forEach((e, i) => {
+    const v = parseFloat(e.total);
+    if (!isNaN(v) && v > bestVal) { bestVal = v; bestIdx = i; }
+  });
+  const rows = [
+    { label: t('cmp_name'), render: e => e.name },
+    { label: t('cmp_nat'), render: e => e.nat },
+    { label: t('cmp_type'), render: e => e.type },
+    { label: t('cmp_flags'), render: e => e.flags },
+    { label: t('cmp_score'), render: e => e.total },
+    { label: t('cmp_grade'), render: e => e.grade },
+    { label: t('cmp_risk'), render: e => `${e.risk} (${ {low:t('risk_low'),mid:t('risk_mid'),high:t('risk_high')}[e.riskLevel] })` },
+    { label: t('cmp_verdict'), render: e => e.verdict },
+  ];
+  let html = '<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th></th>';
+  list.forEach((e, i) => {
+    html += `<th class="${i===bestIdx?'compare-col-best':''}">${e.name}${i===bestIdx?'<br><span style="font-size:10px;">'+t('cmp_best')+'</span>':''}<br><button class="compare-remove-btn" onclick="removeCompareEntry('${e.id}')">✕ ${t('cmp_remove')}</button></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    html += `<tr><td>${r.label}</td>`;
+    list.forEach((e, i) => {
+      html += `<td class="${i===bestIdx?'compare-col-best':''}">${r.render(e)}</td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  wrap.innerHTML = html;
+}
+
+function handlePhotoUpload(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    candidatePhoto = e.target.result;
+    renderPhotoPreview();
+    saveState();
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  candidatePhoto = null;
+  document.getElementById('f-photo').value = '';
+  renderPhotoPreview();
+  saveState();
+}
+
+function renderPhotoPreview() {
+  const img = document.getElementById('photo-preview-img');
+  const icon = document.getElementById('photo-preview-icon');
+  const btn = document.getElementById('photo-remove-btn');
+  if (!img) return;
+  if (candidatePhoto) {
+    img.src = candidatePhoto;
+    img.style.display = 'block';
+    if (icon) icon.style.display = 'none';
+    if (btn) btn.style.display = 'inline-block';
+  } else {
+    img.style.display = 'none';
+    if (icon) icon.style.display = 'block';
+    if (btn) btn.style.display = 'none';
+  }
+}
+
+function toggleTimer() {
+  const btn = document.getElementById('timer-toggle-btn');
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    btn.textContent = t('timer_start');
+    saveState();
+  } else {
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      const m = Math.floor(timerSeconds/60).toString().padStart(2,'0');
+      const s = (timerSeconds%60).toString().padStart(2,'0');
+      document.getElementById('timer-display').textContent = m+':'+s;
+      if (timerSeconds % 15 === 0) saveState();
+    }, 1000);
+    timerRunning = true;
+    const pauseLabels = {zh:'暫停',en:'Pause',id:'Jeda',vi:'Dừng'};
+    btn.textContent = pauseLabels[currentLang] || 'Pause';
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  document.getElementById('timer-display').textContent = '00:00';
+  document.getElementById('timer-toggle-btn').textContent = t('timer_start');
+  saveState();
+}
+
+function resetAll() {
+  if (!confirm(currentLang==='zh'?'確定要清除所有資料，開始新的面試嗎？':currentLang==='en'?'Clear all data and start a new interview?':currentLang==='id'?'Hapus semua data dan mulai wawancara baru?':'Xóa tất cả dữ liệu và bắt đầu phỏng vấn mới?')) return;
+  flagState = {}; scoreState = {lang:0,skill:0,attitude:0,stress:0,honest:0}; vetoChecks = {}; careTypeKey = ''; candidatePhoto = null;
+  document.getElementById('f-name').value='';
+  document.getElementById('f-nationality').value='';
+  document.getElementById('f-type').value='new';
+  document.getElementById('f-date').value='';
+  document.getElementById('f-agency').value='';
+  document.getElementById('f-recid').value='';
+  document.getElementById('f-recfile').value='';
+  document.getElementById('f-reclink').value='';
+  document.getElementById('f-caretype').value='';
+  document.getElementById('f-worktype').value='';
+  document.getElementById('interview-notes').value='';
+  document.getElementById('f-photo').value='';
+  renderPhotoPreview();
+  document.querySelectorAll('.check-box').forEach(b => b.classList.remove('checked'));
+  resetTimer();
+  buildFlagButtons(); buildInterviewQuestions(); buildTransferQuestions(); buildTraps(); buildScoreGrid(); buildVeto(); buildScripts(); buildCareTypeQuestions(); buildHelperTaskQuestions(); updateSummary();
+  toggleTransferExtra();
+  toggleWorktypeExtra();
+  switchTab('setup');
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
+  setAutosaveStatus('');
+}
+
+/* ============ 自動儲存 (localStorage) ============ */
+const STORAGE_KEY = 'caregiver_interview_autosave_v1';
+
+function setAutosaveStatus(text) {
+  const el = document.getElementById('autosave-status');
+  if (el) el.textContent = text;
+}
+
+function collectState() {
+  const checks = {};
+  document.querySelectorAll('.check-box[data-cb-id]').forEach(b => {
+    checks[b.dataset.cbId] = b.classList.contains('checked');
+  });
+  return {
+    v: 1,
+    savedAt: new Date().toISOString(),
+    currentLang,
+    name: document.getElementById('f-name').value,
+    nationality: document.getElementById('f-nationality').value,
+    type: document.getElementById('f-type').value,
+    worktype: document.getElementById('f-worktype') ? document.getElementById('f-worktype').value : '',
+    date: document.getElementById('f-date').value,
+    agency: document.getElementById('f-agency').value,
+    recId: document.getElementById('f-recid').value,
+    recFile: document.getElementById('f-recfile').value,
+    recLink: document.getElementById('f-reclink').value,
+    careType: document.getElementById('f-caretype') ? document.getElementById('f-caretype').value : '',
+    notes: document.getElementById('interview-notes').value,
+    flagState, scoreState, vetoChecks, checks,
+    timerSeconds, candidatePhoto
+  };
+}
+
+function saveState() {
+  clearTimeout(saveDebounceTimer);
+  saveDebounceTimer = setTimeout(() => {
+    try {
+      const data = collectState();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      const now = new Date();
+      const hh = now.getHours().toString().padStart(2,'0');
+      const mm = now.getMinutes().toString().padStart(2,'0');
+      const ss = now.getSeconds().toString().padStart(2,'0');
+      const labels = {zh:`✓ 已自動儲存 ${hh}:${mm}:${ss}`, en:`✓ Auto-saved ${hh}:${mm}:${ss}`, id:`✓ Tersimpan otomatis ${hh}:${mm}:${ss}`, vi:`✓ Đã tự động lưu ${hh}:${mm}:${ss}`};
+      setAutosaveStatus(labels[currentLang] || labels.zh);
+    } catch (e) {
+      console.warn('Autosave failed:', e);
+    }
+  }, 500);
+}
+
+function applyState(data) {
+  if (!data) return;
+  currentLang = data.currentLang || 'zh';
+  document.getElementById('f-name').value = data.name || '';
+  document.getElementById('f-nationality').value = data.nationality || '';
+  document.getElementById('f-type').value = data.type || 'new';
+  document.getElementById('f-date').value = data.date || '';
+  document.getElementById('f-agency').value = data.agency || '';
+  document.getElementById('f-recid').value = data.recId || '';
+  document.getElementById('f-recfile').value = data.recFile || '';
+  document.getElementById('f-reclink').value = data.recLink || '';
+  if (document.getElementById('f-caretype')) document.getElementById('f-caretype').value = data.careType || '';
+  if (document.getElementById('f-worktype')) document.getElementById('f-worktype').value = data.worktype || '';
+  document.getElementById('interview-notes').value = data.notes || '';
+  flagState = data.flagState || {};
+  scoreState = Object.assign({lang:0,skill:0,attitude:0,stress:0,honest:0}, data.scoreState || {});
+  vetoChecks = data.vetoChecks || {};
+  timerSeconds = data.timerSeconds || 0;
+  candidatePhoto = data.candidatePhoto || null;
+  renderPhotoPreview();
+  const m = Math.floor(timerSeconds/60).toString().padStart(2,'0');
+  const s = (timerSeconds%60).toString().padStart(2,'0');
+  document.getElementById('timer-display').textContent = m+':'+s;
+
+  // Rebuild language-dependent UI first
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  const idx = {zh:0,en:1,id:2,vi:3}[currentLang] || 0;
+  const btns = document.querySelectorAll('.lang-btn');
+  if (btns[idx]) btns[idx].classList.add('active');
+  document.getElementById('h-title').textContent = t('h_title');
+  document.getElementById('h-sub').textContent = t('h_sub');
+  document.querySelectorAll('[data-key]').forEach(el => {
+    const key = el.dataset.key;
+    if (LANGS[currentLang][key]) el.innerHTML = LANGS[currentLang][key];
+  });
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    const key = b.dataset.key;
+    if (key && LANGS[currentLang][key]) b.textContent = LANGS[currentLang][key];
+  });
+
+  buildFlagButtons(); buildInterviewQuestions(); buildTransferQuestions(); buildTraps();
+  buildScoreGrid(); buildVeto(); buildScripts(); buildCareTypeQuestions(); buildHelperTaskQuestions();
+  toggleTransferExtra();
+  toggleWorktypeExtra();
+
+  // Restore checkbox states
+  document.querySelectorAll('.check-box[data-cb-id]').forEach(b => {
+    if (data.checks && data.checks[b.dataset.cbId]) b.classList.add('checked');
+  });
+
+  updateSummary();
+}
+
+function loadState() {
+  let raw;
+  try { raw = localStorage.getItem(STORAGE_KEY); } catch (e) { return; }
+  if (!raw) return;
+  let data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+  if (!data) return;
+  const hasContent = data.name || data.notes || (data.flagState && Object.values(data.flagState).some(Boolean));
+  if (!hasContent) return;
+  const promptText = {
+    zh: '偵測到上次未完成的面試紀錄，是否要還原？',
+    en: 'Found an unfinished interview from last time. Restore it?',
+    id: 'Ditemukan wawancara yang belum selesai. Pulihkan?',
+    vi: 'Tìm thấy cuộc phỏng vấn chưa hoàn tất lần trước. Khôi phục?'
+  };
+  const lang = data.currentLang || 'zh';
+  if (confirm(promptText[lang] || promptText.zh)) {
+    applyState(data);
+  } else {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  }
+}
+
+/* ============ PDF 輔助繪圖：雷達圖／風險燈號／QR Code ============ */
+function drawRadarPDF(doc, cx, cy, R) {
+  const dims = [
+    {key:'lang', label:t('radar_lang')},
+    {key:'skill', label:t('radar_skill')},
+    {key:'attitude', label:t('radar_attitude')},
+    {key:'stress', label:t('radar_stress')},
+    {key:'honest', label:t('radar_honest')}
+  ];
+  const n = dims.length;
+  const angle = i => (-Math.PI/2) + i * (2*Math.PI/n);
+  function pt(i, val) { const r = (val/5) * R; return [cx + r*Math.cos(angle(i)), cy + r*Math.sin(angle(i))]; }
+  doc.setDrawColor(210);
+  for (let ring=1; ring<=5; ring++) {
+    const pts = dims.map((d,i) => pt(i, ring));
+    for (let i=0; i<n; i++) {
+      const [x1,y1] = pts[i], [x2,y2] = pts[(i+1)%n];
+      doc.line(x1, y1, x2, y2);
+    }
+  }
+  doc.setFontSize(8);
+  dims.forEach((d,i) => {
+    const [x,y] = pt(i, 5);
+    doc.line(cx, cy, x, y);
+    const lx = cx + (R+20)*Math.cos(angle(i));
+    const ly = cy + (R+20)*Math.sin(angle(i));
+    doc.text(d.label, lx, ly, { align: 'center' });
+  });
+  const hasAny = dims.some(d => scoreState[d.key]);
+  if (hasAny) {
+    const dataPts = dims.map((d,i) => pt(i, scoreState[d.key] || 0));
+    doc.setDrawColor(26,84,144);
+    doc.setLineWidth(1.4);
+    for (let i=0; i<n; i++) {
+      const [x1,y1] = dataPts[i], [x2,y2] = dataPts[(i+1)%n];
+      doc.line(x1, y1, x2, y2);
+    }
+    doc.setFillColor(26,84,144);
+    dataPts.forEach(([x,y]) => doc.circle(x, y, 1.6, 'F'));
+    doc.setLineWidth(1);
+  }
+  doc.setFontSize(10.5);
+}
+
+function drawRiskDialPDF(doc, cx, cy, r, riskInfo) {
+  const color = riskInfo.level === 'low' ? [59,109,17] : riskInfo.level === 'mid' ? [186,117,23] : [163,45,45];
+  doc.setFillColor(color[0], color[1], color[2]);
+  doc.circle(cx, cy, r, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFont(undefined, 'bold'); doc.setFontSize(14);
+  doc.text(String(riskInfo.score), cx, cy + 5, { align: 'center' });
+  doc.setTextColor(0,0,0);
+  doc.setFont(undefined, 'normal'); doc.setFontSize(10.5);
+}
+
+function drawQRPDF(doc, text, x, y, size) {
+  if (typeof qrcode === 'undefined') return;
+  try {
+    const qr = qrcode(0, 'M');
+    qr.addData(text);
+    qr.make();
+    const count = qr.getModuleCount();
+    const cell = size / count;
+    doc.setFillColor(255,255,255);
+    doc.rect(x, y, size, size, 'F');
+    doc.setFillColor(0,0,0);
+    for (let r=0; r<count; r++) {
+      for (let c=0; c<count; c++) {
+        if (qr.isDark(r,c)) doc.rect(x + c*cell, y + r*cell, cell, cell, 'F');
+      }
+    }
+  } catch (e) { /* QR generation failed, skip silently */ }
+}
+
+/* ============ PDF 匯出 ============ */
+function exportPDF() {
+  if (typeof window.jspdf === 'undefined') {
+    alert(currentLang==='zh' ? '無法載入PDF產生器，請確認網路連線後再試一次。' : 'Could not load the PDF generator. Please check your internet connection and try again.');
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const marginX = 40;
+  let y = 50;
+  const pageH = doc.internal.pageSize.getHeight();
+  const lineH = 16;
+
+  function ensureSpace(extra) {
+    if (y + extra > pageH - 40) { doc.addPage(); y = 50; }
+  }
+  function heading(text) {
+    ensureSpace(28);
+    doc.setFont(undefined, 'bold'); doc.setFontSize(13);
+    doc.text(text, marginX, y);
+    y += 20;
+    doc.setFont(undefined, 'normal'); doc.setFontSize(10.5);
+  }
+  function line(text) {
+    const wrapped = doc.splitTextToSize(text, 515);
+    wrapped.forEach(w => {
+      ensureSpace(lineH);
+      doc.text(w, marginX, y);
+      y += lineH;
+    });
+  }
+
+  doc.setFont(undefined, 'bold'); doc.setFontSize(16);
+  doc.text(t('h_title'), marginX, y); y += 26;
+  doc.setFont(undefined, 'normal'); doc.setFontSize(10);
+  const genTime = new Date();
+  const tsLabels = {zh:'報告產生時間戳記', en:'Report Timestamp', id:'Stempel Waktu Laporan', vi:'Dấu thời gian báo cáo'};
+  doc.text(`${tsLabels[currentLang] || tsLabels.zh}: ${genTime.toLocaleString()}`, marginX, y); y += 20;
+
+  // QR Code：右上角，內容為面試編號／姓名／日期，供快速核對
+  const qrPayload = [
+    document.getElementById('f-recid').value || document.getElementById('f-name').value || 'interview',
+    document.getElementById('f-date').value || '',
+    genTime.toISOString()
+  ].join(' | ');
+  drawQRPDF(doc, qrPayload, 515 - 20, 36, 60);
+
+  if (candidatePhoto) {
+    try {
+      const imgSize = 70;
+      doc.addImage(candidatePhoto, marginX, y, imgSize, imgSize);
+      y += imgSize + 10;
+    } catch (e) { /* ignore unsupported image */ }
+  }
+
+  heading(t('sl_candidate'));
+  line(`${t('f_name')}: ${document.getElementById('f-name').value || '—'}`);
+  const natSel = document.getElementById('f-nationality');
+  line(`${t('f_nationality')}: ${natSel.options[natSel.selectedIndex] ? natSel.options[natSel.selectedIndex].text : '—'}`);
+  const typeSel = document.getElementById('f-type');
+  line(`${t('f_type')}: ${typeSel.options[typeSel.selectedIndex] ? typeSel.options[typeSel.selectedIndex].text : '—'}`);
+  const wtSel = document.getElementById('f-worktype');
+  if (wtSel && wtSel.value) line(`${t('f_worktype')}: ${wtSel.options[wtSel.selectedIndex].text}`);
+  line(`${t('f_date')}: ${document.getElementById('f-date').value || '—'}`);
+  line(`${t('f_agency')}: ${document.getElementById('f-agency').value || '—'}`);
+  const recId = document.getElementById('f-recid').value;
+  const recFile = document.getElementById('f-recfile').value;
+  const recLink = document.getElementById('f-reclink').value;
+  if (recId) line(`${t('f_recid')}: ${recId}`);
+  if (recFile) line(`${t('f_recfile')}: ${recFile}`);
+  if (recLink) line(`${t('f_reclink')}: ${recLink}`);
+  const ctSel = document.getElementById('f-caretype');
+  if (ctSel && ctSel.value) line(`${t('f_caretype')}: ${ctSel.options[ctSel.selectedIndex].text}`);
+  y += 6;
+
+  heading(t('sl_score'));
+  const scores = getScoreConfig();
+  const barX = marginX + 170, barMaxW = 280, barH = 9;
+  scores.forEach(s => {
+    ensureSpace(lineH + 4);
+    const val = scoreState[s.key] || 0;
+    doc.setFontSize(10.5);
+    doc.text(`${s.label} (${Math.round(s.weight*100)}%)`, marginX, y + 7);
+    doc.setDrawColor(210); doc.setFillColor(235,235,235);
+    doc.rect(barX, y, barMaxW, barH, 'FD');
+    if (val > 0) {
+      doc.setFillColor(26, 84, 144);
+      doc.rect(barX, y, barMaxW * (val/5), barH, 'F');
+    }
+    doc.setTextColor(0,0,0);
+    doc.text(`${val || '—'}/5`, barX + barMaxW + 8, y + 7.5);
+    y += lineH + 4;
+  });
+  const totalEl = document.getElementById('total-score');
+  line(`${t('total_label')}: ${totalEl ? totalEl.textContent : '—'}`);
+  const verdictEl = document.querySelector('#verdict-box .verdict');
+  if (verdictEl) line(`${t('sum_verdict')}: ${verdictEl.textContent}`);
+  if (totalEl && totalEl.textContent !== '—') {
+    const g = computeGrade(parseFloat(totalEl.textContent));
+    const gradeLabels = {zh:'能力分級', en:'Grade', id:'Tingkat', vi:'Xếp hạng'};
+    line(`${gradeLabels[currentLang] || gradeLabels.zh}: ${g.grade} — ${g.desc}`);
+  }
+  y += 6;
+
+  heading(t('sl_radar'));
+  ensureSpace(190);
+  drawRadarPDF(doc, marginX + 95, y + 85, 65);
+  y += 190;
+
+  heading(t('sl_risk'));
+  const riskInfo = computeRiskIndex();
+  const riskLabel = { low: t('risk_low'), mid: t('risk_mid'), high: t('risk_high') }[riskInfo.level];
+  const riskDesc = { low: t('risk_desc_low'), mid: t('risk_desc_mid'), high: t('risk_desc_high') }[riskInfo.level];
+  ensureSpace(50);
+  drawRiskDialPDF(doc, marginX + 22, y + 14, 20, riskInfo);
+  doc.setFontSize(11);
+  doc.text(`${riskLabel}`, marginX + 56, y + 10);
+  doc.setFontSize(10.5);
+  const riskDescWrapped = doc.splitTextToSize(riskDesc, 515 - 56);
+  doc.text(riskDescWrapped, marginX + 56, y + 25);
+  y += 14 + 20 + Math.max(10, riskDescWrapped.length * 13) + 6;
+  line(`${t('sl_risk')}: ${riskInfo.score}/100`);
+  y += 6;
+
+  const redCount = Object.values(flagState).filter(Boolean).length;
+  heading(t('sl_redflag'));
+  line(`${t('sum_flags')}: ${redCount}`);
+  const flags = CONTENT.flags[currentLang] || CONTENT.flags.zh;
+  flags.forEach((f, i) => { if (flagState[i]) line(`• ${f.label}`); });
+  y += 6;
+
+  const vetoOn = Object.entries(vetoChecks).filter(([,v]) => v);
+  if (vetoOn.length) {
+    heading(t('sl_veto'));
+    const vetos = CONTENT.veto[currentLang] || CONTENT.veto.zh;
+    vetoOn.forEach(([i]) => line(`• ${vetos[i]}`));
+    y += 6;
+  }
+
+  const notes = document.getElementById('interview-notes').value;
+  if (notes) {
+    heading(t('sum_note_label'));
+    line(notes);
+  }
+
+  const fname = (document.getElementById('f-name').value || 'candidate').replace(/[^a-zA-Z0-9\u4e00-\u9fa5_-]/g, '_');
+  doc.save(`interview_report_${fname}.pdf`);
+}
+
+// Init
+buildFlagButtons();
+buildInterviewQuestions();
+buildTransferQuestions();
+buildTraps();
+buildScoreGrid();
+buildVeto();
+buildScripts();
+buildCareTypeQuestions();
+document.getElementById('f-date').valueAsDate = new Date();
+toggleTransferExtra();
+toggleWorktypeExtra();
+renderPhotoPreview();
+renderCompareTable();
+loadState();
+</script>
+</body>
+</html>
