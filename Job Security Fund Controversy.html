@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>就業安定基金爭議檔案</title>
+<style>
+:root{
+  --ink:#1c1b19;
+  --paper:#f6f3ec;
+  --paper-deep:#ece6d8;
+  --brass:#9c7a3c;
+  --brass-deep:#7a5e2a;
+  --alert:#a8432f;
+  --line:#d8cfb8;
+  --mono: 'Courier New', monospace;
+  --serif: "Noto Serif TC","Songti TC","PMingLiU",serif;
+  --sans: "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;}
+body{
+  background-image:
+    linear-gradient(var(--paper) 0%, var(--paper) 100%);
+  min-height:100vh;
+}
+
+/* ===== Top masthead ===== */
+.masthead{
+  border-bottom:3px double var(--ink);
+  padding:28px 20px 18px;
+  text-align:center;
+  position:relative;
+}
+.masthead .eyebrow{
+  font-family:var(--mono);
+  letter-spacing:.25em;
+  font-size:11px;
+  color:var(--brass-deep);
+  text-transform:uppercase;
+}
+.masthead h1{
+  font-family:var(--serif);
+  font-weight:700;
+  font-size:clamp(28px,6vw,46px);
+  margin:8px 0 6px;
+  letter-spacing:.02em;
+}
+.masthead h1 .year-range{
+  font-size:0.45em;
+  font-weight:400;
+  color:var(--brass-deep);
+  letter-spacing:.04em;
+  font-family:var(--mono);
+}
+.masthead .sub{
+  font-size:13px;
+  color:#6b6457;
+  font-family:var(--mono);
+}
+.fund-id{
+  position:absolute;
+  top:18px; right:20px;
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--brass-deep);
+  border:1px solid var(--brass);
+  padding:3px 8px;
+  border-radius:2px;
+  display:none;
+}
+@media(min-width:760px){.fund-id{display:block;}}
+.updated-badge{
+  display:inline-block; margin-top:10px;
+  font-family:var(--mono); font-size:10.5px; color:var(--brass-deep);
+  background:var(--paper-deep); border:1px solid var(--line);
+  padding:3px 10px; border-radius:20px; letter-spacing:.05em;
+}
+
+/* ===== Stat strip ===== */
+.statstrip{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  border-bottom:1px solid var(--line);
+  background:var(--paper-deep);
+}
+/* data tables */
+.dtable{width:100%; border-collapse:collapse; margin:14px 0 20px; font-size:13px; background:#fff;border:1px solid var(--line);}
+.dtable caption{text-align:left; font-family:var(--mono); font-size:11px; color:var(--brass-deep); margin-bottom:6px; caption-side:top;}
+.dtable th,.dtable td{padding:10px 12px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top;}
+.dtable thead th{background:var(--ink); color:#fff; font-weight:600; font-size:12px;}
+.dtable tbody tr:nth-child(even){background:#faf8f2;}
+.dtable td.num{font-family:var(--mono); white-space:nowrap; color:var(--alert); font-weight:700;}
+.dtable td.num.neutral{color:var(--brass-deep);}
+.dtable .src-note{font-size:11px; color:#9a9485; padding:8px 12px;}
+.tablewrap{overflow-x:auto; -webkit-overflow-scrolling:touch; border-radius:4px;}
+.tablewrap .dtable{border-radius:4px; min-width:480px;}
+.note-tag{display:inline-block; font-family:var(--mono); font-size:10px; background:var(--paper-deep); border:1px solid var(--line); color:#6b6457; padding:1px 6px; border-radius:2px; margin-left:6px;}
+
+/* ===== 性質三級標示 ===== */
+.src-badge{display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:3px; white-space:nowrap; letter-spacing:.02em; border:1px solid transparent;}
+.src-badge.media{background:#eef0e6; color:#5c6b3d; border-color:#cdd6b6;}
+.src-badge.audit{background:#f3ddd6; color:var(--alert); border-color:#e3c2b6;}
+.src-badge.admit{background:#e9e2cf; color:#7a5e2a; border-color:#d8cfb8;}
+.dtable td.src-cell{white-space:nowrap;}
+.result-pill{display:inline-block; font-family:var(--mono); font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; white-space:nowrap;}
+.result-pill.unknown{background:#ece6d8; color:#6b6457;}
+.result-pill.review{background:#f3ead0; color:var(--brass-deep);}
+.result-pill.recovered{background:#e1ecdd; color:#3d6b35;}
+.legend-badges{font-size:11.5px; color:#6b6457; margin:6px 0 14px; line-height:2;}
+.legend-badges .src-badge{margin-right:4px;}
+
+/* flow diagram */
+.flow{display:flex; flex-direction:column; gap:0; margin:18px 0 26px;}
+.flow-step{
+  display:flex; align-items:center; gap:14px;
+  background:#fff; border:1px solid var(--line); border-left:4px solid var(--brass-deep);
+  border-radius:4px; padding:13px 16px;
+}
+.flow-step .ico{
+  flex:0 0 38px; height:38px; border-radius:50%;
+  background:var(--paper-deep); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:14px; font-weight:700; color:var(--brass-deep);
+}
+.flow-step .txt h4{margin:0 0 2px; font-size:14px; font-family:var(--serif);}
+.flow-step .txt p{margin:0; font-size:12.5px; color:#6b6457; line-height:1.6;}
+.flow-step.audit{border-left-color:var(--alert);}
+.flow-step.audit .ico{color:var(--alert);}
+.flow-arrow{
+  align-self:center;
+  font-family:var(--mono); color:var(--brass); font-size:16px;
+  padding:3px 0; line-height:1;
+}
+@media(min-width:680px){
+  .flow{flex-direction:row; align-items:stretch; flex-wrap:wrap;}
+  .flow-step{flex:1 1 0; flex-direction:column; text-align:center; gap:8px; min-width:0;}
+  .flow-arrow{align-self:center; transform:none;}
+}
+
+/* pro/con balance grid */
+.balance{display:grid; grid-template-columns:1fr; gap:14px; margin:14px 0 22px;}
+@media(min-width:680px){.balance{grid-template-columns:1fr 1fr;}}
+.balance-col{border-radius:6px; padding:16px 18px;}
+.balance-col.why{background:#f3f6ef; border:1px solid #c9d6ba;}
+.balance-col.risk{background:#faf0ec; border:1px solid #e3c2b6;}
+.balance-col h3{margin:0 0 10px; font-family:var(--serif); font-size:15px;}
+.balance-col ul{margin:0; padding-left:18px;}
+.balance-col li{font-size:13px; line-height:1.8; color:#3a362e; margin-bottom:4px;}
+
+/* core issues */
+.coreissues{display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0 22px;}
+@media(min-width:680px){.coreissues{grid-template-columns:repeat(3,1fr);}}
+.issue-card{
+  background:var(--ink); color:#f0ece0; border-radius:6px; padding:18px 16px;
+  position:relative; overflow:hidden;
+}
+.issue-card .ix{font-family:var(--mono); font-size:28px; font-weight:700; color:var(--brass); opacity:.5; line-height:1;}
+.issue-card h3{font-family:var(--serif); font-size:15.5px; margin:8px 0 6px;}
+.issue-card p{font-size:12.5px; line-height:1.7; color:#c9c2af; margin:0;}
+
+/* charts */
+.chartbox{
+  background:#fff; border:1px solid var(--line); border-radius:6px;
+  padding:18px 16px 14px; margin:14px 0 24px;
+}
+.chartbox h3{margin:0 0 4px; font-family:var(--serif); font-size:15px;}
+.chartbox .chart-sub{font-size:11.5px; color:#9a9485; margin:0 0 14px;}
+.chartbox svg{width:100%; height:auto; display:block;}
+.axis-label{font-family:var(--mono); font-size:9px; fill:#9a9485;}
+.bar-label{font-family:var(--mono); font-size:10px; fill:var(--ink); font-weight:700;}
+.line-pt{fill:var(--brass-deep); stroke:#fff; stroke-width:2;}
+.line-pt.flag{fill:var(--alert);}
+
+/* people index */
+.people{display:grid; grid-template-columns:1fr; gap:12px; margin:14px 0 22px;}
+@media(min-width:680px){.people{grid-template-columns:1fr 1fr;}}
+.person-card{
+  background:#fff; border:1px solid var(--line); border-radius:6px;
+  padding:14px 16px; display:flex; gap:12px;
+}
+.person-avatar{
+  flex:0 0 42px; height:42px; border-radius:50%;
+  background:var(--paper-deep); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-weight:700; font-size:16px; color:var(--brass-deep);
+}
+.person-card.role-official .person-avatar{background:#e9e2cf;}
+.person-card.role-audit .person-avatar{background:#e6ddd0; color:var(--alert);}
+.person-card.role-legislator .person-avatar{background:#dde6e0;}
+.person-info{flex:1;}
+.person-info .name{font-family:var(--serif); font-weight:700; font-size:14.5px;}
+.person-info .role{font-family:var(--mono); font-size:10.5px; color:var(--brass-deep); margin-bottom:5px;}
+.person-info p{margin:0; font-size:12.5px; line-height:1.7; color:#3a362e;}
+.cat-badge{
+  display:inline-block; font-family:var(--mono); font-size:9.5px; font-weight:700;
+  padding:2px 7px; border-radius:3px; margin-bottom:5px; letter-spacing:.03em;
+}
+.cat-badge.cat-exec{background:#e9e2cf; color:#7a5e2a;}
+.cat-badge.cat-audit{background:#f3ddd6; color:var(--alert);}
+.cat-badge.cat-watch{background:#dde6e0; color:#3d6b35;}
+
+/* reform dashboard */
+.dash{display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0 20px;}
+.dash-row{
+  display:flex; align-items:center; gap:14px;
+  background:#fff; border:1px solid var(--line); border-radius:6px;
+  padding:13px 16px;
+}
+.dash-row .label{flex:1 1 auto; font-size:13.5px; font-weight:600;}
+.dash-row .label .d{display:block; font-size:11.5px; font-weight:400; color:#6b6457; margin-top:2px;}
+.dash-bar{flex:0 0 110px; height:8px; border-radius:4px; background:#ece6d8; overflow:hidden;}
+.dash-bar i{display:block; height:100%; border-radius:4px;}
+.status-pill{
+  flex:0 0 auto; font-family:var(--mono); font-size:11px; font-weight:700;
+  padding:4px 10px; border-radius:20px; white-space:nowrap;
+}
+.status-pill.done{background:#e1ecdd; color:#3d6b35;}
+.status-pill.partial{background:#f3ead0; color:var(--brass-deep);}
+.status-pill.progress{background:#f3ead0; color:var(--brass-deep);}
+.status-pill.pending{background:#f3ddd6; color:var(--alert);}
+.dash-updated{text-align:right; font-family:var(--mono); font-size:11px; color:#9a9485; margin-top:-6px;}
+@media(min-width:640px){.statstrip{grid-template-columns:repeat(4,1fr);}}
+.stat{
+  padding:16px 14px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.stat:nth-child(2n){border-right:none;}
+@media(min-width:640px){
+  .stat:nth-child(2n){border-right:1px solid var(--line);}
+  .stat:nth-child(4n){border-right:none;}
+  .stat{border-bottom:none;}
+}
+.stat .num{font-family:var(--serif);font-size:clamp(20px,4vw,28px);font-weight:700;color:var(--brass-deep);}
+.stat .lbl{font-size:11px;color:#6b6457;margin-top:2px;letter-spacing:.05em;}
+
+/* ===== Nav tabs ===== */
+.tabnav{
+  position:sticky; top:0; z-index:50;
+  display:flex;
+  overflow-x:auto;
+  background:var(--ink);
+  scrollbar-width:none;
+}
+.tabnav::-webkit-scrollbar{display:none;}
+.tabnav button{
+  flex:0 0 auto;
+  background:none; border:none;
+  color:#c9c2af;
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:600;
+  padding:14px 18px;
+  cursor:pointer;
+  white-space:nowrap;
+  letter-spacing:.03em;
+  border-bottom:3px solid transparent;
+  transition:.15s;
+}
+.tabnav button:hover{color:#fff;}
+.tabnav button.active{color:#fff; border-bottom-color:var(--brass);}
+@media(max-width:480px){
+  .tabnav button{padding:13px 14px; font-size:12.5px;}
+  .dtable{font-size:12px;}
+  .dtable th,.dtable td{padding:8px 9px;}
+  .chartbox{padding:14px 12px 12px;}
+  .issue-card{padding:15px 13px;}
+}
+@media(min-width:1024px){
+  main{max-width:1040px;}
+  .dtable{font-size:13.5px;}
+}
+@media(hover:none){
+  .tabnav button{padding:15px 18px;}
+}
+
+/* ===== Main layout ===== */
+main{max-width:920px; margin:0 auto; padding:22px 18px 80px;}
+.panel{display:none; animation:fade .35s ease;}
+.panel.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.section-head{
+  display:flex; align-items:baseline; gap:10px;
+  margin:34px 0 14px;
+}
+.section-head:first-child{margin-top:0;}
+.section-head .tag{
+  font-family:var(--mono); font-size:11px; color:#fff;
+  background:var(--brass-deep); padding:2px 7px; border-radius:2px;
+}
+.section-head h2{
+  font-family:var(--serif); font-size:21px; margin:0; font-weight:700;
+}
+.lede{font-size:14.5px; line-height:1.85; color:#3a362e; margin:0 0 18px;}
+.lede b{color:var(--ink); background:linear-gradient(transparent 60%, #f0dca8 60%);}
+
+/* card */
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-left:4px solid var(--brass);
+  border-radius:4px;
+  padding:16px 18px;
+  margin-bottom:14px;
+}
+.card.alert{border-left-color:var(--alert);}
+.card h3{margin:0 0 6px; font-family:var(--serif); font-size:16px;}
+.card p{margin:0; font-size:13.5px; line-height:1.75; color:#3a362e;}
+.card .meta{font-family:var(--mono); font-size:11px; color:var(--brass-deep); margin-bottom:6px;}
+
+/* law article block */
+.law{
+  background:#fbf9f3;
+  border:1px solid var(--line);
+  border-radius:4px;
+  margin-bottom:14px;
+  overflow:hidden;
+}
+.law summary{
+  cursor:pointer;
+  list-style:none;
+  padding:14px 16px;
+  display:flex; align-items:center; gap:10px;
+  font-weight:700;
+  font-size:14px;
+  background:var(--paper-deep);
+}
+.law summary::-webkit-details-marker{display:none;}
+.law summary .num{
+  font-family:var(--mono); background:var(--ink); color:#fff;
+  font-size:11px; padding:3px 8px; border-radius:2px; flex:0 0 auto;
+}
+.law summary::after{
+  content:'＋'; margin-left:auto; font-family:var(--mono); color:var(--brass-deep);
+}
+.law[open] summary::after{content:'－';}
+.law .body{padding:14px 16px; font-size:13.5px; line-height:1.9; color:#3a362e; white-space:pre-line;}
+.law .body .clause{margin-bottom:8px; padding-left:14px; border-left:2px solid var(--line);}
+
+/* timeline */
+.timeline{position:relative; padding-left:26px; margin-top:6px;}
+.timeline::before{
+  content:''; position:absolute; left:7px; top:4px; bottom:4px; width:2px;
+  background:var(--line);
+}
+.tl-item{position:relative; padding-bottom:26px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-item::before{
+  content:''; position:absolute; left:-26px; top:3px;
+  width:14px; height:14px; border-radius:50%;
+  background:var(--paper); border:3px solid var(--brass-deep);
+}
+.tl-item.flag::before{ border-color:var(--alert); background:var(--alert); }
+.tl-year{font-family:var(--mono); font-size:12px; color:var(--brass-deep); font-weight:700;}
+.tl-item.flag .tl-year{color:var(--alert);}
+.tl-title{font-family:var(--serif); font-size:15.5px; font-weight:700; margin:2px 0 4px;}
+.tl-desc{font-size:13px; line-height:1.75; color:#3a362e;}
+
+/* controversy use-grid */
+.usegrid{display:grid; grid-template-columns:1fr; gap:10px;}
+@media(min-width:600px){.usegrid{grid-template-columns:1fr 1fr;}}
+.usecard{
+  background:#fff8ec; border:1px dashed var(--alert); border-radius:4px;
+  padding:12px 14px; font-size:13px; line-height:1.7;
+}
+.usecard b{color:var(--alert);}
+
+/* reform steps */
+.steps{counter-reset:step;}
+.step{
+  display:flex; gap:14px; margin-bottom:16px; align-items:flex-start;
+}
+.step .n{
+  counter-increment:step;
+  flex:0 0 32px; height:32px; border-radius:50%;
+  background:var(--ink); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:13px; font-weight:700;
+}
+.step .n::before{content:counter(step);}
+.step .txt h4{margin:0 0 4px; font-size:14px; font-family:var(--serif);}
+.step .txt p{margin:0; font-size:13px; color:#3a362e; line-height:1.7;}
+
+footer{
+  text-align:center; padding:24px 18px 40px;
+  font-family:var(--mono); font-size:11px; color:#8a8473;
+  border-top:1px solid var(--line);
+}
+.src{font-size:11px; color:#9a9485; margin-top:4px;}
+
+::selection{background:#e9d6a3;}
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <span class="fund-id">FUND · 就業服務法 §55</span>
+  <div class="eyebrow">勞動部 ｜ 特種基金檔案</div>
+  <h1>就業安定基金爭議全紀錄 <span class="year-range">（1994－2026）</span></h1>
+  <div class="sub">法源條文・歷史軌跡・支用爭議・改革進程</div>
+  <div class="updated-badge">最後更新：2026年6月｜Version 8.0</div>
+</div>
+
+<div class="statstrip">
+  <div class="stat"><div class="num">1994</div><div class="lbl">基金成立年（民國83年）</div></div>
+  <div class="stat"><div class="num">3 大用途</div><div class="lbl">促進就業／勞工福祉／外勞管理</div></div>
+  <div class="stat"><div class="num">80萬+</div><div class="lbl">在臺移工人數（財源主體）</div></div>
+  <div class="stat"><div class="num">2025</div><div class="lbl">濫用爭議延燒、辦法修正年</div></div>
+</div>
+
+<div class="tabnav" id="tabnav">
+  <button data-p="overview" class="active">總覽</button>
+  <button data-p="law">法源條文</button>
+  <button data-p="timeline">歷史軌跡</button>
+  <button data-p="dispute">爭議事件</button>
+  <button data-p="reform">改革進程</button>
+  <button data-p="sources">資料來源</button>
+</div>
+
+<main>
+
+  <!-- OVERVIEW -->
+  <section class="panel active" id="overview">
+    <div class="section-head"><span class="tag">00</span><h2>這筆基金，是什麼？</h2></div>
+    <p class="lede">
+      就業安定基金是雇主聘僱外籍移工時，依《就業服務法》第55條按月繳納「就業安定費」所累積而成的<b>特種基金</b>，由勞動部管理運用。
+      設立的初衷是：開放外籍勞工來臺工作，難免排擠本國勞工的就業機會，因此向雇主收取費用，作為照顧本國勞工、強化外勞管理的財源。
+      近年爭議的核心，並非基金「該不該存在」，而是<b>「錢被怎麼花」</b>——從咖啡豆採購、辦公室裝潢、垃圾清運到網路聲量經營，都被質疑與法定用途脫鉤。
+    </p>
+
+    <div class="usegrid">
+      <div class="usecard"><b>誰繳錢？</b>聘僱外籍移工的雇主，依行業別與工作性質，每月繳納約2,000元至11,000元不等。</div>
+      <div class="usecard"><b>誰管錢？</b>就業安定基金管理會，由勞工團體、雇主團體、政府代表與專家學者組成，召集人為勞動部長。</div>
+      <div class="usecard"><b>法定用途？</b>促進國民就業、提升勞工福祉、處理外國人聘僱管理事務——三大類，但邊界長期模糊。</div>
+      <div class="usecard"><b>爭議起點？</b>2024年底霸凌輕生案外案，意外牽出基金支用浮濫的具體事證。</div>
+    </div>
+
+    <div class="section-head"><span class="tag">00b</span><h2>基金運作流程</h2></div>
+    <p class="lede">一張圖看懂錢從哪裡來、經過誰的手、最後誰來查：</p>
+    <div class="flow">
+      <div class="flow-step"><div class="ico">①</div><div class="txt"><h4>雇主</h4><p>聘僱外籍移工的事業單位／家庭</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="ico">②</div><div class="txt"><h4>繳納就業安定費</h4><p>依行業別每月繳2,000～11,000元</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="ico">③</div><div class="txt"><h4>就業安定基金專戶</h4><p>勞動部設置之特種基金</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="ico">④</div><div class="txt"><h4>管理會審議</h4><p>勞資代表、政府代表、學者組成</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="ico">⑤</div><div class="txt"><h4>勞動部執行</h4><p>送行政院、立法院審議後編列預算</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step"><div class="ico">⑥</div><div class="txt"><h4>計畫支出</h4><p>就業服務、職訓、補助、外勞管理等</p></div></div>
+      <div class="flow-arrow">↓</div>
+      <div class="flow-step audit"><div class="ico">⑦</div><div class="txt"><h4>審計部查核</h4><p>事後查核是否符合法定用途，不符者追回</p></div></div>
+    </div>
+    <p style="font-size:12px;color:#9a9485;margin-top:-10px;">⚠ 爭議焦點在於④與⑦之間：管理會審議偏向形式通過，而審計部查核屬「事後」把關，難以阻止支出已發生。</p>
+
+    <div class="section-head"><span class="tag">00c</span><h2>歷年在臺移工人數變化</h2></div>
+    <p class="lede">就安基金的財源規模與移工人數同步成長——人數越多，就業安定費收入基礎越大，但用途監督的急迫性也隨之升高。</p>
+    <div class="tablewrap">
+    <table class="dtable">
+      <caption>在臺移工人數里程碑（依勞動部統計公開數字）</caption>
+      <thead><tr><th>時間點</th><th>移工人數</th><th>備註</th></tr></thead>
+      <tbody>
+        <tr><td>2014年4月（民國103年）</td><td class="num neutral">約50萬人</td><td>首度突破50萬大關</td></tr>
+        <tr><td>2016年6月（民國105年）</td><td class="num neutral">約60萬人</td><td>突破60萬大關</td></tr>
+        <tr><td>2018年8月（民國107年）</td><td class="num neutral">約70萬人</td><td>突破70萬大關</td></tr>
+        <tr><td>2021年底（民國110年）</td><td class="num neutral">約67萬人</td><td>受疫情影響，年減3.9萬人，為史上最大減幅</td></tr>
+        <tr><td>2023年底（民國112年）</td><td class="num neutral">約75.3萬人</td><td>產業移工51.9萬、社福移工23.4萬</td></tr>
+        <tr><td>2024年9月</td><td class="num">突破80萬人</td><td>10年間增加逾27萬人</td></tr>
+        <tr><td>2025年1月</td><td class="num">約81.8萬人</td><td>產業移工56.8萬、社福移工25.0萬</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3" class="src-note">資料來源：勞動部統計處勞動統計通報、勞動統計查詢網（statfy.mol.gov.tw）、媒體整理報導</td></tr></tfoot>
+    </table>
+    </div>
+
+    <div class="chartbox">
+      <h3>📈 移工人數成長趨勢</h3>
+      <p class="chart-sub">單位：萬人 ｜ 2021年因疫情出現史上最大減幅，隨後快速反彈</p>
+      <svg viewBox="0 0 640 200" preserveAspectRatio="xMidYMid meet">
+        <line x1="40" y1="170" x2="620" y2="170" stroke="#d8cfb8" stroke-width="1"/>
+        <line x1="40" y1="10" x2="40" y2="170" stroke="#d8cfb8" stroke-width="1"/>
+        <text x="20" y="155" class="axis-label">50</text>
+        <text x="20" y="110" class="axis-label">65</text>
+        <text x="20" y="65" class="axis-label">75</text>
+        <text x="20" y="28" class="axis-label">82</text>
+        <polyline points="40,150 148,110 256,70 364,82 472,49 580,23" fill="none" stroke="#9c7a3c" stroke-width="2.5"/>
+        <circle class="line-pt" cx="40" cy="150" r="5"/>
+        <circle class="line-pt" cx="148" cy="110" r="5"/>
+        <circle class="line-pt" cx="256" cy="70" r="5"/>
+        <circle class="line-pt flag" cx="364" cy="82" r="5"/>
+        <circle class="line-pt" cx="472" cy="49" r="5"/>
+        <circle class="line-pt" cx="580" cy="23" r="5"/>
+        <text x="40" y="186" text-anchor="middle" class="axis-label">2014</text>
+        <text x="148" y="186" text-anchor="middle" class="axis-label">2016</text>
+        <text x="256" y="186" text-anchor="middle" class="axis-label">2018</text>
+        <text x="364" y="186" text-anchor="middle" class="axis-label">2021</text>
+        <text x="472" y="186" text-anchor="middle" class="axis-label">2023</text>
+        <text x="580" y="186" text-anchor="middle" class="axis-label">2025</text>
+        <text x="40" y="140" text-anchor="middle" class="bar-label">50</text>
+        <text x="148" y="100" text-anchor="middle" class="bar-label">60</text>
+        <text x="256" y="60" text-anchor="middle" class="bar-label">70</text>
+        <text x="364" y="100" text-anchor="middle" class="bar-label" fill="#a8432f">67↓</text>
+        <text x="472" y="39" text-anchor="middle" class="bar-label">75.3</text>
+        <text x="580" y="13" text-anchor="middle" class="bar-label">81.8</text>
+      </svg>
+    </div>
+
+    <div class="section-head"><span class="tag">01</span><h2>基金財務概況</h2></div>
+    <p class="lede">就安基金屬「非營業特種基金」，立法院逐筆審查不易。官方迄未公布單一完整的年度收支結餘總表，但從審計部查核與立委質詢揭露的數字，仍可拼湊出規模輪廓：</p>
+    <div class="tablewrap">
+    <table class="dtable">
+      <caption>基金規模相關公開數字（依年度個別揭露，非同一份決算）</caption>
+      <thead><tr><th>項目</th><th>數字</th><th>統計截至</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>主要財源</td><td class="num neutral">就業安定費</td><td class="num neutral">－</td><td>移工雇主每月繳納，依行業別約2,000～11,000元</td></tr>
+        <tr><td>近3年累計虧損</td><td class="num">約200億元</td><td class="num neutral">2024年12月</td><td>審計長陳瑞敏於立院答詢揭露，基金連續3年收支短絀</td></tr>
+        <tr><td>媒體宣傳費預算（2022年度）</td><td class="num neutral">約1.19億元</td><td class="num neutral">2024年12月揭露</td><td>立委黃國昌質詢數據</td></tr>
+        <tr><td>媒體宣傳費預算（2025年度）</td><td class="num">約2.17億元</td><td class="num neutral">2024年12月揭露</td><td>較2022年成長逾8成，引發編列必要性質疑</td></tr>
+        <tr><td>112年度查核不符用途支出</td><td class="num">約5,174萬元</td><td class="num neutral">2024年12月公布</td><td>審計部初步查核結果，列入應收回項目</td></tr>
+        <tr><td>近5年濫用支出（審計部）</td><td class="num">約7,224萬元</td><td class="num neutral">2025年3月揭露</td><td>涵蓋勞動節影片、粉專經營、喬遷活動、節慶禮品等</td></tr>
+        <tr><td>近2年已追回金額</td><td class="num neutral">逾3億元</td><td class="num neutral">2024年12月揭露</td><td>審計部針對違反規定支出之歷年追討總額</td></tr>
+        <tr><td>立院協商刪減（2024年度）</td><td class="num neutral">3億元</td><td class="num neutral">2024年12月協商</td><td>朝野協商自「促進國民就業計畫服務費」項下刪除</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="4" class="src-note">資料來源：審計部立院答詢、立委質詢公開數字、媒體報導（聯合新聞網、公視新聞網）。基金未對外公布單一年度完整損益表，故無法提供同一基準之「年收入／年支出／累積結餘」三欄式總表，謹列出目前可查證之分項數字；「統計截至」欄為該數字首次公開揭露之時間點，非必然為數字本身的統計基準日。</td></tr></tfoot>
+    </table>
+    </div>
+
+    <div class="chartbox">
+      <h3>📉 基金部分年度線索（非完整收支總表）</h3>
+      <p class="chart-sub">單位：新臺幣億元 ｜ 官方迄未公布逐年完整「收入／支出／結餘」三欄總表，下圖僅整理目前可查證之片段年度數字，年度間不可直接相減推算結餘</p>
+      <svg viewBox="0 0 640 200" preserveAspectRatio="xMidYMid meet">
+        <g font-family="var(--sans)">
+          <text x="0" y="18" font-size="11" fill="#3a362e">媒體宣傳費預算・2022年度（1.19億）</text>
+          <rect x="0" y="24" width="106" height="16" rx="2" fill="#9c7a3c"/>
+
+          <text x="0" y="60" font-size="11" fill="#a8432f" font-weight="700">媒體宣傳費預算・2025年度（2.17億）</text>
+          <rect x="0" y="66" width="194" height="16" rx="2" fill="#a8432f"/>
+
+          <text x="0" y="102" font-size="11" fill="#3a362e">近2年已追回違規支出（逾3億）</text>
+          <rect x="0" y="108" width="268" height="16" rx="2" fill="#1c1b19"/>
+
+          <text x="0" y="144" font-size="11" fill="#a8432f" font-weight="700">近3年累計虧損（約200億，2022–2024）</text>
+          <rect x="0" y="150" width="480" height="16" rx="2" fill="#7a5e2a"/>
+        </g>
+        <text x="0" y="186" font-size="10" fill="#9a9485">⚠ 以上四項分屬不同統計期間與口徑（單年度預算／2年累計／3年累計），並列僅供量級對照，非同基準之收支表</text>
+      </svg>
+    </div>
+    <p style="font-size:12px;color:#9a9485;margin-top:-6px;">註：基金屬「非營業特種基金」，立法院逐筆審查不易，勞動部與審計部目前公開的均為「片段年度」或「累計期間」數字（如上圖），並非逐年（2021、2022、2023、2024…）完整收入／支出／結餘對照表。若日後官方公布逐年完整決算數字，將以表格形式補充於本節，現階段為避免誤導，不自行推算或填補缺漏年度之數字。</p>
+
+    <div class="chartbox">
+      <h3>📊 爭議金額量級比較</h3>
+      <p class="chart-sub">單位：新臺幣萬元 ｜ 採平方根比例尺繪製，以兼顧小額個案與大額總計之可讀性</p>
+      <svg viewBox="0 0 640 260" preserveAspectRatio="xMidYMid meet">
+        <!-- rows: label, value(萬), bar width(px, max480), color -->
+        <g font-family="var(--sans)">
+          <text x="0" y="18" font-size="11" fill="#3a362e">咖啡豆採購（22.8萬）</text>
+          <rect x="0" y="24" width="13" height="14" rx="2" fill="#9c7a3c"/>
+
+          <text x="0" y="54" font-size="11" fill="#3a362e">北分署裝潢（145萬）</text>
+          <rect x="0" y="60" width="33" height="14" rx="2" fill="#9c7a3c"/>
+
+          <text x="0" y="90" font-size="11" fill="#3a362e">前部長演唱會（356萬）</text>
+          <rect x="0" y="96" width="52" height="14" rx="2" fill="#9c7a3c"/>
+
+          <text x="0" y="126" font-size="11" fill="#3a362e">勞發署會議室裝潢（2,000萬）</text>
+          <rect x="0" y="132" width="124" height="14" rx="2" fill="#7a5e2a"/>
+
+          <text x="0" y="162" font-size="11" fill="#3a362e">羅景壬團隊3年合計（2,872萬）</text>
+          <rect x="0" y="168" width="148" height="14" rx="2" fill="#7a5e2a"/>
+
+          <text x="0" y="198" font-size="11" fill="#a8432f" font-weight="700">審計部認定近5年濫用（7,224萬）</text>
+          <rect x="0" y="204" width="236" height="14" rx="2" fill="#a8432f"/>
+
+          <text x="0" y="234" font-size="11" fill="#a8432f" font-weight="700">近2年已追回金額（逾30,000萬／3億）</text>
+          <rect x="0" y="240" width="480" height="14" rx="2" fill="#1c1b19"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="section-head"><span class="tag">02</span><h2>四步看懂整起事件</h2></div>
+    <div class="steps">
+      <div class="step"><div class="n"></div><div class="txt"><h4>制度設計</h4><p>1992年《就業服務法》開放外勞引進，1994年依第55條設置就業安定基金，外部監督機制依賴管理會審議。</p></div></div>
+      <div class="step"><div class="n"></div><div class="txt"><h4>用途擴張</h4><p>歷年「收支保管及運用辦法」多次修正，補助項目從就業服務、職訓逐步擴及地方政府配合款、廣宣經費等，邊界趨於模糊。</p></div></div>
+      <div class="step"><div class="n"></div><div class="txt"><h4>濫用爆發</h4><p>2024年底案外案揭露多筆與基金宗旨無關的支出，包括音樂會、沙龍照、粉專經營、辦公室裝潢與垃圾清運案，引發外界譁然。</p></div></div>
+      <div class="step"><div class="n"></div><div class="txt"><h4>制度補丁</h4><p>勞動部於2025年函送立法院精進報告，並提案修正運用辦法第5條，試圖明確界定用途範圍與支用原則。</p></div></div>
+    </div>
+  </section>
+
+  <!-- LAW -->
+  <section class="panel" id="law">
+    <div class="section-head"><span class="tag">03</span><h2>相關法源條文</h2></div>
+    <p class="lede">基金的設置、收費與支用，分別由《就業服務法》與《就業安定基金收支保管及運用辦法》規範，前者是母法授權，後者是執行細則——爭議多半發生在細則的彈性空間裡。</p>
+
+    <details class="law" open>
+      <summary><span class="num">就業服務法</span>第42條</summary>
+      <div class="body">為保障國民工作權，聘僱外國人工作，不得妨礙本國人之就業機會、勞動條件、國民經濟發展及社會安定。
+<span style="color:#8a8473;font-size:12px;">→ 這是整套外勞政策與就安基金的立法目的條款，後續第55條收費機制由此而生。</span></div>
+    </details>
+
+    <details class="law">
+      <summary><span class="num">就業服務法</span>第55條</summary>
+      <div class="body"><div class="clause">I　雇主聘僱外國人從事第46條第1項第8款至第10款規定之工作（製造業、營造業、家庭看護工等），應向中央主管機關設置之就業安定基金專戶繳納就業安定費，作為加強辦理促進國民就業、提升勞工福祉及處理外國人聘僱管理事務之用。</div><div class="clause">II　就業安定費之數額，由中央主管機關考量國家經濟發展、勞動供需及相關勞動條件，依行業別及工作性質會商相關機關定之。</div><div class="clause">III　雇主或被看護者符合低收入戶、中低收入戶、身心障礙生活補助或中低收入老人生活津貼資格者，聘僱家庭看護工可免繳就業安定費。</div><div class="clause">V　雇主逾期未繳，得寬限30日；逾期每日加徵0.3%滯納金，上限為應繳金額之30%。</div></div>
+    </details>
+
+    <details class="law">
+      <summary><span class="num">運用辦法</span>第1條・立法目的</summary>
+      <div class="body">為加強辦理有關促進國民就業、提升勞工福祉及處理有關外國人聘僱管理事務，特設置就業安定基金，並依《預算法》第21條規定，訂定本辦法。基金性質為《預算法》第4條第1項第2款所定之特種基金，編製附屬單位預算，以勞動部為主管機關。</div>
+    </details>
+
+    <div class="section-head" style="margin-top:30px;"><h2 style="font-size:16px;">「特種基金」是什麼？為何監督特別困難？</h2></div>
+    <div class="card alert">
+      <div class="meta">制度結構 · 預算法第4條</div>
+      <h3>非營業特種基金的雙面性</h3>
+      <p>就業安定基金依《預算法》第4條第1項第2款，屬「特別收入基金」性質的非營業特種基金——有特定收入來源（就業安定費），專供特定用途使用，不併入政府一般公務預算。這種設計的本意是讓收費與支用直接掛鉤、財務獨立運作，但也帶來三個結構性後果：</p>
+    </div>
+    <div class="usegrid">
+      <div class="usecard"><b>編列彈性大：</b>特種基金採「附屬單位預算」編製，審議程序與一般公務預算不同，行政部門在年度間調整支用項目的空間相對較大。</div>
+      <div class="usecard"><b>國會審查強度較弱：</b>立法院對附屬單位預算的逐項逐筆審查，傳統上不若對公務預算（如國防、教育等歲出科目）來得嚴格細緻，給予部會較大裁量空間。</div>
+      <div class="usecard"><b>「小金庫」疑慮的根源：</b>因多個部會在基金管理會中皆有代表席次，加上基金性質特殊、不易被外部究責，過去即有「就安基金是部會小金庫」的說法，2014年時任部長潘世偉去職風波中曾被提及。</div>
+      <div class="usecard"><b>跨部會挪用先例：</b>就安基金不僅用於勞動部自身業務，過去亦曾補助其他部會政策（如2019年經濟部機車師傅轉型計畫、2020年代墊國道收費員安置補貼等），用途邊界因而更難單純以「促進國民就業」一語界定清楚。</div>
+    </div>
+    <p style="font-size:12px;color:#9a9485;">資料來源：ETtoday財經雲（前部長潘世偉「小金庫」說法、跨部會補助案例）、《預算法》第4條（全國法規資料庫）。</p>
+
+    <details class="law">
+      <summary><span class="num">運用辦法</span>第5條・用途範圍（爭議核心條文）</summary>
+      <div class="body">本基金用途原規定範圍寬泛，僅概略列出「促進國民就業」「提升勞工福祉」「外國人聘僱管理」等大項，未逐項界定可否編列之具體事務，是歷次濫用爭議的關鍵漏洞。2025年勞動部提案修正本條，於各大項下增訂細項，限縮可編列範圍。
+<span style="color:#8a8473;font-size:12px;">→ 詳見「改革進程」分頁的修法重點。</span></div>
+    </details>
+
+    <details class="law">
+      <summary><span class="num">運用辦法</span>第6條・補助地方政府規定</summary>
+      <div class="body"><b>可編列項目：</b>
+1. 結合地方特性辦理就業服務、職業訓練、人力培訓
+2. 結合學校與地方資源辦理就業諮詢、轉業輔導、生涯規劃
+3. 勞動權益推廣、弱勢扶助、職場身心健康促進
+4. 外國人工作管理與私立就服機構管理
+5. 因應中央重大政策之其他事項
+
+<b>不可編列項目：</b>
+1. 非第5條規定用途
+2. 全國一致性規劃之津貼或補助
+3. 中央已統籌編列之項目
+4. 公立就服或職訓機構之運作費用
+5. 單價逾10萬元之不動產／設備投資
+6. 出國計畫
+7. 與三大法定用途無關之事項
+8. 地方政府財產之維護修繕</div>
+    </details>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="panel" id="timeline">
+    <div class="section-head"><span class="tag">04</span><h2>歷史軌跡</h2></div>
+    <p class="lede">從1992年開放外勞，到2025年的修法補洞，三十餘年間制度逐步擴張，監督機制始終追在爭議後面。</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">1992</div>
+        <div class="tl-title">《就業服務法》制定，開放外勞引進</div>
+        <div class="tl-desc">確立「不得妨礙本國人就業機會」之立法目的，為日後收取就業安定費埋下法源基礎。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1994（民國83年）</div>
+        <div class="tl-title">就業安定基金正式成立</div>
+        <div class="tl-desc">依第55條設置專戶，由雇主聘僱外勞時按月繳納就業安定費匯入，交由勞動部（前身為勞委會）管理運用。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">1998（民國87年）</div>
+        <div class="tl-title">起編列附屬單位預算</div>
+        <div class="tl-desc">基金正式納入附屬單位預算編製，用於推動多元就業方案與各項補助計畫，使用範圍逐步擴張。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2000s–2010s</div>
+        <div class="tl-title">運用辦法多次修正，補助項目持續加碼</div>
+        <div class="tl-desc">陸續增訂補助地方政府、私立就服機構管理、勞工權益基金等子項，用途邊界日趨模糊，外部質疑聲音零星出現。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-title">勞動部首度澄清「外部監督疑慮」</div>
+        <div class="tl-desc">媒體投書質疑基金缺乏外部監督，勞動部以「管理會有勞資代表與專家學者參與」回應澄清，爭議暫息。</div>
+      </div>
+      <div class="tl-item flag">
+        <div class="tl-year">2024年底</div>
+        <div class="tl-title">公務員霸凌輕生案外案，意外掀開基金濫用蓋子</div>
+        <div class="tl-desc">前部長許銘春任內遭爆以就安基金辦理音樂會、拍攝沙龍照；政府採購網資料顯示粉專經營、辦公室裝潢、垃圾清運等多筆支出與基金用途明顯脫節。</div>
+      </div>
+      <div class="tl-item flag">
+        <div class="tl-year">2025年1月3日</div>
+        <div class="tl-title">勞動部函送立法院「精進規劃報告」</div>
+        <div class="tl-desc">新任部長洪申翰履行對立法院承諾，提出用途面、管理面、資訊公開面三大方向、共6項策進作為。</div>
+      </div>
+      <div class="tl-item flag">
+        <div class="tl-year">2025年1月22日</div>
+        <div class="tl-title">基金管理會臨時會，提案修正運用辦法第5條</div>
+        <div class="tl-desc">部長親自主持臨時會議，討論在三大法定用途下增訂細項，明確界定各項計畫可編列範圍，盼杜絕浮編爭議。</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026・進行中<span class="note-tag">截至2026年上半年</span></div>
+        <div class="tl-title">移工團體持續監督，要求逐筆公開支出明細</div>
+        <div class="tl-desc">雇主團體代表呼籲基金應接受國會逐筆審查，並質疑管理會委員多由勞動部主導之結構性問題尚未根本解決。本項為持續進行中之監督事件，後續若有新進展將另行更新，本段內容不代表事件已終結。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DISPUTE -->
+  <section class="panel" id="dispute">
+    <div class="section-head"><span class="tag">05</span><h2>爭議事件盤點</h2></div>
+    <p class="lede">支持基金存續者強調其法定正當性與審議程序；批評者則聚焦於「用途解釋過於寬鬆」與「監督形同虛設」兩大問題。先看三大核心爭議的收斂總結，再看具體案件與各方立場。</p>
+
+    <div class="coreissues">
+      <div class="issue-card"><div class="ix">01</div><h3>用途界線模糊</h3><p>運用辦法第5條僅概略列出三大用途，未逐項界定可否編列之具體事務，使「促進就業」「提升福祉」幾乎可套用於任何支出，是歷次爭議的根本漏洞。</p></div>
+      <div class="issue-card"><div class="ix">02</div><h3>監督機制不足</h3><p>管理會委員與召集人皆由勞動部主導聘任，審議多在支出發生「前」進行形式把關；審計部查核則在支出發生「後」才介入，難以即時阻止濫用。</p></div>
+      <div class="issue-card"><div class="ix">03</div><h3>財務透明度不足</h3><p>基金屬非營業特種基金，國會逐筆審查不易，迄未公布完整年度收支結餘總表，外界僅能透過個案爆料與立委質詢拼湊支出全貌。</p></div>
+    </div>
+
+    <div class="section-head" style="margin-top:0;"><h2 style="font-size:15px;">爭議支出案件一覽</h2></div>
+    <p class="legend-badges">性質標示：<span class="src-badge media">媒體揭露</span>經記者調閱資料／報導披露，尚待官方正式認定　<span class="src-badge audit">審計認定</span>審計部查核確認應收回或違反規定　<span class="src-badge admit">勞動部自承</span>勞動部公開承認規格規模不合宜</p>
+    <div class="tablewrap">
+    <table class="dtable">
+      <caption>依公開報導與審計部查核結果整理（單位：新臺幣）</caption>
+      <thead><tr><th>項目</th><th>金額</th><th>年度</th><th>性質</th><th>處理結果</th><th>說明</th></tr></thead>
+      <tbody>
+        <tr><td>前部長許銘春演唱會</td><td class="num">356萬元</td><td>2024</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill unknown">尚無公開後續結果</span></td><td>遭質疑與基金法定用途無直接關聯；尚未見審計部就此案單獨出具正式違法認定</td></tr>
+        <tr><td>北分署員工休息室裝潢</td><td class="num">145萬元</td><td>2024</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill unknown">尚無公開後續結果</span></td><td>前北分署署長謝宜容任內採購</td></tr>
+        <tr><td>勞發署會議室裝潢暨設備</td><td class="num">逾2,000萬元</td><td>2024</td><td class="src-cell"><span class="src-badge admit">勞動部自承</span></td><td><span class="result-pill review">檢討中</span></td><td>勞動部坦承「需求規格與經費規模有不合宜之處」，已要求召開檢討會議，評估終止或變更契約可能性</td></tr>
+        <tr><td>羅景壬團隊勞動節宣傳影片（3支）</td><td class="num">合計約2,872萬元</td><td>2022–2024</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill review">列入濫用範圍</span></td><td>「阿紡的洗衣店」1,060萬／「紙紮篇」971.8萬／「搬家篇」831.6萬，被質疑觀看數與經費不成比例；經立委揭露後被列入審計部「近5年濫用支出」查核範圍，惟尚未見單案逐筆認定結果</td></tr>
+        <tr><td>咖啡豆採購（北分署8處辦公室）</td><td class="num">22.8萬元</td><td>近1年</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill unknown">尚無公開後續結果</span></td><td>採購456磅咖啡豆，與基金用途關聯性遭質疑</td></tr>
+        <tr><td>近1年招標案疑似不符用途總額</td><td class="num">逾8,000萬元</td><td>近1年</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill unknown">尚無公開後續結果</span></td><td>ETToday調閱政府採購網至少13件標案，屬媒體整理之「疑似」總額</td></tr>
+        <tr><td>喬遷典禮（記者會＋剪綵＋紀念品＋紀錄片）</td><td class="num">約416萬元</td><td>2023</td><td class="src-cell"><span class="src-badge media">媒體揭露</span></td><td><span class="result-pill unknown">尚無公開後續結果</span></td><td>115萬元剪綵活動＋253萬元入厝紀念品＋48萬元紀錄影片</td></tr>
+        <tr><td>112年度不符用途支出（應收回）</td><td class="num">約5,174萬元</td><td>2023決算</td><td class="src-cell"><span class="src-badge audit">審計認定</span></td><td><span class="result-pill recovered">列入應收回</span></td><td>審計部初步查核結果，列入應收回項目，屬目前唯一具審計部正式查核結論之金額</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="6" class="src-note">資料來源：ETtoday財經雲調查報導、自由時報、聯合新聞網、公視新聞網（立委質詢揭露）。「處理結果」欄僅依目前公開報導所載最新進度整理；標示「尚無公開後續結果」代表截至2026年6月，尚未檢索到該案後續調查或處置之公開報導，不代表案件已結案或未被處理。標示「媒體揭露」者，僅代表經媒體調閱政府採購網或記者會報導披露，尚未檢索到審計部或勞動部就個案逐筆出具正式違法／違規認定；標示「審計認定」者，為審計部已正式查核確認之項目；標示「勞動部自承」者，為勞動部官方公開承認之表述。實際決算金額與法律定性，以審計部正式報告及司法／行政程序結果為準。</td></tr></tfoot>
+    </table>
+    </div>
+
+
+    <div class="chartbox">
+      <h3>🥧 已知爭議個案金額占比</h3>
+      <p class="chart-sub">以上表5項已知金額個案為基礎（合計約5,396萬元）所繪示意比例，並非官方正式分類統計</p>
+      <div style="display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:center; padding:8px 0;">
+        <div style="width:160px;height:160px;border-radius:50%;flex:0 0 auto;
+          background:conic-gradient(
+            #c9a45c 0deg 1.5deg,
+            #b08a3f 1.5deg 11.2deg,
+            #9c7a3c 11.2deg 34.9deg,
+            #7a5e2a 34.9deg 168.4deg,
+            #a8432f 168.4deg 360deg
+          );"></div>
+        <div style="font-size:12.5px; line-height:2.1;">
+          <div><span style="display:inline-block;width:10px;height:10px;background:#a8432f;border-radius:2px;margin-right:6px;"></span>羅景壬團隊3年合計 2,872萬（53.2%）</div>
+          <div><span style="display:inline-block;width:10px;height:10px;background:#7a5e2a;border-radius:2px;margin-right:6px;"></span>會議室裝潢 2,000萬（37.1%）</div>
+          <div><span style="display:inline-block;width:10px;height:10px;background:#9c7a3c;border-radius:2px;margin-right:6px;"></span>前部長演唱會 356萬（6.6%）</div>
+          <div><span style="display:inline-block;width:10px;height:10px;background:#b08a3f;border-radius:2px;margin-right:6px;"></span>北分署裝潢 145萬（2.7%）</div>
+          <div><span style="display:inline-block;width:10px;height:10px;background:#c9a45c;border-radius:2px;margin-right:6px;"></span>咖啡豆採購 22.8萬（0.4%）</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card alert">
+      <div class="meta">官方回應 · 勞動部</div>
+      <h3>承認規格與規模「有不合宜之處」</h3>
+      <p>對於會議室裝潢採購逾2,000萬元一案，勞動部證實確有使用就安基金支應，並表示新任部長洪申翰上任後已要求召開檢討會議，檢視已招標案件是否合宜，並評估終止或變更契約的可能性。</p>
+    </div>
+
+    <div class="section-head" style="margin-top:30px;"><h2 style="font-size:15px;">關鍵人物索引</h2></div>
+    <p class="lede" style="margin-bottom:10px;">事件牽涉多位官員與監督者，先認人、再看發言，較容易掌握脈絡。三種底色代表不同立場角色：<span class="cat-badge cat-exec">行政機關</span> <span class="cat-badge cat-audit">監察查核</span> <span class="cat-badge cat-watch">民意監督</span></p>
+    <div class="people">
+      <div class="person-card role-official">
+        <div class="person-avatar">許</div>
+        <div class="person-info">
+          <span class="cat-badge cat-exec">行政機關</span>
+          <div class="name">許銘春</div>
+          <div class="role">前勞動部長（爭議發生時任內）</div>
+          <p>遭爆以就安基金356萬元辦理演唱會、拍攝沙龍照，是引爆本輪輿論關注的起點人物之一。</p>
+        </div>
+      </div>
+      <div class="person-card role-official">
+        <div class="person-avatar">謝</div>
+        <div class="person-info">
+          <span class="cat-badge cat-exec">行政機關</span>
+          <div class="name">謝宜容</div>
+          <div class="role">前勞動部勞動力發展署北分署署長</div>
+          <p>因職場霸凌案去職，案外案揭露其任內以就安基金145萬元裝潢員工休息室，是基金濫用爭議的直接導火線。</p>
+        </div>
+      </div>
+      <div class="person-card role-official">
+        <div class="person-avatar">洪</div>
+        <div class="person-info">
+          <span class="cat-badge cat-exec">行政機關</span>
+          <div class="name">洪申翰</div>
+          <div class="role">現任勞動部長</div>
+          <p>2025年初接任後函送立法院精進規劃報告，主持基金管理會臨時會提案修法，是目前主導改革的官方代表人物。</p>
+        </div>
+      </div>
+      <div class="person-card role-audit">
+        <div class="person-avatar">陳</div>
+        <div class="person-info">
+          <span class="cat-badge cat-audit">監察查核</span>
+          <div class="name">陳瑞敏</div>
+          <div class="role">審計長</div>
+          <p>在立院答詢中揭露基金近3年累計虧損約200億元、112年度約5,174萬元支出不符用途，並同意將查核期間擴大溯及5年。</p>
+        </div>
+      </div>
+      <div class="person-card role-legislator">
+        <div class="person-avatar">黃</div>
+        <div class="person-info">
+          <span class="cat-badge cat-watch">民意監督</span>
+          <div class="name">黃國昌</div>
+          <div class="role">立法委員（民眾黨）</div>
+          <p>質詢揭露基金媒體宣傳費由2022年1.19億元增至2025年2.17億元，並質疑歷年宣傳影片觀看次數與經費不成比例。</p>
+        </div>
+      </div>
+      <div class="person-card role-legislator">
+        <div class="person-avatar">凌</div>
+        <div class="person-info">
+          <span class="cat-badge cat-watch">民意監督</span>
+          <div class="name">凌濤</div>
+          <div class="role">國民黨智庫副執行長、桃園市議員</div>
+          <p>揭露羅景壬導演團隊2022至2024年承接3支勞動節宣傳影片、合計約2,872萬元，質疑經費與聲量不成比例。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:30px;"><h2 style="font-size:15px;">各方立場比較</h2></div>
+    <div class="tablewrap">
+    <table class="dtable">
+      <caption>整理自勞動部澄清稿、立委質詢、雇主團體訪問及媒體報導</caption>
+      <thead><tr><th>立場</th><th>核心主張</th></tr></thead>
+      <tbody>
+        <tr><td><b>勞動部（官方）</b></td><td>基金運用已有管理會審議、年度兩次內部審查、行政院與立法院轉送監督等程序，並非毫無外部監督；已提出三面向六項策進作為，承諾限縮用途、強化稽核與資訊公開。</td></tr>
+        <tr><td><b>雇主團體</b><br><span class="note-tag">移工聘僱雇主</span></td><td>批評用途解釋過於寬鬆、幾乎任何支出都能與「促進就業」「提升福祉」沾上邊；管理會委員與召集人皆由勞動部主導，呼籲逐筆公開支出明細，並考慮以拒繳就安費表達抗議。</td></tr>
+        <tr><td><b>在野立委</b><br><span class="note-tag">國會監督角色</span></td><td>質疑媒體宣傳費逐年攀升（2022年1.19億→2025年2.17億）卻成效不彰，主張暫緩或刪減年度預算審查，並要求就特定受補助團隊的金流提出說明。</td></tr>
+        <tr><td><b>審計部</b><br><span class="note-tag">法定查核機關</span></td><td>查核確認多筆支出與基金用途關聯性不高，應予收回；揭露基金近3年累計虧損約200億元，並建議將查核期間由3年擴大溯及5年。</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:12px;color:#9a9485;margin-top:-6px;">註：目前公開報導中，尚未檢索到具名學者或全國性移工權益團體對本案提出之系統性政策主張，故未單獨列欄；若有具名意見出現，將於後續版本補充，避免以推測代替事實。</p>
+  </section>
+
+
+
+  <!-- REFORM -->
+  <section class="panel" id="reform">
+    <div class="section-head"><span class="tag">06</span><h2>改革進程</h2></div>
+    <p class="lede">2025年起，勞動部從「用途、管理、資訊公開」三面向提出六項策進作為，試圖回應外界對基金浮濫的疑慮。</p>
+
+    <div class="chartbox">
+      <h3>🎯 改革觀察儀表板</h3>
+      <p class="chart-sub">依公開資訊判斷之進度狀態，非官方正式評等；隨後續修法與審議進展更新</p>
+      <div class="dash">
+        <div class="dash-row">
+          <div class="label">用途限縮<span class="d">修正運用辦法第5條，增訂可編列細項</span></div>
+          <div class="dash-bar"><i style="width:55%; background:#9c7a3c;"></i></div>
+          <div class="status-pill progress">進行中</div>
+        </div>
+        <div class="dash-row">
+          <div class="label">逐筆公開資訊<span class="d">支用明細透明度提升，回應雇主團體訴求</span></div>
+          <div class="dash-bar"><i style="width:35%; background:#9c7a3c;"></i></div>
+          <div class="status-pill partial">部分完成</div>
+        </div>
+        <div class="dash-row">
+          <div class="label">強化外部稽核<span class="d">導入外部稽核機制補強內控</span></div>
+          <div class="dash-bar"><i style="width:45%; background:#9c7a3c;"></i></div>
+          <div class="status-pill progress">進行中</div>
+        </div>
+        <div class="dash-row">
+          <div class="label">公務預算歸位<span class="d">行政庶務費用改編於正式公務預算</span></div>
+          <div class="dash-bar"><i style="width:60%; background:#9c7a3c;"></i></div>
+          <div class="status-pill progress">進行中</div>
+        </div>
+        <div class="dash-row">
+          <div class="label">管理會人事結構改革<span class="d">召集人與委員聘任機制獨立性</span></div>
+          <div class="dash-bar"><i style="width:8%; background:#a8432f;"></i></div>
+          <div class="status-pill pending">未完成</div>
+        </div>
+        <div class="dash-row">
+          <div class="label">不符用途支出追回<span class="d">審計部已查核項目之實際收回進度</span></div>
+          <div class="dash-bar"><i style="width:50%; background:#9c7a3c;"></i></div>
+          <div class="status-pill progress">進行中</div>
+        </div>
+      </div>
+      <p class="dash-updated">儀表板更新：2026年6月 ｜ 下次重大觀察點：113年度決算審計部正式報告</p>
+    </div>
+
+    <div class="card">
+      <div class="meta">用途面</div>
+      <h3>1．爭取合理編列公務預算</h3>
+      <p>勞動部長期公務預算不足、過度依賴基金支應行政費用。自2026年（民國115年）起，與基金法定用途無關的辦公處所修繕、廣宣費用，將改編列於正式公務預算，而非就安基金。</p>
+    </div>
+    <div class="card">
+      <div class="meta">用途面</div>
+      <h3>2．律定用途範圍與支用原則</h3>
+      <p>修正運用辦法第5條，於「促進國民就業」「提升勞工福祉」「外國人聘僱管理」三大法定用途下，明確增訂可編列的細項內容，並另行規範廣宣經費的使用限制。</p>
+    </div>
+    <div class="card">
+      <div class="meta">管理面</div>
+      <h3>3．強化審議機制</h3>
+      <p>提升基金管理會與內部審查會議的把關功能，要求各項計畫提案需更明確說明與法定用途之關聯性，作為審議通過之前提。</p>
+    </div>
+    <div class="card">
+      <div class="meta">管理面</div>
+      <h3>4．強化內控機制並運用外部稽核</h3>
+      <p>導入外部稽核機制，補強過去單純依賴內部審查、外部監督力道不足的結構性問題。</p>
+    </div>
+    <div class="card">
+      <div class="meta">資訊公開面</div>
+      <h3>5．增加公開資訊</h3>
+      <p>提升基金支用明細的透明度，回應雇主團體與輿論「逐筆公開、接受國會監督」的要求。</p>
+    </div>
+    <div class="card">
+      <div class="meta">資訊公開面</div>
+      <h3>6．函送立法院書面承諾</h3>
+      <p>部長洪申翰將整體精進規劃報告正式函送立法院，作為對國會公開承諾的具體回應，後續修法進度持續受到追蹤監督。</p>
+    </div>
+
+    <div class="usecard" style="margin-top:18px;">
+      <b>觀察重點：</b>修法能否真正限縮用途解釋的彈性、管理會的人事結構是否調整、以及公開資訊是否做到逐筆可查，是後續評估改革成效的三項關鍵指標。
+    </div>
+
+    <div class="section-head" style="margin-top:26px;"><h2 style="font-size:15px;">改革前後對照</h2></div>
+    <p class="lede" style="margin-bottom:8px;">三項核心指標的改革方向一覽：</p>
+    <div class="tablewrap" style="margin-bottom:20px;">
+    <table class="dtable" style="min-width:360px;">
+      <thead><tr><th>項目</th><th>改革前</th><th>改革後方向</th></tr></thead>
+      <tbody>
+        <tr><td><b>用途認定</b></td><td>《運用辦法》第5條僅概列三大類，邊界模糊，行政庶務易混入</td><td>修正第5條，於三大用途下明確增訂可編列細項，廣宣費另行規範</td></tr>
+        <tr><td><b>公開程度</b></td><td>支用明細未逐筆公開，外界僅能靠個案爆料拼湊</td><td>提升明細透明度，目標達到逐筆可查、定期公開</td></tr>
+        <tr><td><b>審查方式</b></td><td>管理會審議偏向形式通過，缺乏外部稽核補強</td><td>強化管理會把關功能，並導入外部稽核機制</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="3" class="src-note">「改革後方向」為2025年精進規劃報告所揭示之目標，多數仍在修法與審議過程中，非已完成之最終結果。</td></tr></tfoot>
+    </table>
+    </div>
+
+    <div class="section-head" style="margin-top:26px;"><h2 style="font-size:15px;">改革前 VS 目前現況</h2></div>
+    <p class="lede" style="margin-bottom:8px;">多數項目仍在修法與審議過程中，尚未全數「改革完成」，故以「目前現況」呈現而非絕對的「改革後」結果，並與上方儀表板進度一致。</p>
+    <div class="tablewrap">
+    <table class="dtable">
+      <caption>依勞動部精進規劃報告六項策進作為整理（截至2026年6月）</caption>
+      <thead><tr><th>項目</th><th>改革前</th><th>目前現況</th><th>進度</th></tr></thead>
+      <tbody>
+        <tr><td>用途定義</td><td>運用辦法第5條僅概略列三大用途，未逐項界定可編列事務</td><td>修正第5條，於三大用途下增訂可編列細項內容</td><td><span class="status-pill progress">進行中</span></td></tr>
+        <tr><td>資訊公開</td><td>支用明細未逐筆公開，外界僅能靠個案爆料拼湊全貌</td><td>提升支用明細透明度，回應逐筆公開訴求</td><td><span class="status-pill partial">部分完成</span></td></tr>
+        <tr><td>審查機制</td><td>管理會審議多流於形式，計畫提案與用途關聯性把關不足</td><td>強化內部審查會議把關功能，要求提案明確說明用途關聯性</td><td><span class="status-pill progress">進行中</span></td></tr>
+        <tr><td>外部稽核</td><td>僅依賴內部審查，缺乏外部稽核機制補強</td><td>導入外部稽核機制</td><td><span class="status-pill progress">進行中</span></td></tr>
+        <tr><td>公務預算歸位</td><td>辦公處所修繕、廣宣等行政庶務費用常編列於基金</td><td>自2026年起，與基金法定用途無關之費用改編於正式公務預算</td><td><span class="status-pill progress">進行中</span></td></tr>
+        <tr><td>管理會人事結構</td><td>委員與召集人皆由勞動部主導聘任，獨立性遭質疑</td><td>尚未提出具體調整方案</td><td><span class="status-pill pending">未完成</span></td></tr>
+        <tr><td>不符用途支出</td><td>查核後追回進度不透明</td><td>審計部已查核項目持續追回中</td><td><span class="status-pill progress">進行中</span></td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="4" class="src-note">「進度」欄與本節上方「改革觀察儀表板」採同一組依公開資訊判斷之進度狀態，非官方正式評等，將隨修法與審議進展更新。</td></tr></tfoot>
+    </table>
+    </div>
+
+    <div class="section-head"><span class="tag">07</span><h2>為何仍需要就業安定基金？</h2></div>
+    <p class="lede">爭議的根源是「支出浮濫」，不是「基金本身不該存在」。拉開來看，這筆錢確實長期支撐著幾項對勞工不可或缺的工作：</p>
+    <div class="balance">
+      <div class="balance-col why">
+        <h3>✓ 基金支撐的核心功能</h3>
+        <ul>
+          <li><b>職業訓練：</b>補助技能檢定、職訓課程、創業貸款，提升本國勞工就業力</li>
+          <li><b>協助失業勞工：</b>就業諮詢、轉業輔導、生涯規劃等服務</li>
+          <li><b>外國人聘僱管理：</b>移工招募審查、雇主管理、私立就服機構監督等行政成本</li>
+          <li><b>弱勢就業補助：</b>身心障礙者、中高齡者等特定對象之就業促進措施</li>
+          <li><b>地方政府配合款：</b>補助縣市政府辦理在地化就業服務與人力培訓</li>
+        </ul>
+      </div>
+      <div class="balance-col risk">
+        <h3>⚠ 但必須同時解決的風險</h3>
+        <ul>
+          <li>用途解釋空間過大，行政庶務費用容易被「順手」歸入基金，排擠核心服務資源</li>
+          <li>監督多停留在事後查核，無法在支出發生前有效攔阻</li>
+          <li>移工雇主長期負擔費用卻難以掌握逐筆流向，影響制度信任</li>
+          <li>若改革僅止於修辭調整而非結構鬆綁管理會人事，爭議恐將反覆發生</li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:12.5px;color:#6b6457;line-height:1.8;">換言之，多數意見的交集並非廢除基金，而是要求「錢花在刀口上、花得透明」——這也是2025年修法的核心目標。</p>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="panel" id="sources">
+    <div class="section-head"><span class="tag">08</span><h2>主要資料來源</h2></div>
+    <p class="lede">全站數據與條文均整理自以下公開來源，依機構性質分類列出，方便交叉查證。個案金額多為媒體整理之估算數字，正式數字以政府機關公告為準。</p>
+    <div style="background:var(--paper-deep);border:1px solid var(--line);border-radius:6px;padding:14px 18px;margin-bottom:20px;">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--brass-deep);margin-bottom:8px;letter-spacing:.05em;">資料來源性質說明</div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px 20px;font-size:12.5px;line-height:1.8;color:#3a362e;">
+        <div><span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;background:#e9e2cf;color:#7a5e2a;border:1px solid #d8cfb8;padding:2px 8px;border-radius:3px;margin-right:6px;">官方資料</span>勞動部、全國法規資料庫等政府機關直接發布之新聞稿、公文、法規正文</div>
+        <div><span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;background:#f3ddd6;color:var(--alert);border:1px solid #e3c2b6;padding:2px 8px;border-radius:3px;margin-right:6px;">審計部資料</span>透過立委質詢或公開文件揭露之審計部查核結果，部分數字為媒體轉述</div>
+        <div><span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;background:#dde6e0;color:#3d6b35;border:1px solid #c0d4c6;padding:2px 8px;border-radius:3px;margin-right:6px;">立法院資料</span>委員會質詢紀錄、朝野協商結果，依立法院公報與媒體報導整理</div>
+        <div><span style="display:inline-block;font-family:var(--mono);font-size:10px;font-weight:700;background:#eef0e6;color:#5c6b3d;border:1px solid #cdd6b6;padding:2px 8px;border-radius:3px;margin-right:6px;">媒體資料</span>中央社、公視、聯合、自由時報、ETtoday等，用於具體事件時間軸與金額查證</div>
+      </div>
+    </div>
+
+    <table class="dtable" style="max-width:520px;">
+      <caption>來源可信度速查表</caption>
+      <thead><tr><th>類型</th><th>來源</th></tr></thead>
+      <tbody>
+        <tr><td>官方</td><td>勞動部、勞動力發展署、審計部</td></tr>
+        <tr><td>法規</td><td>全國法規資料庫、行政院主計總處法規系統</td></tr>
+        <tr><td>國會</td><td>立法院公報、委員會質詢紀錄</td></tr>
+        <tr><td>媒體</td><td>中央社、公視新聞網、聯合新聞網、自由時報、ETtoday財經雲</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="2" class="src-note">下方逐項卡片提供各來源之詳細用途說明與查證範圍。</td></tr></tfoot>
+    </table>
+
+    <div class="card">
+      <div class="meta">官方機關 · 第一手資訊</div>
+      <h3>勞動部 ｜ 勞動力發展署</h3>
+      <p>新聞稿與澄清稿（mol.gov.tw）、就業安定基金管理運用精進規劃報告、就業安定基金收支保管及運用辦法逐條內容、年度預算書、補助直轄市縣市政府預算編列規定彙編（wda.gov.tw）。</p>
+    </div>
+    <div class="card">
+      <div class="meta">官方機關 · 法規母法</div>
+      <h3>全國法規資料庫 ｜ 行政院主計總處法規系統</h3>
+      <p>《就業服務法》第42、46、55條、《就業安定基金收支保管及運用辦法》全文、《預算法》第4、21條（law.moj.gov.tw、law.dgbas.gov.tw）。</p>
+    </div>
+    <div class="card alert">
+      <div class="meta">監察查核機關</div>
+      <h3>審計部</h3>
+      <p>透過立法院衛環委員會質詢揭露之查核結果：112年度不符用途支出、近5年濫用金額、近3年基金虧損數字、近2年追回金額等（經審計長陳瑞敏立院答詢公開，未直接取自審計部正式書面報告全文，引用時以媒體整理數字為準）。</p>
+    </div>
+    <div class="card alert">
+      <div class="meta">立法機關</div>
+      <h3>立法院公報 ｜ 委員質詢</h3>
+      <p>立法院全球資訊網（ly.gov.tw）相關委員會質詢紀錄、朝野協商結果；立委黃國昌、廖偉翔等人質詢內容（經新聞媒體報導整理）。</p>
+    </div>
+    <div class="card">
+      <div class="meta">採購紀錄</div>
+      <h3>政府電子採購網</h3>
+      <p>個別標案紀錄（如咖啡豆採購、清潔用品採購、會議室裝潢案等），由媒體記者調閱整理後報導，非本站直接查詢結果。</p>
+    </div>
+    <div class="card">
+      <div class="meta">新聞媒體 · 依公信力與報導深度選用</div>
+      <h3>中央社 ｜ 公視新聞網 ｜ 聯合新聞網 ｜ 自由時報 ｜ ETtoday財經雲</h3>
+      <p>用於查證具體事件時間軸、爭議案件金額、各方人物發言與立場。公視新聞網與中央社報導用於審計部查核數字之轉述；ETtoday財經雲調查報導為近1年標案明細之主要來源；聯合新聞網、自由時報用於追蹤後續政治攻防與輿論發展。</p>
+    </div>
+
+    <div class="usecard" style="margin-top:8px;">
+      <b>使用提醒：</b>本頁面為民間整理之公開資訊彙編，非政府機關正式發布文件，亦非法律意見。若需引用於學術寫作或正式文件，請回溯至上列原始來源逐一查證，並以政府機關公告之正式數字與條文版本為準。
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="section-head" style="justify-content:center; margin:0 0 12px;"><h2 style="font-size:14px;">主要資料來源</h2></div>
+  <div style="max-width:560px;margin:0 auto 16px;text-align:left;font-family:var(--sans);font-size:12px;line-height:2;color:#5c574b;">
+    ・勞動部新聞稿（mol.gov.tw）：澄清稿、精進規劃報告函送立法院新聞<br>
+    ・《就業服務法》第42、46、55條（全國法規資料庫 law.moj.gov.tw）<br>
+    ・《就業安定基金收支保管及運用辦法》（全國法規資料庫／行政院主計總處法規系統）<br>
+    ・行政院、立法院公開資料與委員會質詢紀錄（ly.gov.tw）<br>
+    ・審計部查核結果（透過立委質詢、公視新聞網報導揭露）<br>
+    ・政府電子採購網標案紀錄（經媒體調閱整理）<br>
+    ・中央社、聯合新聞網、自由時報、ETtoday財經雲等新聞報導（用於具體事件與金額查證）
+  </div>
+  僅供公眾參考整理，非正式法律文件；具體金額與條文請以政府公報及法規資料庫正式公告版本為準
+  <div class="src">最後整理：2026年6月｜Version 8.0</div>
+</footer>
+
+<script>
+const buttons = document.querySelectorAll('#tabnav button');
+const panels = document.querySelectorAll('.panel');
+buttons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    buttons.forEach(b=>b.classList.remove('active'));
+    panels.forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.p).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+</script>
+
+</body>
+</html>
