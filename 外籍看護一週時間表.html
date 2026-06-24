@@ -2706,50 +2706,126 @@ function buildWorkHoursStats() {
     { key:'s-craft', label:'手工藝/益智', cat:'leisure' },
     { key:'s-social', label:'家人/社交互動', cat:'leisure' },
   ];
-  let totalMins = 0, careMins = 0, cleanMins = 0, leisureMins = 0;
-  const slotRows = [];
+  // ── 依一週設定逐日統計 ──────────────────────────────────
+  // 每個時段都可限定執行日（slotDayRestrictions / 自訂時段的 days）；
+  // 空陣列＝每天。因此各天工時可能不同，需逐日累計，而非把所有時段加總一次。
+  const NEW_UI = {
+    zh:    { header:'每日工作時間統計', sub:'依一週設定統計', daysWord:'天', weekTotal:'每週總時數', weekTotalSub:'Weekly Total', dailyAvg:'每日平均', dailyAvgSub:'Daily Avg', cCare:'照護', cClean:'🧹打掃', cLeisure:'🎮休閒', cTotal:'合計', colDay:'星期', rowTotal:'每週總計', none:'尚未設定時段或天數 / No slots or days', avgNote:'平均＝每週總時數 ÷ 設定天數' },
+    'zh-id':{ header:'每日工作時間統計', sub:'依一週設定統計 / Per Pengaturan Mingguan', daysWord:'天', weekTotal:'每週總時數', weekTotalSub:'Total Mingguan', dailyAvg:'每日平均', dailyAvgSub:'Rata-rata Harian', cCare:'照護', cClean:'🧹打掃', cLeisure:'🎮休閒', cTotal:'合計', colDay:'星期', rowTotal:'每週總計 / Total', none:'尚未設定時段或天數 / Belum ada jadwal', avgNote:'平均＝每週總時數 ÷ 設定天數' },
+    'zh-vi':{ header:'每日工作時間統計', sub:'依一週設定統計 / Theo Cài Đặt Tuần', daysWord:'天', weekTotal:'每週總時數', weekTotalSub:'Tổng Tuần', dailyAvg:'每日平均', dailyAvgSub:'TB Mỗi Ngày', cCare:'照護', cClean:'🧹打掃', cLeisure:'🎮休閒', cTotal:'合計', colDay:'星期', rowTotal:'每週總計 / Tổng', none:'尚未設定時段或天數 / Chưa đặt lịch', avgNote:'平均＝每週總時數 ÷ 設定天數' },
+    'zh-en':{ header:'每日工作時間統計', sub:'依一週設定統計 / Based on Weekly Setup', daysWord:'天', weekTotal:'每週總時數', weekTotalSub:'Weekly Total', dailyAvg:'每日平均', dailyAvgSub:'Daily Avg', cCare:'照護', cClean:'🧹打掃', cLeisure:'🎮休閒', cTotal:'合計', colDay:'星期', rowTotal:'每週總計 / Total', none:'尚未設定時段或天數 / No slots or days', avgNote:'平均＝每週總時數 ÷ 設定天數' }
+  };
+  const ui = NEW_UI[lang] || NEW_UI.zh;
+  const DAY_LABEL = {
+    zh:    {1:'週一',2:'週二',3:'週三',4:'週四',5:'週五',6:'週六',0:'週日'},
+    'zh-id':{1:'週一/Sen',2:'週二/Sel',3:'週三/Rab',4:'週四/Kam',5:'週五/Jum',6:'週六/Sab',0:'週日/Min'},
+    'zh-vi':{1:'週一/T2',2:'週二/T3',3:'週三/T4',4:'週四/T5',5:'週五/T6',6:'週六/T7',0:'週日/CN'},
+    'zh-en':{1:'週一/Mon',2:'週二/Tue',3:'週三/Wed',4:'週四/Thu',5:'週五/Fri',6:'週六/Sat',0:'週日/Sun'}
+  };
+  const dayLab = DAY_LABEL[lang] || DAY_LABEL.zh;
+
+  const dayOrder = [1,2,3,4,5,6,0];
+  const activeDayVals = getChipVals('cfg-days').map(Number);
+  const activeDays = dayOrder.filter(d => activeDayVals.includes(d));
+  const customSlots = getCustomSlots();
+  const minsBetween = (s,e) => { if(!s||!e) return 0; const [sh,sm]=s.split(':').map(Number); const [eh,em]=e.split(':').map(Number); let m=(eh*60+em)-(sh*60+sm); if(m<0)m+=1440; return m; };
+
+  // 收集所有「已啟用且有時間」的時段：分鐘數、分類、限定執行日
+  const entries = [];
   ALL_SLOTS.forEach(s => {
     if (!getSecEnabled(s.key)) return;
     const mins = calcSlotMinutes(s.key);
-    totalMins += mins;
-    if (s.cat === 'clean') cleanMins += mins;
-    else if (s.cat === 'leisure') leisureMins += mins;
-    else careMins += mins;
-    if (mins > 0) {
-      const h = Math.floor(mins / 60), m = mins % 60;
-      const timeStr = h > 0 ? (m > 0 ? `${h}h${m}m` : `${h}h`) : `${m}m`;
-      slotRows.push(`<div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px dashed #e5e7eb;font-size:12px;">
-        <span style="color:#374151;">${s.label}${foreignLabels[s.label] ? '<span style="font-size:10px;color:#9ca3af;margin-left:4px;">/ '+foreignLabels[s.label]+'</span>' : ''}</span>
-        <span style="font-weight:600;color:#1a5276;">${timeStr}</span>
-      </div>`);
-    }
+    if (mins <= 0) return;
+    entries.push({ mins, cat: s.cat || 'care', days: (slotDayRestrictions[s.key] || []) });
   });
-  const fmtH = (m) => { const h=Math.floor(m/60), r=m%60; return h>0?(r>0?`${h} 小時 ${r} 分`:`${h} 小時`):`${r} 分鐘`; };
+  customSlots.forEach(cs => {
+    const mins = minsBetween(cs.s, cs.e);
+    if (mins <= 0) return;
+    entries.push({ mins, cat: 'care', days: (cs.days || []) });
+  });
+  const runsOn = (days, d) => days.length === 0 || days.includes(String(d));
+
+  // 逐日累計（只計算「該時段在當天執行」者）
+  const perDay = activeDays.map(d => {
+    let care=0, clean=0, leisure=0;
+    entries.forEach(en => {
+      if (!runsOn(en.days, d)) return;
+      if (en.cat === 'clean') clean += en.mins;
+      else if (en.cat === 'leisure') leisure += en.mins;
+      else care += en.mins;
+    });
+    return { d, care, clean, leisure, total: care+clean+leisure };
+  });
+  const weekTotal   = perDay.reduce((a,x)=>a+x.total,0);
+  const weekCare    = perDay.reduce((a,x)=>a+x.care,0);
+  const weekClean   = perDay.reduce((a,x)=>a+x.clean,0);
+  const weekLeisure = perDay.reduce((a,x)=>a+x.leisure,0);
+  const avgDaily    = activeDays.length ? Math.round(weekTotal / activeDays.length) : 0;
+
+  const fmtH = (m) => { if(m<=0) return '0'; const h=Math.floor(m/60), r=m%60; return h>0?(r>0?`${h} 小時 ${r} 分`:`${h} 小時`):`${r} 分鐘`; };
+  const fmtC = (m) => { if(m<=0) return '—'; const h=Math.floor(m/60), r=m%60; return h>0?(r>0?`${h}h${r}m`:`${h}h`):`${r}m`; };
+
+  if (activeDays.length === 0 || entries.length === 0) {
+    return `
+    <div style="margin-top:16px;border:1.5px solid #bfdbfe;border-radius:10px;overflow:hidden;">
+      <div style="background:#1d4ed8;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;">⏱️ ${ui.header} <span style="font-size:12px;font-weight:400;opacity:.85;">${ui.sub}</span></div>
+      <div style="font-size:12px;color:#9ca3af;text-align:center;padding:16px;">${ui.none}</div>
+    </div>`;
+  }
+
+  // 動態欄位：打掃 / 休閒 整週為 0 則隱藏該欄，避免雜訊
+  const cols = [{ key:'care', label: ui.cCare, color:'#059669' }];
+  if (weekClean   > 0) cols.push({ key:'clean',   label: ui.cClean,   color:'#047857' });
+  if (weekLeisure > 0) cols.push({ key:'leisure', label: ui.cLeisure, color:'#7c3aed' });
+
+  const headCells = cols.map(c => `<th style="padding:6px 8px;border:1px solid #d6e4ff;font-size:11px;font-weight:700;color:#1e3a8a;text-align:center;">${c.label}</th>`).join('')
+    + `<th style="padding:6px 8px;border:1px solid #d6e4ff;font-size:11px;font-weight:700;color:#1d4ed8;text-align:center;background:#dbeafe;">${ui.cTotal}</th>`;
+
+  const bodyRows = perDay.map(r => {
+    const cells = cols.map(c => `<td style="padding:5px 8px;border:1px solid #eef2ff;text-align:center;font-size:12px;color:${c.color};font-weight:600;">${fmtC(r[c.key])}</td>`).join('');
+    return `<tr>
+      <td style="padding:5px 8px;border:1px solid #eef2ff;font-size:12px;font-weight:700;color:#374151;white-space:nowrap;">${dayLab[r.d]}</td>
+      ${cells}
+      <td style="padding:5px 8px;border:1px solid #eef2ff;text-align:center;font-size:12px;font-weight:800;color:#1d4ed8;background:#f5f8ff;">${fmtC(r.total)}</td>
+    </tr>`;
+  }).join('');
+
+  const weekByKey = { care: weekCare, clean: weekClean, leisure: weekLeisure };
+  const totalCells = cols.map(c => `<td style="padding:6px 8px;border:1px solid #c7d8ff;text-align:center;font-size:12px;font-weight:800;color:${c.color};">${fmtC(weekByKey[c.key])}</td>`).join('');
+
   return `
   <div style="margin-top:16px;border:1.5px solid #bfdbfe;border-radius:10px;overflow:hidden;">
-    <div style="background:#1d4ed8;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;">
-      ⏱️ 每日工作時間統計 <span style="font-size:12px;font-weight:400;opacity:.85;letter-spacing:.2px;">${previewUI.statsSub}</span>
+    <div style="background:#1d4ed8;color:#fff;padding:10px 16px;font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      ⏱️ ${ui.header} <span style="font-size:12px;font-weight:400;opacity:.85;letter-spacing:.2px;">${ui.sub}（${activeDays.length} ${ui.daysWord}）</span>
     </div>
     <div style="padding:14px 16px;">
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:14px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px;">
         <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">每日合計<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.totalSub}</div></div>
-          <div style="font-size:18px;font-weight:900;color:#1d4ed8;">${fmtH(totalMins)}</div>
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">${ui.weekTotal}<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${ui.weekTotalSub}</div></div>
+          <div style="font-size:18px;font-weight:900;color:#1d4ed8;">${fmtH(weekTotal)}</div>
         </div>
-        <div style="background:#f0fdf4;border:1px solid #a7f3d0;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">照護工作<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.careSub}</div></div>
-          <div style="font-size:18px;font-weight:900;color:#059669;">${fmtH(careMins)}</div>
-        </div>
-        <div style="background:#f0fdf4;border:1px solid #6ee7b7;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🧹 打掃整理<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.cleanSub}</div></div>
-          <div style="font-size:18px;font-weight:900;color:#047857;">${fmtH(cleanMins)}</div>
-        </div>
-        <div style="background:#fdf4ff;border:1px solid #e9d5ff;border-radius:8px;padding:10px 12px;text-align:center;">
-          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">🎮 休閒陪伴<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${previewUI.leisureSub}</div></div>
-          <div style="font-size:18px;font-weight:900;color:#7c3aed;">${fmtH(leisureMins)}</div>
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:10px 12px;text-align:center;">
+          <div style="font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">${ui.dailyAvg}<div style="font-weight:400;font-size:9px;opacity:.75;text-transform:none;letter-spacing:.1px;">${ui.dailyAvgSub}</div></div>
+          <div style="font-size:18px;font-weight:900;color:#0369a1;">${fmtH(avgDaily)}</div>
         </div>
       </div>
-      ${slotRows.length > 0 ? `<details style="cursor:pointer;"><summary style="font-size:12px;font-weight:700;color:#374151;padding:4px 0;list-style:none;display:flex;align-items:center;gap:4px;"><span>▸</span> ${previewUI.details} / ${previewUI.detailsSub} (${slotRows.length} ${previewUI.itemUnit})</summary><div style="margin-top:8px;">${slotRows.join('')}</div></details>` : `<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px 0;">${previewUI.none}</div>`}
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#eff6ff;">
+            <th style="padding:6px 8px;border:1px solid #d6e4ff;font-size:11px;font-weight:700;color:#1e3a8a;text-align:left;">${ui.colDay}</th>
+            ${headCells}
+          </tr>
+        </thead>
+        <tbody>${bodyRows}</tbody>
+        <tfoot>
+          <tr style="background:#dbeafe;">
+            <td style="padding:6px 8px;border:1px solid #c7d8ff;font-size:12px;font-weight:800;color:#1e3a8a;">${ui.rowTotal}</td>
+            ${totalCells}
+            <td style="padding:6px 8px;border:1px solid #c7d8ff;text-align:center;font-size:12px;font-weight:900;color:#1d4ed8;">${fmtC(weekTotal)}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <div style="font-size:10px;color:#9ca3af;margin-top:8px;">💡 ${ui.avgNote}</div>
     </div>
   </div>`;
 }
@@ -3482,45 +3558,95 @@ function buildScheduleHTML() {
     const biName = slotDef ? blSlotName(slotDef.subKey) : null;
     return biName ? `<span class="bi-name">${biName}</span>` : esc(statSlot.label);
   }
-  let totalM=0, careM=0, cleanM=0, leisureM=0;
-  const statRows=[];
-  STAT_SLOTS.forEach(s => {
-    if (!getSecEnabled(s.key)) return;
-    const m = calcSlotMinsLocal(s.key);
-    totalM+=m; if(s.cat==='care')careM+=m; else if(s.cat==='clean')cleanM+=m; else leisureM+=m;
-    if(m>0) statRows.push(`<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;">${statLabelHtml(s)}</td><td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:600;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(m)}</td></tr>`);
+  // ── 依一週設定逐日統計（尊重每個時段的「限定執行日」與自訂時段的適用星期）──
+  const STAT_CAT = {};
+  STAT_SLOTS.forEach(s => { STAT_CAT[s.key] = s.cat; });
+  const statMinsBetween = (a, b) => { if(!a||!b) return 0; const [sh,sm]=a.split(':').map(Number); const [eh,em]=b.split(':').map(Number); let m=(eh*60+em)-(sh*60+sm); if(m<0)m+=1440; return m; };
+  // 已啟用時段（activeSlots 已含啟用內建＋全部自訂）→ 分鐘數、分類、限定執行日
+  const statEntries = [];
+  activeSlots.forEach(s => {
+    let m;
+    if (s.key.indexOf('custom-') === 0) {
+      const parts = (s.timeRange || '').split('–');
+      m = parts.length === 2 ? statMinsBetween(parts[0].trim(), parts[1].trim()) : 0;
+    } else {
+      m = calcSlotMinsLocal(s.key);
+    }
+    if (m <= 0) return;
+    statEntries.push({ m, cat: STAT_CAT[s.key] || 'care', days: s.days || [] });
   });
-  const statsHtml = statRows.length === 0 ? '' : `
+  const statRunsOn = (days, d) => days.length === 0 || days.includes(String(d));
+  const statPerDay = activeDays.map(d => {
+    let care=0, clean=0, leisure=0;
+    statEntries.forEach(en => {
+      if (!statRunsOn(en.days, d)) return;
+      if (en.cat === 'clean') clean += en.m;
+      else if (en.cat === 'leisure') leisure += en.m;
+      else care += en.m;
+    });
+    return { d, care, clean, leisure, total: care+clean+leisure };
+  });
+  const wkTotal   = statPerDay.reduce((a,x)=>a+x.total,0);
+  const wkCare    = statPerDay.reduce((a,x)=>a+x.care,0);
+  const wkClean   = statPerDay.reduce((a,x)=>a+x.clean,0);
+  const wkLeisure = statPerDay.reduce((a,x)=>a+x.leisure,0);
+  const wkAvg     = activeDays.length ? Math.round(wkTotal / activeDays.length) : 0;
+  const fmtMinsDash = (m) => m > 0 ? fmtMins(m) : '—';
+
+  const WK_LABEL = {
+    zh:    { weekTotal:'每週總時數', weekTotalSub:'Weekly Total', dailyAvg:'每日平均', dailyAvgSub:'Daily Avg', rowTotal:'每週總計', dayCol:'星期', statsCalc:'（依一週設定統計）' },
+    'zh-id':{ weekTotal:'每週總時數', weekTotalSub:'Total Mingguan', dailyAvg:'每日平均', dailyAvgSub:'Rata-rata Harian', rowTotal:'每週總計 / Total', dayCol:'星期 / Hari', statsCalc:'（依一週設定統計 / per pengaturan mingguan）' },
+    'zh-vi':{ weekTotal:'每週總時數', weekTotalSub:'Tổng Tuần', dailyAvg:'每日平均', dailyAvgSub:'TB Mỗi Ngày', rowTotal:'每週總計 / Tổng', dayCol:'星期 / Thứ', statsCalc:'（依一週設定統計 / theo cài đặt tuần）' },
+    'zh-en':{ weekTotal:'每週總時數', weekTotalSub:'Weekly Total', dailyAvg:'每日平均', dailyAvgSub:'Daily Avg', rowTotal:'每週總計 / Total', dayCol:'星期 / Day', statsCalc:'（依一週設定統計 / based on weekly setup）' }
+  };
+  const wkUI = WK_LABEL[lang] || WK_LABEL.zh;
+
+  // 動態欄位：整週為 0 的分類欄隱藏
+  const statCols = [{ key:'care', label: uiText.careWork, color:'#059669' }];
+  if (wkClean   > 0) statCols.push({ key:'clean',   label: '🧹 ' + uiText.cleanWork,   color:'#047857' });
+  if (wkLeisure > 0) statCols.push({ key:'leisure', label: '🎮 ' + uiText.leisureWork, color:'#7c3aed' });
+
+  const statHead = statCols.map(c => `<th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;">${c.label}</th>`).join('')
+    + `<th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:72px;">${uiText.hoursHeader}</th>`;
+  const statBody = statPerDay.map(r => {
+    const cells = statCols.map(c => `<td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-size:${fontSize-1}px;color:${c.color};font-weight:600;">${fmtMinsDash(r[c.key])}</td>`).join('');
+    return `<tr><td style="padding:3px 8px;border:1px solid #e5e7eb;font-size:${fontSize-1}px;font-weight:700;color:${t.pri};white-space:nowrap;">${(uiText.dayShort[r.d]||'')}</td>${cells}<td style="padding:3px 8px;border:1px solid #e5e7eb;text-align:center;font-weight:800;color:${t.pri};font-size:${fontSize-1}px;background:${t.hrow};">${fmtMinsDash(r.total)}</td></tr>`;
+  }).join('');
+  const wkByKey = { care: wkCare, clean: wkClean, leisure: wkLeisure };
+  const statTotalCells = statCols.map(c => `<td style="padding:4px 8px;border:1px solid #ccc;text-align:center;font-weight:800;color:${c.color};font-size:${fontSize-1}px;">${fmtMinsDash(wkByKey[c.key])}</td>`).join('');
+
+  const statsHtml = statEntries.length === 0 ? '' : `
 <div style="margin-top:14px;border:1.5px solid ${t.pri};border-radius:8px;overflow:hidden;page-break-inside:avoid;">
   <div style="background:${t.pri};color:#fff;padding:8px 14px;font-weight:700;font-size:${fontSize}px;display:flex;align-items:center;justify-content:space-between;">
     <span>⏱️ ${uiText.statsTitle} <span style="font-size:${fontSize-2}px;font-weight:400;opacity:.85;letter-spacing:.2px;">${uiText.statsSub}</span></span>
-    <span style="font-size:${fontSize-2}px;opacity:.8;">${uiText.statsCalc}</span>
+    <span style="font-size:${fontSize-2}px;opacity:.8;">${wkUI.statsCalc}</span>
   </div>
   <div style="padding:12px 14px;background:${t.alight};">
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;">
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${uiText.totalDaily}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.totalDailySub}</div></div>
-        <div style="font-size:${fontSize+3}px;font-weight:900;color:${t.pri};">${fmtMins(totalM)}</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${wkUI.weekTotal}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${wkUI.weekTotalSub}</div></div>
+        <div style="font-size:${fontSize+3}px;font-weight:900;color:${t.pri};">${fmtMins(wkTotal)}</div>
       </div>
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${uiText.careWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.careWorkSub}</div></div>
-        <div style="font-size:${fontSize+3}px;font-weight:900;color:#059669;">${fmtMins(careM)}</div>
-      </div>
-      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🧹 ${uiText.cleanWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.cleanWorkSub}</div></div>
-        <div style="font-size:${fontSize+3}px;font-weight:900;color:#047857;">${fmtMins(cleanM)}</div>
-      </div>
-      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:8px;text-align:center;">
-        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">🎮 ${uiText.leisureWork}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${uiText.leisureWorkSub}</div></div>
-        <div style="font-size:${fontSize+3}px;font-weight:900;color:#7c3aed;">${fmtMins(leisureM)}</div>
+        <div style="font-size:${fontSize-3}px;font-weight:700;color:#6b7280;text-transform:uppercase;margin-bottom:1px;">${wkUI.dailyAvg}<div style="font-size:${fontSize-4}px;font-weight:400;opacity:.75;text-transform:none;">${wkUI.dailyAvgSub} · ${activeDays.length} 天</div></div>
+        <div style="font-size:${fontSize+3}px;font-weight:900;color:${t.plight};">${fmtMins(wkAvg)}</div>
       </div>
     </div>
     <table style="width:100%;border-collapse:collapse;">
-      <tr style="background:${t.plight};color:#fff;">
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">${blUI ? blUI.headerSlot : '工作時段'}</th>
-        <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:center;width:80px;">${uiText.hoursHeader}</th>
-      </tr>
-      ${statRows.join('')}
+      <thead>
+        <tr style="background:${t.plight};color:#fff;">
+          <th style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;text-align:left;">${wkUI.dayCol}</th>
+          ${statHead}
+        </tr>
+      </thead>
+      <tbody>${statBody}</tbody>
+      <tfoot>
+        <tr style="background:${t.hrow};">
+          <td style="padding:4px 8px;border:1px solid #ccc;font-size:${fontSize-1}px;font-weight:800;color:${t.pri};">${wkUI.rowTotal}</td>
+          ${statTotalCells}
+          <td style="padding:4px 8px;border:1px solid #ccc;text-align:center;font-weight:900;color:${t.pri};font-size:${fontSize-1}px;">${fmtMins(wkTotal)}</td>
+        </tr>
+      </tfoot>
     </table>
   </div>
 </div>`;
