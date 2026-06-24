@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>中文語言學習平台 — 看護照顧用語</title><!-- v24.12 dedup + unique zh + all-2000 quiz + native zh quiz -->
+<title>中文語言學習平台 — 看護照顧用語</title><!-- v29 quiz lang + all-2000 vocab + zh/en/id/vi -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ===== RESPONSIVE OVERHAUL ===== */
@@ -400,6 +400,9 @@ body {
   touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
+  /* PERF: skip layout/paint for off-screen cards; remember measured size */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 200px;
 }
 .vcard::after {
   content: '';
@@ -747,6 +750,171 @@ body.learn-zh-mode .learn-zh-bar { display: flex; }
   line-height: 1;
 }
 
+/* ════════════════════════════════════════════
+   🎮 GAME MODE (詞彙大挑戰)
+   ════════════════════════════════════════════ */
+
+/* Mode toggle (練習 / 遊戲) */
+.quiz-mode-toggle {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  padding: 6px; max-width: 600px; margin-bottom: 8px;
+}
+.quiz-mode-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 6px; border: 2px solid transparent; border-radius: 10px;
+  background: var(--bg); cursor: pointer; transition: all .18s;
+  font-size: 14px; font-weight: 800; color: var(--ink-2);
+}
+.quiz-mode-btn .qm-emoji { font-size: 22px; }
+.quiz-mode-btn .qm-desc { font-size: 9.5px; font-weight: 600; color: var(--ink-3); }
+.quiz-mode-btn:hover { background: #fff; }
+.quiz-mode-btn.active {
+  color: #fff; border-color: transparent;
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  box-shadow: 0 4px 14px rgba(234,88,12,.32);
+}
+.quiz-mode-btn.active .qm-desc { color: rgba(255,255,255,.85); }
+.quiz-mode-btn.active.practice {
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  box-shadow: 0 4px 14px rgba(37,99,235,.3);
+}
+
+/* Game intro / start screen */
+.game-intro {
+  background: linear-gradient(160deg, #FFF7ED 0%, #FFFBEB 100%);
+  border: 2px solid #FED7AA; border-radius: 18px;
+  padding: 26px 22px; max-width: 600px; text-align: center;
+}
+.game-intro-icon { font-size: 54px; line-height: 1; margin-bottom: 6px; animation: gameFloat 2.4s ease-in-out infinite; }
+.game-intro-title { font-size: 24px; font-weight: 900; color: #C2410C; margin-bottom: 4px; }
+.game-intro-sub { font-size: 13px; color: var(--ink-3); margin-bottom: 18px; }
+.game-rules {
+  display: grid; gap: 8px; text-align: left; max-width: 360px; margin: 0 auto 20px;
+  background: rgba(255,255,255,.7); border: 1px solid #FED7AA; border-radius: 12px; padding: 14px 16px;
+}
+.game-rule { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.game-rule .gr-ic { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
+.game-best {
+  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px;
+  background: #fff; border: 1.5px solid #FCD34D; border-radius: 30px; padding: 7px 16px;
+  font-size: 13px; font-weight: 800; color: #B45309;
+}
+.game-start-btn {
+  border: none; border-radius: 14px; padding: 15px 40px; cursor: pointer;
+  background: linear-gradient(135deg, #F59E0B, #EA580C); color: #fff;
+  font-size: 17px; font-weight: 900; letter-spacing: .02em;
+  box-shadow: 0 6px 20px rgba(234,88,12,.4); transition: transform .15s, box-shadow .15s;
+}
+.game-start-btn:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 9px 26px rgba(234,88,12,.5); }
+.game-start-btn:active { transform: translateY(0) scale(.99); }
+
+/* Game HUD (top bar during play) */
+.game-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 18px;
+  padding: 18px 18px 22px; max-width: 600px; position: relative; overflow: hidden;
+  box-shadow: 0 4px 20px rgba(15,23,42,.06);
+}
+.game-card.shake { animation: gameShake .42s cubic-bezier(.36,.07,.19,.97) both; }
+.game-card.flash-good::before, .game-card.flash-bad::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0; animation: gameFlash .5s ease forwards;
+}
+.game-card.flash-good::before { background: radial-gradient(circle at center, rgba(22,163,74,.22), transparent 70%); }
+.game-card.flash-bad::before  { background: radial-gradient(circle at center, rgba(220,38,38,.20), transparent 70%); }
+.game-card > * { position: relative; z-index: 1; }
+
+.game-hud {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px;
+}
+.game-hearts { display: flex; gap: 3px; font-size: 19px; line-height: 1; }
+.game-heart { transition: transform .3s, opacity .3s; }
+.game-heart.lost { transform: scale(.5); opacity: .25; filter: grayscale(1); }
+.game-heart.pulse { animation: heartPulse .5s ease; }
+
+.game-score-box { text-align: center; flex: 1; }
+.game-score { font-size: 26px; font-weight: 900; color: #EA580C; line-height: 1; transition: transform .2s; }
+.game-score.bump { animation: scoreBump .32s ease; }
+.game-score-label { font-size: 9px; font-weight: 800; color: var(--ink-3); letter-spacing: .12em; text-transform: uppercase; }
+
+.game-combo {
+  display: flex; flex-direction: column; align-items: flex-end; min-width: 64px;
+}
+.game-combo-fire { font-size: 13px; font-weight: 900; color: #EA580C; line-height: 1; white-space: nowrap; }
+.game-combo-mult {
+  font-size: 11px; font-weight: 900; color: #fff; background: linear-gradient(135deg,#F59E0B,#EA580C);
+  border-radius: 8px; padding: 1px 7px; margin-top: 3px; opacity: 0; transform: scale(.6);
+  transition: opacity .2s, transform .2s;
+}
+.game-combo-mult.show { opacity: 1; transform: scale(1); }
+.game-combo-fire.combo-pop { animation: comboPop .4s ease; }
+
+/* Timer bar */
+.game-timer-track { height: 8px; background: var(--border); border-radius: 5px; overflow: hidden; margin-bottom: 14px; }
+.game-timer-fill { height: 100%; border-radius: 5px; transition: width .1s linear, background .3s; }
+
+/* Question + options reuse quiz styles, but add lift on hover */
+.game-card .quiz-opt { transition: all .14s; }
+.game-card .quiz-opt:hover { transform: translateY(-1px); }
+
+.game-question { font-size: 26px; font-weight: 900; color: var(--ink); text-align: center; margin: 6px 0 4px; }
+.game-emoji { font-size: 52px; text-align: center; display: block; margin: 6px 0 2px; }
+
+.game-floating-pts {
+  position: absolute; left: 50%; top: 40%; transform: translateX(-50%);
+  font-size: 26px; font-weight: 900; color: #16A34A; pointer-events: none; z-index: 20;
+  text-shadow: 0 2px 8px rgba(255,255,255,.9); animation: floatPts 1s ease forwards;
+}
+
+/* Game over / victory screen */
+.game-over-card {
+  background: #fff; border: 1px solid var(--border); border-radius: 18px;
+  padding: 28px 22px; max-width: 600px; text-align: center; position: relative; overflow: hidden;
+}
+.game-over-card.win  { background: linear-gradient(160deg,#F0FDF4,#ECFDF5); border-color:#BBF7D0; }
+.game-over-card.lose { background: linear-gradient(160deg,#FFF1F2,#FEF2F2); border-color:#FECACA; }
+.game-over-icon { font-size: 60px; line-height: 1; margin-bottom: 4px; animation: gameFloat 2.4s ease-in-out infinite; }
+.game-over-title { font-size: 26px; font-weight: 900; margin-bottom: 2px; }
+.game-over-card.win  .game-over-title { color: #15803D; }
+.game-over-card.lose .game-over-title { color: #DC2626; }
+.game-over-score { font-size: 46px; font-weight: 900; color: #EA580C; margin: 8px 0 2px; line-height: 1; }
+.game-newbest {
+  display: inline-block; background: linear-gradient(135deg,#F59E0B,#EA580C); color:#fff;
+  font-size: 12px; font-weight: 900; padding: 4px 14px; border-radius: 20px; margin-bottom: 10px;
+  animation: newBestPulse 1s ease infinite;
+}
+.game-stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 16px 0 20px; }
+.game-stat { background: rgba(255,255,255,.8); border: 1px solid var(--border); border-radius: 12px; padding: 12px 6px; }
+.game-stat-val { font-size: 22px; font-weight: 900; color: var(--ink); line-height: 1; }
+.game-stat-label { font-size: 10px; font-weight: 700; color: var(--ink-3); margin-top: 4px; }
+.game-over-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.game-over-btn {
+  border: none; border-radius: 12px; padding: 12px 22px; cursor: pointer;
+  font-size: 14px; font-weight: 800; transition: transform .14s;
+}
+.game-over-btn:hover { transform: translateY(-2px); }
+.game-over-btn.primary { background: linear-gradient(135deg,#F59E0B,#EA580C); color:#fff; box-shadow:0 4px 14px rgba(234,88,12,.35); }
+.game-over-btn.ghost { background:#fff; border:1.5px solid var(--border); color:var(--ink-2); }
+
+/* Sound toggle */
+.game-sound-toggle {
+  position: absolute; top: 14px; right: 14px; z-index: 5;
+  width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--border);
+  background: #fff; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center;
+}
+
+/* Confetti canvas */
+#gameFxCanvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; }
+
+/* Animations */
+@keyframes gameFloat { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+@keyframes gameShake { 10%,90%{transform:translateX(-2px);} 20%,80%{transform:translateX(4px);} 30%,50%,70%{transform:translateX(-7px);} 40%,60%{transform:translateX(7px);} }
+@keyframes gameFlash { 0%{opacity:.9;} 100%{opacity:0;} }
+@keyframes heartPulse { 0%,100%{transform:scale(1);} 40%{transform:scale(1.4);} }
+@keyframes scoreBump { 0%,100%{transform:scale(1);} 40%{transform:scale(1.22);} }
+@keyframes comboPop { 0%{transform:scale(1);} 40%{transform:scale(1.5) rotate(-4deg);} 100%{transform:scale(1);} }
+@keyframes floatPts { 0%{opacity:0;transform:translateX(-50%) translateY(10px) scale(.6);} 25%{opacity:1;transform:translateX(-50%) translateY(-8px) scale(1.1);} 100%{opacity:0;transform:translateX(-50%) translateY(-58px) scale(1);} }
+@keyframes newBestPulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.08);} }
+
 /* ── PROGRESS BAR ── */
 .progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
 .progress-bar { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
@@ -1073,6 +1241,14 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   .quiz-emoji { font-size: 40px; }
   .quiz-options { grid-template-columns: 1fr; gap: 8px; }
   .quiz-opt { padding: 11px 10px; font-size: 13px; }
+  .game-card { padding: 16px 14px 18px; }
+  .game-card .quiz-options { grid-template-columns: 1fr 1fr; }
+  .game-question { font-size: 22px; }
+  .game-emoji { font-size: 44px; }
+  .game-score { font-size: 22px; }
+  .game-intro { padding: 22px 16px; }
+  .game-intro-title { font-size: 21px; }
+  .game-over-score { font-size: 40px; }
 
   /* Bottom nav — show on mobile */
   .bottom-nav { display: flex; }
@@ -1546,6 +1722,121 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 .global-sec-head::after { content:""; flex:1; height:1px; background: var(--border); }
 .global-sec-head-name { color: var(--ink-2); }
 
+/* ════════════════════════════════════════════════
+   INTERFACE ENHANCEMENTS  (beautify · smoother · easier switching)
+════════════════════════════════════════════════ */
+
+/* ── Sticky section switcher: jump between vocab sets without leaving the page ── */
+.section-switcher {
+  position: sticky;
+  top: calc(var(--header-h) + 8px);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 16px;
+  padding: 7px;
+  background: rgba(255,255,255,.85);
+  -webkit-backdrop-filter: saturate(1.5) blur(10px);
+  backdrop-filter: saturate(1.5) blur(10px);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  box-shadow: 0 2px 12px rgba(15,23,42,.06);
+}
+.section-switcher:empty { display: none; }
+.sw-home, .sw-arrow {
+  flex-shrink: 0;
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--primary);
+  font-size: 17px; font-weight: 700; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s, color .15s, transform .12s, opacity .15s;
+  touch-action: manipulation;
+}
+.sw-home { font-size: 14px; }
+.sw-home:hover, .sw-arrow:hover:not(:disabled) {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+}
+.sw-home:active, .sw-arrow:active:not(:disabled) { transform: scale(.9); }
+.sw-arrow:disabled { opacity: .3; cursor: default; }
+.sw-track {
+  flex: 1; min-width: 0;
+  display: flex; gap: 6px;
+  overflow-x: auto;
+  padding: 2px;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.sw-track::-webkit-scrollbar { display: none; }
+.sw-chip {
+  flex-shrink: 0;
+  scroll-snap-align: center;
+  padding: 6px 13px;
+  border-radius: 20px;
+  font-size: 12px; font-weight: 600;
+  white-space: nowrap; cursor: pointer;
+  color: var(--primary);
+  background: #fff;
+  border: 1.5px solid var(--border);
+  transition: background .15s, color .15s, border-color .15s, transform .12s;
+  touch-action: manipulation;
+}
+.sw-chip:hover { background: var(--primary-light); border-color: var(--primary); }
+.sw-chip:active { transform: scale(.95); }
+.sw-chip.active {
+  background: var(--primary); color: #fff; border-color: var(--primary);
+  box-shadow: 0 2px 10px rgba(15,23,42,.18);
+}
+.sw-chip-badge { margin-left: 6px; font-size: 10px; font-weight: 600; opacity: .65; }
+.sw-chip.active .sw-chip-badge { opacity: .85; }
+
+@media (max-width: 640px) {
+  .section-switcher { top: calc(var(--header-h) + 6px); gap: 6px; padding: 6px; border-radius: 11px; }
+  .sw-home, .sw-arrow { width: 32px; height: 32px; font-size: 16px; }
+  .sw-chip { padding: 6px 11px; font-size: 12px; }
+}
+
+/* ── Smoother card entrance whenever a set loads ── */
+@keyframes cardsIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.cards-grid { animation: cardsIn .22s ease both; }
+
+/* ── Quieter micro-interactions for a more polished feel ── */
+.nav-btn { transition: background .15s, border-color .15s, transform .12s; }
+.nav-btn:hover { transform: translateY(-1px); }
+.nav-btn:active { transform: translateY(0) scale(.97); }
+.hero-btn { transition: transform .12s, box-shadow .15s, background .15s; }
+.hero-btn:active { transform: scale(.96); }
+.filter-btn:active, .page-tab:active { transform: scale(.97); }
+.vol-pick-chip:active { transform: scale(.95); }
+.sidebar-item { transition: background .14s, color .14s, padding-left .14s; }
+
+/* ── Visible keyboard focus (accessibility floor) ── */
+.lang-tab:focus-visible, .nav-btn:focus-visible, .page-tab:focus-visible,
+.filter-btn:focus-visible, .sw-home:focus-visible, .sw-arrow:focus-visible,
+.sw-chip:focus-visible, .vol-pick-chip:focus-visible, .vol-pick-more:focus-visible,
+.sidebar-item:focus-visible, .hero-btn:focus-visible, .bnav-item:focus-visible,
+.fc-btn:focus-visible, .fc-speak-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ── Respect reduced-motion preferences ── */
+@media (prefers-reduced-motion: reduce) {
+  .cards-grid { animation: none; }
+  .sw-track { scroll-behavior: auto; }
+  .nav-btn:hover, .hero-btn:active, .filter-btn:active, .page-tab:active,
+  .vol-pick-chip:active, .sw-chip:active, .sw-home:active, .sw-arrow:active { transform: none; }
+}
+
 </style>
 </head>
 <body class="lang-en">
@@ -1668,6 +1959,9 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
         <div class="module-title" id="moduleTitleEl">基本動作</div>
         <div class="module-sub" id="moduleSubEl">Basic Actions · Tindakan Dasar · Các hành động cơ bản</div>
       </div>
+
+      <!-- ── SECTION SWITCHER (quick vocab jumping, sticky) ── -->
+      <div class="section-switcher" id="sectionSwitcher" role="navigation" aria-label="詞彙單元切換"></div>
 
       <div class="stats-bar">
         <div class="stat-pill">
@@ -2233,7 +2527,7 @@ const SECTIONS = {
       },
       {
         "n": "1-39",
-        "e": "🤢",
+        "e": "🫃",
         "zh": "肚子",
         "en": "Stomach",
         "id": "Perut",
@@ -5859,7 +6153,7 @@ const SECTIONS = {
       },
       {
         "n": "4-77",
-        "e": "🤰",
+        "e": "😣",
         "zh": "胃痛",
         "en": "Stomachache",
         "id": "Sakit perut",
@@ -6996,7 +7290,7 @@ const SECTIONS = {
         "zh": "長柄穿鞋",
         "en": "Long-handled shoe horn",
         "id": "Alat bantu sepatu",
-        "vi": "Bàn chải giày cán dài",
+        "vi": "Đón giày cán dài",
         "ph": "LONG-HAND-led SHOE HORN",
         "ex": "\"Use the shoe horn to put on shoes.\""
       },
@@ -11564,7 +11858,7 @@ const SECTIONS = {
       },
       {
         "n": "10-16",
-        "e": "🤰",
+        "e": "🫃",
         "zh": "胃消化",
         "en": "Stomach",
         "id": "Perut",
@@ -11703,7 +11997,7 @@ const SECTIONS = {
       },
       {
         "n": "10-36",
-        "e": "🤰",
+        "e": "😣",
         "zh": "腹痛",
         "en": "Stomach ache",
         "id": "Sakit perut",
@@ -14941,7 +15235,7 @@ const SECTIONS = {
       },
       {
         "n": "13-37",
-        "e": "👂",
+        "e": "💭",
         "zh": "妄想",
         "en": "Delusions",
         "id": "Delusi",
@@ -14981,7 +15275,7 @@ const SECTIONS = {
       },
       {
         "n": "13-41",
-        "e": "👗",
+        "e": "💧",
         "zh": "失禁",
         "en": "Incontinence",
         "id": "Inkontinensia",
@@ -15021,7 +15315,7 @@ const SECTIONS = {
       },
       {
         "n": "13-45",
-        "e": "👖",
+        "e": "🫥",
         "zh": "失認症",
         "en": "Agnosia",
         "id": "Agnosia",
@@ -15649,8 +15943,8 @@ const SECTIONS = {
   "chr_vitals": {
     "zh": "生命徵象監測",
     "en": "Vital Signs Monitoring",
-    "id": "Kebersihan Pribadi",
-    "vi": "Vệ sinh cá nhân",
+    "id": "Pemantauan Tanda Vital",
+    "vi": "Theo dõi sinh hiệu",
     "sub": "Vital Signs Monitoring · Pemantauan Tanda Vital · Theo dõi sinh hiệu",
     "cards": [
       {
@@ -15868,8 +16162,8 @@ const SECTIONS = {
   "chr_cardio": {
     "zh": "心血管疾病照護",
     "en": "Cardiovascular Care",
-    "id": "Kebersihan Pribadi",
-    "vi": "Vệ sinh cá nhân",
+    "id": "Perawatan Kardiovaskular",
+    "vi": "Chăm sóc tim mạch",
     "sub": "Cardiovascular Care · Perawatan Kardiovaskular · Chăm sóc tim mạch",
     "cards": [
       {
@@ -16077,8 +16371,8 @@ const SECTIONS = {
   "chr_diabetes": {
     "zh": "糖尿病照護",
     "en": "Diabetes Care",
-    "id": "Kebersihan Pribadi",
-    "vi": "Vệ sinh cá nhân",
+    "id": "Perawatan Diabetes",
+    "vi": "Chăm sóc bệnh tiểu đường",
     "sub": "Diabetes Care · Perawatan Diabetes · Chăm sóc bệnh tiểu đường",
     "cards": [
       {
@@ -16296,8 +16590,8 @@ const SECTIONS = {
   "chr_resp": {
     "zh": "呼吸道疾病照護",
     "en": "Respiratory Care",
-    "id": "Kebersihan Pribadi",
-    "vi": "Vệ sinh cá nhân",
+    "id": "Perawatan Pernafasan",
+    "vi": "Chăm sóc hô hấp",
     "sub": "Respiratory Care · Perawatan Pernafasan · Chăm sóc hô hấp",
     "cards": [
       {
@@ -16505,8 +16799,8 @@ const SECTIONS = {
   "chr_renal": {
     "zh": "腎臟與泌尿道照護",
     "en": "Renal & Urinary Care",
-    "id": "Kebersihan Pribadi",
-    "vi": "Vệ sinh cá nhân",
+    "id": "Perawatan Ginjal & Saluran Kemih",
+    "vi": "Chăm sóc thận & tiết niệu",
     "sub": "Renal & Urinary Care · Perawatan Ginjal & Saluran Kemih · Chăm sóc thận & tiết niệu",
     "cards": [
       {
@@ -18410,7 +18704,7 @@ const SECTIONS = {
     "cards": [
       {
         "n": "16-71",
-        "e": "🌊",
+        "e": "🫨",
         "zh": "地震",
         "en": "Earthquake",
         "id": "Gempa bumi",
@@ -18450,7 +18744,7 @@ const SECTIONS = {
       },
       {
         "n": "16-75",
-        "e": "🔥",
+        "e": "🪨",
         "zh": "土石流",
         "en": "Landslide / Mudslide",
         "id": "Tanah longsor / Longsor lumpur",
@@ -23097,6 +23391,20 @@ let fcCards = [];
 let quizSettings = { quizLang: 'id', count: 10, source: 'section', level: '初級' };
 let quizState = { questions: [], index: 0, score: 0, answered: false, currentOptions: [], wrongCards: [], retryMode: false, sourceLabel: '', started: false };
 
+// ── 🎮 GAME MODE state ──
+let quizMode = 'practice'; // 'practice' | 'game'
+let gameState = {
+  phase: 'intro',        // 'intro' | 'play' | 'over'
+  questions: [], index: 0,
+  score: 0, lives: 3, maxLives: 3,
+  combo: 0, maxCombo: 0,
+  correct: 0, total: 0,
+  answered: false,
+  timeLeft: 0, timeMax: 0, timerId: null, questionStart: 0,
+  won: false
+};
+let gameSoundOn = (()=>{ try { return localStorage.getItem('gameSoundOn') !== '0'; } catch(e){ return true; } })();
+
 // ── Dynamic quiz levels based on chosen quiz language ──
 const QUIZ_LANG_META = {
   id: { flag: '🇮🇩', label: '印尼文',  langName: '印尼文', prop: 'id' },
@@ -23131,7 +23439,9 @@ function getActiveQuizLevels() { return getQuizLevels(quizSettings.quizLang); }
 // Runs once at startup to detect duplicate zh/id entries and empty fields
 (function validateVocab() {
   const zhSeen = new Map();
+  const enSeen = new Map();
   const idSeen = new Map();
+  const viSeen = new Map();
   let issues = 0;
   for (const [secKey, sec] of Object.entries(SECTIONS)) {
     for (const card of sec.cards) {
@@ -23146,6 +23456,27 @@ function getActiveQuizLevels() { return getQuizLevels(quizSettings.quizLang); }
           console.warn(`[Vocab] Duplicate zh "${card.zh}": ${card.n} vs ${zhSeen.get(card.zh)}`);
           issues++;
         } else { zhSeen.set(card.zh, card.n); }
+      }
+      // Check for duplicate en
+      if (card.en) {
+        if (enSeen.has(card.en)) {
+          console.warn(`[Vocab] Duplicate en "${card.en}": ${card.n} vs ${enSeen.get(card.en)}`);
+          issues++;
+        } else { enSeen.set(card.en, card.n); }
+      }
+      // Check for duplicate id
+      if (card.id) {
+        if (idSeen.has(card.id)) {
+          console.warn(`[Vocab] Duplicate id "${card.id}": ${card.n} vs ${idSeen.get(card.id)}`);
+          issues++;
+        } else { idSeen.set(card.id, card.n); }
+      }
+      // Check for duplicate vi
+      if (card.vi) {
+        if (viSeen.has(card.vi)) {
+          console.warn(`[Vocab] Duplicate vi "${card.vi}": ${card.n} vs ${viSeen.get(card.vi)}`);
+          issues++;
+        } else { viSeen.set(card.vi, card.n); }
       }
       // Check for special/garbage content
       if (card.zh && /^[%★※◆◇…]+$/.test(card.zh)) {
@@ -23185,7 +23516,8 @@ function save() {
 function updateMemoryPanel() {
   const mCount = Object.values(mastered).filter(Boolean).length;
   const sCount = Object.values(starred).filter(Boolean).length;
-  const lastSaved = localStorage.getItem('lastSaved');
+  let lastSaved = null;
+  try { lastSaved = localStorage.getItem('lastSaved'); } catch(e) { /* private/iframe mode - silent */ }
   const el = id => document.getElementById(id);
   if (el('memMasteredCount')) el('memMasteredCount').textContent = mCount;
   if (el('memStarredCount'))  el('memStarredCount').textContent  = sCount;
@@ -23423,6 +23755,7 @@ function setSection(sec, el) {
 
   const breadEl = document.getElementById('moduleBreadcrumb');
   if (breadEl) breadEl.innerHTML = (category ? category.name : '照護情境分類') + ' <span>›</span> <span class="section-name-breadcrumb">' + s.zh + '</span>';
+  renderSectionSwitcher();
   renderCards();
   updateStats();
   // Refresh quiz/progress if those tabs are currently visible
@@ -23482,11 +23815,15 @@ function getExpandedSearchTerms(query) {
 }
 
 function cardMatchesSearch(c, queryTerms) {
-  const cardSynonyms = SYNONYM_INDEX[c.zh] || [];
-  const haystack = [
-    c.zh, c.en, c.id, c.vi,
-    ...cardSynonyms
-  ].map(normalizeSearchText).join(' ');
+  let haystack = c._hay;
+  if (haystack === undefined) {
+    const cardSynonyms = SYNONYM_INDEX[c.zh] || [];
+    haystack = [
+      c.zh, c.en, c.id, c.vi,
+      ...cardSynonyms
+    ].map(normalizeSearchText).join(' ');
+    c._hay = haystack; // PERF: cache — card fields & synonyms never change
+  }
   return queryTerms.some(term => haystack.includes(term));
 }
 
@@ -23522,7 +23859,7 @@ function renderCards() {
     if (infoBar) {
       infoBar.style.display = '';
       infoBar.innerHTML = totalHits > 0
-        ? `<div class="global-search-bar">🔍 全局搜尋「<strong>${q}</strong>」${getSynonymSearchHint(queryTerms, q)}，找到 <strong>${totalHits}</strong> 個詞彙</div>`
+        ? `<div class="global-search-bar">🔍 全局搜尋「<strong>${escapeDedupHtml(q)}</strong>」${getSynonymSearchHint(queryTerms, q)}，找到 <strong>${totalHits}</strong> 個詞彙</div>`
         : '';
     }
     if (totalHits === 0) {
@@ -23564,11 +23901,14 @@ function escapeDedupHtml(value) {
   return String(value || '').replace(/[&<>"']/g, ch => map[ch]);
 }
 
+const VCARD_LANG_LABELS  = {zh:'中文', en:'英文', id:'印尼文', vi:'越南文'};
+const VCARD_LANG_LOCALES = {zh:'zh-TW', en:'en', id:'id', vi:'vi'};
+
 function renderCard(c) {
   const isMastered = mastered[c.n] ? 'mastered' : '';
   const isStarred  = starred[c.n]  ? 'active'   : '';
-  const langText = {zh: c.zh, en: c.en, id: c.id, vi: c.vi}[currentLang] || c.en;
-  const langLabel = {zh:'中文', en:'英文', id:'印尼文', vi:'越南文'}[currentLang];
+  const langText = c[currentLang] || c.en;
+  const langLabel = VCARD_LANG_LABELS[currentLang];
   const isRevealed = learnZhRevealed.has(c.n);
   const zhRevealedClass = isRevealed ? ' revealed' : '';
   // In learn-zh-mode, clicking the card reveals zh (not toggle-mastered)
@@ -23580,7 +23920,7 @@ function renderCard(c) {
       <div class="vcard-num">${c.n}</div>
       <div class="vcard-star ${isStarred}" onclick="toggleStar(event,'${c.n}')">★</div>
       <div class="vcard-emoji">${c.e}</div>
-      <div class="vcard-zh${zhRevealedClass}" data-zh="${c.zh.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${isRevealed ? c.zh : ''}</div>
+      <div class="vcard-zh${zhRevealedClass}" data-zh="${c.zh.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${learnZhMode && !isRevealed ? '' : escapeDedupHtml(c.zh)}</div>
       <div class="vcard-divider"></div>
       <div class="vcard-en">${c.en}</div>
       <div class="vcard-id">${c.id}</div>
@@ -23590,36 +23930,44 @@ function renderCard(c) {
       <div class="vcard-learn-hint">👆 點擊顯示中文</div>
       <div class="vcard-speak">
         <button class="speak-btn speak-zh" data-speak-text="${c.zh.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" data-speak-locale="zh-TW" onclick="speakVcardLang(event,this)" title="發音：中文">中文</button>
-        <button class="speak-btn speak-lang" data-speak-text="${langText.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-speak-locale="${{zh:'zh-TW',en:'en',id:'id',vi:'vi'}[currentLang]||'en'}" onclick="speakVcardLang(event,this)" title="發音：${langLabel}">${langLabel}</button>
+        <button class="speak-btn speak-lang" data-speak-text="${langText.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-speak-locale="${VCARD_LANG_LOCALES[currentLang]||'en'}" onclick="speakVcardLang(event,this)" title="發音：${langLabel}">${langLabel}</button>
       </div>
     </div>
   `;
+}
+
+function _rerenderCardsPreserveScroll() {
+  const mainEl = document.querySelector('.main');
+  const scrollY = window.scrollY;
+  const mainScrollY = mainEl ? mainEl.scrollTop : 0;
+  renderCards();
+  window.scrollTo(0, scrollY);
+  if (mainEl) mainEl.scrollTop = mainScrollY;
 }
 
 function toggleMastered(n) {
   mastered[n] = !mastered[n];
   save();
   if (mastered[n]) recordLearningDay();
-  const mainEl = document.querySelector('.main');
-  const scrollY = window.scrollY;
-  const mainScrollY = mainEl ? mainEl.scrollTop : 0;
-  renderCards();
-  updateStats();
-  window.scrollTo(0, scrollY);
-  if (mainEl) mainEl.scrollTop = mainScrollY;
+  // PERF: with "new only" filter on, membership can change → full re-render needed
+  if (filterNew) { _rerenderCardsPreserveScroll(); updateStats(); return; }
+  // Fast path: flip the single card's class instead of rebuilding the whole grid
+  const el = document.getElementById('card-' + String(n).replace(/-/g, ''));
+  if (el) { el.classList.toggle('mastered', !!mastered[n]); updateStats(); }
+  else { _rerenderCardsPreserveScroll(); updateStats(); }
 }
 
 function toggleStar(e, n) {
   e.stopPropagation();
   starred[n] = !starred[n];
   save();
-  const mainEl = document.querySelector('.main');
-  const scrollY = window.scrollY;
-  const mainScrollY = mainEl ? mainEl.scrollTop : 0;
-  renderCards();
-  updateStats();
-  window.scrollTo(0, scrollY);
-  if (mainEl) mainEl.scrollTop = mainScrollY;
+  // PERF: with "starred only" filter on, membership can change → full re-render needed
+  if (filterStar) { _rerenderCardsPreserveScroll(); updateStats(); return; }
+  // Fast path: flip only this card's star class
+  const el = document.getElementById('card-' + String(n).replace(/-/g, ''));
+  const star = el && el.querySelector('.vcard-star');
+  if (star) { star.classList.toggle('active', !!starred[n]); updateStats(); }
+  else { _rerenderCardsPreserveScroll(); updateStats(); }
 }
 
 function filterCards() {
@@ -23955,6 +24303,57 @@ function expandVolChips(btn, secKeys, col) {
   btn.remove();
 }
 
+/* ── SECTION SWITCHER (quick vocab jumping) ── */
+let _flatSections = null;
+function getFlatSections() {
+  if (_flatSections) return _flatSections;
+  const seen = new Set();
+  _flatSections = [];
+  for (const cat of CATEGORY_META) {
+    for (const sk of cat.sections) {
+      if (SECTIONS[sk] && !seen.has(sk)) { seen.add(sk); _flatSections.push(sk); }
+    }
+  }
+  return _flatSections;
+}
+
+function renderSectionSwitcher() {
+  const host = document.getElementById('sectionSwitcher');
+  if (!host) return;
+  const cat = getCategoryForSection(currentSection);
+  const sibs = (cat ? cat.sections : [currentSection]).filter(sk => SECTIONS[sk]);
+  const flat = getFlatSections();
+  const gi = flat.indexOf(currentSection);
+  const prevDis = gi <= 0 ? 'disabled' : '';
+  const nextDis = (gi < 0 || gi >= flat.length - 1) ? 'disabled' : '';
+  const chips = sibs.map(sk => {
+    const s = SECTIONS[sk];
+    const active = sk === currentSection ? ' active' : '';
+    return `<button class="sw-chip${active}" data-sec="${sk}" onclick="setSection('${sk}')" title="${s.zh}（${s.cards.length} 詞）">${s.zh}<span class="sw-chip-badge">${s.cards.length}</span></button>`;
+  }).join('');
+  host.innerHTML =
+    `<button class="sw-home" onclick="showHomePage()" title="回到分類選單" aria-label="回到分類選單">▦</button>`
+    + `<button class="sw-arrow" ${prevDis} onclick="gotoAdjacentSection(-1)" title="上一個單元" aria-label="上一個單元">‹</button>`
+    + `<div class="sw-track" id="swTrack">${chips}</div>`
+    + `<button class="sw-arrow" ${nextDis} onclick="gotoAdjacentSection(1)" title="下一個單元" aria-label="下一個單元">›</button>`;
+  // Center the active chip in the scrollable track
+  const track = document.getElementById('swTrack');
+  const activeChip = track && track.querySelector('.sw-chip.active');
+  if (track && activeChip) {
+    const target = activeChip.offsetLeft - track.clientWidth / 2 + activeChip.offsetWidth / 2;
+    track.scrollTo({ left: Math.max(0, target), behavior: 'auto' });
+  }
+}
+
+function gotoAdjacentSection(dir) {
+  const flat = getFlatSections();
+  const gi = flat.indexOf(currentSection);
+  if (gi < 0) return;
+  const ni = gi + dir;
+  if (ni < 0 || ni >= flat.length) return;
+  setSection(flat[ni]);
+}
+
 function showHomePage() {
   document.getElementById('homeView').style.display = '';
   document.getElementById('sectionView').style.display = 'none';
@@ -24002,6 +24401,7 @@ function updateStats() {
 }
 
 function switchPageTab(name) {
+  if (name !== 'quiz') { if (typeof stopGameTimer === 'function') stopGameTimer(); }
   document.querySelectorAll('.page-tab').forEach((t) => {
     t.classList.toggle('active', t.dataset.tab === name);
   });
@@ -24103,6 +24503,7 @@ function getQuizLangLabel() {
 function setQuizLang(ql) {
   quizSettings.quizLang = ql;
   // If current level uses old language prop in question/answer, keep level name but data will update
+  if (quizMode === 'game') { resetGameToIntro(); renderQuiz(); return; }
   startQuiz();
 }
 
@@ -24208,7 +24609,21 @@ function renderQuizControls(poolSize) {
     </button>`;
   }).join('');
 
-  return `
+  const modeToggleHtml = `
+    <div class="quiz-mode-toggle">
+      <button class="quiz-mode-btn practice${quizMode==='practice'?' active':''}" onclick="setQuizMode('practice')">
+        <span class="qm-emoji">📝</span>
+        <span>練習模式</span>
+        <span class="qm-desc">逐題作答 · 看詳解</span>
+      </button>
+      <button class="quiz-mode-btn${quizMode==='game'?' active':''}" onclick="setQuizMode('game')">
+        <span class="qm-emoji">🎮</span>
+        <span>遊戲闖關</span>
+        <span class="qm-desc">限時 · 連擊 · 愛心</span>
+      </button>
+    </div>`;
+
+  return modeToggleHtml + `
     <div style="background:#fff;border:1px solid var(--border);border-radius:14px;padding:6px 10px 8px;max-width:600px;margin-bottom:8px;">
       <div style="font-size:10px;font-weight:800;color:var(--ink-3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;padding:0 4px;">🌐 學習語言</div>
       <div class="quiz-level-tabs" style="margin-bottom:0;">${qlTabsHtml}</div>
@@ -24234,6 +24649,7 @@ function renderQuizControls(poolSize) {
 
 function setQuizLevel(level) {
   quizSettings.level = level;
+  if (quizMode === 'game') { resetGameToIntro(); renderQuiz(); return; }
   startQuiz();
 }
 
@@ -24242,6 +24658,8 @@ function startQuiz() {
   const countEl  = document.getElementById('quizCountSelect');
   if (sourceEl) quizSettings.source = sourceEl.value;
   if (countEl)  quizSettings.count  = countEl.value;
+
+  if (quizMode === 'game') { resetGameToIntro(); renderQuiz(); return; }
 
   const lv   = getCurrentLevel();
   const prop = lv.answerProp;
@@ -24303,6 +24721,11 @@ function renderQuiz() {
 
   if (pool.length < 4) {
     container.innerHTML = controls + '<div class="coming-soon"><div class="cs-icon">📝</div><h3>此單元詞彙不足</h3><p>請選擇包含更多詞彙的單元</p></div>';
+    return;
+  }
+
+  if (quizMode === 'game') {
+    renderGame(container, controls, lv, pool);
     return;
   }
 
@@ -24491,6 +24914,450 @@ function checkAnswer(el, selected, correct, langProp) {
       : '';
     actions.innerHTML = `${replayBtn}<button class="quiz-next-btn" onclick="nextQuizQuestion()">${isLast ? '📊 看結果' : '下一題 →'}</button>`;
   }
+}
+
+// ════════════════════════════════════════════
+// 🎮 GAME MODE LOGIC (詞彙大挑戰)
+// ════════════════════════════════════════════
+
+function setQuizMode(mode) {
+  if (quizMode === mode) return;
+  stopGameTimer();
+  quizMode = mode;
+  if (mode === 'game') resetGameToIntro();
+  renderQuiz();
+}
+
+function resetGameToIntro() {
+  stopGameTimer();
+  gameState.phase = 'intro';
+  gameState.answered = false;
+}
+
+// time per question depends on level difficulty
+function gameTimePerQuestion(lv) {
+  if (lv.questionProp === 'ex')    return 14; // 情境填空
+  if (lv.questionProp === 'audio') return 12; // 聽音辨字
+  return 9;                                   // 看字選字
+}
+
+function gameComboMult(combo) {
+  if (combo >= 12) return 4;
+  if (combo >= 8)  return 3;
+  if (combo >= 4)  return 2;
+  return 1;
+}
+
+function getGameHighScore() { try { return parseInt(localStorage.getItem('gameHighScore') || '0', 10) || 0; } catch(e){ return 0; } }
+function getGameBestCombo() { try { return parseInt(localStorage.getItem('gameBestCombo') || '0', 10) || 0; } catch(e){ return 0; } }
+
+function renderGame(container, controls, lv, pool) {
+  if (gameState.phase === 'play') { renderGamePlay(container, controls, lv); return; }
+  if (gameState.phase === 'over') { renderGameOver(container, controls, lv); return; }
+  // intro
+  const best = getGameHighScore();
+  const bestCombo = getGameBestCombo();
+  const count = getQuizCountValue(pool.length);
+  const secs = gameTimePerQuestion(lv);
+  container.innerHTML = controls + `
+    <div class="game-intro">
+      <div class="game-intro-icon">🎮</div>
+      <div class="game-intro-title">詞彙大挑戰</div>
+      <div class="game-intro-sub">${lv.emoji} ${lv.name}・${getQuizLangLabel()}　·　${getQuizSourceLabel()}　·　${count} 題</div>
+      ${best > 0 ? `<div class="game-best">🏆 最高分 ${best.toLocaleString()}　·　🔥 最佳連擊 ${bestCombo}</div>` : ''}
+      <div class="game-rules">
+        <div class="game-rule"><span class="gr-ic">❤️</span>你有 <b>3 顆愛心</b>，答錯或超時扣一顆</div>
+        <div class="game-rule"><span class="gr-ic">⏱️</span>每題限時 <b>${secs} 秒</b>，越快答對分數越高</div>
+        <div class="game-rule"><span class="gr-ic">🔥</span>連續答對累積<b>連擊</b>，分數倍率最高 <b>×4</b></div>
+        <div class="game-rule"><span class="gr-ic">🏆</span>愛心歸零或答完全部題目即結算</div>
+      </div>
+      <button class="game-start-btn" onclick="startGame()">▶ 開始挑戰</button>
+    </div>
+  `;
+}
+
+function startGame() {
+  const lv   = getCurrentLevel();
+  const prop = lv.answerProp;
+  const pool = getQuizPool();
+  if (pool.length < 4) { renderQuiz(); return; }
+  const count = getQuizCountValue(pool.length);
+  gameState = {
+    phase: 'play',
+    questions: shuffleCards(pool).slice(0, count).map(card => ({
+      correct: card,
+      options: buildQuizOptions(card, pool, prop)
+    })),
+    index: 0,
+    score: 0, lives: 3, maxLives: 3,
+    combo: 0, maxCombo: 0,
+    correct: 0, total: count,
+    answered: false,
+    timeLeft: 0, timeMax: 0, timerId: null, questionStart: 0,
+    won: false
+  };
+  gameAudioInit();
+  renderQuiz();
+}
+
+function stopGameTimer() {
+  if (gameState.timerId) { clearInterval(gameState.timerId); gameState.timerId = null; }
+}
+
+function startGameTimer(lv) {
+  stopGameTimer();
+  gameState.timeMax  = gameTimePerQuestion(lv);
+  gameState.timeLeft = gameState.timeMax;
+  gameState.questionStart = Date.now();
+  updateGameTimerBar();
+  gameState.timerId = setInterval(() => {
+    const elapsed = (Date.now() - gameState.questionStart) / 1000;
+    gameState.timeLeft = Math.max(0, gameState.timeMax - elapsed);
+    updateGameTimerBar();
+    if (gameState.timeLeft <= 0) { stopGameTimer(); gameTimeout(); }
+  }, 100);
+}
+
+function updateGameTimerBar() {
+  const fill = document.getElementById('gameTimerFill');
+  if (!fill) return;
+  const frac = gameState.timeMax ? gameState.timeLeft / gameState.timeMax : 0;
+  fill.style.width = (frac * 100) + '%';
+  fill.style.background = frac > 0.5 ? '#16A34A' : frac > 0.25 ? '#F59E0B' : '#DC2626';
+}
+
+function renderGamePlay(container, controls, lv) {
+  const item    = gameState.questions[gameState.index];
+  const correct = item.correct;
+  const options = item.options;
+  const prop    = lv.answerProp;
+  const progressText = (gameState.index + 1) + ' / ' + gameState.questions.length;
+
+  // question body by level (mirrors practice quiz)
+  let questionBodyHtml = '';
+  if (lv.questionProp === 'audio') {
+    questionBodyHtml = `
+      <div class="quiz-audio-hint">點擊播放，仔細聆聽中文發音</div>
+      <button class="quiz-audio-play" id="quizAudioBtn" onclick="replayGameAudio()">
+        <span class="play-icon">🔊</span> 播放語音
+      </button>
+      <div style="font-size:12px;color:var(--ink-3);text-align:center;margin-bottom:4px;">選出您聽到的詞：</div>`;
+  } else if (lv.questionProp === 'ex') {
+    const contextSentence = buildContextSentence(correct);
+    const _qlPropEx = QUIZ_LANG_META[quizSettings.quizLang]?.prop || 'id';
+    const _qlLabelEx = QUIZ_LANG_META[quizSettings.quizLang]?.langName || '印尼文';
+    const langHint = correct[_qlPropEx] ? correct[_qlPropEx] : '';
+    questionBodyHtml = `
+      <span class="game-emoji">${correct.e}</span>
+      <div class="quiz-context-box">
+        <div class="quiz-context-label">💬 情境對話</div>
+        <div class="quiz-context-sentence">${escapeDedupHtml(contextSentence)}</div>
+        ${langHint ? `<div class="quiz-context-id">${_qlLabelEx}提示：${escapeDedupHtml(langHint)}</div>` : ''}
+      </div>`;
+  } else {
+    questionBodyHtml = `
+      <span class="game-emoji">${correct.e}</span>
+      <div class="game-question">${escapeDedupHtml(getQuizQuestionText(correct))}</div>`;
+  }
+
+  const hearts = Array.from({length: gameState.maxLives}, (_, i) =>
+    `<span class="game-heart${i >= gameState.lives ? ' lost' : ''}" data-h="${i}">❤️</span>`).join('');
+  const mult = gameComboMult(gameState.combo);
+
+  container.innerHTML = controls + `
+    <div class="game-card" id="gameCard">
+      <button class="game-sound-toggle" id="gameSoundBtn" onclick="toggleGameSound()" title="音效開關">${gameSoundOn ? '🔊' : '🔇'}</button>
+      <div class="game-hud">
+        <div class="game-hearts" id="gameHearts">${hearts}</div>
+        <div class="game-score-box">
+          <div class="game-score" id="gameScore">${gameState.score.toLocaleString()}</div>
+          <div class="game-score-label">分數</div>
+        </div>
+        <div class="game-combo">
+          <div class="game-combo-fire" id="gameComboFire">${gameState.combo > 0 ? '🔥 '+gameState.combo+' 連擊' : '　'}</div>
+          <div class="game-combo-mult${mult > 1 ? ' show' : ''}" id="gameComboMult">×${mult}</div>
+        </div>
+      </div>
+      <div class="game-timer-track"><div class="game-timer-fill" id="gameTimerFill" style="width:100%;background:#16A34A;"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--ink-3);margin-bottom:6px;">
+        <span style="font-weight:800;color:${lv.color};">${lv.emoji} ${lv.name}</span>
+        <span>題目 ${progressText}</span>
+      </div>
+      <div style="font-size:13px;color:var(--ink-3);margin-bottom:8px;text-align:center;">${getQuizPromptText()}</div>
+      ${questionBodyHtml}
+      <div class="quiz-options">
+        ${options.map((o, idx) => `<button class="quiz-opt" data-n="${escapeDedupHtml(o.n)}" data-correct="${escapeDedupHtml(correct.n)}" data-prop="${prop}"><span class="quiz-opt-num">${idx+1}</span>${escapeDedupHtml(o[prop])}</button>`).join('')}
+      </div>
+      <div class="quiz-result" id="gameResult" style="min-height:20px;"></div>
+    </div>
+  `;
+
+  const card = document.getElementById('gameCard');
+  card.addEventListener('click', function(e) {
+    const btn = e.target.closest('.quiz-opt');
+    if (!btn || gameState.answered) return;
+    checkGameAnswer(btn, btn.dataset.n, btn.dataset.correct, btn.dataset.prop);
+  });
+
+  gameState.answered = false;
+  if (lv.questionProp === 'audio') setTimeout(() => speakQuizWord(correct.zh), 300);
+  startGameTimer(lv);
+}
+
+function replayGameAudio() {
+  const item = gameState.questions[gameState.index];
+  if (item) speakQuizWord(item.correct.zh);
+}
+
+function gameTimeout() {
+  if (gameState.answered) return;
+  gameState.answered = true;
+  document.querySelectorAll('#gameCard .quiz-opt').forEach(b => b.style.pointerEvents = 'none');
+  loseGameLife('⏱️ 時間到！');
+}
+
+function checkGameAnswer(el, selected, correct, langProp) {
+  if (gameState.answered) return;
+  gameState.answered = true;
+  stopGameTimer();
+  document.querySelectorAll('#gameCard .quiz-opt').forEach(b => b.style.pointerEvents = 'none');
+  if (window.speechSynthesis) speechSynthesis.cancel();
+
+  const card = gameState.questions[gameState.index].correct;
+
+  if (selected === correct) {
+    el.classList.add('correct');
+    gameState.correct++;
+    gameState.combo++;
+    gameState.maxCombo = Math.max(gameState.maxCombo, gameState.combo);
+    // scoring: base + speed bonus, times combo multiplier
+    const mult = gameComboMult(gameState.combo);
+    const speedBonus = Math.round(gameState.timeLeft / gameState.timeMax * 100); // 0–100
+    const gained = Math.round((100 + speedBonus) * mult);
+    gameState.score += gained;
+    mastered[correct] = true; save();
+    recordQuizAnswer(true);
+
+    playGameSound('correct');
+    flashGameCard('good');
+    floatPoints('+' + gained, '#16A34A');
+    bumpScore();
+    updateHud();
+
+    // combo milestones
+    if (gameState.combo > 0 && gameState.combo % 4 === 0) {
+      playGameSound('combo');
+      fireConfetti(gameState.combo >= 8 ? 70 : 40);
+      showToast('🔥 ' + gameState.combo + ' 連擊！倍率 ×' + mult);
+    }
+    document.getElementById('gameResult').innerHTML = `<span style="color:#16A34A;font-weight:800;">✓ 正確 +${gained}</span>`;
+    setTimeout(() => advanceGame(), 750);
+  } else {
+    el.classList.add('wrong');
+    document.querySelectorAll('#gameCard .quiz-opt').forEach(b => { if (b.getAttribute('data-n') === correct) b.classList.add('correct'); });
+    recordQuizAnswer(false);
+    const _ql = QUIZ_LANG_META[quizSettings.quizLang]?.prop || 'id';
+    const ansLabel = card[langProp] || '';
+    let extra = `正確答案：<strong style="color:#15803D">${escapeDedupHtml(ansLabel)}</strong>`;
+    if (langProp === 'zh') extra += ` (${escapeDedupHtml(card[_ql] || card.id || '')})`;
+    document.getElementById('gameResult').innerHTML = `<span style="color:#DC2626;font-weight:800;">✗ 答錯</span> <span style="font-size:12px;color:var(--ink-3);">${extra}</span>`;
+    loseGameLife('');
+  }
+}
+
+function loseGameLife(prefixMsg) {
+  gameState.combo = 0;
+  gameState.lives--;
+  playGameSound('wrong');
+  flashGameCard('bad');
+  const card = document.getElementById('gameCard');
+  if (card) card.classList.add('shake');
+  // animate the heart that was lost
+  const hearts = document.querySelectorAll('#gameHearts .game-heart');
+  const lostIdx = gameState.lives; // index now empty
+  if (hearts[lostIdx]) { hearts[lostIdx].classList.add('pulse'); setTimeout(()=>hearts[lostIdx].classList.add('lost'), 120); }
+  updateHud();
+  if (prefixMsg && !document.getElementById('gameResult').innerHTML) {
+    const correctCard = gameState.questions[gameState.index].correct;
+    const prop = getCurrentLevel().answerProp;
+    document.querySelectorAll('#gameCard .quiz-opt').forEach(b => { if (b.getAttribute('data-n') === correctCard.n) b.classList.add('correct'); });
+    document.getElementById('gameResult').innerHTML = `<span style="color:#DC2626;font-weight:800;">${prefixMsg}</span> <span style="font-size:12px;color:var(--ink-3);">正確答案：<strong style="color:#15803D">${escapeDedupHtml(correctCard[prop]||'')}</strong></span>`;
+  }
+  setTimeout(() => {
+    if (gameState.lives <= 0) endGame(false);
+    else advanceGame();
+  }, 1050);
+}
+
+function advanceGame() {
+  const card = document.getElementById('gameCard');
+  const proceed = () => {
+    gameState.index++;
+    gameState.answered = false;
+    if (gameState.index >= gameState.questions.length) endGame(true);
+    else renderQuiz();
+  };
+  if (card) { card.classList.add('exit'); setTimeout(proceed, 140); }
+  else proceed();
+}
+
+function endGame(finishedAll) {
+  stopGameTimer();
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  gameState.won = finishedAll && gameState.lives > 0;
+  gameState.phase = 'over';
+  // save records
+  let newBest = false;
+  try {
+    if (gameState.score > getGameHighScore()) { localStorage.setItem('gameHighScore', String(gameState.score)); newBest = true; }
+    if (gameState.maxCombo > getGameBestCombo()) localStorage.setItem('gameBestCombo', String(gameState.maxCombo));
+  } catch(e){}
+  gameState._newBest = newBest;
+  if (gameState.won) { playGameSound('win'); fireConfetti(140); }
+  else playGameSound('lose');
+  renderQuiz();
+}
+
+function renderGameOver(container, controls, lv) {
+  const total    = gameState.total;
+  const answered = gameState.correct + (gameState.maxLives - gameState.lives);
+  const acc = answered ? Math.round(gameState.correct / answered * 100) : 0;
+  const win = gameState.won;
+  const icon  = win ? (gameState.lives === gameState.maxLives ? '🏆' : '🎉') : '💪';
+  const title = win ? (gameState.lives === gameState.maxLives ? '完美通關！' : '挑戰成功！') : '挑戰結束';
+  container.innerHTML = controls + `
+    <div class="game-over-card ${win ? 'win' : 'lose'}">
+      <div class="game-over-icon">${icon}</div>
+      <div class="game-over-title">${title}</div>
+      <div class="game-over-score">${gameState.score.toLocaleString()}</div>
+      ${gameState._newBest ? '<div class="game-newbest">🎊 個人新紀錄！</div>' : `<div style="font-size:12px;color:var(--ink-3);margin-bottom:8px;">最高分 ${getGameHighScore().toLocaleString()}</div>`}
+      <div class="game-stats-grid">
+        <div class="game-stat"><div class="game-stat-val" style="color:#16A34A;">${gameState.correct}</div><div class="game-stat-label">答對題數</div></div>
+        <div class="game-stat"><div class="game-stat-val" style="color:#EA580C;">🔥 ${gameState.maxCombo}</div><div class="game-stat-label">最高連擊</div></div>
+        <div class="game-stat"><div class="game-stat-val">${acc}%</div><div class="game-stat-label">正確率</div></div>
+      </div>
+      <div class="game-over-actions">
+        <button class="game-over-btn primary" onclick="startGame()">🔄 再挑戰一次</button>
+        <button class="game-over-btn ghost" onclick="resetGameToIntro();renderQuiz();">⚙️ 調整設定</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── HUD update helpers ──
+function updateHud() {
+  const sc = document.getElementById('gameScore');
+  if (sc) sc.textContent = gameState.score.toLocaleString();
+  const fire = document.getElementById('gameComboFire');
+  if (fire) {
+    fire.innerHTML = gameState.combo > 0 ? '🔥 ' + gameState.combo + ' 連擊' : '　';
+    fire.classList.remove('combo-pop'); void fire.offsetWidth; if (gameState.combo > 0) fire.classList.add('combo-pop');
+  }
+  const mult = gameComboMult(gameState.combo);
+  const mEl = document.getElementById('gameComboMult');
+  if (mEl) { mEl.textContent = '×' + mult; mEl.classList.toggle('show', mult > 1); }
+}
+function bumpScore() {
+  const sc = document.getElementById('gameScore');
+  if (!sc) return;
+  sc.classList.remove('bump'); void sc.offsetWidth; sc.classList.add('bump');
+}
+function flashGameCard(kind) {
+  const card = document.getElementById('gameCard');
+  if (!card) return;
+  card.classList.remove('flash-good','flash-bad'); void card.offsetWidth;
+  card.classList.add(kind === 'good' ? 'flash-good' : 'flash-bad');
+}
+function floatPoints(text, color) {
+  const card = document.getElementById('gameCard');
+  if (!card) return;
+  const el = document.createElement('div');
+  el.className = 'game-floating-pts';
+  el.style.color = color; el.textContent = text;
+  card.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+
+// ── Sound engine (Web Audio, no files) ──
+let gameAudioCtx = null;
+function gameAudioInit() {
+  if (gameAudioCtx) return;
+  try { gameAudioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){ gameAudioCtx = null; }
+}
+function toggleGameSound() {
+  gameSoundOn = !gameSoundOn;
+  try { localStorage.setItem('gameSoundOn', gameSoundOn ? '1' : '0'); } catch(e){}
+  const b = document.getElementById('gameSoundBtn'); if (b) b.textContent = gameSoundOn ? '🔊' : '🔇';
+  if (gameSoundOn) { gameAudioInit(); playGameSound('correct'); }
+}
+function gameTone(freq, start, dur, type, vol) {
+  if (!gameAudioCtx) return;
+  const t0 = gameAudioCtx.currentTime + start;
+  const osc = gameAudioCtx.createOscillator();
+  const gain = gameAudioCtx.createGain();
+  osc.type = type || 'sine'; osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0.0001, t0);
+  gain.gain.exponentialRampToValueAtTime(vol || 0.18, t0 + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  osc.connect(gain); gain.connect(gameAudioCtx.destination);
+  osc.start(t0); osc.stop(t0 + dur + 0.02);
+}
+function playGameSound(kind) {
+  if (!gameSoundOn) return;
+  gameAudioInit();
+  if (!gameAudioCtx) return;
+  if (gameAudioCtx.state === 'suspended') gameAudioCtx.resume();
+  if (kind === 'correct') { gameTone(660,0,0.12,'triangle',0.2); gameTone(880,0.09,0.14,'triangle',0.2); }
+  else if (kind === 'wrong') { gameTone(200,0,0.18,'sawtooth',0.16); gameTone(140,0.12,0.22,'sawtooth',0.14); }
+  else if (kind === 'combo') { [523,659,784,1046].forEach((f,i)=>gameTone(f, i*0.07, 0.16,'triangle',0.18)); }
+  else if (kind === 'win') { [523,659,784,1046,1318].forEach((f,i)=>gameTone(f, i*0.11, 0.3,'triangle',0.2)); }
+  else if (kind === 'lose') { [392,330,262].forEach((f,i)=>gameTone(f, i*0.16, 0.32,'sine',0.18)); }
+}
+
+// ── Confetti (lightweight canvas burst) ──
+let gameFxCanvas = null, gameFxCtx = null, gameFxParticles = [], gameFxRAF = null;
+function ensureFxCanvas() {
+  if (gameFxCanvas) return;
+  gameFxCanvas = document.createElement('canvas');
+  gameFxCanvas.id = 'gameFxCanvas';
+  document.body.appendChild(gameFxCanvas);
+  gameFxCtx = gameFxCanvas.getContext('2d');
+  const resize = () => { gameFxCanvas.width = window.innerWidth; gameFxCanvas.height = window.innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+}
+function fireConfetti(count) {
+  ensureFxCanvas();
+  const colors = ['#F59E0B','#EA580C','#16A34A','#2563EB','#DB2777','#7C3AED','#FACC15'];
+  const cx = window.innerWidth / 2, cy = window.innerHeight * 0.38;
+  for (let i = 0; i < count; i++) {
+    const ang = Math.random() * Math.PI * 2;
+    const spd = 4 + Math.random() * 9;
+    gameFxParticles.push({
+      x: cx, y: cy,
+      vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd - 4,
+      g: 0.22 + Math.random() * 0.1,
+      size: 5 + Math.random() * 7,
+      rot: Math.random() * 6.28, vr: (Math.random()-0.5) * 0.4,
+      color: colors[(Math.random()*colors.length)|0],
+      life: 90 + Math.random() * 40
+    });
+  }
+  if (!gameFxRAF) gameFxLoop();
+}
+function gameFxLoop() {
+  gameFxCtx.clearRect(0,0,gameFxCanvas.width,gameFxCanvas.height);
+  gameFxParticles = gameFxParticles.filter(p => p.life > 0 && p.y < gameFxCanvas.height + 40);
+  gameFxParticles.forEach(p => {
+    p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life--;
+    gameFxCtx.save();
+    gameFxCtx.translate(p.x, p.y); gameFxCtx.rotate(p.rot);
+    gameFxCtx.fillStyle = p.color;
+    gameFxCtx.globalAlpha = Math.min(1, p.life / 40);
+    gameFxCtx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+    gameFxCtx.restore();
+  });
+  if (gameFxParticles.length) gameFxRAF = requestAnimationFrame(gameFxLoop);
+  else { gameFxRAF = null; gameFxCtx.clearRect(0,0,gameFxCanvas.width,gameFxCanvas.height); }
 }
 
 // ── PROGRESS ──
@@ -27909,6 +28776,12 @@ function clearAllProgress() {
     localStorage.removeItem('mastered');
     localStorage.removeItem('starred');
     localStorage.removeItem('lastSaved');
+    localStorage.removeItem('mastered_ck');
+    localStorage.removeItem('starred_ck');
+    localStorage.removeItem('quizSessions');
+    localStorage.removeItem('learnDays');
+    localStorage.removeItem('gameHighScore');
+    localStorage.removeItem('gameBestCombo');
   } catch(e) {}
   mastered = {};
   starred  = {};
@@ -28128,6 +29001,22 @@ updateLangModeStrip(currentLang);  // show initial lang strip
 document.addEventListener('keydown', function(e) {
   const quizView = document.getElementById('view-quiz');
   if (!quizView || !quizView.classList.contains('active')) return;
+
+  // ── Game mode key handling ──
+  if (quizMode === 'game') {
+    if (gameState.phase === 'intro' && (e.code === 'Space' || e.code === 'Enter')) { e.preventDefault(); startGame(); return; }
+    if (gameState.phase === 'over' && (e.code === 'Space' || e.code === 'Enter')) { e.preventDefault(); startGame(); return; }
+    if (gameState.phase !== 'play' || gameState.answered) {
+      if (e.key === 'r' || e.key === 'R') replayGameAudio();
+      return;
+    }
+    const gopts = document.querySelectorAll('#gameCard .quiz-opt');
+    const gMap = { Digit1:0, Digit2:1, Digit3:2, Digit4:3, KeyA:0, KeyB:1, KeyC:2, KeyD:3 };
+    if (gMap[e.code] !== undefined && gopts[gMap[e.code]]) { e.preventDefault(); gopts[gMap[e.code]].click(); }
+    if (e.key === 'r' || e.key === 'R') replayGameAudio();
+    return;
+  }
+
   if (quizState.answered) {
     if (e.code === 'Space' || e.code === 'ArrowRight' || e.code === 'Enter') {
       e.preventDefault();
@@ -28147,6 +29036,22 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'r' || e.key === 'R') replayQuizAudio();
 });
 
+// ── KEYBOARD: ← / → switch vocab section while browsing ──
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const browseView = document.getElementById('view-browse');
+  if (!browseView || !browseView.classList.contains('active')) return;
+  const sv = document.getElementById('sectionView');
+  if (!sv || sv.style.display === 'none') return;
+  const fc = document.getElementById('flashcardModal');
+  if (fc && fc.classList.contains('open')) return;
+  const ae = document.activeElement;
+  if (ae && (ae.tagName === 'INPUT' || ae.tagName === 'TEXTAREA' || ae.isContentEditable)) return;
+  e.preventDefault();
+  gotoAdjacentSection(e.key === 'ArrowRight' ? 1 : -1);
+});
+
 // ── SWIPE GESTURE FOR QUIZ (mobile) ──
 (function() {
   let touchStartX = 0, touchStartY = 0;
@@ -28157,6 +29062,7 @@ document.addEventListener('keydown', function(e) {
   document.addEventListener('touchend', function(e) {
     const quizView = document.getElementById('view-quiz');
     if (!quizView || !quizView.classList.contains('active')) return;
+    if (quizMode === 'game') return;
     if (!quizState.answered) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
@@ -28168,11 +29074,27 @@ document.addEventListener('keydown', function(e) {
 window.addEventListener('unload', () => {
   _ttsStopKeepAlive();
   if (_searchDebounceTimer) clearTimeout(_searchDebounceTimer);
+  if (typeof stopGameTimer === 'function') stopGameTimer();
   if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
 });
 window.addEventListener('pagehide', () => {
   _ttsStopKeepAlive();
+  if (typeof stopGameTimer === 'function') stopGameTimer();
   if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch(e){} }
+});
+// pause game timer when tab/app goes to background
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden && typeof stopGameTimer === 'function' && quizMode === 'game' && gameState.phase === 'play' && !gameState.answered) {
+    stopGameTimer();
+    // resume on return
+    const resume = () => {
+      if (!document.hidden && quizMode === 'game' && gameState.phase === 'play' && !gameState.answered) {
+        startGameTimer(getCurrentLevel());
+        document.removeEventListener('visibilitychange', resume);
+      }
+    };
+    document.addEventListener('visibilitychange', resume);
+  }
 });
 
 </script>
