@@ -646,6 +646,19 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- ══════════════ STEP 2: TIME SLOTS ══════════════ -->
 <div class="step-page" id="step-2">
   <div class="info-box">🕐 設定每日工作時段，開啟的時段會出現在週表欄位中。可直接修改時間，關閉的時段不顯示。</div>
+
+  <!-- 重置工具列 -->
+  <div class="reset-toolbar">
+    <div class="reset-toolbar-label">⚙️ 時段重置</div>
+    <div class="reset-toolbar-btns">
+      <button class="btn-reset" onclick="resetSlotTimes()" title="還原所有時間為預設值，保留開關狀態">⏱ 重置時間</button>
+      <button class="btn-reset" onclick="resetSlotToggles()" title="還原所有開關為預設狀態，保留時間">🔄 重置開關</button>
+      <button class="btn-reset" onclick="resetSlotTasks()" title="清除所有手動修改的工作細項，還原預設內容">📝 重置細項</button>
+      <button class="btn-reset" onclick="resetCustomSlots()" title="刪除所有自訂時段">✕ 清空自訂</button>
+      <button class="btn-reset primary" onclick="resetAllSlots()" title="全部還原預設：開關、時間、細項、自訂時段">↺ 全部重置</button>
+    </div>
+  </div>
+
   <div id="care-template-library"></div>
 
   <div class="section-card">
@@ -4074,6 +4087,16 @@ function buildDCReportHTML() {
   .dc-tag { display:inline-block;background:${t.alight};color:${t.pri};border-radius:10px;padding:3px 9px;font-size:10px;font-weight:600;margin:2px 2px;line-height:1.5; }
   @media print { .dc-report-wrap { page-break-before:always !important; } }
 
+/* ── STEP 2 RESET TOOLBAR ── */
+.reset-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:14px;box-shadow:var(--shadow-sm);}
+.reset-toolbar-label{font-size:12px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.reset-toolbar-btns{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.btn-reset{border:1.5px solid var(--border);background:var(--white);color:var(--muted);border-radius:8px;padding:6px 12px;font-size:12px;font-family:inherit;cursor:pointer;transition:.15s;white-space:nowrap;display:flex;align-items:center;gap:5px;font-weight:600;}
+.btn-reset:hover{border-color:#f87171;color:#dc2626;background:#fff5f5;}
+.btn-reset:active{background:#fee2e2;}
+.btn-reset.primary{border-color:#fca5a5;color:#dc2626;background:#fff5f5;}
+.btn-reset.primary:hover{background:#fee2e2;border-color:#dc2626;}
+
 /* ── TIME CONFLICT WARNING ── */
 .conflict-banner{border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 10px rgba(220,38,38,.12);}
 .conflict-banner-head{background:#dc2626;color:#fff;padding:10px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
@@ -4546,6 +4569,142 @@ function toggleDaysPanel(secId) {
   const isOpen = wrap.classList.contains('open');
   wrap.classList.toggle('open', !isOpen);
   if (btn) btn.classList.toggle('open', !isOpen);
+}
+
+/* ══ STEP 2 RESET FUNCTIONS ══ */
+
+// Default on/off state per slot
+const DEFAULT_SLOT_ON = {
+  's-morning':true,'s-breakfast':true,'s-med-am':true,'s-morning-act':true,
+  's-vital-am':true,'s-lunch':true,'s-med-noon':true,'s-nap':true,
+  's-vital-pm':true,'s-afternoon-act':true,'s-dinner':true,'s-med-pm':true,
+  's-evening':true,'s-bedtime':true,
+  's-rehab':false,'s-walk':false,'s-hospital':false,'s-night':false,
+  's-tv':false,'s-music':false,'s-reading':false,'s-craft':false,'s-social':false,
+  's-clean-morning':false,'s-clean-noon':false,'s-clean-evening':false,'s-clean-weekly':false
+};
+
+// Default time ranges per slot
+const DEFAULT_SLOT_TIMES = {
+  's-morning':      { s:'06:00', e:'07:30' },
+  's-breakfast':    { s:'07:30', e:'08:30' },
+  's-med-am':       { s:'08:30', e:'09:00' },
+  's-morning-act':  { s:'09:00', e:'11:30' },
+  's-rehab':        { s:'09:00', e:'10:00' },
+  's-walk':         { s:'09:30', e:'10:30' },
+  's-hospital':     { s:'08:00', e:'12:00' },
+  's-vital-am':     { s:'08:00', e:'09:00' },
+  's-lunch':        { s:'11:30', e:'12:30' },
+  's-med-noon':     { s:'12:30', e:'13:00' },
+  's-nap':          { s:'13:00', e:'15:00' },
+  's-vital-pm':     { s:'15:00', e:'16:00' },
+  's-afternoon-act':{ s:'15:00', e:'17:30' },
+  's-dinner':       { s:'17:30', e:'18:30' },
+  's-med-pm':       { s:'18:30', e:'19:00' },
+  's-evening':      { s:'19:00', e:'21:00' },
+  's-bedtime':      { s:'21:00', e:'22:00' },
+  's-night':        { s:'22:00', e:'06:00' },
+  's-tv':           { s:'14:00', e:'15:00' },
+  's-music':        { s:'10:00', e:'10:30' },
+  's-reading':      { s:'08:30', e:'09:00' },
+  's-craft':        { s:'15:30', e:'16:30' },
+  's-social':       { s:'17:00', e:'18:00' },
+  's-clean-morning':{ s:'08:00', e:'09:00' },
+  's-clean-noon':   { s:'12:30', e:'13:00' },
+  's-clean-evening':{ s:'19:30', e:'20:30' },
+  's-clean-weekly': { s:'09:00', e:'11:00' }
+};
+
+// Reset time inputs only (keep toggles and tasks)
+function resetSlotTimes() {
+  if (!confirm('確定要重置所有時段的時間為預設值嗎？（開關狀態與工作細項不受影響）')) return;
+  Object.entries(DEFAULT_SLOT_TIMES).forEach(([sec, t]) => {
+    const si = document.getElementById('time-' + sec + '-s');
+    const ei = document.getElementById('time-' + sec + '-e');
+    if (si) si.value = t.s;
+    if (ei) ei.value = t.e;
+  });
+  scheduleSave(); schedulePreviewUpdate();
+  showToast('✅ 時間已重置為預設值');
+}
+
+// Reset toggles only (keep times and tasks)
+function resetSlotToggles() {
+  if (!confirm('確定要重置所有時段的開關狀態為預設值嗎？（時間與工作細項不受影響）')) return;
+  Object.entries(DEFAULT_SLOT_ON).forEach(([sec, shouldBeOn]) => {
+    const row = document.querySelector(`[data-sec="${sec}"]`);
+    if (!row) return;
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (!cb) return;
+    const isOn = cb.checked;
+    if (isOn !== shouldBeOn) {
+      cb.checked = shouldBeOn;
+      toggleRow(cb, sec);
+    }
+  });
+  scheduleSave(); schedulePreviewUpdate();
+  showToast('✅ 開關狀態已重置為預設值');
+}
+
+// Reset task editors only (keep toggles and times)
+function resetSlotTasks() {
+  if (!confirm('確定要重置所有工作細項為預設內容嗎？（自訂的細項將被清除）')) return;
+  Object.keys(DEFAULT_TASKS).forEach(secId => {
+    const list = document.getElementById('task-list-' + secId);
+    if (!list) return;
+    const defaults = DEFAULT_TASKS[secId] || [];
+    list.innerHTML = defaults.map((t, i) => taskRowHTML(secId, i, t)).join('');
+  });
+  scheduleSave(); schedulePreviewUpdate();
+  showToast('✅ 工作細項已還原為預設內容');
+}
+
+// Clear all custom slots
+function resetCustomSlots() {
+  const list = document.getElementById('customSlotList');
+  if (!list || list.children.length === 0) { showToast('ℹ️ 目前沒有自訂時段'); return; }
+  const count = list.querySelectorAll('.time-entry').length;
+  if (!confirm(`確定要刪除全部 ${count} 個自訂時段嗎？`)) return;
+  list.innerHTML = '';
+  slotId = 0;
+  scheduleSave(); schedulePreviewUpdate();
+  showToast('✅ 已清空所有自訂時段');
+}
+
+// Reset everything in step 2
+function resetAllSlots() {
+  if (!confirm('確定要全部重置嗎？\n包含：開關狀態、時間、工作細項、自訂時段，所有步驟二的設定都會還原為預設值。')) return;
+  // Reset toggles
+  Object.entries(DEFAULT_SLOT_ON).forEach(([sec, shouldBeOn]) => {
+    const row = document.querySelector(`[data-sec="${sec}"]`);
+    if (!row) return;
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (!cb) return;
+    if (cb.checked !== shouldBeOn) { cb.checked = shouldBeOn; toggleRow(cb, sec); }
+  });
+  // Reset times
+  Object.entries(DEFAULT_SLOT_TIMES).forEach(([sec, t]) => {
+    const si = document.getElementById('time-' + sec + '-s');
+    const ei = document.getElementById('time-' + sec + '-e');
+    if (si) si.value = t.s;
+    if (ei) ei.value = t.e;
+  });
+  // Reset tasks
+  Object.keys(DEFAULT_TASKS).forEach(secId => {
+    const list = document.getElementById('task-list-' + secId);
+    if (!list) return;
+    list.innerHTML = (DEFAULT_TASKS[secId] || []).map((t, i) => taskRowHTML(secId, i, t)).join('');
+  });
+  // Clear custom slots
+  const csList = document.getElementById('customSlotList');
+  if (csList) csList.innerHTML = '';
+  slotId = 0;
+  // Clear slot day restrictions
+  BUILT_IN_SLOTS_ALL.forEach(sec => { slotDayRestrictions[sec] = []; });
+  // Re-render day UIs
+  BUILT_IN_SLOTS_ALL.forEach(sec => { if (!sec.startsWith('dc-')) setSlotDaysFromData(sec, []); });
+  scheduleSave(); schedulePreviewUpdate();
+  showToast('✅ 步驟二已全部重置為預設值');
 }
 
 /* ══ TIME CONFLICT DETECTION ══ */
