@@ -3,35 +3,40 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v19</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v21</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 :root {
   --ink:    #1a1f2e;
   --muted:  #6b7280;
   --border: #e2e6ea;
-  --bg:     #f7f9fc;
+  --bg:     #f4f6fa;
   --white:  #ffffff;
   --accent: #2563eb;
   --accent2:#7c3aed;
   --success:#059669;
   --warn:   #d97706;
   --danger: #dc2626;
-  --radius: 10px;
-  --topbar-h: 52px;
+  --radius: 12px;
+  --topbar-h: 58px;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.10);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;min-height:100vh;}
 
 /* ── TOP BAR ── */
-.topbar{background:var(--ink);color:#fff;padding:0 20px;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
-.topbar-brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.topbar-sub{font-size:11px;opacity:.6;white-space:nowrap;}
+.topbar{background:linear-gradient(135deg,#1a2744 0%,#1e3a6e 100%);color:#fff;padding:0 20px;height:var(--topbar-h);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 14px rgba(0,0,0,.22);}
+.topbar-brand{font-weight:700;font-size:15px;display:flex;align-items:center;gap:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-logo{width:34px;height:34px;background:rgba(255,255,255,.13);border:1.5px solid rgba(255,255,255,.22);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.topbar-text{display:flex;flex-direction:column;gap:1px;overflow:hidden;}
+.topbar-title{font-size:14px;font-weight:800;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.topbar-sub{font-size:10px;opacity:.55;white-space:nowrap;letter-spacing:.3px;}
 .topbar-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.tlbtn{border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:20px;padding:5px 13px;font-size:12px;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
-.tlbtn:hover{background:rgba(255,255,255,.15);}
-.tlbtn:active{background:rgba(255,255,255,.25);}
+.tlbtn{border:1.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;border-radius:22px;padding:6px 14px;font-size:12px;cursor:pointer;transition:.15s;font-family:inherit;white-space:nowrap;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:5px;font-weight:600;}
+.tlbtn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.5);}
+.tlbtn:active{background:rgba(255,255,255,.3);}
 .tlbtn.active{background:var(--accent);border-color:var(--accent);}
 
 /* ── PROGRESS BAR (tablet) ── */
@@ -47,17 +52,17 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .step-arrow{color:var(--border);font-size:12px;padding:0 2px;}
 
 /* ── MAIN LAYOUT ── */
-.wizard-body{max-width:860px;margin:0 auto;padding:24px 20px 60px;}
+.wizard-body{max-width:880px;margin:0 auto;padding:24px 20px 80px;}
 
 /* ── SECTION CARD ── */
-.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:box-shadow .2s;}
-.section-card:hover{box-shadow:0 2px 12px rgba(0,0,0,.06);}
-.section-card-head{padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;min-height:52px;}
-.section-card-head-left{display:flex;align-items:center;gap:10px;min-width:0;}
-.section-icon{font-size:18px;flex-shrink:0;}
-.section-title{font-weight:700;font-size:14px;}
-.section-subtitle{font-size:11px;color:var(--muted);margin-top:1px;}
-.section-toggle-icon{font-size:16px;color:var(--muted);transition:.25s;flex-shrink:0;margin-left:8px;}
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;transition:box-shadow .2s;box-shadow:var(--shadow-sm);}
+.section-card:hover{box-shadow:0 3px 16px rgba(0,0,0,.09);}
+.section-card-head{padding:14px 18px;background:var(--white);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;min-height:56px;}
+.section-card-head-left{display:flex;align-items:center;gap:12px;min-width:0;}
+.section-icon{font-size:19px;flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:9px;border:1px solid #dbeafe;}
+.section-title{font-weight:700;font-size:14px;letter-spacing:.1px;}
+.section-subtitle{font-size:11px;color:var(--muted);margin-top:2px;}
+.section-toggle-icon{font-size:11px;color:#9ca3af;transition:.25s;flex-shrink:0;margin-left:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--bg);border-radius:7px;border:1px solid var(--border);}
 .section-card-head.collapsed .section-toggle-icon{transform:rotate(-90deg);}
 .section-body{padding:18px 20px;}
 .section-body.hidden{display:none;}
@@ -73,27 +78,28 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .form-label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
 .form-label .optional{font-weight:400;color:#aaa;font-size:11px;margin-left:4px;}
 .form-input,.form-select,.form-textarea{
-  border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-size:14px;
+  border:1.5px solid var(--border);border-radius:9px;padding:10px 12px;font-size:14px;
   font-family:inherit;color:var(--ink);background:var(--white);outline:none;
   transition:border-color .2s,box-shadow .2s;width:100%;
   /* Prevent zoom on iOS */
   -webkit-appearance:none;appearance:none;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
 }
-.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.1);}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12);}
 .form-textarea{resize:vertical;min-height:70px;}
 .form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
 
 /* ── TOGGLE SWITCHES ── */
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1.5px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color .15s,background .15s;gap:8px;cursor:default;}
-.toggle-row:hover{border-color:#c5cae9;}
-.toggle-row.on{border-color:var(--accent);background:#f0f4ff;}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;margin-bottom:8px;transition:border-color .15s,background .15s,box-shadow .15s;gap:8px;cursor:default;background:#fafbfd;}
+.toggle-row:hover{border-color:#b6c4e8;background:#f5f8ff;box-shadow:0 1px 6px rgba(0,0,0,.05);}
+.toggle-row.on{border-color:var(--accent);background:#f0f4ff;box-shadow:0 1px 8px rgba(37,99,235,.1);}
 .toggle-label{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
 .toggle-label-main{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.toggle-label-sub{font-size:11px;color:var(--muted);}
-.toggle-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+.toggle-label-sub{font-size:11px;color:var(--muted);line-height:1.4;}
+.toggle-switch{position:relative;width:46px;height:26px;flex-shrink:0;}
 .toggle-switch input{opacity:0;width:0;height:0;position:absolute;}
-.toggle-track{position:absolute;inset:0;background:var(--border);border-radius:12px;cursor:pointer;transition:.2s;}
-.toggle-track::before{content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle-track{position:absolute;inset:0;background:#c9ced8;border-radius:13px;cursor:pointer;transition:.2s;}
+.toggle-track::before{content:'';position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 4px rgba(0,0,0,.25);}
 .toggle-switch input:checked+.toggle-track{background:var(--accent);}
 .toggle-switch input:checked+.toggle-track::before{transform:translateX(20px);}
 
@@ -102,10 +108,10 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 /* ── CHIP / TAG SELECTOR ── */
 .chip-group{display:flex;flex-wrap:wrap;gap:7px;}
-.chip-option{border:1.5px solid var(--border);background:var(--bg);border-radius:20px;padding:6px 14px;font-size:13px;font-family:inherit;color:var(--muted);cursor:pointer;transition:.15s;user-select:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;}
-.chip-option:hover{border-color:#90a4d4;color:var(--ink);}
-.chip-option:active{transform:scale(.96);}
-.chip-option.selected{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600;}
+.chip-option{border:1.5px solid var(--border);background:var(--white);border-radius:22px;padding:7px 15px;font-size:13px;font-family:inherit;color:var(--muted);cursor:pointer;transition:.15s;user-select:none;-webkit-tap-highlight-color:transparent;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.chip-option:hover{border-color:#90a4d4;color:var(--ink);background:#f0f4ff;}
+.chip-option:active{transform:scale(.95);}
+.chip-option.selected{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(37,99,235,.3);}
 
 /* ── COLOR THEME PICKER ── */
 .theme-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
@@ -123,18 +129,18 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .time-entry-title{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:6px;}
 .btn-del-entry{background:transparent;border:1.5px solid #fca5a5;color:var(--danger);border-radius:6px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent;}
 .btn-del-entry:hover{background:#fef2f2;}
-.btn-add-entry{background:transparent;border:1.5px dashed var(--accent);color:var(--accent);border-radius:8px;padding:10px 16px;font-size:13px;font-family:inherit;cursor:pointer;width:100%;text-align:center;transition:.15s;margin-top:4px;-webkit-tap-highlight-color:transparent;}
-.btn-add-entry:hover{background:#eff6ff;}
+.btn-add-entry{background:transparent;border:1.5px dashed var(--accent);color:var(--accent);border-radius:10px;padding:11px 16px;font-size:13px;font-family:inherit;cursor:pointer;width:100%;text-align:center;transition:.15s;margin-top:4px;-webkit-tap-highlight-color:transparent;font-weight:600;}
+.btn-add-entry:hover{background:#eff6ff;border-style:solid;}
 .btn-add-entry:active{background:#dbeafe;}
 
 /* ── TIME EDIT INPUT ── */
 .time-edit-input{
-  border:1.5px solid var(--border);border-radius:6px;padding:6px 8px;font-size:13px;
+  border:1.5px solid var(--border);border-radius:7px;padding:7px 8px;font-size:13px;
   font-family:inherit;color:var(--ink);background:var(--white);outline:none;
-  width:90px;transition:border-color .15s;
-  -webkit-appearance:none;
+  width:92px;transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none;font-weight:600;text-align:center;
 }
-.time-edit-input:focus{border-color:var(--accent);}
+.time-edit-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.12);}
 .toggle-row.on .time-edit-input{border-color:#93c5fd;background:#f0f7ff;}
 
 /* ── SLOT DAY RESTRICTION ── */
@@ -218,8 +224,8 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .divider{border:none;border-top:1px dashed var(--border);margin:14px 0;}
 
 /* ── INFO BOX ── */
-.info-box{background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:11px 14px;font-size:13px;color:#1e40af;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
-.info-box.warn{background:#fffbeb;border-color:#fde68a;color:#92400e;}
+.info-box{background:linear-gradient(135deg,#eff6ff,#f0f9ff);border:1px solid #bfdbfe;border-radius:10px;padding:12px 16px;font-size:13px;color:#1e40af;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;line-height:1.6;box-shadow:0 1px 4px rgba(37,99,235,.08);}
+.info-box.warn{background:linear-gradient(135deg,#fffbeb,#fefce8);border-color:#fde68a;color:#92400e;}
 
 /* ── BADGE ── */
 .with-badge{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -229,14 +235,14 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 /* ── NAVIGATION BUTTONS ── */
 .wizard-nav{display:flex;justify-content:space-between;align-items:center;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);gap:12px;}
-.btn-prev{background:var(--white);border:1.5px solid var(--border);color:var(--muted);border-radius:8px;padding:11px 22px;font-size:14px;font-family:inherit;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;}
-.btn-prev:hover{border-color:#999;color:var(--ink);}
-.btn-prev:active{background:#f3f4f6;}
-.btn-next{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:11px 28px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;}
-.btn-next:hover{background:#1d4ed8;}
-.btn-next:active{background:#1e40af;}
-.btn-generate{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;border-radius:8px;padding:13px 32px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(5,150,105,.3);-webkit-tap-highlight-color:transparent;}
-.btn-generate:hover{background:linear-gradient(135deg,#047857,#0e7490);transform:translateY(-1px);}
+.btn-prev{background:var(--white);border:1.5px solid var(--border);color:var(--muted);border-radius:10px;padding:11px 22px;font-size:14px;font-family:inherit;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;gap:6px;}
+.btn-prev:hover{border-color:#aaa;color:var(--ink);background:var(--bg);}
+.btn-prev:active{background:#f0f2f5;}
+.btn-next{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:8px;-webkit-tap-highlight-color:transparent;box-shadow:0 3px 10px rgba(37,99,235,.28);}
+.btn-next:hover{background:#1d4ed8;transform:translateY(-1px);box-shadow:0 5px 14px rgba(37,99,235,.35);}
+.btn-next:active{background:#1e40af;transform:translateY(0);}
+.btn-generate{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border:none;border-radius:10px;padding:13px 32px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(5,150,105,.3);-webkit-tap-highlight-color:transparent;}
+.btn-generate:hover{background:linear-gradient(135deg,#047857,#0e7490);transform:translateY(-1px);box-shadow:0 6px 20px rgba(5,150,105,.35);}
 .btn-generate:active{transform:translateY(0);}
 
 /* ── SUMMARY ── */
@@ -247,7 +253,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 /* ── OUTPUT SECTION ── */
 #outputSection{display:none;}
-.output-header{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.output-header{background:linear-gradient(135deg,#059669,#0891b2);color:#fff;border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;box-shadow:0 4px 20px rgba(5,150,105,.25);}
 .output-title{font-size:18px;font-weight:700;}
 .output-sub{font-size:12px;opacity:.8;margin-top:3px;}
 .output-actions{display:flex;gap:10px;flex-wrap:wrap;}
@@ -259,7 +265,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .output-frame{width:100%;min-height:700px;border:none;display:block;}
 
 /* ── AUTO-SAVE TOAST ── */
-#save-toast{position:fixed;bottom:80px;right:16px;z-index:9999;background:#1a1f2e;color:#fff;border-radius:24px;padding:8px 18px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);transition:opacity .3s,transform .3s;pointer-events:none;}
+#save-toast{position:fixed;bottom:80px;right:16px;z-index:9999;background:rgba(26,31,46,.95);backdrop-filter:blur(8px);color:#fff;border-radius:28px;padding:9px 20px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 4px 20px rgba(0,0,0,.3);opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;}
 #save-toast.show{opacity:1;transform:translateY(0);}
 #save-toast .dot{width:7px;height:7px;border-radius:50%;background:var(--success);flex-shrink:0;}
 #save-toast.saving .dot{background:var(--warn);animation:pulse-dot .8s infinite;}
@@ -271,17 +277,18 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .restore-btn:active{opacity:.7;}
 
 /* ── MOBILE BOTTOM TAB BAR ── */
-#mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:#fff;border-top:1px solid var(--border);box-shadow:0 -4px 20px rgba(0,0,0,.08);padding:4px 0;padding-bottom:max(4px, env(safe-area-inset-bottom));}
+#mobile-tab-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(255,255,255,.97);border-top:1px solid var(--border);box-shadow:0 -4px 24px rgba(0,0,0,.10);padding:4px 0;padding-bottom:max(4px, env(safe-area-inset-bottom));backdrop-filter:blur(8px);}
 .mtab-list{display:flex;align-items:stretch;}
-.mtab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 2px 5px;gap:3px;cursor:pointer;border:none;background:transparent;font-family:inherit;color:var(--muted);font-size:10px;font-weight:500;transition:color .15s;min-height:54px;-webkit-tap-highlight-color:transparent;position:relative;}
+.mtab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px 5px;gap:3px;cursor:pointer;border:none;background:transparent;font-family:inherit;color:var(--muted);font-size:10px;font-weight:500;transition:color .15s;min-height:56px;-webkit-tap-highlight-color:transparent;position:relative;}
 .mtab.active{color:var(--accent);}
 .mtab.done{color:var(--success);}
-.mtab-icon{font-size:19px;line-height:1;}
-.mtab-label{line-height:1;text-align:center;}
-.mtab-num{position:absolute;top:6px;right:calc(50% - 19px);width:15px;height:15px;border-radius:50%;background:var(--border);color:var(--muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.mtab-icon{font-size:21px;line-height:1;transition:transform .15s;}
+.mtab.active .mtab-icon{transform:scale(1.1);}
+.mtab-label{line-height:1;text-align:center;font-size:10px;}
+.mtab-num{position:absolute;top:5px;right:calc(50% - 20px);width:16px;height:16px;border-radius:50%;background:var(--border);color:var(--muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .mtab.active .mtab-num{background:var(--accent);color:#fff;}
 .mtab.done .mtab-num{background:var(--success);color:#fff;}
-.mtab.active::after{content:'';position:absolute;top:0;left:15%;right:15%;height:3px;background:var(--accent);border-radius:0 0 3px 3px;}
+.mtab.active::after{content:'';position:absolute;top:0;left:18%;right:18%;height:3px;background:var(--accent);border-radius:0 0 4px 4px;}
 
 /* ── SIDE NAV (hidden by default, shown on desktop) ── */
 .side-nav{display:none;}
@@ -403,12 +410,15 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div style="min-width:0;flex:1;">
-    <div class="topbar-brand">📅 外籍看護一週工作時間表 — 客製化精靈 v19</div>
-    <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
+  <div style="min-width:0;flex:1;display:flex;align-items:center;gap:10px;">
+    <div class="topbar-logo">📅</div>
+    <div class="topbar-text">
+      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v21</div>
+      <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
+    </div>
   </div>
   <div class="topbar-right">
-    <button class="tlbtn" onclick="window.print()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
+    <button class="tlbtn" onclick="window.print()">
       🖨️ <span>列印/PDF</span>
     </button>
   </div>
@@ -1207,6 +1217,8 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
 
+  <div id="conflict-banner-step2"></div>
+
   <div class="wizard-nav">
     <button class="btn-prev" onclick="gotoStep(1)">‹ 上一步</button>
     <button class="btn-next" onclick="gotoStep(3)">下一步：大掃除整理 ›</button>
@@ -1848,6 +1860,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   </div>
   <div class="wizard-nav">
     <button class="btn-prev" onclick="gotoStep(5)">‹ 回上一步修改</button>
+    <div id="conflict-banner-step6" style="flex:1;margin:0 8px;"></div>
     <button class="btn-generate" id="generateBtn" onclick="generateSchedule()">✨ 生成客製化時間表</button>
   </div>
 </div>
@@ -1879,12 +1892,12 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <!-- MOBILE BOTTOM TAB BAR -->
 <div id="mobile-tab-bar">
   <div class="mtab-list">
-    <button class="mtab active" data-mt="1" onclick="gotoStep(1)"><span class="mtab-num">1</span><span class="mtab-icon">🏠</span><span class="mtab-label">基本</span></button>
-    <button class="mtab" data-mt="2" onclick="gotoStep(2)"><span class="mtab-num">2</span><span class="mtab-icon">🕐</span><span class="mtab-label">時段</span></button>
+    <button class="mtab active" data-mt="1" onclick="gotoStep(1)"><span class="mtab-num">1</span><span class="mtab-icon">🏠</span><span class="mtab-label">基本資訊</span></button>
+    <button class="mtab" data-mt="2" onclick="gotoStep(2)"><span class="mtab-num">2</span><span class="mtab-icon">🕐</span><span class="mtab-label">時段設定</span></button>
     <button class="mtab" data-mt="3" onclick="gotoStep(3)"><span class="mtab-num">3</span><span class="mtab-icon">🧹</span><span class="mtab-label">大掃除</span></button>
-    <button class="mtab" data-mt="4" onclick="gotoStep(4)"><span class="mtab-num">4</span><span class="mtab-icon">📋</span><span class="mtab-label">格式</span></button>
+    <button class="mtab" data-mt="4" onclick="gotoStep(4)"><span class="mtab-num">4</span><span class="mtab-icon">📐</span><span class="mtab-label">格式</span></button>
     <button class="mtab" data-mt="5" onclick="gotoStep(5)"><span class="mtab-num">5</span><span class="mtab-icon">🎨</span><span class="mtab-label">外觀</span></button>
-    <button class="mtab" data-mt="6" onclick="gotoStep(6)"><span class="mtab-num">6</span><span class="mtab-icon">✨</span><span class="mtab-label">生成</span></button>
+    <button class="mtab" data-mt="6" onclick="gotoStep(6)"><span class="mtab-num">6</span><span class="mtab-icon">✨</span><span class="mtab-label">生成預覽</span></button>
   </div>
 </div>
 
@@ -1984,6 +1997,9 @@ function toggleChip(el, groupId, mode) {
   if (groupId === 'cfg-lang' && typeof injectCareTemplateLibrary === 'function') {
     injectCareTemplateLibrary();
   }
+  // Trigger save and preview update on any chip change
+  if (typeof scheduleSave === 'function') scheduleSave();
+  if (typeof schedulePreviewUpdate === 'function') schedulePreviewUpdate();
 }
 
 /* ══ TASK EDITOR ══ */
@@ -2470,6 +2486,8 @@ function toggleRow(cb, sec) {
   // Show/hide sub-option panels for special slots
   const panel = document.getElementById('subopts-' + sec);
   if (panel) panel.style.display = cb.checked ? 'block' : 'none';
+  scheduleSave();
+  schedulePreviewUpdate();
 }
 
 function getSecEnabled(secId) {
@@ -2866,6 +2884,8 @@ function buildSummary() {
   // Inject work hours stats
   const statsWrap = document.getElementById('workHoursStats');
   if (statsWrap) statsWrap.innerHTML = buildWorkHoursStats();
+  // Update conflict warnings
+  updateConflictWarning();
 }
 
 /* ══ GENERATE ══ */
@@ -4053,6 +4073,19 @@ function buildDCReportHTML() {
   .dc-badge { background:rgba(255,255,255,.2);border-radius:10px;padding:2px 8px;font-size:10px;font-weight:700; }
   .dc-tag { display:inline-block;background:${t.alight};color:${t.pri};border-radius:10px;padding:3px 9px;font-size:10px;font-weight:600;margin:2px 2px;line-height:1.5; }
   @media print { .dc-report-wrap { page-break-before:always !important; } }
+
+/* ── TIME CONFLICT WARNING ── */
+.conflict-banner{border-radius:10px;overflow:hidden;margin-bottom:14px;box-shadow:0 2px 10px rgba(220,38,38,.12);}
+.conflict-banner-head{background:#dc2626;color:#fff;padding:10px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+.conflict-banner-head .cb-count{background:rgba(255,255,255,.25);border-radius:12px;padding:2px 8px;font-size:11px;font-weight:800;}
+.conflict-banner-body{background:#fef2f2;border:1.5px solid #fca5a5;border-top:none;padding:10px 14px;}
+.conflict-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px dashed #fecaca;}
+.conflict-item:last-child{border-bottom:none;padding-bottom:0;}
+.conflict-day-badge{background:#fee2e2;color:#991b1b;border-radius:6px;padding:2px 7px;font-size:11px;font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+.conflict-detail{font-size:12px;color:#7f1d1d;line-height:1.6;}
+.conflict-detail strong{color:#dc2626;}
+.conflict-hint{font-size:11px;color:#b91c1c;margin-top:8px;padding-top:8px;border-top:1px solid #fecaca;display:flex;align-items:center;gap:6px;}
+.conflict-ok{background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;padding:9px 14px;font-size:12px;color:#166534;display:flex;align-items:center;gap:8px;margin-bottom:14px;font-weight:600;}
 </style>
 
 <!-- 大掃除表 頁頭 -->
@@ -4515,12 +4548,164 @@ function toggleDaysPanel(secId) {
   if (btn) btn.classList.toggle('open', !isOpen);
 }
 
+/* ══ TIME CONFLICT DETECTION ══ */
+
+const SLOT_NAME_MAP = {
+  's-morning':'晨間照護','s-breakfast':'早餐','s-med-am':'早間用藥',
+  's-morning-act':'上午活動','s-rehab':'復健訓練','s-walk':'戶外散步',
+  's-hospital':'外出就醫','s-vital-am':'上午生命徵象',
+  's-lunch':'午餐','s-med-noon':'午間用藥','s-nap':'午休陪伴',
+  's-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
+  's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
+  's-bedtime':'就寢照護','s-night':'夜間巡視',
+  's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
+  's-craft':'手工藝/益智','s-social':'家人/社交互動',
+  's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
+  's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
+};
+const DAY_NAME_SHORT = {0:'日',1:'一',2:'二',3:'三',4:'四',5:'五',6:'六'};
+
+function toMins(t) {
+  if (!t) return null;
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function detectTimeConflicts() {
+  const activeDayVals = getChipVals('cfg-days').map(Number);
+  const dayOrder = [1,2,3,4,5,6,0];
+  const activeDays = dayOrder.filter(d => activeDayVals.includes(d));
+  if (activeDays.length === 0) return [];
+
+  // Collect all active slots with valid time ranges
+  const allEntries = [];
+
+  // Built-in slots
+  BUILT_IN_SLOTS_ALL.forEach(key => {
+    if (key.startsWith('dc-')) return;
+    if (!getSecEnabled(key)) return;
+    const s = document.getElementById('time-' + key + '-s')?.value || '';
+    const e = document.getElementById('time-' + key + '-e')?.value || '';
+    if (!s || !e) return;
+    const sm = toMins(s), em = toMins(e);
+    if (sm === null || em === null) return;
+    // Normalize: if end <= start, assume midnight crossing, add 1440 to end
+    const emNorm = em <= sm ? em + 1440 : em;
+    allEntries.push({
+      key, name: SLOT_NAME_MAP[key] || key,
+      s, e, sm, em: emNorm,
+      days: slotDayRestrictions[key] || []
+    });
+  });
+
+  // Custom slots
+  getCustomSlots().forEach((cs, i) => {
+    if (!cs.s || !cs.e) return;
+    const sm = toMins(cs.s), em = toMins(cs.e);
+    if (sm === null || em === null) return;
+    const emNorm = em <= sm ? em + 1440 : em;
+    allEntries.push({
+      key: 'custom-' + i, name: cs.name || ('自訂時段 #' + (i+1)),
+      s: cs.s, e: cs.e, sm, em: emNorm,
+      days: cs.days || []
+    });
+  });
+
+  if (allEntries.length < 2) return [];
+
+  const conflicts = [];
+
+  activeDays.forEach(d => {
+    // Slots applicable on this day
+    const daySlots = allEntries.filter(en =>
+      en.days.length === 0 || en.days.includes(String(d))
+    );
+    if (daySlots.length < 2) return;
+
+    // Sort by start time
+    const sorted = [...daySlots].sort((a, b) => a.sm - b.sm);
+
+    for (let i = 0; i < sorted.length - 1; i++) {
+      const a = sorted[i], b = sorted[i + 1];
+      // Overlap if a.end > b.start (a ends after b starts)
+      if (a.em > b.sm) {
+        // Avoid duplicate conflict pairs across days
+        const pairKey = [a.key, b.key].sort().join('|') + '|' + d;
+        if (!conflicts.some(c => c.pairKey === pairKey)) {
+          conflicts.push({
+            pairKey,
+            day: d,
+            dayLabel: '週' + DAY_NAME_SHORT[d],
+            nameA: a.name, timeA: a.s + '–' + a.e,
+            nameB: b.name, timeB: b.s + '–' + b.e,
+            overlapMins: a.em - b.sm
+          });
+        }
+      }
+    }
+  });
+
+  return conflicts;
+}
+
+function buildConflictBannerHTML(conflicts, compact) {
+  if (conflicts.length === 0) {
+    return compact ? '' :
+      `<div class="conflict-ok">✅ 所有時段無重疊衝突</div>`;
+  }
+
+  const items = conflicts.map(c => {
+    const overMin = c.overlapMins;
+    const overLabel = overMin >= 60
+      ? Math.floor(overMin/60) + '小時' + (overMin%60 > 0 ? overMin%60 + '分' : '')
+      : overMin + '分鐘';
+    return `<div class="conflict-item">
+      <span class="conflict-day-badge">${c.dayLabel}</span>
+      <div class="conflict-detail">
+        <strong>「${c.nameA}」${c.timeA}</strong> 與 <strong>「${c.nameB}」${c.timeB}</strong> 重疊 <strong>${overLabel}</strong>
+      </div>
+    </div>`;
+  }).join('');
+
+  return `<div class="conflict-banner">
+    <div class="conflict-banner-head">
+      ⚠️ 發現時段衝突
+      <span class="cb-count">${conflicts.length} 組</span>
+    </div>
+    <div class="conflict-banner-body">
+      ${items}
+      <div class="conflict-hint">💡 請調整衝突時段的開始或結束時間，避免同一天有重疊的工作安排</div>
+    </div>
+  </div>`;
+}
+
+function updateConflictWarning() {
+  const conflicts = detectTimeConflicts();
+  const b2 = document.getElementById('conflict-banner-step2');
+  const b6 = document.getElementById('conflict-banner-step6');
+  if (b2) b2.innerHTML = buildConflictBannerHTML(conflicts, false);
+  if (b6) b6.innerHTML = buildConflictBannerHTML(conflicts, true);
+  // Warn on generate button if conflicts exist
+  const btn = document.getElementById('generateBtn');
+  if (btn) {
+    if (conflicts.length > 0) {
+      btn.style.background = 'linear-gradient(135deg,#d97706,#b45309)';
+      btn.title = '⚠️ 有 ' + conflicts.length + ' 組時段衝突，仍可生成但請注意';
+      btn.innerHTML = '⚠️ 有衝突，仍要生成';
+    } else {
+      btn.style.background = '';
+      btn.title = '';
+      btn.innerHTML = '✨ 生成客製化時間表';
+    }
+  }
+}
+
 /* ══ LIVE PREVIEW ══ */
 let previewTimer = null;
 
 function schedulePreviewUpdate() {
   clearTimeout(previewTimer);
-  previewTimer = setTimeout(updateLivePreview, 350);
+  previewTimer = setTimeout(() => { updateLivePreview(); updateConflictWarning(); }, 350);
 }
 
 function updateLivePreview() {
@@ -4600,10 +4785,10 @@ function hidePreviewPanel() {
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  // Inject slot day restriction UIs first (inserted right after toggle-row)
-  injectSlotDayUIs();
-  // Inject task editors after (so they appear immediately after toggle-row, before day restriction)
+  // Inject task editors FIRST (appear right after toggle-row)
   injectTaskEditors();
+  // Inject slot day restriction UIs AFTER (appear after task editors, so UI order is: toggle-row → task-editor → days-wrap)
+  injectSlotDayUIs();
   injectCareTemplateLibrary();
   // cfg-start-date is optional — no auto-fill
 
@@ -4637,6 +4822,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.addEventListener('change', schedulePreviewUpdate);
   document.body.addEventListener('input', schedulePreviewUpdate);
   schedulePreviewUpdate();
+  updateConflictWarning();
 });
 </script>
 
