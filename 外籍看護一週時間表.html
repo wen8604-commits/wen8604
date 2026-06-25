@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v29</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v30</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <!-- v22: Google Fonts 離線 fallback — 若無網路，系統字體自動頂替，不影響版面 -->
 <style>
@@ -441,7 +441,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div style="min-width:0;flex:1;display:flex;align-items:center;gap:10px;">
     <div class="topbar-logo">📅</div>
     <div class="topbar-text">
-      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v29</div>
+      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v30</div>
       <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
     </div>
   </div>
@@ -4055,95 +4055,129 @@ function buildDCReportHTML() {
 
 /* ── v26: UNIFIED SCENARIO PANEL ── */
 .unified-scenario-panel{background:linear-gradient(135deg,#f0f9ff 0%,#f5f3ff 100%);border:1.5px solid #c4b5fd;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 2px 12px rgba(124,58,237,.07);}
-.usp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
-.usp-header-text{flex:1;}
-.usp-title{font-weight:800;font-size:14px;color:#4c1d95;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-/* 已套用情境 banner */
-.usp-applied-bar{display:none;align-items:center;gap:8px;background:#ede9fe;border:1.5px solid #c4b5fd;border-radius:8px;padding:6px 12px;font-size:12px;color:#4c1d95;font-weight:600;flex-shrink:0;}
+/* ── USP (照護情境) – v30 redesign ── */
+.unified-scenario-panel{font-family:inherit;}
+
+/* header */
+.usp-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.usp-title{font-size:13px;font-weight:800;color:#3730a3;display:flex;align-items:center;gap:6px;}
+.usp-applied-bar{display:none;align-items:center;gap:6px;background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:20px;padding:4px 12px 4px 8px;font-size:11px;color:#065f46;font-weight:700;}
 .usp-applied-bar.show{display:flex;}
-.btn-usp-reset{background:transparent;border:1.5px solid #c4b5fd;color:#6d28d9;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-left:6px;-webkit-tap-highlight-color:transparent;}
-.btn-usp-reset:hover{background:#ede9fe;}
-/* ── 情境卡片 grid (預設5欄，簡潔) ── */
+.usp-applied-bar-icon{font-size:13px;}
+.btn-usp-reset{background:transparent;border:none;color:#6b7280;cursor:pointer;font-size:11px;padding:0 0 0 4px;font-family:inherit;opacity:.7;}
+.btn-usp-reset:hover{opacity:1;color:#dc2626;}
+
+/* ── 5-card grid ── */
 .usp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:0;}
 .usp-card{
-  background:#fff;border:1.5px solid #e9d5ff;border-radius:12px;
-  padding:14px 8px 12px;cursor:pointer;transition:all .18s;
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  text-align:center;position:relative;
+  position:relative;background:#fff;
+  border:1.5px solid #e0e7ff;border-radius:14px;
+  padding:16px 8px 13px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;
+  transition:border-color .18s,transform .18s,box-shadow .18s;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
 }
-.usp-card:hover{border-color:#7c3aed;box-shadow:0 4px 16px rgba(124,58,237,.15);transform:translateY(-2px);}
-.usp-card.selected{border-color:#7c3aed;border-width:2px;background:#faf5ff;box-shadow:0 0 0 3px rgba(124,58,237,.12);}
-.usp-card.applied{border-color:#059669;border-width:2px;background:#f0fdf4;box-shadow:0 0 0 3px rgba(5,150,105,.12);}
-.usp-card-icon{font-size:28px;line-height:1;}
-.usp-card-name{font-size:12px;font-weight:800;color:#111827;line-height:1.3;}
-.usp-card-count{font-size:10px;color:#9ca3af;font-weight:600;}
-.usp-card.applied .usp-card-count{color:#059669;}
-.usp-tag{background:#f3e8ff;color:#6d28d9;border-radius:99px;padding:2px 5px;font-size:9.5px;font-weight:700;}
+.usp-card:hover{border-color:#818cf8;transform:translateY(-3px);box-shadow:0 6px 20px rgba(99,102,241,.15);}
+.usp-card.selected{border-color:#6366f1;border-width:2px;background:linear-gradient(160deg,#eef2ff,#fff);box-shadow:0 0 0 3px rgba(99,102,241,.15);}
+.usp-card.applied{border-color:#10b981;border-width:2px;background:linear-gradient(160deg,#ecfdf5,#fff);box-shadow:0 0 0 3px rgba(16,185,129,.12);}
+.usp-card-icon{font-size:30px;line-height:1;margin-bottom:2px;}
+.usp-card-name{font-size:12px;font-weight:800;color:#1e1b4b;line-height:1.3;}
+.usp-card-count{font-size:10px;color:#a5b4fc;font-weight:600;margin-top:1px;}
+.usp-card.applied .usp-card-count{color:#34d399;}
+.usp-card-tags{display:flex;flex-direction:column;gap:3px;align-items:center;margin-top:4px;}
+.usp-tag{background:#eef2ff;color:#4338ca;border-radius:4px;padding:2px 6px;font-size:9.5px;font-weight:700;line-height:1.4;}
 .usp-card.applied .usp-tag{background:#d1fae5;color:#065f46;}
-.usp-card-tags{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:2px;}
-/* applied / selected badges */
-.usp-selected-badge{display:none;position:absolute;top:5px;right:5px;background:#7c3aed;color:#fff;border-radius:99px;padding:2px 6px;font-size:8.5px;font-weight:800;}
-.usp-card.selected .usp-selected-badge{display:block;}
-.usp-applied-badge{display:none;position:absolute;top:5px;right:5px;background:#059669;color:#fff;border-radius:99px;padding:2px 6px;font-size:8.5px;font-weight:800;}
+.usp-card.selected .usp-tag{background:#e0e7ff;}
+/* corner badges */
+.usp-applied-badge,.usp-selected-badge{
+  display:none;position:absolute;top:7px;right:7px;
+  border-radius:6px;padding:2px 5px;font-size:8.5px;font-weight:800;letter-spacing:.3px;
+}
+.usp-applied-badge{background:#10b981;color:#fff;}
+.usp-selected-badge{background:#6366f1;color:#fff;}
 .usp-card.applied .usp-applied-badge{display:block;}
+.usp-card.selected:not(.applied) .usp-selected-badge{display:block;}
 
-/* ── 展開詳情面板 (圖式) ── */
+/* ── Expandable detail panel ── */
 .usp-detail{
-  background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;
-  padding:0;margin-top:10px;display:none;overflow:hidden;
-  animation:uspFadeIn .2s ease;
+  display:none;margin-top:10px;
+  background:#fff;border:1.5px solid #e0e7ff;border-radius:16px;
+  overflow:hidden;animation:uspIn .2s ease;
 }
 .usp-detail.open{display:block;}
-@keyframes uspFadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
-/* 詳情頭部 */
-.usp-detail-head{
-  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
-  padding:14px 18px 12px;border-bottom:1px solid #e9d5ff;
-  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+@keyframes uspIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+/* detail: top strip */
+.usp-d-strip{
+  background:linear-gradient(135deg,#4f46e5,#6366f1);
+  color:#fff;padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
 }
-.usp-detail-name{font-size:15px;font-weight:800;color:#4c1d95;}
-.usp-detail-desc{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.55;}
-.usp-detail-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.usp-slot-count{font-size:11px;color:#7c3aed;font-weight:700;background:#ede9fe;border-radius:99px;padding:3px 10px;}
+.usp-d-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.usp-d-icon{font-size:28px;line-height:1;flex-shrink:0;}
+.usp-d-info{}
+.usp-d-name{font-size:15px;font-weight:800;line-height:1.2;}
+.usp-d-meta{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;}
+.usp-d-badge{background:rgba(255,255,255,.2);border-radius:20px;padding:2px 9px;font-size:10px;font-weight:700;}
+.usp-d-tag{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:2px 7px;font-size:10px;font-weight:600;}
 .btn-usp-apply{
-  border:none;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;
-  border-radius:8px;padding:9px 20px;font-size:13px;font-weight:800;font-family:inherit;
-  cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;
-  box-shadow:0 3px 10px rgba(124,58,237,.28);display:flex;align-items:center;gap:6px;
+  background:#fff;color:#4f46e5;
+  border:none;border-radius:10px;padding:9px 20px;
+  font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;
+  transition:all .15s;white-space:nowrap;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+  display:flex;align-items:center;gap:6px;
 }
-.btn-usp-apply:hover{background:linear-gradient(135deg,#6d28d9,#1d4ed8);transform:translateY(-1px);}
-.btn-usp-apply:active{transform:translateY(0);}
-.btn-usp-apply.applied-state{background:linear-gradient(135deg,#059669,#0891b2);}
-/* 時段時間軸 */
-.usp-timeline{display:flex;flex-direction:column;gap:0;padding:14px 16px;}
-.usp-tl-group{margin-bottom:12px;}
-.usp-tl-group-label{font-size:10px;font-weight:800;color:#9ca3af;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
-.usp-tl-group-label::after{content:'';flex:1;height:1px;background:#f3e8ff;}
-.usp-tl-slots{display:flex;flex-direction:column;gap:4px;}
-.usp-tl-row{display:flex;align-items:stretch;gap:0;font-size:12px;border-radius:7px;overflow:hidden;border:1px solid #f3e8ff;}
-.usp-tl-row:hover{border-color:#d8b4fe;}
-.usp-tl-time{background:#f5f3ff;color:#7c3aed;font-weight:700;font-size:10.5px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;min-width:90px;border-right:1px solid #e9d5ff;flex-shrink:0;}
-.usp-tl-label{font-weight:700;color:#111827;padding:6px 10px;flex-shrink:0;min-width:80px;border-right:1px solid #f3e8ff;display:flex;align-items:center;}
-.usp-tl-tasks{padding:6px 10px;flex:1;font-size:11px;color:#6b7280;line-height:1.5;display:flex;align-items:center;}
-.usp-tl-tasks-list{display:flex;flex-wrap:wrap;gap:3px;}
-.usp-tl-task{background:#faf5ff;border:1px solid #e9d5ff;border-radius:4px;padding:1px 6px;font-size:10.5px;color:#4c1d95;white-space:nowrap;}
-/* 夜班特殊色 */
-.usp-tl-row.night .usp-tl-time{background:#1e1b4b;color:#a5b4fc;}
-.usp-tl-row.night .usp-tl-label{color:#c7d2fe;background:#2e1065;}
-.usp-tl-row.night .usp-tl-tasks{color:#a5b4fc;background:#1e1b4b;}
-.usp-tl-row.night .usp-tl-task{background:#312e81;border-color:#4338ca;color:#c7d2fe;}
-.usp-tl-row.night{border-color:#4338ca;}
+.btn-usp-apply:hover{transform:scale(1.03);box-shadow:0 4px 14px rgba(0,0,0,.2);}
+.btn-usp-apply:active{transform:scale(.98);}
+.btn-usp-apply.applied-state{background:#10b981;color:#fff;}
+
+/* detail: timeline body */
+.usp-timeline{padding:14px 16px 10px;display:flex;flex-direction:column;gap:10px;}
+.usp-shift{display:flex;flex-direction:column;gap:4px;}
+.usp-shift-label{
+  font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;
+  color:#a5b4fc;display:flex;align-items:center;gap:8px;margin-bottom:2px;
+}
+.usp-shift-label::after{content:'';flex:1;height:1px;background:#e0e7ff;}
+.usp-row{display:flex;align-items:center;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e8ecff;min-height:36px;}
+.usp-row:hover{border-color:#a5b4fc;}
+.usp-row-time{
+  background:#eef2ff;color:#4338ca;font-size:10px;font-weight:700;
+  padding:0 10px;min-width:86px;display:flex;align-items:center;justify-content:center;
+  text-align:center;line-height:1.3;align-self:stretch;flex-shrink:0;border-right:1px solid #e0e7ff;
+}
+.usp-row-name{
+  font-size:11.5px;font-weight:700;color:#1e1b4b;
+  padding:6px 10px;min-width:76px;flex-shrink:0;
+  border-right:1px solid #f0f0ff;display:flex;align-items:center;
+}
+.usp-row-tasks{padding:5px 10px;flex:1;display:flex;flex-wrap:wrap;gap:3px;align-items:center;}
+.usp-pill{
+  background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6;
+  border-radius:5px;padding:2px 7px;font-size:10px;font-weight:600;
+  white-space:nowrap;line-height:1.4;
+}
+/* night row */
+.usp-row.night{background:#0f0c29;border-color:#3730a3;}
+.usp-row.night .usp-row-time{background:#1e1b4b;color:#818cf8;border-color:#3730a3;}
+.usp-row.night .usp-row-name{color:#c7d2fe;border-color:#312e81;}
+.usp-row.night .usp-row-tasks{background:#0f0c29;}
+.usp-row.night .usp-pill{background:#1e1b4b;border-color:#4338ca;color:#a5b4fc;}
+/* no-tasks placeholder */
+.usp-row-empty{color:#c7d2fe;font-size:10px;padding-left:2px;}
+
 @media(max-width:760px){
   .usp-grid{grid-template-columns:repeat(3,1fr);}
-  .usp-tl-row{flex-wrap:wrap;}
-  .usp-tl-time{min-width:80px;}
-  .usp-tl-label{min-width:70px;}
+  .usp-d-strip{flex-direction:column;align-items:flex-start;gap:10px;}
+  .btn-usp-apply{width:100%;justify-content:center;}
 }
-@media(max-width:480px){
-  .usp-grid{grid-template-columns:repeat(2,1fr) !important;}
-  .usp-card-icon{font-size:24px;}
-  .usp-card-name{font-size:11px;}
-  .usp-detail{padding:0;}
+@media(max-width:479px){
+  .usp-grid{grid-template-columns:repeat(2,1fr);}
+  .usp-card{padding:13px 6px 11px;}
+  .usp-card-icon{font-size:26px;}
+  .usp-row-time{min-width:70px;font-size:9.5px;}
+  .usp-row-name{min-width:64px;font-size:11px;}
 }
 
 /* ── v22: 匯出/匯入設定檔 ── */
@@ -5176,115 +5210,133 @@ function injectScenarioTemplates() {
   const lang = getScenarioLang();
   const i18n = SCENARIO_I18N[lang] || {};
 
-  // Slot groups for timeline display
-  const slotGroups = {
-    '早班': ['s-morning','s-breakfast','s-med-am','s-morning-act','s-rehab','s-walk','s-hospital','s-vital-am'],
-    '午班': ['s-lunch','s-med-noon','s-nap','s-vital-pm','s-afternoon-act'],
-    '晚班': ['s-dinner','s-med-pm','s-evening','s-bedtime'],
-    '夜間': ['s-night'],
-    '其他': ['s-music','s-social']
+  const SLOT_META = {
+    's-morning':    {label:'晨間照護', shift:'早班'},
+    's-breakfast':  {label:'早餐',     shift:'早班'},
+    's-med-am':     {label:'早間用藥', shift:'早班'},
+    's-vital-am':   {label:'生命徵象', shift:'早班'},
+    's-rehab':      {label:'復健訓練', shift:'早班'},
+    's-walk':       {label:'戶外散步', shift:'早班'},
+    's-hospital':   {label:'外出就醫', shift:'早班'},
+    's-morning-act':{label:'上午活動', shift:'早班'},
+    's-lunch':      {label:'午餐',     shift:'午班'},
+    's-med-noon':   {label:'午間用藥', shift:'午班'},
+    's-nap':        {label:'午休陪伴', shift:'午班'},
+    's-vital-pm':   {label:'生命徵象', shift:'午班'},
+    's-afternoon-act':{label:'下午活動',shift:'午班'},
+    's-dinner':     {label:'晚餐',     shift:'晚班'},
+    's-med-pm':     {label:'晚間用藥', shift:'晚班'},
+    's-evening':    {label:'晚間活動', shift:'晚班'},
+    's-bedtime':    {label:'就寢照護', shift:'晚班'},
+    's-night':      {label:'夜間巡視', shift:'夜間'},
+    's-music':      {label:'聽音樂',   shift:'其他'},
+    's-social':     {label:'家人互動', shift:'其他'},
   };
-  const slotLabelMap = {
-    's-morning':'晨間照護','s-breakfast':'早餐','s-med-am':'早間用藥',
-    's-morning-act':'上午活動','s-rehab':'復健訓練','s-walk':'戶外散步',
-    's-vital-am':'上午生命徵象','s-lunch':'午餐','s-med-noon':'午間用藥',
-    's-nap':'午休陪伴','s-vital-pm':'下午生命徵象','s-afternoon-act':'下午活動',
-    's-dinner':'晚餐','s-med-pm':'晚間用藥','s-evening':'晚間活動',
-    's-bedtime':'就寢照護','s-night':'夜間巡視','s-music':'聽音樂',
-    's-social':'家人互動','s-hospital':'外出就醫'
-  };
+  const SHIFTS = ['早班','午班','晚班','夜間','其他'];
 
-  /* ── Cards (簡潔預設) ── */
+  /* ── CARDS ── */
   const cards = Object.entries(CARE_SCENARIOS).map(([key, sc]) => {
     const loc = i18n[key] || {};
-    const name = loc.name || sc.name;
-    const tags = (loc.tags || sc.tags).map(t=>`<span class="usp-tag">${t}</span>`).join('');
+    const name = (loc.name || sc.name).split(' / ')[0]; // zh only
+    const tags = (loc.tags || sc.tags).map(t =>
+      `<span class="usp-tag">${t.split(' / ')[0]}</span>`
+    ).join('');
     const isApplied = lastAppliedScenario === key;
-    const appliedCls = isApplied ? ' applied' : '';
-    const badge = isApplied ? `<span class="usp-applied-badge">✓ 已套用</span>` : `<span class="usp-selected-badge">▾</span>`;
-    const activeCount = Object.values(sc.slots).filter(s => s.on !== false).length;
-    const nightOn = sc.slots['s-night'] && sc.slots['s-night'].on === true;
-    return `<div class="usp-card${appliedCls}" id="sc-card-${key}" onclick="toggleScenarioDetail('${key}')">
-      ${badge}
+    const cls = isApplied ? ' applied' : '';
+    const activeN = Object.values(sc.slots).filter(s => s.on !== false).length;
+    const hasNight = sc.slots['s-night'] && sc.slots['s-night'].on !== false;
+    return `<div class="usp-card${cls}" id="sc-card-${key}" onclick="toggleScenarioDetail('${key}')">
+      <span class="usp-applied-badge">✓ 套用中</span>
+      <span class="usp-selected-badge">展開</span>
       <div class="usp-card-icon">${sc.icon}</div>
       <div class="usp-card-name">${name}</div>
-      <div class="usp-card-count">${activeCount}個時段${nightOn ? '＋🌙' : ''}</div>
+      <div class="usp-card-count">${activeN} 時段${hasNight ? ' · 🌙' : ''}</div>
       <div class="usp-card-tags">${tags}</div>
     </div>`;
   }).join('');
 
-  /* ── Detail panels (圖式時間軸) ── */
+  /* ── DETAIL PANELS ── */
   const details = Object.entries(CARE_SCENARIOS).map(([key, sc]) => {
     const loc = i18n[key] || {};
-    const name = loc.name || sc.name;
+    const name = (loc.name || sc.name).split(' / ')[0];
+    const tags = (loc.tags || sc.tags).map(t =>
+      `<span class="usp-d-tag">${t.split(' / ')[0]}</span>`
+    ).join('');
     const isApplied = lastAppliedScenario === key;
-    const activeSlots = Object.entries(sc.slots).filter(([,cfg]) => cfg.on !== false);
-    const slotCount = activeSlots.length;
-    const applyLabel = isApplied ? '✓ 已套用，重新套用' : `套用「${sc.name}」`;
+    const applyTxt = isApplied ? '✓ 已套用' : '🚀 套用此情境';
     const applyCls = isApplied ? 'btn-usp-apply applied-state' : 'btn-usp-apply';
+    const activeN = Object.values(sc.slots).filter(s => s.on !== false).length;
 
-    // Build timeline grouped by shift
-    let timelineHTML = '<div class="usp-timeline">';
-    Object.entries(slotGroups).forEach(([groupName, groupSlots]) => {
-      const groupActive = groupSlots.filter(sid => {
-        const cfg = sc.slots[sid];
-        return cfg && cfg.on !== false;
-      });
-      if (groupActive.length === 0) return;
-      timelineHTML += `<div class="usp-tl-group">`;
-      timelineHTML += `<div class="usp-tl-group-label">${groupName}</div>`;
-      timelineHTML += `<div class="usp-tl-slots">`;
-      groupActive.forEach(sid => {
-        const cfg = sc.slots[sid];
-        const label = slotLabelMap[sid] || sid;
-        const timeStr = (cfg.s && cfg.e) ? `${cfg.s} – ${cfg.e}` : '';
+    // Build grouped timeline
+    const grouped = {};
+    SHIFTS.forEach(s => grouped[s] = []);
+    Object.entries(sc.slots).forEach(([sid, cfg]) => {
+      if (cfg.on === false) return;
+      const meta = SLOT_META[sid];
+      if (!meta) return;
+      const shift = meta.shift;
+      if (!grouped[shift]) return;
+      grouped[shift].push({ sid, cfg, label: meta.label });
+    });
+
+    let tlHTML = '';
+    SHIFTS.forEach(shift => {
+      const rows = grouped[shift];
+      if (!rows.length) return;
+      tlHTML += `<div class="usp-shift">`;
+      tlHTML += `<div class="usp-shift-label">${shift}</div>`;
+      rows.forEach(({ sid, cfg, label }) => {
+        const timeStr = (cfg.s && cfg.e) ? `${cfg.s}–${cfg.e}` : '';
         const tasks = (sc.tasks && sc.tasks[sid]) || [];
-        const isNight = groupName === '夜間';
-        const taskBubbles = tasks.slice(0,3).map(t => `<span class="usp-tl-task">${t}</span>`).join('');
-        const moreTasks = tasks.length > 3 ? `<span class="usp-tl-task" style="color:#9ca3af;">+${tasks.length-3}項</span>` : '';
-        timelineHTML += `<div class="usp-tl-row${isNight ? ' night' : ''}">
-          <div class="usp-tl-time">${timeStr || '──'}</div>
-          <div class="usp-tl-label">${label}</div>
-          <div class="usp-tl-tasks"><div class="usp-tl-tasks-list">${taskBubbles}${moreTasks}</div></div>
+        const pills = tasks.slice(0, 4).map(t =>
+          `<span class="usp-pill">${t}</span>`
+        ).join('');
+        const extra = tasks.length > 4
+          ? `<span class="usp-pill" style="opacity:.55">+${tasks.length-4}</span>` : '';
+        const isNight = shift === '夜間';
+        tlHTML += `<div class="usp-row${isNight ? ' night' : ''}">
+          <div class="usp-row-time">${timeStr || '—'}</div>
+          <div class="usp-row-name">${label}</div>
+          <div class="usp-row-tasks">${pills}${extra}${!pills ? '<span class="usp-row-empty">—</span>' : ''}</div>
         </div>`;
       });
-      timelineHTML += `</div></div>`;
+      tlHTML += `</div>`;
     });
-    timelineHTML += '</div>';
 
     return `<div class="usp-detail" id="sc-detail-${key}">
-      <div class="usp-detail-head">
-        <div>
-          <div class="usp-detail-name">${sc.icon} ${name}</div>
-          <div class="usp-detail-desc">${sc.desc}</div>
+      <div class="usp-d-strip">
+        <div class="usp-d-left">
+          <div class="usp-d-icon">${sc.icon}</div>
+          <div class="usp-d-info">
+            <div class="usp-d-name">${name}</div>
+            <div class="usp-d-meta">
+              <span class="usp-d-badge">${activeN} 個時段</span>
+              ${tags}
+            </div>
+          </div>
         </div>
-        <div class="usp-detail-actions">
-          <span class="usp-slot-count">共 ${slotCount} 個時段</span>
-          <button class="${applyCls}" id="btn-apply-${key}" onclick="applyScenarioTemplate('${key}')">
-            🚀 ${applyLabel}
-          </button>
-        </div>
+        <button class="${applyCls}" id="btn-apply-${key}" onclick="applyScenarioTemplate('${key}')">
+          ${applyTxt}
+        </button>
       </div>
-      ${timelineHTML}
+      <div class="usp-timeline">${tlHTML}</div>
     </div>`;
   }).join('');
 
-  /* ── Applied bar ── */
+  /* ── APPLIED BAR ── */
   const appliedSc = lastAppliedScenario ? CARE_SCENARIOS[lastAppliedScenario] : null;
   const appliedBar = appliedSc
     ? `<div class="usp-applied-bar show" id="usp-applied-bar">
-        <span>${appliedSc.icon}</span>
-        <span>已套用：<strong>${appliedSc.name}</strong></span>
-        <button class="btn-usp-reset" onclick="resetScenario()">✕ 取消</button>
+        <span class="usp-applied-bar-icon">${appliedSc.icon}</span>
+        <span>套用中：<strong>${appliedSc.name}</strong></span>
+        <button class="btn-usp-reset" onclick="resetScenario()" title="取消套用">✕</button>
       </div>`
     : `<div class="usp-applied-bar" id="usp-applied-bar"></div>`;
 
   host.innerHTML = `
     <div class="unified-scenario-panel">
       <div class="usp-header">
-        <div class="usp-header-text">
-          <div class="usp-title">🏥 照護情境一鍵套用 <span class="badge-new">v29</span></div>
-        </div>
+        <div class="usp-title">🏥 照護情境一鍵套用 <span class="badge-new">v30</span></div>
         ${appliedBar}
       </div>
       <div class="usp-grid">${cards}</div>
