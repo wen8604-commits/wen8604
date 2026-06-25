@@ -5626,6 +5626,18 @@ function applyScenarioTemplate(key) {
   if (prevKey && prevKey !== key) {
     if (!confirm(`目前已套用「${CARE_SCENARIOS[prevKey]?.name}」，要改套用「${sc.name}」嗎？\n（將覆蓋目前時段開關與時間設定）`)) return;
   }
+  // 先把所有內建時段正規化，避免上一個情境或手動開啟的時段殘留造成衝突。
+  BUILT_IN_SLOTS_ALL.forEach(secId => {
+    if (secId.startsWith('dc-')) return;
+    setSlotDaysFromData(secId, []);
+    if (Object.prototype.hasOwnProperty.call(sc.slots, secId)) return;
+    const row = document.querySelector(`[data-sec="${secId}"]`);
+    const cb = row ? row.querySelector('input[type="checkbox"]') : null;
+    if (cb && cb.checked) {
+      cb.checked = false;
+      toggleRow(cb, secId);
+    }
+  });
   Object.entries(sc.slots).forEach(([secId, cfg]) => {
     const row = document.querySelector(`[data-sec="${secId}"]`);
     if (!row) return;
@@ -5700,6 +5712,8 @@ function applyScenarioTemplate(key) {
   }
 
   scheduleSave(); schedulePreviewUpdate();
+  if (typeof updateConflictWarning === 'function') updateConflictWarning();
+  if (typeof checkPrintDensity === 'function') checkPrintDensity();
   showToast(`✅ 已套用「${sc.icon} ${sc.name}」，請繼續微調細節`);
 }
 
