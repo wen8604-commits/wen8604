@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v32</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v33</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <!-- v22: Google Fonts 離線 fallback — 若無網路，系統字體自動頂替，不影響版面 -->
 <style>
@@ -469,7 +469,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 }
 
 
-/* ── v32 mobile-family friendly refinements ── */
+/* ── v33 formal family-app refinements ── */
 .quick-start-btn{flex-direction:column;align-items:flex-start;text-align:left;gap:3px;min-height:64px;}
 .quick-start-btn strong{font-size:13px;line-height:1.25;}
 .quick-start-btn small{font-size:11px;font-weight:600;color:#475569;line-height:1.35;}
@@ -520,6 +520,41 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 
 
+
+.quick-start-btn em{font-style:normal;font-size:10.5px;font-weight:800;color:#059669;margin-top:2px;}
+.optional-subsection-title{font-size:12px;font-weight:900;color:#64748b;margin:4px 0 10px;}
+.optional-signature-inline{box-shadow:none;margin-bottom:0;}
+.optional-signature-inline .section-card-head{background:#f8fafc;}
+.step2-current-label{font-size:12px;font-weight:900;color:#1e3a8a;margin:0 0 8px;padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;}
+.step2-guide-details{margin-bottom:14px;}
+.step2-guide-details summary{list-style:none;cursor:pointer;background:#fff;border:1.5px solid #bfdbfe;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:900;color:#1e3a8a;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm);}
+.step2-guide-details summary::-webkit-details-marker{display:none;}
+.step2-guide-details summary::after{content:'▾';font-size:12px;color:#60a5fa;transition:.2s;}
+.step2-guide-details[open] summary{border-radius:10px 10px 0 0;}
+.step2-guide-details[open] summary::after{transform:rotate(180deg);}
+.step2-guide-details .step2-visual-guide{border-top:none;border-radius:0 0 12px 12px;margin-bottom:0;}
+.completion-card{border:1.5px solid #fde68a;background:#fffbeb;border-radius:12px;padding:14px;margin-bottom:14px;}
+.completion-card.ok{border-color:#86efac;background:#f0fdf4;}
+.completion-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.completion-title{font-size:15px;font-weight:900;color:#111827;}
+.completion-sub{font-size:12px;color:#64748b;margin-top:3px;}
+.completion-score{font-size:18px;font-weight:900;color:#059669;white-space:nowrap;}
+.completion-bar{height:8px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin:12px 0;}
+.completion-bar span{display:block;height:100%;background:linear-gradient(90deg,#059669,#2563eb);border-radius:999px;}
+.completion-checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:7px;}
+.completion-check{font-size:12px;font-weight:800;border-radius:8px;padding:7px 9px;background:#fff;}
+.completion-check.ok{color:#166534;border:1px solid #bbf7d0;}
+.completion-check.warn{color:#92400e;border:1px solid #fde68a;}
+.usp-card-note{font-size:10px;color:#059669;font-weight:900;margin-top:3px;}
+.output-actions{align-items:center;}
+.btn-out-primary{font-size:15px;padding:13px 22px;border-radius:10px;}
+.btn-out-secondary{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);}
+.btn-out-edit{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.22);font-weight:500;}
+@media(max-width:639px){
+  .output-actions{width:100%;flex-direction:column;align-items:stretch;}
+  .btn-out{width:100%;justify-content:center;}
+  .btn-out-primary{font-size:16px;padding:14px 18px;}
+}
 
 /* ── v28: Step 2 Visual Guide ── */
 .step2-visual-guide{background:linear-gradient(135deg,#f0f7ff,#f5f3ff);border:1.5px solid #c7d7f9;border-radius:12px;padding:16px 18px;margin-bottom:16px;}
@@ -582,7 +617,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div style="min-width:0;flex:1;display:flex;align-items:center;gap:10px;">
     <div class="topbar-logo">📅</div>
     <div class="topbar-text">
-      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v32</div>
+      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v33</div>
       <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
     </div>
   </div>
@@ -608,15 +643,15 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     <span class="step-arrow">›</span>
   </div>
   <div class="step-pill">
-    <div class="step-node" id="step-tab-4" onclick="gotoStep(4)"><div class="step-num">4</div>工作細項設定</div>
+    <div class="step-node" id="step-tab-4" onclick="gotoStep(4)"><div class="step-num">4</div>每個時段要做什麼</div>
     <span class="step-arrow">›</span>
   </div>
   <div class="step-pill">
-    <div class="step-node" id="step-tab-5" onclick="gotoStep(5)"><div class="step-num">5</div>列印版面與外觀</div>
+    <div class="step-node" id="step-tab-5" onclick="gotoStep(5)"><div class="step-num">5</div>列印樣式</div>
     <span class="step-arrow">›</span>
   </div>
   <div class="step-pill">
-    <div class="step-node" id="step-tab-6" onclick="gotoStep(6)"><div class="step-num">6</div>確認並產生</div>
+    <div class="step-node" id="step-tab-6" onclick="gotoStep(6)"><div class="step-num">6</div>確認產生</div>
   </div>
 </div>
 
@@ -628,9 +663,9 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div class="side-nav-item active" data-sn="1" onclick="gotoStep(1)"><span class="sn-num">1</span><span class="sn-icon">🏠</span> 基本資訊</div>
   <div class="side-nav-item" data-sn="2" onclick="gotoStep(2)"><span class="sn-num">2</span><span class="sn-icon">🕐</span> 每日照護時段</div>
   <div class="side-nav-item" data-sn="3" onclick="gotoStep(3)"><span class="sn-num">3</span><span class="sn-icon">🧹</span> 打掃與整理</div>
-  <div class="side-nav-item" data-sn="4" onclick="gotoStep(4)"><span class="sn-num">4</span><span class="sn-icon">📋</span> 工作細項設定</div>
-  <div class="side-nav-item" data-sn="5" onclick="gotoStep(5)"><span class="sn-num">5</span><span class="sn-icon">🎨</span> 列印版面與外觀</div>
-  <div class="side-nav-item" data-sn="6" onclick="gotoStep(6)"><span class="sn-num">6</span><span class="sn-icon">✨</span> 確認並產生</div>
+  <div class="side-nav-item" data-sn="4" onclick="gotoStep(4)"><span class="sn-num">4</span><span class="sn-icon">📋</span> 每個時段要做什麼</div>
+  <div class="side-nav-item" data-sn="5" onclick="gotoStep(5)"><span class="sn-num">5</span><span class="sn-icon">🎨</span> 列印樣式</div>
+  <div class="side-nav-item" data-sn="6" onclick="gotoStep(6)"><span class="sn-num">6</span><span class="sn-icon">✨</span> 確認產生</div>
   <div class="side-nav-save" id="snSaveStatus">
     <span class="sn-save-dot" id="snDot"></span>
     <span id="snSaveText">尚未儲存</span>
@@ -650,9 +685,9 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       </div>
     </div>
     <div class="quick-start-actions">
-      <button class="quick-start-btn" onclick="applyQuickStart('bedbound')"><strong>🛏️ 臥床照護</strong><small>翻身、拍背、尿布、夜巡</small></button>
-      <button class="quick-start-btn" onclick="applyQuickStart('stroke')"><strong>🧠 中風復健</strong><small>復健、散步、生命徵象</small></button>
-      <button class="quick-start-btn" onclick="applyQuickStart('ambulatory')"><strong>🚶 一般陪伴</strong><small>三餐、用藥、陪伴活動</small></button>
+      <button class="quick-start-btn" onclick="applyQuickStart('bedbound')"><strong>🛏️ 臥床照護</strong><small>翻身、拍背、尿布、夜巡</small><em>套用後仍可逐項修改</em></button>
+      <button class="quick-start-btn" onclick="applyQuickStart('stroke')"><strong>🧠 中風復健</strong><small>復健、散步、生命徵象</small><em>套用後仍可逐項修改</em></button>
+      <button class="quick-start-btn" onclick="applyQuickStart('ambulatory')"><strong>🚶 一般陪伴</strong><small>三餐、用藥、陪伴活動</small><em>套用後仍可逐項修改</em></button>
     </div>
   </div>
 
@@ -689,27 +724,6 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div class="section-card">
     <div class="section-card-head" onclick="toggleCard(this)">
       <div class="section-card-head-left">
-        <span class="section-icon">🧑‍⚕️</span>
-        <div>
-          <div class="section-title">外籍看護姓名</div>
-          <div class="section-subtitle">印在表單識別欄，方便家屬與機構核對</div>
-        </div>
-      </div>
-      <span class="section-toggle-icon">▾</span>
-    </div>
-    <div class="section-body">
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">外籍看護姓名 <span class="optional">選填</span></label>
-          <input class="form-input" id="cfg-caregiver-name" type="text" placeholder="例：Siti">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
-      <div class="section-card-head-left">
         <span class="section-icon">📅</span>
         <div>
           <div class="section-title">週別設定</div>
@@ -719,14 +733,10 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <span class="section-toggle-icon">▾</span>
     </div>
     <div class="section-body">
-      <div class="form-row">
+      <div class="form-row single">
         <div class="form-group">
-          <label class="form-label">表單起始日期 <span class="optional">選填，填入後表頭顯示日期</span></label>
+          <label class="form-label">週表起始日期 <span class="optional">選填，填入後表頭顯示日期</span></label>
           <input class="form-input" id="cfg-start-date" type="date" placeholder="留空則只顯示星期幾">
-        </div>
-        <div class="form-group">
-          <label class="form-label">制定日期 <span class="optional">選填，留空自動帶今天</span></label>
-          <input class="form-input" id="cfg-issue-date" type="date">
         </div>
       </div>
       <div class="form-group" style="margin-bottom:12px;">
@@ -741,10 +751,6 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
           <div class="chip-option selected" data-val="0" onclick="toggleChip(this,'cfg-days','multi')">日</div>
         </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">頁尾備註 <span class="optional">選填</span></label>
-        <input class="form-input" id="cfg-footer-note" type="text" placeholder="例：如有異常請立即聯絡家屬">
-      </div>
     </div>
   </div>
 
@@ -753,7 +759,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <div class="section-card-head-left">
         <span class="section-icon">🚨</span>
         <div>
-          <div class="section-title with-badge">緊急狀況要找誰？ <span class="badge-opt">建議填寫</span></div>
+          <div class="section-title with-badge">緊急時要聯絡誰？ <span class="badge-opt">建議填寫</span></div>
           <div class="section-subtitle">安全提醒卡，會印在表單上方便看護回報</div>
         </div>
       </div>
@@ -804,17 +810,27 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   </div>
 
   <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
+    <div class="section-card-head collapsed" onclick="toggleCard(this)">
       <div class="section-card-head-left">
-        <span class="section-icon">🏠</span>
+        <span class="section-icon">🧑‍⚕️</span>
         <div>
-          <div class="section-title">機構 / 家庭基本資訊</div>
-          <div class="section-subtitle">地址與家庭名稱可稍後再填，降低一開始的壓力</div>
+          <div class="section-title with-badge">其他資料，可不填 <span class="badge-opt">選填</span></div>
+          <div class="section-subtitle">看護姓名、機構資料、備註與簽名欄，需要時再填</div>
         </div>
       </div>
       <span class="section-toggle-icon">▾</span>
     </div>
-    <div class="section-body">
+    <div class="section-body hidden">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">看護姓名 <span class="optional">選填</span></label>
+          <input class="form-input" id="cfg-caregiver-name" type="text" placeholder="例：Siti">
+        </div>
+        <div class="form-group">
+          <label class="form-label">製表日期 <span class="optional">選填，留空自動帶今天</span></label>
+          <input class="form-input" id="cfg-issue-date" type="date">
+        </div>
+      </div>
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">機構 / 家庭名稱 <span class="optional">選填</span></label>
@@ -825,21 +841,12 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
           <input class="form-input" id="cfg-org-addr" type="text" placeholder="例：台中市北區…">
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="section-card">
-    <div class="section-card-head" onclick="toggleCard(this)">
-      <div class="section-card-head-left">
-        <span class="section-icon">✍️</span>
-        <div>
-          <div class="section-title with-badge">簽名欄 <span class="badge-opt">選填</span></div>
-          <div class="section-subtitle">列印後手寫簽名用欄位</div>
-        </div>
+      <div class="form-group" style="margin-bottom:14px;">
+        <label class="form-label">備註提醒 <span class="optional">選填</span></label>
+        <input class="form-input" id="cfg-footer-note" type="text" placeholder="例：如有異常請立即聯絡家屬">
       </div>
-      <span class="section-toggle-icon">▾</span>
-    </div>
-    <div class="section-body">
+      <hr class="divider">
+      <div class="optional-subsection-title">簽名欄</div>
       <div class="toggle-row" id="sig-toggle-row" style="margin-bottom:12px;">
         <div class="toggle-label">
           <div class="toggle-label-main">顯示簽名欄</div>
@@ -898,8 +905,10 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 <!-- ══════════════ STEP 2: TIME SLOTS ══════════════ -->
 <div class="step-page" id="step-2">
-  <!-- ── v28: 圖式說明流程 ── -->
-  <div class="step2-visual-guide">
+  <!-- ── v33: 第一次展開、之後收合的操作說明 ── -->
+  <details class="step2-guide-details" id="step2GuideDetails">
+    <summary>不知道怎麼排？查看操作說明</summary>
+    <div class="step2-visual-guide">
     <div class="svg2-title">⚙️ 這一步怎麼操作？</div>
     <div class="svg2-steps">
       <div class="svg2-step">
@@ -936,13 +945,15 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
     <div class="svg2-tip">💡 不知道怎麼排？直接使用下方的「照護情境一鍵套用」，系統自動幫你填好所有時段！</div>
   </div>
+  </details>
 
+  <div class="step2-current-label" id="step2CurrentLabel">目前正在設定：一鍵套用</div>
   <div class="step2-segment-bar" aria-label="時段分段導覽">
-    <button class="step2-segment active" data-target="step2-quick" onclick="activateStep2Segment('step2-quick', this)">一鍵套用</button>
-    <button class="step2-segment" data-target="step2-common" onclick="activateStep2Segment('step2-common', this)">常用時段</button>
-    <button class="step2-segment" data-target="step2-medical" onclick="activateStep2Segment('step2-medical', this)">醫療照護</button>
-    <button class="step2-segment" data-target="step2-leisure" onclick="activateStep2Segment('step2-leisure', this)">休閒陪伴</button>
-    <button class="step2-segment" data-target="step2-custom" onclick="activateStep2Segment('step2-custom', this)">自訂時段</button>
+    <button class="step2-segment active" data-label="一鍵套用" data-target="step2-quick" onclick="activateStep2Segment('step2-quick', this)">一鍵</button>
+    <button class="step2-segment" data-label="常用照護" data-target="step2-common" onclick="activateStep2Segment('step2-common', this)">常用</button>
+    <button class="step2-segment" data-label="醫療照護" data-target="step2-medical" onclick="activateStep2Segment('step2-medical', this)">醫療</button>
+    <button class="step2-segment" data-label="休閒陪伴" data-target="step2-leisure" onclick="activateStep2Segment('step2-leisure', this)">陪伴</button>
+    <button class="step2-segment" data-label="自訂時段" data-target="step2-custom" onclick="activateStep2Segment('step2-custom', this)">自訂</button>
   </div>
 
   <div class="step-layer-label" id="step2-quick">① 一鍵套用 <span>先套用情境，再微調細節</span></div>
@@ -2069,7 +2080,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
   <div class="wizard-nav">
     <button class="btn-prev" onclick="gotoStep(3)">‹ 上一步</button>
-    <button class="btn-next" onclick="gotoStep(5)">下一步：列印版面與外觀 ›</button>
+    <button class="btn-next" onclick="gotoStep(5)">下一步：列印樣式 ›</button>
   </div>
 </div>
 
@@ -2170,7 +2181,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
   <div class="wizard-nav">
     <button class="btn-prev" onclick="gotoStep(4)">‹ 上一步</button>
-    <button class="btn-next" onclick="gotoStep(6)">最後一步：確認並產生時間表 ›</button>
+    <button class="btn-next" onclick="gotoStep(6)">最後一步：確認產生時間表 ›</button>
   </div>
 </div>
 
@@ -2188,6 +2199,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <span class="section-toggle-icon">▾</span>
     </div>
     <div class="section-body">
+      <div class="completion-card" id="completionCard"></div>
       <div class="status-card-grid" id="statusCardGrid"></div>
       <div class="summary-grid" id="summaryGrid"></div>
       <div id="workHoursStats"></div>
@@ -2208,8 +2220,8 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     <div class="section-body">
       <div class="summary-grid compact-summary" id="advancedSummaryGrid"></div>
       <div class="advanced-settings-actions">
-        <button class="btn-ie" onclick="gotoStep(4)">📋 工作細項設定</button>
-        <button class="btn-ie" onclick="gotoStep(5)">🎨 列印版面與外觀</button>
+        <button class="btn-ie" onclick="gotoStep(4)">📋 每個時段要做什麼</button>
+        <button class="btn-ie" onclick="gotoStep(5)">🎨 列印樣式</button>
       </div>
     </div>
   </div>
@@ -2219,7 +2231,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <div class="section-card-head-left">
         <span class="section-icon">🖨️</span>
         <div>
-          <div class="section-title">產生輸出</div>
+          <div class="section-title">產生與列印</div>
           <div class="section-subtitle">先產生，再列印、存 PDF 或下載 HTML</div>
         </div>
       </div>
@@ -2239,7 +2251,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
         </div>
       </div>
       <div id="conflict-banner-step6" style="margin-bottom:12px;"></div>
-      <button class="btn-generate output-primary-generate" id="generateBtn" onclick="generateSchedule()">✨ 確認並產生時間表</button>
+      <button class="btn-generate output-primary-generate" id="generateBtn" onclick="generateSchedule()">✨ 確認產生時間表</button>
     </div>
   </div>
 
@@ -2258,8 +2270,8 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     </div>
     <div class="output-actions">
       <button class="btn-out btn-out-primary" onclick="printOutput()">🖨️ 列印 / 存 PDF</button>
-      <button class="btn-out" onclick="downloadOutput()">💾 下載 HTML</button>
-      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
+      <button class="btn-out btn-out-secondary" onclick="downloadOutput()">💾 下載 HTML</button>
+      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">返回修改</button>
     </div>
   </div>
   <div style="background:#fef3c7;border:1px solid #fde68a;border-radius:8px;padding:8px 14px;margin-bottom:10px;font-size:12px;color:#92400e;display:flex;align-items:center;gap:8px;">
@@ -2329,6 +2341,9 @@ function updateSigLabelInputs(count) {
 function activateStep2Segment(targetId, btn) {
   document.querySelectorAll('.step2-segment').forEach(el => el.classList.remove('active'));
   if (btn) btn.classList.add('active');
+  const label = btn?.dataset?.label || btn?.textContent?.trim() || '一鍵套用';
+  const labelEl = document.getElementById('step2CurrentLabel');
+  if (labelEl) labelEl.textContent = '目前正在設定：' + label;
   const panels = document.getElementById('step2-panels');
   document.querySelectorAll('.step2-tab-panel').forEach(panel => {
     panel.classList.toggle('active', panel.id === targetId);
@@ -2339,6 +2354,18 @@ function activateStep2Segment(targetId, btn) {
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
   }
   if (targetId === 'step2-quick' && typeof injectScenarioTemplates === 'function') injectScenarioTemplates();
+}
+
+function initStep2GuideDetails() {
+  const guide = document.getElementById('step2GuideDetails');
+  if (!guide) return;
+  const seenKey = 'careWizardStep2GuideSeenV33';
+  const seen = localStorage.getItem(seenKey) === '1';
+  guide.open = !seen;
+  guide.addEventListener('toggle', () => {
+    if (guide.open) localStorage.setItem(seenKey, '1');
+  }, { once: true });
+  if (!seen) localStorage.setItem(seenKey, '1');
 }
 
 function organizeStep2TabbedPanels() {
@@ -2526,34 +2553,34 @@ function toggleChip(el, groupId, mode) {
 // Default tasks per slot key
 const DEFAULT_TASKS = {
   's-morning':       ['起床協助','盥洗清潔','更衣'],
-  's-breakfast':     ['備餐/準備','餵食協助','飲水量記錄'],
-  's-med-am':        ['核對藥單','給藥確認','記錄時間'],
+  's-breakfast':     ['備餐','餵食','記錄飲水'],
+  's-med-am':        ['核對藥單','給藥','記錄時間'],
   's-vital-am':      ['量血壓','量體溫','測脈搏'],
   's-morning-act':   ['活動協助','室內運動','陪伴活動'],
-  's-rehab':         ['確認復健計畫','執行復健項目','記錄成效'],
-  's-walk':          ['協助穿鞋/外出準備','陪同戶外散步','觀察狀況、確認安全'],
-  's-hospital':      ['協助出門準備（健保卡、藥袋）','陪同就醫、記錄醫囑','返家後整理用藥/注意事項'],
-  's-lunch':         ['備餐/準備','餵食協助','飲水量記錄'],
-  's-med-noon':      ['核對藥單','給藥確認'],
+  's-rehab':         ['確認復健','執行項目','記錄成效'],
+  's-walk':          ['穿鞋外出','陪同散步','安全觀察'],
+  's-hospital':      ['備健保卡/藥袋','陪同就醫','整理醫囑/用藥'],
+  's-lunch':         ['備餐','餵食','記錄飲水'],
+  's-med-noon':      ['核對藥單','給藥'],
   's-nap':           ['協助躺臥','翻身排程','確認舒適'],
   's-vital-pm':      ['量血壓','測血糖','記錄數值'],
   's-afternoon-act': ['點心準備','沐浴協助','娛樂陪伴'],
-  's-dinner':        ['備餐/準備','餵食協助','飲水量記錄'],
-  's-med-pm':        ['核對藥單','給藥確認'],
+  's-dinner':        ['備餐','餵食','記錄飲水'],
+  's-med-pm':        ['核對藥單','給藥'],
   's-evening':       ['洗澡/擦身','口腔護理','更換衣物'],
-  's-bedtime':       ['更換尿布/衣物','就寢安置','確認舒適'],
+  's-bedtime':       ['換尿布/衣物','就寢安置','確認舒適'],
   's-night':         ['定時翻身','如廁協助','觀察狀況'],
   // Cleaning slots
-  's-clean-morning': ['整理床鋪','掃地清潔','倒垃圾/開窗通風'],
-  's-clean-noon':    ['廚房清潔','洗碗/整理碗盤','擦拭桌面'],
-  's-clean-evening': ['廚房收拾','浴室/廁所清潔','整理垃圾/摺衣'],
-  's-clean-weekly':  ['浴室深度清潔','廚房深度清潔','全室拖地/吸塵'],
+  's-clean-morning': ['整理床鋪','掃地','倒垃圾/通風'],
+  's-clean-noon':    ['清廚房','洗碗盤','擦桌面'],
+  's-clean-evening': ['收廚房','清浴廁','垃圾/衣物'],
+  's-clean-weekly':  ['清浴室','清廚房','拖地/吸塵'],
   // Leisure slots
-  's-tv':            ['開電視、選頻道','陪同收看','觀察反應與情緒'],
-  's-music':         ['播放喜愛音樂','陪伴欣賞/輕唱','觀察情緒反應'],
-  's-reading':       ['備好報紙/書籍','協助閱讀/朗讀','討論內容'],
-  's-craft':         ['準備材料/道具','陪同進行活動','鼓勵完成、收拾'],
-  's-social':        ['準備互動環境','陪同家屬/視訊','記錄互動情況'],
+  's-tv':            ['開電視','陪同收看','觀察情緒'],
+  's-music':         ['播放音樂','陪伴輕唱','觀察情緒'],
+  's-reading':       ['備報紙/書','協助朗讀','討論內容'],
+  's-craft':         ['備材料','陪同活動','收拾整理'],
+  's-social':        ['準備環境','陪同視訊','記錄互動'],
 };
 
 
@@ -2585,29 +2612,29 @@ const CARE_TEMPLATE_TASK_TRANSLATIONS = {
     '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Amati napas dan kondisi kulit',
     '整理床鋪':'整理床鋪 / Rapikan tempat tidur',
     '掃地':'掃地 / Sapu lantai',
-    '掃地清潔':'掃地清潔 / Sapu lantai',
+    '掃地清潔':'掃地 / Sapu lantai',
     '拖地':'拖地 / Pel lantai',
     '倒垃圾':'倒垃圾 / Buang sampah',
     '開窗通風':'開窗通風 / Buka jendela untuk ventilasi',
-    '倒垃圾/開窗通風':'倒垃圾/開窗通風 / Buang sampah / buka jendela',
+    '倒垃圾/開窗通風':'倒垃圾/通風 / Buang sampah/ventilasi',
     '更換床單/被套':'更換床單/被套 / Ganti seprai/selimut',
-    '廚房清潔':'廚房清潔 / Bersihkan dapur',
-    '洗碗/整理碗盤':'洗碗/整理碗盤 / Cuci dan rapikan piring',
-    '擦拭桌面':'擦拭桌面 / Lap meja',
+    '廚房清潔':'清廚房 / Bersihkan dapur',
+    '洗碗/整理碗盤':'洗碗盤 / Cuci piring',
+    '擦拭桌面':'擦桌面 / Lap meja',
     '客廳整理':'客廳整理 / Rapikan ruang tamu',
     '洗衣/曬衣':'洗衣/曬衣 / Cuci/jemur pakaian',
-    '廚房收拾':'廚房收拾 / Rapikan dapur',
+    '廚房收拾':'收廚房 / Rapikan dapur',
     '洗碗/收碗':'洗碗/收碗 / Cuci dan simpan piring',
     '浴室清潔':'浴室清潔 / Bersihkan kamar mandi',
     '廁所清潔':'廁所清潔 / Bersihkan toilet',
-    '浴室/廁所清潔':'浴室/廁所清潔 / Bersihkan kamar mandi/toilet',
+    '浴室/廁所清潔':'清浴廁 / Bersihkan kamar mandi/toilet',
     '整理垃圾':'整理垃圾 / Rapikan sampah',
     '摺衣/收衣':'摺衣/收衣 / Lipat/simpan pakaian',
-    '整理垃圾/摺衣':'整理垃圾/摺衣 / Rapikan sampah / lipat pakaian',
-    '浴室深度清潔':'浴室深度清潔 / Bersihkan kamar mandi secara mendalam',
-    '廚房深度清潔':'廚房深度清潔 / Bersihkan dapur secara mendalam',
+    '整理垃圾/摺衣':'垃圾/衣物 / Sampah/pakaian',
+    '浴室深度清潔':'清浴室 / Bersihkan kamar mandi',
+    '廚房深度清潔':'清廚房 / Bersihkan dapur',
     '全室拖地':'全室拖地 / Pel seluruh rumah',
-    '全室拖地/吸塵':'全室拖地/吸塵 / Pel/vakum seluruh rumah',
+    '全室拖地/吸塵':'拖地/吸塵 / Pel/vakum',
     '擦拭牆面/門窗':'擦拭牆面/門窗 / Lap dinding/pintu/jendela',
     '換洗床單被套':'換洗床單被套 / Ganti dan cuci seprai',
     '清理冰箱':'清理冰箱 / Bersihkan kulkas',
@@ -2641,29 +2668,29 @@ const CARE_TEMPLATE_TASK_TRANSLATIONS = {
     '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Theo dõi hô hấp và tình trạng da',
     '整理床鋪':'整理床鋪 / Dọn giường',
     '掃地':'掃地 / Quét nhà',
-    '掃地清潔':'掃地清潔 / Quét dọn sàn',
+    '掃地清潔':'掃地 / Quét sàn',
     '拖地':'拖地 / Lau nhà',
     '倒垃圾':'倒垃圾 / Đổ rác',
     '開窗通風':'開窗通風 / Mở cửa sổ thông gió',
-    '倒垃圾/開窗通風':'倒垃圾/開窗通風 / Đổ rác / mở cửa thông gió',
+    '倒垃圾/開窗通風':'倒垃圾/通風 / Đổ rác/thông gió',
     '更換床單/被套':'更換床單/被套 / Thay ga/vỏ chăn',
-    '廚房清潔':'廚房清潔 / Dọn bếp',
-    '洗碗/整理碗盤':'洗碗/整理碗盤 / Rửa và sắp xếp bát đĩa',
-    '擦拭桌面':'擦拭桌面 / Lau mặt bàn',
+    '廚房清潔':'清廚房 / Dọn bếp',
+    '洗碗/整理碗盤':'洗碗盤 / Rửa bát đĩa',
+    '擦拭桌面':'擦桌面 / Lau bàn',
     '客廳整理':'客廳整理 / Dọn phòng khách',
     '洗衣/曬衣':'洗衣/曬衣 / Giặt/phơi quần áo',
-    '廚房收拾':'廚房收拾 / Dọn dẹp bếp',
+    '廚房收拾':'收廚房 / Dọn bếp',
     '洗碗/收碗':'洗碗/收碗 / Rửa và cất bát đĩa',
     '浴室清潔':'浴室清潔 / Dọn phòng tắm',
     '廁所清潔':'廁所清潔 / Dọn nhà vệ sinh',
-    '浴室/廁所清潔':'浴室/廁所清潔 / Dọn phòng tắm/nhà vệ sinh',
+    '浴室/廁所清潔':'清浴廁 / Dọn tắm/vệ sinh',
     '整理垃圾':'整理垃圾 / Thu gom rác',
     '摺衣/收衣':'摺衣/收衣 / Gấp/cất quần áo',
-    '整理垃圾/摺衣':'整理垃圾/摺衣 / Thu gom rác / gấp quần áo',
-    '浴室深度清潔':'浴室深度清潔 / Vệ sinh sâu phòng tắm',
-    '廚房深度清潔':'廚房深度清潔 / Vệ sinh sâu nhà bếp',
+    '整理垃圾/摺衣':'垃圾/衣物 / Rác/quần áo',
+    '浴室深度清潔':'清浴室 / Dọn phòng tắm',
+    '廚房深度清潔':'清廚房 / Dọn bếp',
     '全室拖地':'全室拖地 / Lau toàn bộ nhà',
-    '全室拖地/吸塵':'全室拖地/吸塵 / Lau/hút bụi toàn bộ nhà',
+    '全室拖地/吸塵':'拖地/吸塵 / Lau/hút bụi',
     '擦拭牆面/門窗':'擦拭牆面/門窗 / Lau tường/cửa',
     '換洗床單被套':'換洗床單被套 / Thay và giặt ga gối',
     '清理冰箱':'清理冰箱 / Vệ sinh tủ lạnh',
@@ -2697,29 +2724,29 @@ const CARE_TEMPLATE_TASK_TRANSLATIONS = {
     '觀察呼吸與皮膚狀況':'觀察呼吸與皮膚狀況 / Observe breathing and skin condition',
     '整理床鋪':'整理床鋪 / Make the bed',
     '掃地':'掃地 / Sweep floor',
-    '掃地清潔':'掃地清潔 / Sweep floor',
+    '掃地清潔':'掃地 / Sweep floor',
     '拖地':'拖地 / Mop floor',
     '倒垃圾':'倒垃圾 / Empty trash',
     '開窗通風':'開窗通風 / Open windows for ventilation',
-    '倒垃圾/開窗通風':'倒垃圾/開窗通風 / Empty trash / ventilate',
+    '倒垃圾/開窗通風':'倒垃圾/通風 / Trash/ventilate',
     '更換床單/被套':'更換床單/被套 / Change sheets/duvet cover',
-    '廚房清潔':'廚房清潔 / Clean kitchen',
-    '洗碗/整理碗盤':'洗碗/整理碗盤 / Wash and organize dishes',
-    '擦拭桌面':'擦拭桌面 / Wipe table',
+    '廚房清潔':'清廚房 / Clean kitchen',
+    '洗碗/整理碗盤':'洗碗盤 / Wash dishes',
+    '擦拭桌面':'擦桌面 / Wipe table',
     '客廳整理':'客廳整理 / Tidy living room',
     '洗衣/曬衣':'洗衣/曬衣 / Wash/hang laundry',
-    '廚房收拾':'廚房收拾 / Tidy kitchen',
+    '廚房收拾':'收廚房 / Tidy kitchen',
     '洗碗/收碗':'洗碗/收碗 / Wash and put away dishes',
     '浴室清潔':'浴室清潔 / Clean bathroom',
     '廁所清潔':'廁所清潔 / Clean toilet',
-    '浴室/廁所清潔':'浴室/廁所清潔 / Clean bathroom/toilet',
+    '浴室/廁所清潔':'清浴廁 / Clean bath/toilet',
     '整理垃圾':'整理垃圾 / Collect trash',
     '摺衣/收衣':'摺衣/收衣 / Fold/put away clothes',
-    '整理垃圾/摺衣':'整理垃圾/摺衣 / Collect trash / fold clothes',
-    '浴室深度清潔':'浴室深度清潔 / Deep-clean bathroom',
-    '廚房深度清潔':'廚房深度清潔 / Deep-clean kitchen',
+    '整理垃圾/摺衣':'垃圾/衣物 / Trash/clothes',
+    '浴室深度清潔':'清浴室 / Clean bathroom',
+    '廚房深度清潔':'清廚房 / Clean kitchen',
     '全室拖地':'全室拖地 / Mop all rooms',
-    '全室拖地/吸塵':'全室拖地/吸塵 / Mop/vacuum all rooms',
+    '全室拖地/吸塵':'拖地/吸塵 / Mop/vacuum',
     '擦拭牆面/門窗':'擦拭牆面/門窗 / Wipe walls/doors/windows',
     '換洗床單被套':'換洗床單被套 / Change and wash bedding',
     '清理冰箱':'清理冰箱 / Clean fridge',
@@ -2727,6 +2754,157 @@ const CARE_TEMPLATE_TASK_TRANSLATIONS = {
     '消毒清潔':'消毒清潔 / Clean and disinfect'
   }
 };
+
+
+Object.assign(CARE_TEMPLATE_TASK_TRANSLATIONS['zh-id'], {
+  '翻身看皮膚':'翻身看皮膚 / Ubah posisi & cek kulit',
+  '尿布/管路':'尿布/管路 / Popok/selang',
+  '口腔護理':'口腔護理 / Kebersihan mulut',
+  '擦浴':'擦浴 / Lap badan',
+  '更衣':'更衣 / Ganti pakaian',
+  '量體溫/血壓/血氧':'量體溫/血壓/血氧 / Cek suhu/BP/SpO2',
+  '記錄飲食/尿量':'記錄飲食/尿量 / Catat makan/urin',
+  '翻身擺位':'翻身擺位 / Atur posisi',
+  '床頭抬高':'床頭抬高 / Naikkan kepala ranjang',
+  '2小時翻身':'2小時翻身 / Ubah posisi tiap 2 jam',
+  '看呼吸/皮膚':'看呼吸/皮膚 / Cek napas/kulit',
+  '換尿布':'換尿布 / Ganti popok',
+  '被動關節運動':'被動關節運動 / ROM pasif',
+  '主動復健':'主動復健 / Rehab aktif',
+  '記錄反應':'記錄反應 / Catat respons',
+  '患側按摩':'患側按摩 / Pijat sisi sakit',
+  '助行器行走':'助行器行走 / Jalan dengan alat bantu',
+  '看步態防跌':'看步態防跌 / Cek gaya jalan, cegah jatuh',
+  '翻身/擺位':'翻身/擺位 / Ubah posisi',
+  '記錄翻身':'記錄翻身 / Catat ubah posisi',
+  '看無力麻木':'看無力麻木 / Cek lemah/kebas',
+  '記錄異常':'記錄異常 / Catat abnormal',
+  '抓握訓練':'抓握訓練 / Latihan genggam',
+  'ADL練習':'ADL練習 / Latihan ADL',
+  '翻舊照片':'翻舊照片 / Lihat foto lama',
+  '記憶聊天':'記憶聊天 / Latihan memori ngobrol',
+  '返家補水':'返家補水 / Minum setelah pulang',
+  '手作活動':'手作活動 / Aktivitas kerajinan',
+  '歌曲跟唱':'歌曲跟唱 / Ikut bernyanyi',
+  '固定睡前流程':'固定睡前流程 / Rutinitas tidur',
+  '鎖門窗防走失':'鎖門窗防走失 / Kunci pintu/jendela',
+  '讀報/練字':'讀報/練字 / Baca koran/tulis',
+  '伸展運動':'伸展運動 / Peregangan',
+  '散步30–40分':'散步30–40分 / Jalan 30–40 menit',
+  '防曬補水':'防曬補水 / Tabir surya & minum',
+  '視訊家人':'視訊家人 / Video call keluarga',
+  '鄰里互動':'鄰里互動 / Interaksi tetangga',
+  '備隔日衣物':'備隔日衣物 / Siapkan baju besok',
+  '看電視聊天':'看電視聊天 / TV & ngobrol',
+  '傷口換藥':'傷口換藥 / Ganti balutan',
+  '協助如廁':'協助如廁 / Bantu toilet',
+  '安全移位':'安全移位 / Pindah aman',
+  '量血壓/體溫':'量血壓/體溫 / Cek BP/suhu',
+  '看傷口滲液':'看傷口滲液 / Cek cairan luka',
+  '記錄排泄':'記錄排泄 / Catat eliminasi',
+  '備病歷/藥單':'備病歷/藥單 / Siapkan rekam/obat',
+  '確認醫囑/藥物':'確認醫囑/藥物 / Cek instruksi/obat'
+});
+
+Object.assign(CARE_TEMPLATE_TASK_TRANSLATIONS['zh-vi'], {
+  '翻身看皮膚':'翻身看皮膚 / Trở mình & kiểm tra da',
+  '尿布/管路':'尿布/管路 / Tã/ống thông',
+  '口腔護理':'口腔護理 / Vệ sinh răng miệng',
+  '擦浴':'擦浴 / Lau người',
+  '更衣':'更衣 / Thay quần áo',
+  '量體溫/血壓/血氧':'量體溫/血壓/血氧 / Đo nhiệt/BP/SpO2',
+  '記錄飲食/尿量':'記錄飲食/尿量 / Ghi ăn/uống/tiểu',
+  '翻身擺位':'翻身擺位 / Chỉnh tư thế',
+  '床頭抬高':'床頭抬高 / Nâng đầu giường',
+  '2小時翻身':'2小時翻身 / Trở mình mỗi 2 giờ',
+  '看呼吸/皮膚':'看呼吸/皮膚 / Theo dõi thở/da',
+  '換尿布':'換尿布 / Thay tã',
+  '被動關節運動':'被動關節運動 / Vận động khớp thụ động',
+  '主動復健':'主動復健 / Tập phục hồi chủ động',
+  '記錄反應':'記錄反應 / Ghi phản ứng',
+  '患側按摩':'患側按摩 / Xoa bóp bên yếu',
+  '助行器行走':'助行器行走 / Đi với dụng cụ hỗ trợ',
+  '看步態防跌':'看步態防跌 / Theo dõi dáng đi, chống ngã',
+  '翻身/擺位':'翻身/擺位 / Trở mình/tư thế',
+  '記錄翻身':'記錄翻身 / Ghi giờ trở mình',
+  '看無力麻木':'看無力麻木 / Theo dõi yếu/tê',
+  '記錄異常':'記錄異常 / Ghi bất thường',
+  '抓握訓練':'抓握訓練 / Tập nắm',
+  'ADL練習':'ADL練習 / Tập sinh hoạt ADL',
+  '翻舊照片':'翻舊照片 / Xem ảnh cũ',
+  '記憶聊天':'記憶聊天 / Trò chuyện gợi nhớ',
+  '返家補水':'返家補水 / Uống nước khi về',
+  '手作活動':'手作活動 / Hoạt động thủ công',
+  '歌曲跟唱':'歌曲跟唱 / Hát theo bài hát',
+  '固定睡前流程':'固定睡前流程 / Quy trình trước ngủ',
+  '鎖門窗防走失':'鎖門窗防走失 / Khóa cửa chống đi lạc',
+  '讀報/練字':'讀報/練字 / Đọc báo/tập viết',
+  '伸展運動':'伸展運動 / Giãn cơ',
+  '散步30–40分':'散步30–40分 / Đi bộ 30–40 phút',
+  '防曬補水':'防曬補水 / Chống nắng/uống nước',
+  '視訊家人':'視訊家人 / Gọi video gia đình',
+  '鄰里互動':'鄰里互動 / Giao lưu hàng xóm',
+  '備隔日衣物':'備隔日衣物 / Chuẩn bị đồ ngày mai',
+  '看電視聊天':'看電視聊天 / Xem TV/trò chuyện',
+  '傷口換藥':'傷口換藥 / Thay băng vết thương',
+  '協助如廁':'協助如廁 / Hỗ trợ vệ sinh',
+  '安全移位':'安全移位 / Di chuyển an toàn',
+  '量血壓/體溫':'量血壓/體溫 / Đo BP/nhiệt độ',
+  '看傷口滲液':'看傷口滲液 / Theo dõi dịch vết thương',
+  '記錄排泄':'記錄排泄 / Ghi bài tiết',
+  '備病歷/藥單':'備病歷/藥單 / Chuẩn bị hồ sơ/thuốc',
+  '確認醫囑/藥物':'確認醫囑/藥物 / Xác nhận dặn dò/thuốc'
+});
+
+Object.assign(CARE_TEMPLATE_TASK_TRANSLATIONS['zh-en'], {
+  '翻身看皮膚':'翻身看皮膚 / Reposition & check skin',
+  '尿布/管路':'尿布/管路 / Diaper/tube',
+  '口腔護理':'口腔護理 / Oral care',
+  '擦浴':'擦浴 / Bed bath',
+  '更衣':'更衣 / Change clothes',
+  '量體溫/血壓/血氧':'量體溫/血壓/血氧 / Check temp/BP/SpO2',
+  '記錄飲食/尿量':'記錄飲食/尿量 / Log intake/urine',
+  '翻身擺位':'翻身擺位 / Positioning',
+  '床頭抬高':'床頭抬高 / Raise bed head',
+  '2小時翻身':'2小時翻身 / Reposition q2h',
+  '看呼吸/皮膚':'看呼吸/皮膚 / Check breathing/skin',
+  '換尿布':'換尿布 / Change diaper',
+  '被動關節運動':'被動關節運動 / Passive ROM',
+  '主動復健':'主動復健 / Active rehab',
+  '記錄反應':'記錄反應 / Log response',
+  '患側按摩':'患側按摩 / Massage affected side',
+  '助行器行走':'助行器行走 / Walk with aid',
+  '看步態防跌':'看步態防跌 / Watch gait/fall risk',
+  '翻身/擺位':'翻身/擺位 / Reposition',
+  '記錄翻身':'記錄翻身 / Log repositioning',
+  '看無力麻木':'看無力麻木 / Check weakness/numbness',
+  '記錄異常':'記錄異常 / Log abnormal',
+  '抓握訓練':'抓握訓練 / Grip training',
+  'ADL練習':'ADL練習 / ADL practice',
+  '翻舊照片':'翻舊照片 / Look at old photos',
+  '記憶聊天':'記憶聊天 / Memory chat',
+  '返家補水':'返家補水 / Hydrate after return',
+  '手作活動':'手作活動 / Craft activity',
+  '歌曲跟唱':'歌曲跟唱 / Sing along',
+  '固定睡前流程':'固定睡前流程 / Bedtime routine',
+  '鎖門窗防走失':'鎖門窗防走失 / Lock doors/windows',
+  '讀報/練字':'讀報/練字 / Read/write practice',
+  '伸展運動':'伸展運動 / Stretching',
+  '散步30–40分':'散步30–40分 / Walk 30–40 min',
+  '防曬補水':'防曬補水 / Sun care/hydrate',
+  '視訊家人':'視訊家人 / Video call family',
+  '鄰里互動':'鄰里互動 / Neighbor interaction',
+  '備隔日衣物':'備隔日衣物 / Prep tomorrow clothes',
+  '看電視聊天':'看電視聊天 / TV/chat',
+  '傷口換藥':'傷口換藥 / Change dressing',
+  '協助如廁':'協助如廁 / Assist toileting',
+  '安全移位':'安全移位 / Safe transfer',
+  '量血壓/體溫':'量血壓/體溫 / Check BP/temp',
+  '看傷口滲液':'看傷口滲液 / Check wound drainage',
+  '記錄排泄':'記錄排泄 / Log elimination',
+  '備病歷/藥單':'備病歷/藥單 / Prep records/med list',
+  '確認醫囑/藥物':'確認醫囑/藥物 / Confirm orders/meds'
+});
 
 
 function buildTaskEditor(secId) {
@@ -2915,7 +3093,7 @@ function addCustomSlot(prefillDays) {
     <div class="form-row single">
       <div class="form-group">
         <label class="form-label">工作內容說明 <span class="optional">選填</span></label>
-        <input class="form-input" id="slot-${id}-desc" type="text" placeholder="例：協助被動關節運動 20 分鐘">
+        <input class="form-input" id="slot-${id}-desc" type="text" placeholder="例：復健 20 分鐘">
       </div>
     </div>`;
   list.appendChild(entry);
@@ -3223,10 +3401,44 @@ function getScheduleMetrics() {
   return { activeSlots, avgDailyMins, conflicts, activeDayCount: activeDays.length };
 }
 
+function renderCompletionCard(metrics) {
+  const host = document.getElementById('completionCard');
+  if (!host) return;
+  const m = metrics || getScheduleMetrics();
+  const selectedDaysOk = m.activeDayCount > 0;
+  const slotsOk = m.activeSlots > 0;
+  const printStyleOk = !!getChipVal('cfg-fontsize') && !!getChipVal('cfg-rowheight');
+  const emergencyOk = !!(document.getElementById('emg-phone-1')?.value || '').trim();
+  const conflictOk = m.conflicts.length === 0;
+  const checks = [
+    ['已選星期', selectedDaysOk],
+    ['已設定照護時段', slotsOk],
+    ['已完成列印樣式', printStyleOk],
+    ['已填緊急聯絡人', emergencyOk, true],
+    ['無時間衝突', conflictOk]
+  ];
+  const done = checks.filter(item => item[1]).length;
+  const canGenerate = selectedDaysOk && slotsOk && conflictOk;
+  host.className = 'completion-card ' + (canGenerate ? 'ok' : 'warn');
+  host.innerHTML = `
+    <div class="completion-top">
+      <div>
+        <div class="completion-title">完成度：${done} / ${checks.length}，${canGenerate ? '可產生時間表' : '建議先補齊設定'}</div>
+        <div class="completion-sub">緊急聯絡人是建議填寫，沒有填也可先產生。</div>
+      </div>
+      <div class="completion-score">${done}/${checks.length}</div>
+    </div>
+    <div class="completion-bar"><span style="width:${Math.round(done / checks.length * 100)}%"></span></div>
+    <div class="completion-checks">
+      ${checks.map(([text, ok, optional]) => `<div class="completion-check ${ok ? 'ok' : 'warn'}">${ok ? '✅' : '⚠️'} ${ok ? text : (optional ? '尚未填緊急聯絡人' : text)}</div>`).join('')}
+    </div>`;
+}
+
 function renderStatusCards() {
   const host = document.getElementById('statusCardGrid');
   if (!host) return;
   const m = getScheduleMetrics();
+  renderCompletionCard(m);
   const slotClass = m.activeSlots > 16 ? 'danger' : (m.activeSlots > 12 ? 'warn' : 'ok');
   const slotText = m.activeSlots > 16 ? '17 個以上' : (m.activeSlots > 12 ? '13–16 個' : '12 個以下');
   const densityClass = slotClass;
@@ -3318,7 +3530,7 @@ function generateSchedule() {
       btn.disabled = false;
     } catch (e) {
       btn.disabled = false;
-      btn.innerHTML = '✨ 確認並產生時間表';
+      btn.innerHTML = '✨ 確認產生時間表';
       // 用非阻塞方式顯示錯誤，避免 alert 卡住 UI
       const errBox = document.createElement('div');
       errBox.style.cssText = 'background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:13px;color:#dc2626;white-space:pre-line;';
@@ -3600,37 +3812,37 @@ function buildScheduleHTML() {
       clean_evening:'晚班打掃\nBersih Malam', clean_weekly:'週間大掃除\nBersih Mingguan',
       tasks:{
         morning:     ['起床協助 / Bantu bangun','盥洗清潔 / Kebersihan diri','更衣 / Ganti pakaian'],
-        breakfast:   ['備餐/準備 / Siapkan makanan','餵食協助 / Bantu makan','飲水量記錄 / Catat asupan air'],
-        med_am:      ['核對藥單 / Cek daftar obat','給藥確認 / Berikan obat','記錄時間 / Catat waktu'],
+        breakfast:   ['備餐 / Siapkan makanan','餵食 / Bantu makan','記錄飲水 / Catat air'],
+        med_am:      ['核對藥單 / Cek daftar obat','給藥 / Berikan obat','記錄時間 / Catat waktu'],
         vital_am:    ['量血壓 / Cek tekanan darah','量體溫 / Cek suhu','測脈搏 / Cek nadi'],
         morning_act: ['活動協助 / Bantu aktivitas','被動關節運動 / Latihan pasif','陪同散步 / Temani jalan'],
-        rehab_slot:  ['Cek rencana rehabilitasi / 確認復健計畫','Lakukan rehabilitasi / 執行復健項目','Catat kemajuan / 記錄成效'],
-        walk:        ['Bantu persiapan keluar / 協助出門準備','Temani jalan udara segar / 陪同戶外散步','Awasi kondisi keselamatan / 觀察安全狀況'],
-        hospital:    ['Siapkan kartu BPJS/obat / 備好健保卡藥袋','Temani ke dokter & catat pesan dokter / 陪同就醫記錄醫囑','Atur obat sepulang / 返家整理用藥'],
-        lunch:       ['備餐/準備 / Siapkan makan siang','餵食協助 / Bantu makan','飲水量記錄 / Catat asupan air'],
-        med_noon:    ['核對藥單 / Cek daftar obat','給藥確認 / Berikan obat'],
+        rehab_slot:  ['確認復健 / Cek rehab','執行項目 / Lakukan rehab','記錄成效 / Catat hasil'],
+        walk:        ['穿鞋外出 / Bantu keluar','陪同散步 / Temani jalan','安全觀察 / Awasi aman'],
+        hospital:    ['備健保卡/藥袋 / Siapkan kartu/obat','陪同就醫 / Temani dokter','整理醫囑/用藥 / Atur obat'],
+        lunch:       ['備餐 / Siapkan makan siang','餵食 / Bantu makan','記錄飲水 / Catat air'],
+        med_noon:    ['核對藥單 / Cek daftar obat','給藥 / Berikan obat'],
         nap:         ['協助躺臥 / Bantu berbaring','翻身排程 / Jadwal miring','確認舒適 / Pastikan nyaman'],
         vital_pm:    ['量血壓 / Cek tekanan darah','測血糖 / Cek gula darah','記錄數值 / Catat angka'],
         afternoon_act:['點心準備 / Siapkan snack','沐浴協助 / Bantu mandi','娛樂陪伴 / Temani aktivitas'],
-        dinner:      ['備餐/準備 / Siapkan makan malam','餵食協助 / Bantu makan','飲水量記錄 / Catat asupan air'],
-        med_pm:      ['核對藥單 / Cek daftar obat','給藥確認 / Berikan obat'],
+        dinner:      ['備餐 / Siapkan makan malam','餵食 / Bantu makan','記錄飲水 / Catat air'],
+        med_pm:      ['核對藥單 / Cek daftar obat','給藥 / Berikan obat'],
         evening:     ['洗澡/擦身 / Mandi/lap badan','口腔護理 / Kebersihan mulut','更換衣物 / Ganti pakaian'],
-        bedtime:     ['更換尿布/衣物 / Ganti popok','就寢安置 / Siapkan tidur','確認舒適 / Pastikan nyaman'],
+        bedtime:     ['換尿布/衣物 / Ganti popok/pakaian','就寢安置 / Siapkan tidur','確認舒適 / Pastikan nyaman'],
         night:       ['定時翻身 / Miring berkala','如廁協助 / Bantu ke toilet','觀察狀況 / Amati kondisi'],
         tube:        ['準備配方 / Siapkan formula','管灌執行 / Lakukan NGT','記錄容量 / Catat volume'],
         wound:       ['換藥執行 / Ganti balutan','傷口觀察 / Observasi luka','記錄狀況 / Catat kondisi'],
         rehab:       ['復健項目 / Jenis rehabilitasi','執行時間 / Waktu pelaksanaan','成效記錄 / Catat kemajuan'],
         elim:        ['排尿次數 / Frekuensi BAK','排便次數 / Frekuensi BAB','狀況記錄 / Catat kondisi'],
         weight:      ['量體重 / Timbang berat badan','記錄數值 / Catat angka'],
-        tv:          ['開電視選頻道 / Nyalakan TV & pilih saluran','陪同收看 / Temani menonton','觀察情緒反應 / Amati respons emosi'],
-        music:       ['播放喜愛音樂 / Putar musik favorit','陪伴欣賞 / Temani mendengarkan','觀察情緒反應 / Amati respons emosi'],
-        reading:     ['備好報紙/書籍 / Siapkan koran/buku','協助閱讀 / Bantu membaca','討論內容 / Diskusikan isi bacaan'],
-        craft:       ['準備材料道具 / Siapkan bahan','陪同進行活動 / Temani kegiatan','鼓勵完成 / Dukung & rapikan'],
-        social:      ['準備互動環境 / Siapkan suasana','陪同視訊/家屬 / Temani video call','記錄互動 / Catat interaksi'],
-        clean_morning:['整理床鋪 / Rapikan tempat tidur','掃地清潔 / Sapu lantai','倒垃圾/開窗通風 / Buang sampah / buka jendela'],
-        clean_noon:   ['廚房清潔 / Bersihkan dapur','洗碗/整理碗盤 / Cuci dan rapikan piring','擦拭桌面 / Lap meja'],
-        clean_evening:['廚房收拾 / Rapikan dapur','浴室/廁所清潔 / Bersihkan kamar mandi/toilet','整理垃圾/摺衣 / Rapikan sampah / lipat pakaian'],
-        clean_weekly: ['浴室深度清潔 / Bersihkan kamar mandi secara mendalam','廚房深度清潔 / Bersihkan dapur secara mendalam','全室拖地/吸塵 / Pel/vakum seluruh rumah'],
+        tv:          ['開電視 / Nyalakan TV','陪同收看 / Temani menonton','觀察情緒 / Amati emosi'],
+        music:       ['播放音樂 / Putar musik','陪伴輕唱 / Temani musik','觀察情緒 / Amati emosi'],
+        reading:     ['備報紙/書 / Siapkan koran/buku','協助朗讀 / Bantu baca','討論內容 / Diskusikan isi bacaan'],
+        craft:       ['備材料 / Siapkan bahan','陪同活動 / Temani kegiatan','收拾整理 / Rapikan'],
+        social:      ['準備環境 / Siapkan suasana','陪同視訊 / Temani video call','記錄互動 / Catat interaksi'],
+        clean_morning:['整理床鋪 / Rapikan tempat tidur','掃地 / Sapu lantai','倒垃圾/通風 / Buang sampah/ventilasi'],
+        clean_noon:   ['清廚房 / Bersihkan dapur','洗碗盤 / Cuci piring','擦桌面 / Lap meja'],
+        clean_evening:['收廚房 / Rapikan dapur','清浴廁 / Bersihkan kamar mandi/toilet','垃圾/衣物 / Sampah/pakaian'],
+        clean_weekly: ['清浴室 / Bersihkan kamar mandi','清廚房 / Bersihkan dapur','拖地/吸塵 / Pel/vakum'],
       }
     },
     'zh-vi': {
@@ -3659,37 +3871,37 @@ function buildScheduleHTML() {
       clean_evening:'晚班打掃\nDọn Dẹp Tối', clean_weekly:'週間大掃除\nTổng Vệ Sinh Tuần',
       tasks:{
         morning:     ['起床協助 / Hỗ trợ dậy','盥洗清潔 / Vệ sinh cá nhân','更衣 / Thay quần áo'],
-        breakfast:   ['備餐/準備 / Chuẩn bị bữa ăn','餵食協助 / Hỗ trợ ăn','飲水量記錄 / Ghi lượng nước'],
-        med_am:      ['核對藥單 / Kiểm tra thuốc','給藥確認 / Cho uống thuốc','記錄時間 / Ghi giờ'],
+        breakfast:   ['備餐 / Chuẩn bị bữa ăn','餵食 / Hỗ trợ ăn','記錄飲水 / Ghi nước'],
+        med_am:      ['核對藥單 / Kiểm tra thuốc','給藥 / Cho thuốc','記錄時間 / Ghi giờ'],
         vital_am:    ['量血壓 / Đo huyết áp','量體溫 / Đo nhiệt độ','測脈搏 / Đo mạch'],
         morning_act: ['活動協助 / Hỗ trợ hoạt động','被動關節運動 / Vận động khớp thụ động','陪同散步 / Đi bộ cùng'],
-        rehab_slot:  ['確認復健計畫 / Xác nhận kế hoạch phục hồi','執行復健項目 / Thực hiện bài tập','記錄成效 / Ghi kết quả'],
-        walk:        ['協助出門準備 / Chuẩn bị ra ngoài','陪同戶外散步 / Đi bộ ngoài trời cùng','觀察安全狀況 / Theo dõi an toàn'],
-        hospital:    ['備好健保卡藥袋 / Chuẩn bị hồ sơ thuốc','陪同就醫記錄醫囑 / Đi khám & ghi dặn dò','返家整理用藥 / Sắp xếp thuốc khi về'],
-        lunch:       ['備餐/準備 / Chuẩn bị bữa trưa','餵食協助 / Hỗ trợ ăn','飲水量記錄 / Ghi lượng nước'],
-        med_noon:    ['核對藥單 / Kiểm tra thuốc','給藥確認 / Cho uống thuốc'],
+        rehab_slot:  ['確認復健 / Xác nhận phục hồi','執行項目 / Thực hiện bài tập','記錄成效 / Ghi kết quả'],
+        walk:        ['穿鞋外出 / Chuẩn bị ra ngoài','陪同散步 / Đi bộ cùng','安全觀察 / Theo dõi an toàn'],
+        hospital:    ['備健保卡/藥袋 / Chuẩn bị thẻ/thuốc','陪同就醫 / Đi khám cùng','整理醫囑/用藥 / Sắp thuốc'],
+        lunch:       ['備餐 / Chuẩn bị bữa trưa','餵食 / Hỗ trợ ăn','記錄飲水 / Ghi nước'],
+        med_noon:    ['核對藥單 / Kiểm tra thuốc','給藥 / Cho thuốc'],
         nap:         ['協助躺臥 / Hỗ trợ nằm','翻身排程 / Lịch trở mình','確認舒適 / Kiểm tra thoải mái'],
         vital_pm:    ['量血壓 / Đo huyết áp','測血糖 / Đo đường huyết','記錄數值 / Ghi số liệu'],
         afternoon_act:['點心準備 / Chuẩn bị bữa phụ','沐浴協助 / Hỗ trợ tắm','娛樂陪伴 / Cùng giải trí'],
-        dinner:      ['備餐/準備 / Chuẩn bị bữa tối','餵食協助 / Hỗ trợ ăn','飲水量記錄 / Ghi lượng nước'],
-        med_pm:      ['核對藥單 / Kiểm tra thuốc','給藥確認 / Cho uống thuốc'],
+        dinner:      ['備餐 / Chuẩn bị bữa tối','餵食 / Hỗ trợ ăn','記錄飲水 / Ghi nước'],
+        med_pm:      ['核對藥單 / Kiểm tra thuốc','給藥 / Cho thuốc'],
         evening:     ['洗澡/擦身 / Tắm/lau người','口腔護理 / Vệ sinh răng miệng','更換衣物 / Thay quần áo'],
-        bedtime:     ['更換尿布/衣物 / Thay tã','就寢安置 / Chuẩn bị ngủ','確認舒適 / Kiểm tra thoải mái'],
+        bedtime:     ['換尿布/衣物 / Thay tã/quần áo','就寢安置 / Chuẩn bị ngủ','確認舒適 / Kiểm tra thoải mái'],
         night:       ['定時翻身 / Trở mình định kỳ','如廁協助 / Hỗ trợ vệ sinh','觀察狀況 / Theo dõi tình trạng'],
         tube:        ['準備配方 / Chuẩn bị dung dịch','管灌執行 / Thực hiện ống thông','記錄容量 / Ghi thể tích'],
         wound:       ['換藥執行 / Thay băng','傷口觀察 / Quan sát vết thương','記錄狀況 / Ghi tình trạng'],
         rehab:       ['復健項目 / Loại phục hồi','執行時間 / Thời gian thực hiện','成效記錄 / Ghi tiến triển'],
         elim:        ['排尿次數 / Số lần tiểu','排便次數 / Số lần đại tiện','狀況記錄 / Ghi tình trạng'],
         weight:      ['量體重 / Đo cân nặng','記錄數值 / Ghi số liệu'],
-        tv:          ['開電視選頻道 / Bật TV & chọn kênh','陪同收看 / Cùng xem TV','觀察情緒反應 / Theo dõi cảm xúc'],
-        music:       ['播放喜愛音樂 / Mở nhạc yêu thích','陪伴欣賞 / Cùng nghe','觀察情緒反應 / Theo dõi cảm xúc'],
-        reading:     ['備好報紙/書籍 / Chuẩn bị báo/sách','協助閱讀 / Hỗ trợ đọc','討論內容 / Thảo luận nội dung'],
-        craft:       ['準備材料道具 / Chuẩn bị vật liệu','陪同進行活動 / Cùng tham gia','鼓勵完成 / Khuyến khích & dọn dẹp'],
-        social:      ['準備互動環境 / Chuẩn bị không gian','陪同視訊/家屬 / Cùng gọi video','記錄互動 / Ghi chép tương tác'],
-        clean_morning:['整理床鋪 / Dọn giường','掃地清潔 / Quét dọn sàn','倒垃圾/開窗通風 / Đổ rác / mở cửa thông gió'],
-        clean_noon:   ['廚房清潔 / Dọn bếp','洗碗/整理碗盤 / Rửa và sắp xếp bát đĩa','擦拭桌面 / Lau mặt bàn'],
-        clean_evening:['廚房收拾 / Dọn dẹp bếp','浴室/廁所清潔 / Dọn phòng tắm/nhà vệ sinh','整理垃圾/摺衣 / Thu gom rác / gấp quần áo'],
-        clean_weekly: ['浴室深度清潔 / Vệ sinh sâu phòng tắm','廚房深度清潔 / Vệ sinh sâu nhà bếp','全室拖地/吸塵 / Lau/hút bụi toàn bộ nhà'],
+        tv:          ['開電視 / Bật TV','陪同收看 / Cùng xem TV','觀察情緒 / Theo dõi cảm xúc'],
+        music:       ['播放音樂 / Mở nhạc','陪伴輕唱 / Cùng nghe/hát','觀察情緒 / Theo dõi cảm xúc'],
+        reading:     ['備報紙/書 / Chuẩn bị báo/sách','協助朗讀 / Hỗ trợ đọc','討論內容 / Thảo luận nội dung'],
+        craft:       ['備材料 / Chuẩn bị vật liệu','陪同活動 / Cùng tham gia','收拾整理 / Dọn dẹp'],
+        social:      ['準備環境 / Chuẩn bị không gian','陪同視訊 / Cùng gọi video','記錄互動 / Ghi chép tương tác'],
+        clean_morning:['整理床鋪 / Dọn giường','掃地 / Quét sàn','倒垃圾/通風 / Đổ rác/thông gió'],
+        clean_noon:   ['清廚房 / Dọn bếp','洗碗盤 / Rửa bát đĩa','擦桌面 / Lau bàn'],
+        clean_evening:['收廚房 / Dọn bếp','清浴廁 / Dọn tắm/vệ sinh','垃圾/衣物 / Rác/quần áo'],
+        clean_weekly: ['清浴室 / Dọn phòng tắm','清廚房 / Dọn bếp','拖地/吸塵 / Lau/hút bụi'],
       }
     },
     'zh-en': {
@@ -3718,37 +3930,37 @@ function buildScheduleHTML() {
       clean_evening:'晚班打掃\nEvening Clean', clean_weekly:'週間大掃除\nWeekly Deep Clean',
       tasks:{
         morning:     ['起床協助 / Assist to rise','盥洗清潔 / Personal hygiene','更衣 / Change clothes'],
-        breakfast:   ['備餐/準備 / Prepare meal','餵食協助 / Assist feeding','飲水量記錄 / Log fluid intake'],
-        med_am:      ['核對藥單 / Verify medication','給藥確認 / Administer meds','記錄時間 / Log time'],
+        breakfast:   ['備餐 / Prepare meal','餵食 / Assist feeding','記錄飲水 / Log fluids'],
+        med_am:      ['核對藥單 / Verify medication','給藥 / Give meds','記錄時間 / Log time'],
         vital_am:    ['量血壓 / Check BP','量體溫 / Check temperature','測脈搏 / Check pulse'],
         morning_act: ['活動協助 / Assist activity','被動關節運動 / Passive ROM','陪同散步 / Accompany walk'],
-        rehab_slot:  ['確認復健計畫 / Confirm rehab plan','執行復健項目 / Perform rehab exercises','記錄成效 / Log progress'],
-        walk:        ['協助出門準備 / Assist going out','陪同戶外散步 / Accompany outdoor walk','觀察安全狀況 / Monitor safety'],
-        hospital:    ['備好健保卡藥袋 / Prepare insurance card & meds','陪同就醫記錄醫囑 / Accompany & note doctor instructions','返家整理用藥 / Organize medications on return'],
-        lunch:       ['備餐/準備 / Prepare lunch','餵食協助 / Assist feeding','飲水量記錄 / Log fluid intake'],
-        med_noon:    ['核對藥單 / Verify medication','給藥確認 / Administer meds'],
+        rehab_slot:  ['確認復健 / Confirm rehab','執行項目 / Do rehab','記錄成效 / Log progress'],
+        walk:        ['穿鞋外出 / Prep to go out','陪同散步 / Walk with patient','安全觀察 / Monitor safety'],
+        hospital:    ['備健保卡/藥袋 / Prep card/meds','陪同就醫 / Medical visit','整理醫囑/用藥 / Organize meds'],
+        lunch:       ['備餐 / Prepare lunch','餵食 / Assist feeding','記錄飲水 / Log fluids'],
+        med_noon:    ['核對藥單 / Verify medication','給藥 / Give meds'],
         nap:         ['協助躺臥 / Assist lying down','翻身排程 / Repositioning schedule','確認舒適 / Confirm comfort'],
         vital_pm:    ['量血壓 / Check BP','測血糖 / Check blood sugar','記錄數值 / Log values'],
         afternoon_act:['點心準備 / Prepare snack','沐浴協助 / Assist bathing','娛樂陪伴 / Leisure activity'],
-        dinner:      ['備餐/準備 / Prepare dinner','餵食協助 / Assist feeding','飲水量記錄 / Log fluid intake'],
-        med_pm:      ['核對藥單 / Verify medication','給藥確認 / Administer meds'],
+        dinner:      ['備餐 / Prepare dinner','餵食 / Assist feeding','記錄飲水 / Log fluids'],
+        med_pm:      ['核對藥單 / Verify medication','給藥 / Give meds'],
         evening:     ['洗澡/擦身 / Bath/wipe down','口腔護理 / Oral hygiene','更換衣物 / Change clothes'],
-        bedtime:     ['更換尿布/衣物 / Change diaper','就寢安置 / Settle for sleep','確認舒適 / Confirm comfort'],
+        bedtime:     ['換尿布/衣物 / Change diaper/clothes','就寢安置 / Settle for sleep','確認舒適 / Confirm comfort'],
         night:       ['定時翻身 / Reposition regularly','如廁協助 / Assist toileting','觀察狀況 / Monitor condition'],
         tube:        ['準備配方 / Prepare formula','管灌執行 / Administer tube feed','記錄容量 / Log volume'],
         wound:       ['換藥執行 / Change dressing','傷口觀察 / Observe wound','記錄狀況 / Log condition'],
         rehab:       ['復健項目 / Rehab type','執行時間 / Duration','成效記錄 / Log progress'],
         elim:        ['排尿次數 / Urination count','排便次數 / Defecation count','狀況記錄 / Log condition'],
         weight:      ['量體重 / Weigh patient','記錄數值 / Log weight'],
-        tv:          ['Turn on TV & select channel / 開電視選頻道','Watch together / 陪同收看','Observe mood & reactions / 觀察情緒反應'],
-        music:       ['Play favorite music / 播放喜愛音樂','Enjoy music together / 陪伴欣賞','Observe emotional response / 觀察情緒反應'],
-        reading:     ['Prepare newspaper/book / 備好報紙書籍','Assist reading/read aloud / 協助朗讀','Discuss content / 討論內容'],
-        craft:       ['Prepare materials / 準備材料','Participate in activity / 陪同進行','Encourage & tidy up / 鼓勵收拾'],
-        social:      ['Prepare interaction space / 準備互動環境','Accompany visit/video call / 陪同家屬視訊','Log interaction notes / 記錄互動'],
-        clean_morning:['整理床鋪 / Make the bed','掃地清潔 / Sweep floor','倒垃圾/開窗通風 / Empty trash / ventilate'],
-        clean_noon:   ['廚房清潔 / Clean kitchen','洗碗/整理碗盤 / Wash and organize dishes','擦拭桌面 / Wipe table'],
-        clean_evening:['廚房收拾 / Tidy kitchen','浴室/廁所清潔 / Clean bathroom/toilet','整理垃圾/摺衣 / Collect trash / fold clothes'],
-        clean_weekly: ['浴室深度清潔 / Deep-clean bathroom','廚房深度清潔 / Deep-clean kitchen','全室拖地/吸塵 / Mop/vacuum all rooms'],
+        tv:          ['開電視 / Turn on TV','Watch together / 陪同收看','觀察情緒 / Observe mood'],
+        music:       ['播放音樂 / Play music','陪伴輕唱 / Listen/sing along','Observe emotional response / 觀察情緒反應'],
+        reading:     ['備報紙/書 / Prepare reading','協助朗讀 / Read aloud','Discuss content / 討論內容'],
+        craft:       ['備材料 / Prepare materials','陪同活動 / Join activity','收拾整理 / Tidy up'],
+        social:      ['準備環境 / Prepare space','陪同視訊 / Video call','Log interaction notes / 記錄互動'],
+        clean_morning:['整理床鋪 / Make the bed','掃地 / Sweep floor','倒垃圾/通風 / Trash/ventilate'],
+        clean_noon:   ['清廚房 / Clean kitchen','洗碗盤 / Wash dishes','擦桌面 / Wipe table'],
+        clean_evening:['收廚房 / Tidy kitchen','清浴廁 / Clean bath/toilet','垃圾/衣物 / Trash/clothes'],
+        clean_weekly: ['清浴室 / Clean bathroom','清廚房 / Clean kitchen','拖地/吸塵 / Mop/vacuum'],
       }
     }
   };
@@ -5046,7 +5258,7 @@ function applyState(state) {
           <div class="form-row single">
             <div class="form-group">
               <label class="form-label">工作內容說明 <span class="optional">選填</span></label>
-              <input class="form-input" id="slot-${id}-desc" type="text" value="${(cs.desc||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}" placeholder="例：協助被動關節運動 20 分鐘">
+              <input class="form-input" id="slot-${id}-desc" type="text" value="${(cs.desc||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}" placeholder="例：復健 20 分鐘">
             </div>
           </div>`;
         list.appendChild(entry);
@@ -5612,11 +5824,11 @@ const CARE_SCENARIOS = {
       's-morning-act':{on:false},'s-walk':{on:false},'s-rehab':{on:false},'s-afternoon-act':{on:false}
     },
     tasks:{
-      's-morning':['協助翻身並檢查皮膚完整性','口腔護理','清潔擦浴','更換尿布或導尿管護理','協助更衣'],
-      's-vital-am':['測量體溫、血壓、血氧','記錄入出量（飲食量/尿量）'],
-      's-nap':['翻身排程','壓瘡檢查（臀部、踝部、肩胛）','拍背'],
-      's-bedtime':['翻身擺位（2小時一次）','皮膚清潔','就寢安置，抬高床頭30°'],
-      's-night':['每2小時協助翻身並記錄','觀察呼吸與皮膚狀況','夜間尿布更換']
+      's-morning':['翻身看皮膚','口腔護理','擦浴','尿布/管路','更衣'],
+      's-vital-am':['量體溫/血壓/血氧','記錄飲食/尿量'],
+      's-nap':['翻身','壓瘡檢查','拍背'],
+      's-bedtime':['翻身擺位','皮膚清潔','床頭抬高'],
+      's-night':['2小時翻身','看呼吸/皮膚','換尿布']
     }
   },
   stroke: {
@@ -5641,11 +5853,11 @@ const CARE_SCENARIOS = {
       's-night':    {on:false}
     },
     tasks:{
-      's-rehab':['協助被動關節運動（患側上下肢）','輔助主動復健訓練','記錄復健反應','按摩患側肢體'],
-      's-walk':['協助使用助行器或四腳拐行走','監測平衡與步態，防跌'],
-      's-nap':['翻身、確認肢體擺位','記錄翻身時間'],
-      's-vital-pm':['觀察肢體無力或麻木','記錄異常狀況'],
-      's-afternoon-act':['手部靈巧度練習（抓握訓練）','陪伴練習日常生活動作（ADL）']
+      's-rehab':['被動關節運動','主動復健','記錄反應','患側按摩'],
+      's-walk':['助行器行走','看步態防跌'],
+      's-nap':['翻身/擺位','記錄翻身'],
+      's-vital-pm':['看無力麻木','記錄異常'],
+      's-afternoon-act':['抓握訓練','ADL練習']
     }
   },
   dementia: {
@@ -5670,11 +5882,11 @@ const CARE_SCENARIOS = {
       's-night':     {on:false}
     },
     tasks:{
-      's-morning-act':['定向活動（告知今日日期、天氣）','懷舊療法（翻閱舊相冊）','記憶訓練、陪伴聊天'],
-      's-walk':['陪伴散步，觀察情緒與疲累','返家後補充水分'],
-      's-afternoon-act':['手工藝活動（折紙、摺衣物）','熟悉歌曲跟唱','情緒安撫：若出現激躁，播放輕音樂'],
+      's-morning-act':['定向活動','翻舊照片','記憶聊天'],
+      's-walk':['陪伴散步','返家補水'],
+      's-afternoon-act':['手作活動','歌曲跟唱','安撫情緒'],
       's-evening':['協助回顧今日活動','安撫情緒'],
-      's-bedtime':['固定睡前儀式（洗腳→熱牛奶→輕音樂）','確認門窗鎖好，防夜間遊走']
+      's-bedtime':['固定睡前流程','鎖門窗防走失']
     }
   },
   ambulatory: {
@@ -5699,10 +5911,10 @@ const CARE_SCENARIOS = {
       's-night':     {on:false}
     },
     tasks:{
-      's-morning-act':['陪同閱讀報紙或練字','輕度體操或伸展運動'],
-      's-walk':['戶外散步約30–40分鐘，注意防曬與補水'],
-      's-social':['陪同視訊家人或與鄰居互動'],
-      's-evening':['協助準備隔日衣物','陪伴看電視或聊天']
+      's-morning-act':['讀報/練字','伸展運動'],
+      's-walk':['散步30–40分','防曬補水'],
+      's-social':['視訊家人','鄰里互動'],
+      's-evening':['備隔日衣物','看電視聊天']
     }
   },
   postop: {
@@ -5724,9 +5936,9 @@ const CARE_SCENARIOS = {
       's-morning-act':{on:false},'s-walk':{on:false},'s-night':{on:false}
     },
     tasks:{
-      's-morning':['傷口換藥（依醫囑）','協助如廁/便盆輔助','協助坐立與安全移位'],
-      's-vital-am':['測血壓、體溫、傷口滲液評估','記錄排便/排尿情況'],
-      's-hospital':['陪同回診，準備病歷與用藥清單','回診後確認醫囑與藥物調整']
+      's-morning':['傷口換藥','協助如廁','安全移位'],
+      's-vital-am':['量血壓/體溫','看傷口滲液','記錄排泄'],
+      's-hospital':['備病歷/藥單','確認醫囑/藥物']
     }
   }
 };
@@ -5788,6 +6000,7 @@ function injectScenarioTemplates() {
       <div class="usp-card-name">${name}</div>
       <div class="usp-card-count">${activeN} 時段${hasNight ? ' · 🌙' : ''}</div>
       <div class="usp-card-tags">${tags}</div>
+      <div class="usp-card-note">套用後仍可逐項修改</div>
       <div class="usp-card-actions">
         <button type="button" class="${applyCls}" id="card-apply-${key}" onclick="applyScenarioTemplate('${key}')">${applyLabel}</button>
         <button type="button" class="btn-usp-card-detail" id="card-detail-${key}" onclick="toggleScenarioDetail('${key}')">查看細節</button>
@@ -6333,7 +6546,7 @@ function updateConflictWarning() {
     } else {
       btn.style.background = '';
       btn.title = '';
-      btn.innerHTML = '✨ 確認並產生時間表';
+      btn.innerHTML = '✨ 確認產生時間表';
     }
   }
 }
@@ -6345,6 +6558,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inject slot day restriction UIs AFTER (appear after task editors, so UI order is: toggle-row → task-editor → days-wrap)
   injectSlotDayUIs();
   injectCareTemplateLibrary();
+  initStep2GuideDetails();
   organizeStep2TabbedPanels();
   // cfg-start-date is optional — no auto-fill
 
