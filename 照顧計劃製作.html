@@ -1682,6 +1682,206 @@ a:focus-visible, button:focus-visible, .chip:focus-visible,
   color: var(--ok);
 }
 
+/* ══════════════════════════════════════════
+   v30 優化新增樣式
+══════════════════════════════════════════ */
+
+/* ── 1. 步驟進度條 ── */
+.step-progress {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-sm);
+}
+.step-progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .86rem;
+  color: var(--ink-soft);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.step-progress-top span { font-weight: 500; color: var(--muted); }
+.step-bar {
+  height: 8px;
+  background: var(--soft);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.step-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent3));
+  border-radius: 99px;
+  transition: width .5s ease;
+}
+
+/* ── 2. 手機版語言列橫向滑動 ── */
+@media (max-width: 640px) {
+  header { align-items: flex-start; }
+  .lang-bar {
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+  }
+  .lang-bar::-webkit-scrollbar { display: none; }
+  .lang-bar button {
+    flex: 0 0 auto;
+    min-width: max-content;
+    padding: 8px 13px;
+  }
+  .hd-clear-btn {
+    flex: 0 0 auto;
+    min-width: max-content;
+  }
+}
+
+/* ── 3. 藥物步驟圓標專屬色 ── */
+.med-num {
+  background: linear-gradient(145deg, var(--accent), var(--accent-d)) !important;
+}
+
+/* ── 4. 每張卡片副說明 ── */
+.sec-desc {
+  margin: -8px 0 18px 46px;
+  font-size: .82rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+@media (max-width: 640px) {
+  .sec-desc { margin-left: 40px; }
+}
+
+/* ── 5. Chip 分群標題 ── */
+.chip-group-title {
+  font-size: .76rem;
+  font-weight: 800;
+  color: var(--accent2);
+  margin: 16px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+.chip-group-title::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--accent2);
+  flex-shrink: 0;
+}
+
+/* ── 6. 底部操作列弱化清除按鈕（手機） ── */
+@media (max-width: 640px) {
+  .action-bar .btn-ghost {
+    flex: 0 0 auto;
+    min-width: 86px;
+    background: transparent;
+    border-color: transparent;
+    color: var(--muted);
+    font-size: .82rem;
+  }
+  .action-bar .btn-primary { flex: 1; }
+}
+
+/* ── 7. 輸出重點摘要卡 ── */
+.summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0 20px;
+}
+.summary-strip div {
+  background: #fff8ee;
+  border: 1px solid #e8c07a;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.summary-strip span {
+  display: block;
+  font-size: .7rem;
+  color: var(--muted);
+  font-weight: 800;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.summary-strip b {
+  font-size: .9rem;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.45;
+}
+@media (max-width: 640px) {
+  .summary-strip { grid-template-columns: 1fr; }
+}
+
+/* ── 8. 完成度提示 ── */
+.form-hint {
+  background: #fffbee;
+  border: 1px solid #e8d070;
+  color: #6b5200;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: .84rem;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.form-hint.complete {
+  background: #f0f8f0;
+  border-color: #a8d5b8;
+  color: #1a4a2e;
+}
+
+/* ── 9. 字級拉開：標題更明顯 ── */
+.sec-head h2 {
+  font-size: clamp(1.02rem, .96rem + .35vw, 1.18rem);
+}
+label {
+  font-size: .76rem;
+}
+.card {
+  padding-top: clamp(20px, 2.6vw, 30px);
+}
+
+/* ── 10. 整理 inline style → class ── */
+.sub-section {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1.5px solid var(--soft);
+}
+.minor-title {
+  font-size: .72rem;
+  color: var(--muted);
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.tip-box {
+  background: #fff8ee;
+  border: 1.5px solid #e8c07a;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .82rem;
+  color: #8a5a00;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.helper-text {
+  font-size: .82rem;
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+
 /* ── Auto-Save Indicator ── */
 .save-indicator {
   position: fixed;
@@ -1736,12 +1936,29 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
 <div class="wrap">
   <div id="formArea" class="no-print">
 
+    <!-- 步驟進度條 -->
+    <div class="step-progress no-print" id="stepProgress">
+      <div class="step-progress-top">
+        <span>照顧計劃填寫進度</span>
+        <b id="stepNow">1 / 7</b>
+      </div>
+      <div class="step-bar">
+        <span id="stepBarFill" style="width:14%"></span>
+      </div>
+    </div>
+
+    <!-- 完成度提示 -->
+    <div class="form-hint no-print" id="formHint">
+      建議先填寫：姓名、行動能力、健康狀況、緊急聯絡人
+    </div>
+
     <!-- ① 基本資料 -->
     <div class="card">
       <div class="sec-head">
         <div class="sec-num">1</div>
         <h2 id="t_basic">受照顧者基本資料 / Patient Information</h2>
       </div>
+      <p class="sec-desc">先填寫受照顧者基本狀況，方便產生個人化照顧重點。</p>
       <div class="row3">
         <div><label id="l_name">姓名 / Name</label><input id="f_name" placeholder="王○○"></div>
         <div><label id="l_age">年齡 / Age</label><input id="f_age" type="number" placeholder="78" min="0" max="120" step="1" inputmode="numeric" autocomplete="off"></div>
@@ -1768,6 +1985,7 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
         <div class="sec-num">2</div>
         <h2 id="t_living">家庭環境與生活安排 / Living Arrangement</h2>
       </div>
+      <p class="sec-desc">補充居家環境與每日作息，讓計劃更貼近實際生活。</p>
 
       <!-- 家人同住 / 外食 -->
       <div class="row2">
@@ -1786,8 +2004,8 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       <input id="f_env_note" placeholder="例：有電梯、有門檻、住2樓無電梯">
 
       <!-- 作息時間 -->
-      <div style="margin-top:18px;padding-top:14px;border-top:1.5px solid var(--soft)">
-        <div style="font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:12px" id="l_schedule_hd">每日作息規劃 / Daily Schedule</div>
+      <div class="sub-section">
+        <div class="minor-title" id="l_schedule_hd">每日作息規劃 / Daily Schedule</div>
         <div class="schedule-grid">
           <div class="sch-item">
             <span class="sch-icon">🌅</span>
@@ -1849,6 +2067,7 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
         <div class="sec-num">3</div>
         <h2 id="t_cond">身體狀況 / Health Conditions</h2>
       </div>
+      <p class="sec-desc">勾選目前健康狀況，系統會整理照顧注意事項。</p>
       <label id="l_condL">健康狀況（可複選）</label>
       <div class="chips" id="condChips"></div>
       <label id="l_diet" style="margin-top:16px">飲食型態 / Diet</label>
@@ -1866,6 +2085,7 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
         <div class="sec-num">4</div>
         <h2 id="t_vital">生命徵象監測 / Vital Signs</h2>
       </div>
+      <p class="sec-desc">選擇需要定期觀察的項目，不是每日數值紀錄表。</p>
 
       <!-- Step 1: 勾選需定期監測的生命徵象（固定照顧計劃項目，非每日記錄表） -->
       <div class="vital-select-label" id="l_vital_select">請勾選需<b>定期監測</b>的生命徵象項目（固定照顧計劃項目，非每日數值記錄）/ Select vital signs to monitor regularly</div>
@@ -2052,13 +2272,14 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       </div>
     </div>
 
-    <!-- ④.5 藥物管理 -->
+    <!-- ⑤ 藥物管理 -->
     <div class="card">
       <div class="sec-head">
-        <div class="sec-num" style="background:linear-gradient(145deg,#b04621,#93381a)">💊</div>
+        <div class="sec-num med-num">5</div>
         <h2 id="t_med">藥物管理 / Medication Management</h2>
       </div>
-      <div class="med-tip-bar" style="background:#fff8ee;border:1.5px solid #e8c07a;border-radius:10px;padding:10px 14px;font-size:.82rem;color:#8a5a00;margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <p class="sec-desc">可輸入常用藥物，方便產生用藥提醒與照顧計劃。</p>
+      <div class="tip-box">
         <span>💡</span>
         <span>請填寫所有需要定期服用的藥物，資訊將顯示於照顧計劃中 / Please list all regular medications for the care plan.</span>
       </div>
@@ -2069,12 +2290,13 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       </button>
     </div>
 
-    <!-- ⑤ 緊急聯絡 -->
+    <!-- ⑥ 緊急聯絡 -->
     <div class="card">
       <div class="sec-head">
-        <div class="sec-num">5</div>
+        <div class="sec-num">6</div>
         <h2 id="t_emg">緊急聯絡人 / Emergency Contacts</h2>
       </div>
+      <p class="sec-desc">建議至少填寫一位家屬與一個醫療單位聯絡方式。</p>
       <div class="contact-wrap">
         <div class="contact-card">
           <div class="contact-type" id="ct_fam">👨‍👩‍👧 家屬 / Family</div>
@@ -2097,21 +2319,22 @@ const SAVE_IND_LBL = { zh:"✓ 已自動儲存", id:"✓ Tersimpan otomatis", en
       </div>
     </div>
 
-    <!-- ⑥ 打掃清潔注意事項 -->
+    <!-- ⑦ 打掃清潔注意事項 -->
     <div class="card">
       <div class="sec-head">
-        <div class="sec-num">6</div>
+        <div class="sec-num">7</div>
         <h2 id="t_clean">打掃清潔注意事項 / Housekeeping & Cleaning Notes</h2>
       </div>
+      <p class="sec-desc">勾選家務與環境清潔重點，避免工作期待落差。</p>
       <label id="l_clean_hd" style="margin-top:0">清潔照護注意項目（可複選）/ Select applicable items</label>
       <div class="chips" id="cleanChips"></div>
       <label id="l_clean_note" style="margin-top:16px">清潔特殊說明 / Additional Cleaning Instructions</label>
       <textarea id="f_clean_note" placeholder="例：病患過敏漂白水，請改用稀釋酒精消毒；浴室需每日清潔，地板保持乾燥防跌倒。"></textarea>
 
       <!-- 洗澡方式與注意事項 -->
-      <div style="margin-top:20px;padding-top:16px;border-top:1.5px solid var(--soft)">
-        <div style="font-size:.72rem;color:var(--muted);font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:10px" id="l_bath_hd">🛁 洗澡方式與注意事項 / Bathing Method & Safety Notes</div>
-        <div style="font-size:.82rem;color:var(--ink-soft);margin-bottom:10px" id="l_bath_sub">請選擇適用的洗澡方式（可複選），選取後展開查看注意事項 / Select bathing method(s) to view safety notes</div>
+      <div class="sub-section">
+        <div class="minor-title" id="l_bath_hd">🛁 洗澡方式與注意事項 / Bathing Method & Safety Notes</div>
+        <div class="helper-text" id="l_bath_sub">請選擇適用的洗澡方式（可複選），選取後展開查看注意事項 / Select bathing method(s) to view safety notes</div>
         <div class="chips" id="bathChips"></div>
         <div id="bathNotesWrap" style="display:none;margin-top:12px"></div>
       </div>
@@ -2190,6 +2413,8 @@ let _saveTimer = null;
 function scheduleSave() {
   clearTimeout(_saveTimer);
   _saveTimer = setTimeout(saveToStorage, 800);
+  // Update progress bar & hint immediately on any interaction
+  if (typeof updateProgressAndHint === "function") updateProgressAndHint();
 }
 
 function saveToStorage() {
@@ -2290,10 +2515,64 @@ function showSaveIndicator() {
 /* Attach input listeners for auto-save after DOM is ready */
 function attachAutoSaveListeners() {
   const fields = document.querySelectorAll("input, select, textarea");
-  fields.forEach(el => el.addEventListener("change", scheduleSave));
+  fields.forEach(el => el.addEventListener("change", e => { scheduleSave(); updateProgressAndHint(); }));
   /* For text inputs, also listen on input event for faster save */
   document.querySelectorAll("input[type=text], input[type=number], input[type=tel], input[type=time], textarea")
-    .forEach(el => el.addEventListener("input", scheduleSave));
+    .forEach(el => el.addEventListener("input", e => { scheduleSave(); updateProgressAndHint(); }));
+}
+
+/* ══════════════════════════════════════
+   步驟進度條 & 完成度提示（v30 新增）
+══════════════════════════════════════ */
+function updateProgressAndHint() {
+  // ── 進度條：根據已有資料的區塊數（共7區）
+  const filledSections = [
+    // 1. 基本資料
+    !!(document.getElementById("f_name")?.value.trim() ||
+       document.getElementById("f_age")?.value.trim()),
+    // 2. 家庭環境
+    !!(document.getElementById("f_cohabit")?.value ||
+       document.getElementById("f_env_note")?.value.trim()),
+    // 3. 健康狀況
+    selected.size > 0 ||
+       !!(document.getElementById("f_diet")?.value ||
+          document.getElementById("f_allergy")?.value.trim()),
+    // 4. 生命徵象
+    vitalSelected.size > 0,
+    // 5. 藥物管理
+    meds.length > 0,
+    // 6. 緊急聯絡
+    !!(document.getElementById("f_fn")?.value.trim() ||
+       document.getElementById("f_ftel")?.value.trim()),
+    // 7. 清潔
+    cleanSelected.size > 0 ||
+       !!(document.getElementById("f_clean_note")?.value.trim()),
+  ];
+  const filled = filledSections.filter(Boolean).length;
+  const pct = Math.round((filled / 7) * 100);
+
+  const stepNow = document.getElementById("stepNow");
+  const barFill = document.getElementById("stepBarFill");
+  if (stepNow) stepNow.textContent = filled + " / 7";
+  if (barFill) barFill.style.width = Math.max(6, pct) + "%";
+
+  // ── 完成度提示
+  const hint = document.getElementById("formHint");
+  if (!hint) return;
+
+  const missing = [];
+  if (!document.getElementById("f_name")?.value.trim()) missing.push("姓名");
+  if (!document.getElementById("f_mob")?.value) missing.push("行動能力");
+  if (selected.size === 0) missing.push("健康狀況");
+  if (!document.getElementById("f_fn")?.value.trim() && !document.getElementById("f_ftel")?.value.trim()) missing.push("緊急聯絡人");
+
+  if (missing.length === 0) {
+    hint.className = "form-hint complete no-print";
+    hint.textContent = "✓ 核心資料已填寫完整，可以產生照顧計劃了！";
+  } else {
+    hint.className = "form-hint no-print";
+    hint.textContent = "建議補充：" + missing.join("、");
+  }
 }
 
 /* ========================================================
@@ -3625,7 +3904,56 @@ function makeChipAccessible(el, isOn) {
 function renderChips() {
   const box = document.getElementById("condChips");
   box.innerHTML = "";
+
+  // Group definitions for health condition chips
+  const COND_GROUPS = [
+    { key:"mobility",  zh:"行動照顧", id:"Mobilisasi", en:"Mobility",    vi:"Vận động",
+      keys:["bedbound","wheelchair","cane_walker","fall_risk"] },
+    { key:"chronic",   zh:"慢性病",   id:"Penyakit Kronis", en:"Chronic Disease", vi:"Bệnh mãn tính",
+      keys:["hypertension","diabetes","cardiac","copd","renal","liver","osteoporosis","gout"] },
+    { key:"cognitive", zh:"認知情緒", id:"Kognitif & Emosi", en:"Cognitive & Emotional", vi:"Nhận thức & Cảm xúc",
+      keys:["dementia","depression","agitation","insomnia","stroke","hemiplegia","parkinsons"] },
+    { key:"special",   zh:"特殊照護", id:"Perawatan Khusus", en:"Special Care", vi:"Chăm sóc đặc biệt",
+      keys:["ng_tube","foley","trach","picc","wound","dysphagia","constipation","dialysis"] },
+  ];
+
+  // Build a map from key → chip data
+  const condMap = {};
+  CONDS.forEach(c => { condMap[c.k] = c; });
+
+  // Chips not in any group (safety net)
+  const groupedKeys = new Set(COND_GROUPS.flatMap(g => g.keys));
+
+  COND_GROUPS.forEach(group => {
+    const chipsInGroup = group.keys.map(k => condMap[k]).filter(Boolean);
+    if (chipsInGroup.length === 0) return;
+
+    // Group title
+    const title = document.createElement("div");
+    title.className = "chip-group-title";
+    title.textContent = lang === "zh" ? group.zh : (group.zh + " / " + group[lang]);
+    box.appendChild(title);
+
+    // Chips
+    chipsInGroup.forEach(c => {
+      const isOn = selected.has(c.k);
+      const d = document.createElement("div");
+      d.className = "chip" + (isOn ? " on" : "");
+      d.textContent = lang === "zh" ? c.zh : (c.zh + " / " + c[lang]);
+      makeChipAccessible(d, isOn);
+      d.onclick = () => {
+        selected.has(c.k) ? selected.delete(c.k) : selected.add(c.k);
+        d.classList.toggle("on");
+        d.setAttribute("aria-pressed", selected.has(c.k) ? "true" : "false");
+        scheduleSave();
+      };
+      box.appendChild(d);
+    });
+  });
+
+  // Render ungrouped chips (no category header)
   CONDS.forEach(c => {
+    if (groupedKeys.has(c.k)) return;
     const isOn = selected.has(c.k);
     const d = document.createElement("div");
     d.className = "chip" + (isOn ? " on" : "");
@@ -4464,6 +4792,41 @@ async function generatePlan() {
         <span class="date-chip">${today}</span>
       </div>
       ${transWarningHtml}
+      <!-- 重點摘要卡 (v30) -->
+      <div class="summary-strip no-print">
+        <div>
+          <span>${{zh:"照顧重點",id:"Prioritas",en:"Care Focus",vi:"Trọng tâm"}[lang]||"照顧重點"}</span>
+          <b>${(() => {
+            const risks = [];
+            if(selected.has("fall_risk")||selected.has("wheelchair")||selected.has("bedbound")) risks.push(lang==="zh"?"跌倒/移位":"Fall/Transfer");
+            if(selected.has("dementia")||selected.has("agitation")) risks.push(lang==="zh"?"認知安全":"Cognitive Safety");
+            if(meds.filter(m=>m.name.trim()).length>0) risks.push(lang==="zh"?"用藥確認":"Medication");
+            if(selected.has("ng_tube")) risks.push(lang==="zh"?"灌食管":"NG Tube");
+            if(selected.has("wound")) risks.push(lang==="zh"?"傷口護理":"Wound Care");
+            return risks.length ? risks.slice(0,3).join("、") : (lang==="zh"?"依計劃照顧":"Per care plan");
+          })()}</b>
+        </div>
+        <div>
+          <span>${{zh:"每日重點",id:"Harian",en:"Daily",vi:"Hàng ngày"}[lang]||"每日重點"}</span>
+          <b>${(() => {
+            const daily = [];
+            if(selected.has("hypertension")||selected.has("cardiac")||vitalSelected.has("bp")) daily.push(lang==="zh"?"量血壓":"BP Check");
+            if(selected.has("diabetes")||vitalSelected.has("sugar")) daily.push(lang==="zh"?"測血糖":"Blood Sugar");
+            daily.push(lang==="zh"?"三餐照顧":"Meals");
+            if(vitalSelected.size>0) daily.push(lang==="zh"?"生命徵象":"Vital Signs");
+            return daily.slice(0,3).join("、");
+          })()}</b>
+        </div>
+        <div>
+          <span>${{zh:"緊急提醒",id:"Darurat",en:"Emergency",vi:"Khẩn cấp"}[lang]||"緊急提醒"}</span>
+          <b>${(() => {
+            const fn = document.getElementById("f_fn")?.value.trim();
+            const ftel = document.getElementById("f_ftel")?.value.trim();
+            if(fn && ftel) return (lang==="zh"?"異常立即通知 ":"Alert ") + fn;
+            return lang==="zh"?"異常立即通報家屬":"Alert family immediately";
+          })()}</b>
+        </div>
+      </div>
       <div class="info-grid">
         <div class="info-cell"><div class="lbl">${t.l_name}</div><div class="val">${name} · ${sex}</div></div>
         <div class="info-cell"><div class="lbl">${t.l_age}</div><div class="val">${ageInputStr ? age + " " + ageUnit : "—"}</div></div>
@@ -4639,6 +5002,7 @@ function _doClearAll() {
   renderActChips();
   renderCleanChips();
   renderBathChips();
+  updateProgressAndHint();
 }
 
 /* ========================================================
@@ -4983,6 +5347,9 @@ if (_restored) {
 
 /* Attach auto-save listeners after full render */
 attachAutoSaveListeners();
+
+/* Initial progress render */
+updateProgressAndHint();
 </script>
 
 
