@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護一週工作時間表 — 客製化精靈 v26</title>
+<title>外籍看護一週工作時間表 — 客製化精靈 v29</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Noto+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 <!-- v22: Google Fonts 離線 fallback — 若無網路，系統字體自動頂替，不影響版面 -->
 <style>
@@ -376,6 +376,33 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 @media(max-width:639px){.task-editor-outer{padding:0 8px 10px;}}
 
 /* ── PRINT ── */
+
+
+
+
+/* ── v28: Step 2 Visual Guide ── */
+.step2-visual-guide{background:linear-gradient(135deg,#f0f7ff,#f5f3ff);border:1.5px solid #c7d7f9;border-radius:12px;padding:16px 18px;margin-bottom:16px;}
+.svg2-title{font-weight:800;font-size:13px;color:#1e3a8a;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.svg2-steps{display:flex;align-items:stretch;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.svg2-steps::-webkit-scrollbar{display:none;}
+.svg2-step{flex:1;min-width:130px;background:#fff;border:1.5px solid #e2e8f8;border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px;transition:.15s;}
+.svg2-step:hover{border-color:#93c5fd;box-shadow:0 2px 10px rgba(37,99,235,.1);}
+.svg2-step-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.svg2-step-body{display:flex;flex-direction:column;gap:3px;}
+.svg2-step-name{font-size:12px;font-weight:800;color:#111827;display:flex;align-items:center;gap:4px;justify-content:center;flex-wrap:wrap;}
+.svg2-step-desc{font-size:11px;color:#6b7280;line-height:1.5;}
+.svg2-arrow{font-size:20px;color:#93c5fd;padding:0 8px;display:flex;align-items:center;flex-shrink:0;font-weight:900;}
+.svg2-opt{background:#fef3c7;color:#92400e;border-radius:4px;padding:1px 5px;font-size:9px;font-weight:700;}
+.svg2-tip{margin-top:10px;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;font-size:12px;color:#92400e;line-height:1.55;}
+@media(max-width:639px){
+  .svg2-step{min-width:110px;padding:10px 8px;}
+  .svg2-step-name{font-size:11px;}
+  .svg2-step-desc{font-size:10px;}
+  .svg2-arrow{padding:0 4px;font-size:16px;}
+}
+
+
+
 @media print{
   @page{size:A4 landscape;margin:10mm 12mm 10mm 12mm;}
   .topbar,.progress-bar,.side-nav,#mobile-tab-bar,#save-toast,#restore-banner,.wizard-nav,.btn-prev,.btn-next,.btn-generate,.btn-out,.btn-out-edit,.output-actions,.step-page:not(.active),.section-card-head .section-toggle-icon{display:none !important;}
@@ -414,14 +441,11 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
   <div style="min-width:0;flex:1;display:flex;align-items:center;gap:10px;">
     <div class="topbar-logo">📅</div>
     <div class="topbar-text">
-      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v26</div>
+      <div class="topbar-title">外籍看護一週工作時間表 — 客製化精靈 v29</div>
       <div class="topbar-sub">Weekly Work Schedule Customization Wizard</div>
     </div>
   </div>
   <div class="topbar-right">
-    <button class="tlbtn tlbtn-quick" id="btnQuickMode" onclick="openQuickMode()" title="手機快速完成：只需回答5題，立即產生時間表">
-      ⚡ <span>快速完成</span>
-    </button>
     <button class="tlbtn" onclick="window.print()">
       🖨️ <span>列印目前設定頁</span>
     </button>
@@ -705,7 +729,44 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 
 <!-- ══════════════ STEP 2: TIME SLOTS ══════════════ -->
 <div class="step-page" id="step-2">
-  <div class="info-box">🕐 設定每日工作時段，開啟的時段會出現在週表欄位中。可直接修改時間，關閉的時段不顯示。系統會即時偵測重疊時段並在下方顯示衝突警告。</div>
+  <!-- ── v28: 圖式說明流程 ── -->
+  <div class="step2-visual-guide">
+    <div class="svg2-title">⚙️ 這一步怎麼操作？</div>
+    <div class="svg2-steps">
+      <div class="svg2-step">
+        <div class="svg2-step-icon" style="background:#dbeafe;color:#1d4ed8;">🔘</div>
+        <div class="svg2-step-body">
+          <div class="svg2-step-name">開 / 關 時段</div>
+          <div class="svg2-step-desc">右側滑桿控制，<br>關閉的時段<strong>不會</strong>出現在週表</div>
+        </div>
+      </div>
+      <div class="svg2-arrow">›</div>
+      <div class="svg2-step">
+        <div class="svg2-step-icon" style="background:#dcfce7;color:#15803d;">🕐</div>
+        <div class="svg2-step-body">
+          <div class="svg2-step-name">設定時間</div>
+          <div class="svg2-step-desc">直接點擊時間框<br>輸入開始 &amp; 結束</div>
+        </div>
+      </div>
+      <div class="svg2-arrow">›</div>
+      <div class="svg2-step">
+        <div class="svg2-step-icon" style="background:#fef3c7;color:#d97706;">📅</div>
+        <div class="svg2-step-body">
+          <div class="svg2-step-name">限定星期<span class="svg2-opt">可選</span></div>
+          <div class="svg2-step-desc">只在特定幾天出現<br>（如週一三五復健）</div>
+        </div>
+      </div>
+      <div class="svg2-arrow">›</div>
+      <div class="svg2-step">
+        <div class="svg2-step-icon" style="background:#f3e8ff;color:#7c3aed;">⚠️</div>
+        <div class="svg2-step-body">
+          <div class="svg2-step-name">衝突自動偵測</div>
+          <div class="svg2-step-desc">時段重疊時<br>下方即時顯示警告</div>
+        </div>
+      </div>
+    </div>
+    <div class="svg2-tip">💡 不知道怎麼排？直接使用下方的「照護情境一鍵套用」，系統自動幫你填好所有時段！</div>
+  </div>
 
   <!-- 重置工具列 -->
   <div class="reset-toolbar">
@@ -776,7 +837,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
       <div class="toggle-row on" data-sec="s-morning-act">
         <div class="toggle-label"><div class="toggle-label-main">上午活動</div><div class="toggle-label-sub">活動、室內運動、陪伴</div></div>
         <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:6px;margin-right:12px;">
-          <input class="time-edit-input" type="time" id="time-s-morning-act-s" value="09:00">
+          <input class="time-edit-input" type="time" id="time-s-morning-act-s" value="09:30">
           <span style="color:var(--muted);font-size:12px;">–</span>
           <input class="time-edit-input" type="time" id="time-s-morning-act-e" value="11:30">
         </div>
@@ -3994,63 +4055,95 @@ function buildDCReportHTML() {
 
 /* ── v26: UNIFIED SCENARIO PANEL ── */
 .unified-scenario-panel{background:linear-gradient(135deg,#f0f9ff 0%,#f5f3ff 100%);border:1.5px solid #c4b5fd;border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 2px 12px rgba(124,58,237,.07);}
-.usp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.usp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
 .usp-header-text{flex:1;}
-.usp-title{font-weight:800;font-size:15px;color:#4c1d95;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.usp-sub{font-size:12px;color:#374151;line-height:1.6;margin-top:4px;max-width:560px;}
+.usp-title{font-weight:800;font-size:14px;color:#4c1d95;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 /* 已套用情境 banner */
-.usp-applied-bar{display:none;align-items:center;gap:8px;background:#ede9fe;border:1.5px solid #c4b5fd;border-radius:8px;padding:7px 12px;font-size:12px;color:#4c1d95;font-weight:600;flex-shrink:0;margin-top:2px;}
+.usp-applied-bar{display:none;align-items:center;gap:8px;background:#ede9fe;border:1.5px solid #c4b5fd;border-radius:8px;padding:6px 12px;font-size:12px;color:#4c1d95;font-weight:600;flex-shrink:0;}
 .usp-applied-bar.show{display:flex;}
-.usp-applied-bar-icon{font-size:16px;}
-.btn-usp-reset{background:transparent;border:1.5px solid #c4b5fd;color:#6d28d9;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-left:6px;transition:.15s;-webkit-tap-highlight-color:transparent;}
+.btn-usp-reset{background:transparent;border:1.5px solid #c4b5fd;color:#6d28d9;border-radius:6px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;margin-left:6px;-webkit-tap-highlight-color:transparent;}
 .btn-usp-reset:hover{background:#ede9fe;}
-/* 情境卡片 grid */
-.usp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:4px;}
-.usp-card{background:#fff;border:2px solid #e9d5ff;border-radius:12px;padding:14px 10px 12px;cursor:pointer;transition:.18s;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;position:relative;box-shadow:0 1px 4px rgba(0,0,0,.05);}
-.usp-card:hover{border-color:#7c3aed;box-shadow:0 6px 20px rgba(124,58,237,.16);transform:translateY(-3px);}
-.usp-card:active{transform:translateY(-1px);}
-.usp-card.selected{border-color:#7c3aed;background:linear-gradient(135deg,#faf5ff,#f0f4ff);box-shadow:0 0 0 3px rgba(124,58,237,.18);}
-.usp-card.applied{border-color:#059669;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);box-shadow:0 0 0 3px rgba(5,150,105,.15);}
-.usp-card-icon{font-size:28px;line-height:1;filter:drop-shadow(0 1px 2px rgba(0,0,0,.10));}
+/* ── 情境卡片 grid (預設5欄，簡潔) ── */
+.usp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:0;}
+.usp-card{
+  background:#fff;border:1.5px solid #e9d5ff;border-radius:12px;
+  padding:14px 8px 12px;cursor:pointer;transition:all .18s;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  text-align:center;position:relative;
+}
+.usp-card:hover{border-color:#7c3aed;box-shadow:0 4px 16px rgba(124,58,237,.15);transform:translateY(-2px);}
+.usp-card.selected{border-color:#7c3aed;border-width:2px;background:#faf5ff;box-shadow:0 0 0 3px rgba(124,58,237,.12);}
+.usp-card.applied{border-color:#059669;border-width:2px;background:#f0fdf4;box-shadow:0 0 0 3px rgba(5,150,105,.12);}
+.usp-card-icon{font-size:28px;line-height:1;}
 .usp-card-name{font-size:12px;font-weight:800;color:#111827;line-height:1.3;}
-.usp-card-tags{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:1px;}
-.usp-tag{background:#f3e8ff;color:#6d28d9;border-radius:99px;padding:2px 6px;font-size:10px;font-weight:700;}
+.usp-card-count{font-size:10px;color:#9ca3af;font-weight:600;}
+.usp-card.applied .usp-card-count{color:#059669;}
+.usp-tag{background:#f3e8ff;color:#6d28d9;border-radius:99px;padding:2px 5px;font-size:9.5px;font-weight:700;}
 .usp-card.applied .usp-tag{background:#d1fae5;color:#065f46;}
-/* ✓ 套用完成 badge */
-.usp-selected-badge{display:none;position:absolute;top:6px;right:6px;background:#7c3aed;color:#fff;border-radius:99px;padding:2px 7px;font-size:9px;font-weight:800;letter-spacing:.3px;}
+.usp-card-tags{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin-top:2px;}
+/* applied / selected badges */
+.usp-selected-badge{display:none;position:absolute;top:5px;right:5px;background:#7c3aed;color:#fff;border-radius:99px;padding:2px 6px;font-size:8.5px;font-weight:800;}
 .usp-card.selected .usp-selected-badge{display:block;}
-.usp-applied-badge{display:none;position:absolute;top:6px;right:6px;background:#059669;color:#fff;border-radius:99px;padding:2px 7px;font-size:9px;font-weight:800;letter-spacing:.3px;}
+.usp-applied-badge{display:none;position:absolute;top:5px;right:5px;background:#059669;color:#fff;border-radius:99px;padding:2px 6px;font-size:8.5px;font-weight:800;}
 .usp-card.applied .usp-applied-badge{display:block;}
-/* 詳細展開面板 */
-.usp-detail{background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;padding:16px 18px;margin-top:12px;display:none;animation:uspFadeIn .18s ease;}
+
+/* ── 展開詳情面板 (圖式) ── */
+.usp-detail{
+  background:#fff;border:1.5px solid #c4b5fd;border-radius:12px;
+  padding:0;margin-top:10px;display:none;overflow:hidden;
+  animation:uspFadeIn .2s ease;
+}
 .usp-detail.open{display:block;}
-@keyframes uspFadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-.usp-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
-.usp-detail-name{font-size:15px;font-weight:800;color:#4c1d95;display:flex;align-items:center;gap:8px;}
-.usp-detail-desc{font-size:12.5px;color:#374151;line-height:1.65;margin-bottom:12px;padding:10px 12px;background:#f5f3ff;border-radius:8px;border-left:3px solid #a78bfa;}
-/* 時段預覽清單 */
-.usp-slot-list{display:flex;flex-direction:column;gap:0;margin-bottom:14px;border:1px solid #e9d5ff;border-radius:8px;overflow:hidden;}
-.usp-slot-row{display:flex;align-items:flex-start;gap:0;font-size:11.5px;color:#374151;line-height:1.5;border-bottom:1px solid #f3e8ff;}
-.usp-slot-row:last-child{border-bottom:none;}
-.usp-slot-row:nth-child(even){background:#faf5ff;}
-.usp-slot-label{font-weight:700;color:#4c1d95;white-space:nowrap;flex-shrink:0;min-width:90px;padding:6px 10px;border-right:1px solid #e9d5ff;}
-.usp-slot-tasks{padding:6px 10px;flex:1;}
-.usp-slot-time{font-size:10.5px;color:#6d28d9;font-weight:600;background:#ede9fe;border-radius:4px;padding:1px 5px;margin-left:4px;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:6px;}
-/* 套用按鈕 */
-.usp-detail-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.btn-usp-apply{border:none;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;border-radius:9px;padding:10px 24px;font-size:13px;font-weight:800;font-family:inherit;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;box-shadow:0 3px 12px rgba(124,58,237,.3);display:flex;align-items:center;gap:7px;}
+@keyframes uspFadeIn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
+/* 詳情頭部 */
+.usp-detail-head{
+  background:linear-gradient(135deg,#f5f3ff,#ede9fe);
+  padding:14px 18px 12px;border-bottom:1px solid #e9d5ff;
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+}
+.usp-detail-name{font-size:15px;font-weight:800;color:#4c1d95;}
+.usp-detail-desc{font-size:12px;color:#6b7280;margin-top:3px;line-height:1.55;}
+.usp-detail-actions{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.usp-slot-count{font-size:11px;color:#7c3aed;font-weight:700;background:#ede9fe;border-radius:99px;padding:3px 10px;}
+.btn-usp-apply{
+  border:none;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;
+  border-radius:8px;padding:9px 20px;font-size:13px;font-weight:800;font-family:inherit;
+  cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 3px 10px rgba(124,58,237,.28);display:flex;align-items:center;gap:6px;
+}
 .btn-usp-apply:hover{background:linear-gradient(135deg,#6d28d9,#1d4ed8);transform:translateY(-1px);}
 .btn-usp-apply:active{transform:translateY(0);}
 .btn-usp-apply.applied-state{background:linear-gradient(135deg,#059669,#0891b2);}
-.btn-usp-apply.applied-state:hover{background:linear-gradient(135deg,#047857,#0e7490);}
-.usp-slot-count{font-size:11px;color:#6b7280;font-weight:400;}
-@media(max-width:900px){.usp-grid{grid-template-columns:repeat(3,1fr);gap:8px;}}
-@media(max-width:560px){
-  .usp-grid{grid-template-columns:repeat(3,1fr);gap:6px;}
-  .usp-card{padding:10px 6px 9px;}
+/* 時段時間軸 */
+.usp-timeline{display:flex;flex-direction:column;gap:0;padding:14px 16px;}
+.usp-tl-group{margin-bottom:12px;}
+.usp-tl-group-label{font-size:10px;font-weight:800;color:#9ca3af;letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.usp-tl-group-label::after{content:'';flex:1;height:1px;background:#f3e8ff;}
+.usp-tl-slots{display:flex;flex-direction:column;gap:4px;}
+.usp-tl-row{display:flex;align-items:stretch;gap:0;font-size:12px;border-radius:7px;overflow:hidden;border:1px solid #f3e8ff;}
+.usp-tl-row:hover{border-color:#d8b4fe;}
+.usp-tl-time{background:#f5f3ff;color:#7c3aed;font-weight:700;font-size:10.5px;padding:6px 10px;white-space:nowrap;display:flex;align-items:center;min-width:90px;border-right:1px solid #e9d5ff;flex-shrink:0;}
+.usp-tl-label{font-weight:700;color:#111827;padding:6px 10px;flex-shrink:0;min-width:80px;border-right:1px solid #f3e8ff;display:flex;align-items:center;}
+.usp-tl-tasks{padding:6px 10px;flex:1;font-size:11px;color:#6b7280;line-height:1.5;display:flex;align-items:center;}
+.usp-tl-tasks-list{display:flex;flex-wrap:wrap;gap:3px;}
+.usp-tl-task{background:#faf5ff;border:1px solid #e9d5ff;border-radius:4px;padding:1px 6px;font-size:10.5px;color:#4c1d95;white-space:nowrap;}
+/* 夜班特殊色 */
+.usp-tl-row.night .usp-tl-time{background:#1e1b4b;color:#a5b4fc;}
+.usp-tl-row.night .usp-tl-label{color:#c7d2fe;background:#2e1065;}
+.usp-tl-row.night .usp-tl-tasks{color:#a5b4fc;background:#1e1b4b;}
+.usp-tl-row.night .usp-tl-task{background:#312e81;border-color:#4338ca;color:#c7d2fe;}
+.usp-tl-row.night{border-color:#4338ca;}
+@media(max-width:760px){
+  .usp-grid{grid-template-columns:repeat(3,1fr);}
+  .usp-tl-row{flex-wrap:wrap;}
+  .usp-tl-time{min-width:80px;}
+  .usp-tl-label{min-width:70px;}
+}
+@media(max-width:480px){
+  .usp-grid{grid-template-columns:repeat(2,1fr) !important;}
   .usp-card-icon{font-size:24px;}
   .usp-card-name{font-size:11px;}
-  .usp-detail{padding:13px 14px;}
+  .usp-detail{padding:0;}
 }
 
 /* ── v22: 匯出/匯入設定檔 ── */
@@ -4567,7 +4660,7 @@ const DEFAULT_SLOT_TIMES = {
   's-morning':      { s:'06:00', e:'07:30' },
   's-breakfast':    { s:'07:30', e:'08:30' },
   's-med-am':       { s:'08:30', e:'09:00' },
-  's-morning-act':  { s:'09:00', e:'11:30' },
+  's-morning-act':  { s:'09:30', e:'11:30' },
   's-rehab':        { s:'09:00', e:'10:00' },
   's-walk':         { s:'09:30', e:'10:30' },
   's-hospital':     { s:'08:00', e:'12:00' },
@@ -4939,16 +5032,16 @@ const CARE_SCENARIOS = {
     desc:'中風後復健期，側重肢體功能訓練，需協助移位與輔具使用，定期觀察患側肢體。',
     tags:['被動關節運動','防跌移位','復健訓練'],
     slots:{
-      's-morning':  {on:true, s:'06:30',e:'07:00'},
-      's-vital-am': {on:true, s:'07:00',e:'07:30'},
+      's-morning':  {on:true, s:'06:30',e:'07:30'},
       's-breakfast':{on:true, s:'07:30',e:'08:30'},
       's-med-am':   {on:true, s:'08:30',e:'09:00'},
-      's-rehab':    {on:true, s:'09:00',e:'10:30'},
-      's-walk':     {on:true, s:'10:30',e:'11:30'},
-      's-lunch':    {on:true, s:'11:30',e:'12:30'},
-      's-med-noon': {on:true, s:'12:30',e:'13:00'},
-      's-nap':      {on:true, s:'13:00',e:'14:30'},
-      's-afternoon-act':{on:true, s:'14:30',e:'16:30'},
+      's-vital-am': {on:true, s:'09:00',e:'09:30'},
+      's-rehab':    {on:true, s:'09:30',e:'11:00'},
+      's-walk':     {on:true, s:'11:00',e:'12:00'},
+      's-lunch':    {on:true, s:'12:00',e:'13:00'},
+      's-med-noon': {on:true, s:'13:00',e:'13:30'},
+      's-nap':      {on:true, s:'13:30',e:'15:00'},
+      's-afternoon-act':{on:true, s:'15:00',e:'16:30'},
       's-vital-pm': {on:true, s:'16:30',e:'17:00'},
       's-dinner':   {on:true, s:'17:30',e:'18:30'},
       's-med-pm':   {on:true, s:'18:30',e:'19:00'},
@@ -4970,16 +5063,16 @@ const CARE_SCENARIOS = {
     slots:{
       's-morning':   {on:true, s:'07:00',e:'08:00'},
       's-breakfast': {on:true, s:'08:00',e:'09:00'},
-      's-med-am':    {on:true},
-      's-morning-act':{on:true, s:'09:00',e:'10:00'},
-      's-walk':      {on:true, s:'10:00',e:'11:00'},
+      's-med-am':    {on:true, s:'09:00',e:'09:30'},
+      's-morning-act':{on:true, s:'09:30',e:'10:30'},
+      's-walk':      {on:true, s:'10:30',e:'11:30'},
       's-lunch':     {on:true, s:'11:30',e:'12:30'},
-      's-med-noon':  {on:true},
+      's-med-noon':  {on:true, s:'12:30',e:'13:00'},
       's-nap':       {on:true, s:'13:00',e:'14:30'},
       's-afternoon-act':{on:true, s:'14:30',e:'16:30'},
       's-music':     {on:true, s:'16:30',e:'17:00'},
       's-dinner':    {on:true, s:'17:30',e:'18:30'},
-      's-med-pm':    {on:true},
+      's-med-pm':    {on:true, s:'18:30',e:'19:00'},
       's-evening':   {on:true, s:'19:00',e:'20:30'},
       's-bedtime':   {on:true, s:'20:30',e:'21:30'},
       's-night':     {on:false}
@@ -5035,7 +5128,7 @@ const CARE_SCENARIOS = {
       's-dinner':    {on:true, s:'17:30',e:'18:30'},
       's-med-pm':    {on:true, s:'18:30',e:'19:00'},
       's-bedtime':   {on:true, s:'21:00',e:'22:00'},
-      's-hospital':  {on:true, s:'08:00',e:'12:00'},
+      's-hospital':  {on:false, s:'09:30',e:'13:00'},
       's-morning-act':{on:false},'s-walk':{on:false},'s-night':{on:false}
     },
     tasks:{
@@ -5083,6 +5176,14 @@ function injectScenarioTemplates() {
   const lang = getScenarioLang();
   const i18n = SCENARIO_I18N[lang] || {};
 
+  // Slot groups for timeline display
+  const slotGroups = {
+    '早班': ['s-morning','s-breakfast','s-med-am','s-morning-act','s-rehab','s-walk','s-hospital','s-vital-am'],
+    '午班': ['s-lunch','s-med-noon','s-nap','s-vital-pm','s-afternoon-act'],
+    '晚班': ['s-dinner','s-med-pm','s-evening','s-bedtime'],
+    '夜間': ['s-night'],
+    '其他': ['s-music','s-social']
+  };
   const slotLabelMap = {
     's-morning':'晨間照護','s-breakfast':'早餐','s-med-am':'早間用藥',
     's-morning-act':'上午活動','s-rehab':'復健訓練','s-walk':'戶外散步',
@@ -5093,70 +5194,88 @@ function injectScenarioTemplates() {
     's-social':'家人互動','s-hospital':'外出就醫'
   };
 
+  /* ── Cards (簡潔預設) ── */
   const cards = Object.entries(CARE_SCENARIOS).map(([key, sc]) => {
     const loc = i18n[key] || {};
     const name = loc.name || sc.name;
     const tags = (loc.tags || sc.tags).map(t=>`<span class="usp-tag">${t}</span>`).join('');
     const isApplied = lastAppliedScenario === key;
     const appliedCls = isApplied ? ' applied' : '';
-    const badge = isApplied
-      ? `<span class="usp-applied-badge">✓ 已套用</span>`
-      : `<span class="usp-selected-badge">展開詳情</span>`;
+    const badge = isApplied ? `<span class="usp-applied-badge">✓ 已套用</span>` : `<span class="usp-selected-badge">▾</span>`;
+    const activeCount = Object.values(sc.slots).filter(s => s.on !== false).length;
+    const nightOn = sc.slots['s-night'] && sc.slots['s-night'].on === true;
     return `<div class="usp-card${appliedCls}" id="sc-card-${key}" onclick="toggleScenarioDetail('${key}')">
       ${badge}
       <div class="usp-card-icon">${sc.icon}</div>
       <div class="usp-card-name">${name}</div>
+      <div class="usp-card-count">${activeCount}個時段${nightOn ? '＋🌙' : ''}</div>
       <div class="usp-card-tags">${tags}</div>
     </div>`;
   }).join('');
 
-  // Build detail panels with time ranges and richer task preview
+  /* ── Detail panels (圖式時間軸) ── */
   const details = Object.entries(CARE_SCENARIOS).map(([key, sc]) => {
     const loc = i18n[key] || {};
     const name = loc.name || sc.name;
     const isApplied = lastAppliedScenario === key;
-
-    // Collect on-slots with times
-    const onSlots = Object.entries(sc.slots).filter(([,cfg]) => cfg.on !== false);
-    const slotCount = onSlots.length;
-
-    const slotRows = onSlots.map(([sid, cfg]) => {
-      const label = slotLabelMap[sid] || sid;
-      const timeStr = (cfg.s && cfg.e) ? `${cfg.s}–${cfg.e}` : '';
-      const tasks = (sc.tasks && sc.tasks[sid]) || [];
-      const taskText = tasks.length ? tasks.slice(0,3).join('、') + (tasks.length > 3 ? '…' : '') : '';
-      return `<div class="usp-slot-row">
-        <span class="usp-slot-label">${label}</span>
-        <span class="usp-slot-tasks">${taskText || '<span style="color:#9ca3af;font-size:11px;">─</span>'}</span>
-        ${timeStr ? `<span class="usp-slot-time">${timeStr}</span>` : ''}
-      </div>`;
-    }).join('');
-
+    const activeSlots = Object.entries(sc.slots).filter(([,cfg]) => cfg.on !== false);
+    const slotCount = activeSlots.length;
     const applyLabel = isApplied ? '✓ 已套用，重新套用' : `套用「${sc.name}」`;
     const applyCls = isApplied ? 'btn-usp-apply applied-state' : 'btn-usp-apply';
 
+    // Build timeline grouped by shift
+    let timelineHTML = '<div class="usp-timeline">';
+    Object.entries(slotGroups).forEach(([groupName, groupSlots]) => {
+      const groupActive = groupSlots.filter(sid => {
+        const cfg = sc.slots[sid];
+        return cfg && cfg.on !== false;
+      });
+      if (groupActive.length === 0) return;
+      timelineHTML += `<div class="usp-tl-group">`;
+      timelineHTML += `<div class="usp-tl-group-label">${groupName}</div>`;
+      timelineHTML += `<div class="usp-tl-slots">`;
+      groupActive.forEach(sid => {
+        const cfg = sc.slots[sid];
+        const label = slotLabelMap[sid] || sid;
+        const timeStr = (cfg.s && cfg.e) ? `${cfg.s} – ${cfg.e}` : '';
+        const tasks = (sc.tasks && sc.tasks[sid]) || [];
+        const isNight = groupName === '夜間';
+        const taskBubbles = tasks.slice(0,3).map(t => `<span class="usp-tl-task">${t}</span>`).join('');
+        const moreTasks = tasks.length > 3 ? `<span class="usp-tl-task" style="color:#9ca3af;">+${tasks.length-3}項</span>` : '';
+        timelineHTML += `<div class="usp-tl-row${isNight ? ' night' : ''}">
+          <div class="usp-tl-time">${timeStr || '──'}</div>
+          <div class="usp-tl-label">${label}</div>
+          <div class="usp-tl-tasks"><div class="usp-tl-tasks-list">${taskBubbles}${moreTasks}</div></div>
+        </div>`;
+      });
+      timelineHTML += `</div></div>`;
+    });
+    timelineHTML += '</div>';
+
     return `<div class="usp-detail" id="sc-detail-${key}">
-      <div class="usp-detail-header">
-        <div class="usp-detail-name">${sc.icon} ${name}</div>
+      <div class="usp-detail-head">
+        <div>
+          <div class="usp-detail-name">${sc.icon} ${name}</div>
+          <div class="usp-detail-desc">${sc.desc}</div>
+        </div>
         <div class="usp-detail-actions">
-          <div class="usp-slot-count">共 ${slotCount} 個時段</div>
+          <span class="usp-slot-count">共 ${slotCount} 個時段</span>
           <button class="${applyCls}" id="btn-apply-${key}" onclick="applyScenarioTemplate('${key}')">
-            <span>🚀</span> ${applyLabel}
+            🚀 ${applyLabel}
           </button>
         </div>
       </div>
-      <div class="usp-detail-desc">${sc.desc}</div>
-      <div class="usp-slot-list">${slotRows}</div>
+      ${timelineHTML}
     </div>`;
   }).join('');
 
-  // Applied scenario bar
+  /* ── Applied bar ── */
   const appliedSc = lastAppliedScenario ? CARE_SCENARIOS[lastAppliedScenario] : null;
   const appliedBar = appliedSc
     ? `<div class="usp-applied-bar show" id="usp-applied-bar">
-        <span class="usp-applied-bar-icon">${appliedSc.icon}</span>
-        <span>目前已套用：<strong>${appliedSc.name}</strong></span>
-        <button class="btn-usp-reset" onclick="resetScenario()">取消套用</button>
+        <span>${appliedSc.icon}</span>
+        <span>已套用：<strong>${appliedSc.name}</strong></span>
+        <button class="btn-usp-reset" onclick="resetScenario()">✕ 取消</button>
       </div>`
     : `<div class="usp-applied-bar" id="usp-applied-bar"></div>`;
 
@@ -5164,8 +5283,7 @@ function injectScenarioTemplates() {
     <div class="unified-scenario-panel">
       <div class="usp-header">
         <div class="usp-header-text">
-          <div class="usp-title">🏥 照護情境一鍵套用 <span class="badge-new">v26</span></div>
-          <div class="usp-sub">不知道怎麼排也沒關係，先點選長輩狀況，系統自動帶入常見時段與工作細項，再依家中習慣微調。</div>
+          <div class="usp-title">🏥 照護情境一鍵套用 <span class="badge-new">v29</span></div>
         </div>
         ${appliedBar}
       </div>
@@ -5393,19 +5511,31 @@ function qmApplyAndGenerate() {
   // Apply scenario
   applyScenarioTemplate(condition);
 
-  // Adjust wake/sleep times dynamically
+  // Adjust wake/sleep times dynamically (無衝突公式 v27)
+  // morning  = wake ~ wake+30
+  // breakfast= wake+30 ~ wake+60
+  // med-am   = wake+60 ~ wake+90
+  // bedtime  = sleep-30 ~ sleep  (就寢程序結束時長輩入睡)
+  // night-s  = sleep (如開啟夜間巡視)
   const wM = toMins(wakeTime) || 390;
+  const sM = toMins(sleepTime) || 1290;
   function addMins(base, delta) {
     const t = (base + delta + 1440) % 1440;
     return String(Math.floor(t/60)).padStart(2,'0') + ':' + String(t%60).padStart(2,'0');
   }
   const setTime = (id, val) => { const e = document.getElementById(id); if (e && !e.disabled) e.value = val; };
-  setTime('time-s-morning-s', wakeTime);
-  setTime('time-s-morning-e', addMins(wM, 90));
-  setTime('time-s-breakfast-s', addMins(wM, 90));
-  setTime('time-s-breakfast-e', addMins(wM, 150));
-  setTime('time-s-bedtime-s', sleepTime);
-  setTime('time-s-bedtime-e', addMins(toMins(sleepTime)||1290, 60));
+  setTime('time-s-morning-s',   wakeTime);
+  setTime('time-s-morning-e',   addMins(wM, 30));
+  setTime('time-s-breakfast-s', addMins(wM, 30));
+  setTime('time-s-breakfast-e', addMins(wM, 60));
+  setTime('time-s-med-am-s',    addMins(wM, 60));
+  setTime('time-s-med-am-e',    addMins(wM, 90));
+  setTime('time-s-bedtime-s',   addMins(sM, -30));
+  setTime('time-s-bedtime-e',   sleepTime);
+  // 若夜間巡視開啟，夜間巡視從入睡時間開始
+  if (nightcare) {
+    setTime('time-s-night-s', sleepTime);
+  }
 
   // Night care
   const nightRow = document.querySelector('[data-sec="s-night"]');
@@ -5597,94 +5727,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <button id="btn-show-preview" onclick="showPreviewPanel()">📋 時段預覽</button>
 
-<!-- ══ v23 QUICK MODE OVERLAY ══ -->
-<div id="quickModeOverlay">
-  <div class="qm-sheet">
-    <div class="qm-header">
-      <div>
-        <div class="qm-title">⚡ 快速完成模式</div>
-        <div class="qm-sub">只需回答 5 個問題，系統自動幫你設定好時間表</div>
-      </div>
-      <button class="qm-close" onclick="closeQuickMode()">✕</button>
-    </div>
-    <div class="qm-progress">
-      <div class="qm-dot active" id="qm-dot-1"></div>
-      <div class="qm-dot" id="qm-dot-2"></div>
-      <div class="qm-dot" id="qm-dot-3"></div>
-      <div class="qm-dot" id="qm-dot-4"></div>
-      <div class="qm-dot" id="qm-dot-5"></div>
-    </div>
-    <div class="qm-body">
-      <!-- Q1: 長輩狀況 -->
-      <div class="qm-step active" id="qm-step-1">
-        <div class="qm-step-label"><span class="qm-num">1</span> 長輩目前的狀況</div>
-        <div class="qm-question">長輩最接近哪種情況？</div>
-        <div class="qm-chips" id="qm-condition">
-          <div class="qm-chip" data-val="bedbound" onclick="qmSelect(this,'qm-condition')"><span class="qm-chip-icon">🛏️</span>完全臥床</div>
-          <div class="qm-chip" data-val="stroke" onclick="qmSelect(this,'qm-condition')"><span class="qm-chip-icon">🧠</span>中風復健中</div>
-          <div class="qm-chip" data-val="dementia" onclick="qmSelect(this,'qm-condition')"><span class="qm-chip-icon">🌼</span>失智症</div>
-          <div class="qm-chip" data-val="ambulatory" onclick="qmSelect(this,'qm-condition')"><span class="qm-chip-icon">🚶</span>行動尚可</div>
-          <div class="qm-chip" data-val="postop" onclick="qmSelect(this,'qm-condition')"><span class="qm-chip-icon">🏥</span>術後靜養</div>
-        </div>
-        <div class="qm-hint">💡 不確定可先選最接近的，之後還可以調整</div>
-      </div>
-      <!-- Q2: 起床/就寢時間 -->
-      <div class="qm-step" id="qm-step-2">
-        <div class="qm-step-label"><span class="qm-num">2</span> 作息時間</div>
-        <div class="qm-question">長輩通常幾點起床、幾點睡覺？</div>
-        <div class="qm-time-row">
-          <div class="qm-time-label">🌅 起床</div>
-          <input class="qm-time-input" type="time" id="qm-wake" value="06:30">
-        </div>
-        <div class="qm-time-row">
-          <div class="qm-time-label">🌙 就寢</div>
-          <input class="qm-time-input" type="time" id="qm-sleep" value="21:30">
-        </div>
-        <div class="qm-hint">💡 系統會以這兩個時間自動排列早晚班時段</div>
-      </div>
-      <!-- Q3: 夜間巡視 -->
-      <div class="qm-step" id="qm-step-3">
-        <div class="qm-step-label"><span class="qm-num">3</span> 夜間照護</div>
-        <div class="qm-question">夜間需要看護巡視或協助嗎？</div>
-        <div class="qm-chips" id="qm-nightcare">
-          <div class="qm-chip" data-val="yes" onclick="qmSelect(this,'qm-nightcare')"><span class="qm-chip-icon">✅</span>需要夜間巡視</div>
-          <div class="qm-chip" data-val="no" onclick="qmSelect(this,'qm-nightcare')"><span class="qm-chip-icon">😴</span>不需要，夜間可休息</div>
-        </div>
-        <div class="qm-hint">💡 臥床或剛術後的長輩通常需要夜間巡視</div>
-      </div>
-      <!-- Q4: 打掃 -->
-      <div class="qm-step" id="qm-step-4">
-        <div class="qm-step-label"><span class="qm-num">4</span> 打掃工作</div>
-        <div class="qm-question">看護的工作是否包含打掃整理？</div>
-        <div class="qm-chips" id="qm-clean">
-          <div class="qm-chip" data-val="morning" onclick="qmSelect(this,'qm-clean')"><span class="qm-chip-icon">🧹</span>有，早班打掃</div>
-          <div class="qm-chip" data-val="noon" onclick="qmSelect(this,'qm-clean')"><span class="qm-chip-icon">🌤️</span>有，午班打掃</div>
-          <div class="qm-chip" data-val="no" onclick="qmSelect(this,'qm-clean')"><span class="qm-chip-icon">🚫</span>不需要</div>
-        </div>
-      </div>
-      <!-- Q5: 名字 -->
-      <div class="qm-step" id="qm-step-5">
-        <div class="qm-step-label"><span class="qm-num">5</span> 基本資訊（選填）</div>
-        <div class="qm-question">填上名字，時間表更個人化</div>
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div class="form-group">
-            <label class="form-label">長輩稱呼</label>
-            <input class="form-input" type="text" id="qm-patient" placeholder="例：林爺爺" style="font-size:16px;">
-          </div>
-          <div class="form-group">
-            <label class="form-label">看護姓名</label>
-            <input class="form-input" type="text" id="qm-caregiver" placeholder="例：Siti" style="font-size:16px;">
-          </div>
-        </div>
-        <div class="qm-hint" style="margin-top:10px;">✅ 完成後系統會自動套用設定並直接產生時間表</div>
-      </div>
-    </div>
-    <div class="qm-footer">
-      <button class="qm-btn-back" id="qm-btn-back" onclick="qmPrev()" style="display:none;">‹ 上一題</button>
-      <button class="qm-btn-next" id="qm-btn-next" onclick="qmNext()">下一題 ›</button>
-    </div>
-  </div>
-</div>
 
 </body>
-</html>
