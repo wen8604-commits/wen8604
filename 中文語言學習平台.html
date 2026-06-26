@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>中文語言學習平台 — 看護照顧用語</title><!-- v29 quiz lang + all-2000 vocab + zh/en/id/vi -->
+<title>中文語言學習平台 v35｜手機照護任務流程優化版</title><!-- v35 mobile care task flow optimization -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ===== RESPONSIVE OVERHAUL ===== */
@@ -1698,6 +1698,502 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   .vol-pick-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* ── V32 CARE TASK HOME ── */
+.v32-home-stack {
+  display: grid;
+  grid-template-columns: minmax(260px, .9fr) minmax(320px, 1.4fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.v32-home-left {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+.v32-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 1px 3px rgba(15,23,42,.04);
+  align-self: start;
+}
+.v32-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.v32-panel-head > div:first-child { min-width: 0; }
+.v32-panel-kicker {
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--ink-3);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.v32-panel-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-top: 2px;
+}
+.v32-panel-sub {
+  font-size: 11px;
+  color: var(--ink-3);
+  margin-top: 2px;
+}
+.v32-time-pill {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 800;
+}
+.daily-list {
+  display: grid;
+  gap: 8px;
+}
+.daily-row {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #F8FAFC;
+}
+.daily-row-icon { font-size: 15px; }
+.daily-row-main { min-width: 0; }
+.daily-row-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.daily-row-note {
+  font-size: 10.5px;
+  color: var(--ink-3);
+  margin-top: 1px;
+}
+.daily-go-btn,
+.task-chip,
+.task-line-btn,
+.generator-btn {
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform .12s, opacity .12s, background .12s;
+}
+.daily-go-btn {
+  padding: 6px 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  white-space: nowrap;
+}
+.daily-go-btn:disabled {
+  background: #CBD5E1;
+  cursor: not-allowed;
+}
+.daily-go-btn:not(:disabled):hover,
+.task-chip:hover,
+.task-line-btn:hover,
+.generator-btn:hover { transform: translateY(-1px); opacity: .95; }
+.task-mode-grid {
+  display: grid;
+  gap: 10px;
+}
+.task-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.task-chip {
+  padding: 7px 10px;
+  background: #F8FAFC;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  font-size: 11px;
+}
+.task-chip.active {
+  background: var(--primary-light);
+  border-color: var(--primary-mid);
+  color: var(--primary);
+}
+.task-flow-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.task-flow-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #F8FAFC;
+  border-bottom: 1px solid var(--border);
+}
+.task-flow-icon { font-size: 24px; }
+.task-flow-title { font-size: 14px; font-weight: 900; color: var(--ink); }
+.task-flow-sub { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.task-step {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.task-step:last-child { border-bottom: none; }
+.task-step-index {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 900;
+}
+.task-step-label {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+.task-line-grid {
+  display: grid;
+  gap: 6px;
+}
+.task-line {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border-radius: 8px;
+  background: #F8FAFC;
+}
+.task-lang {
+  font-size: 10px;
+  font-weight: 900;
+  color: var(--ink-3);
+}
+.task-sentence {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  min-width: 0;
+}
+.task-line-actions {
+  display: flex;
+  gap: 4px;
+}
+.task-line-btn {
+  min-width: 28px;
+  height: 28px;
+  padding: 0 7px;
+  background: #fff;
+  border: 1px solid var(--border);
+  color: var(--ink-2);
+  font-size: 11px;
+}
+.task-line-btn.active { color: #D97706; border-color: #FDE68A; background: #FFFBEB; }
+.task-quiz-box {
+  margin-top: 8px;
+  padding: 9px;
+  border-radius: 10px;
+  background: #EEF2FF;
+  color: #3730A3;
+  font-size: 12px;
+  line-height: 1.55;
+}
+.generator-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+.generator-field {
+  display: grid;
+  gap: 4px;
+}
+.generator-field.full { grid-column: 1 / -1; }
+.generator-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  color: var(--ink-3);
+}
+.generator-input,
+.generator-select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--ink);
+  padding: 8px 10px;
+  font-size: 13px;
+  outline: none;
+}
+.generator-input:focus,
+.generator-select:focus {
+  border-color: var(--primary-mid);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.generator-btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 13px;
+}
+.generator-output {
+  display: grid;
+  gap: 7px;
+  margin-top: 10px;
+}
+.generator-sentence {
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px;
+  background: #F8FAFC;
+}
+
+.daily-status-card {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.daily-status-pill {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 10px;
+  background: #F8FAFC;
+}
+.daily-status-label {
+  font-size: 10px;
+  color: var(--ink-3);
+  font-weight: 900;
+}
+.daily-status-value {
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 900;
+  margin-top: 2px;
+}
+.daily-goal-note {
+  margin: 0 0 10px;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #ECFDF5;
+  color: #047857;
+  font-size: 12px;
+  font-weight: 800;
+}
+.weak-panel {
+  border: 1px solid #FED7AA;
+  border-radius: 12px;
+  padding: 12px;
+  background: #FFF7ED;
+  margin: 10px 0;
+}
+.weak-panel-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: #C2410C;
+  margin-bottom: 4px;
+}
+.weak-panel-sub {
+  font-size: 11px;
+  color: #9A3412;
+  margin-bottom: 9px;
+}
+.weak-word-list {
+  display: grid;
+  gap: 6px;
+}
+.weak-word-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 9px;
+  border: 1px solid #FED7AA;
+  border-radius: 9px;
+  background: #fff;
+}
+.weak-word-main {
+  min-width: 0;
+  font-size: 12px;
+  color: var(--ink-2);
+  line-height: 1.45;
+}
+.weak-word-main strong {
+  color: var(--ink);
+  font-size: 13px;
+}
+.weak-badge {
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #FEF2F2;
+  color: #DC2626;
+  font-size: 10px;
+  font-weight: 900;
+}
+.task-tools-stack {
+  display: grid;
+  gap: 16px;
+}
+.task-tool-band {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.task-tool-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.task-tool-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.task-tool-sub {
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 3px;
+  line-height: 1.5;
+}
+.template-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 10px;
+}
+.template-btn {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-2);
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+.template-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-mid);
+  color: var(--primary);
+}
+.generator-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.generator-secondary-btn {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink-2);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.generator-edit {
+  width: 100%;
+  min-height: 52px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 9px;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 1.45;
+  font-family: inherit;
+}
+.generator-edit:focus {
+  outline: none;
+  border-color: var(--primary-mid);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+.care-report-card {
+  border-top: 1px solid var(--border);
+  padding: 14px;
+  background: #F8FAFC;
+}
+.care-report-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.care-report-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.emergency-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.emergency-card {
+  border: 1px solid #FECACA;
+  border-radius: 10px;
+  background: #FEF2F2;
+  padding: 10px;
+}
+.emergency-title {
+  font-size: 13px;
+  color: #B91C1C;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+.emergency-line {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+@media (max-width: 640px) {
+  .daily-status-card, .care-report-grid, .emergency-grid, .generator-actions { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 980px) {
+  .v32-home-stack { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .v32-panel-head {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+  .v32-time-pill { justify-self: start; margin-left: 0; }
+  .generator-grid { grid-template-columns: 1fr; }
+  .task-step { grid-template-columns: 1fr; }
+  .task-line, .generator-sentence { grid-template-columns: 42px 1fr; }
+  .task-line-actions, .generator-sentence .task-line-actions { grid-column: 2; }
+  .daily-row { grid-template-columns: 22px 1fr; }
+  .daily-go-btn { grid-column: 2; justify-self: start; }
+}
+
 /* Global search results */
 .global-search-bar {
   background: var(--primary-light); border: 1.5px solid var(--primary-mid);
@@ -1837,6 +2333,254 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   .vol-pick-chip:active, .sw-chip:active, .sw-home:active, .sw-arrow:active { transform: none; }
 }
 
+
+
+/* ── V35 MOBILE CARE FLOW OPTIMIZATION ── */
+@media (max-width: 640px) {
+  .page-tabs { display: none !important; }
+  .bottom-nav { display: flex; }
+  .main {
+    padding-top: 14px;
+    padding-bottom: calc(var(--bottom-nav-h) + 18px + env(safe-area-inset-bottom, 0px));
+  }
+  .search-bar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .quick-filter-row {
+    display: flex;
+    gap: 7px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 2px;
+  }
+  .quick-filter-row .filter-btn { flex: 0 0 auto; }
+  .vcard {
+    min-height: 150px;
+    padding: 14px 12px;
+  }
+  .vcard-zh {
+    font-size: 16px;
+    line-height: 1.35;
+  }
+  .vcard-en,
+  .vcard-id,
+  .vcard-vi {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .speak-btn {
+    min-height: 36px;
+    padding: 7px 12px;
+  }
+}
+.quick-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.home-hero-bar {
+  display: none;
+}
+.bottom-nav-inner {
+  width: 100%;
+}
+.vocab-mode-toggle {
+  border-color: #C4B5FD;
+  color: #6D28D9;
+  background: #F5F3FF;
+}
+body.vocab-compact .vcard {
+  min-height: 138px;
+}
+body.vocab-compact .vcard-ph,
+body.vocab-compact .vcard-ex,
+body.vocab-compact.lang-en .vcard-id,
+body.vocab-compact.lang-en .vcard-vi,
+body.vocab-compact.lang-id .vcard-en,
+body.vocab-compact.lang-id .vcard-vi,
+body.vocab-compact.lang-vi .vcard-en,
+body.vocab-compact.lang-vi .vcard-id,
+body.vocab-compact.lang-zh .vcard-en,
+body.vocab-compact.lang-zh .vcard-id,
+body.vocab-compact.lang-zh .vcard-vi {
+  display: none;
+}
+.v35-today-panel {
+  border: 1px solid #BFDBFE;
+  border-radius: 12px;
+  padding: 18px;
+  background: linear-gradient(180deg, #EFF6FF, #FFFFFF);
+  margin-bottom: 16px;
+}
+.v35-today-kicker,
+.v35-section-kicker {
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.v35-today-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.v35-today-summary {
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 800;
+  margin: 8px 0 14px;
+}
+.v35-primary-action {
+  border: 0;
+  border-radius: 10px;
+  background: var(--primary);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 900;
+  padding: 12px 16px;
+  cursor: pointer;
+}
+.v35-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.v35-tool-card {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 14px;
+}
+.v35-tool-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.v35-tool-sub {
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 5px 0 12px;
+}
+.v35-section-head {
+  margin: 18px 0 10px;
+}
+.v35-section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--ink);
+}
+.task-process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.task-process-step {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--ink-2);
+}
+.task-process-step strong {
+  display: block;
+  color: var(--primary);
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+.task-report-sticky {
+  position: sticky;
+  bottom: calc(var(--bottom-nav-h) + 8px);
+  z-index: 12;
+  padding: 10px 14px 14px;
+  background: linear-gradient(180deg, rgba(248,250,252,0), #F8FAFC 28%);
+}
+.care-report-card.formal {
+  border: 1px solid #CBD5E1;
+  border-radius: 12px;
+  margin: 12px;
+  background: #fff;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
+}
+.care-report-title-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.care-report-badge {
+  border-radius: 999px;
+  background: #ECFDF5;
+  color: #047857;
+  font-size: 11px;
+  font-weight: 900;
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+.report-note-input {
+  min-height: 72px;
+  resize: vertical;
+}
+.line-card {
+  border: 1px solid #BAE6FD;
+  border-radius: 12px;
+  background: #F0F9FF;
+  padding: 12px;
+}
+.line-card-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: #075985;
+  margin-bottom: 10px;
+}
+.line-preview-label {
+  font-size: 12px;
+  font-weight: 900;
+  color: #075985;
+  margin-top: 12px;
+}
+.emergency-quick-panel {
+  border: 1px solid #FCA5A5;
+  border-radius: 12px;
+  background: #FEF2F2;
+  padding: 14px;
+}
+.emergency-quick-title {
+  color: #991B1B;
+  font-size: 17px;
+  font-weight: 900;
+  margin-bottom: 4px;
+}
+.emergency-quick-sub {
+  color: #B91C1C;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+.emergency-lines {
+  display: grid;
+  gap: 5px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink-2);
+  margin-bottom: 8px;
+}
+@media (max-width: 640px) {
+  .v35-tool-grid,
+  .task-process-steps {
+    grid-template-columns: 1fr;
+  }
+  .v35-today-title { font-size: 20px; }
+  .care-report-card.formal { margin: 10px 0; }
+}
+
 </style>
 </head>
 <body class="lang-en">
@@ -1863,6 +2607,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
   </div>
 
   <button class="nav-btn" onclick="openFlashcard(0)">⚡ 閃卡練習</button>
+  <button class="nav-btn" onclick="switchPageTab('tasks')">📝 任務工具</button>
   <button class="nav-btn nav-btn-quiz" onclick="switchPageTab('quiz')">🧠 測驗</button>
 </nav>
 
@@ -1884,6 +2629,9 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="switchPageTab('quiz')">
       <span class="item-icon">🧠</span> 詞彙測驗
     </a>
+    <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="switchPageTab('tasks')">
+      <span class="item-icon">📝</span> 任務工具
+    </a>
     <a class="sidebar-item vol-20" href="javascript:void(0)" role="button" onclick="switchPageTab('dashboard')">
       <span class="item-icon">🏆</span> 學習儀表板
     </a>
@@ -1895,6 +2643,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     <!-- PAGE TABS -->
     <div class="page-tabs">
       <button class="page-tab active" data-tab="browse" onclick="switchPageTab('browse')">📖 詞彙瀏覽</button>
+      <button class="page-tab" data-tab="tasks" onclick="switchPageTab('tasks')">📝 任務工具</button>
       <button class="page-tab" data-tab="quiz" onclick="switchPageTab('quiz')">🧠 測驗模式</button>
       <button class="page-tab" data-tab="dialogue" onclick="switchPageTab('dialogue')">💬 情境對話</button>
       <button class="page-tab" data-tab="progress" onclick="switchPageTab('progress')">📊 學習進度</button>
@@ -1907,9 +2656,16 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
       <!-- ── GLOBAL SEARCH BAR (always visible in browse) ── -->
       <div class="search-bar" id="globalSearchBar">
         <input class="search-input" type="text" placeholder="🔍 搜尋詞彙（全局 · 支援中文同義詞）" id="searchInput" maxlength="50" oninput="filterCardsDebounced()"/>
-        <button class="filter-btn" id="filterStarBtn" onclick="toggleFilterStar()">★ 收藏</button>
-        <button class="filter-btn" id="filterNewBtn" onclick="toggleFilterNew()">僅顯示未學</button>
-        <button class="filter-btn" id="learnZhBtn" onclick="toggleLearnZhMode()" title="看翻譯→回想中文字">🀄 學中文</button>
+        <div class="quick-filter-row" aria-label="詞彙快速篩選">
+          <button class="filter-btn active" id="filterAllBtn" onclick="applyQuickFilter('all')">全部</button>
+          <button class="filter-btn" id="filterNewBtn" onclick="applyQuickFilter('new')">未學</button>
+          <button class="filter-btn" id="filterStarBtn" onclick="applyQuickFilter('star')">收藏</button>
+          <button class="filter-btn" id="filterWrongBtn" onclick="applyQuickFilter('wrong')">錯題</button>
+          <button class="filter-btn" id="filterTodayBtn" onclick="applyQuickFilter('today')">今日任務</button>
+          <button class="filter-btn" id="filterCareBtn" onclick="applyQuickFilter('care')">照護回報</button>
+        </div>
+        <button class="filter-btn vocab-mode-toggle" id="vocabCompactBtn" onclick="toggleVocabCardMode()">精簡卡</button>
+        <button class="filter-btn vocab-mode-toggle" id="learnZhBtn" onclick="toggleLearnZhMode()" title="看翻譯→回想中文字">🀄 學中文</button>
       </div>
 
       <!-- ── LANG MODE STRIP (shows current display language) ── -->
@@ -1940,10 +2696,11 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
           </div>
           <div class="home-hero-actions">
             <button class="hero-btn hero-btn-primary" onclick="openFlashcard(0)">⚡ 閃卡</button>
+            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('tasks')">📝 任務工具</button>
             <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('quiz')">🧠 測驗</button>
-            <button class="hero-btn hero-btn-ghost" onclick="switchPageTab('dashboard')">📊 儀表板</button>
           </div>
         </div>
+        <div id="v32HomeTaskHub"></div>
         <div class="home-vol-label">選擇照護情境分類</div>
         <div class="vol-pick-grid" id="volPickGrid"></div>
       </div>
@@ -1994,6 +2751,15 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
     </div>
 
 
+
+    <!-- ── VIEW: TASKS ── -->
+    <div class="view" id="view-tasks">
+      <div class="module-header">
+        <div class="module-title">任務工具</div>
+        <div class="module-sub">今日學習、照護任務、雇主交代句與緊急回報句集中在這裡</div>
+      </div>
+      <div id="taskToolsContainer"></div>
+    </div>
 
     <!-- ── VIEW: DIALOGUE ── -->
     <div class="view" id="view-dialogue">
@@ -23383,8 +24149,14 @@ let starred = (()=>{
     return obj;
   } catch(e) { return {}; }
 })();
+let wrongVocab = (()=>{
+  try { return JSON.parse(localStorage.getItem('wrongVocab') || '{}'); }
+  catch(e) { return {}; }
+})();
 let filterStar = false;
 let filterNew  = false;
+let activeDailyMission = '';
+try { activeDailyMission = localStorage.getItem('activeDailyMission') || ''; } catch(e) {}
 
 let fcIndex = 0;
 let fcCards = [];
@@ -23505,11 +24277,13 @@ function save() {
   try {
     localStorage.setItem('mastered', JSON.stringify(mastered));
     localStorage.setItem('starred',  JSON.stringify(starred));
+    localStorage.setItem('wrongVocab', JSON.stringify(wrongVocab));
     localStorage.setItem('mastered_ck', _lsHash(mastered));
     localStorage.setItem('starred_ck',  _lsHash(starred));
     const now = new Date().toISOString();
     localStorage.setItem('lastSaved', now);
     updateMemoryPanel();
+    if (typeof renderHomeTaskHub === 'function') renderHomeTaskHub();
   } catch(e) { /* private/iframe mode - silent fail */ }
 }
 
@@ -23884,6 +24658,7 @@ function renderCards() {
 
   const langLabel = {zh:'', en:'英文', id:'印尼文', vi:'越南文'}[currentLang];
   const html = `
+    ${renderDailyReviewBanner(cards)}
     <div class="section-label">
       <span class="section-label-text">${sec.zh} · ${langLabel || '中文'}</span>
       <div class="section-label-line"></div>
@@ -23894,6 +24669,56 @@ function renderCards() {
     </div>
   `;
   container.innerHTML = html;
+}
+
+function renderDailyReviewBanner(cards) {
+  if (!activeDailyMission || !['new','star'].includes(activeDailyMission)) return '';
+  const labels = {
+    new: { title: '今日新詞練習', note: '看完今天的新詞，或把詞卡點成已學會後，再按完成。', done: '完成今日新詞' },
+    star: { title: '今日收藏詞複習', note: '複習完收藏詞後，再按完成。', done: '完成收藏詞複習' }
+  };
+  const meta = labels[activeDailyMission];
+  return `
+    <div class="daily-goal-note" style="margin-bottom:12px;">
+      <strong>${meta.title}</strong>｜目前顯示 ${cards.length} 個詞。${meta.note}
+      <button class="daily-go-btn" style="margin-left:8px;" onclick="finishDailyReviewMission('${activeDailyMission}')">${meta.done}</button>
+    </div>
+  `;
+}
+
+function finishDailyReviewMission(key) {
+  markDailyMission(key);
+  activeDailyMission = '';
+  try { localStorage.removeItem('activeDailyMission'); } catch(e) {}
+  renderCards();
+  showToast(key === 'new' ? '已完成今日新詞任務' : '已完成收藏詞複習');
+}
+
+function setDailyMissionTargets(key, cards) {
+  let targets = {};
+  try { targets = JSON.parse(localStorage.getItem('dailyMissionTargets') || '{}'); } catch(e) {}
+  const today = new Date().toISOString().slice(0,10);
+  targets[`${today}_${key}`] = cards.map(c => c.n);
+  try { localStorage.setItem('dailyMissionTargets', JSON.stringify(targets)); } catch(e) {}
+}
+
+function getDailyMissionTargets(key) {
+  let targets = {};
+  try { targets = JSON.parse(localStorage.getItem('dailyMissionTargets') || '{}'); } catch(e) {}
+  const today = new Date().toISOString().slice(0,10);
+  return targets[`${today}_${key}`] || [];
+}
+
+function checkDailyCardMissionCompletion(n) {
+  if (activeDailyMission !== 'new') return;
+  const targets = getDailyMissionTargets('new');
+  if (!targets.length || !targets.includes(n)) return;
+  if (targets.every(id => mastered[id])) {
+    markDailyMission('new');
+    activeDailyMission = '';
+    try { localStorage.removeItem('activeDailyMission'); } catch(e) {}
+    showToast('已完成今日新詞任務');
+  }
 }
 
 function escapeDedupHtml(value) {
@@ -23949,6 +24774,7 @@ function toggleMastered(n) {
   mastered[n] = !mastered[n];
   save();
   if (mastered[n]) recordLearningDay();
+  if (mastered[n]) checkDailyCardMissionCompletion(n);
   // PERF: with "new only" filter on, membership can change → full re-render needed
   if (filterNew) { _rerenderCardsPreserveScroll(); updateStats(); return; }
   // Fast path: flip the single card's class instead of rebuilding the whole grid
@@ -24355,6 +25181,7 @@ function gotoAdjacentSection(dir) {
 }
 
 function showHomePage() {
+  if (typeof renderHomeTaskHub === 'function') renderHomeTaskHub();
   document.getElementById('homeView').style.display = '';
   document.getElementById('sectionView').style.display = 'none';
   document.querySelectorAll('.sidebar-item').forEach(e => e.classList.remove('active'));
@@ -24410,6 +25237,7 @@ function switchPageTab(name) {
   if (!targetView) return;
   targetView.classList.add('active');
   if (name === 'quiz') renderQuiz();
+  if (name === 'tasks') renderTaskTools();
   if (name === 'dialogue') renderDialogue();
   if (name === 'progress') renderProgress();
   if (name === 'dashboard') renderDashboard();
@@ -24429,10 +25257,6 @@ function openFlashcard(idx) {
   fcIndex = idx;
   document.getElementById('flashcardModal').classList.add('open');
   updateFlashcard();
-  // Sync bottom nav active state
-  document.querySelectorAll('.bnav-item[id^="bnav-"]').forEach(b => b.classList.remove('active'));
-  const bnavFlash = document.getElementById('bnav-flash');
-  if (bnavFlash) bnavFlash.classList.add('active');
 }
 
 function closeFlashcard() {
@@ -24745,6 +25569,10 @@ function renderQuiz() {
   }
 
   if (quizState.index >= quizState.questions.length) {
+    if (quizState.dailyMissionKey === 'wrong' && !quizState.dailyMissionMarked) {
+      quizState.dailyMissionMarked = true;
+      markDailyMission('wrong');
+    }
     const total = quizState.questions.length;
     const pct = total ? Math.round(quizState.score / total * 100) : 0;
     const wrongTotal = (quizState.wrongCards || []).length;
@@ -24889,10 +25717,12 @@ function checkAnswer(el, selected, correct, langProp) {
     }
     document.getElementById('quizResult').innerHTML = `<span style="color:#16A34A;font-weight:800;">✓ 正確！</span>${feedbackExtra}`;
     mastered[correct] = true; save();
+    reduceWrongVocab(card.n);
     recordQuizAnswer(true);
   } else {
     el.classList.add('wrong');
     if (!quizState.wrongCards.some(c => c.n === card.n)) quizState.wrongCards.push(card);
+    addWrongVocab(card.n);
     // Show correct answer
     let correctLabel = card[langProp] || '';
     let feedbackExtra = `<div style="font-size:13px;color:var(--ink-3);margin-top:4px;">正確答案：<strong style="color:#15803D">${correctLabel}</strong>`;
@@ -25136,6 +25966,7 @@ function checkGameAnswer(el, selected, correct, langProp) {
     const gained = Math.round((100 + speedBonus) * mult);
     gameState.score += gained;
     mastered[correct] = true; save();
+    reduceWrongVocab(card.n);
     recordQuizAnswer(true);
 
     playGameSound('correct');
@@ -25155,6 +25986,7 @@ function checkGameAnswer(el, selected, correct, langProp) {
   } else {
     el.classList.add('wrong');
     document.querySelectorAll('#gameCard .quiz-opt').forEach(b => { if (b.getAttribute('data-n') === correct) b.classList.add('correct'); });
+    addWrongVocab(card.n);
     recordQuizAnswer(false);
     const _ql = QUIZ_LANG_META[quizSettings.quizLang]?.prop || 'id';
     const ansLabel = card[langProp] || '';
@@ -25405,6 +26237,7 @@ function renderProgress() {
         <div style="font-size:12px;color:var(--ink-3);">已收藏</div>
       </div>
     </div>
+    ${renderWeakWordsPanel(8)}
     <div>${rows.join('')}</div>
     <div style="text-align:center;margin-top:20px;">
       <button class="nav-btn" onclick="switchPageTab('browse')" style="margin-top:4px;">← 回詞彙瀏覽</button>
@@ -28712,7 +29545,19 @@ function closeSidebar() {
 
 // ── BOTTOM NAV SYNC ──
 function switchToView(name) {
+  if (name === 'favorites') { switchToFavorites(); return; }
   switchPageTab(name);
+}
+
+function switchToFavorites() {
+  filterStar = true;
+  filterNew = false;
+  document.getElementById('filterStarBtn')?.classList.add('active');
+  document.getElementById('filterNewBtn')?.classList.remove('active');
+  switchPageTab('browse');
+  document.querySelectorAll('.bnav-item[id^="bnav-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('bnav-favorites')?.classList.add('active');
+  showToast('已切換到收藏詞');
 }
 
 // Patch sidebar-item clicks to close sidebar on mobile
@@ -28780,14 +29625,17 @@ function clearAllProgress() {
     localStorage.removeItem('starred_ck');
     localStorage.removeItem('quizSessions');
     localStorage.removeItem('learnDays');
+    localStorage.removeItem('wrongVocab');
     localStorage.removeItem('gameHighScore');
     localStorage.removeItem('gameBestCombo');
   } catch(e) {}
   mastered = {};
   starred  = {};
+  wrongVocab = {};
   renderProgress();
   updateStats();
   renderCards();
+  renderHomeTaskHub();
   updateMemoryPanel();
   showToast('✅ 已清除全部學習進度');
 }
@@ -28988,10 +29836,1585 @@ function renderDashboard() {
   `;
 }
 
-// init
+// ── V32 DAILY REVIEW + CARE TASK MODE + EMPLOYER INSTRUCTION GENERATOR ──
+function persistWrongVocab() {
+  try { localStorage.setItem('wrongVocab', JSON.stringify(wrongVocab)); } catch(e) {}
+  if (typeof renderHomeTaskHub === 'function') renderHomeTaskHub();
+  const activeTab = document.querySelector('.page-tab.active')?.dataset.tab;
+  if (activeTab === 'tasks' && typeof renderTaskTools === 'function') renderTaskTools();
+}
+
+function normalizeWrongItem(item) {
+  if (typeof item === 'number') return { count: item, last: '', correctStreak: 0, weak: item >= 3 };
+  return {
+    count: item?.count || 0,
+    last: item?.last || '',
+    correctStreak: item?.correctStreak || 0,
+    weak: !!item?.weak || (item?.count || 0) >= 3
+  };
+}
+
+function addWrongVocab(n) {
+  const item = normalizeWrongItem(wrongVocab[n] || { count: 0 });
+  item.count = (item.count || 0) + 1;
+  item.correctStreak = 0;
+  item.last = new Date().toISOString();
+  item.weak = item.count >= 3;
+  wrongVocab[n] = item;
+  persistWrongVocab();
+}
+
+function reduceWrongVocab(n) {
+  const old = wrongVocab[n];
+  if (!old) return;
+  const item = normalizeWrongItem(old);
+  item.correctStreak = (item.correctStreak || 0) + 1;
+  item.count = Math.max(0, (item.count || 0) - 1);
+  item.last = new Date().toISOString();
+  item.weak = !!item.weak || item.count >= 3;
+  if (item.correctStreak >= 3) delete wrongVocab[n];
+  else wrongVocab[n] = item;
+  persistWrongVocab();
+}
+
+function getSeededDailyCards(cards, count) {
+  const today = new Date().toISOString().slice(0,10);
+  return cards.slice().sort((a, b) => {
+    const av = String(a.n) + today;
+    const bv = String(b.n) + today;
+    let ah = 0, bh = 0;
+    for (let i = 0; i < av.length; i++) ah = Math.imul(31, ah) + av.charCodeAt(i) | 0;
+    for (let i = 0; i < bv.length; i++) bh = Math.imul(31, bh) + bv.charCodeAt(i) | 0;
+    return (ah >>> 0) - (bh >>> 0);
+  }).slice(0, count);
+}
+
+function getDailyNewCards(count = 10) {
+  return getSeededDailyCards(getAllCards().filter(c => !mastered[c.n]), count);
+}
+
+function getStarredCards(count = 5) {
+  return getSeededDailyCards(getAllCards().filter(c => starred[c.n]), count);
+}
+
+function getWrongVocabCards(count = 5) {
+  const cardMap = new Map(getAllCards().map(c => [c.n, c]));
+  return Object.entries(wrongVocab)
+    .map(([n, item]) => {
+      const norm = normalizeWrongItem(item);
+      return { card: cardMap.get(n), count: norm.count, correctStreak: norm.correctStreak, last: norm.last, weak: norm.weak };
+    })
+    .filter(x => x.card && (x.count > 0 || x.correctStreak > 0))
+    .sort((a, b) => (Number(b.weak) - Number(a.weak)) || (b.count - a.count) || String(b.last).localeCompare(String(a.last)))
+    .slice(0, count)
+    .map(x => x.card);
+}
+
+function getWeakVocabItems(count = 6) {
+  const cardMap = new Map(getAllCards().map(c => [c.n, c]));
+  return Object.entries(wrongVocab)
+    .map(([n, item]) => {
+      const norm = normalizeWrongItem(item);
+      return { card: cardMap.get(n), count: norm.count, correctStreak: norm.correctStreak, last: norm.last, weak: norm.weak };
+    })
+    .filter(x => x.card && x.weak)
+    .sort((a, b) => (b.count - a.count) || String(b.last).localeCompare(String(a.last)))
+    .slice(0, count);
+}
+
+function renderWeakWordsPanel(count = 6) {
+  const items = getWeakVocabItems(count);
+  if (!items.length) return '';
+  return `
+    <div class="weak-panel">
+      <div class="weak-panel-title">⚠️ 我的弱點詞</div>
+      <div class="weak-panel-sub">這些詞你常答錯，建議優先複習。連續答對 3 次後會自動移出。</div>
+      <div class="weak-word-list">
+        ${items.map(({card, count, correctStreak}) => `
+          <div class="weak-word-row">
+            <div class="weak-word-main"><strong>${escapeHtml(card.zh)}</strong><br>${escapeHtml(card.id || card.en || '')}</div>
+            <div class="weak-badge">錯 ${count} 次 · 對 ${correctStreak}/3</div>
+          </div>
+        `).join('')}
+      </div>
+      <button class="daily-go-btn" style="margin-top:10px;" onclick="startDailyWrongMission()">優先重練</button>
+    </div>
+  `;
+}
+
+function firstSectionForCards(cards) {
+  const wanted = new Set(cards.map(c => c.n));
+  for (const [secKey, sec] of Object.entries(SECTIONS)) {
+    if (sec.cards.some(c => wanted.has(c.n))) return secKey;
+  }
+  return currentSection || 'basic';
+}
+
+function getLearningStreak() {
+  let learnDays = [];
+  try { learnDays = JSON.parse(localStorage.getItem('learnDays') || '[]'); } catch(e) {}
+  const today = new Date().toISOString().slice(0,10);
+  const todayMs = new Date(today).getTime();
+  let streak = 0;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(todayMs - i * 86400000).toISOString().slice(0,10);
+    if (learnDays.includes(d)) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function getDailyMissionState() {
+  const today = new Date().toISOString().slice(0,10);
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem('dailyMissions') || '{}'); } catch(e) {}
+  const doneMap = all[today] || {};
+  const keys = ['new', 'wrong', 'star', 'care'];
+  const done = keys.filter(k => doneMap[k]).length;
+  const labels = { new: '完成新詞練習', wrong: '完成錯題重練', star: '複習收藏詞', care: '產生一次照護回報' };
+  const nextKey = keys.find(k => !doneMap[k]);
+  return {
+    date: today,
+    total: keys.length,
+    done,
+    doneMap,
+    streak: getLearningStreak(),
+    statusText: done === keys.length ? '今日完成 ✅' : done ? `進行中 ${done}/${keys.length}` : '今日尚未完成',
+    nextGoal: nextKey ? labels[nextKey] : '今天任務都完成了'
+  };
+}
+
+function markDailyMission(key) {
+  const today = new Date().toISOString().slice(0,10);
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem('dailyMissions') || '{}'); } catch(e) {}
+  all[today] = Object.assign({}, all[today] || {}, { [key]: true });
+  try { localStorage.setItem('dailyMissions', JSON.stringify(all)); } catch(e) {}
+  recordLearningDay();
+  if (typeof renderHomeTaskHub === 'function') renderHomeTaskHub();
+  const activeTab = document.querySelector('.page-tab.active')?.dataset.tab;
+  if (activeTab === 'tasks' && typeof renderTaskTools === 'function') renderTaskTools();
+}
+
+function startDailyNewMission() {
+  const cards = getDailyNewCards(10);
+  if (!cards.length) { showToast('今天沒有新的未學詞，太強了！'); return; }
+  activeDailyMission = 'new';
+  setDailyMissionTargets('new', cards);
+  try { localStorage.setItem('activeDailyMission', 'new'); } catch(e) {}
+  filterNew = true;
+  filterStar = false;
+  document.getElementById('filterNewBtn')?.classList.add('active');
+  document.getElementById('filterStarBtn')?.classList.remove('active');
+  switchPageTab('browse');
+  setSection(firstSectionForCards(cards));
+  showToast('已開啟今日新詞練習，完成後請按完成今日新詞');
+}
+
+function startDailyStarMission() {
+  const cards = getStarredCards(5);
+  if (!cards.length) { showToast('目前沒有收藏詞，先把重要詞彙按星號收藏'); return; }
+  activeDailyMission = 'star';
+  setDailyMissionTargets('star', cards);
+  try { localStorage.setItem('activeDailyMission', 'star'); } catch(e) {}
+  filterStar = true;
+  filterNew = false;
+  document.getElementById('filterStarBtn')?.classList.add('active');
+  document.getElementById('filterNewBtn')?.classList.remove('active');
+  switchPageTab('browse');
+  setSection(firstSectionForCards(cards));
+  showToast('已開啟收藏詞複習，完成後請按完成收藏詞複習');
+}
+
+function startDailyWrongMission() {
+  const cards = getWrongVocabCards(5);
+  if (!cards.length) { showToast('目前沒有錯題紀錄，先完成一次測驗就會累積'); return; }
+  quizSettings.source = 'all';
+  quizSettings.count = Math.min(5, cards.length);
+  switchPageTab('quiz');
+  quizState.wrongCards = cards;
+  startWrongQuiz();
+  quizState.dailyMissionKey = 'wrong';
+}
+
+function startDailyCareMission() {
+  switchPageTab('tasks');
+  renderTaskTools();
+  document.getElementById('careTaskModeHostTask')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  showToast('請產生一次完成回報卡，才會計入今日照護任務');
+}
+
+const CARE_TASKS = [
+  {
+    id: 'medicine',
+    icon: '💊',
+    title: '協助長者吃藥',
+    titleEn: 'taking medicine',
+    titleId: 'minum obat',
+    titleVi: 'uống thuốc',
+    sub: '從提醒、確認、喝水到回報',
+    steps: [
+      {
+        label: '詢問',
+        zh: '現在要吃藥了。',
+        en: 'It is time to take your medicine now.',
+        id: 'Sekarang waktunya minum obat.',
+        vi: 'Bây giờ đến giờ uống thuốc rồi.'
+      },
+      {
+        label: '確認',
+        zh: '這是早上的藥。',
+        en: 'This is the morning medicine.',
+        id: 'Ini obat pagi.',
+        vi: 'Đây là thuốc buổi sáng.'
+      },
+      {
+        label: '提醒',
+        zh: '請配溫開水。',
+        en: 'Please take it with warm water.',
+        id: 'Silakan minum dengan air hangat.',
+        vi: 'Xin uống cùng nước ấm.'
+      },
+      {
+        label: '回報',
+        zh: '阿公已經吃完藥了。',
+        en: 'Grandpa has finished taking the medicine.',
+        id: 'Kakek sudah selesai minum obat.',
+        vi: 'Ông đã uống thuốc xong rồi.'
+      }
+    ]
+  },
+  {
+    id: 'blood_pressure',
+    icon: '🩺',
+    title: '量血壓並回報',
+    titleEn: 'checking blood pressure',
+    titleId: 'mengukur tekanan darah',
+    titleVi: 'đo huyết áp',
+    sub: '測量、記錄、異常提醒',
+    steps: [
+      { label: '說明', zh: '我要幫您量血壓。', en: 'I am going to check your blood pressure.', id: 'Saya akan mengukur tekanan darah Anda.', vi: 'Tôi sẽ đo huyết áp cho ông/bà.' },
+      { label: '配合', zh: '請把手放輕鬆。', en: 'Please relax your arm.', id: 'Tolong rilekskan lengan Anda.', vi: 'Xin thả lỏng tay.' },
+      { label: '記錄', zh: '我會把數字記下來。', en: 'I will write down the numbers.', id: 'Saya akan mencatat angkanya.', vi: 'Tôi sẽ ghi lại chỉ số.' },
+      { label: '回報', zh: '血壓比較高，我會告訴家屬。', en: 'The blood pressure is high, so I will tell the family.', id: 'Tekanan darah agak tinggi, saya akan memberi tahu keluarga.', vi: 'Huyết áp hơi cao, tôi sẽ báo cho gia đình.' }
+    ]
+  },
+  {
+    id: 'meal_help',
+    icon: '🥣',
+    title: '協助用餐',
+    titleEn: 'eating a meal',
+    titleId: 'makan',
+    titleVi: 'ăn cơm',
+    sub: '詢問、餵食、觀察、整理',
+    steps: [
+      { label: '詢問', zh: '您現在想吃飯嗎？', en: 'Would you like to eat now?', id: 'Apakah Anda mau makan sekarang?', vi: 'Bây giờ ông/bà muốn ăn cơm không?' },
+      { label: '提醒', zh: '請慢慢吃，不要急。', en: 'Please eat slowly. Do not rush.', id: 'Silakan makan pelan-pelan, jangan terburu-buru.', vi: 'Xin ăn chậm thôi, đừng vội.' },
+      { label: '觀察', zh: '如果會嗆到，請先停一下。', en: 'If you choke, please stop for a moment.', id: 'Jika tersedak, tolong berhenti sebentar.', vi: 'Nếu bị sặc, xin dừng lại một chút.' },
+      { label: '回報', zh: '阿嬤今天吃了半碗飯。', en: 'Grandma ate half a bowl of rice today.', id: 'Nenek hari ini makan setengah mangkuk nasi.', vi: 'Hôm nay bà ăn nửa chén cơm.' }
+    ]
+  }
+];
+
+function getTaskFavorites() {
+  try { return JSON.parse(localStorage.getItem('taskFavorites') || '{}'); } catch(e) { return {}; }
+}
+
+function saveTaskFavorites(data) {
+  try { localStorage.setItem('taskFavorites', JSON.stringify(data)); } catch(e) {}
+}
+
+function toggleTaskFavorite(event, key) {
+  event.stopPropagation();
+  const favs = getTaskFavorites();
+  favs[key] = !favs[key];
+  saveTaskFavorites(favs);
+  const btn = event.currentTarget;
+  if (btn) btn.classList.toggle('active', !!favs[key]);
+  showToast(favs[key] ? '已收藏任務句' : '已取消收藏');
+}
+
+function renderCareTaskMode(selectedId, hostId = 'careTaskModeHost') {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const task = CARE_TASKS.find(t => t.id === selectedId) || CARE_TASKS[0];
+  const favs = getTaskFavorites();
+  const langNames = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  host.innerHTML = `
+    <div class="task-chip-row">
+      ${CARE_TASKS.map(t => `<button class="task-chip ${t.id === task.id ? 'active' : ''}" onclick="renderCareTaskMode('${t.id}', '${hostId}')">${t.icon} ${escapeHtml(t.title)}</button>`).join('')}
+    </div>
+    <div class="task-flow-card">
+      <div class="task-flow-head">
+        <div class="task-flow-icon">${task.icon}</div>
+        <div>
+          <div class="task-flow-title">任務：${escapeHtml(task.title)}</div>
+          <div class="task-flow-sub">${escapeHtml(task.sub)}</div>
+        </div>
+      </div>
+      ${task.steps.map((step, stepIndex) => `
+        <div class="task-step">
+          <div class="task-step-index">${stepIndex + 1}</div>
+          <div>
+            <div class="task-step-label">${escapeHtml(step.label)}</div>
+            <div class="task-line-grid">
+              ${['zh','en','id','vi'].map(lang => {
+                const key = `${task.id}_${stepIndex}_${lang}`;
+                return `
+                  <div class="task-line">
+                    <div class="task-lang">${langNames[lang]}</div>
+                    <div class="task-sentence">${escapeHtml(step[lang])}</div>
+                    <div class="task-line-actions">
+                      <button class="task-line-btn dialogue-speak" data-speak-text="${escapeHtml(step[lang])}" data-speak-locale="${langToLocale(lang)}" onclick="speakVcardLang(event,this)" title="語音播放">🔊</button>
+                      <button class="task-line-btn ${favs[key] ? 'active' : ''}" onclick="toggleTaskFavorite(event,'${key}')" title="收藏">★</button>
+                      <button class="task-line-btn" onclick="practiceTaskLine(event,'${task.id}',${stepIndex},'${lang}')" title="測驗">測</button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div class="task-quiz-box" id="taskQuiz_${task.id}_${stepIndex}" style="display:none;"></div>
+          </div>
+        </div>
+      `).join('')}
+      ${renderCareReportCard(task, hostId)}
+    </div>
+  `;
+  generateCareTaskReport(task.id, hostId);
+}
+
+function practiceTaskLine(event, taskId, stepIndex, lang) {
+  event.stopPropagation();
+  const task = CARE_TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const step = task.steps[stepIndex];
+  const box = document.getElementById(`taskQuiz_${taskId}_${stepIndex}`);
+  if (!box) return;
+  const answerLang = lang === 'zh' ? 'id' : 'zh';
+  const langNames = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  const prompt = lang === 'zh'
+    ? `請選出「${escapeHtml(step.zh)}」的印尼文`
+    : `請選出這句${langNames[lang]}的中文：${escapeHtml(step[lang])}`;
+  const options = shuffleCards(task.steps.map(s => s[answerLang])).slice(0, 4);
+  if (!options.includes(step[answerLang])) options[0] = step[answerLang];
+  const shuffled = shuffleCards(options);
+  box.style.display = '';
+  box.innerHTML = `
+    <div style="font-weight:900;margin-bottom:7px;">${prompt}</div>
+    <div style="display:grid;gap:6px;">
+      ${shuffled.map(opt => `<button class="quiz-opt" data-correct="${opt === step[answerLang] ? '1' : '0'}" onclick="checkTaskQuiz(event,this)" style="text-align:left;">${escapeHtml(opt)}</button>`).join('')}
+    </div>
+  `;
+}
+
+function checkTaskQuiz(event, btn) {
+  event.stopPropagation();
+  const ok = btn.getAttribute('data-correct') === '1';
+  const box = btn.closest('.task-quiz-box');
+  if (box) box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.style.pointerEvents = 'none';
+    if (b.getAttribute('data-correct') === '1') b.classList.add('correct');
+  });
+  btn.classList.add(ok ? 'correct' : 'wrong');
+  showToast(ok ? '答對了' : '再看一次正確句子');
+}
+
+function renderHomeTaskHub() {
+  const host = document.getElementById('v32HomeTaskHub');
+  if (!host) return;
+  const newCount = getDailyNewCards(10).length;
+  const wrongCount = getWrongVocabCards(5).length;
+  const starCount = getStarredCards(5).length;
+  const careCount = CARE_TASKS.length;
+  const daily = getDailyMissionState();
+  const weakHtml = renderWeakWordsPanel(4);
+  host.innerHTML = `
+    <div class="v32-home-stack">
+      <div class="v32-home-left">
+        <div class="v32-panel">
+          <div class="v32-panel-head">
+            <div>
+              <div class="v32-panel-kicker">Daily Review</div>
+              <div class="v32-panel-title">今日學習任務</div>
+              <div class="v32-panel-sub">打開就知道今天要做什麼</div>
+            </div>
+            <div class="v32-time-pill">${daily.statusText}</div>
+          </div>
+          <div class="daily-status-card">
+            <div class="daily-status-pill">
+              <div class="daily-status-label">今日進度</div>
+              <div class="daily-status-value">${daily.done} / ${daily.total}</div>
+            </div>
+            <div class="daily-status-pill">
+              <div class="daily-status-label">連續學習</div>
+              <div class="daily-status-value">${daily.streak} 天</div>
+            </div>
+            <div class="daily-status-pill">
+              <div class="daily-status-label">完成狀態</div>
+              <div class="daily-status-value">${daily.done === daily.total ? '完成 ✅' : daily.done ? '進行中' : '未完成'}</div>
+            </div>
+          </div>
+          <div class="daily-goal-note">今日目標：${daily.nextGoal}</div>
+          <div class="daily-list">
+            ${renderDailyRow('new', '新詞 ' + newCount + ' 個', '從尚未標記學會的詞彙中挑選', '開始', newCount, 'startDailyNewMission()')}
+            ${renderDailyRow('wrong', '錯題 ' + wrongCount + ' 個', '依最近答錯與錯誤次數排序', '重練', wrongCount, 'startDailyWrongMission()')}
+            ${renderDailyRow('star', '收藏詞 ' + starCount + ' 個', '複習自己按星號的重點詞', '複習', starCount, 'startDailyStarMission()')}
+            ${renderDailyRow('care', '照護回報 1 次', '產生一次完成回報卡並留下今天紀錄', '去回報', careCount, 'startDailyCareMission()')}
+          </div>
+          ${weakHtml}
+        </div>
+        <div class="v32-panel">
+          <div class="v32-panel-head">
+            <div>
+              <div class="v32-panel-kicker">Employer Tool</div>
+              <div class="v32-panel-title">雇主交代句產生器</div>
+              <div class="v32-panel-sub">輸入任務，產生可編輯、可複製 LINE 格式的四語交代句</div>
+            </div>
+          </div>
+          <div id="employerGeneratorHost"></div>
+        </div>
+      </div>
+      <div class="v32-panel">
+        <div class="v32-panel-head">
+          <div>
+            <div class="v32-panel-kicker">Care Task</div>
+            <div class="v32-panel-title">照護情境任務模式</div>
+            <div class="v32-panel-sub">從背單字升級成會照護、會回報</div>
+          </div>
+        </div>
+        <div class="task-mode-grid" id="careTaskModeHost"></div>
+      </div>
+    </div>
+  `;
+  renderCareTaskMode(undefined, 'careTaskModeHost');
+  renderInstructionGenerator('employerGeneratorHost', '');
+}
+
+function renderTaskTools() {
+  const host = document.getElementById('taskToolsContainer');
+  if (!host) return;
+  host.innerHTML = `
+    <div class="task-tools-stack">
+      <section class="task-tool-band">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">今日學習任務</div>
+            <div class="task-tool-sub">先完成今天最小任務，再進入照護情境練習。</div>
+          </div>
+        </div>
+        <div id="taskDailyHost"></div>
+      </section>
+      <section class="task-tool-band">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">照護情境任務</div>
+            <div class="task-tool-sub">每個任務最後都能產生完成回報卡，方便留紀錄或貼給家屬。</div>
+          </div>
+        </div>
+        <div class="task-mode-grid" id="careTaskModeHostTask"></div>
+      </section>
+      <section class="task-tool-band">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">雇主交代句產生器</div>
+            <div class="task-tool-sub">可套用常用範本、產生後直接編輯，並一鍵複製 LINE 格式。</div>
+          </div>
+        </div>
+        <div id="employerGeneratorHostTask"></div>
+      </section>
+      <section class="task-tool-band">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">緊急回報句</div>
+            <div class="task-tool-sub">照護現場需要立刻通知時，直接複製短句。</div>
+          </div>
+        </div>
+        <div id="emergencyReportHost"></div>
+      </section>
+    </div>
+  `;
+  renderDailyMissionMini('taskDailyHost');
+  renderCareTaskMode(undefined, 'careTaskModeHostTask');
+  renderInstructionGenerator('employerGeneratorHostTask', 'Task');
+  renderEmergencyReport('emergencyReportHost');
+}
+
+function renderInstructionGenerator(hostId = 'employerGeneratorHost', suffix = '') {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const id = name => name + suffix;
+  const arg = suffix ? `'${suffix}'` : "''";
+  host.innerHTML = `
+    <div class="template-row" aria-label="常用交代範本">
+      ${EMPLOYER_TEMPLATES.map(t => `<button class="template-btn" onclick="applyInstructionTemplate('${t.key}', ${arg})">${t.label}</button>`).join('')}
+    </div>
+    <div class="generator-grid">
+      <div class="generator-field">
+        <label class="generator-label" for="${id('genTarget')}">對象</label>
+        <input class="generator-input" id="${id('genTarget')}" value="阿公" list="${id('targetOptions')}"/>
+      </div>
+      <div class="generator-field">
+        <label class="generator-label" for="${id('genTone')}">語氣</label>
+        <select class="generator-select" id="${id('genTone')}">
+          <option value="polite">禮貌</option>
+          <option value="clear">清楚</option>
+          <option value="strict">嚴格</option>
+        </select>
+      </div>
+      <div class="generator-field full">
+        <label class="generator-label" for="${id('genTask')}">任務</label>
+        <input class="generator-input" id="${id('genTask')}" value="晚上 8 點吃藥" list="${id('taskOptions')}"/>
+      </div>
+      <div class="generator-field full">
+        <label class="generator-label" for="${id('genNote')}">注意事項</label>
+        <input class="generator-input" id="${id('genNote')}" value="吃藥後量血壓" list="${id('noteOptions')}"/>
+      </div>
+    </div>
+    <datalist id="${id('targetOptions')}"><option value="阿公"><option value="阿嬤"><option value="長者"><option value="爸爸"><option value="媽媽"></datalist>
+    <datalist id="${id('taskOptions')}"><option value="晚上 8 點吃藥"><option value="早上 9 點量血壓"><option value="晚餐後散步"><option value="睡前喝水"><option value="下午做復健"><option value="晚上洗澡"><option value="外出就醫"></datalist>
+    <datalist id="${id('noteOptions')}"><option value="吃藥後量血壓"><option value="請配溫開水"><option value="記錄血壓數字"><option value="如果不舒服請馬上回報"><option value="不要空腹吃藥"><option value="出門前確認健保卡與藥袋"></datalist>
+    <div class="generator-actions">
+      <button class="generator-btn" onclick="generateEmployerInstruction(${arg})">產生交代句</button>
+      <button class="generator-secondary-btn" onclick="copyAllInstructions(event, ${arg})">一鍵複製 LINE 格式</button>
+    </div>
+    <div class="generator-output" id="${id('generatorOutput')}"></div>
+  `;
+  generateEmployerInstruction(suffix);
+}
+
+const EMPLOYER_TEMPLATES = [
+  { key: 'medicine', label: '💊 吃藥', target: '阿公', task: '晚上 8 點吃藥', note: '請配溫開水', tone: 'clear' },
+  { key: 'bp', label: '🩺 量血壓', target: '阿公', task: '早上 9 點量血壓', note: '記錄血壓數字', tone: 'clear' },
+  { key: 'meal', label: '🍚 吃飯', target: '阿嬤', task: '晚餐吃飯', note: '如果不舒服請馬上回報', tone: 'polite' },
+  { key: 'bath', label: '🚿 洗澡', target: '長者', task: '晚上洗澡', note: '請注意水溫與地板防滑', tone: 'clear' },
+  { key: 'doctor', label: '🏥 就醫', target: '長者', task: '外出就醫', note: '出門前確認健保卡與藥袋', tone: 'strict' },
+  { key: 'unwell', label: '⚠️ 不舒服回報', target: '長者', task: '觀察身體狀況', note: '如果不舒服請馬上回報', tone: 'strict' }
+];
+
+function applyInstructionTemplate(key, suffix = '') {
+  const tpl = EMPLOYER_TEMPLATES.find(t => t.key === key);
+  if (!tpl) return;
+  const id = name => name + suffix;
+  const set = (name, value) => { const el = document.getElementById(id(name)); if (el) el.value = value; };
+  set('genTarget', tpl.target);
+  set('genTask', tpl.task);
+  set('genNote', tpl.note);
+  set('genTone', tpl.tone);
+  generateEmployerInstruction(suffix);
+}
+
+function translateTarget(target, lang) {
+  const map = {
+    '阿公': { en: 'Grandpa', id: 'Kakek', vi: 'ông' },
+    '阿嬤': { en: 'Grandma', id: 'Nenek', vi: 'bà' },
+    '長者': { en: 'the elder', id: 'lansia', vi: 'người cao tuổi' },
+    '爸爸': { en: 'Father', id: 'Bapak', vi: 'bố' },
+    '媽媽': { en: 'Mother', id: 'Ibu', vi: 'mẹ' }
+  };
+  return (map[target] && map[target][lang]) || target;
+}
+
+function extractTaskParts(task) {
+  const clean = String(task || '').trim();
+  const time = clean.replace(/吃藥|量血壓|散步|喝水|做復健|復健|洗澡|吃飯|外出就醫|觀察身體狀況/g, '').trim();
+  let action = clean.replace(time, '').trim();
+  if (!action) action = clean;
+  return { time, action };
+}
+
+function translateTime(time, lang) {
+  const clean = String(time || '').trim();
+  if (!clean) return '';
+  const hourMatch = clean.match(/(\d{1,2})\s*點/);
+  const hour = hourMatch ? parseInt(hourMatch[1], 10) : null;
+  const isNight = /晚|晚上|睡前/.test(clean);
+  const isMorning = /早|上午/.test(clean);
+  const isAfternoon = /下午/.test(clean);
+  if (hour) {
+    let h = hour;
+    if (lang === 'en') {
+      if (isNight && h < 12) h += 12;
+      const suffix = h >= 12 ? 'PM' : 'AM';
+      const display = h > 12 ? h - 12 : h;
+      return `at ${display}:00 ${suffix}`;
+    }
+    if (lang === 'id') return `pukul ${hour}.00${isNight ? ' malam' : isMorning ? ' pagi' : isAfternoon ? ' sore' : ''}`;
+    if (lang === 'vi') return `lúc ${hour} giờ${isNight ? ' tối' : isMorning ? ' sáng' : isAfternoon ? ' chiều' : ''}`;
+  }
+  const common = {
+    en: { '早上': 'in the morning', '晚上': 'in the evening', '下午': 'in the afternoon', '睡前': 'before bedtime', '晚餐後': 'after dinner' },
+    id: { '早上': 'pagi hari', '晚上': 'malam hari', '下午': 'sore hari', '睡前': 'sebelum tidur', '晚餐後': 'setelah makan malam' },
+    vi: { '早上': 'buổi sáng', '晚上': 'buổi tối', '下午': 'buổi chiều', '睡前': 'trước khi ngủ', '晚餐後': 'sau bữa tối' }
+  };
+  for (const key of Object.keys(common[lang] || {})) {
+    if (clean.includes(key)) return common[lang][key];
+  }
+  return clean;
+}
+
+function translateTask(task, target, lang) {
+  const parts = extractTaskParts(task);
+  const t = translateTarget(target, lang);
+  const time = parts.time ? ` ${translateTime(parts.time, lang)}` : '';
+  const action = parts.action;
+  const dict = {
+    en: {
+      '吃藥': `remind ${t} to take medicine${time}`,
+      '量血壓': `check ${t}'s blood pressure${time}`,
+      '散步': `take a walk with ${t}${time}`,
+      '喝水': `remind ${t} to drink water${time}`,
+      '做復健': `help ${t} do rehabilitation exercises${time}`,
+      '復健': `help ${t} do rehabilitation exercises${time}`,
+      '洗澡': `help ${t} take a bath${time}`,
+      '吃飯': `help ${t} eat${time}`,
+      '外出就醫': `take ${t} to the doctor${time}`,
+      '觀察身體狀況': `observe ${t}'s condition${time}`
+    },
+    id: {
+      '吃藥': `ingatkan ${t} minum obat${time}`,
+      '量血壓': `ukur tekanan darah ${t}${time}`,
+      '散步': `temani ${t} berjalan-jalan${time}`,
+      '喝水': `ingatkan ${t} minum air${time}`,
+      '做復健': `bantu ${t} latihan rehabilitasi${time}`,
+      '復健': `bantu ${t} latihan rehabilitasi${time}`,
+      '洗澡': `bantu ${t} mandi${time}`,
+      '吃飯': `bantu ${t} makan${time}`,
+      '外出就醫': `antar ${t} berobat${time}`,
+      '觀察身體狀況': `amati kondisi ${t}${time}`
+    },
+    vi: {
+      '吃藥': `nhắc ${t} uống thuốc${time}`,
+      '量血壓': `đo huyết áp cho ${t}${time}`,
+      '散步': `đi dạo với ${t}${time}`,
+      '喝水': `nhắc ${t} uống nước${time}`,
+      '做復健': `giúp ${t} tập phục hồi chức năng${time}`,
+      '復健': `giúp ${t} tập phục hồi chức năng${time}`,
+      '洗澡': `giúp ${t} tắm${time}`,
+      '吃飯': `giúp ${t} ăn cơm${time}`,
+      '外出就醫': `đưa ${t} đi khám${time}`,
+      '觀察身體狀況': `theo dõi tình trạng của ${t}${time}`
+    }
+  };
+  for (const key of Object.keys(dict[lang])) {
+    if (action.includes(key)) return dict[lang][key];
+  }
+  return `${task} ${t}`;
+}
+
+function translateNote(note, lang) {
+  const clean = String(note || '').trim();
+  if (!clean) return '';
+  const dict = {
+    en: {
+      '吃藥後量血壓': 'check the blood pressure after taking the medicine',
+      '請配溫開水': 'use warm water',
+      '記錄血壓數字': 'record the blood pressure numbers',
+      '如果不舒服請馬上回報': 'report immediately if there is any discomfort',
+      '不要空腹吃藥': 'do not take the medicine on an empty stomach',
+      '請注意水溫與地板防滑': 'check the water temperature and prevent slipping',
+      '出門前確認健保卡與藥袋': 'check the health insurance card and medicine bag before leaving'
+    },
+    id: {
+      '吃藥後量血壓': 'ukur tekanan darah setelah minum obat',
+      '請配溫開水': 'gunakan air hangat',
+      '記錄血壓數字': 'catat angka tekanan darah',
+      '如果不舒服請馬上回報': 'segera laporkan jika merasa tidak nyaman',
+      '不要空腹吃藥': 'jangan minum obat saat perut kosong',
+      '請注意水溫與地板防滑': 'perhatikan suhu air dan lantai agar tidak licin',
+      '出門前確認健保卡與藥袋': 'periksa kartu asuransi kesehatan dan kantong obat sebelum keluar'
+    },
+    vi: {
+      '吃藥後量血壓': 'đo huyết áp sau khi uống thuốc',
+      '請配溫開水': 'dùng nước ấm',
+      '記錄血壓數字': 'ghi lại chỉ số huyết áp',
+      '如果不舒服請馬上回報': 'báo ngay nếu thấy không khỏe',
+      '不要空腹吃藥': 'không uống thuốc khi bụng đói',
+      '請注意水溫與地板防滑': 'chú ý nhiệt độ nước và chống trơn trượt',
+      '出門前確認健保卡與藥袋': 'kiểm tra thẻ bảo hiểm y tế và túi thuốc trước khi ra ngoài'
+    }
+  };
+  return (dict[lang] && dict[lang][clean]) || clean;
+}
+
+function buildZhInstruction(target, task, note, tone) {
+  const prefix = tone === 'strict' ? '務必' : '請';
+  const parts = extractTaskParts(task);
+  let sentence = '';
+  if (parts.action.includes('吃藥')) sentence = `${prefix}在${parts.time || '指定時間'}提醒${target}吃藥`;
+  else sentence = `${prefix}協助${target}${task}`;
+  if (note) sentence += `，${note}`;
+  if (tone === 'strict') sentence += '，並確實回報。';
+  else if (tone === 'clear') sentence += '，完成後請回報。';
+  else sentence += '，並記錄下來，謝謝。';
+  return sentence;
+}
+
+function buildForeignInstruction(target, task, note, tone, lang) {
+  const taskText = translateTask(task, target, lang);
+  const noteText = translateNote(note, lang);
+  const tails = {
+    en: tone === 'strict' ? 'Please complete it carefully and report back.' : tone === 'clear' ? 'Please report back after finishing.' : 'Please record it. Thank you.',
+    id: tone === 'strict' ? 'Tolong lakukan dengan benar dan laporkan kembali.' : tone === 'clear' ? 'Tolong laporkan setelah selesai.' : 'Tolong catat. Terima kasih.',
+    vi: tone === 'strict' ? 'Xin làm đúng và báo lại.' : tone === 'clear' ? 'Xin báo lại sau khi hoàn thành.' : 'Xin ghi lại. Cảm ơn.'
+  };
+  const starts = {
+    en: tone === 'strict' ? 'Make sure to' : 'Please',
+    id: tone === 'strict' ? 'Harus' : 'Tolong',
+    vi: tone === 'strict' ? 'Nhất định phải' : 'Xin'
+  };
+  const connectors = { en: ', and ', id: ', lalu ', vi: ', rồi ' };
+  return `${starts[lang]} ${taskText}${noteText ? connectors[lang] + noteText : ''}. ${tails[lang]}`;
+}
+
+function generateEmployerInstruction(suffix = '') {
+  const id = name => name + suffix;
+  const target = document.getElementById(id('genTarget'))?.value.trim() || '阿公';
+  const task = document.getElementById(id('genTask'))?.value.trim() || '晚上 8 點吃藥';
+  const note = document.getElementById(id('genNote'))?.value.trim() || '';
+  const tone = document.getElementById(id('genTone'))?.value || 'polite';
+  const out = document.getElementById(id('generatorOutput'));
+  if (!out) return;
+  const rows = {
+    zh: buildZhInstruction(target, task, note, tone),
+    en: buildForeignInstruction(target, task, note, tone, 'en'),
+    id: buildForeignInstruction(target, task, note, tone, 'id'),
+    vi: buildForeignInstruction(target, task, note, tone, 'vi')
+  };
+  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  out.innerHTML = ['zh','en','id','vi'].map(lang => `
+    <div class="generator-sentence">
+      <div class="task-lang">${names[lang]}</div>
+      <textarea class="generator-edit" id="${id('genOut_' + lang)}">${escapeHtml(rows[lang])}</textarea>
+      <div class="task-line-actions">
+        <button class="task-line-btn dialogue-speak" onclick="speakGeneratedLine(event, '${suffix}', '${lang}')" title="語音播放">🔊</button>
+        <button class="task-line-btn" onclick="copyGeneratedLine(event, '${suffix}', '${lang}')" title="複製">複</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function getGeneratedLine(suffix, lang) {
+  return document.getElementById('genOut_' + lang + suffix)?.value.trim() || '';
+}
+
+function speakGeneratedLine(event, suffix, lang) {
+  event.stopPropagation();
+  const text = getGeneratedLine(suffix, lang);
+  if (!text) return;
+  _doSpeak(text, langToLocale(lang), event.currentTarget);
+}
+
+function copyGeneratedLine(event, suffix, lang) {
+  event.stopPropagation();
+  copyTextToClipboard(getGeneratedLine(suffix, lang), '已複製句子');
+}
+
+function copyAllInstructions(event, suffix = '') {
+  event.stopPropagation();
+  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
+  const text = ['zh','en','id','vi']
+    .map(lang => `${names[lang]}：${getGeneratedLine(suffix, lang)}`)
+    .filter(line => !line.endsWith('：'))
+    .join('\n');
+  copyTextToClipboard(text, '已複製 LINE 格式');
+}
+
+function copyTextToClipboard(text, okMessage = '已複製') {
+  if (!text) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast(okMessage)).catch(() => showToast(text));
+  } else {
+    showToast(text);
+  }
+}
+
+function copyDataText(event, btn) {
+  event.stopPropagation();
+  const text = btn.getAttribute('data-copy-text')
+    .replace(/&amp;/g,'&').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+  copyTextToClipboard(text, '已複製');
+}
+
+function renderCareReportCard(task, hostId) {
+  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
+  const now = new Date();
+  const time = now.toTimeString().slice(0,5);
+  const defaults = getCareReportDefaults(task.id);
+  return `
+    <div class="care-report-card">
+      <div class="care-report-title">✅ 完成回報卡</div>
+      <div class="care-report-grid">
+        <div class="generator-field">
+          <label class="generator-label" for="reportTarget_${scope}_${task.id}">對象</label>
+          <select class="generator-select" id="reportTarget_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
+            <option value="阿公">阿公</option>
+            <option value="阿嬤">阿嬤</option>
+            <option value="爸爸">爸爸</option>
+            <option value="媽媽">媽媽</option>
+            <option value="長者">長者</option>
+          </select>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportTime_${scope}_${task.id}">時間</label>
+          <input class="generator-input" id="reportTime_${scope}_${task.id}" type="time" value="${time}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportStatus_${scope}_${task.id}">狀況</label>
+          <input class="generator-input" id="reportStatus_${scope}_${task.id}" value="${escapeHtml(defaults.status)}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+        <div class="generator-field full">
+          <label class="generator-label" for="reportNote_${scope}_${task.id}">備註</label>
+          <input class="generator-input" id="reportNote_${scope}_${task.id}" value="${escapeHtml(defaults.note)}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+        <div class="generator-field full">
+          <label class="generator-label" for="reportBp_${scope}_${task.id}">數值記錄</label>
+          <input class="generator-input" id="reportBp_${scope}_${task.id}" value="${escapeHtml(defaults.value)}" placeholder="例如：血壓 132/78" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+      </div>
+      <div class="generator-output" id="reportOutput_${scope}_${task.id}"></div>
+      <div class="generator-output" id="careRecordList_${scope}_${task.id}"></div>
+    </div>
+  `;
+}
+
+function getCareReportDefaults(taskId) {
+  const map = {
+    medicine: { status: '已完成吃藥', note: '有配溫開水', value: '血壓 132/78' },
+    blood_pressure: { status: '已完成量血壓', note: '已坐著休息後測量', value: '血壓 132/78' },
+    meal_help: { status: '已完成用餐', note: '吃飯速度穩定，沒有嗆到', value: '吃了半碗飯' }
+  };
+  return map[taskId] || { status: '已完成任務', note: '狀況穩定', value: '' };
+}
+
+function generateCareTaskReport(taskId, hostId) {
+  const task = CARE_TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
+  const read = name => document.getElementById(`${name}_${scope}_${taskId}`)?.value.trim() || '';
+  const target = read('reportTarget') || '阿公';
+  const time = read('reportTime');
+  const status = read('reportStatus');
+  const note = read('reportNote');
+  const value = read('reportBp');
+  const rows = buildCareReportRows(task, target, time, status, note, value);
+  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  const out = document.getElementById(`reportOutput_${scope}_${taskId}`);
+  if (!out) return;
+  out.innerHTML = ['zh','en','id','vi'].map(lang => `
+    <div class="generator-sentence">
+      <div class="task-lang">${names[lang]}</div>
+      <textarea class="generator-edit" id="reportOut_${scope}_${taskId}_${lang}">${escapeHtml(rows[lang])}</textarea>
+      <div class="task-line-actions">
+        <button class="task-line-btn dialogue-speak" onclick="speakReportLine(event, '${scope}', '${taskId}', '${lang}')" title="語音播放">🔊</button>
+        <button class="task-line-btn" onclick="copyReportLine(event, '${scope}', '${taskId}', '${lang}')" title="複製">複</button>
+      </div>
+    </div>
+  `).join('') + `<button class="generator-btn" onclick="recordAndCopyCareReport(event, '${scope}', '${taskId}', '${hostId}')">記錄並複製完整回報</button>`;
+  renderCareRecordList(scope, taskId);
+}
+
+function formatCareTime(time) {
+  if (!time) return '';
+  const [h, m] = time.split(':').map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return time;
+  const period = h < 12 ? '上午' : h < 18 ? '下午' : '晚上';
+  const hour = h > 12 ? h - 12 : h;
+  return `${period} ${hour}:${String(m).padStart(2, '0')}`;
+}
+
+function capitalizeFirstText(text) {
+  const clean = String(text || '').trim();
+  return clean ? clean.charAt(0).toUpperCase() + clean.slice(1) : '';
+}
+
+function translateCareDetail(text, lang) {
+  const clean = String(text || '').trim();
+  if (!clean) return '';
+  const dict = {
+    en: {
+      '有配溫開水': 'used warm water',
+      '已坐著休息後測量': 'measured after sitting and resting',
+      '吃飯速度穩定，沒有嗆到': 'ate steadily with no choking',
+      '血壓 132/78': 'blood pressure 132/78',
+      '吃了半碗飯': 'ate half a bowl of rice'
+    },
+    id: {
+      '有配溫開水': 'dengan air hangat',
+      '已坐著休息後測量': 'diukur setelah duduk dan istirahat',
+      '吃飯速度穩定，沒有嗆到': 'makan stabil dan tidak tersedak',
+      '血壓 132/78': 'tekanan darah 132/78',
+      '吃了半碗飯': 'makan setengah mangkuk nasi'
+    },
+    vi: {
+      '有配溫開水': 'uống với nước ấm',
+      '已坐著休息後測量': 'đo sau khi ngồi nghỉ',
+      '吃飯速度穩定，沒有嗆到': 'ăn ổn định, không bị sặc',
+      '血壓 132/78': 'huyết áp 132/78',
+      '吃了半碗飯': 'ăn nửa chén cơm'
+    }
+  };
+  return (dict[lang] && dict[lang][clean]) || clean;
+}
+
+function buildCareReportRows(task, target, time, status, note, value) {
+  const zhTime = formatCareTime(time);
+  const zh = `${target}${status ? status.replace(/^已完成/, '已經完成') : '已經完成' }${zhTime ? '，時間：' + zhTime : ''}${note ? '，狀況：' + note : ''}${value ? '，' + value : ''}。`;
+  const enTarget = capitalizeFirstText(translateTarget(target, 'en'));
+  const idTarget = capitalizeFirstText(translateTarget(target, 'id'));
+  const viTarget = capitalizeFirstText(translateTarget(target, 'vi'));
+  const enNote = translateCareDetail(note, 'en');
+  const idNote = translateCareDetail(note, 'id');
+  const viNote = translateCareDetail(note, 'vi');
+  const enValue = translateCareDetail(value, 'en');
+  const idValue = translateCareDetail(value, 'id');
+  const viValue = translateCareDetail(value, 'vi');
+  return {
+    zh,
+    en: `${enTarget} has completed ${task.titleEn || task.title}. ${time ? 'Time: ' + time + '. ' : ''}${enNote ? 'Condition: ' + enNote + '. ' : ''}${enValue ? 'Record: ' + enValue + '.' : ''}`,
+    id: `${idTarget} sudah selesai ${task.titleId || task.title}. ${time ? 'Waktu: ' + time + '. ' : ''}${idNote ? 'Kondisi: ' + idNote + '. ' : ''}${idValue ? 'Catatan: ' + idValue + '.' : ''}`,
+    vi: `${viTarget} đã hoàn thành ${task.titleVi || task.title}. ${time ? 'Thời gian: ' + time + '. ' : ''}${viNote ? 'Tình trạng: ' + viNote + '. ' : ''}${viValue ? 'Ghi chú: ' + viValue + '.' : ''}`
+  };
+}
+
+function getReportLine(scope, taskId, lang) {
+  return document.getElementById(`reportOut_${scope}_${taskId}_${lang}`)?.value.trim() || '';
+}
+
+function speakReportLine(event, scope, taskId, lang) {
+  event.stopPropagation();
+  const text = getReportLine(scope, taskId, lang);
+  if (text) _doSpeak(text, langToLocale(lang), event.currentTarget);
+}
+
+function copyReportLine(event, scope, taskId, lang) {
+  event.stopPropagation();
+  copyTextToClipboard(getReportLine(scope, taskId, lang), '已複製回報句');
+}
+
+function copyAllCareReport(event, scope, taskId) {
+  event.stopPropagation();
+  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
+  const text = ['zh','en','id','vi'].map(lang => `${names[lang]}：${getReportLine(scope, taskId, lang)}`).join('\n');
+  copyTextToClipboard(text, '已複製完整回報');
+}
+
+function getTodayCareRecords() {
+  const today = new Date().toISOString().slice(0,10);
+  let all = {};
+  try { all = JSON.parse(localStorage.getItem('careReportRecords') || '{}'); } catch(e) {}
+  return { today, all, records: all[today] || [] };
+}
+
+function saveCareRecord(record) {
+  const state = getTodayCareRecords();
+  const records = [record, ...state.records].slice(0, 20);
+  state.all[state.today] = records;
+  try { localStorage.setItem('careReportRecords', JSON.stringify(state.all)); } catch(e) {}
+}
+
+function recordAndCopyCareReport(event, scope, taskId, hostId) {
+  event.stopPropagation();
+  const task = CARE_TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const target = document.getElementById(`reportTarget_${scope}_${taskId}`)?.value || '阿公';
+  const time = document.getElementById(`reportTime_${scope}_${taskId}`)?.value || '';
+  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
+  const text = ['zh','en','id','vi'].map(lang => `${names[lang]}：${getReportLine(scope, taskId, lang)}`).join('\n');
+  saveCareRecord({
+    id: `${Date.now()}_${taskId}`,
+    taskId,
+    taskTitle: task.title,
+    target,
+    time,
+    text
+  });
+  markDailyMission('care');
+  copyTextToClipboard(text, '已記錄並複製完整回報');
+  renderCareRecordList(scope, taskId);
+}
+
+function renderCareRecordList(scope, taskId) {
+  const host = document.getElementById(`careRecordList_${scope}_${taskId}`);
+  if (!host) return;
+  const state = getTodayCareRecords();
+  if (!state.records.length) {
+    host.innerHTML = '<div class="daily-goal-note">今天尚未記錄照護回報。</div>';
+    return;
+  }
+  host.innerHTML = `
+    <div class="daily-goal-note"><strong>今天照護紀錄</strong>｜已記錄 ${state.records.length} 筆完成回報</div>
+    <div class="daily-list">
+      ${state.records.slice(0, 5).map(r => `
+        <div class="daily-row">
+          <div class="daily-row-icon">📝</div>
+          <div class="daily-row-main">
+            <div class="daily-row-title">${escapeHtml(r.target)}｜${escapeHtml(r.taskTitle)}${r.time ? '｜' + escapeHtml(r.time) : ''}</div>
+            <div class="daily-row-note">${escapeHtml(String(r.text || '').split('\n')[0] || '')}</div>
+          </div>
+          <button class="daily-go-btn" data-copy-text="${escapeHtml(r.text)}" onclick="copyDataText(event,this)">複製</button>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderEmergencyReport(hostId) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const items = [
+    { title: '頭暈', zh: '阿公現在頭暈，我會先讓他坐下休息，請問是否需要就醫？', en: 'Grandpa feels dizzy now. I will let him sit and rest first. Do we need to see a doctor?', id: 'Kakek sekarang pusing. Saya akan membiarkan beliau duduk dan istirahat dulu. Apakah perlu ke dokter?', vi: 'Ông hiện đang chóng mặt. Tôi sẽ cho ông ngồi nghỉ trước. Có cần đi khám không?' },
+    { title: '跌倒', zh: '阿公剛才跌倒了，目前先不移動他，我會立刻回報狀況。', en: 'Grandpa just fell. I will not move him for now and will report the condition immediately.', id: 'Kakek baru saja jatuh. Saya tidak akan memindahkan beliau dulu dan akan segera melaporkan kondisinya.', vi: 'Ông vừa bị ngã. Tôi sẽ không di chuyển ông trước và sẽ báo tình trạng ngay.' },
+    { title: '血壓異常', zh: '血壓數字異常，我已經記錄，請家屬確認下一步。', en: 'The blood pressure is abnormal. I have recorded it. Please confirm the next step.', id: 'Tekanan darah tidak normal. Saya sudah mencatatnya. Mohon keluarga memastikan langkah selanjutnya.', vi: 'Chỉ số huyết áp bất thường. Tôi đã ghi lại. Xin gia đình xác nhận bước tiếp theo.' },
+    { title: '不舒服', zh: '阿公說身體不舒服，我會先觀察並請家屬盡快回覆。', en: 'Grandpa says he feels unwell. I will observe first and ask the family to reply as soon as possible.', id: 'Kakek bilang badan tidak nyaman. Saya akan mengamati dulu dan meminta keluarga segera membalas.', vi: 'Ông nói trong người không khỏe. Tôi sẽ theo dõi trước và nhờ gia đình phản hồi sớm.' }
+  ];
+  host.innerHTML = `<div class="emergency-grid">${items.map(item => {
+    const full = `中文：${item.zh}\nEnglish：${item.en}\nBahasa Indonesia：${item.id}\nTiếng Việt：${item.vi}`;
+    return `<div class="emergency-card">
+      <div class="emergency-title">⚠️ ${escapeHtml(item.title)}</div>
+      <div class="emergency-line">${escapeHtml(item.zh)}</div>
+      <button class="daily-go-btn" data-copy-text="${escapeHtml(full)}" onclick="copyDataText(event,this)">複製四語</button>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderDailyRow(key, title, note, actionLabel, count, action) {
+  const state = getDailyMissionState();
+  const done = state.doneMap[key];
+  return `
+    <div class="daily-row">
+      <div class="daily-row-icon">${done ? '✅' : '○'}</div>
+      <div class="daily-row-main">
+        <div class="daily-row-title">${title}</div>
+        <div class="daily-row-note">${done ? '今日已完成' : note}</div>
+      </div>
+      <button class="daily-go-btn" ${count ? '' : 'disabled'} onclick="${action}">${done ? '再練' : actionLabel}</button>
+    </div>
+  `;
+}
+
+function renderDailyMissionMini(hostId) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const newCount = getDailyNewCards(10).length;
+  const wrongCount = getWrongVocabCards(5).length;
+  const starCount = getStarredCards(5).length;
+  const careCount = CARE_TASKS.length;
+  const daily = getDailyMissionState();
+  host.innerHTML = `
+    <div class="daily-status-card">
+      <div class="daily-status-pill"><div class="daily-status-label">今日進度</div><div class="daily-status-value">${daily.done} / ${daily.total}</div></div>
+      <div class="daily-status-pill"><div class="daily-status-label">連續學習</div><div class="daily-status-value">${daily.streak} 天</div></div>
+      <div class="daily-status-pill"><div class="daily-status-label">今日目標</div><div class="daily-status-value">${daily.done === daily.total ? '完成 ✅' : '繼續'}</div></div>
+    </div>
+    <div class="daily-goal-note">${daily.nextGoal}</div>
+    <div class="daily-list">
+      ${renderDailyRow('new', '新詞 ' + newCount + ' 個', '從尚未標記學會的詞彙中挑選', '開始', newCount, 'startDailyNewMission()')}
+      ${renderDailyRow('wrong', '錯題 ' + wrongCount + ' 個', '依最近答錯與錯誤次數排序', '重練', wrongCount, 'startDailyWrongMission()')}
+      ${renderDailyRow('star', '收藏詞 ' + starCount + ' 個', '複習自己按星號的重點詞', '複習', starCount, 'startDailyStarMission()')}
+      ${renderDailyRow('care', '照護回報 1 次', '產生一次完成回報卡並留下今天紀錄', '去回報', careCount, 'startDailyCareMission()')}
+    </div>
+  `;
+}
+
+
+
+/* ── V35 overrides: mobile navigation, home priority, care-flow records ── */
+let vocabCompactMode = false;
+
+function syncQuickFilterButtons() {
+  const active = filterStar ? 'star' : filterNew ? 'new' : 'all';
+  ['All','New','Star','Wrong','Today','Care'].forEach(key => {
+    const btn = document.getElementById('filter' + key + 'Btn');
+    if (btn) btn.classList.remove('active');
+  });
+  const map = { all: 'filterAllBtn', new: 'filterNewBtn', star: 'filterStarBtn' };
+  document.getElementById(map[active])?.classList.add('active');
+}
+
+function applyQuickFilter(mode) {
+  if (mode === 'all') {
+    filterStar = false;
+    filterNew = false;
+    ensureSectionViewForFilter();
+    syncQuickFilterButtons();
+    renderCards();
+    return;
+  }
+  if (mode === 'new') {
+    filterNew = true;
+    filterStar = false;
+    ensureSectionViewForFilter();
+    syncQuickFilterButtons();
+    renderCards();
+    return;
+  }
+  if (mode === 'star') {
+    filterStar = true;
+    filterNew = false;
+    ensureSectionViewForFilter();
+    syncQuickFilterButtons();
+    renderCards();
+    return;
+  }
+  if (mode === 'wrong') {
+    startDailyWrongMission();
+    return;
+  }
+  if (mode === 'today') {
+    startDailyNewMission();
+    return;
+  }
+  if (mode === 'care') {
+    switchPageTab('tasks');
+    setTimeout(() => document.getElementById('v35CareFlowSection')?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 0);
+  }
+}
+
+function toggleFilterStar() {
+  filterStar = !filterStar;
+  if (filterStar) filterNew = false;
+  ensureSectionViewForFilter();
+  syncQuickFilterButtons();
+  renderCards();
+}
+
+function toggleFilterNew() {
+  filterNew = !filterNew;
+  if (filterNew) filterStar = false;
+  ensureSectionViewForFilter();
+  syncQuickFilterButtons();
+  renderCards();
+}
+
+function switchToFavorites() {
+  applyQuickFilter('star');
+  switchPageTab('browse');
+  showToast('已切換到收藏詞');
+}
+
+function toggleVocabCardMode() {
+  vocabCompactMode = !vocabCompactMode;
+  document.body.classList.toggle('vocab-compact', vocabCompactMode);
+  const btn = document.getElementById('vocabCompactBtn');
+  if (btn) {
+    btn.classList.toggle('active', vocabCompactMode);
+    btn.textContent = vocabCompactMode ? '完整卡' : '精簡卡';
+  }
+}
+
+function renderHomeTaskHub() {
+  const host = document.getElementById('v32HomeTaskHub');
+  if (!host) return;
+  const newCount = getDailyNewCards(10).length;
+  const wrongCount = getWrongVocabCards(5).length;
+  const daily = getDailyMissionState();
+  host.innerHTML = `
+    <div class="v35-today-panel">
+      <div class="v35-today-kicker">今日任務</div>
+      <div class="v35-today-title">今天先完成這三件事</div>
+      <div class="v35-today-summary">新詞 ${newCount} 個｜錯題 ${wrongCount} 個｜照護回報 1 次</div>
+      <div class="daily-status-card">
+        <div class="daily-status-pill"><div class="daily-status-label">今日進度</div><div class="daily-status-value">${daily.done} / ${daily.total}</div></div>
+        <div class="daily-status-pill"><div class="daily-status-label">連續學習</div><div class="daily-status-value">${daily.streak} 天</div></div>
+        <div class="daily-status-pill"><div class="daily-status-label">下一步</div><div class="daily-status-value">${daily.done === daily.total ? '已完成' : '繼續'}</div></div>
+      </div>
+      <button class="v35-primary-action" onclick="startDailyNewMission()">開始今日任務</button>
+    </div>
+
+    <div class="v35-section-head">
+      <div class="v35-section-kicker">照護現場工具</div>
+      <div class="v35-section-title">照護回報與雇主交代</div>
+    </div>
+    <div class="v35-tool-grid">
+      <div class="v35-tool-card">
+        <div class="v35-tool-title">照護回報</div>
+        <div class="v35-tool-sub">依照情境產生正式紀錄卡，並複製給家屬。</div>
+        <button class="daily-go-btn" onclick="switchPageTab('tasks'); setTimeout(() => document.getElementById('v35CareFlowSection')?.scrollIntoView({behavior:'smooth',block:'start'}), 0)">產生今日回報</button>
+      </div>
+      <div class="v35-tool-card">
+        <div class="v35-tool-title">雇主交代句</div>
+        <div class="v35-tool-sub">快速產生 LINE 可用的中文、印尼文、越南文交代句。</div>
+        <button class="daily-go-btn" onclick="switchPageTab('tasks'); setTimeout(() => document.getElementById('v35EmployerToolSection')?.scrollIntoView({behavior:'smooth',block:'start'}), 0)">產生 LINE 交代句</button>
+      </div>
+    </div>
+
+    <div class="v35-section-head">
+      <div class="v35-section-kicker">分類學習</div>
+      <div class="v35-section-title">選擇照護情境分類</div>
+    </div>
+  `;
+}
+
+function renderTaskTools() {
+  const host = document.getElementById('taskToolsContainer');
+  if (!host) return;
+  host.innerHTML = `
+    <div class="task-tools-stack">
+      <section class="task-tool-band">
+        <div id="emergencyReportHost"></div>
+      </section>
+      <section class="task-tool-band" id="v35CareFlowSection">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">照護任務流程</div>
+            <div class="task-tool-sub">選擇情境，照著步驟完成照護，最後產生正式回報卡。</div>
+          </div>
+        </div>
+        <div class="task-process-steps">
+          <div class="task-process-step"><strong>1</strong>選擇情境</div>
+          <div class="task-process-step"><strong>2</strong>照護步驟</div>
+          <div class="task-process-step"><strong>3</strong>產生回報</div>
+          <div class="task-process-step"><strong>4</strong>儲存紀錄</div>
+        </div>
+        <div class="task-mode-grid" id="careTaskModeHostTask"></div>
+      </section>
+      <section class="task-tool-band" id="v35EmployerToolSection">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">雇主交代句</div>
+            <div class="task-tool-sub">輸入對象、任務和補充提醒，產生可直接貼到 LINE 的交代文字。</div>
+          </div>
+        </div>
+        <div id="employerGeneratorHostTask"></div>
+      </section>
+      <section class="task-tool-band">
+        <div class="task-tool-head">
+          <div>
+            <div class="task-tool-title">今日學習任務</div>
+            <div class="task-tool-sub">新詞、錯題與照護回報任務集中追蹤。</div>
+          </div>
+        </div>
+        <div id="taskDailyHost"></div>
+      </section>
+    </div>
+  `;
+  renderEmergencyReport('emergencyReportHost');
+  renderCareTaskMode(undefined, 'careTaskModeHostTask');
+  renderInstructionGenerator('employerGeneratorHostTask', 'Task');
+  renderDailyMissionMini('taskDailyHost');
+}
+
+function renderCareTaskMode(selectedId, hostId = 'careTaskModeHost') {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const task = CARE_TASKS.find(t => t.id === selectedId) || CARE_TASKS[0];
+  const favs = getTaskFavorites();
+  const langNames = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  host.innerHTML = `
+    <div class="task-chip-row">
+      ${CARE_TASKS.map(t => `<button class="task-chip ${t.id === task.id ? 'active' : ''}" onclick="renderCareTaskMode('${t.id}', '${hostId}')">${t.icon} ${escapeHtml(t.title)}</button>`).join('')}
+    </div>
+    <div class="task-flow-card">
+      <div class="task-flow-head">
+        <div class="task-flow-icon">${task.icon}</div>
+        <div>
+          <div class="task-flow-title">任務：${escapeHtml(task.title)}</div>
+          <div class="task-flow-sub">${escapeHtml(task.sub)}｜完成後可產生正式回報卡</div>
+        </div>
+      </div>
+      ${task.steps.map((step, stepIndex) => `
+        <div class="task-step">
+          <div class="task-step-index">${stepIndex + 1}</div>
+          <div>
+            <div class="task-step-label">${escapeHtml(step.label)}</div>
+            <div class="task-line-grid">
+              ${['zh','en','id','vi'].map(lang => {
+                const key = `${task.id}_${stepIndex}_${lang}`;
+                return `
+                  <div class="task-line">
+                    <div class="task-lang">${langNames[lang]}</div>
+                    <div class="task-sentence">${escapeHtml(step[lang])}</div>
+                    <div class="task-line-actions">
+                      <button class="task-line-btn dialogue-speak" data-speak-text="${escapeHtml(step[lang])}" data-speak-locale="${langToLocale(lang)}" onclick="speakVcardLang(event,this)" title="語音播放">🔊</button>
+                      <button class="task-line-btn ${favs[key] ? 'active' : ''}" onclick="toggleTaskFavorite(event,'${key}')" title="收藏">★</button>
+                      <button class="task-line-btn" onclick="practiceTaskLine(event,'${task.id}',${stepIndex},'${lang}')" title="測驗">測</button>
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div class="task-quiz-box" id="taskQuiz_${task.id}_${stepIndex}" style="display:none;"></div>
+          </div>
+        </div>
+      `).join('')}
+      <div class="task-report-sticky">
+        <button class="generator-btn" onclick="generateCareTaskReport('${task.id}', '${hostId}'); document.getElementById('reportOutput_${hostId.replace(/[^a-zA-Z0-9]/g, '')}_${task.id}')?.scrollIntoView({behavior:'smooth',block:'nearest'});">產生完成回報卡</button>
+      </div>
+      ${renderCareReportCard(task, hostId)}
+    </div>
+  `;
+  generateCareTaskReport(task.id, hostId);
+}
+
+function renderCareReportCard(task, hostId) {
+  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
+  const now = new Date();
+  const time = now.toTimeString().slice(0,5);
+  const defaults = getCareReportDefaults(task.id);
+  return `
+    <div class="care-report-card formal">
+      <div class="care-report-title-line">
+        <div class="care-report-title">正式照護紀錄卡</div>
+        <div class="care-report-badge">今日紀錄</div>
+      </div>
+      <div class="care-report-grid">
+        <div class="generator-field">
+          <label class="generator-label" for="reportStatus_${scope}_${task.id}">完成狀態</label>
+          <select class="generator-select" id="reportStatus_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
+            <option value="已完成">已完成</option>
+            <option value="部分完成">部分完成</option>
+            <option value="異常">異常</option>
+          </select>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportTimeSlot_${scope}_${task.id}">時間</label>
+          <select class="generator-select" id="reportTimeSlot_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
+            <option value="上午">上午</option>
+            <option value="下午">下午</option>
+            <option value="晚上">晚上</option>
+            <option value="實際時間">實際時間</option>
+          </select>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportTime_${scope}_${task.id}">實際時間</label>
+          <input class="generator-input" id="reportTime_${scope}_${task.id}" type="time" value="${time}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportTarget_${scope}_${task.id}">對象</label>
+          <select class="generator-select" id="reportTarget_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
+            <option value="阿公">阿公</option>
+            <option value="阿嬤">阿嬤</option>
+            <option value="爸爸">爸爸</option>
+            <option value="媽媽">媽媽</option>
+            <option value="長者">長者</option>
+          </select>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportVersion_${scope}_${task.id}">回報版本</label>
+          <select class="generator-select" id="reportVersion_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
+            <option value="家屬版">家屬版</option>
+            <option value="看護學習版">看護學習版</option>
+          </select>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="reportBp_${scope}_${task.id}">數值記錄</label>
+          <input class="generator-input" id="reportBp_${scope}_${task.id}" value="${escapeHtml(defaults.value)}" placeholder="例如：血壓 132/78" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
+        </div>
+        <div class="generator-field full">
+          <label class="generator-label" for="reportNote_${scope}_${task.id}">備註</label>
+          <textarea class="generator-input report-note-input" id="reportNote_${scope}_${task.id}" oninput="generateCareTaskReport('${task.id}', '${hostId}')" placeholder="可填寫吃飯量、血壓、情緒、疼痛或其他觀察">${escapeHtml(defaults.note)}</textarea>
+        </div>
+      </div>
+      <div class="generator-output" id="reportOutput_${scope}_${task.id}"></div>
+      <div class="generator-output" id="careRecordList_${scope}_${task.id}"></div>
+    </div>
+  `;
+}
+
+function generateCareTaskReport(taskId, hostId) {
+  const task = CARE_TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
+  const read = name => document.getElementById(`${name}_${scope}_${taskId}`)?.value.trim() || '';
+  const target = read('reportTarget') || '阿公';
+  const time = read('reportTime');
+  const timeSlot = read('reportTimeSlot') || '實際時間';
+  const status = read('reportStatus') || '已完成';
+  const note = read('reportNote');
+  const value = read('reportBp');
+  const version = read('reportVersion') || '家屬版';
+  const rows = buildCareReportRows(task, target, time, status, note, value, timeSlot, version);
+  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  const out = document.getElementById(`reportOutput_${scope}_${taskId}`);
+  if (!out) return;
+  out.innerHTML = ['zh','en','id','vi'].map(lang => `
+    <div class="generator-sentence">
+      <div class="task-lang">${names[lang]}</div>
+      <textarea class="generator-edit" id="reportOut_${scope}_${taskId}_${lang}">${escapeHtml(rows[lang])}</textarea>
+      <div class="task-line-actions">
+        <button class="task-line-btn dialogue-speak" onclick="speakReportLine(event, '${scope}', '${taskId}', '${lang}')" title="語音播放">🔊</button>
+        <button class="task-line-btn" onclick="copyReportLine(event, '${scope}', '${taskId}', '${lang}')" title="複製">複</button>
+      </div>
+    </div>
+  `).join('') + `<button class="generator-btn" onclick="recordAndCopyCareReport(event, '${scope}', '${taskId}', '${hostId}')">儲存今日紀錄，並複製給家屬</button>`;
+  renderCareRecordList(scope, taskId);
+}
+
+function buildCareReportRows(task, target, time, status, note, value, timeSlot = '實際時間', version = '家屬版') {
+  const zhTime = timeSlot === '實際時間' ? formatCareTime(time) : timeSlot;
+  const statusText = status === '已完成' ? `已完成${task.title}` : `${status}：${task.title}`;
+  const learningNote = version === '看護學習版' ? '（此版本可用來練習照護中文與回報句。）' : '';
+  const zh = `${target}${zhTime ? '在' + zhTime : ''}${statusText}${note ? '，備註：' + note : ''}${value ? '，記錄：' + value : ''}。${learningNote}`;
+  const enTarget = capitalizeFirstText(translateTarget(target, 'en'));
+  const idTarget = capitalizeFirstText(translateTarget(target, 'id'));
+  const viTarget = capitalizeFirstText(translateTarget(target, 'vi'));
+  const enNote = translateCareDetail(note, 'en');
+  const idNote = translateCareDetail(note, 'id');
+  const viNote = translateCareDetail(note, 'vi');
+  const enValue = translateCareDetail(value, 'en');
+  const idValue = translateCareDetail(value, 'id');
+  const viValue = translateCareDetail(value, 'vi');
+  return {
+    zh,
+    en: `${enTarget}: ${status} - ${task.titleEn || task.title}. ${zhTime ? 'Time: ' + zhTime + '. ' : ''}${enNote ? 'Note: ' + enNote + '. ' : ''}${enValue ? 'Record: ' + enValue + '.' : ''}`,
+    id: `${idTarget}: ${status} - ${task.titleId || task.title}. ${zhTime ? 'Waktu: ' + zhTime + '. ' : ''}${idNote ? 'Catatan: ' + idNote + '. ' : ''}${idValue ? 'Rekam: ' + idValue + '.' : ''}`,
+    vi: `${viTarget}: ${status} - ${task.titleVi || task.title}. ${zhTime ? 'Thời gian: ' + zhTime + '. ' : ''}${viNote ? 'Ghi chú: ' + viNote + '. ' : ''}${viValue ? 'Ghi nhận: ' + viValue + '.' : ''}`
+  };
+}
+
+function recordAndCopyCareReport(event, scope, taskId, hostId) {
+  event.stopPropagation();
+  const task = CARE_TASKS.find(t => t.id === taskId);
+  if (!task) return;
+  const target = document.getElementById(`reportTarget_${scope}_${taskId}`)?.value || '阿公';
+  const time = document.getElementById(`reportTime_${scope}_${taskId}`)?.value || '';
+  const status = document.getElementById(`reportStatus_${scope}_${taskId}`)?.value || '已完成';
+  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
+  const text = ['zh','en','id','vi'].map(lang => `${names[lang]}：${getReportLine(scope, taskId, lang)}`).join('\n');
+  saveCareRecord({
+    id: `${Date.now()}_${taskId}`,
+    taskId,
+    taskTitle: task.title,
+    target,
+    time,
+    status,
+    text
+  });
+  markDailyMission('care');
+  copyTextToClipboard(text, '已儲存今日紀錄，並複製給家屬');
+  renderCareRecordList(scope, taskId);
+  renderHomeTaskHub();
+}
+
+function renderInstructionGenerator(hostId = 'employerGeneratorHost', suffix = '') {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const id = name => name + suffix;
+  const arg = suffix ? `'${suffix}'` : "''";
+  host.innerHTML = `
+    <div class="line-card">
+      <div class="line-card-title">雇主交代句</div>
+      <div class="template-row" aria-label="常用交代範本">
+        ${EMPLOYER_TEMPLATES.map(t => `<button class="template-btn" onclick="applyInstructionTemplate('${t.key}', ${arg})">${t.label}</button>`).join('')}
+      </div>
+      <div class="generator-grid">
+        <div class="generator-field">
+          <label class="generator-label" for="${id('genTarget')}">對象</label>
+          <input class="generator-input" id="${id('genTarget')}" value="阿公" list="${id('targetOptions')}"/>
+        </div>
+        <div class="generator-field">
+          <label class="generator-label" for="${id('genTone')}">語氣</label>
+          <select class="generator-select" id="${id('genTone')}">
+            <option value="polite">禮貌</option>
+            <option value="clear">清楚</option>
+            <option value="strict">重要提醒</option>
+          </select>
+        </div>
+        <div class="generator-field full">
+          <label class="generator-label" for="${id('genTask')}">任務</label>
+          <input class="generator-input" id="${id('genTask')}" value="晚上 8 點吃藥" list="${id('taskOptions')}"/>
+        </div>
+        <div class="generator-field full">
+          <label class="generator-label" for="${id('genNote')}">補充提醒</label>
+          <input class="generator-input" id="${id('genNote')}" value="請配溫開水" list="${id('noteOptions')}"/>
+        </div>
+      </div>
+      <datalist id="${id('targetOptions')}"><option value="阿公"><option value="阿嬤"><option value="長者"><option value="爸爸"><option value="媽媽"></datalist>
+      <datalist id="${id('taskOptions')}"><option value="晚上 8 點吃藥"><option value="早上 9 點量血壓"><option value="晚餐後散步"><option value="睡前喝水"><option value="下午做復健"><option value="晚上洗澡"><option value="外出就醫"></datalist>
+      <datalist id="${id('noteOptions')}"><option value="吃藥後量血壓"><option value="請配溫開水"><option value="記錄血壓數字"><option value="如果不舒服請馬上回報"><option value="不要空腹吃藥"><option value="出門前確認健保卡與藥袋"></datalist>
+      <div class="generator-actions">
+        <button class="generator-btn" onclick="generateEmployerInstruction(${arg})">產生照護交代</button>
+        <button class="generator-secondary-btn" onclick="copyAllInstructions(event, ${arg})">複製給 LINE</button>
+      </div>
+      <div class="line-preview-label">預覽</div>
+      <div class="generator-output" id="${id('generatorOutput')}"></div>
+    </div>
+  `;
+  generateEmployerInstruction(suffix);
+}
+
+function generateEmployerInstruction(suffix = '') {
+  const id = name => name + suffix;
+  const target = document.getElementById(id('genTarget'))?.value.trim() || '阿公';
+  const task = document.getElementById(id('genTask'))?.value.trim() || '晚上 8 點吃藥';
+  const note = document.getElementById(id('genNote'))?.value.trim() || '';
+  const tone = document.getElementById(id('genTone'))?.value || 'polite';
+  const out = document.getElementById(id('generatorOutput'));
+  if (!out) return;
+  const rows = {
+    zh: buildZhInstruction(target, task, note, tone),
+    en: buildForeignInstruction(target, task, note, tone, 'en'),
+    id: buildForeignInstruction(target, task, note, tone, 'id'),
+    vi: buildForeignInstruction(target, task, note, tone, 'vi')
+  };
+  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
+  out.innerHTML = ['zh','en','id','vi'].map(lang => `
+    <div class="generator-sentence">
+      <div class="task-lang">${names[lang]}</div>
+      <textarea class="generator-edit" id="${id('genOut_' + lang)}">${escapeHtml(rows[lang])}</textarea>
+      <div class="task-line-actions">
+        <button class="task-line-btn dialogue-speak" onclick="speakGeneratedLine(event, '${suffix}', '${lang}')" title="語音播放">🔊</button>
+        <button class="task-line-btn" onclick="copyGeneratedLine(event, '${suffix}', '${lang}')" title="複製">複</button>
+      </div>
+    </div>
+  `).join('') + `
+    <div class="generator-actions">
+      <button class="generator-secondary-btn" onclick="copyAllInstructions(event, '${suffix}')">複製全部</button>
+      <button class="generator-secondary-btn" onclick="copyGeneratedLine(event, '${suffix}', 'id')">只複製印尼文</button>
+      <button class="generator-secondary-btn" onclick="copyGeneratedLine(event, '${suffix}', 'vi')">只複製越南文</button>
+    </div>`;
+}
+
+function copyGeneratedLine(event, suffix, lang) {
+  event.stopPropagation();
+  const message = lang === 'id' ? '已複製印尼文' : lang === 'vi' ? '已複製越南文' : '已複製句子';
+  copyTextToClipboard(getGeneratedLine(suffix, lang), message);
+}
+
+function copyAllInstructions(event, suffix = '') {
+  event.stopPropagation();
+  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
+  const text = ['zh','en','id','vi']
+    .map(lang => `${names[lang]}：${getGeneratedLine(suffix, lang)}`)
+    .filter(line => !line.endsWith('：'))
+    .join('\n');
+  copyTextToClipboard(text, '已複製給 LINE');
+}
+
+function renderEmergencyReport(hostId) {
+  const host = document.getElementById(hostId);
+  if (!host) return;
+  const items = [
+    { title: '跌倒', zh: '阿公剛才跌倒了，目前先不移動他，我會立刻回報狀況。', en: 'Grandpa just fell. I will not move him for now and will report the condition immediately.', id: 'Kakek baru saja jatuh. Saya tidak akan memindahkan beliau dulu dan akan segera melaporkan kondisinya.', vi: 'Ông vừa bị ngã. Tôi sẽ không di chuyển ông trước và sẽ báo tình trạng ngay.' },
+    { title: '頭暈', zh: '阿公現在頭暈，我會先讓他坐下休息，請問是否需要就醫？', en: 'Grandpa feels dizzy now. I will let him sit and rest first. Do we need to see a doctor?', id: 'Kakek sekarang pusing. Saya akan membiarkan beliau duduk dan istirahat dulu. Apakah perlu ke dokter?', vi: 'Ông hiện đang chóng mặt. Tôi sẽ cho ông ngồi nghỉ trước. Có cần đi khám không?' },
+    { title: '血壓異常', zh: '血壓數字異常，我已經記錄，請家屬確認下一步。', en: 'The blood pressure is abnormal. I have recorded it. Please confirm the next step.', id: 'Tekanan darah tidak normal. Saya sudah mencatatnya. Mohon keluarga memastikan langkah selanjutnya.', vi: 'Chỉ số huyết áp bất thường. Tôi đã ghi lại. Xin gia đình xác nhận bước tiếp theo.' },
+    { title: '不舒服', zh: '阿公說身體不舒服，我會先觀察並請家屬盡快回覆。', en: 'Grandpa says he feels unwell. I will observe first and ask the family to reply as soon as possible.', id: 'Kakek bilang badan tidak nyaman. Saya akan mengamati dulu dan meminta keluarga segera membalas.', vi: 'Ông nói trong người không khỏe. Tôi sẽ theo dõi trước và nhờ gia đình phản hồi sớm.' }
+  ];
+  host.innerHTML = `
+    <div class="emergency-quick-panel">
+      <div class="emergency-quick-title">⚠️ 緊急狀況快速回報</div>
+      <div class="emergency-quick-sub">跌倒｜頭暈｜血壓異常｜不舒服</div>
+      <div class="emergency-grid">${items.map(item => {
+        const full = `中文：${item.zh}\nEnglish：${item.en}\nBahasa Indonesia：${item.id}\nTiếng Việt：${item.vi}`;
+        return `<div class="emergency-card">
+          <div class="emergency-title">⚠️ ${escapeHtml(item.title)}</div>
+          <div class="emergency-lines">
+            <div><strong>中文：</strong>${escapeHtml(item.zh)}</div>
+            <div><strong>印尼文：</strong>${escapeHtml(item.id)}</div>
+            <div><strong>越南文：</strong>${escapeHtml(item.vi)}</div>
+            <div><strong>英文：</strong>${escapeHtml(item.en)}</div>
+          </div>
+          <button class="daily-go-btn" data-copy-text="${escapeHtml(full)}" onclick="copyDataText(event,this)">複製四語</button>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+}
+
+// init// init
 currentSection = 'basic';  // set default for stats/quiz context
 renderCategorySidebar();   // populate topic-based sidebar
 renderVolGrid();           // populate topic-based home grid
+renderHomeTaskHub();        // v32 daily care task hub
 showHomePage();            // show home on load
 updateStats();
 updateMemoryPanel();
@@ -29103,27 +31526,23 @@ document.addEventListener('visibilitychange', () => {
 <nav class="bottom-nav">
   <div class="bottom-nav-inner">
     <button class="bnav-item active" id="bnav-browse" onclick="switchToView('browse')">
-      <span class="bnav-icon">📖</span>詞彙
+      <span class="bnav-icon">🏠</span>首頁
+    </button>
+    <div class="bnav-sep"></div>
+    <button class="bnav-item" id="bnav-tasks" onclick="switchToView('tasks')">
+      <span class="bnav-icon">📝</span>任務
     </button>
     <div class="bnav-sep"></div>
     <button class="bnav-item" id="bnav-quiz" onclick="switchToView('quiz')">
       <span class="bnav-icon">🧠</span>測驗
     </button>
     <div class="bnav-sep"></div>
+    <button class="bnav-item" id="bnav-dialogue" onclick="switchToView('dialogue')">
+      <span class="bnav-icon">💬</span>對話
+    </button>
+    <div class="bnav-sep"></div>
     <button class="bnav-item" id="bnav-progress" onclick="switchToView('progress')">
       <span class="bnav-icon">📊</span>進度
-    </button>
-    <div class="bnav-sep"></div>
-    <button class="bnav-item" id="bnav-dashboard" onclick="switchToView('dashboard')">
-      <span class="bnav-icon">🏆</span>儀表板
-    </button>
-    <div class="bnav-sep"></div>
-    <button class="bnav-item" id="bnav-flash" onclick="openFlashcard(0)">
-      <span class="bnav-icon">⚡</span>閃卡
-    </button>
-    <div class="bnav-sep"></div>
-    <button class="bnav-item" id="bnav-menu" onclick="toggleSidebar()">
-      <span class="bnav-icon">☰</span>單元
     </button>
   </div>
 </nav>
