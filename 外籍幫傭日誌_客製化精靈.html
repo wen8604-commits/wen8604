@@ -79,10 +79,12 @@ body{
 
 /* ── MAIN LAYOUT ── */
 .wizard-body{max-width:860px;margin:0 auto;padding:24px 20px 60px;}
+.side-nav{display:none;}
+.mobile-step-status{display:none;}
 
 /* ── SECTION CARD ── */
-.section-card{background:var(--white);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;}
-.section-card-head{padding:14px 18px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
+.section-card{background:var(--white);border:1px solid var(--border);border-radius:14px;margin-bottom:20px;overflow:hidden;box-shadow:0 3px 12px rgba(15,23,42,.05);}
+.section-card-head{padding:14px 18px;background:linear-gradient(180deg,#ffffff,#f8fafc);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;}
 .section-card-head-left{display:flex;align-items:center;gap:10px;}
 .section-icon{font-size:18px;}
 .section-title{font-weight:700;font-size:14px;}
@@ -242,9 +244,13 @@ body{
   display:flex;align-items:center;gap:3px;
 }
 .detail-toggle-btn:hover{color:#6d28d9;}
-.toggle-row-head{display:flex;align-items:center;justify-content:space-between;
+.toggle-row-head{display:flex;align-items:center;justify-content:space-between;gap:12px;
   padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;
   transition:border-color .15s;}
+.toggle-row-head .toggle-label{flex:1;min-width:0;}
+.toggle-row-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;flex-shrink:0;}
+.enable-status{display:inline-flex;align-items:center;justify-content:center;border:1px solid #c4b5fd;background:#ede9fe;color:#5b21b6;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;}
+.toggle-row-head:not(.on) .enable-status{border-color:#cbd5e1;background:#f8fafc;color:#64748b;}
 .toggle-row-head:hover{border-color:#c5cae9;}
 .toggle-row-head.on{border-color:var(--accent);background:#f5f0ff;}
 .toggle-row-head.detail-open{border-radius:8px 8px 0 0;}
@@ -265,6 +271,18 @@ body{
   background:#f5f0ff;border:1px solid #ddd6fe;border-radius:8px;padding:10px 14px;
   font-size:12px;color:#5b21b6;margin-bottom:14px;display:flex;gap:8px;align-items:flex-start;
 }
+
+/* ── STEP 3 QUICK SETTINGS ── */
+.quick-settings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+.quick-template{border:1.5px solid var(--border);background:var(--white);border-radius:12px;padding:13px 14px;text-align:left;font-family:inherit;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(15,23,42,.04);}
+.quick-template:hover{border-color:#a78bfa;transform:translateY(-1px);}
+.quick-template strong{display:block;font-size:14px;margin-bottom:4px;color:var(--ink);}
+.quick-template span{display:block;font-size:11.5px;color:var(--muted);line-height:1.45;}
+.work-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.work-search{flex:1;min-width:220px;border:1.5px solid var(--border);border-radius:8px;padding:9px 12px;font-family:inherit;font-size:13px;background:var(--white);}
+.work-count{font-size:12px;font-weight:700;color:#5b21b6;background:#ede9fe;border-radius:999px;padding:6px 10px;white-space:nowrap;}
+.work-tool-btn{border:1.5px solid var(--border);background:#fff;color:var(--muted);border-radius:8px;padding:8px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;}
+.work-tool-btn:hover{border-color:#a78bfa;color:var(--accent);}
 
 /* ── OUTPUT SECTION ── */
 #outputSection{display:none;}
@@ -374,6 +392,7 @@ body{
 /* ── MOBILE ── */
 @media(max-width:639px){
   #mobile-tab-bar{display:block;}
+  .mobile-step-status{display:block;position:sticky;top:46px;z-index:90;background:var(--white);border-bottom:1px solid var(--border);padding:9px 14px;font-size:12px;font-weight:700;color:var(--accent);}
   .progress-bar{display:none;}
   .topbar{padding:10px 14px;}
   .topbar-brand{font-size:13px;}
@@ -394,7 +413,15 @@ body{
   .toggle-row .time-inputs-wrap{width:100%;display:flex;align-items:center;gap:6px;order:3;}
   .time-edit-input{width:100%;flex:1;font-size:13px;padding:7px 10px;}
   .theme-grid{grid-template-columns:repeat(3,1fr);}
-  .wizard-nav{flex-direction:column-reverse;gap:10px;padding-top:16px;margin-top:20px;}
+  .wizard-nav{position:sticky;bottom:64px;z-index:150;flex-direction:column-reverse;gap:10px;padding:10px 0;margin-top:20px;background:var(--bg);border-top:1px solid var(--border);box-shadow:0 -8px 18px rgba(247,249,252,.92);}
+  .quick-settings{grid-template-columns:1fr;}
+  .work-tools{gap:8px;}
+  .work-search{min-width:100%;}
+  .toggle-row-head{display:grid;grid-template-columns:1fr auto;align-items:start;padding:12px;gap:10px;}
+  .toggle-row-actions{grid-column:1 / -1;width:100%;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px;}
+  .toggle-row-actions .time-inputs-wrap{order:-2;flex:1 1 100%;width:100%;display:flex;align-items:center;gap:6px;}
+  .toggle-row-actions .enable-status{order:-1;}
+  .detail-toggle-btn{padding:6px 0;}
   .btn-prev,.btn-next,.btn-generate{width:100%;justify-content:center;padding:13px 20px;font-size:15px;}
   .summary-grid{grid-template-columns:1fr 1fr;}
   .output-frame{min-height:400px;}
@@ -414,10 +441,10 @@ body{
 
 <!-- RESTORE BANNER -->
 <div id="restore-banner" style="display:none;">
-  <span>💾 <strong>發現上次未完成的設定</strong>，是否要還原？</span>
+  <span class="restore-msg">💾 <strong>發現上次未完成的設定</strong>，是否要還原？</span>
   <div style="display:flex;gap:8px;">
-    <button class="restore-btn" onclick="restoreSave()">✅ 還原</button>
-    <button class="restore-btn clear" onclick="dismissRestore()">✕ 忽略</button>
+    <button class="restore-btn restore-yes" onclick="restoreSave()">✅ 還原</button>
+    <button class="restore-btn clear restore-no" onclick="dismissRestore()">✕ 忽略</button>
   </div>
 </div>
 
@@ -470,10 +497,12 @@ body{
   <div class="step-pill">
     <div class="step-node" onclick="gotoStep(6)">
       <div class="step-num">6</div>
-      <span class="step-zh">預覽生成</span><span class="step-en" style="display:none">Generate</span><span class="step-id" style="display:none">Buat</span><span class="step-vi" style="display:none">Tạo</span>
+      <span class="step-zh">確認生成</span><span class="step-en" style="display:none">Generate</span><span class="step-id" style="display:none">Buat</span><span class="step-vi" style="display:none">Tạo</span>
     </div>
   </div>
 </div>
+
+<div class="mobile-step-status" id="mobileStepStatus">目前步驟 1 / 6：基本資訊</div>
 
 <!-- WIZARD SHELL -->
 <div class="wizard-shell">
@@ -496,7 +525,7 @@ body{
     <span class="sn-num">5</span><span class="sn-icon">📝</span> 注意事項
   </div>
   <div class="side-nav-item" data-sn="6" onclick="gotoStep(6)">
-    <span class="sn-num">6</span><span class="sn-icon">✨</span> 預覽生成
+    <span class="sn-num">6</span><span class="sn-icon">✨</span> 確認生成
   </div>
   <div class="side-nav-save" id="snSaveStatus">
     <span class="sn-save-dot" id="snDot"></span>
@@ -532,7 +561,7 @@ body{
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">幫傭姓名預設 <span class="optional">選填</span></label>
+          <label class="form-label">幫傭姓名 <span class="optional">選填</span></label>
           <input class="form-input" id="cfg-helper-name" type="text" placeholder="例：Maria、Siti">
         </div>
         <div class="form-group">
@@ -548,7 +577,7 @@ body{
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">備注文字（印於頁尾）<span class="optional">選填</span></label>
+          <label class="form-label">備註文字（印於頁尾）<span class="optional">選填</span></label>
           <input class="form-input" id="cfg-footer-note" type="text" placeholder="例：本表單需每日繳回雇主查閱">
         </div>
         <div class="form-group">
@@ -612,12 +641,12 @@ body{
         <div class="form-group">
           <label class="form-label">工作型態</label>
           <div class="chip-group" id="cfg-work-type">
-            <div class="chip-option selected" data-val="live-in" onclick="toggleChip(this,'cfg-work-type','single')">住家型（全天）</div>
+            <div class="chip-option selected" data-val="live-in" onclick="toggleChip(this,'cfg-work-type','single')">住家型（依約定時段）</div>
             <div class="chip-option" data-val="live-out" onclick="toggleChip(this,'cfg-work-type','single')">外住型（定時）</div>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">工作起止時間</label>
+          <label class="form-label">工作時段</label>
           <div style="display:flex;align-items:center;gap:8px;">
             <input class="form-input" type="time" id="cfg-work-start" value="07:00" style="flex:1;">
             <span style="color:var(--muted);">–</span>
@@ -752,7 +781,35 @@ body{
 
 <!-- ════════════════ STEP 3: WORK TASKS ════════════════ -->
 <div class="step-page" id="step-3">
-  <div class="info-box">💡 開啟的欄位會出現在生成的日誌中；關閉的欄位完全不顯示。可依家庭實際需求勾選。</div>
+  <div class="info-box">💡 開啟的欄位會出現在生成的日誌中；關閉的欄位完全不顯示。可先選快速模板，再到進階自訂欄位微調。</div>
+
+  <div class="section-card">
+    <div class="section-card-head" onclick="toggleCard(this)">
+      <div class="section-card-head-left">
+        <span class="section-icon">⚡</span>
+        <div>
+          <div class="section-title">快速設定</div>
+          <div class="section-subtitle">先套用常見家庭情境，下面再微調細項</div>
+        </div>
+      </div>
+      <span class="section-toggle-icon">▾</span>
+    </div>
+    <div class="section-body">
+      <div class="quick-settings">
+        <button class="quick-template" type="button" onclick="applyWorkTemplate('basic')"><strong>基本家務版</strong><span>清潔、洗衣、三餐</span></button>
+        <button class="quick-template" type="button" onclick="applyWorkTemplate('kids')"><strong>有小孩家庭版</strong><span>家務＋兒童接送＋洗澡睡覺</span></button>
+        <button class="quick-template" type="button" onclick="applyWorkTemplate('full')"><strong>完整管理版</strong><span>家務＋採買＋支出＋簽名＋備註</span></button>
+      </div>
+      <div class="work-tools">
+        <input class="work-search" id="workSearch" type="search" placeholder="搜尋工作項目，例如：洗衣、採買、簽名" oninput="filterWorkItems(this.value)">
+        <span class="work-count" id="enabledWorkCount">已啟用 0 個欄位</span>
+        <button class="work-tool-btn" type="button" onclick="collapseStep3Sections()">全部收合</button>
+        <button class="work-tool-btn" type="button" onclick="expandCommonStep3Sections()">展開常用</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box">進階自訂欄位：只展開最常用區塊，兒童、嬰幼兒、採買與其他欄位預設收合。</div>
 
   <!-- 清潔工作 -->
   <div class="section-card">
@@ -771,7 +828,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="clean-daily">
           <div class="toggle-label"><div class="toggle-label-main">每日清掃 Daily Cleaning</div><div class="toggle-label-sub">掃地、拖地、整理</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('clean-daily',this)" title="細部設定">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'clean-daily')"><span class="toggle-track"></span></label>
           </div>
@@ -779,7 +836,7 @@ body{
         <div class="detail-panel" id="detail-clean-daily">
           <div class="detail-panel-title">⚙ 細部設定 — 每日清掃</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-clean-daily">
               <div class="detail-item on" data-val="掃地|Sweep|Sapu" onclick="toggleDetailItem(this)">✓ 掃地</div>
               <div class="detail-item on" data-val="拖地|Mop|Pel" onclick="toggleDetailItem(this)">✓ 拖地</div>
@@ -790,9 +847,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-clean-daily">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -801,7 +858,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="clean-bathroom">
           <div class="toggle-label"><div class="toggle-label-main">廁所清潔 Bathroom</div><div class="toggle-label-sub">馬桶、洗手台、地板</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('clean-bathroom',this)" title="細部設定">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'clean-bathroom')"><span class="toggle-track"></span></label>
           </div>
@@ -809,7 +866,7 @@ body{
         <div class="detail-panel" id="detail-clean-bathroom">
           <div class="detail-panel-title">⚙ 細部設定 — 廁所清潔</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-clean-bathroom">
               <div class="detail-item on" data-val="馬桶|Toilet|WC" onclick="toggleDetailItem(this)">✓ 馬桶</div>
               <div class="detail-item on" data-val="洗手台|Sink|Wastafel" onclick="toggleDetailItem(this)">✓ 洗手台</div>
@@ -820,9 +877,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-clean-bathroom">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -831,7 +888,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="clean-kitchen">
           <div class="toggle-label"><div class="toggle-label-main">廚房清潔 Kitchen</div><div class="toggle-label-sub">流理台、瓦斯爐、油煙機</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('clean-kitchen',this)" title="細部設定">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'clean-kitchen')"><span class="toggle-track"></span></label>
           </div>
@@ -839,7 +896,7 @@ body{
         <div class="detail-panel" id="detail-clean-kitchen">
           <div class="detail-panel-title">⚙ 細部設定 — 廚房清潔</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-clean-kitchen">
               <div class="detail-item on" data-val="流理台|Countertop|Meja dapur" onclick="toggleDetailItem(this)">✓ 流理台</div>
               <div class="detail-item on" data-val="瓦斯爐|Stove|Kompor" onclick="toggleDetailItem(this)">✓ 瓦斯爐</div>
@@ -851,9 +908,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-clean-kitchen">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -862,7 +919,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="clean-window">
           <div class="toggle-label"><div class="toggle-label-main">窗戶擦拭 Window Cleaning</div><div class="toggle-label-sub">玻璃、窗台、紗窗</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('clean-window',this)" title="細部設定">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'clean-window')"><span class="toggle-track"></span></label>
           </div>
@@ -870,7 +927,7 @@ body{
         <div class="detail-panel" id="detail-clean-window">
           <div class="detail-panel-title">⚙ 細部設定 — 窗戶擦拭</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-clean-window">
               <div class="detail-item on" data-val="玻璃|Glass|Kaca" onclick="toggleDetailItem(this)">✓ 玻璃</div>
               <div class="detail-item on" data-val="窗台|Sill|Kusen" onclick="toggleDetailItem(this)">✓ 窗台</div>
@@ -879,9 +936,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">頻率說明欄</div>
+            <div class="detail-sub-label" data-label-key="freq">頻率說明欄</div>
             <div class="detail-item-grid" id="note-clean-window">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
               <div class="detail-item" data-val="show-freq" onclick="toggleDetailItem(this)">顯示頻率欄</div>
             </div>
           </div>
@@ -891,7 +948,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="clean-vacuum">
           <div class="toggle-label"><div class="toggle-label-main">吸塵器 Vacuuming</div><div class="toggle-label-sub">地毯、沙發、床底</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('clean-vacuum',this)" title="細部設定">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'clean-vacuum')"><span class="toggle-track"></span></label>
           </div>
@@ -899,7 +956,7 @@ body{
         <div class="detail-panel" id="detail-clean-vacuum">
           <div class="detail-panel-title">⚙ 細部設定 — 吸塵器</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-clean-vacuum">
               <div class="detail-item on" data-val="地毯|Carpet|Karpet" onclick="toggleDetailItem(this)">✓ 地毯</div>
               <div class="detail-item on" data-val="沙發|Sofa|Sofa" onclick="toggleDetailItem(this)">✓ 沙發</div>
@@ -909,9 +966,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-clean-vacuum">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -941,7 +998,7 @@ body{
             <div class="toggle-label-main">早餐 Breakfast / Sarapan / Bữa sáng</div>
             <div class="toggle-label-sub">備餐、盛盤、收拾</div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:5px;">
               <input class="time-edit-input" type="time" id="time-meal-breakfast-s" value="07:00">
               <span style="color:var(--muted);font-size:12px;">–</span>
@@ -954,14 +1011,14 @@ body{
         <div class="detail-panel" id="detail-meal-breakfast">
           <div class="detail-panel-title">⚙ 細部設定 — 早餐</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-meal-breakfast">
               <div class="detail-item on" data-val="menu" onclick="toggleDetailItem(this)">✓ 菜色欄</div>
               <div class="detail-item on" data-val="prepared" onclick="toggleDetailItem(this)">✓ 備餐完成✓</div>
               <div class="detail-item on" data-val="cleaned" onclick="toggleDetailItem(this)">✓ 收拾完畢✓</div>
               <div class="detail-item on" data-val="leftovers" onclick="toggleDetailItem(this)">✓ 剩菜處理✓</div>
               <div class="detail-item" data-val="portions" onclick="toggleDetailItem(this)">份量記錄</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -973,7 +1030,7 @@ body{
             <div class="toggle-label-main">午餐 Lunch / Makan Siang / Bữa trưa</div>
             <div class="toggle-label-sub">備餐、盛盤、收拾</div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:5px;">
               <input class="time-edit-input" type="time" id="time-meal-lunch-s" value="12:00">
               <span style="color:var(--muted);font-size:12px;">–</span>
@@ -986,14 +1043,14 @@ body{
         <div class="detail-panel" id="detail-meal-lunch">
           <div class="detail-panel-title">⚙ 細部設定 — 午餐</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-meal-lunch">
               <div class="detail-item on" data-val="menu" onclick="toggleDetailItem(this)">✓ 菜色欄</div>
               <div class="detail-item on" data-val="prepared" onclick="toggleDetailItem(this)">✓ 備餐完成✓</div>
               <div class="detail-item on" data-val="cleaned" onclick="toggleDetailItem(this)">✓ 收拾完畢✓</div>
               <div class="detail-item on" data-val="leftovers" onclick="toggleDetailItem(this)">✓ 剩菜處理✓</div>
               <div class="detail-item" data-val="portions" onclick="toggleDetailItem(this)">份量記錄</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1005,7 +1062,7 @@ body{
             <div class="toggle-label-main">晚餐 Dinner / Makan Malam / Bữa tối</div>
             <div class="toggle-label-sub">備餐、盛盤、收拾</div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <div class="time-inputs-wrap" style="display:flex;align-items:center;gap:5px;">
               <input class="time-edit-input" type="time" id="time-meal-dinner-s" value="18:00">
               <span style="color:var(--muted);font-size:12px;">–</span>
@@ -1018,14 +1075,14 @@ body{
         <div class="detail-panel" id="detail-meal-dinner">
           <div class="detail-panel-title">⚙ 細部設定 — 晚餐</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-meal-dinner">
               <div class="detail-item on" data-val="menu" onclick="toggleDetailItem(this)">✓ 菜色欄</div>
               <div class="detail-item on" data-val="prepared" onclick="toggleDetailItem(this)">✓ 備餐完成✓</div>
               <div class="detail-item on" data-val="cleaned" onclick="toggleDetailItem(this)">✓ 收拾完畢✓</div>
               <div class="detail-item on" data-val="leftovers" onclick="toggleDetailItem(this)">✓ 剩菜處理✓</div>
               <div class="detail-item" data-val="portions" onclick="toggleDetailItem(this)">份量記錄</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1037,7 +1094,7 @@ body{
             <div class="toggle-label-main">點心 Snack / Camilan / Ăn vặt</div>
             <div class="toggle-label-sub">下午茶、宵夜</div>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('meal-snack',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'meal-snack')"><span class="toggle-track"></span></label>
           </div>
@@ -1045,11 +1102,11 @@ body{
         <div class="detail-panel" id="detail-meal-snack">
           <div class="detail-panel-title">⚙ 細部設定 — 點心</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-meal-snack">
               <div class="detail-item on" data-val="menu" onclick="toggleDetailItem(this)">✓ 品項欄</div>
               <div class="detail-item on" data-val="prepared" onclick="toggleDetailItem(this)">✓ 備好✓</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1075,7 +1132,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="laundry-wash">
           <div class="toggle-label"><div class="toggle-label-main">洗衣 Laundry / Mencuci / Giặt đồ</div><div class="toggle-label-sub">手洗或機洗</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('laundry-wash',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'laundry-wash')"><span class="toggle-track"></span></label>
           </div>
@@ -1083,7 +1140,7 @@ body{
         <div class="detail-panel" id="detail-laundry-wash">
           <div class="detail-panel-title">⚙ 細部設定 — 洗衣</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-laundry-wash">
               <div class="detail-item on" data-val="手洗|Hand wash|Cuci tangan" onclick="toggleDetailItem(this)">✓ 手洗</div>
               <div class="detail-item on" data-val="機洗|Machine|Mesin cuci" onclick="toggleDetailItem(this)">✓ 機洗</div>
@@ -1094,9 +1151,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-laundry-wash">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1105,7 +1162,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="laundry-fold">
           <div class="toggle-label"><div class="toggle-label-main">曬衣 / 折疊收納 Folding</div><div class="toggle-label-sub">晾曬、折疊、歸位</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('laundry-fold',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'laundry-fold')"><span class="toggle-track"></span></label>
           </div>
@@ -1113,7 +1170,7 @@ body{
         <div class="detail-panel" id="detail-laundry-fold">
           <div class="detail-panel-title">⚙ 細部設定 — 曬衣/折疊</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-laundry-fold">
               <div class="detail-item on" data-val="晾曬完|Hung|Dijemur" onclick="toggleDetailItem(this)">✓ 晾曬完</div>
               <div class="detail-item on" data-val="折疊好|Folded|Dilipat" onclick="toggleDetailItem(this)">✓ 折疊好</div>
@@ -1123,9 +1180,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-laundry-fold">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1134,7 +1191,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="laundry-iron">
           <div class="toggle-label"><div class="toggle-label-main">燙衣 Ironing / Setrika / Là ủi</div><div class="toggle-label-sub">需燙衣物</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('laundry-iron',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'laundry-iron')"><span class="toggle-track"></span></label>
           </div>
@@ -1142,7 +1199,7 @@ body{
         <div class="detail-panel" id="detail-laundry-iron">
           <div class="detail-panel-title">⚙ 細部設定 — 燙衣</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-laundry-iron">
               <div class="detail-item on" data-val="完成|Done|Selesai" onclick="toggleDetailItem(this)">✓ 完成</div>
               <div class="detail-item on" data-val="數量|Qty|Jumlah" onclick="toggleDetailItem(this)">✓ 數量欄</div>
@@ -1152,9 +1209,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-laundry-iron">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1180,7 +1237,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="child-school">
           <div class="toggle-label"><div class="toggle-label-main">接送上下學 School Pick-up</div><div class="toggle-label-sub">上學、放學接送</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('child-school',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'child-school')"><span class="toggle-track"></span></label>
           </div>
@@ -1188,7 +1245,7 @@ body{
         <div class="detail-panel" id="detail-child-school">
           <div class="detail-panel-title">⚙ 細部設定 — 接送上下學</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-child-school">
               <div class="detail-item on" data-val="早上送校|Morning drop|Antar pagi" onclick="toggleDetailItem(this)">✓ 早上送校</div>
               <div class="detail-item on" data-val="下午接回|Afternoon pick|Jemput sore" onclick="toggleDetailItem(this)">✓ 下午接回</div>
@@ -1197,15 +1254,15 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">時間欄位</div>
+            <div class="detail-sub-label" data-label-key="child">時間欄位</div>
             <div class="detail-item-grid" id="time-child-school">
               <div class="detail-item on" data-val="show-time" onclick="toggleDetailItem(this)">✓ 顯示出發/到達時間欄</div>
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-child-school">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1214,7 +1271,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="child-homework">
           <div class="toggle-label"><div class="toggle-label-main">課後陪伴 Homework Help</div><div class="toggle-label-sub">作業、閱讀、遊戲</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('child-homework',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'child-homework')"><span class="toggle-track"></span></label>
           </div>
@@ -1222,7 +1279,7 @@ body{
         <div class="detail-panel" id="detail-child-homework">
           <div class="detail-panel-title">⚙ 細部設定 — 課後陪伴</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-child-homework">
               <div class="detail-item on" data-val="作業完成|HW done|PR selesai" onclick="toggleDetailItem(this)">✓ 作業完成</div>
               <div class="detail-item on" data-val="簽聯絡簿|Notebook signed|Buku ditandatangani" onclick="toggleDetailItem(this)">✓ 簽聯絡簿</div>
@@ -1232,9 +1289,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-child-homework">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1243,7 +1300,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="child-bath">
           <div class="toggle-label"><div class="toggle-label-main">兒童沐浴 Child Bathing</div><div class="toggle-label-sub">洗澡、更衣</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('child-bath',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'child-bath')"><span class="toggle-track"></span></label>
           </div>
@@ -1251,7 +1308,7 @@ body{
         <div class="detail-panel" id="detail-child-bath">
           <div class="detail-panel-title">⚙ 細部設定 — 兒童沐浴</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-child-bath">
               <div class="detail-item on" data-val="洗澡完|Bathed|Mandi" onclick="toggleDetailItem(this)">✓ 洗澡完</div>
               <div class="detail-item on" data-val="更換衣物|Changed|Ganti baju" onclick="toggleDetailItem(this)">✓ 更換衣物</div>
@@ -1261,9 +1318,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-child-bath">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1272,7 +1329,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="child-sleep">
           <div class="toggle-label"><div class="toggle-label-main">哄睡 / 午休 Nap Time</div><div class="toggle-label-sub">哄睡、夜間照料</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('child-sleep',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'child-sleep')"><span class="toggle-track"></span></label>
           </div>
@@ -1280,7 +1337,7 @@ body{
         <div class="detail-panel" id="detail-child-sleep">
           <div class="detail-panel-title">⚙ 細部設定 — 哄睡/午休</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-child-sleep">
               <div class="detail-item on" data-val="午休完成|Nap done|Tidur siang selesai" onclick="toggleDetailItem(this)">✓ 午休完成</div>
               <div class="detail-item on" data-val="夜間哄睡|Night sleep|Tidur malam" onclick="toggleDetailItem(this)">✓ 夜間哄睡</div>
@@ -1289,9 +1346,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-child-sleep">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1318,7 +1375,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-feed">
           <div class="toggle-label"><div class="toggle-label-main">餵奶 / 餵食 Feeding</div><div class="toggle-label-sub">母乳、配方奶、副食品</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-feed',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-feed')"><span class="toggle-track"></span></label>
           </div>
@@ -1326,7 +1383,7 @@ body{
         <div class="detail-panel" id="detail-baby-feed">
           <div class="detail-panel-title">⚙ 細部設定 — 餵奶/餵食</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-baby-feed">
               <div class="detail-item on" data-val="母乳|Breast milk|ASI" onclick="toggleDetailItem(this)">✓ 母乳</div>
               <div class="detail-item on" data-val="配方奶|Formula|Susu formula" onclick="toggleDetailItem(this)">✓ 配方奶</div>
@@ -1338,15 +1395,15 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">時間欄位</div>
+            <div class="detail-sub-label" data-label-key="child">時間欄位</div>
             <div class="detail-item-grid" id="time-baby-feed">
               <div class="detail-item on" data-val="show-time" onclick="toggleDetailItem(this)">✓ 顯示餵食時間欄</div>
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-baby-feed">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1356,7 +1413,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-diaper">
           <div class="toggle-label"><div class="toggle-label-main">換尿布 Diaper Change</div><div class="toggle-label-sub">更換、清潔、護膚</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-diaper',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-diaper')"><span class="toggle-track"></span></label>
           </div>
@@ -1364,7 +1421,7 @@ body{
         <div class="detail-panel" id="detail-baby-diaper">
           <div class="detail-panel-title">⚙ 細部設定 — 換尿布</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-baby-diaper">
               <div class="detail-item on" data-val="換尿布次數|Times changed|Ganti popok" onclick="toggleDetailItem(this)">✓ 換尿布次數</div>
               <div class="detail-item on" data-val="小便|Wet|Pipis" onclick="toggleDetailItem(this)">✓ 小便</div>
@@ -1374,9 +1431,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-baby-diaper">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1386,7 +1443,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-bath">
           <div class="toggle-label"><div class="toggle-label-main">嬰幼兒沐浴 Baby Bath</div><div class="toggle-label-sub">洗澡、洗頭、護膚</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-bath',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-bath')"><span class="toggle-track"></span></label>
           </div>
@@ -1394,7 +1451,7 @@ body{
         <div class="detail-panel" id="detail-baby-bath">
           <div class="detail-panel-title">⚙ 細部設定 — 嬰幼兒沐浴</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-baby-bath">
               <div class="detail-item on" data-val="洗澡完|Bathed|Mandi" onclick="toggleDetailItem(this)">✓ 洗澡完</div>
               <div class="detail-item on" data-val="洗頭|Hair wash|Keramas" onclick="toggleDetailItem(this)">✓ 洗頭</div>
@@ -1405,9 +1462,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-baby-bath">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1417,7 +1474,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-health">
           <div class="toggle-label"><div class="toggle-label-main">體溫 / 健康量測 Health Check</div><div class="toggle-label-sub">體溫、體重、健康觀察</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-health',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-health')"><span class="toggle-track"></span></label>
           </div>
@@ -1425,7 +1482,7 @@ body{
         <div class="detail-panel" id="detail-baby-health">
           <div class="detail-panel-title">⚙ 細部設定 — 體溫/健康量測</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-baby-health">
               <div class="detail-item on" data-val="體溫記錄|Temp record|Suhu" onclick="toggleDetailItem(this)">✓ 體溫記錄</div>
               <div class="detail-item on" data-val="精神狀況|Alertness|Kondisi" onclick="toggleDetailItem(this)">✓ 精神狀況</div>
@@ -1435,9 +1492,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-baby-health">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1447,7 +1504,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-sleep">
           <div class="toggle-label"><div class="toggle-label-main">嬰幼兒睡眠 Baby Sleep</div><div class="toggle-label-sub">午睡、夜眠、哄睡記錄</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-sleep',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-sleep')"><span class="toggle-track"></span></label>
           </div>
@@ -1455,7 +1512,7 @@ body{
         <div class="detail-panel" id="detail-baby-sleep">
           <div class="detail-panel-title">⚙ 細部設定 — 嬰幼兒睡眠</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-baby-sleep">
               <div class="detail-item on" data-val="午睡|Nap|Tidur siang" onclick="toggleDetailItem(this)">✓ 午睡</div>
               <div class="detail-item on" data-val="入睡時間|Sleep time|Waktu tidur" onclick="toggleDetailItem(this)">✓ 入睡時間</div>
@@ -1465,9 +1522,9 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">備注欄</div>
+            <div class="detail-sub-label" data-label-key="note">備註欄</div>
             <div class="detail-item-grid" id="note-baby-sleep">
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 顯示備註欄</div>
             </div>
           </div>
         </div>
@@ -1477,7 +1534,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="baby-outdoor">
           <div class="toggle-label"><div class="toggle-label-main">推車散步 Stroller Walk</div><div class="toggle-label-sub">戶外活動、曬太陽</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('baby-outdoor',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'baby-outdoor')"><span class="toggle-track"></span></label>
           </div>
@@ -1485,13 +1542,13 @@ body{
         <div class="detail-panel" id="detail-baby-outdoor">
           <div class="detail-panel-title">⚙ 細部設定 — 推車散步</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-baby-outdoor">
               <div class="detail-item on" data-val="完成|Done|Selesai" onclick="toggleDetailItem(this)">✓ 完成</div>
               <div class="detail-item on" data-val="時長|Duration|Durasi" onclick="toggleDetailItem(this)">✓ 時長欄</div>
               <div class="detail-item" data-val="曬太陽|Sun exposure|Berjemur" onclick="toggleDetailItem(this)">曬太陽</div>
               <div class="detail-item" data-val="防曬|Sunscreen|Tabir surya" onclick="toggleDetailItem(this)">防曬</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1517,7 +1574,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="errand-grocery">
           <div class="toggle-label"><div class="toggle-label-main">採買食材 Grocery Shopping</div><div class="toggle-label-sub">市場、超市採買</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('errand-grocery',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'errand-grocery')"><span class="toggle-track"></span></label>
           </div>
@@ -1525,13 +1582,13 @@ body{
         <div class="detail-panel" id="detail-errand-grocery">
           <div class="detail-panel-title">⚙ 細部設定 — 採買食材</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-errand-grocery">
               <div class="detail-item on" data-val="完成|Done|Selesai" onclick="toggleDetailItem(this)">✓ 完成勾選</div>
               <div class="detail-item on" data-val="採買清單欄|Shopping list|Daftar belanja" onclick="toggleDetailItem(this)">✓ 採買清單欄</div>
               <div class="detail-item on" data-val="花費金額|Amount spent|Jumlah pengeluaran" onclick="toggleDetailItem(this)">✓ 花費金額欄</div>
               <div class="detail-item" data-val="市場/超市|Market/Supermarket|Pasar/Supermarket" onclick="toggleDetailItem(this)">採買地點欄</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1540,7 +1597,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="errand-plant">
           <div class="toggle-label"><div class="toggle-label-main">植物澆水 Plant Watering</div><div class="toggle-label-sub">室內植物、陽台盆栽</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('errand-plant',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'errand-plant')"><span class="toggle-track"></span></label>
           </div>
@@ -1548,13 +1605,13 @@ body{
         <div class="detail-panel" id="detail-errand-plant">
           <div class="detail-panel-title">⚙ 細部設定 — 植物澆水</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的勾選項目</div>
+            <div class="detail-sub-label" data-label-key="items">日誌中顯示的勾選項目</div>
             <div class="detail-item-grid" id="items-errand-plant">
               <div class="detail-item on" data-val="完成|Done|Selesai" onclick="toggleDetailItem(this)">✓ 完成勾選</div>
               <div class="detail-item" data-val="室內植物|Indoor plants|Tanaman dalam" onclick="toggleDetailItem(this)">室內植物</div>
               <div class="detail-item" data-val="陽台盆栽|Balcony pots|Pot balkon" onclick="toggleDetailItem(this)">陽台盆栽</div>
               <div class="detail-item" data-val="施肥|Fertilize|Pupuk" onclick="toggleDetailItem(this)">施肥</div>
-              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1563,7 +1620,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="errand-other">
           <div class="toggle-label"><div class="toggle-label-main">其他雜務 Other Tasks</div><div class="toggle-label-sub">跑腿、整理庭院</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('errand-other',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'errand-other')"><span class="toggle-track"></span></label>
           </div>
@@ -1571,7 +1628,7 @@ body{
         <div class="detail-panel" id="detail-errand-other">
           <div class="detail-panel-title">⚙ 細部設定 — 其他雜務</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">日誌中顯示的欄位</div>
+            <div class="detail-sub-label" data-label-key="cols">日誌中顯示的欄位</div>
             <div class="detail-item-grid" id="items-errand-other">
               <div class="detail-item on" data-val="完成|Done|Selesai" onclick="toggleDetailItem(this)">✓ 完成勾選</div>
               <div class="detail-item on" data-val="show-note" onclick="toggleDetailItem(this)">✓ 說明欄</div>
@@ -1592,7 +1649,7 @@ body{
         <span class="section-icon">📊</span>
         <div>
           <div class="section-title">其他記錄欄位</div>
-          <div class="section-subtitle">特殊事件、備注、簽名</div>
+          <div class="section-subtitle">特殊事件、備註、簽名</div>
         </div>
       </div>
       <span class="section-toggle-icon">▾</span>
@@ -1602,7 +1659,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="sec-expense">
           <div class="toggle-label"><div class="toggle-label-main">費用支出記錄</div><div class="toggle-label-sub">採買金額、找零記錄</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('sec-expense',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'sec-expense')"><span class="toggle-track"></span></label>
           </div>
@@ -1610,18 +1667,18 @@ body{
         <div class="detail-panel" id="detail-sec-expense">
           <div class="detail-panel-title">⚙ 細部設定 — 費用支出記錄</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">顯示欄位</div>
+            <div class="detail-sub-label" data-label-key="clock">顯示欄位</div>
             <div class="detail-item-grid" id="items-sec-expense">
               <div class="detail-item on" data-val="item" onclick="toggleDetailItem(this)">✓ 項目欄</div>
               <div class="detail-item on" data-val="desc" onclick="toggleDetailItem(this)">✓ 說明欄</div>
               <div class="detail-item on" data-val="amount" onclick="toggleDetailItem(this)">✓ 金額欄</div>
               <div class="detail-item on" data-val="change" onclick="toggleDetailItem(this)">✓ 找零欄</div>
-              <div class="detail-item on" data-val="note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
               <div class="detail-item on" data-val="total" onclick="toggleDetailItem(this)">✓ 合計列</div>
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">顯示筆數</div>
+            <div class="detail-sub-label" data-label-key="rows">顯示筆數</div>
             <div class="detail-item-grid" id="rows-sec-expense" data-single="1">
               <div class="detail-item" data-val="2" onclick="toggleDetailItem(this)">2 筆</div>
               <div class="detail-item on" data-val="3" onclick="toggleDetailItem(this)">✓ 3 筆</div>
@@ -1635,7 +1692,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="sec-notes">
           <div class="toggle-label"><div class="toggle-label-main">特殊事件記錄</div><div class="toggle-label-sub">訪客、異常、待回報事項</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('sec-notes',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'sec-notes')"><span class="toggle-track"></span></label>
           </div>
@@ -1643,7 +1700,7 @@ body{
         <div class="detail-panel" id="detail-sec-notes">
           <div class="detail-panel-title">⚙ 細部設定 — 特殊事件記錄</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">記錄行數</div>
+            <div class="detail-sub-label" data-label-key="rows">記錄行數</div>
             <div class="detail-item-grid" id="rows-sec-notes" data-single="1">
               <div class="detail-item" data-val="1" onclick="toggleDetailItem(this)">1 行</div>
               <div class="detail-item on" data-val="2" onclick="toggleDetailItem(this)">✓ 2 行</div>
@@ -1656,7 +1713,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head on" data-sec="sec-signature">
           <div class="toggle-label"><div class="toggle-label-main">簽名欄</div><div class="toggle-label-sub">幫傭 ＋ 雇主簽名</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('sec-signature',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" checked onchange="toggleWorkRow(this,'sec-signature')"><span class="toggle-track"></span></label>
           </div>
@@ -1664,7 +1721,7 @@ body{
         <div class="detail-panel" id="detail-sec-signature">
           <div class="detail-panel-title">⚙ 細部設定 — 簽名欄</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">顯示的簽名欄位</div>
+            <div class="detail-sub-label" data-label-key="sig">顯示的簽名欄位</div>
             <div class="detail-item-grid" id="items-sec-signature">
               <div class="detail-item on" data-val="helper" onclick="toggleDetailItem(this)">✓ 幫傭簽名</div>
               <div class="detail-item on" data-val="employer" onclick="toggleDetailItem(this)">✓ 雇主確認</div>
@@ -1672,7 +1729,7 @@ body{
             </div>
           </div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">簽名欄下方顯示</div>
+            <div class="detail-sub-label" data-label-key="sig-sub">簽名欄下方顯示</div>
             <div class="detail-item-grid" id="sub-sec-signature">
               <div class="detail-item on" data-val="name" onclick="toggleDetailItem(this)">✓ 姓名</div>
               <div class="detail-item on" data-val="date" onclick="toggleDetailItem(this)">✓ 日期</div>
@@ -1684,7 +1741,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="sec-inventory">
           <div class="toggle-label"><div class="toggle-label-main">物品盤點記錄</div><div class="toggle-label-sub">清潔用品、食材庫存待補</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('sec-inventory',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'sec-inventory')"><span class="toggle-track"></span></label>
           </div>
@@ -1692,7 +1749,7 @@ body{
         <div class="detail-panel" id="detail-sec-inventory">
           <div class="detail-panel-title">⚙ 細部設定 — 物品盤點</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">顯示筆數</div>
+            <div class="detail-sub-label" data-label-key="rows">顯示筆數</div>
             <div class="detail-item-grid" id="rows-sec-inventory" data-single="1">
               <div class="detail-item" data-val="2" onclick="toggleDetailItem(this)">2 筆</div>
               <div class="detail-item on" data-val="3" onclick="toggleDetailItem(this)">✓ 3 筆</div>
@@ -1705,7 +1762,7 @@ body{
       <div class="work-item-wrap">
         <div class="toggle-row-head" data-sec="sec-checkin">
           <div class="toggle-label"><div class="toggle-label-main">工時打卡記錄</div><div class="toggle-label-sub">上班/下班時間確認</div></div>
-          <div style="display:flex;align-items:center;gap:6px;">
+          <div class="toggle-row-actions">
             <button class="detail-toggle-btn" onclick="toggleDetail('sec-checkin',this)">⚙ 細項</button>
             <label class="toggle-switch"><input type="checkbox" onchange="toggleWorkRow(this,'sec-checkin')"><span class="toggle-track"></span></label>
           </div>
@@ -1713,12 +1770,12 @@ body{
         <div class="detail-panel" id="detail-sec-checkin">
           <div class="detail-panel-title">⚙ 細部設定 — 工時打卡</div>
           <div class="detail-sub-group">
-            <div class="detail-sub-label">顯示欄位</div>
+            <div class="detail-sub-label" data-label-key="clock">顯示欄位</div>
             <div class="detail-item-grid" id="items-sec-checkin">
               <div class="detail-item on" data-val="clock-in" onclick="toggleDetailItem(this)">✓ 上班時間</div>
               <div class="detail-item on" data-val="clock-out" onclick="toggleDetailItem(this)">✓ 下班時間</div>
               <div class="detail-item" data-val="total-hours" onclick="toggleDetailItem(this)">合計工時欄</div>
-              <div class="detail-item on" data-val="note" onclick="toggleDetailItem(this)">✓ 備注欄</div>
+              <div class="detail-item on" data-val="note" onclick="toggleDetailItem(this)">✓ 備註欄</div>
             </div>
           </div>
         </div>
@@ -1801,7 +1858,7 @@ body{
           <input class="form-input" id="cfg-contract-end" type="date">
         </div>
         <div class="form-group">
-          <label class="form-label">ARC 有效期限 <span class="optional">選填</span></label>
+          <label class="form-label">居留證有效期限（ARC） <span class="optional">選填</span></label>
           <input class="form-input" id="cfg-arc-exp" type="date">
         </div>
       </div>
@@ -1816,7 +1873,7 @@ body{
 
 <!-- ════════════════ STEP 5: SPECIAL NOTES ════════════════ -->
 <div class="step-page" id="step-5">
-  <div class="info-box">📝 注意事項與家規清單會印在表單內，提醒幫傭日常注意。所有欄位均為<strong>選填</strong>，不填則不顯示此區塊。</div>
+  <div class="info-box">📝 注意事項與家規清單會印在表單內，提醒幫傭日常注意。所有欄位均為<strong>選填</strong>，未填寫時未填寫時不顯示。</div>
 
   <div class="section-card">
     <div class="section-card-head" onclick="toggleCard(this)">
@@ -1887,7 +1944,7 @@ body{
 
   <div class="wizard-nav">
     <button class="btn-prev" onclick="gotoStep(4)">‹ 上一步</button>
-    <button class="btn-next" onclick="gotoStep(6)">最後一步：預覽生成 ›</button>
+    <button class="btn-next" onclick="gotoStep(6)">下一步：確認並生成 ›</button>
   </div>
 </div>
 
@@ -1919,12 +1976,13 @@ body{
 <div id="outputSection">
   <div class="output-header">
     <div>
-      <div class="output-title">✅ 日誌已生成！</div>
-      <div class="output-sub">您的客製化外籍幫傭工作日誌已準備完成</div>
+      <div class="output-title">✅ 已完成客製化日誌</div>
+      <div class="output-sub">你可以列印、存 PDF，或回到設定修改內容。</div>
     </div>
     <div class="output-actions">
-      <button class="btn-out" onclick="printOutput()">🖨️ 列印 / 存PDF</button>
-      <button class="btn-out btn-out-edit" onclick="document.getElementById('outputSection').style.display='none';gotoStep(1)">⟵ 返回修改</button>
+      <button class="btn-out" onclick="printOutput()">🖨 列印／存 PDF</button>
+      <button class="btn-out" onclick="downloadOutputHTML()">⬇ 下載 HTML</button>
+      <button class="btn-out btn-out-edit" onclick="returnToEdit()">✏ 返回修改</button>
     </div>
   </div>
   <div class="output-frame-wrap">
@@ -1974,6 +2032,8 @@ const TOTAL_STEPS = 6;
 const SAVE_KEY = 'helper-log-wizard-v1';
 let saveTimer = null;
 let lastSaveHash = '';
+let lastGeneratedHTML = '';
+let lastEditStep = 6;
 
 function gotoStep(n) {
   document.querySelectorAll('.step-page').forEach(p => p.classList.remove('active'));
@@ -1996,6 +2056,7 @@ function gotoStep(n) {
     if (s === n) el.classList.add('active');
   });
   currentStep = n;
+  updateMobileStepStatus(n);
   if (n === 6) buildSummary();
   window.scrollTo({top:0,behavior:'smooth'});
   scheduleSave();
@@ -2039,7 +2100,22 @@ function toggleDetail(sec, btn) {
   const isOpen = panel.classList.toggle('open');
   const head = btn.closest('.toggle-row-head');
   if (head) head.classList.toggle('detail-open', isOpen);
-  btn.textContent = isOpen ? '✕ 關閉' : '⚙ 細項';
+  btn.textContent = isOpen ? getStr('detailClose') : getStr('detailOpen');
+}
+
+// Auto-suggest sublang when wizard UI lang changes (e.g. switching to ID → suggest Bahasa)
+function _syncSublangWithLang(lang) {
+  const langToSublang = { id:'id', vi:'vi', en:'en' };
+  const match = langToSublang[lang];
+  if (!match) return;
+  const sublangGroup = document.getElementById('cfg-sublang');
+  if (!sublangGroup) return;
+  const noneChip  = sublangGroup.querySelector('.chip-option[data-val="none"]');
+  const matchChip = sublangGroup.querySelector(`.chip-option[data-val="${match}"]`);
+  if (noneChip && noneChip.classList.contains('selected')) {
+    noneChip.classList.remove('selected');
+    if (matchChip) matchChip.classList.add('selected');
+  }
 }
 
 function toggleDetailItem(el) {
@@ -2069,11 +2145,109 @@ function toggleWorkRow(cb, sec) {
         panel.classList.remove('open');
         head.classList.remove('detail-open');
         const btn = head.querySelector('.detail-toggle-btn');
-        if (btn) btn.textContent = '⚙ 細項';
+        if (btn) btn.textContent = getStr('detailOpen');
       }
     }
   }
+  if (head) updateEnableStatus(head);
   scheduleSave();
+}
+
+function ensureEnableStatusLabels() {
+  document.querySelectorAll('.toggle-row-head[data-sec]').forEach(head => {
+    const actions = head.querySelector('.toggle-row-actions') || head.lastElementChild;
+    if (!actions || actions.querySelector('.enable-status')) return;
+    const status = document.createElement('span');
+    status.className = 'enable-status';
+    actions.insertBefore(status, actions.querySelector('.toggle-switch') || actions.firstChild);
+  });
+  updateEnableStatus();
+}
+
+function updateEnableStatus(scope) {
+  const heads = scope ? [scope] : document.querySelectorAll('.toggle-row-head[data-sec]');
+  heads.forEach(head => {
+    const cb = head.querySelector('input[type=checkbox]');
+    const status = head.querySelector('.enable-status');
+    if (status && cb) status.textContent = cb.checked ? '已啟用' : '未啟用';
+  });
+  updateEnabledWorkCount();
+}
+
+function updateEnabledWorkCount() {
+  const el = document.getElementById('enabledWorkCount');
+  if (!el) return;
+  el.textContent = '已啟用 ' + getEnabledWorkCount() + ' 個欄位';
+}
+
+function getEnabledWorkCount() {
+  return [...document.querySelectorAll('.toggle-row-head[data-sec] input[type=checkbox]')].filter(cb => cb.checked).length;
+}
+
+function updateMobileStepStatus(n) {
+  const el = document.getElementById('mobileStepStatus');
+  if (!el) return;
+  const labels = ['基本資訊','版面外觀','工作欄位','雇主聯絡','注意事項','確認生成'];
+  el.textContent = '目前步驟 ' + n + ' / ' + TOTAL_STEPS + '：' + (labels[n-1] || '');
+}
+
+function setWorkSection(sec, enabled) {
+  const head = document.querySelector(`.toggle-row-head[data-sec="${sec}"]`);
+  if (!head) return;
+  const cb = head.querySelector('input[type=checkbox]');
+  if (!cb) return;
+  cb.checked = enabled;
+  toggleWorkRow(cb, sec);
+}
+
+const WORK_TEMPLATES = {
+  basic: ['clean-daily','clean-bathroom','clean-kitchen','meal-breakfast','meal-lunch','meal-dinner','laundry-wash','laundry-fold'],
+  kids: ['clean-daily','clean-bathroom','clean-kitchen','meal-breakfast','meal-lunch','meal-dinner','laundry-wash','laundry-fold','child-school','child-bath','child-sleep'],
+  full: ['clean-daily','clean-bathroom','clean-kitchen','clean-window','clean-vacuum','meal-breakfast','meal-lunch','meal-dinner','meal-snack','laundry-wash','laundry-fold','laundry-iron','child-school','child-homework','child-bath','child-sleep','errand-grocery','errand-plant','errand-other','sec-expense','sec-notes','sec-signature','sec-inventory','sec-checkin']
+};
+
+function applyWorkTemplate(name) {
+  const selected = new Set(WORK_TEMPLATES[name] || []);
+  document.querySelectorAll('.toggle-row-head[data-sec]').forEach(head => setWorkSection(head.dataset.sec, selected.has(head.dataset.sec)));
+  expandCommonStep3Sections();
+  updateEnableStatus();
+  scheduleSave();
+}
+
+function setCardCollapsed(card, collapsed) {
+  if (!card) return;
+  const head = card.querySelector(':scope > .section-card-head');
+  const body = card.querySelector(':scope > .section-body');
+  if (!head || !body) return;
+  head.classList.toggle('collapsed', collapsed);
+  body.classList.toggle('hidden', collapsed);
+}
+
+function getStep3Cards() {
+  return [...document.querySelectorAll('#step-3 > .section-card')];
+}
+
+function collapseStep3Sections() {
+  getStep3Cards().slice(1).forEach(card => setCardCollapsed(card, true));
+}
+
+function expandCommonStep3Sections() {
+  getStep3Cards().forEach((card, index) => setCardCollapsed(card, index > 3));
+}
+
+function applyDefaultCollapsedSections() {
+  expandCommonStep3Sections();
+  ['仲介 / 機構資訊','家電與設備使用說明'].forEach(title => {
+    const head = [...document.querySelectorAll('.section-card-head')].find(h => h.textContent.includes(title));
+    if (head) setCardCollapsed(head.closest('.section-card'), true);
+  });
+}
+
+function filterWorkItems(keyword) {
+  const q = (keyword || '').trim().toLowerCase();
+  document.querySelectorAll('#step-3 .work-item-wrap').forEach(wrap => {
+    wrap.style.display = !q || wrap.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
 }
 
 function getDetailItems(groupId) {
@@ -2264,23 +2438,191 @@ function buildSummary() {
     <div class="summary-item"><div class="summary-item-label">啟用欄位</div><div class="summary-item-value">${allSecs} 個</div></div>
     <div class="summary-item"><div class="summary-item-label">雇主聯絡人</div><div class="summary-item-value">${contacts.length > 0 ? contacts.length+' 筆' : '（未填）'}</div></div>
     <div class="summary-item"><div class="summary-item-label">注意事項</div><div class="summary-item-value">${rules.length > 0 ? rules.length+' 項' : '（未填）'}</div></div>
-    <div class="summary-item"><div class="summary-item-label">工作型態</div><div class="summary-item-value">${(getChipVal('cfg-work-type')||'live-in')==='live-in'?'住家型（全天）':'外住型（定時）'}</div></div>
+    <div class="summary-item"><div class="summary-item-label">工作型態</div><div class="summary-item-value">${(getChipVal('cfg-work-type')||'live-in')==='live-in'?'住家型（依約定時段）':'外住型（定時）'}</div></div>
   `;
 }
 
 /* ══════════════════════════════════════
    WIZARD LANGUAGE
 ══════════════════════════════════════ */
+let currentWizLang = 'zh';
+
+// All UI strings by language
+const WIZ_STR = {
+  zh: {
+    detailOpen:   '⚙ 細項',
+    detailClose:  '✕ 關閉',
+    detailTitle:  '⚙ 細部設定',
+    subLabelItems:'日誌中顯示的勾選項目',
+    subLabelNote: '備註欄',
+    subLabelCols: '日誌中顯示的欄位',
+    subLabelRows: '列數',
+    subLabelFreq: '頻率說明欄',
+    subLabelSig:  '簽名欄',
+    subLabelSigSub:'簽名欄附加',
+    subLabelClock:'打卡欄位',
+    subLabelInv:  '庫存欄位',
+    subLabelExp:  '費用欄位',
+    subLabelTime: '時間記錄',
+    subLabelDisp: '注意事項顯示方式',
+    subLabelCB:   '注意事項勾選框',
+    subLabelChild:'時間欄',
+    saved:        '已自動儲存',
+    saving:       '儲存中…',
+    unsaved:      '尚未儲存',
+    restoreMsg:   '💾 <strong>發現上次未完成的設定</strong>，是否要還原？',
+    restoreYes:   '✅ 還原',
+    restoreNo:    '✕ 忽略',
+    prevBtn:      '‹ 上一步',
+    toastSaved:   '✅ 已自動儲存',
+    toastRestored:'✅ 設定已還原',
+    generateBtn:  '✨ 生成客製化日誌',
+    generating:   '⏳ 生成中…',
+    regenerate:   '🔄 重新生成',
+    confirmEmpty: '⚠️ 目前沒有啟用任何工作欄位，確定要生成空白日誌嗎？\n\n建議回到「工作欄位」步驟開啟需要的項目。',
+    errorGenerate:'生成失敗：',
+    errorRestore: '還原失敗：',
+  },
+  en: {
+    detailOpen:   '⚙ Details',
+    detailClose:  '✕ Close',
+    detailTitle:  '⚙ Detail Settings',
+    subLabelItems:'Checkboxes shown in log',
+    subLabelNote: 'Notes field',
+    subLabelCols: 'Fields shown in log',
+    subLabelRows: 'Row count',
+    subLabelFreq: 'Frequency column',
+    subLabelSig:  'Signature fields',
+    subLabelSigSub:'Signature extras',
+    subLabelClock:'Clock-in fields',
+    subLabelInv:  'Inventory fields',
+    subLabelExp:  'Expense fields',
+    subLabelTime: 'Time record',
+    subLabelDisp: 'Rules display style',
+    subLabelCB:   'Rules checkboxes',
+    subLabelChild:'Time column',
+    saved:        'Auto-saved',
+    saving:       'Saving…',
+    unsaved:      'Not saved',
+    restoreMsg:   '💾 <strong>Previous settings found</strong> — restore?',
+    restoreYes:   '✅ Restore',
+    restoreNo:    '✕ Discard',
+    prevBtn:      '‹ Back',
+    toastSaved:   '✅ Auto-saved',
+    toastRestored:'✅ Settings restored',
+    generateBtn:  '✨ Generate Log',
+    generating:   '⏳ Generating…',
+    regenerate:   '🔄 Regenerate',
+    confirmEmpty: '⚠️ No work sections are enabled. Generate a blank log anyway?\n\nConsider going back to "Work Tasks" to enable sections.',
+    errorGenerate:'Generation failed: ',
+    errorRestore: 'Restore failed: ',
+  },
+  id: {
+    detailOpen:   '⚙ Detail',
+    detailClose:  '✕ Tutup',
+    detailTitle:  '⚙ Pengaturan Detail',
+    subLabelItems:'Centang yang ditampilkan',
+    subLabelNote: 'Kolom catatan',
+    subLabelCols: 'Kolom yang ditampilkan',
+    subLabelRows: 'Jumlah baris',
+    subLabelFreq: 'Kolom frekuensi',
+    subLabelSig:  'Kolom tanda tangan',
+    subLabelSigSub:'Tambahan tanda tangan',
+    subLabelClock:'Kolom absensi',
+    subLabelInv:  'Kolom inventaris',
+    subLabelExp:  'Kolom pengeluaran',
+    subLabelTime: 'Catatan waktu',
+    subLabelDisp: 'Tampilan peraturan',
+    subLabelCB:   'Centang peraturan',
+    subLabelChild:'Kolom waktu',
+    saved:        'Tersimpan otomatis',
+    saving:       'Menyimpan…',
+    unsaved:      'Belum tersimpan',
+    restoreMsg:   '💾 <strong>Ditemukan pengaturan sebelumnya</strong> — pulihkan?',
+    restoreYes:   '✅ Pulihkan',
+    restoreNo:    '✕ Abaikan',
+    prevBtn:      '‹ Kembali',
+    toastSaved:   '✅ Tersimpan otomatis',
+    toastRestored:'✅ Pengaturan dipulihkan',
+    generateBtn:  '✨ Buat Jurnal',
+    generating:   '⏳ Membuat…',
+    regenerate:   '🔄 Buat Ulang',
+    confirmEmpty: '⚠️ Belum ada tugas yang diaktifkan. Buat jurnal kosong?\n\nSilakan kembali ke "Tugas" untuk mengaktifkan item.',
+    errorGenerate:'Gagal membuat: ',
+    errorRestore: 'Gagal memulihkan: ',
+  },
+  vi: {
+    detailOpen:   '⚙ Chi tiết',
+    detailClose:  '✕ Đóng',
+    detailTitle:  '⚙ Cài đặt chi tiết',
+    subLabelItems:'Ô tick hiển thị trong nhật ký',
+    subLabelNote: 'Ô ghi chú',
+    subLabelCols: 'Cột hiển thị trong nhật ký',
+    subLabelRows: 'Số dòng',
+    subLabelFreq: 'Cột tần suất',
+    subLabelSig:  'Cột chữ ký',
+    subLabelSigSub:'Phụ chữ ký',
+    subLabelClock:'Cột chấm công',
+    subLabelInv:  'Cột tồn kho',
+    subLabelExp:  'Cột chi tiêu',
+    subLabelTime: 'Ghi chú thời gian',
+    subLabelDisp: 'Kiểu hiển thị lưu ý',
+    subLabelCB:   'Ô tick lưu ý',
+    subLabelChild:'Cột thời gian',
+    saved:        'Đã tự động lưu',
+    saving:       'Đang lưu…',
+    unsaved:      'Chưa lưu',
+    restoreMsg:   '💾 <strong>Tìm thấy cài đặt trước</strong> — khôi phục?',
+    restoreYes:   '✅ Khôi phục',
+    restoreNo:    '✕ Bỏ qua',
+    prevBtn:      '‹ Quay lại',
+    toastSaved:   '✅ Đã tự động lưu',
+    toastRestored:'✅ Đã khôi phục cài đặt',
+    generateBtn:  '✨ Tạo nhật ký',
+    generating:   '⏳ Đang tạo…',
+    regenerate:   '🔄 Tạo lại',
+    confirmEmpty: '⚠️ Chưa có mục công việc nào được bật. Tạo nhật ký trống?\n\nHãy quay lại "Công việc" để bật các mục.',
+    errorGenerate:'Tạo thất bại: ',
+    errorRestore: 'Khôi phục thất bại: ',
+  },
+};
+
+function getStr(key) {
+  return (WIZ_STR[currentWizLang] || WIZ_STR.zh)[key] || (WIZ_STR.zh)[key] || '';
+}
+
+// Map detail-sub-label data-key to string key
+const SUBLABEL_KEY_MAP = {
+  'items':   'subLabelItems',
+  'note':    'subLabelNote',
+  'cols':    'subLabelCols',
+  'rows':    'subLabelRows',
+  'freq':    'subLabelFreq',
+  'sig':     'subLabelSig',
+  'sig-sub': 'subLabelSigSub',
+  'clock':   'subLabelClock',
+  'inv':     'subLabelInv',
+  'exp':     'subLabelExp',
+  'time':    'subLabelTime',
+  'disp':    'subLabelDisp',
+  'cb':      'subLabelCB',
+  'child':   'subLabelChild',
+};
+
 function setWizLang(lang) {
+  currentWizLang = lang;
   document.querySelectorAll('.tlbtn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
   ['zh','en','id','vi'].forEach(l => {
     const show = l === lang;
     document.querySelectorAll(`.step-${l}`).forEach(el => el.style.display = show ? '' : 'none');
     document.querySelectorAll(`.wz-${l}`).forEach(el => el.style.display = show ? '' : 'none');
   });
-  // Update side nav and mobile tab bar
+
+  const s = WIZ_STR[lang] || WIZ_STR.zh;
+
+  // ── Side nav labels ──
   const navLabels = {
-    zh: ['基本資訊','版面外觀','工作欄位','雇主聯絡','注意事項','預覽生成'],
+    zh: ['基本資訊','版面外觀','工作欄位','雇主聯絡','注意事項','確認生成'],
     en: ['Basic Info','Appearance','Work Tasks','Contacts','Notes','Generate'],
     id: ['Info Dasar','Tampilan','Tugas','Kontak','Catatan','Buat'],
     vi: ['Thông tin','Giao diện','Công việc','Liên lạc','Lưu ý','Tạo'],
@@ -2294,31 +2636,97 @@ function setWizLang(lang) {
   const labels = navLabels[lang] || navLabels.zh;
   const tabs   = tabLabels[lang] || tabLabels.zh;
   document.querySelectorAll('.side-nav-item').forEach(el => {
-    const s = parseInt(el.dataset.sn);
-    if (s >= 1 && s <= 6) {
+    const sn = parseInt(el.dataset.sn);
+    if (sn >= 1 && sn <= 6) {
       const icon = el.querySelector('.sn-icon');
       const num  = el.querySelector('.sn-num');
       el.textContent = '';
       if (num)  el.appendChild(num);
       if (icon) el.appendChild(icon);
-      el.appendChild(document.createTextNode(' ' + labels[s-1]));
+      el.appendChild(document.createTextNode(' ' + labels[sn-1]));
     }
   });
   document.querySelectorAll('.mtab').forEach(el => {
-    const s = parseInt(el.dataset.mt);
-    if (s >= 1 && s <= 6) {
-      const numEl  = el.querySelector('.mtab-num');
-      const iconEl = el.querySelector('.mtab-icon');
-      const lblEl  = el.querySelector('.mtab-label');
-      if (lblEl) lblEl.textContent = tabs[s-1];
+    const mt = parseInt(el.dataset.mt);
+    if (mt >= 1 && mt <= 6) {
+      const lblEl = el.querySelector('.mtab-label');
+      if (lblEl) lblEl.textContent = tabs[mt-1];
     }
   });
+
+  // ── Detail toggle buttons (closed state) ──
+  document.querySelectorAll('.detail-toggle-btn').forEach(btn => {
+    const panel = btn.closest('.work-item-wrap,div')?.parentElement?.querySelector('.detail-panel');
+    // Find associated panel by looking at onclick attr
+    const onclick = btn.getAttribute('onclick') || '';
+    const m = onclick.match(/toggleDetail\('([^']+)'/);
+    const isOpen = m ? document.getElementById('detail-' + m[1])?.classList.contains('open') : false;
+    btn.textContent = isOpen ? s.detailClose : s.detailOpen;
+  });
+
+  // ── Detail panel section titles ──
+  document.querySelectorAll('.detail-panel-title').forEach(el => {
+    // Extract the section name after the dash (or use full)
+    const txt = el.textContent;
+    const dashIdx = txt.indexOf('—');
+    if (dashIdx !== -1) {
+      const sectionName = txt.substring(dashIdx + 1).trim();
+      el.textContent = s.detailTitle + ' — ' + sectionName;
+    } else {
+      el.textContent = s.detailTitle;
+    }
+  });
+
+  // ── Detail sub-labels (use data-label-key attribute) ──
+  document.querySelectorAll('.detail-sub-label[data-label-key]').forEach(el => {
+    const key = el.getAttribute('data-label-key');
+    const strKey = SUBLABEL_KEY_MAP[key];
+    if (strKey && s[strKey]) el.textContent = s[strKey];
+  });
+
+  // ── Save status text ──
+  const snSaveText = document.getElementById('snSaveText');
+  if (snSaveText) {
+    const dot = document.getElementById('snDot');
+    const isSaved = dot && dot.classList.contains('saved');
+    snSaveText.textContent = isSaved ? s.saved : s.unsaved;
+  }
+
+  // ── Restore banner ──
+  const banner = document.getElementById('restore-banner');
+  if (banner) {
+    const msgEl = banner.querySelector('.restore-msg');
+    const yesEl = banner.querySelector('.restore-yes');
+    const noEl  = banner.querySelector('.restore-no');
+    if (msgEl) msgEl.innerHTML = s.restoreMsg;
+    if (yesEl) yesEl.textContent = s.restoreYes;
+    if (noEl)  noEl.textContent  = s.restoreNo;
+  }
+
+  // ── Generate button ──
+  const genBtn = document.getElementById('generateBtn');
+  if (genBtn && !genBtn.disabled) {
+    genBtn.innerHTML = genBtn.innerHTML.includes('🔄') ? s.regenerate : s.generateBtn;
+  }
+
+  // ── Prev/Next nav buttons (data-nav-prev / data-nav-next) ──
+  document.querySelectorAll('[data-nav="prev"]').forEach(btn => {
+    btn.innerHTML = s.prevBtn;
+  });
+  document.querySelectorAll('[data-nav="next"]').forEach(btn => {
+    const key = btn.getAttribute('data-nav-label');
+    if (key && s[key]) btn.innerHTML = s[key];
+  });
+
+  // ── Auto-select sublang chip matching nationality when lang changes ──
+  _syncSublangWithLang(lang);
 }
 
 /* ══════════════════════════════════════
    GENERATE LOG
 ══════════════════════════════════════ */
 function generateLog() {
+  lastEditStep = currentStep;
   // 檢查是否至少有一個欄位啟用
   const enabledCount = ['clean-daily','clean-bathroom','clean-kitchen','clean-window','clean-vacuum',
     'meal-breakfast','meal-lunch','meal-dinner','meal-snack',
@@ -2329,15 +2737,16 @@ function generateLog() {
   ].filter(s => getSectionEnabled(s)).length;
   const hasCustom = (document.getElementById('cfg-custom-slots')?.value||'').trim().length > 0;
   if (enabledCount === 0 && !hasCustom) {
-    if (!confirm('⚠️ 目前沒有啟用任何工作欄位，確定要生成空白日誌嗎？\n\n建議回到「工作欄位」步驟開啟需要的項目。')) return;
+    if (!confirm(getStr('confirmEmpty'))) return;
   }
 
   const btn = document.getElementById('generateBtn');
-  btn.innerHTML = '⏳ 生成中…';
+  btn.innerHTML = getStr('generating');
   btn.disabled = true;
   setTimeout(() => {
     try {
       const html = buildLogHTML();
+      lastGeneratedHTML = html;
       const iframe = document.getElementById('outputFrame');
       iframe.srcdoc = html;
       document.getElementById('outputSection').style.display = 'block';
@@ -2346,14 +2755,34 @@ function generateLog() {
       const topOffset = (document.querySelector('.topbar')?.offsetHeight || 56) + 8;
       const y = outEl.getBoundingClientRect().top + window.scrollY - topOffset;
       window.scrollTo({ top: y, behavior: 'smooth' });
-      btn.innerHTML = '🔄 重新生成';
+      btn.innerHTML = getStr('regenerate');
       btn.disabled = false;
     } catch(e) {
       btn.disabled = false;
-      alert('生成失敗：' + e.message);
-      btn.innerHTML = '✨ 生成客製化日誌';
+      alert(getStr('errorGenerate') + e.message);
+      btn.innerHTML = getStr('generateBtn');
     }
   }, 200);
+}
+
+function downloadOutputHTML() {
+  if (!lastGeneratedHTML) lastGeneratedHTML = document.getElementById('outputFrame')?.srcdoc || '';
+  if (!lastGeneratedHTML) return;
+  const blob = new Blob([lastGeneratedHTML], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const name = (document.getElementById('cfg-org-name')?.value || '客製化日誌').trim().replace(/[\\/:*?"<>|]/g, '_');
+  a.href = url;
+  a.download = name + '.html';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function returnToEdit() {
+  document.getElementById('outputSection').style.display = 'none';
+  gotoStep(lastEditStep && lastEditStep >= 1 ? lastEditStep : 6);
 }
 
 function printOutput() {
@@ -2582,7 +3011,7 @@ function buildLogHTML() {
         <div style="margin-top:5px;display:flex;align-items:center;gap:4px;">
           <span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('其他','Other','Lain','Khác')}：</span>${inpText('160px')}
         </div>
-        ${showNote ? `<div style="margin-top:4px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
+        ${showNote ? `<div style="margin-top:4px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備註','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
       </td>
       <td style="padding:${rowPad};width:80px;text-align:center;">${cb(Bi('完成','Done','Selesai','Xong'),'Done','Selesai','Xong')}</td>
     </tr>`;
@@ -2627,7 +3056,7 @@ function buildLogHTML() {
           ${showCleaned  ? cb('收拾完畢','Cleaned up','Sudah beres','Đã dọn dẹp') : ''}
           ${showLeftover ? cb('剩菜處理','Leftovers','Sisa makanan','Đồ thừa') : ''}
         </div>
-        ${showNote ? `<div style="margin-top:4px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
+        ${showNote ? `<div style="margin-top:4px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備註','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
       </td>
     </tr>`;
   });
@@ -2666,7 +3095,7 @@ function buildLogHTML() {
         <div style="display:flex;flex-wrap:wrap;gap:4px 10px;">
           ${items.map(it => cb(it[0],it[1],it[2]||it[1],it[3]||it[1])).join('')}
         </div>
-        ${showNote ? `<div style="margin-top:5px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
+        ${showNote ? `<div style="margin-top:5px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備註','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
       </td>
     </tr>`;
   });
@@ -2711,7 +3140,7 @@ function buildLogHTML() {
           ${items.map(it => cb(it[0],it[1],it[2]||it[1],it[3]||it[1])).join('')}
         </div>
         ${showTime ? `<div style="margin-top:5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('出發','Depart','Berangkat','Khởi hành')}：</span>${inpText('70px')}<span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('到達','Arrive','Tiba','Đến nơi')}：</span>${inpText('70px')}</div>` : ''}
-        ${showNote ? `<div style="margin-top:5px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備注','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
+        ${showNote ? `<div style="margin-top:5px;display:flex;align-items:center;gap:4px;"><span style="font-weight:700;font-size:${Math.max(9,fs-2)}px;">${Bi('備註','Notes','Catatan','Ghi chú')}：</span>${inpText('160px')}</div>` : ''}
       </td>
     </tr>`;
   });
@@ -2783,7 +3212,7 @@ function buildLogHTML() {
     if (showDesc)   thCells += TH('width:22%;','說明','Description','Keterangan','Mô tả');
     if (showAmount) thCells += TH('width:18%;text-align:right;','金額（元）','Amount','Jumlah','Số tiền');
     if (showChange) thCells += TH('width:18%;text-align:right;','找零','Change','Kembalian','Tiền thối');
-    if (showNote)   thCells += TH('','備注','Notes','Catatan','Ghi chú');
+    if (showNote)   thCells += TH('','備註','Notes','Catatan','Ghi chú');
     const rows = Array.from({length:rowCount}, (_, i) => {
       const bg = i%2===1 && zebraOn ? theme.hrow : 'white';
       let tds = '';
@@ -2818,7 +3247,7 @@ function buildLogHTML() {
     if (showIn)    thCells += TH('width:28%;','上班時間','Clock In','Masuk','Giờ vào');
     if (showOut)   thCells += TH('width:28%;','下班時間','Clock Out','Keluar','Giờ ra');
     if (showTotal) thCells += TH('width:22%;','合計工時','Total Hrs','Total Jam','Tổng giờ');
-    if (showNote)  thCells += TH('','備注','Notes','Catatan','Ghi chú');
+    if (showNote)  thCells += TH('','備註','Notes','Catatan','Ghi chú');
     let tds = '';
     if (showIn)    tds += `<td style="padding:${rowPad};">${inpText('90%')}</td>`;
     if (showOut)   tds += `<td style="padding:${rowPad};">${inpText('90%')}</td>`;
@@ -2965,7 +3394,7 @@ function buildLogHTML() {
    AUTO-SAVE
 ══════════════════════════════════════ */
 function collectState() {
-  const state = { step: currentStep, fields: {}, chips: {}, toggles: {}, contacts: [], rules: [], theme: selectedTheme, ts: Date.now(), details: {} };
+  const state = { step: currentStep, wizLang: currentWizLang, fields: {}, chips: {}, toggles: {}, contacts: [], rules: [], theme: selectedTheme, ts: Date.now(), details: {} };
 
   ['cfg-org-name','cfg-org-addr','cfg-helper-name','cfg-footer-note','cfg-lang',
    'cfg-helper-nationality',
@@ -3061,6 +3490,8 @@ function applyState(state) {
     });
   });
   if (state.theme) selectTheme(state.theme);
+  updateEnableStatus();
+  if (state.wizLang) setWizLang(state.wizLang);
   if (state.contacts?.length) {
     document.getElementById('contactList').innerHTML = '';
     contactId = 0;
@@ -3104,8 +3535,8 @@ function updateSaveStatus(saved) {
   const dot = document.getElementById('snDot');
   const text = document.getElementById('snSaveText');
   if (!dot || !text) return;
-  if (saved) { dot.classList.add('saved'); text.textContent = '已自動儲存'; }
-  else { dot.classList.remove('saved'); text.textContent = '儲存中…'; }
+  if (saved) { dot.classList.add('saved'); text.textContent = getStr('saved'); }
+  else { dot.classList.remove('saved'); text.textContent = getStr('saving'); }
 }
 
 function doSave() {
@@ -3117,7 +3548,7 @@ function doSave() {
     if (hashJson === lastSaveHash) return;
     localStorage.setItem(SAVE_KEY, JSON.stringify(state));
     lastSaveHash = hashJson;
-    showToast('✅ 已自動儲存');
+    showToast(getStr('toastSaved'));
     updateSaveStatus(true);
   } catch(e) { console.warn('AutoSave failed:', e); }
 }
@@ -3136,8 +3567,8 @@ function restoreSave() {
     applyState(state);
     document.getElementById('restore-banner').style.display = 'none';
     if (state.step && state.step >= 1 && state.step <= TOTAL_STEPS) gotoStep(state.step);
-    showToast('✅ 設定已還原');
-  } catch(e) { alert('還原失敗：' + e.message); }
+    showToast(getStr('toastRestored'));
+  } catch(e) { alert(getStr('errorRestore') + e.message); }
 }
 
 function dismissRestore() {
@@ -3165,6 +3596,15 @@ document.addEventListener('DOMContentLoaded', () => {
   addContact();
   addRule();
 
+  ensureEnableStatusLabels();
+  applyDefaultCollapsedSections();
+  updateMobileStepStatus(currentStep);
+
+  // Initialize wizard language (zh default) — updates all dynamic text nodes
+  setWizLang('zh');
+  const snSaveText = document.getElementById('snSaveText');
+  if (snSaveText) snSaveText.textContent = getStr('unsaved');
+
   document.querySelectorAll('.time-edit-input').forEach(inp => {
     inp.addEventListener('mousedown', e => e.stopPropagation());
     inp.addEventListener('click', e => e.stopPropagation());
@@ -3184,15 +3624,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.addEventListener('input', scheduleSave);
   document.body.addEventListener('change', e => {
+    updateEnableStatus();
     scheduleSave();
-    // When main language changes, remove it from sublang selection to avoid confusion
     if (e.target && e.target.id === 'cfg-lang') {
+      // When main language changes, remove it from sublang to avoid redundancy
       const mainLang = e.target.value;
       const sublangGroup = document.getElementById('cfg-sublang');
       if (sublangGroup) {
         sublangGroup.querySelectorAll('.chip-option').forEach(chip => {
           if (chip.dataset.val === mainLang) chip.classList.remove('selected');
         });
+      }
+    }
+    if (e.target && e.target.id === 'cfg-helper-nationality') {
+      // When nationality changes, auto-suggest the matching sublang
+      const nat = e.target.value;
+      const natToLang = { id:'id', vn:'vi', ph:'en' };
+      const suggestLang = natToLang[nat];
+      if (suggestLang) {
+        const sublangGroup = document.getElementById('cfg-sublang');
+        const mainLang = document.getElementById('cfg-lang')?.value || 'zh';
+        if (sublangGroup && suggestLang !== mainLang) {
+          // Deselect 'none' if active
+          sublangGroup.querySelector('.chip-option[data-val="none"]')?.classList.remove('selected');
+          // Select the suggested lang chip
+          const chip = sublangGroup.querySelector(`.chip-option[data-val="${suggestLang}"]`);
+          if (chip && !chip.classList.contains('selected')) chip.classList.add('selected');
+        }
       }
     }
   });
