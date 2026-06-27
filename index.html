@@ -2,8 +2,8 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>外籍看護幫傭 能力評測系統 v25.5｜聘外看就上手</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>外籍看護幫傭 能力評測系統 v26.0｜聘外看就上手</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -134,6 +134,31 @@ body::after {
 .lang-btn:not(.active):hover { background: var(--surf2); color: var(--t1); }
 .lang-btn .lang-zh { display: block; font-size: 8px; opacity: .55; letter-spacing: .2px; margin-top: 1px; font-weight: 400; }
 
+.lang-select-wrap {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  color: var(--t2);
+  font-size: 11px;
+  font-weight: 700;
+}
+.lang-select {
+  appearance: none;
+  border: 1px solid var(--border2);
+  border-radius: 9px;
+  background: var(--surf2);
+  color: var(--t1);
+  padding: 7px 28px 7px 10px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  background-image: linear-gradient(45deg, transparent 50%, var(--accent) 50%), linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+
 /* ─────────────────────────────────────
    LAYOUT
 ───────────────────────────────────── */
@@ -209,6 +234,42 @@ body::after {
   max-width: 420px; margin: 0 auto 30px; letter-spacing: .2px;
 }
 
+/* ─── THREE-STEP HOME FLOW ─── */
+.home-step {
+  background: rgba(13,22,36,.72);
+  border: 1px solid var(--border);
+  border-radius: var(--r2);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.step-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.step-num {
+  flex: 0 0 auto;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(232,96,46,.12);
+  color: var(--accent);
+  border: 1px solid rgba(232,96,46,.24);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .6px;
+}
+.step-copy {
+  font-size: 12px;
+  color: var(--t2);
+  line-height: 1.6;
+  margin-top: -4px;
+}
+.home-step .sec-label { margin-bottom: 5px; }
+.home-step .job-grid,
+.home-step .mode-grid { margin-bottom: 0; }
+.home-step-start { padding-bottom: 18px; }
+
 /* ─── STATS ROW ─── */
 .stat-row {
   display: grid; grid-template-columns: repeat(4, 1fr);
@@ -280,6 +341,9 @@ body::after {
 .jc-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; color: var(--t1); }
 .jc-sub { font-size: 11px; color: var(--t2); line-height: 1.5; }
 
+.jc-sub { white-space: pre-line; }
+
+
 /* ─── MODE CARDS ─── */
 .mode-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-bottom: 20px; }
 .mode-card {
@@ -318,6 +382,28 @@ body::after {
   color: var(--teal); padding: 2px 8px; border-radius: 99px;
   font-size: 9px; font-weight: 700; letter-spacing: .5px;
 }
+
+.mode-card.recommended {
+  grid-column: 1 / -1;
+  border-color: rgba(229,182,74,.28);
+  background: var(--surf);
+}
+.mode-card.recommended.selected {
+  border-color: rgba(31,181,204,.65);
+  background: var(--surf2);
+}
+.mc-recommend {
+  display: inline-flex;
+  margin-bottom: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(229,182,74,.12);
+  color: var(--gold);
+  border: 1px solid rgba(229,182,74,.28);
+  font-size: 10px;
+  font-weight: 800;
+}
+
 
 /* ─── QB INFO ─── */
 .qbinfo {
@@ -383,6 +469,25 @@ body::after {
   box-shadow: 0 0 0 2px rgba(217,64,64,.1), inset 0 1px 3px rgba(0,0,0,.2);
 }
 @keyframes blink-timer { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+
+.quiz-home-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: var(--surf);
+  color: var(--t2);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  transition: var(--trans);
+}
+.quiz-home-icon:hover {
+  color: var(--t1);
+  border-color: var(--border3);
+  background: var(--surf2);
+}
+
 
 /* ─── PROGRESS BAR ─── */
 .prog-wrap {
@@ -486,9 +591,9 @@ body::after {
   font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 13px;
   flex-shrink: 0; transition: var(--trans); color: var(--t2);
 }
-.opt-text { font-size: 14px; line-height: 1.55; padding-top: 8px; font-weight: 600; color: var(--t1); }
+.opt-text { font-size: 15px; line-height: 1.65; padding-top: 5px; font-weight: 600; color: var(--t1); }
 .opt-sub {
-  font-size: 11px; color: var(--t2); margin-top: 5px; display: block;
+  font-size: 12px; color: var(--t2); margin-top: 5px; display: block;
   font-style: normal; padding-top: 5px; border-top: 1px solid rgba(255,255,255,.05);
   line-height: 1.6;
 }
@@ -520,6 +625,12 @@ body::after {
 .expl-panel.wrong-expl .expl-title { color: var(--err); }
 .expl-text { font-size: 13px; line-height: 1.7; color: var(--t2); }
 
+.expl-panel.open {
+  max-height: 220px;
+  overflow: auto;
+}
+
+
 /* ─── QUIZ NAV ─── */
 .qnav { display: flex; justify-content: space-between; gap: 10px; margin-top: 14px; }
 .nav-btn {
@@ -544,10 +655,29 @@ body::after {
 /* ─── QMAP ─── */
 .qmap {
   background: var(--surf); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 14px; margin-top: 12px;
+  border-radius: var(--r); padding: 10px 12px 12px; margin-top: 12px;
 }
-.qmap-lbl { font-size: 10px; color: var(--t2); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+.qmap-toggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 2px 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.qmap-lbl { font-size: 10px; color: var(--t2); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin: 0; }
+.qmap-arr { color: var(--accent); font-size: 11px; font-weight: 800; }
 .qmap-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+.qmap.collapsed .qmap-grid,
+.qmap.collapsed .qmap-actions { display: none; }
+.qmap-actions {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
 .qmap-dot {
   width: 27px; height: 27px; border-radius: 6px;
   background: var(--surf2); border: 1px solid var(--border);
@@ -594,6 +724,45 @@ body::after {
   font-size: 24px; font-weight: 800; margin-bottom: 8px; letter-spacing: .2px;
 }
 .result-msg { font-size: 13px; color: var(--t2); line-height: 1.65; margin-bottom: 24px; }
+
+.result-conclusion-card {
+  background: linear-gradient(135deg, rgba(232,96,46,.08), rgba(31,181,204,.05));
+  border: 1px solid rgba(232,96,46,.22);
+  border-radius: var(--r2);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.result-conclusion-title {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  margin-bottom: 8px;
+}
+.result-conclusion-card p {
+  color: var(--t1);
+  font-size: 14px;
+  line-height: 1.75;
+  margin: 0 0 12px;
+}
+.result-advice-list {
+  display: grid;
+  gap: 7px;
+}
+.result-advice-list div {
+  color: var(--t2);
+  font-size: 12px;
+  line-height: 1.55;
+  padding-left: 18px;
+  position: relative;
+}
+.result-advice-list div::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--ok);
+  font-weight: 900;
+}
 
 /* ─── RESULT STATS ─── */
 .rstat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 9px; margin-bottom: 24px; }
@@ -669,6 +838,22 @@ body::after {
   box-shadow: 0 4px 14px rgba(232,96,46,.3);
 }
 .act-btn.primary:hover { box-shadow: 0 8px 24px rgba(232,96,46,.45); }
+
+.result-actions {
+  grid-template-columns: 1fr;
+}
+.act-link-btn {
+  border: none;
+  background: transparent;
+  color: var(--t2);
+  padding: 8px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.act-link-btn:hover { color: var(--t1); }
+
 
 /* ─── QUIZ EXTRA ACTIONS ─── */
 .quiz-action-row {
@@ -924,17 +1109,47 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
    RESPONSIVE
 ───────────────────────────────────── */
 @media (max-width: 480px) {
-  .app-header { padding: 0 12px; }
+  .app-header { padding: 0 12px; gap: 10px; }
+  .h-logo { min-width: 0; }
+  .h-logo-text { min-width: 0; }
+  .h-logo-text .brand-main { font-size: 12px; }
   .h-logo-text .brand-copy { display: none; }
-  .main { padding: 16px 12px 40px; }
-  .qtext { font-size: 14.5px; }
-  .opt-text { font-size: 13px; }
-  .stat-row { grid-template-columns: repeat(4, 1fr); }
+  .lang-bar { display: none; }
+  .lang-select-wrap { display: inline-flex; }
+  .main { padding: 16px 12px 76px; }
+  .hero { padding: 24px 0 20px; }
+  .qtext { font-size: 15px; }
+  .opt-btn {
+    grid-template-columns: 32px 1fr;
+    padding: 14px 13px;
+  }
+  .opt-letter {
+    width: 32px;
+    height: 32px;
+  }
+  .opt-text {
+    font-size: 15px;
+    padding-top: 4px;
+  }
+  .stat-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .stat-box { padding: 13px 10px; }
+  .stat-n { font-size: 22px; }
+  .stat-l { font-size: 11px; }
+  .job-grid,
+  .mode-grid { grid-template-columns: 1fr; }
+  .start-btn {
+    position: sticky;
+    bottom: 12px;
+    z-index: 80;
+  }
   .action-row { grid-template-columns: 1fr; }
   .rstat-row { grid-template-columns: repeat(3, 1fr); }
   .timer-box { font-size: 15px; min-width: 70px; }
-  .lang-btn .lang-zh { display: none; }
   .hero h1 { font-size: clamp(22px, 6vw, 36px); }
+  .expl-panel.open { max-height: 180px; }
 }
 @media (min-width: 600px) {
   .opts-grid { grid-template-columns: 1fr 1fr; }
@@ -1127,12 +1342,21 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
       <span class="brand-copy">聘外看就上手</span>
     </div>
   </div>
-  <div class="lang-bar">
+  <div class="lang-bar" aria-label="語言切換">
     <button class="lang-btn active" id="btnZh" onclick="setLang('zh')">純中文<span class="lang-zh">Chinese Only</span></button>
     <button class="lang-btn" id="btnEn" onclick="setLang('en')">中英<span class="lang-zh">Chinese·English</span></button>
     <button class="lang-btn" id="btnId" onclick="setLang('id')">中印<span class="lang-zh">中文·印尼文</span></button>
     <button class="lang-btn" id="btnVi" onclick="setLang('vi')">中越<span class="lang-zh">中文·越南文</span></button>
   </div>
+  <label class="lang-select-wrap" for="langSelect">
+    <span>語言</span>
+    <select class="lang-select" id="langSelect" onchange="setLang(this.value)">
+      <option value="zh">純中文</option>
+      <option value="en">中文＋英文</option>
+      <option value="id">中文＋印尼文</option>
+      <option value="vi">中文＋越南文</option>
+    </select>
+  </label>
 </header>
 
 <!-- ═══════════ HOME ═══════════ -->
@@ -1153,24 +1377,39 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
   </div>
 
   <!-- JOB TYPE -->
-  <div class="sec-label" id="lblJob">選擇職位類型</div>
+  <section class="home-step">
+    <div class="step-head">
+      <div class="step-num">Step 1</div>
+      <div>
+        <div class="sec-label" id="lblJob">選擇職位</div>
+        <div class="step-copy">先決定這次要評估的工作類型</div>
+      </div>
+    </div>
   <div class="job-grid">
     <div class="job-card" id="jcCare" onclick="selectJob('caregiver')">
       <div class="jc-check">✓</div>
       <div class="jc-icon">🏥</div>
       <div class="jc-title" id="jTCare">外籍看護</div>
-      <div class="jc-sub" id="jSTCare"><span style="color:var(--teal);font-style:normal;">Foreign Caregiver</span><br><span style="opacity:.5;font-size:10px;">Perawat · Người chăm sóc</span></div>
+      <div class="jc-sub" id="jSTCare">適合：照顧長者、病人、失能者<br><span style="color:var(--teal);font-style:normal;">Foreign Caregiver</span></div>
     </div>
     <div class="job-card" id="jcHelp" onclick="selectJob('helper')">
       <div class="jc-check">✓</div>
       <div class="jc-icon">🏠</div>
       <div class="jc-title" id="jTHelp">外籍幫傭</div>
-      <div class="jc-sub" id="jSTHelp"><span style="color:var(--teal);font-style:normal;">Domestic Helper</span><br><span style="opacity:.5;font-size:10px;">Asisten Rumah Tangga · Người giúp việc</span></div>
+      <div class="jc-sub" id="jSTHelp">適合：家務、清潔、料理、兒童照顧<br><span style="color:var(--teal);font-style:normal;">Domestic Helper</span></div>
     </div>
   </div>
+  </section>
 
   <!-- MODE -->
-  <div class="sec-label" id="lblMode">選擇評測模式</div>
+  <section class="home-step">
+    <div class="step-head">
+      <div class="step-num">Step 2</div>
+      <div>
+        <div class="sec-label" id="lblMode">你這次想評估哪一種能力？</div>
+        <div class="step-copy">依照面試、考核或訓練目的選擇</div>
+      </div>
+    </div>
   <div class="mode-grid">
     <div class="mode-card" id="mcIntv" onclick="selectMode('interview')">
       <div class="mc-check">✓</div>
@@ -1200,8 +1439,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
       <div class="mc-sub" id="mSTSpec" style="color:var(--teal);">Specialty Skill Assessment</div>
       <div class="mc-tags"><span class="mc-tag" id="mTagSpec1">食品衛生</span><span class="mc-tag" id="mTagSpec2">專業技能</span></div>
     </div>
-    <div class="mode-card" id="mcLearn" onclick="selectMode('learn')" style="grid-column:1/-1;border-color:rgba(31,181,204,.35);background:var(--surf2);">
+    <div class="mode-card recommended" id="mcLearn" onclick="selectMode('learn')">
       <div class="mc-check" style="background:var(--teal);color:var(--bg);">✓</div>
+      <div class="mc-recommend">新手建議先用</div>
       <div class="mc-icon">📖</div>
       <div class="mc-title" id="mTLearn">📖 學習模式（外看/幫傭專用）</div>
       <div class="mc-sub" id="mSTLearn" style="color:var(--teal);">Study Mode · Mode Belajar · Chế độ học tập</div>
@@ -1212,6 +1452,18 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
       </div>
     </div>
   </div>
+
+  </section>
+
+  <!-- START -->
+  <section class="home-step home-step-start">
+    <div class="step-head">
+      <div class="step-num">Step 3</div>
+      <div>
+        <div class="sec-label">開始</div>
+        <div class="step-copy" id="startSummaryText">本次會出 40 題、約 25 分鐘、可下載報告</div>
+      </div>
+    </div>
 
   <!-- QB INFO -->
   <div class="qbinfo" id="qbInfoBox" style="display:none;">
@@ -1224,6 +1476,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
   </button>
 
   <button class="home-hist-btn" onclick="showScreen('historyScreen'); renderHistoryScreen();">📊 查看歷史紀錄 · Test History</button>
+  </section>
 
 </div>
 </div>
@@ -1240,6 +1493,7 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
       <div class="prog-wrap"><div class="prog-fill" id="progFill" style="width:2.5%"></div></div>
     </div>
     <div class="timer-box" id="timerBox">25:00</div>
+    <button class="quiz-home-icon" id="quitBtn" onclick="confirmQuit()" aria-label="返回首頁">⌂</button>
   </div>
 
   <div class="qcard" id="qCard">
@@ -1265,16 +1519,18 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
 
   <div class="qnav">
     <button class="nav-btn" id="prevBtn" onclick="prevQ()">← <span id="prevTxt">上一題</span></button>
-    <button class="nav-btn primary" id="nextBtn" onclick="nextQ()"><span id="nextTxt">下一題</span> →</button>
-  </div>
-  <div class="quiz-action-row">
-    <button class="quiz-act-btn" id="earlySubmitBtn" onclick="confirmEarlySubmit()">📋 提早交卷</button>
-    <button class="quiz-act-btn danger" id="quitBtn" onclick="confirmQuit()">✕ 返回首頁</button>
+    <button class="nav-btn primary" id="nextBtn" onclick="nextQ()"><span id="nextTxt">下一題</span></button>
   </div>
 
-  <div class="qmap">
-    <div class="qmap-lbl" id="qmapLbl">題目導覽</div>
+  <div class="qmap collapsed" id="qmapBox">
+    <button class="qmap-toggle" type="button" onclick="toggleQMap()">
+      <span class="qmap-lbl" id="qmapLbl">題目導覽</span>
+      <span class="qmap-arr" id="qmapArr">展開</span>
+    </button>
     <div class="qmap-grid" id="qmapGrid"></div>
+    <div class="qmap-actions">
+      <button class="quiz-act-btn" id="earlySubmitBtn" onclick="confirmEarlySubmit()">交卷看結果</button>
+    </div>
   </div>
 </div>
 </div>
@@ -1303,6 +1559,16 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
     </div>
     <div class="result-title" id="rTitle">測驗完成！</div>
     <div class="result-msg" id="rMsg"></div>
+  </div>
+
+  <div class="result-conclusion-card">
+    <div class="result-conclusion-title">評估結論</div>
+    <p id="resultConclusion">正在整理本次評測重點...</p>
+    <div class="result-advice-list">
+      <div id="resultAdvice1">可安排實作觀察</div>
+      <div id="resultAdvice2">加強緊急狀況訓練</div>
+      <div id="resultAdvice3">前兩週建議家屬密集確認工作紀錄</div>
+    </div>
   </div>
 
   <div class="rstat-row">
@@ -1339,9 +1605,9 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
   <!-- v9: EXPORT + SAVE RECORD BUTTONS -->
   <button class="export-btn" onclick="exportReport()">📄 下載 PDF 評測報告 Export PDF</button>
 
-  <div class="action-row">
-    <button class="act-btn" onclick="goHome()" id="btnHome">← 返回首頁</button>
-    <button class="act-btn primary" onclick="retryQuiz()" id="btnRetry">🔄 重新測驗</button>
+  <div class="action-row result-actions">
+    <button class="act-btn" onclick="retryQuiz()" id="btnRetry">🔄 重新測驗</button>
+    <button class="act-link-btn" onclick="goHome()" id="btnHome">返回首頁</button>
   </div>
 </div>
 </div>
@@ -1582,9 +1848,9 @@ const L = {
     hSub:'能力評測系統', hTag:'外籍看護 & 幫傭',
     hTitle:'外籍看護・幫傭\n能力評測系統', hDesc:'專業面試 · 績效考核 · 危機應變 · 動態題庫 · 四語介面',
     stQ:'題目庫', stR:'隨機出題', stC:'能力維度', stL:'語言模式',
-    lblJob:'選擇職位類型', lblMode:'選擇評測模式',
-    jTCare:'外籍看護', jSTCare:'Foreign Caregiver',
-    jTHelp:'外籍幫傭', jSTHelp:'Domestic Helper',
+    lblJob:'選擇職位', lblMode:'你這次想評估哪一種能力？',
+    jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nForeign Caregiver',
+    jTHelp:'外籍幫傭', jSTHelp:'適合：家務、清潔、料理、兒童照顧\nDomestic Helper',
     mTIntv:'面試情境評估', mSTIntv:'Interview Scenario Assessment',
     mTPerf:'工作績效考核', mSTPerf:'Work Performance Evaluation',
     mTCrisis:'危機應變測驗', mSTCrisis:'Crisis Response Test',
@@ -1616,9 +1882,9 @@ const L = {
     hSub:'ASSESSMENT SYSTEM', hTag:'Foreign Caregiver & Helper',
     hTitle:'Assessment System', hDesc:'Interview · Performance · Crisis · 動態 Questions · 4 Languages',
     stQ:'Question Bank', stR:'Random Questions', stC:'Ability Dimensions', stL:'Languages',
-    lblJob:'Job Type / 選擇職位', lblMode:'Assessment Mode / 評測模式',
-    jTCare:'外籍看護', jSTCare:'Foreign Caregiver',
-    jTHelp:'外籍幫傭', jSTHelp:'Domestic Helper',
+    lblJob:'Step 1 · Job Type', lblMode:'Step 2 · What ability do you want to assess?',
+    jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nForeign Caregiver',
+    jTHelp:'外籍幫傭', jSTHelp:'適合：家務、清潔、料理、兒童照顧\nDomestic Helper',
     mTIntv:'面試情境評估', mSTIntv:'Interview Scenario Assessment',
     mTPerf:'工作績效考核', mSTPerf:'Work Performance Evaluation',
     mTCrisis:'危機應變測驗', mSTCrisis:'Crisis Response Test',
@@ -1650,9 +1916,9 @@ const L = {
     hSub:'SISTEM PENILAIAN', hTag:'Perawat & ART Asing',
     hTitle:'Sistem Penilaian', hDesc:'Wawancara · Kinerja · Krisis · Soal Dinamis · 4 Bahasa',
     stQ:'Bank Soal', stR:'Soal Acak', stC:'Kategori', stL:'Bahasa',
-    lblJob:'Jenis Pekerjaan / 選擇職位', lblMode:'Mode Penilaian / 評測模式',
-    jTCare:'外籍看護', jSTCare:'Perawat Asing',
-    jTHelp:'外籍幫傭', jSTHelp:'Asisten Rumah Tangga',
+    lblJob:'Step 1 · Jenis Pekerjaan', lblMode:'Step 2 · Kemampuan apa yang ingin dinilai?',
+    jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nPerawat Asing',
+    jTHelp:'外籍幫傭', jSTHelp:'適合：家務、清潔、料理、兒童照顧\nAsisten Rumah Tangga',
     mTIntv:'面試情境評估', mSTIntv:'Penilaian Skenario Wawancara',
     mTPerf:'工作績效考核', mSTPerf:'Evaluasi Kinerja Kerja',
     mTCrisis:'危機應變測驗', mSTCrisis:'Tes Respons Krisis',
@@ -1684,9 +1950,9 @@ const L = {
     hSub:'HỆ THỐNG ĐÁNH GIÁ', hTag:'Người chăm sóc & Giúp việc',
     hTitle:'Hệ Thống Đánh Giá', hDesc:'Phỏng vấn · Hiệu suất · Khủng hoảng · 動態 câu · 4 ngôn ngữ',
     stQ:'Ngân hàng đề', stR:'Câu ngẫu nhiên', stC:'Chiều năng lực', stL:'Ngôn ngữ',
-    lblJob:'Loại công việc / 選擇職位', lblMode:'Chế độ đánh giá / 評測模式',
-    jTCare:'外籍看護', jSTCare:'Người chăm sóc nước ngoài',
-    jTHelp:'外籍幫傭', jSTHelp:'Giúp việc nhà nước ngoài',
+    lblJob:'Step 1 · Loại công việc', lblMode:'Step 2 · Muốn đánh giá năng lực nào?',
+    jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nNgười chăm sóc nước ngoài',
+    jTHelp:'外籍幫傭', jSTHelp:'適合：家務、清潔、料理、兒童照顧\nGiúp việc nhà nước ngoài',
     mTIntv:'面試情境評估', mSTIntv:'Đánh giá tình huống phỏng vấn',
     mTPerf:'工作績效考核', mSTPerf:'Đánh giá hiệu suất làm việc',
     mTCrisis:'危機應變測驗', mSTCrisis:'Kiểm tra ứng phó khủng hoảng',
@@ -4278,7 +4544,7 @@ const SCENARIO_QS = {
 // ✅ V25-12: exportReport fallback toast 加入「允許彈出視窗」引導文字，改善 iOS/LINE 場景
 // ✅ V25-13: footer 動態注入補上 role="contentinfo"，強化無障礙語意（A11y）
 // ============================================================
-const APP_VERSION = 'v25.5'; // v25.5：localStorage 歷史紀錄安全清洗 + 遷移補強
+const APP_VERSION = 'v26.0'; // v26.0：三步驟首頁、手機友善流程與結果結論卡
 // Fix 4: 答題紀錄綁定版本號（升版自動隔離），書籤 key 固定（跨版本保留）
 const STORAGE_KEY_RECORDS   = `records_${APP_VERSION}`; // 升版後自動隔離舊版紀錄（v25.4）
 const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
@@ -4318,7 +4584,7 @@ const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 (function migrateRecords() {
   try {
     if (localStorage.getItem(STORAGE_KEY_RECORDS)) return; // 新版已有資料，不需遷移
-    const prevVersions = ['records_v25.4','records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
+    const prevVersions = ['records_v25.5','records_v25.4','records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
     for (const oldKey of prevVersions) {
       const old = localStorage.getItem(oldKey);
       if (old) {
@@ -4388,6 +4654,8 @@ function setLang(l) {
   });
   const map = {zh:'btnZh',en:'btnEn',id:'btnId',vi:'btnVi'};
   document.getElementById(map[l]).classList.add('active');
+  const langSelect = document.getElementById('langSelect');
+  if (langSelect && langSelect.value !== l) langSelect.value = l;
   applyLang();
   // 🟢 擴充判斷，確保各種畫面下切換語言都能即時生效
   if (document.getElementById('quizScreen') && document.getElementById('quizScreen').classList.contains('active')) {
@@ -4423,6 +4691,7 @@ function applyLang() {
   const hDescEn = document.getElementById('hDescEn');
   if(hDescEn) hDescEn.style.display = (lang==='zh') ? 'none' : 'block';
   updateQBInfo();
+  updateStartSummary();
 }
 
 function sel(id, cls) {
@@ -4433,7 +4702,7 @@ function sel(id, cls) {
 function selectJob(job) {
   selJob = job;
   sel(job==='caregiver'?'jcCare':'jcHelp','job-card');
-  canStart(); updateQBInfo();
+  canStart(); updateQBInfo(); updateStartSummary();
 }
 
 function selectMode(mode) {
@@ -4442,7 +4711,7 @@ function selectMode(mode) {
   document.querySelectorAll('.mode-card').forEach(e=>e.classList.remove('selected'));
   const targetId = map[mode];
   if(targetId) document.getElementById(targetId).classList.add('selected');
-  canStart(); updateQBInfo();
+  canStart(); updateQBInfo(); updateStartSummary();
   const btn = document.getElementById('startBtn');
   const btnTxt = document.getElementById('startBtnTxt');
   if(mode==='learn'){
@@ -4462,6 +4731,18 @@ function canStart() {
   // V24-3: 學習模式同樣需要選職位才可啟動（startLearn 依賴 selJob 建題庫）
   document.getElementById('startBtn').disabled = !(selJob && selMode);
 }
+
+function updateStartSummary() {
+  const el = document.getElementById('startSummaryText');
+  if (!el) return;
+  if (selMode === 'learn') {
+    el.textContent = '學習模式可逐題練習、即時看解析，適合正式評測前先熟悉題型';
+    return;
+  }
+  const mins = selMode === 'interview' ? 30 : selMode === 'crisis' ? 20 : 25;
+  el.textContent = `本次會出 40 題、約 ${mins} 分鐘、可下載報告`;
+}
+
 
 function updateQBInfo() {
   const box = document.getElementById('qbInfoBox');
@@ -4599,6 +4880,10 @@ function buildPool() {
 // QUIZ LOGIC
 // ============================================================
 function startQuiz() {
+  const qmapBox = document.getElementById('qmapBox');
+  if (qmapBox) qmapBox.classList.add('collapsed');
+  const qmapArr = document.getElementById('qmapArr');
+  if (qmapArr) qmapArr.textContent = '展開';
   questions = buildPool();
   curQ = 0; answers = {};
   // v9: mode-based timer
@@ -4781,9 +5066,42 @@ function updateQMap() {
   });
 }
 
+function toggleQMap() {
+  const box = document.getElementById('qmapBox');
+  const arr = document.getElementById('qmapArr');
+  if (!box) return;
+  const collapsed = box.classList.toggle('collapsed');
+  if (arr) arr.textContent = collapsed ? '展開' : '收合';
+}
+
+
 // ============================================================
 // RESULT - v9 ENHANCED
 // ============================================================
+function updateResultConclusion(pct, catStats) {
+  const conclusion = document.getElementById('resultConclusion');
+  if (!conclusion) return;
+  const entries = Object.entries(catStats || {});
+  const weakest = entries.length
+    ? entries.map(([cat, stat]) => ({ cat, pct: Math.round(stat.correct / stat.total * 100) })).sort((a,b) => a.pct - b.pct)[0]
+    : null;
+  const weakText = weakest ? weakest.cat : '危機應變與安全判斷';
+  if (pct >= 85) {
+    conclusion.textContent = '此測驗結果顯示：整體觀念穩定，已具備多數工作情境所需的基礎判斷與安全意識。';
+  } else if (pct >= 65) {
+    conclusion.textContent = `此測驗結果顯示：基礎觀念尚可，但「${weakText}」仍需要加強，建議搭配實作觀察再做任用判斷。`;
+  } else {
+    conclusion.textContent = `此測驗結果顯示：目前基礎觀念仍不穩，尤其「${weakText}」需要優先補強，暫不建議立即獨立承擔高風險工作。`;
+  }
+  const a1 = document.getElementById('resultAdvice1');
+  const a2 = document.getElementById('resultAdvice2');
+  const a3 = document.getElementById('resultAdvice3');
+  if (a1) a1.textContent = '可安排實作觀察';
+  if (a2) a2.textContent = pct >= 85 ? '維持定期複訓與工作紀錄' : `加強「${weakText}」相關訓練`;
+  if (a3) a3.textContent = '前兩週建議家屬密集確認工作紀錄';
+}
+
+
 function showResult(isLangSwitch = false) {
   clearInterval(timerInt); timerInt = null; // B1: 重置為 null
   timerPaused = false; // BUG-8 FIX v20: 重置暫停狀態，防止 closeModal 誤觸計時器重啟
@@ -4832,6 +5150,9 @@ function showResult(isLangSwitch = false) {
     catStats[dim].total++;
     if(answers[i]===q.ans) catStats[dim].correct++;
   });
+
+  updateResultConclusion(pct, catStats);
+
   drawRadar(catStats);
   buildRadarLegend(catStats);
 
@@ -4886,7 +5207,7 @@ function showResult(isLangSwitch = false) {
     rlist.appendChild(item);
   });
 
-  document.getElementById('btnHome').textContent = t.btnHome||'← 返回首頁';
+  document.getElementById('btnHome').textContent = (t.btnHome||'← 返回首頁').replace('← ', '');
   document.getElementById('btnRetry').textContent = t.btnRetry||'🔄 重新測驗';
   document.getElementById('rsCL').textContent = t.rsCL||'答對';
   document.getElementById('rsWL').textContent = t.rsWL||'答錯';
@@ -5303,7 +5624,7 @@ function confirmEarlySubmit() {
   const total = questions.length;
   const unanswered = total - answered;
   document.getElementById('modalIcon').textContent = '📋';
-  document.getElementById('modalTitle').textContent = '確認提早交卷？';
+  document.getElementById('modalTitle').textContent = '交卷看結果？';
   document.getElementById('modalDesc').textContent = unanswered > 0
     ? `還有 ${unanswered} 題未作答，未作答題目將計為錯誤。`
     : '所有題目已作答，確認提交成績？';
