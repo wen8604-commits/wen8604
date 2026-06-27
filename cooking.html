@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://og-image.vercel.app; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://og-image.vercel.app;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="料理基礎學習平台 v0.49 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
+<meta name="description" content="料理基礎學習平台 v0.52 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
 <meta name="keywords" content="料理,廚房安全,刀工,火候,食品衛生,烹調,學習平台,多語言,家庭幫傭">
 <meta name="author" content="Culinary Basics Learning Platform">
 <meta name="theme-color" content="#5a1800">
 
 <!-- Open Graph / Social sharing -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="料理基礎學習平台 v0.49">
+<meta property="og:title" content="料理基礎學習平台 v0.52">
 <meta property="og:description" content="多語言廚藝入門：廚房安全・刀工基礎・火候控制・食品衛生 — 200 題測驗，自由學習，無關卡無證書">
 <meta property="og:image" content="https://og-image.vercel.app/料理基礎學習平台.png?theme=light&md=1&fontSize=100px&images=🍜">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="料理基礎學習平台 v0.49">
+<meta name="twitter:title" content="料理基礎學習平台 v0.52">
 <meta name="twitter:description" content="繁中・EN・ID・VI 四語言廚藝入門，200 題測驗，自由學習">
 
-<title>料理基礎學習平台 v0.49</title>
+<title>料理基礎學習平台 v0.52</title>
 
 <!-- Favicon (emoji) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
@@ -146,7 +146,7 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 
 /* ── body layout ── */
 .body{display:flex;min-height:calc(100svh - 180px);position:relative}
-.sidebar{width:216px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);flex-shrink:0;transition:transform 0.25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.sidebar{width:216px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);flex-shrink:0;transition:transform 0.25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;max-height:calc(100svh - 58px);overflow-y:auto}
 .sidebar.gone{display:none}
 .ss-header{padding:12px 14px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
 .ss-header-title{font-size:10px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.7px;text-transform:uppercase}
@@ -199,12 +199,13 @@ body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)
 .mcard.actm .memoji-wrap{background:rgba(138,40,0,.09);border-color:rgba(138,40,0,.2)}
 .mcard.mdone .memoji-wrap{background:rgba(26,114,72,.08);border-color:rgba(26,114,72,.22)}
 .memoji{font-size:25px;line-height:1}
-.mtitle{font-size:13px;font-weight:600;color:var(--color-text-primary);line-height:1.3}
+.mtitle{font-size:15px;font-weight:600;color:var(--color-text-primary);line-height:1.3}
 .men{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
 .mlvl{display:inline-block;font-size:9.5px;color:var(--color-text-tertiary);background:var(--color-background-secondary);border-radius:6px;padding:2px 7px;margin-top:6px;border:0.5px solid var(--color-border-tertiary)}
-.mcnt{font-size:11px;color:var(--color-text-secondary);margin-top:6px}
-.mbar{display:block;width:100%;height:3px;background:var(--color-background-tertiary);border-radius:2px;margin-top:8px;overflow:hidden}
-.mfill{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#5a1800,#8a3000);transition:width .4s cubic-bezier(.4,0,.2,1)}
+.mcnt{font-size:11px;color:var(--color-text-secondary);margin-top:6px;display:flex;align-items:center;gap:4px}
+.mcnt-badge{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:8px;padding:2px 7px;font-size:10px;color:var(--color-text-secondary)}
+.mbar{display:block;width:100%;height:5px;background:var(--color-background-tertiary);border-radius:3px;margin-top:8px;overflow:hidden}
+.mfill{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#5a1800,#8a3000);transition:width .4s cubic-bezier(.4,0,.2,1)}
 .mcard.mdone .mfill{background:linear-gradient(90deg,#1a7248,#2a9a60)}
 
 /* lesson & topics */
@@ -524,7 +525,9 @@ body{font-size:14.5px}
 /* ── v0.49 新增：Hero 圓形進度環 ── */
 .hero-ring-wrap{display:flex;align-items:center;gap:12px;margin-top:8px}
 .hero-ring{flex-shrink:0}
-.hero-ring svg circle{transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)}
+.hero-ring-track{fill:none;stroke:rgba(255,255,255,.22);stroke-width:5}
+.hero-ring-fill{fill:none;stroke-width:5;stroke-linecap:round;transform:rotate(-90deg);transform-origin:26px 26px}
+.hero-ring circle{transition:stroke-dashoffset .8s cubic-bezier(.4,0,.2,1)}
 /* ── v0.49 新增：底部導航角標 ── */
 .bnb-badge{position:absolute;top:2px;right:6px;background:#e74c3c;color:#fff;font-size:9px;font-weight:700;border-radius:8px;padding:1px 5px;min-width:16px;text-align:center;line-height:15px;display:none;border:1.5px solid var(--color-background-primary)}
 .bnb-badge.show{display:block}
@@ -540,6 +543,46 @@ body{font-size:14.5px}
 .cert-mod-bar-fill{height:100%;border-radius:2px;background:#5a1800;transition:width .4s}
 .cert-mod-item.done .cert-mod-bar-fill{background:#1a7248}
 .cert-mod-check{font-size:14px;color:#1a7248;flex-shrink:0}
+
+/* ── v0.50 新增：模組分類篩選 ── */
+.mod-filter-wrap{display:flex;gap:6px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.mod-filter-wrap::-webkit-scrollbar{display:none}
+.mod-filter-btn{background:var(--color-background-primary);border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);white-space:nowrap;transition:all .15s;flex-shrink:0;font-weight:500}
+.mod-filter-btn:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+.mod-filter-btn.active{background:#5a1800;border-color:#5a1800;color:#fff}
+/* ── v0.50 新增：語言 chips（精簡版）── */
+.lang-chips{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.lang-chip{background:var(--color-background-primary);border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);transition:all .18s;display:flex;align-items:center;gap:6px}
+.lang-chip.on{background:#5a1800;border-color:#5a1800;color:#fff}
+.lang-chip:hover:not(.on){border-color:var(--color-border-primary);color:var(--color-text-primary)}
+/* ── v0.50 新增：Hero 繼續學習主按鈕 ── */
+.hero-cta{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hero-cta-pri{background:#fff;border:none;color:#5a1800;border-radius:20px;padding:9px 20px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:all .18s;white-space:nowrap}
+.hero-cta-pri:hover{background:#f5f0ee;transform:translateY(-1px);box-shadow:0 5px 16px rgba(0,0,0,.25)}
+.hero-cta-pri:active{transform:scale(.96)}
+.hero-cta-sec{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.9);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font-sans);transition:all .18s;white-space:nowrap}
+.hero-cta-sec:hover{background:rgba(255,255,255,.25)}
+/* ── v0.50 新增：課程完成按鈕區 ── */
+.lesson-complete-bar{background:var(--color-background-primary);border:1px solid var(--color-border-secondary);border-radius:16px;padding:14px 16px;margin-top:14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.lesson-complete-bar-title{font-size:11px;font-weight:600;color:var(--color-text-tertiary);letter-spacing:.5px;text-transform:uppercase}
+.lesson-complete-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn-mark-done{background:#1a7248;border:none;color:#fff;border-radius:14px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:7px;transition:all .18s}
+.btn-mark-done:hover{background:#156040;transform:translateY(-1px)}
+.btn-mark-done.marked{background:#0f4d30;border:1.5px solid #0a3520;opacity:.85}
+.btn-next-mod{background:var(--color-background-secondary);border:1.5px solid var(--color-border-secondary);color:var(--color-text-secondary);border-radius:14px;padding:10px 16px;font-size:13px;font-weight:500;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:6px;transition:all .18s}
+.btn-next-mod:hover{border-color:var(--color-border-primary);color:var(--color-text-primary)}
+/* ── v0.50 新增：新手導覽卡 ── */
+.onboarding-card{background:linear-gradient(135deg,rgba(90,24,0,.06),rgba(90,24,0,.02));border:1px solid rgba(90,24,0,.15);border-radius:16px;padding:14px 16px;margin-bottom:14px;position:relative;overflow:hidden}
+.onboarding-card::before{content:'';position:absolute;right:-8px;top:-8px;font-size:52px;opacity:.08;pointer-events:none}
+.onboarding-title{font-size:13px;font-weight:700;color:#5a1800;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.onboarding-steps{display:flex;flex-direction:column;gap:5px}
+.onboarding-step{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.onboarding-step-num{width:20px;height:20px;border-radius:50%;background:#5a1800;color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.onboarding-dismiss{position:absolute;top:8px;right:10px;background:none;border:none;color:var(--color-text-tertiary);cursor:pointer;font-size:16px;padding:2px;line-height:1}
+/* ── v0.50：側邊欄進度百分比 ── */
+.si-pct{margin-left:auto;font-size:10px;color:var(--color-text-tertiary);font-weight:500;flex-shrink:0}
+.si.sdone .si-pct{color:#1a7248}
+.si.act .si-pct{color:#8a2800}
 
 </style>
 <noscript>
@@ -605,6 +648,11 @@ body{font-size:14.5px}
           <div class="hero-ring-sub" id="hero-ring-sub" style="font-size:10px;color:rgba(255,255,255,.6);margin-top:2px">0 / 103 主題完成</div>
         </div>
       </div>
+      <div class="hero-cta">
+        <button class="hero-cta-pri" onclick="loadModule(curMod)" id="hero-cta-continue">▶ 繼續學習</button>
+        <button class="hero-cta-sec" onclick="showView('quizcenter')">練習測驗</button>
+        <button class="hero-cta-sec" onclick="showView('cert')">學習總覽</button>
+      </div>
     </div>
   </div>
 </div>
@@ -638,15 +686,22 @@ body{font-size:14.5px}
 <div class="footer">
   <span id="footer-version"></span>
   <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
-  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.49</span>
+  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.52</span>
 </div>
 
 </div>
 </div>
 
 <script>
-var APP_VERSION='0.49';
+var APP_VERSION='0.52';
 function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
+function escHTML(v){
+  return String(v==null?'':v).replace(/[&<>"']/g,function(ch){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch];
+  });
+}
+function escAttr(v){return escHTML(v).replace(/`/g,'&#96;');}
+function encArg(v){return encodeURIComponent(String(v==null?'':v)).replace(/'/g,'%27');}
 // ── 版本號統一注入 ──
 (function(){
   var vEl=document.getElementById('dbar-version');if(vEl)vEl.textContent='v'+APP_VERSION;
@@ -902,7 +957,7 @@ var MODS=[
    topics:[{zh:'口頭交辦理解技巧',en:'Understanding Verbal Instructions',id:'Memahami Instruksi Verbal',vi:'Hiểu hướng dẫn bằng lời',s:0},{zh:'菜單識讀與理解',en:'Reading & Understanding Menus',id:'Membaca & Memahami Menu',vi:'Đọc & Hiểu thực đơn',s:0},{zh:'採買清單溝通',en:'Shopping List Communication',id:'Komunikasi Daftar Belanja',vi:'Giao tiếp danh sách mua sắm',s:0},{zh:'食材標示解讀',en:'Reading Food Labels & Packaging',id:'Membaca Label & Kemasan Bahan',vi:'Đọc nhãn & Bao bì thực phẩm',s:0},{zh:'過敏與飲食禁忌溝通',en:'Communicating Allergies & Dietary Restrictions',id:'Komunikasi Alergi & Pantangan Diet',vi:'Giao tiếp dị ứng & Kiêng ăn',s:0},{zh:'廚房術語中英對照',en:'Kitchen Vocabulary: Chinese–English Reference',id:'Referensi Kosakata Dapur: Mandarin–Inggris',vi:'Từ vựng bếp: Tiếng Trung–Tiếng Anh',s:0}]},
   {lv:20,emoji:'🚨',
    titles:{zh:'食物過敏與飲食禁忌',en:'Food Allergies & Dietary Restrictions',id:'Alergi Makanan & Pantangan Diet',vi:'Dị ứng thực phẩm & Kiêng ăn'},
-   topics:[{zh:'食物過敏 vs 食物不耐症',en:'Food Allergy vs Food Intolerance',id:'Alergi Makanan vs Intoleransi Makanan',vi:'Dị ứng thực phẩm vs Không dung nạp thực phẩm',s:0},{zh:'台灣11大過敏原辨識',en:'Taiwan\'s 11 Specified Allergens',s:0},{zh:'宗教飲食禁忌（清真・素食・猶太）',en:'Religious Dietary Laws (Halal · Vegetarian · Kosher)',id:'Pantangan Diet Agama (Halal · Vegetarian · Kosher)',vi:'Kiêng ăn tôn giáo (Halal · Chay · Kosher)',s:0},{zh:'過敏緊急反應與急救處置',en:'Allergic Emergency Response & First Aid',id:'Respons Darurat Alergi & Pertolongan Pertama',vi:'Phản ứng khẩn cấp dị ứng & Sơ cứu',s:0},{zh:'廚房交叉接觸預防',en:'Preventing Cross-Contact in the Kitchen',id:'Pencegahan Kontak Silang di Dapur',vi:'Ngăn ngừa tiếp xúc chéo trong bếp',s:0},{zh:'無麩質飲食實務',en:'Gluten-Free Diet in Practice',id:'Diet Bebas Gluten dalam Praktik',vi:'Chế độ ăn không gluten trong thực tế',s:0},{zh:'過敏標示閱讀與採購確認',en:'Reading Allergen Labels & Shopping Verification',id:'Membaca Label Alergen & Konfirmasi Belanja',vi:'Đọc nhãn dị ứng & Xác nhận khi mua sắm',s:0}]}
+   topics:[{zh:'食物過敏 vs 食物不耐症',en:'Food Allergy vs Food Intolerance',id:'Alergi Makanan vs Intoleransi Makanan',vi:'Dị ứng thực phẩm vs Không dung nạp thực phẩm',s:0},{zh:'台灣11大過敏原辨識',en:'Taiwan\'s 11 Specified Allergens',id:'Mengenali 11 Alergen Utama di Taiwan',vi:'Nhận biết 11 chất gây dị ứng chính ở Đài Loan',s:0},{zh:'宗教飲食禁忌（清真・素食・猶太）',en:'Religious Dietary Laws (Halal · Vegetarian · Kosher)',id:'Pantangan Diet Agama (Halal · Vegetarian · Kosher)',vi:'Kiêng ăn tôn giáo (Halal · Chay · Kosher)',s:0},{zh:'過敏緊急反應與急救處置',en:'Allergic Emergency Response & First Aid',id:'Respons Darurat Alergi & Pertolongan Pertama',vi:'Phản ứng khẩn cấp dị ứng & Sơ cứu',s:0},{zh:'廚房交叉接觸預防',en:'Preventing Cross-Contact in the Kitchen',id:'Pencegahan Kontak Silang di Dapur',vi:'Ngăn ngừa tiếp xúc chéo trong bếp',s:0},{zh:'無麩質飲食實務',en:'Gluten-Free Diet in Practice',id:'Diet Bebas Gluten dalam Praktik',vi:'Chế độ ăn không gluten trong thực tế',s:0},{zh:'過敏標示閱讀與採購確認',en:'Reading Allergen Labels & Shopping Verification',id:'Membaca Label Alergen & Konfirmasi Belanja',vi:'Đọc nhãn dị ứng & Xác nhận khi mua sắm',s:0}]}
 ];
 
 var curLang='zh',curMod=0,curView='home',sbOK=true,deviceMode='desktop';
@@ -5779,8 +5834,6 @@ function updateProgressUI(){
   var weakCount=0;Object.keys(qcState.weakData||{}).forEach(function(mi){Object.keys(qcState.weakData[mi]).forEach(function(qi){if((qcState.weakData[mi][qi].wrong||0)>0)weakCount++;});});
   var badge=document.getElementById('bnb-quiz-badge');
   if(badge){if(weakCount>0){badge.textContent=weakCount>9?'9+':weakCount;badge.classList.add('show');}else{badge.classList.remove('show');}}
-  // v0.49: record streak today
-  recordStreak();
 }
 
 function buildLevelPath(){ /* removed — replaced by sidebar progress */ }
@@ -5794,22 +5847,54 @@ function buildSidebar(){
     var isDone=isModDone(m);
     var isAct=(i===curMod && curView==='levels');
     var pct=getModPct(m);
-    var dotColor=isDone?'#1a7248':(getDoneCount(m)>0?'#8a2800':'var(--color-border-primary)');
-    html+='<div class="si'+(isAct?' act':'')+(isDone?' sdone':'')+'" onclick="loadModule('+i+')" title="'+t('lesson.topic')+m.lv+' '+label+'">';
-    html+='<span class="si-emoji">'+m.emoji+'</span>';
-    html+='<div style="flex:1;min-width:0"><div style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+label+'</div><div class="si-sub">'+t('lesson.topic')+m.lv+' · '+pct+'%</div></div>';
-    html+='<div class="sprogdot" style="background:'+dotColor+'"></div>';
+    html+='<div class="si'+(isAct?' act':'')+(isDone?' sdone':'')+'" onclick="loadModule('+i+')" title="'+escAttr(label)+'">';
+    html+='<span class="si-emoji">'+escHTML(m.emoji)+'</span>';
+    html+='<div style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px">'+escHTML(label)+'</div>';
+    html+='<span class="si-pct">'+(isDone?'✓':pct+'%')+'</span>';
     html+='</div>';
   });
   el.innerHTML=html;
 }
-
 function getIcon(i){return['ti-shield','ti-cut','ti-flame','ti-snowflake','ti-soup','ti-wash','ti-clipboard-list','ti-award'][i]||'ti-book'}
+function markAllTopics(modIdx){
+  var m=MODS[modIdx];
+  var allDone=m.topics.every(function(tp){return tp.s===2;});
+  m.topics.forEach(function(tp){ tp.s=allDone?0:2; });
+  saveProgress();
+  buildSidebar();
+  updateProgressUI();
+  // Re-render current lesson
+  var c=document.getElementById('content');
+  if(c) c.innerHTML=renderLesson(modIdx);
+}
+
+
 
 function renderHome(){
   var html='';
 
-  // ── v0.49: Streak 連續學習天數 ──
+  // ── v0.50: 新手導覽卡（只在首次顯示）──
+  var onboardingSeen=localStorage.getItem('onboarding_seen_v1');
+  if(!onboardingSeen){
+    var obSteps={
+      zh:['選擇語言（中文、中英、中印尼、中越）','點選一個料理模組進入課程','閱讀圖解與步驟內容','完成課程底部的小測驗','標記單元完成，繼續下一個'],
+      en:['Choose your language (ZH, EN, ID, VI)','Pick a cooking module','Read the guides and steps','Complete the quiz at the bottom','Mark the unit done and continue'],
+      id:['Pilih bahasa (ZH, EN, ID, VI)','Pilih modul memasak','Baca panduan dan langkah-langkah','Selesaikan kuis di bagian bawah','Tandai unit selesai dan lanjutkan'],
+      vi:['Chọn ngôn ngữ (ZH, EN, ID, VI)','Chọn một mô-đun nấu ăn','Đọc hướng dẫn và các bước','Hoàn thành bài kiểm tra ở cuối','Đánh dấu đơn vị hoàn thành và tiếp tục']
+    };
+    var obTitle={zh:'怎麼開始？',en:'How to start?',id:'Cara memulai?',vi:'Cách bắt đầu?'};
+    var steps=obSteps[curLang]||obSteps.zh;
+    html+='<div class="onboarding-card" id="onboarding-card">';
+    html+='<button class="onboarding-dismiss" onclick="document.getElementById(\'onboarding-card\').style.display=\'none\';localStorage.setItem(\'onboarding_seen_v1\',\'1\')" aria-label="關閉">✕</button>';
+    html+='<div class="onboarding-title">🍳 '+(obTitle[curLang]||obTitle.zh)+'</div>';
+    html+='<div class="onboarding-steps">';
+    steps.forEach(function(s,i){
+      html+='<div class="onboarding-step"><div class="onboarding-step-num">'+(i+1)+'</div><span>'+escHTML(s)+'</span></div>';
+    });
+    html+='</div></div>';
+  }
+
+  // ── v0.50: Streak（緊湊版）──
   var sd=getStreakData();
   var streakLabels={zh:'連續學習天',en:'Day streak',id:'Hari berturut-turut',vi:'Ngày liên tiếp'};
   var bestLabels={zh:'最長',en:'Best',id:'Terbaik',vi:'Tốt nhất'};
@@ -5818,7 +5903,6 @@ function renderHome(){
   html+='<div class="streak-info">';
   html+='<div class="streak-count">'+sd.current+'</div>';
   html+='<div class="streak-label">'+(streakLabels[curLang]||streakLabels.zh)+'</div>';
-  // 7 dots for last 7 days
   html+='<div class="streak-dots">';
   for(var di=6;di>=0;di--){
     var dayAgo=di;
@@ -5831,53 +5915,57 @@ function renderHome(){
   }
   html+='</div>';
   html+='</div>';
-  html+='<div class="streak-best">'+( bestLabels[curLang]||'Best' )+' '+sd.best+'🔥</div>';
+  html+='<div class="streak-best">'+(bestLabels[curLang]||'Best')+' '+sd.best+'🔥</div>';
   html+='</div>';
 
-  // ── 語言選擇 ──
-  html+='<div class=\"sechd\"><h2>'+t('sec.lang')+'</h2><div class=\"ln\"></div></div>';
-  html+='<div class=\"lgrid\">';
-  [{code:'zh',flag:'🇹🇼',name:'繁體中文',sub:'Traditional Chinese'},
-   {code:'en',flag:'🇬🇧',name:'中文 + English',sub:'中英雙語'},
-   {code:'id',flag:'🇮🇩',name:'中文 + Bahasa',sub:'中印尼雙語'},
-   {code:'vi',flag:'🇻🇳',name:'中文 + Tiếng Việt',sub:'中越雙語'}].forEach(function(l){
+  // ── v0.50: 語言 chips（精簡，取代大卡片）──
+  html+='<div class="sechd"><h2>'+t('sec.lang')+'</h2><div class="ln"></div></div>';
+  html+='<div class="lang-chips">';
+  [{code:'zh',flag:'🇹🇼',name:'中文'},{code:'en',flag:'🇬🇧',name:'中英'},{code:'id',flag:'🇮🇩',name:'中印尼'},{code:'vi',flag:'🇻🇳',name:'中越'}].forEach(function(l){
     var isOn=l.code===curLang;
-    html+='<div class=\"lcard'+(isOn?' on':'')+'\" onclick=\"setLangCard(\''+l.code+'\',this)\" role=\"button\" tabindex=\"0\">';
-    html+='<div class=\"flag\">'+l.flag+'</div><div class=\"lname\">'+l.name+'</div><div class=\"lsub\">'+l.sub+'</div></div>';
+    html+='<div class="lang-chip'+(isOn?' on':'')+'\" onclick="setLangCard(\''+l.code+'\',this)" role="button" tabindex="0">'+escHTML(l.flag+' '+l.name)+'</div>';
   });
   html+='</div>';
 
-  // ── 模組清單 ──
+  // ── v0.50: 模組清單 + 分類篩選 ──
+  var modCats={
+    zh:[{label:'全部',ids:null},{label:'廚房安全',ids:[0,5,14,19]},{label:'刀工備料',ids:[1,11]},{label:'烹調技法',ids:[2,4,8]},{label:'家庭料理',ids:[7,9,10,16]},{label:'進階應用',ids:[6,12,13,15,17,18]}],
+    en:[{label:'All',ids:null},{label:'Safety',ids:[0,5,14,19]},{label:'Knife & Prep',ids:[1,11]},{label:'Techniques',ids:[2,4,8]},{label:'Home Cooking',ids:[7,9,10,16]},{label:'Advanced',ids:[6,12,13,15,17,18]}],
+    id:[{label:'Semua',ids:null},{label:'Keamanan',ids:[0,5,14,19]},{label:'Pisau & Persiapan',ids:[1,11]},{label:'Teknik',ids:[2,4,8]},{label:'Masakan Rumahan',ids:[7,9,10,16]},{label:'Lanjutan',ids:[6,12,13,15,17,18]}],
+    vi:[{label:'Tất cả',ids:null},{label:'An toàn',ids:[0,5,14,19]},{label:'Dao & Sơ chế',ids:[1,11]},{label:'Kỹ thuật',ids:[2,4,8]},{label:'Nấu ăn nhà',ids:[7,9,10,16]},{label:'Nâng cao',ids:[6,12,13,15,17,18]}]
+  };
+  var cats=modCats[curLang]||modCats.zh;
+  var activeCat=window._homeCatFilter||0;
+
   html+='<div class="sechd"><h2>'+t('sec.mod')+'</h2><div class="ln"></div></div>';
+  html+='<div class="mod-filter-wrap" id="mod-filter-wrap">';
+  cats.forEach(function(c,ci){
+    html+='<button class="mod-filter-btn'+(ci===activeCat?' active':'')+'\" onclick="window._homeCatFilter='+ci+';document.getElementById(\'content\').innerHTML=renderHome()">'+escHTML(c.label)+'</button>';
+  });
+  html+='</div>';
+
+  var showIds=cats[activeCat].ids;
   html+='<div class="mgrid">';
   MODS.forEach(function(m,i){
+    if(showIds && showIds.indexOf(i)<0) return;
     var done=getDoneCount(m);var tot=getTotal(m);
     var isDone=isModDone(m);
     var pct=getModPct(m);
     var label=m.titles[curLang]||m.titles.zh;
     var cls='mcard'+(i===curMod?' actm':'')+(isDone?' mdone':'');
     html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')loadModule('+i+')">';
-    html+='<div class="memoji-wrap"><span class="memoji">'+m.emoji+'</span></div>';
-    html+='<div class="mtitle">'+label+'</div>';
-    html+='<div class="men">'+m.titles.en+'</div>';
-    html+='<div class="mlvl">'+t('lesson.topic')+' '+m.lv+'</div>';
-    html+='<div class="mcnt">'+done+' / '+tot+' '+t('tag.done')+'</div>';
+    html+='<div class="memoji-wrap"><span class="memoji">'+escHTML(m.emoji)+'</span></div>';
+    html+='<div class="mtitle">'+escHTML(label)+'</div>';
+    html+='<div class="men">'+escHTML(m.titles.en)+'</div>';
+    html+='<div class="mcnt"><span class="mcnt-badge">'+done+'/'+tot+'</span></div>';
     html+='<div class="mbar"><div class="mfill" style="width:'+pct+'%"></div></div>';
     if(isDone) html+='<div class="mcheck"><i class="ti ti-circle-check" aria-hidden="true"></i></div>';
     html+='</div>';
   });
   html+='</div>';
 
-  // ── 快捷操作 ──
-  html+='<div class=\"sechd\"><h2>'+t('sec.quick')+'</h2><div class=\"ln\"></div></div>';
-  html+='<div class=\"quick\">';
-  html+='<button class=\"qbtn pri\" onclick=\"loadModule('+curMod+')\"><i class=\"ti ti-player-play\" aria-hidden=\"true\"></i>'+t('btn.continue')+'</button>';
-  html+='<button class=\"qbtn\" onclick=\"showView(\'quizcenter\')\"><i class=\"ti ti-clipboard-list\" aria-hidden=\"true\"></i>'+t('btn.quiz')+'</button>';
-  html+='<button class=\"qbtn\" onclick=\"showView(\'cert\')\"><i class=\"ti ti-chart-bar\" aria-hidden=\"true\"></i>'+t('nav.cert')+'</button>';
-  html+='</div>';
   return html;
 }
-
 // ── lang2(): 雙語次要語言選取器 ──
 // zh模式：次要語言=英文(en)作參考
 // en/id/vi模式：次要語言=中文(zh)，實現「中英/中印/中越並陳」
@@ -5894,10 +5982,10 @@ function renderLesson(idx){
   var label=m.titles[curLang]||m.titles.zh;
   var tot=getTotal(m);
   var doneCnt=getDoneCount(m);
-  var html='<div class="sechd"><h2>'+t('sec.cur')+' — '+t('lesson.topic')+m.lv+' '+label+'</h2><div class="ln"></div></div>';
-  html+='<div class="lesson"><div class="leshd"><div class="lesico">'+m.emoji+'</div><div>';
-  html+='<h3>'+t('lesson.topic')+m.lv+' '+label+'</h3>';
-  html+='<div class="lessub">'+(curLang==='zh'?m.titles.en:m.titles.zh)+'</div>';
+  var html='<div class="sechd"><h2>'+escHTML(t('sec.cur')+' — '+t('lesson.topic')+m.lv+' '+label)+'</h2><div class="ln"></div></div>';
+  html+='<div class="lesson"><div class="leshd"><div class="lesico">'+escHTML(m.emoji)+'</div><div>';
+  html+='<h3>'+escHTML(t('lesson.topic')+m.lv+' '+label)+'</h3>';
+  html+='<div class="lessub">'+escHTML(curLang==='zh'?m.titles.en:m.titles.zh)+'</div>';
   html+='<div class="leschips"><span class="chip">'+t('chip.prog')+'</span><span class="chip">'+tot+' '+t('stat.units')+'</span><span class="chip" style="background:rgba(26,114,72,.15);color:#1a7248">'+doneCnt+'/'+tot+' '+t('tag.done')+'</span></div>';
   html+='</div></div>';
   html+='<div class=\"lesbody\">';
@@ -5911,12 +5999,12 @@ function renderLesson(idx){
   if(kd){
     var ktitle=pick(kd.title);
     html+='<div class=\"kcard\" style=\"margin-top:8px\">';
-    html+='<div class=\"kcard-hd\"><i class=\"ti ti-bulb\" aria-hidden=\"true\"></i><span class=\"khtitle\">'+ktitle+'</span><span class=\"khen\">'+(curLang!=='zh'?kd.title.zh:kd.title.en)+'</span></div>';
+    html+='<div class=\"kcard-hd\"><i class=\"ti ti-bulb\" aria-hidden=\"true\"></i><span class=\"khtitle\">'+escHTML(ktitle)+'</span><span class=\"khen\">'+escHTML(curLang!=='zh'?kd.title.zh:kd.title.en)+'</span></div>';
     html+='<div class=\"kcard-body\">';
     // visual diagram if present
     if(kd.visual){
       html+='<div class=\"kdiagram\">';
-      html+='<div class=\"kdiagram-title\">'+( pick(kd.visual.title) )+'</div>';
+      html+='<div class=\"kdiagram-title\">'+escHTML(pick(kd.visual.title))+'</div>';
       var vHtml=kd.visual.html;
       if(typeof vHtml==='object'&&vHtml!==null){
         var langHtml=vHtml[curLang];
@@ -5929,7 +6017,7 @@ function renderLesson(idx){
             id:'📌 Diagram di bawah ini dalam bahasa Mandarin sebagai referensi. Semua deskripsi di atas tersedia dalam Bahasa Indonesia.',
             vi:'📌 Sơ đồ bên dưới bằng tiếng Trung để tham khảo. Tất cả mô tả trên đã có bằng tiếng Việt.'
           };
-          var notice=curLang!=='zh'&&noticeText[curLang]?'<div style="font-size:10.5px;color:var(--color-text-secondary);background:var(--color-background-tertiary);border:0.5px solid var(--color-border-secondary);border-radius:5px;padding:5px 8px;margin-bottom:6px">'+noticeText[curLang]+'</div>':'';
+          var notice=curLang!=='zh'&&noticeText[curLang]?'<div style="font-size:10.5px;color:var(--color-text-secondary);background:var(--color-background-tertiary);border:0.5px solid var(--color-border-secondary);border-radius:5px;padding:5px 8px;margin-bottom:6px">'+escHTML(noticeText[curLang])+'</div>':'';
           vHtml=notice+(vHtml.en||vHtml.zh||'');
         }
       }
@@ -5941,8 +6029,8 @@ function renderLesson(idx){
       html+='<div class=\"ksteps\">';
       kd.steps.forEach(function(s,si){
         var sSecondary=lang2(s);
-        html+='<div class=\"kstep\"><div class=\"kstep-num\">'+(si+1)+'</div><div class=\"kstep-txt\"><strong>'+pick(s)+'</strong>';
-        if(sSecondary) html+=' <span style=\"color:var(--color-text-tertiary);font-size:10.5px\">'+sSecondary+'</span>';
+        html+='<div class=\"kstep\"><div class=\"kstep-num\">'+(si+1)+'</div><div class=\"kstep-txt\"><strong>'+escHTML(pick(s))+'</strong>';
+        if(sSecondary) html+=' <span style=\"color:var(--color-text-tertiary);font-size:10.5px\">'+escHTML(sSecondary)+'</span>';
         html+='</div></div>';
       });
       html+='</div>';
@@ -5951,8 +6039,8 @@ function renderLesson(idx){
     if(kd.sections){
       kd.sections.forEach(function(sec){
         html+='<div class="ksec">';
-        html+='<div class="ksec-hd">'+pick(sec.heading)+'</div>';
-        html+='<div class="ksec-body">'+pick(sec.body)+'</div>';
+        html+='<div class="ksec-hd">'+escHTML(pick(sec.heading))+'</div>';
+        html+='<div class="ksec-body">'+escHTML(pick(sec.body))+'</div>';
         html+='</div>';
       });
     }
@@ -5960,7 +6048,7 @@ function renderLesson(idx){
     if(kd.items){
       html+='<div class=\"krow\">';
       kd.items.forEach(function(item){
-        html+='<div class=\"kitem\"><div class=\"ki-icon\">'+item.icon+'</div><div class=\"ki-title\">'+pick(item)+'</div><div class=\"ki-en\">'+lang2(item)+'</div></div>';
+        html+='<div class=\"kitem\"><div class=\"ki-icon\">'+escHTML(item.icon)+'</div><div class=\"ki-title\">'+escHTML(pick(item))+'</div><div class=\"ki-en\">'+escHTML(lang2(item))+'</div></div>';
       });
       html+='</div>';
     }
@@ -5968,23 +6056,23 @@ function renderLesson(idx){
     if(kd.checklist){
       var cltitle=pick(kd.checklist.title);
       html+='<div class=\"safepanel\" style=\"margin-top:8px\">';
-      html+='<div class=\"safehd\"><i class=\"ti ti-checklist\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+cltitle+'</span></div>';
+      html+='<div class=\"safehd\"><i class=\"ti ti-checklist\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+escHTML(cltitle)+'</span></div>';
       html+='<div class=\"safebody\">';
       kd.checklist.items.forEach(function(r){
-        html+='<div class=\"saferow '+(r.ok?'ok':'no')+'\"><i class=\"ti ti-'+(r.ok?'circle-check':'circle-x')+'\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+pick(r)+'</div><div class=\"sen\">'+lang2(r)+'</div></div></div>';
+        html+='<div class=\"saferow '+(r.ok?'ok':'no')+'\"><i class=\"ti ti-'+(r.ok?'circle-check':'circle-x')+'\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+escHTML(pick(r))+'</div><div class=\"sen\">'+escHTML(lang2(r))+'</div></div></div>';
       });
       html+='</div></div>';
     }
     // table if present
     if(kd.table){
       html+='<div class=\"kdiagram\" style=\"margin-top:8px\">';
-      html+='<div class=\"kdiagram-title\">'+pick(kd.table.title)+'</div>';
+      html+='<div class=\"kdiagram-title\">'+escHTML(pick(kd.table.title))+'</div>';
       html+='<table class=\"kvtable\"><thead><tr>';
-      kd.table.cols.forEach(function(c){html+='<th>'+pick(c)+'</th>';});
+      kd.table.cols.forEach(function(c){html+='<th>'+escHTML(pick(c))+'</th>';});
       html+='</tr></thead><tbody>';
       kd.table.rows.forEach(function(row){
         html+='<tr>';
-        row.forEach(function(cell){html+='<td>'+(typeof cell==='object'?pick(cell):cell)+'</td>';});
+        row.forEach(function(cell){html+='<td>'+escHTML(typeof cell==='object'?pick(cell):cell)+'</td>';});
         html+='</tr>';
       });
       html+='</tbody></table></div>';
@@ -5996,7 +6084,7 @@ function renderLesson(idx){
       var maxVal=0;
       ct.bars.forEach(function(b){if(b.value>maxVal)maxVal=b.value;});
       html+='<div class=\"kdiagram\" style=\"margin-top:8px\">';
-      html+='<div class=\"kdiagram-title\">📊 '+ctitle+'</div>';
+      html+='<div class=\"kdiagram-title\">📊 '+escHTML(ctitle)+'</div>';
       html+='<div style=\"display:flex;flex-direction:column;gap:6px;margin-top:6px\">';
       ct.bars.forEach(function(b){
         var pct2=maxVal>0?Math.round(b.value/maxVal*100):0;
@@ -6004,17 +6092,17 @@ function renderLesson(idx){
         var col=b.color||'#5a1800';
         var valLabel=b.unit?b.value+' '+b.unit:b.value;
         html+='<div style=\"display:flex;align-items:center;gap:8px\">';
-        html+='<div style=\"width:90px;flex-shrink:0;font-size:10.5px;color:var(--color-text-secondary);text-align:right;line-height:1.3\">'+b.emoji+' '+label+'</div>';
+        html+='<div style=\"width:90px;flex-shrink:0;font-size:10.5px;color:var(--color-text-secondary);text-align:right;line-height:1.3\">'+escHTML((b.emoji||'')+' '+label)+'</div>';
         html+='<div style=\"flex:1;height:22px;background:var(--color-background-tertiary);border-radius:4px;overflow:hidden;position:relative\">';
         html+='<div style=\"height:100%;width:'+pct2+'%;background:'+col+';border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)\"></div>';
-        html+='<span style=\"position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--color-text-secondary);font-weight:500\">'+valLabel+'</span>';
+        html+='<span style=\"position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--color-text-secondary);font-weight:500\">'+escHTML(valLabel)+'</span>';
         html+='</div></div>';
       });
-      if(ct.note){html+='<div style=\"margin-top:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 10px;font-size:10.5px;color:var(--color-text-secondary)\">'+pick(ct.note)+'</div>';}
+      if(ct.note){html+='<div style=\"margin-top:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 10px;font-size:10.5px;color:var(--color-text-secondary)\">'+escHTML(pick(ct.note))+'</div>';}
       html+='</div></div>';
     }
     var tip=pick(kd.tip);
-    html+='<div class=\"ktip\">'+tip+'</div></div></div>';
+    html+='<div class=\"ktip\">'+escHTML(tip)+'</div></div></div>';
   }
   html+='</div>';
   
@@ -6028,14 +6116,14 @@ function renderLesson(idx){
     html+='<div class=\"safehd\"><i class=\"ti ti-circle-check\" style=\"color:var(--color-text-success)\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+t('lesson.do')+'</span><span class=\"shen\">'+(curLang==='zh'?'Do':'正確做法')+'</span></div>';
     html+='<div class=\"safebody\">';
     okRows.forEach(function(r){
-      html+='<div class=\"saferow ok\"><i class=\"ti ti-circle-check\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+pick(r)+'</div><div class=\"sen\">'+lang2(r)+'</div></div></div>';
+      html+='<div class=\"saferow ok\"><i class=\"ti ti-circle-check\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+escHTML(pick(r))+'</div><div class=\"sen\">'+escHTML(lang2(r))+'</div></div></div>';
     });
     html+='</div></div>';
     html+='<div class=\"safepanel\" style=\"margin-bottom:10px\">';
     html+='<div class=\"safehd\"><i class=\"ti ti-alert-circle\" style=\"color:var(--color-text-danger)\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+t('lesson.dont')+'</span><span class=\"shen\">'+(curLang==='zh'?'Don\'t':'常見錯誤')+'</span></div>';
     html+='<div class=\"safebody\">';
     noRows.forEach(function(r){
-      html+='<div class=\"saferow no\"><i class=\"ti ti-circle-x\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+pick(r)+'</div><div class=\"sen\">'+lang2(r)+'</div></div></div>';
+      html+='<div class=\"saferow no\"><i class=\"ti ti-circle-x\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+escHTML(pick(r))+'</div><div class=\"sen\">'+escHTML(lang2(r))+'</div></div></div>';
     });
     html+='</div></div>';
   }
@@ -6046,7 +6134,7 @@ function renderLesson(idx){
     var checked=tp.s===2;
     html+='<div class=\"saferow '+(checked?'ok':'no')+'\">';
     html+='<i class=\"ti ti-'+(checked?'circle-check':'circle')+'\" aria-hidden=\"true\"></i>';
-    html+='<div><div class=\"stxt\">'+pick(tp)+'</div><div class=\"sen\">'+lang2(tp)+'</div></div>';
+    html+='<div><div class=\"stxt\">'+escHTML(pick(tp))+'</div><div class=\"sen\">'+escHTML(lang2(tp))+'</div></div>';
     html+='</div>';
   });
   html+='</div></div>';
@@ -6055,6 +6143,22 @@ function renderLesson(idx){
   if(idx<MODS.length-1)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx+1)+')\">'+t('lesson.next')+(MODS[idx+1] ? (MODS[idx+1].titles[curLang]||MODS[idx+1].titles.zh) : '')+' →</button>';
   if(idx>0)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx-1)+')\">'+t('lesson.prev')+(MODS[idx-1] ? (MODS[idx-1].titles[curLang]||MODS[idx-1].titles.zh) : '')+'</button>';
   html+='</div></div></div>';
+  // ── v0.50: 課程完成區 ──
+  var allTopicsDone = m.topics.every(function(tp){return tp.s===2;});
+  var doneCount = getDoneCount(m);
+  var totalCount = getTotal(m);
+  var markAllLabels={zh:'標記全部完成',en:'Mark All Done',id:'Tandai Semua Selesai',vi:'Đánh dấu tất cả hoàn thành'};
+  var nextModLabels={zh:'下一個模組',en:'Next Module',id:'Modul Berikutnya',vi:'Mô-đun tiếp theo'};
+  var backLabels={zh:'← 回到所有課程',en:'← All Modules',id:'← Semua Modul',vi:'← Tất cả mô-đun'};
+  html+='<div class="lesson-complete-bar">';
+  html+='<div class="lesson-complete-bar-title">'+t('lesson.progress')+'</div>';
+  html+='<div class="lesson-complete-actions">';
+  html+='<button class="btn-mark-done'+(allTopicsDone?' marked':'')+'" onclick="markAllTopics('+idx+')">';
+  html+= allTopicsDone ? '✅ '+(markAllLabels[curLang]||markAllLabels.zh) : '☐ '+(markAllLabels[curLang]||markAllLabels.zh);
+  html+='</button>';
+  if(idx<MODS.length-1) html+='<button class="btn-next-mod" onclick="loadModule('+(idx+1)+')">'+escHTML((nextModLabels[curLang]||nextModLabels.zh)+' '+(MODS[idx+1].titles[curLang]||MODS[idx+1].titles.zh)+' →')+'</button>';
+  html+='<button class="btn-next-mod" onclick="showView(\'home\')">'+escHTML(backLabels[curLang]||backLabels.zh)+'</button>';
+  html+='</div></div>';
   html+='</div></div>';
   
   return html;
@@ -6101,7 +6205,7 @@ function renderQuiz(){
   var curQNum=qi+1;
   var pct=Math.round(quizState.q/totalQ*100);
 
-  var html='<div class=\"sechd\"><h2>'+t('quiz.title')+' — '+MODS[curMod].titles[curLang]+'</h2><div class=\"ln\"></div></div>';
+  var html='<div class=\"sechd\"><h2>'+escHTML(t('quiz.title')+' — '+(MODS[curMod].titles[curLang]||MODS[curMod].titles.zh))+'</h2><div class=\"ln\"></div></div>';
 
   // 進度區塊
   html+='<div class=\"quiz-prog\">';
@@ -6109,8 +6213,8 @@ function renderQuiz(){
   html+='<div class=\"quiz-prog-row\">';
   var qCounterLabel=qCounter(curQNum);
   var qTotalLabel=qTotal(totalQ);
-  html+='<span class=\"quiz-q-counter\">'+qCounterLabel+'</span>';
-  html+='<span class=\"quiz-q-total\">'+qTotalLabel+'</span>';
+  html+='<span class=\"quiz-q-counter\">'+escHTML(qCounterLabel)+'</span>';
+  html+='<span class=\"quiz-q-total\">'+escHTML(qTotalLabel)+'</span>';
   html+='<div style=\"flex:1\"></div>';
   html+='<span style=\"font-size:11px;color:var(--color-text-tertiary)\">'+t('quiz.score')+'</span>';
   html+='<span style=\"font-size:13px;font-weight:600;color:#8a2800;margin-left:3px\">'+quizState.score+'</span>';
@@ -6122,14 +6226,14 @@ function renderQuiz(){
     var dotCls='quiz-dot';
     if(di<quizState.q) dotCls+=' done';
     else if(di===quizState.q) dotCls+=' cur';
-    html+='<div class=\"'+dotCls+'\" title=\"'+qCounter(di+1)+'\"></div>';
+    html+='<div class=\"'+dotCls+'\" title=\"'+escAttr(qCounter(di+1))+'\"></div>';
   }
   html+='</div>';
   html+='</div>';
 
-  html+='<div class=\"quiz-wrap\"><div class=\"quiz-q\">'+(q.q[curLang]||q.q.zh)+'</div>';
+  html+='<div class=\"quiz-wrap\"><div class=\"quiz-q\">'+escHTML(q.q[curLang]||q.q.zh)+'</div>';
   html+='<div class=\"quiz-opts\">';
-  var fbEnc=encodeURIComponent(q.fb[curLang]||q.fb.zh);
+  var fbEnc=encArg(q.fb[curLang]||q.fb.zh);
   q.opts.forEach(function(o,oi){
     var cls='qopt';
     var extra='';
@@ -6138,10 +6242,10 @@ function renderQuiz(){
       if(oi===quizState.picked) cls+=(o.ok?' correct':' wrong');
       extra=' disabled style=\"cursor:default\"';
     }
-    html+='<button class=\"'+cls+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+(o[curLang]||o.zh)+'</button>';
+    html+='<button class=\"'+cls+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+escHTML(o[curLang]||o.zh)+'</button>';
   });
   var fbText=quizState.answered?(q.fb[curLang]||q.fb.zh):'';
-  html+='</div><div class=\"quiz-fb\" id=\"quiz-fb\">'+fbText+'</div></div>';
+  html+='</div><div class=\"quiz-fb\" id=\"quiz-fb\">'+escHTML(fbText)+'</div></div>';
   var nextStyle=quizState.answered?'':'display:none';
   html+='<div class=\"quick\"><button class=\"qbtn pri\" id=\"quiz-next-btn\" style=\"'+nextStyle+'\" onclick=\"nextQ()\">'+t('quiz.next')+'</button></div>';
   return html;
@@ -6197,7 +6301,7 @@ function renderCert(){
     html+='<div class="cert-mod-item'+(isDone?' done':'')+'" onclick="loadModule('+i+')" role="button" tabindex="0" style="cursor:pointer">';
     html+='<div class="cert-mod-emoji">'+m.emoji+'</div>';
     html+='<div class="cert-mod-info">';
-    html+='<div class="cert-mod-name">'+label+'</div>';
+    html+='<div class="cert-mod-name">'+escHTML(label)+'</div>';
     html+='<div class="cert-mod-prog">'+mDone+'/'+mTot+' ('+pct+'%)</div>';
     html+='<div class="cert-mod-bar-wrap"><div class="cert-mod-bar-fill" style="width:'+pct+'%"></div></div>';
     html+='</div>';
@@ -6233,7 +6337,7 @@ function showView(v, resetQuiz){
   if(v==='home') c.innerHTML=renderHome();
   else if(v==='levels') c.innerHTML=renderLesson(curMod);
   else if(v==='quiz'){
-    if(resetQuiz) { quizState={q:0,score:0,answered:false}; }
+    if(resetQuiz) { quizState={q:0,score:0,answered:false,picked:-1}; }
     c.innerHTML=renderQuiz();
   }
   else if(v==='quizcenter') c.innerHTML=(qcState.inSession?renderQCQuiz():renderQuizCenter());
@@ -6284,8 +6388,8 @@ function nextQ(){
     var scoreMsg=scorePct>=90?t('quiz.msg.excellent'):scorePct>=70?t('quiz.msg.good'):scorePct>=50?t('quiz.msg.keep'):t('quiz.msg.practice');
     var scoreHtml='<div style=\"background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:24px 20px;text-align:center;margin-bottom:14px\">';
     scoreHtml+='<div style=\"font-size:40px;margin-bottom:10px\">'+scoreEmoji+'</div>';
-    scoreHtml+='<div style=\"font-size:15px;font-weight:600;margin-bottom:4px\">'+scoreMsg+'</div>';
-    scoreHtml+='<div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:16px\">'+(MODS[curMod].titles[curLang]||MODS[curMod].titles.zh)+' · '+t('quiz.completed')+'</div>';
+    scoreHtml+='<div style=\"font-size:15px;font-weight:600;margin-bottom:4px\">'+escHTML(scoreMsg)+'</div>';
+    scoreHtml+='<div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:16px\">'+escHTML((MODS[curMod].titles[curLang]||MODS[curMod].titles.zh)+' · '+t('quiz.completed'))+'</div>';
     scoreHtml+='<div style=\"display:flex;justify-content:center;gap:12px;margin-bottom:16px\">';
     scoreHtml+='<div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px 18px\">';
     scoreHtml+='<div style=\"font-size:26px;font-weight:700;color:#8a2800;line-height:1\">'+quizState.score+'</div>';
@@ -6505,10 +6609,10 @@ function qcShuffle(arr){
 
 function renderQuizCenter(){
   var totalQ=0;QUIZZES.forEach(function(qs){totalQ+=qs.length;});
-  var html='<div class="sechd"><h2>'+t('qc.title')+'</h2><div class="ln"></div></div>';
+  var html='<div class="sechd"><h2>'+escHTML(t('qc.title'))+'</h2><div class="ln"></div></div>';
   html+='<div class="qc-hero"><div class="qc-hero-row"><div class="qc-hero-ico">📝</div>';
-  html+='<div class="qc-hero-text"><div class="qc-hero-title">'+t('qc.title')+'</div>';
-  html+='<div class="qc-hero-sub">'+t('qc.sub')+'</div></div></div>';
+  html+='<div class="qc-hero-text"><div class="qc-hero-title">'+escHTML(t('qc.title'))+'</div>';
+  html+='<div class="qc-hero-sub">'+escHTML(t('qc.sub'))+'</div></div></div>';
   // Pills 完全走 t()，確保切換語言後正確顯示
   html+='<div class="qc-hero-pills" id="qc-hero-pills">';
   html+='<span class="qc-pill"><strong>'+MODS.length+'</strong> '+t('stat.mod')+'</span>';
@@ -6521,10 +6625,10 @@ function renderQuizCenter(){
   modes.forEach(function(m){
     var sel=qcState.mode===m.id?' selected':'';
     html+='<div class="qc-mode-card'+sel+'" onclick="qcSelectMode(\''+m.id+'\')">';
-    html+='<div class="qcm-ico">'+m.ico+'</div>';
-    html+='<div class="qcm-title">'+t('qc.mode.'+m.id)+'</div>';
-    html+='<div class="qcm-desc">'+t('qc.mode.'+m.id+'.desc')+'</div>';
-    html+='<span class="qcm-badge '+m.id+'">'+t('qc.mode.'+m.id+'.badge')+'</span>';
+    html+='<div class="qcm-ico">'+escHTML(m.ico)+'</div>';
+    html+='<div class="qcm-title">'+escHTML(t('qc.mode.'+m.id))+'</div>';
+    html+='<div class="qcm-desc">'+escHTML(t('qc.mode.'+m.id+'.desc'))+'</div>';
+    html+='<span class="qcm-badge '+m.id+'">'+escHTML(t('qc.mode.'+m.id+'.badge'))+'</span>';
     html+='<span class="qcm-check">✓</span></div>';
   });
   html+='</div>';
@@ -6536,8 +6640,8 @@ function renderQuizCenter(){
       var picked=qcState.selMod===i?' picked':'';
       var hasQ=QUIZZES[i]&&QUIZZES[i].length>0;
       html+='<div class="qc-mp-item'+picked+'" onclick="qcPickMod('+i+')">';
-      html+='<span class="qcpi-emoji">'+(m.emoji||'📚')+'</span>';
-      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<span class="qcpi-emoji">'+escHTML(m.emoji||'📚')+'</span>';
+      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
       if(hasQ)html+='<span class="qcpi-tick">✓</span>';
       else html+='<span style="font-size:10px;color:var(--color-text-tertiary)">—</span>';
       html+='</div>';
@@ -6558,8 +6662,8 @@ function renderQuizCenter(){
       var totalWrong=weakQs.reduce(function(a,k){return a+wd[k].wrong;},0);
       var pct=Math.round(totalWrong/Math.max(1,totalAttempts)*100);
       var col=pct>60?'#c0392b':pct>30?'#e67e22':'#1a7248';
-      html+='<div class="qc-weak-row"><span style="font-size:12px">'+(m.emoji||'📚')+'</span>';
-      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<div class="qc-weak-row"><span style="font-size:12px">'+escHTML(m.emoji||'📚')+'</span>';
+      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
       html+='<div class="qc-weak-bar-wrap"><div class="qc-weak-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>';
       html+='<span class="qc-weak-pct">'+weakQs.length+' '+t('qc.count.unit')+'</span></div>';
     });
@@ -6584,8 +6688,8 @@ function renderQuizCenter(){
       var pct=Math.round(h.score/Math.max(1,h.total)*100);
       var pass=pct>=70;
       html+='<div class="qc-hist-row"><span class="qc-hist-ico">'+(pass?'⭐':'📖')+'</span>';
-      html+='<span class="qc-hist-mode">'+t('qc.mode.'+h.mode+'.badge')+'</span>';
-      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--color-text-secondary)">'+t('qc.mode.'+h.mode)+'</span>';
+      html+='<span class="qc-hist-mode">'+escHTML(t('qc.mode.'+h.mode+'.badge'))+'</span>';
+      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--color-text-secondary)">'+escHTML(t('qc.mode.'+h.mode))+'</span>';
       html+='<span class="qc-hist-score '+(pass?'pass':'fail')+'">'+h.score+'/'+h.total+'</span></div>';
     });
     html+='</div></div>';
@@ -6628,9 +6732,9 @@ function renderQCQuiz(){
   var pi=qcState.poolIdx;var item=qcState.pool[pi];var q=item.q;var mi=item.mi;
   var totalQ=qcState.pool.length;var pct=Math.round(pi/totalQ*100);
   var html='<div class="qc-session-hd">';
-  html+='<span class="qcs-mode-badge" style="background:rgba(138,40,0,.1);color:#8a2800">'+t('qc.mode.'+qcState.mode)+'</span>';
-  html+='<span class="qcs-src">'+(MODS[mi].titles[curLang]||MODS[mi].titles.zh)+'</span>';
-  html+='<button class="qcs-exit" onclick="qcExit()">'+t('qc.exit')+'</button></div>';
+  html+='<span class="qcs-mode-badge" style="background:rgba(138,40,0,.1);color:#8a2800">'+escHTML(t('qc.mode.'+qcState.mode))+'</span>';
+  html+='<span class="qcs-src">'+escHTML(MODS[mi].titles[curLang]||MODS[mi].titles.zh)+'</span>';
+  html+='<button class="qcs-exit" onclick="qcExit()">'+escHTML(t('qc.exit'))+'</button></div>';
   html+='<div class="quiz-prog"><div class="quiz-prog-row">';
   html+='<span class="quiz-q-counter">'+qCounter(pi+1)+'</span><span class="quiz-q-total">'+qTotal(totalQ)+'</span>';
   html+='<div style="flex:1"></div>';
@@ -6643,20 +6747,20 @@ function renderQCQuiz(){
     html+='<div class="'+dotCls+'"></div>';
   }
   html+='</div></div>';
-  html+='<span class="q-src-tag">'+(MODS[mi].emoji||'📚')+' '+(MODS[mi].titles[curLang]||MODS[mi].titles.zh)+'</span>';
-  html+='<div class="quiz-wrap"><div class="quiz-q">'+(q.q[curLang]||q.q.zh)+'</div>';
+  html+='<span class="q-src-tag">'+escHTML((MODS[mi].emoji||'📚')+' '+(MODS[mi].titles[curLang]||MODS[mi].titles.zh))+'</span>';
+  html+='<div class="quiz-wrap"><div class="quiz-q">'+escHTML(q.q[curLang]||q.q.zh)+'</div>';
   html+='<div class="quiz-opts">';
-  var fbEnc=encodeURIComponent(q.fb[curLang]||q.fb.zh);
+  var fbEnc=encArg(q.fb[curLang]||q.fb.zh);
   q.opts.forEach(function(o,oi){
     var cls='qopt';var extra='';
     if(qcState.answered){
       if(oi===qcState.picked) cls+=(o.ok?' correct':' wrong');
       extra=' disabled style="cursor:default"';
     }
-    html+='<button class="'+cls+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+(o[curLang]||o.zh)+'</button>';
+    html+='<button class="'+cls+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+escHTML(o[curLang]||o.zh)+'</button>';
   });
   var fbText=qcState.answered?(q.fb[curLang]||q.fb.zh):'';
-  html+='</div><div class="quiz-fb" id="quiz-fb">'+fbText+'</div></div>';
+  html+='</div><div class="quiz-fb" id="quiz-fb">'+escHTML(fbText)+'</div></div>';
   var nextStyle=qcState.answered?'':'display:none';
   html+='<div class="quick"><button class="qbtn pri" id="quiz-next-btn" style="'+nextStyle+'" onclick="qcNextQ()">'+t('quiz.next')+'</button></div>';
   return html;
@@ -6701,8 +6805,8 @@ function qcShowResult(){
   qcSaveData();
   var html='<div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:24px 20px;text-align:center;margin-bottom:14px">';
   html+='<div style="font-size:40px;margin-bottom:10px">'+emoji+'</div>';
-  html+='<div style="font-size:15px;font-weight:600;margin-bottom:4px">'+msg+'</div>';
-  html+='<div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:16px">'+modeFull+' · '+t('quiz.completed')+'</div>';
+  html+='<div style="font-size:15px;font-weight:600;margin-bottom:4px">'+escHTML(msg)+'</div>';
+  html+='<div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:16px">'+escHTML(modeFull+' · '+t('quiz.completed'))+'</div>';
   html+='<div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px">';
   html+='<div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 18px"><div style="font-size:26px;font-weight:700;color:#8a2800;line-height:1">'+score+'</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">'+t('quiz.score')+'</div></div>';
   html+='<div style="background:var(--color-background-secondary);border-radius:8px;padding:10px 18px"><div style="font-size:26px;font-weight:700;color:var(--color-text-secondary);line-height:1">'+total+'</div><div style="font-size:10px;color:var(--color-text-tertiary);margin-top:2px">'+t('quiz.total')+'</div></div>';
@@ -6716,8 +6820,8 @@ function qcShowResult(){
     modKeys.forEach(function(k){
       var s=qcState.modScores[k];var mp=Math.round(s.correct/Math.max(1,s.total)*100);
       var col=mp>=70?'#1a7248':'#c0392b';var m=MODS[parseInt(k)];
-      html+='<div class="qr-br-row"><span class="qr-br-emoji">'+(m.emoji||'📚')+'</span>';
-      html+='<span class="qr-br-label">'+(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<div class="qr-br-row"><span class="qr-br-emoji">'+escHTML(m.emoji||'📚')+'</span>';
+      html+='<span class="qr-br-label">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
       html+='<div class="qr-br-bar"><div class="qr-br-fill" style="width:'+mp+'%;background:'+col+'"></div></div>';
       html+='<span class="qr-br-val">'+s.correct+'/'+s.total+'</span></div>';
     });
