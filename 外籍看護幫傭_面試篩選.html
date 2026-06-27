@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>外籍看護幫傭 面試篩選工具 | Foreign Caregiver & Domestic Helper Interview Screening</title>
 <style>
 :root {
@@ -58,7 +58,7 @@ body {
   font-family: -apple-system, 'Noto Sans TC', 'Noto Sans', sans-serif;
   background: var(--bg-ter);
   color: var(--text);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
   min-height: 100vh;
 }
@@ -102,6 +102,8 @@ body {
   font-weight: 500;
   cursor: pointer;
   transition: background 0.15s;
+  min-height: 36px;
+  min-width: 36px;
 }
 .lang-btn.active { background: rgba(255,255,255,0.25); }
 .lang-btn:hover { background: rgba(255,255,255,0.18); }
@@ -113,6 +115,9 @@ body {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+  position: sticky;
+  top: 56px;
+  z-index: 90;
 }
 .tab-bar::-webkit-scrollbar { display: none; }
 .tab-btn {
@@ -129,21 +134,22 @@ body {
   border-left: none;
   border-right: none;
   transition: color 0.15s;
+  min-height: 44px;
 }
 .tab-btn.active {
   color: var(--primary);
   border-bottom-color: var(--primary);
 }
 
-.main { padding: 14px 14px 80px; max-width: 680px; margin: 0 auto; }
+.main { padding: 14px 14px 100px; max-width: 680px; margin: 0 auto; }
 
 .section-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-hint);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin: 18px 0 8px;
+  margin: 24px 0 10px;
 }
 .section-label:first-child { margin-top: 4px; }
 
@@ -151,11 +157,11 @@ body {
   background: var(--bg);
   border-radius: var(--radius-lg);
   border: 0.5px solid var(--border);
-  padding: 14px 16px;
-  margin-bottom: 10px;
+  padding: 18px;
+  margin-bottom: 14px;
 }
 .card-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--text);
   display: flex;
@@ -187,9 +193,9 @@ body {
 }
 .checklist li:last-child { border-bottom: none; padding-bottom: 0; }
 .check-box {
-  width: 20px;
-  height: 20px;
-  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
   border: 1.5px solid var(--border-med);
   flex-shrink: 0;
   cursor: pointer;
@@ -201,7 +207,7 @@ body {
   background: var(--bg);
 }
 .check-box.checked { background: var(--accent); border-color: var(--accent); }
-.check-box.checked::after { content: '✓'; color: #fff; font-size: 12px; font-weight: 700; }
+.check-box.checked::after { content: '✓'; color: #fff; font-size: 15px; font-weight: 700; }
 
 .q-item {
   background: var(--bg-sec);
@@ -210,10 +216,10 @@ body {
   margin-bottom: 8px;
   border-left: 3px solid var(--primary);
 }
-.q-text { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-.q-note { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
-.q-good { color: var(--success); font-size: 12px; margin-top: 4px; }
-.q-bad { color: var(--danger); font-size: 12px; margin-top: 4px; }
+.q-text { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+.q-note { font-size: 14px; color: var(--text-sec); margin-top: 4px; }
+.q-good { color: var(--success); font-size: 13px; margin-top: 4px; }
+.q-bad { color: var(--danger); font-size: 13px; margin-top: 4px; }
 .q-item.warn { border-left-color: var(--warn); }
 .q-item.danger { border-left-color: var(--danger); }
 
@@ -257,12 +263,12 @@ body {
   margin: 6px 0 4px;
 }
 .star {
-  width: 20px; height: 20px;
-  border-radius: 3px;
+  width: 34px; height: 34px;
+  border-radius: 5px;
   border: 1.5px solid var(--border-med);
   cursor: pointer;
   background: var(--bg);
-  font-size: 11px;
+  font-size: 15px;
   display: flex; align-items: center; justify-content: center;
   color: var(--text-hint);
   transition: background 0.1s;
@@ -288,15 +294,15 @@ body {
   border-radius: var(--radius);
   padding: 12px 14px;
   margin-bottom: 10px;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
   border-left: 3px solid;
 }
 .alert-danger { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
 .alert-warn { background: var(--warn-light); border-color: var(--warn); color: var(--warn); }
 .alert-ok { background: var(--success-light); border-color: var(--success); color: var(--success); }
-.alert-title { font-weight: 700; margin-bottom: 4px; }
-.alert-body { color: var(--text); font-size: 13px; }
+.alert-title { font-weight: 700; margin-bottom: 4px; font-size: 15px; }
+.alert-body { color: var(--text); font-size: 14px; }
 
 .flag-toggle {
   display: inline-flex;
@@ -487,7 +493,7 @@ body {
   .score-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media print {
-  .app-header, .tab-bar, .print-btn, .timer-btns, .btn-primary, .btn-secondary, .autosave-status { display: none !important; }
+  .app-header, .tab-bar, .print-btn, .timer-btns, .btn-primary, .btn-secondary, .autosave-status, .mobile-action-bar, .dashboard-grid { display: none !important; }
   .tab-content { display: block !important; }
   body { background: #fff; }
   .card { border: 1px solid #ddd; page-break-inside: avoid; }
@@ -498,6 +504,93 @@ body {
   margin-top: 4px;
   min-height: 12px;
   transition: opacity 0.3s;
+}
+
+/* Sticky bottom action bar */
+.mobile-action-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 8px;
+  z-index: 80;
+  margin: 0 -14px;
+}
+.mobile-action-bar .btn-nav {
+  flex: 1;
+  padding: 12px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-med);
+  background: var(--bg-sec);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  min-height: 44px;
+}
+.mobile-action-bar .btn-nav-primary {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+/* Collapsible sections */
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  padding: 4px 0;
+}
+.collapsible-arrow {
+  font-size: 14px;
+  color: var(--text-hint);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.collapsible-arrow.open {
+  transform: rotate(180deg);
+}
+.collapsible-body {
+  overflow: hidden;
+  max-height: none;
+  transition: max-height 0.3s ease;
+}
+.collapsible-body.collapsed {
+  max-height: 0 !important;
+}
+
+/* Dashboard summary cards */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.dashboard-card {
+  background: var(--bg-sec);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+}
+.dashboard-card-label {
+  font-size: 11px;
+  color: var(--text-hint);
+  margin-bottom: 4px;
+}
+.dashboard-card-value {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.dashboard-card-sub {
+  font-size: 11px;
+  color: var(--text-sec);
+  margin-top: 2px;
 }
 .grade-badge-wrap {
   display: flex;
@@ -580,7 +673,12 @@ body {
 <div class="tab-content active" id="tab-setup">
   <p class="section-label" data-key="sl_candidate">候選人基本資料</p>
   <div class="card">
-    <div class="candidate-form">
+    <div class="collapsible-header" onclick="toggleCollapsible('coll-basic')">
+      <div class="card-title" style="margin-bottom:0;" data-key="sl_candidate">📋 基本資料</div>
+      <span class="collapsible-arrow open" id="arrow-coll-basic">▼</span>
+    </div>
+    <div class="collapsible-body" id="coll-basic">
+    <div class="candidate-form" style="margin-top:12px;">
       <label data-key="f_name">姓名</label>
       <input type="text" id="f-name" placeholder="候選人姓名" oninput="saveState()">
       <label data-key="f_nationality">國籍</label>
@@ -640,6 +738,7 @@ body {
         <input type="file" id="f-photo" accept="image/*" style="display:none;" onchange="handlePhotoUpload(this)">
       </div>
     </div>
+    </div><!-- end collapsible-body -->
   </div>
 
   <p class="section-label" data-key="sl_notes">面試前注意事項</p>
@@ -650,7 +749,11 @@ body {
   </div>
 
   <div class="card">
-    <div class="card-title" data-key="prep_title">面試前準備清單</div>
+    <div class="collapsible-header" onclick="toggleCollapsible('coll-prep')">
+      <div class="card-title" style="margin-bottom:0;" data-key="prep_title">面試前準備清單</div>
+      <span class="collapsible-arrow open" id="arrow-coll-prep">▼</span>
+    </div>
+    <div class="collapsible-body" id="coll-prep" style="margin-top:8px;">
     <ul class="checklist" id="prep-list">
       <li><span class="check-box" data-cb-id="prep1" onclick="toggleCheck(this)"></span><span data-key="prep1">確認視訊軟體可用（LINE / Zoom / Teams）</span></li>
       <li><span class="check-box" data-cb-id="prep2" onclick="toggleCheck(this)"></span><span data-key="prep2">收到候選人履歷並已預讀</span></li>
@@ -659,6 +762,7 @@ body {
       <li><span class="check-box" data-cb-id="prep5" onclick="toggleCheck(this)"></span><span data-key="prep5">若需翻譯，確認翻譯員已待命</span></li>
       <li><span class="check-box" data-cb-id="prep6" onclick="toggleCheck(this)"></span><span data-key="prep6">若承接轉出：已取得前雇主聯絡方式</span></li>
     </ul>
+    </div><!-- end collapsible-body -->
   </div>
 
   <div class="tip-bubble" data-key="tip_transfer">
@@ -710,6 +814,9 @@ body {
 
 
   <button class="btn-primary" onclick="switchTab('resume')" data-key="btn_next_resume">下一步：履歷審查 →</button>
+  <div class="mobile-action-bar">
+    <button class="btn-nav btn-nav-primary" onclick="switchTab('resume')"><span data-key="tab_resume">履歷審查</span> →</button>
+  </div>
 </div>
 
 <!-- TAB 2: Resume Review -->
@@ -761,6 +868,10 @@ body {
   </div>
 
   <button class="btn-primary" onclick="switchTab('interview')" data-key="btn_next_interview">下一步：視訊面試 →</button>
+  <div class="mobile-action-bar">
+    <button class="btn-nav" onclick="switchTab('setup')">← <span data-key="tab_setup">候選人資訊</span></button>
+    <button class="btn-nav btn-nav-primary" onclick="switchTab('interview')"><span data-key="tab_interview">視訊面試</span> →</button>
+  </div>
 </div>
 
 <!-- TAB 3: Interview -->
@@ -866,6 +977,10 @@ body {
   </div>
 
   <button class="btn-primary" onclick="switchTab('traps')" data-key="btn_next_traps">下一步：陷阱問題 →</button>
+  <div class="mobile-action-bar">
+    <button class="btn-nav" onclick="switchTab('resume')">← <span data-key="tab_resume">履歷審查</span></button>
+    <button class="btn-nav btn-nav-primary" onclick="switchTab('traps')"><span data-key="tab_traps">陷阱問題</span> →</button>
+  </div>
 </div>
 
 <!-- TAB 4: Trap Questions -->
@@ -900,10 +1015,32 @@ body {
   </div>
 
   <button class="btn-primary" onclick="switchTab('score')" data-key="btn_next_score">下一步：評分結果 →</button>
+  <div class="mobile-action-bar">
+    <button class="btn-nav" onclick="switchTab('interview')">← <span data-key="tab_interview">視訊面試</span></button>
+    <button class="btn-nav btn-nav-primary" onclick="switchTab('score')"><span data-key="tab_score">評分結果</span> →</button>
+  </div>
 </div>
 
 <!-- TAB 5: Score -->
 <div class="tab-content" id="tab-score">
+
+  <!-- 決策儀表板 -->
+  <p class="section-label" id="dashboard-label">一眼判斷</p>
+  <div class="dashboard-grid" id="dashboard-grid">
+    <div class="dashboard-card">
+      <div class="dashboard-card-label" id="db-label-score">綜合分數</div>
+      <div class="dashboard-card-value" id="db-score">—</div>
+      <div class="dashboard-card-sub">/ 5.0</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="dashboard-card-label" id="db-label-risk">風險等級</div>
+      <div class="dashboard-card-value" id="db-risk" style="font-size:16px;">—</div>
+    </div>
+    <div class="dashboard-card">
+      <div class="dashboard-card-label" id="db-label-action">建議動作</div>
+      <div class="dashboard-card-value" id="db-action" style="font-size:13px; margin-top:4px;">—</div>
+    </div>
+  </div>
 
   <p class="section-label" data-key="sl_score">五項評分（每項 1–5 分）</p>
   <div class="score-grid" id="score-grid"></div>
@@ -946,8 +1083,14 @@ body {
 
   <div class="alert-box alert-warn">
     <div class="alert-title" data-key="legal_title">⚠️ 法律提醒</div>
-    <div class="alert-body" data-key="legal_body">錄影需事先取得移工與仲介雙方同意；不得詢問工作必要性以外的隱私（如財產、政治傾向）；不得承諾超出合理範圍的條件；外籍看護有權拒絕面試，仲介不得施壓。</div>
-    <div class="alert-body" data-key="legal_prohibited" style="margin-top:8px;">為降低歧視風險，面試中應避免詢問：宗教信仰細節、政治立場、婚姻規劃、生育計畫。如有照護工作確實需要的相關安排（如宗教飲食禁忌），可僅就工作必要範圍說明並詢問。</div>
+    <div class="alert-body" style="margin-top:6px;">
+      <div style="font-weight:600; margin-bottom:4px;">📹 面試錄影</div>
+      <div data-key="legal_recording" style="margin-bottom:10px; padding-left:8px;">須事先取得移工與仲介雙方同意</div>
+      <div style="font-weight:600; margin-bottom:4px;">🚫 不可詢問</div>
+      <div style="margin-bottom:10px; padding-left:8px;" data-key="legal_prohibited_short">政治立場 · 生育計畫 · 婚姻規劃 · 非工作必要的宗教細節</div>
+      <div style="font-weight:600; margin-bottom:4px;">✅ 可以詢問</div>
+      <div style="padding-left:8px;" data-key="legal_allowed">飲食禁忌 · 休假配合 · 照護工作相關安排</div>
+    </div>
   </div>
 
   <p class="section-label" data-key="sl_summary">面試摘要</p>
@@ -985,6 +1128,10 @@ body {
   <button class="btn-secondary" onclick="exportPDF()" data-key="btn_pdf">📄 下載 PDF 報告</button>
   <button class="btn-primary" onclick="addToCompare()" data-key="btn_add_compare">➕ 加入比較名單</button>
   <button class="btn-secondary" onclick="resetAll()" data-key="btn_reset">重新開始新面試</button>
+  <div class="mobile-action-bar">
+    <button class="btn-nav" onclick="switchTab('traps')">← <span data-key="tab_traps">陷阱問題</span></button>
+    <button class="btn-nav btn-nav-primary" onclick="switchTab('compare')"><span data-key="tab_compare">候選人比較</span> →</button>
+  </div>
 
 </div>
 
@@ -1087,6 +1234,9 @@ const LANGS = {
     f_recid:'面試編號', f_recfile:'錄影檔名稱', f_reclink:'雲端連結',
     tab_compare:'候選人比較', sl_compare:'多候選人比較表', btn_add_compare:'➕ 加入比較名單', compare_added:'已加入比較名單',
     cmp_name:'候選人', cmp_nat:'國籍', cmp_type:'類型', cmp_flags:'紅旗數', cmp_score:'綜合評分', cmp_grade:'分級', cmp_risk:'風險指數', cmp_verdict:'建議', cmp_empty:'尚未加入任何候選人，請至「評分結果」頁點擊「加入比較名單」', cmp_clear:'清空比較名單', cmp_remove:'移除', cmp_best:'★ 最佳',
+    legal_recording:'須事先取得移工與仲介雙方同意',
+    legal_prohibited_short:'政治立場 · 生育計畫 · 婚姻規劃 · 非工作必要的宗教細節',
+    legal_allowed:'飲食禁忌 · 休假配合 · 照護工作相關安排',
   },
   en: {
     tab_setup:'Candidate Info', tab_resume:'Resume Check', tab_interview:'Video Interview', tab_traps:'Trap Questions', tab_score:'Score & Result',
@@ -1175,6 +1325,9 @@ const LANGS = {
     f_recid:'Interview ID', f_recfile:'Recording File Name', f_reclink:'Cloud Link',
     tab_compare:'Compare', sl_compare:'Multi-Candidate Comparison', btn_add_compare:'➕ Add to Comparison', compare_added:'Added to comparison list',
     cmp_name:'Candidate', cmp_nat:'Nationality', cmp_type:'Type', cmp_flags:'Red Flags', cmp_score:'Overall Score', cmp_grade:'Grade', cmp_risk:'Risk Index', cmp_verdict:'Recommendation', cmp_empty:'No candidates added yet — go to the Score tab and tap "Add to Comparison"', cmp_clear:'Clear comparison list', cmp_remove:'Remove', cmp_best:'★ Best',
+    legal_recording:'Recording requires prior consent from both the worker and the agency',
+    legal_prohibited_short:'Political views · Childbearing plans · Marriage plans · Religious details beyond job necessity',
+    legal_allowed:'Dietary restrictions · Days-off arrangement · Care-related scheduling',
   },
   id: {
     tab_setup:'Info Kandidat', tab_resume:'Cek Riwayat', tab_interview:'Wawancara Video', tab_traps:'Pertanyaan Jebakan', tab_score:'Penilaian',
@@ -1265,6 +1418,9 @@ const LANGS = {
     f_recid:'ID Wawancara', f_recfile:'Nama File Rekaman', f_reclink:'Tautan Cloud',
     tab_compare:'Bandingkan', sl_compare:'Perbandingan Multi-Kandidat', btn_add_compare:'➕ Tambah ke Perbandingan', compare_added:'Ditambahkan ke daftar perbandingan',
     cmp_name:'Kandidat', cmp_nat:'Kebangsaan', cmp_type:'Jenis', cmp_flags:'Bendera Merah', cmp_score:'Nilai Keseluruhan', cmp_grade:'Tingkat', cmp_risk:'Indeks Risiko', cmp_verdict:'Rekomendasi', cmp_empty:'Belum ada kandidat ditambahkan — buka tab Penilaian lalu ketuk "Tambah ke Perbandingan"', cmp_clear:'Hapus daftar perbandingan', cmp_remove:'Hapus', cmp_best:'★ Terbaik',
+    legal_recording:'Perekaman memerlukan persetujuan terlebih dahulu dari pekerja dan agen',
+    legal_prohibited_short:'Pandangan politik · Rencana memiliki anak · Rencana pernikahan · Detail agama di luar kebutuhan kerja',
+    legal_allowed:'Pantangan makanan · Pengaturan hari libur · Jadwal terkait perawatan',
   },
   vi: {
     tab_setup:'Thông tin ứng viên', tab_resume:'Kiểm tra hồ sơ', tab_interview:'Phỏng vấn video', tab_traps:'Câu hỏi bẫy', tab_score:'Chấm điểm',
@@ -1355,6 +1511,9 @@ const LANGS = {
     f_recid:'Mã phỏng vấn', f_recfile:'Tên file ghi hình', f_reclink:'Liên kết đám mây',
     tab_compare:'So sánh', sl_compare:'So sánh nhiều ứng viên', btn_add_compare:'➕ Thêm vào so sánh', compare_added:'Đã thêm vào danh sách so sánh',
     cmp_name:'Ứng viên', cmp_nat:'Quốc tịch', cmp_type:'Loại', cmp_flags:'Cờ đỏ', cmp_score:'Điểm tổng', cmp_grade:'Xếp hạng', cmp_risk:'Chỉ số rủi ro', cmp_verdict:'Khuyến nghị', cmp_empty:'Chưa có ứng viên nào — vào tab Chấm điểm và nhấn "Thêm vào so sánh"', cmp_clear:'Xóa danh sách so sánh', cmp_remove:'Xóa', cmp_best:'★ Tốt nhất',
+    legal_recording:'Ghi âm/hình cần có sự đồng ý trước của người lao động và đại lý',
+    legal_prohibited_short:'Quan điểm chính trị · Kế hoạch sinh con · Kế hoạch hôn nhân · Chi tiết tôn giáo ngoài yêu cầu công việc',
+    legal_allowed:'Kiêng ăn · Sắp xếp ngày nghỉ · Lịch liên quan đến chăm sóc',
   }
 };
 
@@ -2349,6 +2508,7 @@ function setLang(lang) {
   buildCareTypeQuestions();
   buildHelperTaskQuestions();
   updateSummary();
+  updateDashboard();
   document.querySelectorAll('.tab-btn').forEach(b => {
     const key = b.dataset.key;
     if (key && LANGS[lang][key]) b.textContent = LANGS[lang][key];
@@ -2553,6 +2713,7 @@ function updateTotal() {
   if (gradeBox) gradeBox.innerHTML = renderGradeBadge(total);
   buildRadarChart();
   updateSummary();
+  updateDashboard();
 }
 
 function computeGrade(total) {
@@ -2606,7 +2767,86 @@ function toggleVeto(i, el) {
   saveState();
 }
 
-function buildScripts() {
+function toggleCollapsible(id) {
+  const body = document.getElementById(id);
+  const arrow = document.getElementById('arrow-' + id);
+  if (!body) return;
+  if (body.classList.contains('collapsed')) {
+    // Expand: set max-height to scrollHeight
+    body.style.maxHeight = body.scrollHeight + 'px';
+    body.classList.remove('collapsed');
+    if (arrow) arrow.classList.add('open');
+    // After transition, remove fixed max-height so content can grow freely
+    body.addEventListener('transitionend', function handler() {
+      body.style.maxHeight = '';
+      body.removeEventListener('transitionend', handler);
+    });
+  } else {
+    // Collapse: first fix current height, then animate to 0
+    body.style.maxHeight = body.scrollHeight + 'px';
+    // Force reflow
+    body.offsetHeight; // eslint-disable-line no-unused-expressions
+    body.classList.add('collapsed');
+    if (arrow) arrow.classList.remove('open');
+  }
+}
+
+function updateDashboard() {
+  const totalEl = document.getElementById('total-score');
+  const dbScore = document.getElementById('db-score');
+  const dbRisk = document.getElementById('db-risk');
+  const dbAction = document.getElementById('db-action');
+  if (!dbScore) return;
+
+  // Translate card labels
+  const cardLabels = {
+    zh: {score:'綜合分數', risk:'風險等級', action:'建議動作'},
+    en: {score:'Overall Score', risk:'Risk Level', action:'Suggested Action'},
+    id: {score:'Nilai Total', risk:'Tingkat Risiko', action:'Tindakan Disarankan'},
+    vi: {score:'Điểm tổng', risk:'Mức độ rủi ro', action:'Hành động đề xuất'}
+  };
+  const cl = cardLabels[currentLang] || cardLabels.zh;
+  const lScore = document.getElementById('db-label-score');
+  const lRisk = document.getElementById('db-label-risk');
+  const lAction = document.getElementById('db-label-action');
+  if (lScore) lScore.textContent = cl.score;
+  if (lRisk) lRisk.textContent = cl.risk;
+  if (lAction) lAction.textContent = cl.action;
+
+  // Dashboard label
+  const dlabels = {zh:'一眼判斷', en:'At a Glance', id:'Ringkasan', vi:'Tóm tắt nhanh'};
+  const dlEl = document.getElementById('dashboard-label');
+  if (dlEl) dlEl.textContent = dlabels[currentLang] || dlabels.zh;
+
+  // Score
+  const scoreVal = totalEl ? totalEl.textContent : '—';
+  dbScore.textContent = scoreVal;
+
+  // Risk
+  const risk = computeRiskIndex();
+  const riskLabels = {
+    zh: {low:'🟢 低風險', mid:'🟡 中風險', high:'🔴 高風險'},
+    en: {low:'🟢 Low Risk', mid:'🟡 Medium Risk', high:'🔴 High Risk'},
+    id: {low:'🟢 Rendah', mid:'🟡 Sedang', high:'🔴 Tinggi'},
+    vi: {low:'🟢 Thấp', mid:'🟡 Trung bình', high:'🔴 Cao'}
+  };
+  const rl = (riskLabels[currentLang] || riskLabels.zh);
+  dbRisk.textContent = rl[risk.level];
+  dbRisk.style.color = risk.level === 'high' ? 'var(--danger)' : risk.level === 'mid' ? 'var(--warn)' : 'var(--success)';
+
+  // Action
+  const actionLabels = {
+    zh: {low:'建議優先考慮', mid:'建議二次面談', high:'不建議錄取'},
+    en: {low:'Prioritize', mid:'2nd interview', high:'Not recommended'},
+    id: {low:'Prioritaskan', mid:'Wawancara 2', high:'Tidak disarankan'},
+    vi: {low:'Ưu tiên xét', mid:'Phỏng vấn lại', high:'Không khuyến nghị'}
+  };
+  const al = (actionLabels[currentLang] || actionLabels.zh);
+  dbAction.textContent = al[risk.level];
+  dbAction.style.color = risk.level === 'high' ? 'var(--danger)' : risk.level === 'mid' ? 'var(--warn)' : 'var(--success)';
+}
+
+
   const scripts = CONTENT.scripts[currentLang] || CONTENT.scripts.zh;
   const cont = document.getElementById('scripts-content');
   cont.innerHTML = '';
@@ -2638,6 +2878,7 @@ function updateSummary() {
   const notes = document.getElementById('interview-notes');
   document.getElementById('sum-notes').textContent = notes && notes.value ? notes.value : '—';
   renderRiskIndex();
+  updateDashboard();
 }
 
 function buildRadarChart() {
