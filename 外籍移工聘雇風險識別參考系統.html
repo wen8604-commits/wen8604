@@ -9,7 +9,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://gs.jurieo.com/gemini/fonts-googleapis; font-src 'self' https://gs.jurieo.com/gemini/fonts-gstatic data:; script-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="X-Content-Type-Options" content="nosniff">
-<title>外籍移工聘雇風險識別參考系統</title>
+<title>外籍移工聘雇風險識別參考系統 v13</title>
 <link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-googleapis">
 <link rel="preconnect" href="https://gs.jurieo.com/gemini/fonts-gstatic" crossorigin>
 <link href="https://gs.jurieo.com/gemini/fonts-googleapis/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700;900&display=swap" rel="stylesheet">
@@ -907,7 +907,130 @@
   }
   .tablet-nav-scroll::-webkit-scrollbar { display: none; }
 
-  /* ─── PRINT STYLES ─── */
+  /* ─── MOBILE FLOATING RISK BAR ─── */
+  .mobile-risk-bar {
+    display: none;
+    position: fixed;
+    bottom: 64px;
+    left: 0; right: 0;
+    z-index: 150;
+    background: rgba(10,14,26,0.95);
+    border-top: 1px solid var(--border);
+    padding: 0.5rem 1rem calc(env(safe-area-inset-bottom) + 0.2rem);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
+  }
+  .mobile-risk-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+  }
+  .mobile-risk-bar-score {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: 1;
+  }
+  .mobile-risk-bar-num {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .mobile-risk-bar-label {
+    font-size: 0.72rem;
+    color: var(--text3);
+    line-height: 1.4;
+  }
+  .mobile-risk-bar-badge {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-weight: 700;
+  }
+  @media (max-width: 480px) {
+    .mobile-risk-bar { display: block; }
+    #page-analyzer.active ~ * .risk-score-wrap { opacity: 0.6; }
+  }
+
+  /* ─── 改善次要文字對比 ─── */
+  :root {
+    --text2: #b6c3d6;
+    --text3: #8794aa;
+  }
+
+  /* ─── 手機卡片間距加大 ─── */
+  @media (max-width: 600px) {
+    .stat-grid,
+    .fraud-grid,
+    .tac-grid,
+    .contact-grid {
+      gap: 0.9rem;
+    }
+    .card,
+    .stat-card,
+    .fraud-card,
+    .tac-card,
+    .contact-card {
+      border-radius: 16px;
+    }
+  }
+
+  /* ─── 法規手機卡片式 ─── */
+  @media (max-width: 600px) {
+    .law-table-wrap { display: none; }
+    .law-cards-mobile { display: block !important; }
+  }
+  .law-cards-mobile {
+    display: none;
+  }
+  .law-card-mobile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    margin-bottom: 0.75rem;
+  }
+  .law-card-mobile-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.5rem;
+  }
+  .law-card-mobile-row {
+    font-size: 0.8rem;
+    color: var(--text2);
+    line-height: 1.6;
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .law-card-mobile-row-label {
+    color: var(--text3);
+    flex-shrink: 0;
+    width: 52px;
+    font-size: 0.75rem;
+  }
+
+  /* ─── Report copy button ─── */
+  .report-copy-btn {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 16px;
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.25);
+    border-radius: 8px;
+    color: var(--accent2);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition: all 0.15s;
+  }
+  .report-copy-btn:hover { background: rgba(59,130,246,0.18); }
+
   @media print {
     header, .mobile-nav, .risk-actions, .header-badge,
     .btn-ghost, .step-wrap, .search-wrap, .filter-tabs { display: none !important; }
@@ -1228,10 +1351,29 @@
   </div>
 </header>
 
+<!-- 「更多」抽屜 -->
+<div id="moreDrawer" style="display:none;position:fixed;bottom:64px;left:0;right:0;z-index:199;background:rgba(10,14,26,0.98);border-top:1px solid rgba(100,160,255,0.15);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:1rem 1.2rem calc(env(safe-area-inset-bottom)+0.5rem);box-shadow:0 -8px 32px rgba(0,0,0,0.6);" aria-label="更多功能">
+  <div style="font-size:0.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.8rem;">更多功能</div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:0.6rem;">
+    <button class="more-drawer-btn" data-page="contacts" style="display:flex;align-items:center;gap:10px;padding:0.75rem 1rem;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;" aria-label="求助管道">
+      <span style="font-size:1.2rem;">📞</span><div style="text-align:left;"><div>求助管道</div><div style="font-size:0.65rem;color:var(--text3);">緊急電話與申訴</div></div>
+    </button>
+    <button class="more-drawer-btn" data-page="report" style="display:flex;align-items:center;gap:10px;padding:0.75rem 1rem;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;" aria-label="評估報告">
+      <span style="font-size:1.2rem;">📋</span><div style="text-align:left;"><div>評估報告</div><div style="font-size:0.65rem;color:var(--text3);">查看與匯出報告</div></div>
+    </button>
+    <button class="more-drawer-btn" data-page="tactics" style="display:flex;align-items:center;gap:10px;padding:0.75rem 1rem;background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.2);border-radius:12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;" aria-label="議價手法">
+      <span style="font-size:1.2rem;">🎭</span><div style="text-align:left;"><div>議價手法</div><div style="font-size:0.65rem;color:var(--text3);">27種常見劇本</div></div>
+    </button>
+    <button class="more-drawer-btn" data-page="broker" style="display:flex;align-items:center;gap:10px;padding:0.75rem 1rem;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);border-radius:12px;color:var(--text);font-family:'Noto Sans TC',sans-serif;font-size:0.83rem;font-weight:600;cursor:pointer;transition:all 0.15s;" aria-label="仲介篩選">
+      <span style="font-size:1.2rem;">🏢</span><div style="text-align:left;"><div>仲介篩選</div><div style="font-size:0.65rem;color:var(--text3);">聘前5步驟指南</div></div>
+    </button>
+  </div>
+</div>
+
 <nav class="mobile-nav" id="mobileNav" aria-label="行動裝置底部導覽">
   <div class="mobile-nav-inner">
-    <button class="mobile-nav-btn active" id="mnav-dashboard" data-page="dashboard" aria-label="總覽">
-      <span class="nav-icon" aria-hidden="true">📊</span>總覽
+    <button class="mobile-nav-btn active" id="mnav-dashboard" data-page="dashboard" aria-label="首頁">
+      <span class="nav-icon" aria-hidden="true">🏠</span>首頁
     </button>
     <button class="mobile-nav-btn" id="mnav-analyzer" data-page="analyzer" aria-label="風險評估">
       <span class="nav-icon" aria-hidden="true">🔍</span>評估
@@ -1242,17 +1384,8 @@
     <button class="mobile-nav-btn" id="mnav-law" data-page="law" aria-label="法規查詢">
       <span class="nav-icon" aria-hidden="true">⚖️</span>法規
     </button>
-    <button class="mobile-nav-btn" id="mnav-contacts" data-page="contacts" aria-label="求助管道">
-      <span class="nav-icon" aria-hidden="true">📞</span>求助
-    </button>
-    <button class="mobile-nav-btn" id="mnav-report" data-page="report" aria-label="評估報告">
-      <span class="nav-icon" aria-hidden="true">📋</span>報告
-    </button>
-    <button class="mobile-nav-btn" id="mnav-tactics" data-page="tactics" aria-label="議價手法識別">
-      <span class="nav-icon" aria-hidden="true">🎭</span>議價
-    </button>
-    <button class="mobile-nav-btn" id="mnav-broker" data-page="broker" aria-label="仲介篩選指南">
-      <span class="nav-icon" aria-hidden="true">🏢</span>仲介
+    <button class="mobile-nav-btn" id="mnav-more" id="mnavMoreBtn" aria-label="更多功能" aria-expanded="false" aria-controls="moreDrawer">
+      <span class="nav-icon" aria-hidden="true">⋯</span>更多
     </button>
   </div>
 </nav>
@@ -1263,7 +1396,12 @@
     <div class="hero">
       <div class="hero-tag">🇹🇼 台灣外籍移工聘雇保護平台</div>
       <h1>聘前知風險<br>雇中懂保護</h1>
-      <p>本平台整合就業服務法、消費者保護法等公開法規資訊，協助雇主辨識常見異常風險訊號。內容僅供教育與資訊參考用途，不代表對任何個人或機構之違法認定。</p>
+      <p>不確定仲介是否可靠？先用 3 分鐘完成風險評估，讓系統幫你找出潛在風險訊號。</p>
+      <div style="display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:0.5rem;">
+        <button class="btn btn-primary" data-page="analyzer" style="font-size:0.95rem;padding:13px 28px;border-radius:12px;box-shadow:0 0 24px rgba(59,130,246,0.35);">🔍 立即開始風險評估</button>
+        <button class="btn btn-ghost" data-page="fraud" style="font-size:0.88rem;padding:13px 22px;border-radius:12px;">查看常見風險案例</button>
+      </div>
+      <div style="margin-top:0.6rem;font-size:0.72rem;color:var(--text3);">本平台整合就業服務法、消費者保護法等公開法規資訊，內容僅供教育與資訊參考用途，不代表對任何個人或機構之違法認定。</div>
     </div>
 
     <div class="section-divider"></div>
@@ -1274,7 +1412,7 @@
     </div>
 
     <div class="section-title"><span>🚀</span> 快速功能入口</div>
-    <div class="stat-grid">
+    <div class="stat-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr));">
       <div class="stat-card accent" style="cursor:pointer;" data-page="analyzer">
         <div class="stat-icon">🔍</div>
         <div class="stat-val" style="font-size:1.1rem;">開始評估</div>
@@ -1295,10 +1433,15 @@
         <div class="stat-val" style="font-size:1.1rem;">求助管道</div>
         <div class="stat-label">緊急求助電話、法律扶助、政府機關一覽</div>
       </div>
-      <div class="stat-card" style="cursor:pointer;border-top-color:#a855f7;background:var(--surface);" data-page="tactics">
-        <div class="stat-icon">🎭</div>
-        <div class="stat-val" style="font-size:1.1rem;color:#d8b4fe;">議價手法</div>
-        <div class="stat-label">27種常見議價劇本，附動機分析與雇主應對策略</div>
+      <div class="stat-card" style="cursor:pointer;border-top-color:var(--accent);background:var(--surface);" data-page="report">
+        <div class="stat-icon">📋</div>
+        <div class="stat-val" style="font-size:1.1rem;color:var(--accent2);">評估報告</div>
+        <div class="stat-label">查看完整評估結果，支援列印與一鍵複製</div>
+      </div>
+      <div class="stat-card" style="cursor:pointer;border-top-color:#10b981;background:var(--surface);" data-page="broker">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-val" style="font-size:1.1rem;color:#6ee7b7;">仲介篩選</div>
+        <div class="stat-label">聘前5步驟核查清單，快速辨識不良仲介</div>
       </div>
     </div>
 
@@ -1314,6 +1457,10 @@
 
   <div id="page-analyzer" class="page fade-up">
     <div class="section-title"><span>🔍</span> 仲介風險評估系統</div>
+
+    <div style="padding:0.75rem 1rem;background:rgba(59,130,246,0.07);border:1px solid rgba(59,130,246,0.18);border-radius:10px;margin-bottom:1rem;font-size:0.82rem;color:var(--text2);line-height:1.6;">
+      💡 勾選你遇到的情況，系統會自動產生風險分數與建議處理方向。<strong style="color:var(--accent2);">紅色項目</strong>為高度風險訊號，勾選越多代表風險越高。
+    </div>
 
     <div class="step-wrap">
       <div class="step done" id="step1"><div class="step-dot">✓</div><div class="step-label">基本資料</div></div>
@@ -1413,6 +1560,17 @@
           </div>
         </div>
 
+        <!-- 手機浮動分數條 (≤480px) -->
+        <div class="mobile-risk-bar" id="mobileRiskBar">
+          <div class="mobile-risk-bar-inner">
+            <div class="mobile-risk-bar-score">
+              <div class="mobile-risk-bar-num" id="mobileRiskScore" style="color:#10b981;">0</div>
+              <div class="mobile-risk-bar-label">目前風險分數<br><span id="mobileRiskLabel" style="color:var(--success2);">低風險</span></div>
+            </div>
+            <button class="mobile-risk-bar-badge btn-primary btn" data-page="report" style="padding:6px 14px;font-size:0.75rem;">查看建議 →</button>
+          </div>
+        </div>
+
         <div class="card" style="margin-top:1rem;">
           <div class="card-title">⚡ 緊急求助</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
@@ -1470,6 +1628,10 @@
 
   <div id="page-law" class="page fade-up">
     <div class="section-title"><span>⚖️</span> 法律條文快速查詢</div>
+
+    <div style="padding:0.75rem 1rem;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:10px;margin-bottom:1rem;font-size:0.82rem;color:var(--text2);line-height:1.6;">
+      💡 不需要懂法律，直接搜尋關鍵字，例如：<strong style="color:var(--success2);">收費、轉換、解約、申訴</strong>，系統會找出相關條文與保護內容。
+    </div>
 
     <div class="search-wrap">
       <span class="search-icon">🔍</span>
@@ -1568,6 +1730,7 @@
     <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:1rem;">
       <button class="btn btn-primary" data-page="analyzer">🔍 重新評估</button>
       <button class="btn btn-ghost" data-cmd="print">🖨️ 列印報告</button>
+      <button class="report-copy-btn" id="reportCopyBtn">📋 一鍵複製摘要</button>
     </div>
 
     <div class="report-section" style="margin-top:1.5rem;border-color:rgba(100,116,139,0.2);">
@@ -1670,6 +1833,10 @@
       <div class="hero-tag" style="border-color:rgba(16,185,129,0.4);color:#6ee7b7;">🏢 Broker Screening · 仲介評鑑篩選</div>
       <h2 style="background:linear-gradient(135deg,#e2e8f0 30%,#6ee7b7 70%,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">仲介篩選重點指南</h2>
       <p>整合評鑑驗證機制、8大辨識要點與分級管理制度，協助雇主在聘前做出明智決策。</p>
+    </div>
+
+    <div style="padding:0.75rem 1rem;background:rgba(16,185,129,0.07);border:1px solid rgba(16,185,129,0.18);border-radius:10px;margin-bottom:1.2rem;font-size:0.82rem;color:var(--text2);line-height:1.6;">
+      💡 聘前先看 5 件事：<strong style="color:var(--success2);">合法登記、收費明細、契約內容、評鑑紀錄、後續服務</strong>。這頁用來一步步確認仲介是否達標。
     </div>
 
     <div class="tactics-stat-bar">
@@ -2046,8 +2213,8 @@ const checkData = {
 };
 
 const MODEL_META = {
-  version: 'v12',
-  lastUpdated: '2026/05/23',
+  version: 'v13',
+  lastUpdated: '2026/06/27',
   description: '本模型採多維加權設計，權重會依法規修訂、政策公告與實務統計動態檢視調整。所有分數屬統計推估，非法律量刑或行政認定。',
   dimensions: ['資格', '契約', '金流', '證件', '透明度'],
 };
@@ -2239,11 +2406,45 @@ function showPage(id) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const map = { dashboard:0, analyzer:1, fraud:2, law:3, contacts:4, report:5, tactics:6, broker:7 };
   document.querySelectorAll('.tab-btn')[map[id]]?.classList.add('active');
+  // v13: update 5-item mobile nav
   document.querySelectorAll('.mobile-nav-btn').forEach(b => b.classList.remove('active'));
-  const mBtn = document.getElementById('mnav-' + id);
-  if (mBtn) mBtn.classList.add('active');
+  const mainPages = ['dashboard','analyzer','fraud','law'];
+  if (mainPages.includes(id)) {
+    const mBtn = document.getElementById('mnav-' + id);
+    if (mBtn) mBtn.classList.add('active');
+  } else {
+    // secondary pages — mark "更多" as active
+    const moreBtn = document.getElementById('mnav-more');
+    if (moreBtn) moreBtn.classList.add('active');
+  }
+  // hide more drawer when switching pages
+  closeMoreDrawer();
+  // show/hide mobile risk bar
+  const riskBar = document.getElementById('mobileRiskBar');
+  if (riskBar) riskBar.style.display = (id === 'analyzer') ? 'block' : 'none';
   if (id === 'report') generateReport();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeMoreDrawer() {
+  const drawer = document.getElementById('moreDrawer');
+  const btn = document.getElementById('mnav-more');
+  if (drawer) drawer.style.display = 'none';
+  if (btn) btn.setAttribute('aria-expanded', 'false');
+}
+
+function toggleMoreDrawer() {
+  const drawer = document.getElementById('moreDrawer');
+  const btn = document.getElementById('mnav-more');
+  if (!drawer) return;
+  const isOpen = drawer.style.display !== 'none';
+  if (isOpen) {
+    drawer.style.display = 'none';
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+  } else {
+    drawer.style.display = 'block';
+    if (btn) btn.setAttribute('aria-expanded', 'true');
+  }
 }
 
 function buildChecks() {
@@ -2360,6 +2561,17 @@ function updateScore() {
     scoreEl.style.color = '#6ee7b7';
     badgeEl.textContent = '✅ 低度風險 — 可繼續評估';
     badgeEl.style.cssText = 'background:rgba(16,185,129,0.15);color:#6ee7b7;border:1px solid rgba(16,185,129,0.3);display:inline-block;padding:6px 20px;border-radius:20px;font-size:0.9rem;font-weight:700;margin-bottom:1rem;';
+  }
+
+  // Sync mobile floating risk bar
+  const mScore = document.getElementById('mobileRiskScore');
+  const mLabel = document.getElementById('mobileRiskLabel');
+  if (mScore) {
+    mScore.textContent = clamped;
+    if (clamped >= 70) { mScore.style.color = '#fca5a5'; if (mLabel) { mLabel.textContent = '高度警示'; mLabel.style.color = '#fca5a5'; } }
+    else if (clamped >= 45) { mScore.style.color = '#fde68a'; if (mLabel) { mLabel.textContent = '中度風險'; mLabel.style.color = '#fde68a'; } }
+    else if (clamped >= 20) { mScore.style.color = '#fdba74'; if (mLabel) { mLabel.textContent = '偏高風險'; mLabel.style.color = '#fdba74'; } }
+    else { mScore.style.color = '#6ee7b7'; if (mLabel) { mLabel.textContent = '低風險'; mLabel.style.color = '#6ee7b7'; } }
   }
 }
 
@@ -2624,6 +2836,60 @@ document.addEventListener('DOMContentLoaded', () => {
       el.style.cursor = 'pointer';
     }
   });
+
+  // v13: "更多" button toggle
+  const mnavMoreBtn = document.getElementById('mnav-more');
+  if (mnavMoreBtn) {
+    mnavMoreBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleMoreDrawer();
+    });
+  }
+
+  // v13: drawer item clicks
+  document.querySelectorAll('.more-drawer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      showPage(btn.dataset.page);
+    });
+  });
+
+  // v13: close drawer when clicking outside
+  document.addEventListener('click', (e) => {
+    const drawer = document.getElementById('moreDrawer');
+    if (drawer && drawer.style.display !== 'none') {
+      if (!drawer.contains(e.target) && !document.getElementById('mnav-more')?.contains(e.target)) {
+        closeMoreDrawer();
+      }
+    }
+  });
+
+  // v13: copy report button
+  const copyBtn = document.getElementById('reportCopyBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      const score = document.getElementById('reportScore')?.textContent || '—';
+      const badge = document.getElementById('reportBadge')?.textContent || '';
+      const dangerEl = document.getElementById('reportDangerList');
+      const warnEl = document.getElementById('reportWarnList');
+      let text = `【聘雇風險評估報告摘要】\n風險分數：${score}分\n風險等級：${badge}\n`;
+      if (dangerEl && dangerEl.querySelectorAll('.report-item').length > 0) {
+        text += '\n⚠️ 高度風險訊號：\n';
+        dangerEl.querySelectorAll('.ri-text').forEach(el => { text += '• ' + (el.childNodes[0]?.textContent || '') + '\n'; });
+      }
+      if (warnEl && warnEl.querySelectorAll('.report-item').length > 0) {
+        text += '\n🟡 中度風險訊號：\n';
+        warnEl.querySelectorAll('.ri-text').forEach(el => { text += '• ' + (el.childNodes[0]?.textContent || '') + '\n'; });
+      }
+      text += '\n（本報告由外籍移工聘雇風險識別參考系統 v13 產生，僅供資訊參考，不構成法律認定）';
+      navigator.clipboard?.writeText(text).then(() => {
+        copyBtn.textContent = '✅ 已複製！';
+        setTimeout(() => { copyBtn.innerHTML = '📋 一鍵複製摘要'; }, 2000);
+      }).catch(() => {
+        copyBtn.textContent = '請手動選取複製';
+        setTimeout(() => { copyBtn.innerHTML = '📋 一鍵複製摘要'; }, 2000);
+      });
+    });
+  }
 
   document.querySelectorAll('[data-fraud-filter]').forEach(btn => {
     btn.addEventListener('click', () => setFraudFilter(btn.dataset.fraudFilter, btn));
