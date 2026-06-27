@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>外籍看護訓練學習平台 v23</title>
+<title>外籍看護訓練學習平台 v25</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,6 +34,25 @@ html{scroll-behavior:smooth}
 body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gray-900);font-size:15px}
 
 /* Layout replaced by sidebar CSS above */
+
+/* ── Today's learning card ── */
+.today-card{
+  background:linear-gradient(135deg,var(--g800) 0%,var(--g600) 100%);
+  border-radius:var(--r-xl);padding:18px 20px;margin-bottom:20px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  box-shadow:var(--sh-md);flex-wrap:wrap;
+}
+.today-card-left{flex:1;min-width:0}
+.today-card-kicker{font-size:11px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.7);margin-bottom:5px}
+.today-card-title{font-size:16px;font-weight:900;color:#fff;line-height:1.3;margin-bottom:4px}
+.today-card-sub{font-size:12px;color:rgba(255,255,255,.75);font-weight:600}
+.today-card-btn{
+  flex-shrink:0;padding:10px 18px;border-radius:10px;
+  background:#fff;color:var(--g800);font-size:13px;font-weight:800;
+  border:none;cursor:pointer;font-family:var(--font);white-space:nowrap;
+  transition:all .15s;box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.today-card-btn:hover{background:var(--g50);transform:scale(1.03)}
 
 /* ═══════ HOME ═══════ */
 .home-header{margin-bottom:22px}
@@ -78,45 +97,58 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 @media(min-width:900px){.units-grid{grid-template-columns:repeat(2,1fr);gap:14px}}
 
 /* Unit card */
+/* ═══ UNIT CARDS — redesigned v25 ═══ */
 .unit-card{
-  background:#fff;border:1.5px solid var(--gray-200);border-radius:var(--r-lg);
-  overflow:hidden;cursor:pointer;transition:all .18s ease;
-  box-shadow:var(--sh-xs);
+  background:#fff;
+  border:0.5px solid var(--gray-200);
+  border-radius:var(--r-lg);
+  overflow:hidden;cursor:pointer;
+  transition:box-shadow .18s ease,transform .18s ease;
   display:flex;flex-direction:column;
+  position:relative;
 }
-.unit-card:hover{box-shadow:var(--sh-md);transform:translateY(-2px);border-color:var(--g200)}
+.unit-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.1);transform:translateY(-2px);border-color:var(--gray-300)}
+.unit-card-accent{height:3px;width:100%;flex-shrink:0}
 .unit-card-top{
   padding:16px 16px 12px;display:flex;align-items:flex-start;gap:12px;flex:1;
 }
+.unit-card-icon-wrap{position:relative;flex-shrink:0}
 .unit-card-icon{
-  width:46px;height:46px;border-radius:13px;flex-shrink:0;
+  width:48px;height:48px;border-radius:14px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:21px;color:#fff;
+  font-size:22px;color:#fff;
 }
 .unit-card-num{
-  position:absolute;top:-4px;right:-4px;
-  width:18px;height:18px;border-radius:50%;background:#fff;
-  font-size:9px;font-weight:900;color:var(--gray-700);
+  position:absolute;top:-5px;right:-5px;
+  width:20px;height:20px;border-radius:50%;
+  background:#fff;border:0.5px solid var(--gray-200);
+  font-size:10px;font-weight:700;color:var(--gray-600);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 1px 3px rgba(0,0,0,.15);
 }
-.unit-card-icon-wrap{position:relative;flex-shrink:0}
 .unit-card-info{flex:1;min-width:0}
-.unit-card-title{font-size:14.5px;font-weight:800;color:var(--gray-900);line-height:1.35;margin-bottom:4px}
-.unit-card-desc{font-size:12px;color:var(--gray-500);line-height:1.6}
+.unit-card-meta{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gray-400);margin-bottom:5px}
+.unit-card-title{font-size:14px;font-weight:800;color:var(--gray-900);line-height:1.35;margin-bottom:4px}
+.unit-card-desc{font-size:11.5px;color:var(--gray-500);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .unit-card-footer{
-  border-top:1px solid var(--gray-100);padding:10px 16px;
-  display:flex;align-items:center;justify-content:space-between;
-  gap:10px;
+  border-top:0.5px solid var(--gray-100);padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
 }
-.unit-card-tags{display:flex;gap:5px;flex-wrap:wrap}
-.unit-tag{font-size:10px;font-weight:700;color:var(--g700);background:var(--g50);
-  border:1px solid var(--g100);border-radius:20px;padding:3px 8px}
-/* mini progress on card */
-.unit-card-progress{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.unit-card-prog-bar{width:40px;height:4px;border-radius:4px;background:var(--gray-200);overflow:hidden}
-.unit-card-prog-fill{height:100%;border-radius:4px;background:var(--g500)}
-.unit-card-prog-text{font-size:10px;font-weight:700;color:var(--gray-500);white-space:nowrap}
+.unit-card-tags{display:flex;gap:5px;flex-wrap:wrap;flex:1;min-width:0}
+.unit-tag{
+  font-size:10px;font-weight:600;color:var(--gray-500);
+  background:transparent;border:0.5px solid var(--gray-200);
+  border-radius:20px;padding:2px 8px;white-space:nowrap;
+}
+.unit-card-progress{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.unit-card-prog-bar{width:44px;height:3px;border-radius:3px;background:var(--gray-200);overflow:hidden}
+.unit-card-prog-fill{height:100%;border-radius:3px}
+.unit-card-prog-text{font-size:10px;font-weight:600;color:var(--gray-500);white-space:nowrap}
+.unit-card-done-badge{
+  display:inline-flex;align-items:center;gap:3px;
+  font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;
+  background:var(--g50);color:var(--g700);border:0.5px solid var(--g100);
+  flex-shrink:0;
+}
 
 /* ═══════ UNIT DETAIL VIEW ═══════ */
 .unit-detail-header{
@@ -348,19 +380,19 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 /* Unit card — quiz shortcut button */
 .unit-card-quiz-btn{
   display:flex;align-items:center;gap:4px;
-  padding:5px 12px;border-radius:20px;font-size:10.5px;font-weight:800;
-  border:2px solid var(--purple-100);background:var(--purple-50);color:var(--purple-700);
-  cursor:pointer;font-family:var(--font);transition:all .15s;flex-shrink:0;
-  -webkit-tap-highlight-color:transparent;
+  padding:5px 10px;border-radius:20px;font-size:10.5px;font-weight:700;
+  border:0.5px solid var(--gray-200);background:transparent;color:var(--gray-500);
+  cursor:pointer;font-family:var(--font);transition:all .14s;flex-shrink:0;
+  -webkit-tap-highlight-color:transparent;white-space:nowrap;
 }
-.unit-card-quiz-btn:hover{background:var(--purple-100)}
+.unit-card-quiz-btn:hover{background:var(--gray-100);color:var(--gray-700);border-color:var(--gray-300)}
 
 /* ── Accessibility ── */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* ── Touch: no hover transforms ── */
 @media(hover:none){
-  .unit-card:hover{transform:none;box-shadow:var(--sh-xs)}
+  .unit-card:hover{transform:none;box-shadow:none;border-color:var(--gray-200)}
   .lesson-row:hover{border-color:var(--gray-200);box-shadow:none}
 }
 
@@ -368,30 +400,8 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ── Small phone ── */
-/* ── Sub-navigation tab bar ── */
-.subnav{
-  background:#fff;border-bottom:1.5px solid var(--gray-200);
-  display:flex;align-items:center;padding:0 20px;gap:4px;
-  position:sticky;top:56px;z-index:190;
-  box-shadow:0 1px 4px rgba(0,0,0,.04);flex-shrink:0;
-}
-.subnav-tab{
-  display:flex;align-items:center;gap:7px;padding:0 14px;height:44px;
-  font-family:var(--font);font-size:13px;font-weight:700;color:var(--gray-500);
-  background:none;border:none;border-bottom:2.5px solid transparent;
-  cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent;
-  white-space:nowrap;
-}
-.subnav-tab:hover{color:var(--gray-700)}
-.subnav-tab.on{color:var(--g700);border-bottom-color:var(--g600)}
-.subnav-tab.quiz-tab.on{color:var(--purple-700);border-bottom-color:var(--purple-700)}
-.subnav-tab-badge{
-  font-size:10px;font-weight:800;
-  background:var(--gray-100);color:var(--gray-500);
-  border-radius:20px;padding:2px 7px;
-}
-.subnav-tab.on .subnav-tab-badge{background:var(--g100);color:var(--g700)}
-.subnav-tab.quiz-tab.on .subnav-tab-badge{background:var(--purple-100);color:var(--purple-700)}
+/* ── Sub-navigation tab bar (currently unused / reserved) ── */
+/* subnav styles removed in v25 — kept as placeholder if re-enabled */
 
 /* ═══════ QUIZ CENTER ═══════ */
 .qc-header{margin-bottom:22px}
@@ -630,13 +640,25 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 /* Unit group */
 .sidebar-unit-group{margin-bottom:4px;border-radius:10px;overflow:hidden;border:1px solid var(--gray-100)}
 .sidebar-unit-btn{
-  width:100%;display:flex;align-items:center;gap:9px;
-  padding:9px 10px;background:#fff;border:none;cursor:pointer;
-  font-family:var(--font);text-align:left;transition:background .15s;
-  -webkit-tap-highlight-color:transparent;
+  width:100%;display:flex;align-items:center;
+  background:#fff;border:none;
+  transition:background .15s;
 }
 .sidebar-unit-btn:hover{background:var(--gray-50)}
 .sidebar-unit-btn.active{background:var(--g50)}
+.sidebar-unit-main{
+  flex:1;display:flex;align-items:center;gap:9px;
+  padding:9px 6px 9px 10px;background:none;border:none;cursor:pointer;
+  font-family:var(--font);text-align:left;min-width:0;
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-unit-toggle{
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  width:34px;padding:9px 4px;background:none;border:none;cursor:pointer;
+  font-family:var(--font);border-left:1px solid var(--gray-100);
+  -webkit-tap-highlight-color:transparent;
+}
+.sidebar-unit-toggle:hover{background:var(--gray-100)}
 .sidebar-unit-icon{
   width:30px;height:30px;border-radius:8px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
@@ -755,6 +777,34 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 }
 .topbar-lb.on{background:var(--g700);border-color:var(--g700);color:#fff}
 
+/* Mobile language dropdown */
+.topbar-lang{position:relative}
+.topbar-lang-current{
+  display:flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:8px;border:1.5px solid var(--gray-200);
+  background:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);
+  color:var(--gray-900);white-space:nowrap;
+}
+.topbar-lang-current:hover{border-color:var(--g400);background:var(--g50)}
+.topbar-lang-dropdown{
+  display:none;position:absolute;right:0;top:calc(100% + 6px);
+  background:#fff;border:1.5px solid var(--gray-200);border-radius:10px;
+  box-shadow:var(--sh-md);z-index:400;min-width:140px;overflow:hidden;
+}
+.topbar-lang-dropdown.open{display:block}
+.topbar-lang-dropdown button{
+  display:block;width:100%;text-align:left;padding:10px 14px;
+  border:none;background:none;font-family:var(--font);font-size:13px;
+  font-weight:600;cursor:pointer;color:var(--gray-700);
+}
+.topbar-lang-dropdown button:hover{background:var(--g50);color:var(--g800)}
+
+/* 3-column desktop grid */
+@media(min-width:1200px){
+  .content{max-width:1120px}
+  .units-grid,.qc-units-grid{grid-template-columns:repeat(3,1fr);gap:16px}
+}
+
 /* subnav — mobile tab bar */
 .subnav{display:none}
 
@@ -818,10 +868,15 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-lang">
-      <button class="topbar-lb on" id="tb-lb-zh" onclick="setLang('zh')">🇹🇼</button>
-      <button class="topbar-lb" id="tb-lb-id" onclick="setLang('id')">🇮🇩</button>
-      <button class="topbar-lb" id="tb-lb-en" onclick="setLang('en')">🇺🇸</button>
-      <button class="topbar-lb" id="tb-lb-vi" onclick="setLang('vi')">🇻🇳</button>
+      <button class="topbar-lang-current" id="topbar-lang-current" onclick="toggleLangDropdown()" aria-label="切換語言">
+        <span id="topbar-lang-flag">🇹🇼</span> <span id="topbar-lang-name">繁中</span> <span style="font-size:9px;opacity:.7">▾</span>
+      </button>
+      <div class="topbar-lang-dropdown" id="topbar-lang-dropdown">
+        <button onclick="setLang('zh');closeLangDropdown()">🇹🇼 繁中</button>
+        <button onclick="setLang('id');closeLangDropdown()">🇮🇩 印尼文</button>
+        <button onclick="setLang('en');closeLangDropdown()">🇺🇸 English</button>
+        <button onclick="setLang('vi');closeLangDropdown()">🇻🇳 Tiếng Việt</button>
+      </div>
     </div>
   </header>
 
@@ -898,6 +953,19 @@ body{font-family:var(--font);background:#EFF2F7;min-height:100dvh;color:var(--gr
 </div>
 
 <script>
+// Language dropdown helpers
+function toggleLangDropdown(){
+  const dd = document.getElementById('topbar-lang-dropdown');
+  if(dd) dd.classList.toggle('open');
+}
+function closeLangDropdown(){
+  const dd = document.getElementById('topbar-lang-dropdown');
+  if(dd) dd.classList.remove('open');
+}
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.topbar-lang')) closeLangDropdown();
+});
+
 // ══════════════════════════════════════
 // DATA — all preserved from v8
 // ══════════════════════════════════════
@@ -942,6 +1010,10 @@ const UI_COPY = {
     qcUnitTitle:'單元練習', qcUnitDesc:'選擇一個單元，從該單元 40 題中抽 10 題。',
     qcStartMixed:'開始混合測驗', qcStartMock:'開始模擬測驗', qcStartWrong:'開始錯題練習',
     qcAttemptedBank:'已練題庫', qcWrongCount:'錯題數',
+    resetBtn:'重置進度', resetConfirm:'確定要重置所有答題進度嗎？',
+    todayKicker:'今日學習', todayContinue:'繼續上次課程', todayStart:'從第 1 單元開始',
+    todayStartSub:'共 100 課・每次學一點，穩步前進',
+    todayContinueBtn:'繼續學習 →', todayStartBtn:'開始學習 →',
   },
   id:{
     brandName:'Platform Pelatihan', brandSub:'Sistem Pelatihan Pengasuh',
@@ -2370,11 +2442,10 @@ function renderSidebar(){
   const sbSub = document.getElementById('sb-brand-sub');
   if(sbSub) sbSub.textContent = cp.brandSub;
 
-  // Mobile lang buttons
-  ['zh','id','en','vi'].forEach(l=>{
-    const el=document.getElementById('tb-lb-'+l);
-    if(el) el.classList.toggle('on', lang===l);
-  });
+  // Mobile lang dropdown — update current label
+  const langMeta = {zh:{flag:'🇹🇼',name:'繁中'}, id:{flag:'🇮🇩',name:'印尼'}, en:{flag:'🇺🇸',name:'英文'}, vi:{flag:'🇻🇳',name:'越南'}};
+  const lf = document.getElementById('topbar-lang-flag'); if(lf) lf.textContent = langMeta[lang]?.flag||'🌐';
+  const ln = document.getElementById('topbar-lang-name'); if(ln) ln.textContent = langMeta[lang]?.name||lang;
 
   // Sidebar tabs
   const stc = document.getElementById('sb-tab-course');
@@ -2424,17 +2495,20 @@ function renderSidebar(){
       const isActiveUnit = currentView==='unit' && currentUnitNo===u.no;
       const isOpenUnit = openUnitNos.has(u.no) || isActiveUnit;
       navHtml += `<div class="sidebar-unit-group">
-        <button class="sidebar-unit-btn ${isActiveUnit?'active':''} ${isOpenUnit?'open':''}"
-          onclick="toggleSidebarUnit(${u.no})">
-          <div class="sidebar-unit-icon" style="background:${u.solid||u.color.split(',')[1]||'var(--g700)'}"><i class="ti ${u.icon}" style="font-size:13px"></i></div>
-          <div class="sidebar-unit-info">
-            <div class="sidebar-unit-name">U${u.no} ${u.title}</div>
-            <div class="sidebar-unit-meta">
-              ${us.answered>0?`<span style="color:var(--g700);font-weight:800">${us.answered}</span>/<span>${us.total}</span>`:`<span>${us.total} ${cp.lessons||'課'}</span>`}
+        <div class="sidebar-unit-btn ${isActiveUnit?'active':''} ${isOpenUnit?'open':''}">
+          <button class="sidebar-unit-main" onclick="openUnit(${u.no});closeSidebar()">
+            <div class="sidebar-unit-icon" style="background:${u.solid||u.color.split(',')[1]||'var(--g700)'}"><i class="ti ${u.icon}" style="font-size:13px"></i></div>
+            <div class="sidebar-unit-info">
+              <div class="sidebar-unit-name">U${u.no} ${u.title}</div>
+              <div class="sidebar-unit-meta">
+                ${us.answered>0?`<span style="color:var(--g700);font-weight:800">${us.answered}</span>/<span>${us.total}</span>`:`<span>${us.total} ${cp.lessons||'課'}</span>`}
+              </div>
             </div>
-          </div>
-          <i class="ti ti-chevron-right sidebar-unit-chevron"></i>
-        </button>`;
+          </button>
+          <button class="sidebar-unit-toggle" onclick="toggleSidebarUnit(${u.no})" aria-label="展開/收合">
+            <i class="ti ti-chevron-right sidebar-unit-chevron"></i>
+          </button>
+        </div>`;
       if(isOpenUnit){
         navHtml += '<div class="sidebar-lessons">';
         u.lessons.forEach((title,idx)=>{
@@ -2504,7 +2578,7 @@ function openUnitLesson(unitNo, lessonIdx){
   renderSidebar();
   renderUnitViewWithLesson(lessonIdx);
   closeSidebar();
-  window.scrollTo({top:0,behavior:'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── TAB SWITCH ──
@@ -2519,7 +2593,7 @@ function switchTab(tab){
     renderSidebar();
     renderQuizCenter();
   }
-  window.scrollTo({top:0,behavior:'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── RENDER MAIN ──
@@ -2567,12 +2641,30 @@ function renderHome(){
     </div>
   </div>` : '';
 
+  // Build "Today's learning card"
+  const lastUnit = units.find(u=>u.no===currentUnitNo) || units[0];
+  const lastLessonIdx = lastUnit ? lastUnit.lessons.findIndex((_,i)=>lessonKey(lastUnit.no,i)===currentLessonNo) : 0;
+  const safeIdx = lastLessonIdx >= 0 ? lastLessonIdx : 0;
+  const hasProgress = st.answered > 0;
+  const todayCard = `
+  <div class="today-card">
+    <div class="today-card-left">
+      <div class="today-card-kicker">📅 ${cp.todayKicker||'今日學習'}</div>
+      <div class="today-card-title">${hasProgress ? (cp.todayContinue||'繼續上次課程') : (cp.todayStart||'從第 1 單元開始')}</div>
+      ${hasProgress ? `<div class="today-card-sub">📍 ${lastUnit.title} · ${cp.lessonOf ? cp.lessonOf.replace('%a',safeIdx+1).replace('%b',lastUnit.lessons.length) : `第 ${safeIdx+1} / ${lastUnit.lessons.length} 課`}</div>` : `<div class="today-card-sub">${cp.todayStartSub||'共 100 課・每次學一點，穩步前進'}</div>`}
+    </div>
+    <button class="today-card-btn" onclick="${hasProgress ? `openUnitLesson(${lastUnit.no},${safeIdx})` : `openUnit(1)`}">
+      ${hasProgress ? (cp.todayContinueBtn||'繼續學習 →') : (cp.todayStartBtn||'開始學習 →')}
+    </button>
+  </div>`;
+
   let html = `
   <div class="home-header">
     <div class="home-kicker"><i class="ti ti-school" style="font-size:13px"></i> ${cp.homeKicker}</div>
     <div class="home-title">${cp.homeTitle}</div>
     <div class="home-sub">${cp.homeSub}</div>
   </div>
+  ${todayCard}
   ${progressBlock}
   <div class="section-title">${cp.units||'課程單元'}</div>
   <div class="units-grid">`;
@@ -2580,31 +2672,38 @@ function renderHome(){
   units.forEach(u => {
     const us = getUnitStats(u);
     const progPct = us.total ? Math.round(us.answered/us.total*100) : 0;
-    const progText = us.answered > 0 ? `${us.answered}/${us.total}` : `${us.total} ${cp.lessons||'課'}`;
+    const isAllDone = us.total > 0 && us.answered >= us.total;
+    // Extract a solid color for accent/prog bar from the gradient or use solid
+    const accentBg = u.color; // gradient string
+    const solidColor = u.solid || '#1D9E75';
     html += `
     <div class="unit-card" onclick="openUnit(${u.no})" role="button" tabindex="0"
       onkeydown="if(event.key==='Enter'||event.key===' ')openUnit(${u.no})">
+      <div class="unit-card-accent" style="background:${accentBg}"></div>
       <div class="unit-card-top">
         <div class="unit-card-icon-wrap">
-          <div class="unit-card-icon" style="background:${u.color}">
+          <div class="unit-card-icon" style="background:${accentBg}">
             <i class="ti ${u.icon}"></i>
           </div>
           <div class="unit-card-num">${u.no}</div>
         </div>
         <div class="unit-card-info">
+          <div class="unit-card-meta">單元 ${String(u.no).padStart(2,'0')} · ${u.lessons.length} ${cp.lessons||'課'}</div>
           <div class="unit-card-title">${u.title}</div>
           <div class="unit-card-desc">${u.desc}</div>
         </div>
       </div>
       <div class="unit-card-footer">
-        <div class="unit-card-tags">${u.tags.map(t=>`<span class="unit-tag\">${t}</span>`).join('')}</div>
-        <div style=\"display:flex;align-items:center;gap:8px;flex-shrink:0\">
-          ${us.answered > 0 ? `<div class=\"unit-card-progress\">
-            <div class=\"unit-card-prog-bar\"><div class=\"unit-card-prog-fill" style="width:${progPct}%\"></div></div>
-            <span class=\"unit-card-prog-text\">${progText}</span>
-          </div>` : ''}
-          <button class=\"unit-card-quiz-btn" onclick="event.stopPropagation();openQuiz(${u.no})\">
-            <i class=\"ti ti-help-circle" style="font-size:12px\"></i> ${cp.quizModeBtn||'測驗'}
+        ${us.answered > 0 ? `
+          <div class="unit-card-progress">
+            <div class="unit-card-prog-bar"><div class="unit-card-prog-fill" style="width:${progPct}%;background:${accentBg}"></div></div>
+            <span class="unit-card-prog-text">${us.answered}/${us.total}</span>
+          </div>
+        ` : `<div class="unit-card-tags">${u.tags.map(t=>`<span class="unit-tag">${t}</span>`).join('')}</div>`}
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto">
+          ${isAllDone ? `<span class="unit-card-done-badge"><i class="ti ti-check" style="font-size:10px"></i> 完成</span>` : ''}
+          <button class="unit-card-quiz-btn" onclick="event.stopPropagation();openQuiz(${u.no})">
+            <i class="ti ti-help-circle" style="font-size:12px"></i> ${cp.quizModeBtn||'測驗'}
           </button>
         </div>
       </div>
@@ -2627,7 +2726,7 @@ function openUnit(no){
   renderSidebar();
   renderUnitView();
   closeSidebar();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 function goHome(){
@@ -2637,7 +2736,7 @@ function goHome(){
   renderSidebar();
   renderHome();
   closeSidebar();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── UNIT VIEW ──
@@ -3088,7 +3187,7 @@ function openQuiz(unitNo, mode='unit'){
   quizState = {unitNo, mode, questions, current: 0, answers: Array(questions.length).fill(null), loggedComplete:false};
   renderSidebar();
   renderQuizView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 function goQuizCenter(){
@@ -3096,7 +3195,7 @@ function goQuizCenter(){
   mainTab = 'quiz';
   renderSidebar();
   renderQuizCenter();
-  window.scrollTo({top:0,behavior:'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 // ── QUIZ CENTER VIEW ──
@@ -3349,7 +3448,7 @@ function quizAnswer(chosenIdx){
   saveState();
   renderSidebar();
   renderQuizView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 function quizNext(){
@@ -3360,7 +3459,7 @@ function quizNext(){
     quizState.current = quizState.questions.length;
   }
   renderQuizView();
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  (document.querySelector('.main-area')||window).scrollTo({top:0,behavior:'smooth'});
 }
 
 function retryQuiz(){
@@ -3376,7 +3475,9 @@ function resetProgress(){
   saveState();
   saveLearningLog();
   renderSidebar();
-  if(currentView === 'quiz-center') renderQuizCenter();
+  if(currentView === 'quiz') renderQuizView();
+  else if(currentView === 'quiz-center') renderQuizCenter();
+  else if(currentView === 'unit') renderUnitView();
   else renderHome();
 }
 
