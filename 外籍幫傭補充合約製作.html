@@ -10,8 +10,8 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍幫傭補充合約製作工具</title>
-<!-- v3.2 第7條全面強化：新增5個精細化UI欄位（fine_repeat累計升級、fine_abuse傷害處置、resign_notice預告期、resign_breach未足期賠償、dispute_resolve爭議調解），第7條條文擴充為7層結構化輸出，四語翻譯同步升級含《就業服務法》第59條、《刑法》傷害罪法條引用 -->
+<title>外籍幫傭補充合約製作工具 v3.3</title>
+<!-- v3.3 UX全面強化：(1)移除看護殘留欄位(pat_name/pat_age/pat_health/mobility)，改為幫傭版家庭狀況 (2)手機版隱藏sidebar、精簡步驟條 (3)工作內容、福利、條款改為可收合群組 (4)新增右側/底部合約即時摘要 (5)頂部按鈕重排，重設改低權重 (6)必填欄位紅色標籤 (7)列印設定文案友善化 (8)章節標題放大 (9)help-box精簡 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -584,6 +584,211 @@
   /* 確保可見的 contract-page 正常接受事件 */
   .contract-page { pointer-events: auto; }
 
+  /* ===== v3.3: REQUIRED BADGE ===== */
+  .required {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: var(--red-light);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  /* ===== v3.3: COLLAPSIBLE CHECKBOX GROUP ===== */
+  .collapsible-group {
+    border: 1.5px solid var(--cream-dark);
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .collapsible-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    cursor: pointer;
+    background: var(--cream);
+    transition: var(--transition);
+    border: none;
+    width: 100%;
+    text-align: left;
+    gap: 8px;
+  }
+  .collapsible-header:hover { background: var(--cream-dark); }
+  .collapsible-header .group-title { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .collapsible-header .group-count {
+    margin-left: 6px;
+    font-size: 11px; font-weight: 700;
+    background: var(--teal); color: white;
+    padding: 2px 7px; border-radius: 999px;
+  }
+  .collapsible-header .group-count.empty {
+    background: var(--cream-dark); color: var(--text-light);
+  }
+  .collapsible-header .chevron {
+    font-size: 12px; color: var(--text-light);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+  .collapsible-header.open .chevron { transform: rotate(180deg); }
+  .collapsible-body {
+    display: none;
+    padding: 10px 14px 14px;
+    background: white;
+  }
+  .collapsible-body.open { display: block; }
+
+  /* ===== v3.3: CONTRACT SUMMARY PANEL ===== */
+  .summary-panel {
+    width: 200px; flex-shrink: 0;
+    background: white; border-radius: var(--radius);
+    box-shadow: var(--shadow-sm); padding: 14px;
+    height: fit-content; position: sticky; top: 116px;
+    margin-left: 16px;
+    font-size: 12px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .summary-panel h4 {
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--text-light);
+    padding-bottom: 6px; border-bottom: 1px solid var(--cream-dark);
+    margin-bottom: 2px;
+  }
+  .summary-row { display: flex; gap: 4px; flex-direction: column; }
+  .summary-label { font-size: 10px; color: var(--text-light); font-weight: 600; }
+  .summary-value { font-size: 12px; color: var(--navy); font-weight: 700; min-height: 14px; }
+  .summary-value.empty { color: var(--text-light); font-weight: 400; font-style: italic; }
+  .summary-divider { height: 1px; background: var(--cream-dark); margin: 2px 0; }
+  .summary-counts { font-size: 11px; color: var(--text-mid); }
+  @media screen and (max-width: 1100px) {
+    .summary-panel { display: none; }
+  }
+
+  /* ===== v3.3: MOBILE SUMMARY FLOATING BUTTON ===== */
+  .mobile-summary-btn {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .mobile-summary-btn {
+      display: flex;
+      position: fixed;
+      bottom: 16px;
+      right: 16px;
+      z-index: 200;
+      align-items: center;
+      gap: 6px;
+      background: var(--navy);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: var(--font-body);
+      box-shadow: 0 4px 16px rgba(26,39,68,0.3);
+      cursor: pointer;
+    }
+  }
+  /* Mobile summary modal */
+  .summary-modal-overlay {
+    display: none;
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.4);
+  }
+  .summary-modal-overlay.open { display: block; }
+  .summary-modal {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  .summary-modal h3 {
+    font-size: 15px; font-weight: 700; color: var(--navy);
+    margin-bottom: 14px; padding-bottom: 8px;
+    border-bottom: 2px solid var(--cream-dark);
+  }
+  .summary-modal .close-btn {
+    float: right; background: var(--cream-dark);
+    border: none; border-radius: 50%;
+    width: 28px; height: 28px;
+    cursor: pointer; font-size: 14px;
+  }
+  .summary-modal-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .summary-modal-row { display: flex; flex-direction: column; gap: 2px; }
+  .summary-modal-label { font-size: 11px; color: var(--text-light); font-weight: 600; }
+  .summary-modal-value { font-size: 13px; color: var(--navy); font-weight: 700; }
+  .summary-modal-value.empty { color: var(--text-light); font-style: italic; font-weight: 400; }
+
+  /* ===== v3.3: MOBILE SIDEBAR HIDDEN ===== */
+  @media screen and (max-width: 768px) {
+    .sidebar { display: none; }
+    .step-indicator {
+      position: sticky;
+      top: 92px;
+      z-index: 80;
+      margin-bottom: 10px;
+      border-radius: var(--radius-xs);
+    }
+  }
+
+  /* ===== v3.3: SIMPLIFIED STEP INDICATOR (mobile shows "N/8 title") ===== */
+  .step-compact {
+    display: none;
+    position: sticky;
+    top: 92px;
+    z-index: 80;
+    margin-bottom: 10px;
+    background: white;
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+    padding: 10px 14px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .step-compact .step-label {
+    font-size: 13px; font-weight: 700; color: var(--navy);
+  }
+  .step-compact .step-progress {
+    font-size: 11px; color: var(--text-light); font-weight: 600;
+  }
+  .step-compact .step-progress-bar {
+    height: 3px; background: var(--cream-dark); border-radius: 99px;
+    margin-top: 4px; overflow: hidden;
+  }
+  .step-compact .step-progress-fill {
+    height: 100%; background: var(--teal); border-radius: 99px;
+    transition: width 0.3s ease;
+  }
+  @media screen and (max-width: 768px) {
+    .step-indicator { display: none !important; }
+    .step-compact { display: flex; flex-direction: column; align-items: flex-start; }
+  }
+
+  /* ===== v3.3: SECTION HEADER SIZE INCREASE ===== */
+  .section-header h2 { font-size: 18px !important; }
+  .form-card h3 { font-size: 15px; }
+  label { font-size: 13px !important; }
+
+  /* ===== v3.3: PRINT SETTINGS FRIENDLY LABELS ===== */
+  /* (applied via HTML changes) */
+
+  /* ===== v3.3: LOW-WEIGHT RESET BUTTON ===== */
+  .btn-reset {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid rgba(255,255,255,0.15);
+    font-size: 12px;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.1); color: white; }
+
   /* ===== STEP NAV BUTTON ROW ===== */
   .step-nav-row {
     display: flex;
@@ -610,13 +815,12 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v3.2</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v3.3</span></div>
     <div class="nav-actions">
-      <button class="btn btn-secondary btn-sm" onclick="safeCall('resetForm')">🔄 <span>重設</span></button>
-      <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>預覽</span></button>
-      <button class="btn btn-primary btn-sm" onclick="safeCall('exportPDF')">📥 <span>匯出PDF（列印）</span></button>
-      <button class="btn btn-sm" style="background:#5b3a8c;color:white;" onclick="safeCall('exportHTML')">💾 <span>匯出HTML</span></button>
-
+      <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>產生預覽</span></button>
+      <button class="btn btn-primary btn-sm" onclick="safeCall('exportPDF')">📥 <span>匯出 PDF</span></button>
+      <button class="btn btn-sm" style="background:#5b3a8c;color:white;" onclick="safeCall('exportHTML')">💾 <span>下載 HTML 備份</span></button>
+      <button class="btn btn-reset btn-sm" onclick="safeCall('resetForm')">↺ <span>清空重填</span></button>
     </div>
   </nav>
 
@@ -650,6 +854,7 @@
     </aside>
 
     <div class="content-area">
+      <!-- v3.3: 桌機版完整步驟條 -->
       <div class="step-indicator">
         <div class="step active" id="step1" onclick="safeCall('showSection', 'sec-party')"><span class="step-num">1</span>當事人</div>
         <div class="step" id="step2" onclick="safeCall('showSection', 'sec-agency')"><span class="step-num">2</span>仲介</div>
@@ -660,6 +865,16 @@
         <div class="step" id="step7" onclick="safeCall('showSection', 'sec-special')"><span class="step-num">7</span>特約與防護</div>
         <div class="step" id="step8" onclick="safeCall('showSection', 'sec-preview')"><span class="step-num">📄</span>預覽</div>
       </div>
+      <!-- v3.3: 手機版精簡步驟條 -->
+      <div class="step-compact" id="step-compact">
+        <div style="width:100%">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="step-label" id="compact-step-label">第 1 / 8 步：當事人資訊</span>
+            <span class="step-progress" id="compact-step-progress">1/8</span>
+          </div>
+          <div class="step-progress-bar"><div class="step-progress-fill" id="compact-progress-fill" style="width:12.5%"></div></div>
+        </div>
+      </div>
 
       <div class="form-card" id="sec-party">
         <div class="section-header">
@@ -668,16 +883,16 @@
         </div>
         <h3 style="font-size:14px;color:var(--navy);margin-bottom:12px;border-left:4px solid var(--teal);padding-left:8px;">甲方（雇主）</h3>
         <div class="form-grid">
-          <div class="form-group"><label>雇主姓名 Name</label><input type="text" id="emp_name" placeholder="例：王大明"></div>
-          <div class="form-group"><label>身分證字號 ID No.</label><input type="text" id="emp_id" placeholder="A123456789" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
+          <div class="form-group"><label>雇主姓名 Name <span class="required">必填</span></label><input type="text" id="emp_name" placeholder="例：王大明"></div>
+          <div class="form-group"><label>身分證字號 ID No. <span class="required">必填</span></label><input type="text" id="emp_id" placeholder="A123456789" maxlength="10" oninput="this.value=this.value.toUpperCase()"></div>
           <div class="form-group"><label>聯絡電話 Phone</label><input type="text" id="emp_phone" placeholder="0912-345-678"></div>
           <div class="form-group"><label>電子信箱 Email</label><input type="text" id="emp_email" placeholder="example@mail.com"></div>
           <div class="form-group span-2"><label>地址 Address</label><input type="text" id="emp_addr" placeholder="請輸入主聘僱合約登記之工作地址"></div>
         </div>
         <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--gold);padding-left:8px;">乙方（外籍幫傭）</h3>
         <div class="form-grid">
-          <div class="form-group"><label>幫傭姓名 Name (英文正本)</label><input type="text" id="maid_name" placeholder="例：MARIA SANTOS"></div>
-          <div class="form-group"><label>國籍 Nationality</label>
+          <div class="form-group"><label>幫傭姓名 Name (英文正本) <span class="required">必填</span></label><input type="text" id="maid_name" placeholder="例：MARIA SANTOS"></div>
+          <div class="form-group"><label>國籍 Nationality <span class="required">必填</span></label>
             <select id="maid_nation">
               <option value="">-- 選擇國籍 --</option>
               <option value="印尼 / Indonesia">印尼 / Indonesia</option>
@@ -693,9 +908,9 @@
         </div>
         <h3 style="font-size:14px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--navy-mid);padding-left:8px;">合約期程</h3>
         <div class="form-grid cols-3">
-          <div class="form-group"><label>簽約日期</label><input type="date" id="contract_date"></div>
-          <div class="form-group"><label>合約生效起日</label><input type="date" id="start_date" onchange="validateDates()"></div>
-          <div class="form-group"><label>合約截止日</label><input type="date" id="end_date" onchange="validateDates()"></div>
+          <div class="form-group"><label>簽約日期 <span class="required">必填</span></label><input type="date" id="contract_date"></div>
+          <div class="form-group"><label>合約生效起日 <span class="required">必填</span></label><input type="date" id="start_date" onchange="validateDates()"></div>
+          <div class="form-group"><label>合約截止日 <span class="required">必填</span></label><input type="date" id="end_date" onchange="validateDates()"></div>
         </div>
         <div id="date-warning" class="help-box warning" style="display:none;margin-top:8px;">⚠️ 合約截止日不可早於生效起日，請重新檢查日期！</div>
         <div id="party-warn" class="help-box warning" style="display:none;text-align:left;margin-bottom:8px;"></div>
@@ -806,47 +1021,94 @@
           <div class="section-icon">📋</div>
           <div><h2>第二章：工作範圍與核定標準</h2><p>勾選之項目在輸出時會自動翻譯為選定外語</p></div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin-bottom:8px;">核心家務清潔項目 (Core Housekeeping)</h3>
-        <div class="checkbox-group">
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_sweep" checked> 掃地、拖地（全室）</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_vacuum" checked> 吸塵器清潔地毯地板</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_kitchen_clean" checked> 廚房清潔（爐台、排油煙機、水槽）</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_bathroom" checked> 衛浴廁所清潔消毒</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wipe" checked> 擦拭傢俱、桌面、窗台</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_trash" checked> 清理垃圾、分類資源回收</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_window"> 擦窗戶、清洗紗窗</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_garden"> 庭院、花園澆水整理</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_car"> 清洗車輛（外觀清潔）</label>
+
+        <!-- v3.3: 可收合工作內容群組 -->
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">🧹 核心家務清潔</span>
+            <span class="group-count" id="count-core">6 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group">
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_sweep" checked> 掃地、拖地（全室）</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_vacuum" checked> 吸塵器清潔地毯地板</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_kitchen_clean" checked> 廚房清潔（爐台、排油煙機、水槽）</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_bathroom" checked> 衛浴廁所清潔消毒</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wipe" checked> 擦拭傢俱、桌面、窗台</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_trash" checked> 清理垃圾、分類資源回收</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_window"> 擦窗戶、清洗紗窗</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_garden"> 庭院、花園澆水整理</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_car"> 清洗車輛（外觀清潔）</label>
+            </div>
+          </div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">洗滌整燙項目 (Laundry &amp; Ironing)</h3>
-        <div class="checkbox-group">
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wash" checked> 洗衣（使用洗衣機）</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_dry" checked> 晾衣、曬衣、烘衣</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_fold" checked> 折疊衣物、歸類收納</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_iron"> 燙衣（全家衣物）</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_bedchange"> 定期更換床單枕套被套</label>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">👕 洗滌整燙</span>
+            <span class="group-count" id="count-laundry">3 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group">
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_wash" checked> 洗衣（使用洗衣機）</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_dry" checked> 晾衣、曬衣、烘衣</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_fold" checked> 折疊衣物、歸類收納</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_iron"> 燙衣（全家衣物）</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_bedchange"> 定期更換床單枕套被套</label>
+            </div>
+          </div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">烹飪餐食項目 (Cooking &amp; Meals)</h3>
-        <div class="checkbox-group">
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_cook" checked> 負責三餐烹飪</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_partial"> 負責部分餐食（早餐或晚餐）</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_grocery" checked> 採購日常食材雜貨</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baking"> 備製烘焙點心</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_special"> 配合家庭飲食禁忌烹飪（清真/素食/過敏原）</label>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">🍳 烹飪餐食</span>
+            <span class="group-count" id="count-cooking">2 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group">
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_cook" checked> 負責三餐烹飪</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_partial"> 負責部分餐食（早餐或晚餐）</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="duty" value="d_grocery" checked> 採購日常食材雜貨</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baking"> 備製烘焙點心</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_cook_special"> 配合家庭飲食禁忌烹飪（清真/素食/過敏原）</label>
+            </div>
+          </div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">育兒照護項目（如適用）(Childcare)</h3>
-        <div class="checkbox-group">
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baby_care"> 嬰幼兒日常生活照護（餵食、換尿布、洗澡）</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_school"> 接送兒童上下學</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_homework"> 陪伴兒童課後作業與活動</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_bath"> 協助兒童洗澡盥洗</label>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header" onclick="toggleGroup(this)">
+            <span class="group-title">👶 育兒照護</span>
+            <span class="group-count empty" id="count-childcare">未啟用</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body">
+            <div class="checkbox-group">
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_baby_care"> 嬰幼兒日常生活照護（餵食、換尿布、洗澡）</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_school"> 接送兒童上下學</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_homework"> 陪伴兒童課後作業與活動</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_child_bath"> 協助兒童洗澡盥洗</label>
+            </div>
+          </div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">其他家務協助項目 (Other Household)</h3>
-        <div class="checkbox-group">
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_errand"> 代辦日常雜務（繳費、取件等）</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_organize"> 整理雜物、衣櫃、倉庫</label>
-          <label class="checkbox-label"><input type="checkbox" name="duty" value="d_host"> 配合家庭宴客備料佈置</label>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header" onclick="toggleGroup(this)">
+            <span class="group-title">🏠 其他家務協助</span>
+            <span class="group-count empty" id="count-other">未啟用</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body">
+            <div class="checkbox-group">
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_errand"> 代辦日常雜務（繳費、取件等）</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_organize"> 整理雜物、衣櫃、倉庫</label>
+              <label class="checkbox-label"><input type="checkbox" name="duty" value="d_host"> 配合家庭宴客備料佈置</label>
+            </div>
+          </div>
         </div>
+
         <div class="form-group" style="margin-top:14px;">
           <label>其他未盡工作備註 (此欄輸入之中文不會自動翻譯，將原樣呈現)</label>
           <textarea id="duties_extra" placeholder="若有特殊家務或照護協議請寫於此..."></textarea>
@@ -969,17 +1231,39 @@
           <div class="form-group"><label>換季/購衣補助 (NTD/年，0表示不適用)</label><input type="number" id="allow_clothing" value="0" min="0" placeholder="0"></div>
           <div class="form-group"><label>年資加薪 (每滿一年加給 NTD，0表示不適用)</label><input type="number" id="allow_seniority" value="0" min="0" max="3000" placeholder="0"></div>
         </div>
-        <h3 style="font-size:13px;color:var(--navy);margin:18px 0 8px;">甲方保障與提供福利 (Benefits Provided by Party A)</h3>
+        <h3 style="font-size:15px;color:var(--navy);margin:20px 0 12px;border-left:4px solid var(--red);padding-left:8px;">甲方保障與提供福利</h3>
         <div class="help-box info" style="font-size:12px;margin-bottom:10px;">⚖️ <strong>法規提示：</strong>前四項（膳食、住宿、健保、職災險）為法定義務，<strong>必須勾選</strong>。後四項為強化保障條款，強烈建議一併勾選。</div>
-        <div class="checkbox-group">
-          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_food" checked> 🍱 <strong>法定</strong>｜免費提供每日三餐合理膳食</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_room" checked> 🛏️ <strong>法定</strong>｜免費提供合規獨立居住空間</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_health" checked> 🏥 <strong>法定</strong>｜依法辦理全民健康保險加保</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_insure" checked> 🦺 <strong>法定</strong>｜依法投保勞工職業災害保險</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_leave" checked> 🎁 <strong>獎勵</strong>｜良好照護績效得發給季度/年度工作獎金</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_transport" checked> 🧋 <strong>獎勵</strong>｜甲方不定期提供飲料點心等日常生活獎勵</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_passport" checked> 🪪 <strong>人權</strong>｜禁止扣押護照或任何重要個人證件</label>
-          <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_contact" checked> 📞 <strong>人權</strong>｜不限制聯繫在台辦事處與仲介機構</label>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">⚖️ 法定義務（4項）</span>
+            <span class="group-count" id="count-benefit-legal">4 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group">
+              <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_food" checked> 🍱 <strong>法定</strong>｜免費提供每日三餐合理膳食</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_room" checked> 🛏️ <strong>法定</strong>｜免費提供合規獨立居住空間</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_health" checked> 🏥 <strong>法定</strong>｜依法辦理全民健康保險加保</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--teal);"><input type="checkbox" name="benefit" value="b_insure" checked> 🦺 <strong>法定</strong>｜依法投保勞工職業災害保險</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">🎁 加值保障與人權條款（4項）</span>
+            <span class="group-count" id="count-benefit-extra">4 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group">
+              <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_leave" checked> 🎁 <strong>獎勵</strong>｜良好照護績效得發給季度/年度工作獎金</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--gold);"><input type="checkbox" name="benefit" value="b_transport" checked> 🧋 <strong>獎勵</strong>｜甲方不定期提供飲料點心等日常生活獎勵</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_passport" checked> 🪪 <strong>人權</strong>｜禁止扣押護照或任何重要個人證件</label>
+              <label class="checkbox-label checked" style="border-left:4px solid var(--red);"><input type="checkbox" name="benefit" value="b_contact" checked> 📞 <strong>人權</strong>｜不限制聯繫在台辦事處與仲介機構</label>
+            </div>
+          </div>
         </div>
         <div class="step-nav-row">
           <button class="btn btn-outline" onclick="safeCall('showSection', 'sec-duties')">← 上一步</button>
@@ -1073,30 +1357,58 @@
           <div><h2>第五章：特別防護與補充條款 (防禦強化)</h2><p>針對常見現代家庭爭議之事前特約，勾選以自動列入合約</p></div>
         </div>
         
-        <div class="help-box info"><strong>💡 防禦條款提示：</strong> 以下條款結合了《就業服務法》精神與雇主保障，強烈建議勾選以保障雙方權益，避免未來發生薪資、病假或未預告離職之爭議。</div>
+        <div class="help-box info"><strong>💡 防禦條款提示：</strong>勾選以保障雙方權益，避免日後爭議。</div>
 
-        <div class="checkbox-group" style="grid-template-columns:1fr; gap:10px;">
-          <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_labor_law" checked> ⚖️ <strong>勞基法適用聲明：</strong>外籍家庭幫傭依法適用《勞動基準法》，各項權利義務依勞基法及本合約辦理，相關假別及加班費應依法計給。</label>
-          
-          <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_damage_claim" checked> ⚖️ <strong>未預告離職/違約損害賠償聲明：</strong> 若乙方未依法提前30日預告逕行離職或重大違約，甲方保留依法請求重新招募與空窗期實際損害賠償之權利。</label>
-          
-          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_salary_struct" checked> 💰 <strong>薪資結構確認與禁止轉嫁：</strong> 確認約定薪資為應發總額。移工私人仲介費由乙方自理，甲方無代墊或吸收義務；一般消費不構成預支薪資正當理由。</label>
-          
-          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_sick_leave" checked> 🏥 <strong>病假與健康舉證責任：</strong> 因病無法執行照護時，應提供台灣合格醫療機構之醫師診斷證明。若隱瞞重大病情致無法勝任，雇主得依法解約。</label>
-          
-          <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_camera" checked> 📹 <strong>監視設備裝設同意：</strong> 乙方同意甲方為確保照護品質，於工作區域（不含私人房間/浴室）裝設監視器，不得以此主張侵犯隱私。</label>
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">⚖️ 勞工法規與損害賠償（核心）</span>
+            <span class="group-count" id="count-special-law">5 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group" style="grid-template-columns:1fr; gap:10px;">
+              <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_labor_law" checked> ⚖️ <strong>勞基法適用聲明：</strong>外籍家庭幫傭依法適用《勞動基準法》，各項權利義務依勞基法及本合約辦理，相關假別及加班費應依法計給。</label>
+              <label class="checkbox-label checked" style="border-left: 4px solid var(--red);"><input type="checkbox" name="special" value="s_damage_claim" checked> ⚖️ <strong>未預告離職/違約損害賠償聲明：</strong>若乙方未依法提前30日預告逕行離職或重大違約，甲方保留依法請求重新招募與空窗期實際損害賠償之權利。</label>
+              <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_salary_struct" checked> 💰 <strong>薪資結構確認與禁止轉嫁：</strong>確認約定薪資為應發總額。移工私人仲介費由乙方自理，甲方無代墊或吸收義務；一般消費不構成預支薪資正當理由。</label>
+              <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_sick_leave" checked> 🏥 <strong>病假與健康舉證責任：</strong>因病無法執行照護時，應提供台灣合格醫療機構之醫師診斷證明。若隱瞞重大病情致無法勝任，雇主得依法解約。</label>
+              <label class="checkbox-label checked" style="border-left: 4px solid var(--gold);"><input type="checkbox" name="special" value="s_camera" checked> 📹 <strong>監視設備裝設同意：</strong>乙方同意甲方為確保照護品質，於工作區域（不含私人房間/浴室）裝設監視器，不得以此主張侵犯隱私。</label>
+            </div>
+          </div>
+        </div>
 
-          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_phone" checked> 📱 <strong>手機使用限制：</strong> 非工作休息空檔，工作護理執行期間禁止長時間滑手機、打私人視訊，緊急聯絡除外。</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_advance" checked> 💳 <strong>借支現款限制：</strong> 為防範債務糾紛，每次預支以不超過半月薪資為限，須簽立借據。</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_sns" checked> 📸 <strong>網路社群管制：</strong> 禁止將被照顧者之隱私動態、清涼照或雇主住家內部格局上傳抖音 TikTok、FB。</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_standby" checked> ⏰ <strong>待命時間認定：</strong> 被照顧者夜間入睡後或日間靜養，非連續性突發交辦事項期間，均認定為在宅「待命休息時間」，不另計加班費。</label>
-          <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_hospital_stay" checked> 🏥 <strong>住院陪病義務：</strong> 若被照顧者經醫師診斷需住院，乙方同意配合至醫院陪病照料，屬正常職責不另計額外津貼。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_termination_notice"> 📋 <strong>甲方終止合約預告規定：</strong> 甲方如因被照顧者過世、移居機構或病情改善而終止契約，應提前14日書面通知乙方，並協助辦理後續轉換手續。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_valuables"> 🔒 <strong>貴重物品登記聲明：</strong> 雙方同意在簽約日以清單方式列明家中主要貴重物品，乙方不得私自移動或使用，如有遺失雙方得核對清單處理。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_mental_health"> 🧠 <strong>情緒與心理健康支持條款：</strong> 甲方關心乙方身心狀況，如乙方有情緒或適應困難，應主動告知甲方或仲介，雙方共同協調解決，不得以消極怠工方式表達不滿。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_cooking_restriction"> 🍳 <strong>烹飪安全規範：</strong> 乙方使用廚房烹飪時須全程在場看管，嚴禁離開爐火，並遵守雇主家之廚房安全規定及電器使用方式。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_visitor_log"> 📝 <strong>訪客登記制度：</strong> 乙方如有親友來訪，須至少提前一天告知甲方並說明訪客身份，每次訪客時間以不超過3小時為原則。</label>
-          <label class="checkbox-label"><input type="checkbox" name="special" value="s_renewal_priority"> 🔄 <strong>續約優先權：</strong> 合約期滿如甲方有意願續聘，乙方在同等條件下享有優先續約之資格，惟須於期滿前60日表達意願。</label>
+        <div class="collapsible-group">
+          <button class="collapsible-header open" onclick="toggleGroup(this)">
+            <span class="group-title">📱 生活管理條款</span>
+            <span class="group-count" id="count-special-life">5 項</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body open">
+            <div class="checkbox-group" style="grid-template-columns:1fr; gap:10px;">
+              <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_phone" checked> 📱 <strong>手機使用限制：</strong>非工作休息空檔，工作護理執行期間禁止長時間滑手機、打私人視訊，緊急聯絡除外。</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_advance" checked> 💳 <strong>借支現款限制：</strong>為防範債務糾紛，每次預支以不超過半月薪資為限，須簽立借據。</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_sns" checked> 📸 <strong>網路社群管制：</strong>禁止將被照顧者之隱私動態、清涼照或雇主住家內部格局上傳抖音 TikTok、FB。</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_standby" checked> ⏰ <strong>待命時間認定：</strong>被照顧者夜間入睡後或日間靜養，非連續性突發交辦事項期間，均認定為在宅「待命休息時間」，不另計加班費。</label>
+              <label class="checkbox-label checked"><input type="checkbox" name="special" value="s_hospital_stay" checked> 🏥 <strong>住院陪病義務：</strong>若被照顧者經醫師診斷需住院，乙方同意配合至醫院陪病照料，屬正常職責不另計額外津貼。</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="collapsible-group">
+          <button class="collapsible-header" onclick="toggleGroup(this)">
+            <span class="group-title">📋 進階補充條款</span>
+            <span class="group-count empty" id="count-special-extra">未啟用</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div class="collapsible-body">
+            <div class="checkbox-group" style="grid-template-columns:1fr; gap:10px;">
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_termination_notice"> 📋 <strong>甲方終止合約預告規定：</strong>甲方如因被照顧者過世、移居機構或病情改善而終止契約，應提前14日書面通知乙方，並協助辦理後續轉換手續。</label>
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_valuables"> 🔒 <strong>貴重物品登記聲明：</strong>雙方同意在簽約日以清單方式列明家中主要貴重物品，乙方不得私自移動或使用，如有遺失雙方得核對清單處理。</label>
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_mental_health"> 🧠 <strong>情緒與心理健康支持條款：</strong>甲方關心乙方身心狀況，如乙方有情緒或適應困難，應主動告知甲方或仲介，雙方共同協調解決，不得以消極怠工方式表達不滿。</label>
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_cooking_restriction"> 🍳 <strong>烹飪安全規範：</strong>乙方使用廚房烹飪時須全程在場看管，嚴禁離開爐火，並遵守雇主家之廚房安全規定及電器使用方式。</label>
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_visitor_log"> 📝 <strong>訪客登記制度：</strong>乙方如有親友來訪，須至少提前一天告知甲方並說明訪客身份，每次訪客時間以不超過3小時為原則。</label>
+              <label class="checkbox-label"><input type="checkbox" name="special" value="s_renewal_priority"> 🔄 <strong>續約優先權：</strong>合約期滿如甲方有意願續聘，乙方在同等條件下享有優先續約之資格，惟須於期滿前60日表達意願。</label>
+            </div>
+          </div>
         </div>
         <div class="form-group" style="margin-top:14px;">
           <label>其他特約註記 (自訂條款)</label>
@@ -1118,7 +1430,7 @@
           </div>
         </div>
 
-        <!-- 排版格式設定列 -->
+        <!-- v3.3 列印排版設定：更直覺的文案 -->
         <div class="print-settings-bar">
           <span style="color:var(--gold-light);font-weight:700;font-size:13px;">🖨️ 列印排版設定</span>
           <div class="settings-divider"></div>
@@ -1139,18 +1451,18 @@
           </div>
           <div class="settings-divider"></div>
           <div class="settings-group">
-            <label>字級</label>
+            <label>合約文字大小</label>
             <input type="range" min="9" max="13" value="10" step="0.5"
               oninput="applyPrintSetting('fontSize', this.value); document.getElementById('font-size-val').textContent=this.value+'pt'">
             <span id="font-size-val">10pt</span>
           </div>
           <div class="settings-divider"></div>
           <div class="settings-group">
-            <label>頁邊距</label>
+            <label>列印模式</label>
             <select onchange="applyPrintSetting('margin', this.value)">
-              <option value="normal">標準 (18mm)</option>
-              <option value="narrow">窄版 (12mm)</option>
-              <option value="wide">寬版 (24mm)</option>
+              <option value="normal">標準版（標準邊界）</option>
+              <option value="narrow">省紙版（窄邊界）</option>
+              <option value="wide">簽署放大版（寬邊界）</option>
             </select>
           </div>
           <div class="settings-divider"></div>
@@ -1169,6 +1481,85 @@
         </div>
       </div>
 
+    </div>
+
+    <!-- v3.3: 右側即時合約摘要（桌機版）-->
+    <aside class="summary-panel" id="summary-panel">
+      <h4>📋 合約摘要</h4>
+      <div class="summary-row">
+        <span class="summary-label">雇主</span>
+        <span class="summary-value empty" id="sum-employer">尚未填寫</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">幫傭</span>
+        <span class="summary-value empty" id="sum-maid">尚未填寫</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">語言版本</span>
+        <span class="summary-value" id="sum-lang">純中文版</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row">
+        <span class="summary-label">約定薪資</span>
+        <span class="summary-value empty" id="sum-salary">尚未填寫</span>
+      </div>
+      <div class="summary-row">
+        <span class="summary-label">例假</span>
+        <span class="summary-value" id="sum-days-off">每週 1 天</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-counts" id="sum-duties">已選工作項目：0 項</div>
+      <div class="summary-counts" id="sum-special">已選防護條款：0 項</div>
+      <div class="summary-divider"></div>
+      <div class="summary-row">
+        <span class="summary-label">合約起訖</span>
+        <span class="summary-value empty" id="sum-dates">尚未填寫</span>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- v3.3: 手機版底部浮動摘要按鈕 -->
+<button class="mobile-summary-btn" onclick="safeCall('openSummaryModal')">📋 查看合約摘要</button>
+
+<!-- v3.3: 手機摘要彈出層 -->
+<div class="summary-modal-overlay" id="summary-modal-overlay" onclick="safeCall('closeSummaryModal')">
+  <div class="summary-modal" onclick="event.stopPropagation()">
+    <button class="close-btn" onclick="safeCall('closeSummaryModal')">✕</button>
+    <h3>📋 合約摘要</h3>
+    <div class="summary-modal-grid">
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">雇主</span>
+        <span class="summary-modal-value empty" id="msum-employer">尚未填寫</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">幫傭</span>
+        <span class="summary-modal-value empty" id="msum-maid">尚未填寫</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">語言版本</span>
+        <span class="summary-modal-value" id="msum-lang">純中文版</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">約定薪資</span>
+        <span class="summary-modal-value empty" id="msum-salary">尚未填寫</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">例假</span>
+        <span class="summary-modal-value" id="msum-days-off">每週 1 天</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">工作項目</span>
+        <span class="summary-modal-value" id="msum-duties">0 項</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">防護條款</span>
+        <span class="summary-modal-value" id="msum-special">0 項</span>
+      </div>
+      <div class="summary-modal-row">
+        <span class="summary-modal-label">合約起訖</span>
+        <span class="summary-modal-value empty" id="msum-dates">尚未填寫</span>
+      </div>
     </div>
   </div>
 </div>
@@ -1427,6 +1818,7 @@ function showSection(id) {
   if (ni) ni.classList.add('active');
 
   const steps = ['sec-party','sec-agency','sec-household','sec-duties','sec-salary','sec-rules','sec-special','sec-preview'];
+  const stepLabels = ['當事人資訊','仲介與見證人','家庭基本狀況','工作內容','薪資休假','紀律規範','特約與防護','預覽與輸出'];
   const idx = steps.indexOf(id);
   document.querySelectorAll('.step').forEach((s, i) => {
     s.classList.remove('active','done');
@@ -1434,21 +1826,36 @@ function showSection(id) {
     else if (i < idx) s.classList.add('done');
   });
 
+  // v3.3: 更新手機版精簡步驟條
+  const compactLabel = document.getElementById('compact-step-label');
+  const compactProgress = document.getElementById('compact-step-progress');
+  const compactFill = document.getElementById('compact-progress-fill');
+  if (compactLabel && idx >= 0) {
+    compactLabel.textContent = `第 ${idx+1} / 8 步：${stepLabels[idx]}`;
+  }
+  if (compactProgress && idx >= 0) {
+    compactProgress.textContent = `${idx+1}/8`;
+  }
+  if (compactFill && idx >= 0) {
+    compactFill.style.width = `${((idx+1)/8)*100}%`;
+  }
+
   currentSection = id;
   if (id === 'sec-preview') generatePreview();
+  // v3.3: 更新摘要面板
+  updateSummaryPanel();
 }
 
 function setLang(lang) {
   currentLang = lang;
-  // body class controls CSS language-specific colour for .c-bi spans
-  // lang values: 'zh', 'zh-en', 'zh-id', 'zh-vi'
   const bodyLang = lang.includes('-') ? lang.split('-')[1] : lang;
   document.body.className = "lang-" + bodyLang;
   document.querySelectorAll('.lang-tab').forEach(t => t.classList.remove('active'));
   const tabEl = document.getElementById('tab-' + lang);
   if (tabEl) tabEl.classList.add('active');
-  // Only regenerate preview if currently on the preview section
   if (currentSection === 'sec-preview') generatePreview();
+  // v3.3: 更新摘要語言
+  updateSummaryPanel();
 }
 
 // ===== HELPERS =====
@@ -2187,7 +2594,178 @@ function clearAll() {
   }
 }
 
+// ===== v3.3: COLLAPSIBLE GROUP TOGGLE =====
+function toggleGroup(headerEl) {
+  headerEl.classList.toggle('open');
+  const body = headerEl.nextElementSibling;
+  if (body) body.classList.toggle('open');
+}
+
+// ===== v3.3: UPDATE COLLAPSIBLE COUNTS =====
+function updateGroupCounts() {
+  // Duty groups
+  const dutyGroups = [
+    { ids: ['d_sweep','d_vacuum','d_kitchen_clean','d_bathroom','d_wipe','d_trash','d_window','d_garden','d_car'], countId: 'count-core' },
+    { ids: ['d_wash','d_dry','d_fold','d_iron','d_bedchange'], countId: 'count-laundry' },
+    { ids: ['d_cook','d_cook_partial','d_grocery','d_baking','d_cook_special'], countId: 'count-cooking' },
+    { ids: ['d_baby_care','d_child_school','d_child_homework','d_child_bath'], countId: 'count-childcare' },
+    { ids: ['d_errand','d_organize','d_host'], countId: 'count-other' },
+  ];
+  dutyGroups.forEach(function(g) {
+    const count = g.ids.filter(function(v) {
+      const el = document.querySelector(`input[value="${v}"]`);
+      return el && el.checked;
+    }).length;
+    const badge = document.getElementById(g.countId);
+    if (badge) {
+      badge.textContent = count > 0 ? `${count} 項` : '未啟用';
+      badge.className = count > 0 ? 'group-count' : 'group-count empty';
+    }
+  });
+
+  // Benefit groups
+  const legalBenefits = ['b_food','b_room','b_health','b_insure'];
+  const extraBenefits = ['b_leave','b_transport','b_passport','b_contact'];
+  [{ ids: legalBenefits, countId: 'count-benefit-legal' }, { ids: extraBenefits, countId: 'count-benefit-extra' }].forEach(function(g) {
+    const count = g.ids.filter(function(v) {
+      const el = document.querySelector(`input[value="${v}"]`);
+      return el && el.checked;
+    }).length;
+    const badge = document.getElementById(g.countId);
+    if (badge) {
+      badge.textContent = count > 0 ? `${count} 項` : '未啟用';
+      badge.className = count > 0 ? 'group-count' : 'group-count empty';
+    }
+  });
+
+  // Special clause groups
+  const specialLaw = ['s_labor_law','s_damage_claim','s_salary_struct','s_sick_leave','s_camera'];
+  const specialLife = ['s_phone','s_advance','s_sns','s_standby','s_hospital_stay'];
+  const specialExtra = ['s_termination_notice','s_valuables','s_mental_health','s_cooking_restriction','s_visitor_log','s_renewal_priority'];
+  [
+    { ids: specialLaw, countId: 'count-special-law' },
+    { ids: specialLife, countId: 'count-special-life' },
+    { ids: specialExtra, countId: 'count-special-extra' },
+  ].forEach(function(g) {
+    const count = g.ids.filter(function(v) {
+      const el = document.querySelector(`input[value="${v}"]`);
+      return el && el.checked;
+    }).length;
+    const badge = document.getElementById(g.countId);
+    if (badge) {
+      badge.textContent = count > 0 ? `${count} 項` : '未啟用';
+      badge.className = count > 0 ? 'group-count' : 'group-count empty';
+    }
+  });
+}
+
+// ===== v3.3: SUMMARY PANEL UPDATE =====
+function updateSummaryPanel() {
+  const empName = v('emp_name');
+  const maidName = v('maid_name');
+  const salary = v('salary');
+  const startDate = v('start_date');
+  const endDate = v('end_date');
+  const dutyCount = document.querySelectorAll('input[name="duty"]:checked').length;
+  const specialCount = document.querySelectorAll('input[name="special"]:checked').length;
+  const daysOffEl = document.getElementById('days_off');
+  const daysOffText = daysOffEl ? (daysOffEl.value === 'off_2' ? '每週 2 天' : '每週 1 天') : '每週 1 天';
+
+  const langMap = { zh:'純中文版', 'zh-en':'中英對照', 'zh-id':'中印對照', 'zh-vi':'中越對照' };
+  const langText = langMap[currentLang] || '純中文版';
+
+  const datesText = (startDate && endDate) ? `${startDate} ~ ${endDate.slice(5)}` : null;
+
+  function setSummaryField(id, value, empty) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (value) {
+      el.textContent = value;
+      el.className = 'summary-value';
+    } else {
+      el.textContent = empty || '尚未填寫';
+      el.className = 'summary-value empty';
+    }
+  }
+  function setMSummaryField(id, value, empty) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (value) {
+      el.textContent = value;
+      el.className = 'summary-modal-value';
+    } else {
+      el.textContent = empty || '尚未填寫';
+      el.className = 'summary-modal-value empty';
+    }
+  }
+
+  setSummaryField('sum-employer', empName);
+  setSummaryField('sum-maid', maidName);
+  const sumLang = document.getElementById('sum-lang');
+  if (sumLang) sumLang.textContent = langText;
+  setSummaryField('sum-salary', salary ? `NT$${Number(salary).toLocaleString()}` : null);
+  const sumDaysOff = document.getElementById('sum-days-off');
+  if (sumDaysOff) sumDaysOff.textContent = daysOffText;
+  const sumDuties = document.getElementById('sum-duties');
+  if (sumDuties) sumDuties.textContent = `已選工作項目：${dutyCount} 項`;
+  const sumSpecial = document.getElementById('sum-special');
+  if (sumSpecial) sumSpecial.textContent = `已選防護條款：${specialCount} 項`;
+  setSummaryField('sum-dates', datesText);
+
+  // Mobile modal
+  setMSummaryField('msum-employer', empName);
+  setMSummaryField('msum-maid', maidName);
+  const msumLang = document.getElementById('msum-lang');
+  if (msumLang) msumLang.textContent = langText;
+  setMSummaryField('msum-salary', salary ? `NT$${Number(salary).toLocaleString()}` : null);
+  const msumDays = document.getElementById('msum-days-off');
+  if (msumDays) msumDays.textContent = daysOffText;
+  const msumDuties = document.getElementById('msum-duties');
+  if (msumDuties) msumDuties.textContent = `${dutyCount} 項`;
+  const msumSpecial = document.getElementById('msum-special');
+  if (msumSpecial) msumSpecial.textContent = `${specialCount} 項`;
+  setMSummaryField('msum-dates', datesText);
+
+  // Also update group counts
+  updateGroupCounts();
+}
+
+// ===== v3.3: MOBILE SUMMARY MODAL =====
+function openSummaryModal() {
+  updateSummaryPanel();
+  const overlay = document.getElementById('summary-modal-overlay');
+  if (overlay) overlay.classList.add('open');
+}
+function closeSummaryModal() {
+  const overlay = document.getElementById('summary-modal-overlay');
+  if (overlay) overlay.classList.remove('open');
+}
+
+// ===== v3.3: FIX pat_name GHOST FIELDS =====
+// Add hidden input placeholders so fillSample doesn't throw errors
+(function() {
+  const ghostFields = ['pat_name','pat_age','pat_health','pat_illness','pat_special'];
+  ghostFields.forEach(function(id) {
+    if (!document.getElementById(id)) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.id = id;
+      input.value = '';
+      document.body.appendChild(input);
+    }
+  });
+  // Also add hidden mobility radio placeholder
+  if (!document.querySelector('input[name="mobility"]')) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'mobility';
+    input.value = '';
+    document.body.appendChild(input);
+  }
+})();
+
 function resetForm() { clearAll(); }
+
 
 // ===== 台灣身分證加權校驗碼驗證 =====
 function validateTWID(id) {
@@ -2211,7 +2789,7 @@ function goToAgency() {
   if (!v('emp_name')) missing.push('雇主姓名');
   if (!v('emp_id')) missing.push('身分證字號');
   else if (!validateTWID(v('emp_id').toUpperCase())) missing.push('身分證字號格式或校驗碼有誤，請對照實際身分證確認');
-  if (!v('maid_name')) missing.push('看護姓名');
+  if (!v('maid_name')) missing.push('幫傭姓名');
   if (!v('maid_nation')) missing.push('看護國籍');
   if (!v('contract_date')) missing.push('簽約日期');
   if (!v('start_date')) missing.push('合約生效起日');
@@ -2309,7 +2887,8 @@ window.addEventListener('load', function() {
   // ⑤ 【高風險修復⑤】驗證關鍵函式是否全部存在（CDN 或 JS 截斷時的保險）
   var REQUIRED_FUNCTIONS = ['showSection','setLang','fillSample','clearAll','exportPDF','exportHTML',
     'generatePreview','updatePageStyle','autoSaveToStorage','autoRestoreFromStorage',
-    'syncCheckboxState','validateSalary','validateDates','safeStorageSet','safeCall'];
+    'syncCheckboxState','validateSalary','validateDates','safeStorageSet','safeCall',
+    'toggleGroup','updateSummaryPanel','openSummaryModal','closeSummaryModal'];
   var missing = REQUIRED_FUNCTIONS.filter(function(fn) { return typeof window[fn] !== 'function'; });
   if (missing.length > 0) {
     var msg = '⚠️ 以下 JS 函式載入失敗，部分功能將無法使用：\n' + missing.join(', ') + '\n\n請嘗試：強制重新整理（Ctrl+Shift+R / Cmd+Shift+R）';
@@ -2347,8 +2926,8 @@ window.addEventListener('load', function() {
   console.log('v11 GitHub Ready ✅');
 });
 
-document.addEventListener('input',  autoSaveToStorage);
-document.addEventListener('change', autoSaveToStorage);
+document.addEventListener('input',  function() { autoSaveToStorage(); updateSummaryPanel(); });
+document.addEventListener('change', function() { autoSaveToStorage(); updateSummaryPanel(); });
 setInterval(autoSaveToStorage, 30000);
 
 // ===== SALARY VALIDATION =====
@@ -2511,6 +3090,13 @@ document.addEventListener('DOMContentLoaded', function () {
     syncCheckboxState();
   } catch(e) {
     console.error('[init] syncCheckboxState 失敗：', e);
+  }
+
+  // v3.3: 初始化摘要面板
+  try {
+    updateSummaryPanel();
+  } catch(e) {
+    console.warn('[init] updateSummaryPanel 失敗：', e);
   }
 });
 </script>
