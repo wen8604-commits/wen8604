@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>認知症照顧教育訓練平台 v41 · Dementia Care Training Platform</title>
+<title>認知症照顧教育訓練平台 v40 · Dementia Care Training Platform</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Inter:wght@400;500;600&display=swap');
 
@@ -123,6 +123,11 @@ body{
   color:var(--ink3);
   padding:14px 16px 4px;
 }
+.sidebar-section.collapsible .sidebar-label{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.sidebar-section.collapsible .sidebar-label::after{content:"⌄";font-size:13px;color:var(--ink3);transition:transform var(--t);}
+.sidebar-section.collapsible.is-collapsed .sidebar-label::after{transform:rotate(-90deg);}
+.sidebar-section.collapsible.is-collapsed .nav-item{display:none;}
+.priority-section{background:rgba(13,148,136,.04);}
 .nav-item{
   display:flex;
   align-items:center;
@@ -238,7 +243,6 @@ html[data-lang="zh"] .card-en{display:none;}
 /* ── HOME PAGE ── */
 .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
 .overview-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 14px;text-align:center;box-shadow:var(--shadow);}
-.overview-card-wide{grid-column:span 4;}
 .overview-num{font-size:28px;font-weight:700;line-height:1;margin-bottom:4px;}
 .overview-label{font-size:11.5px;color:var(--ink2);}
 
@@ -283,10 +287,37 @@ html[data-lang="zh"] .card-en{display:none;}
 .progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--green));border-radius:999px;transition:width .5s cubic-bezier(.4,0,.2,1);}
 .progress-meta{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--ink2);}
 .progress-chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border);border-radius:999px;padding:3px 9px;background:var(--surface2);}
-.module-complete-panel{background:var(--teal-light);border:1px solid #99d8d8;border-radius:var(--radius-sm);padding:12px 14px;margin:-8px 0 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.progress-hero{padding:20px;background:linear-gradient(135deg,#ecfeff,#f0fdf4);border-color:#99d8d8;}
+.progress-hero-main{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;align-items:center;}
+.progress-kicker{font-size:12px;font-weight:700;color:var(--teal);margin-bottom:6px;}
+.progress-big{font-size:24px;font-weight:800;color:var(--ink);line-height:1.25;margin-bottom:8px;}
+.progress-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.progress-next{background:rgba(255,255,255,.78);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;}
+.path-section{margin-bottom:24px;}
+.path-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.path-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;box-shadow:var(--shadow);cursor:pointer;transition:box-shadow var(--t),transform var(--t),border-color var(--t);}
+.path-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);border-color:var(--teal-mid);}
+.path-card.danger{border-color:#fecaca;background:#fff7f7;}
+.path-card.quiz{border-color:var(--purple);background:linear-gradient(135deg,var(--purple-light),#fff);}
+.path-order{font-size:11px;font-weight:800;color:var(--ink3);margin-bottom:6px;}
+.path-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:4px;line-height:1.3;}
+.path-desc{font-size:12px;color:var(--ink2);line-height:1.45;}
+.path-tag{display:inline-flex;margin-top:8px;font-size:10.5px;font-weight:700;border-radius:999px;padding:2px 8px;background:var(--teal-light);color:var(--teal);}
+.path-card.danger .path-tag{background:var(--red-light);color:var(--red);}
+.path-card.quiz .path-tag{background:var(--purple-light);color:var(--purple);}
+.module-complete-panel{background:var(--teal-light);border:1px solid #99d8d8;border-radius:var(--radius-sm);padding:14px;margin:-8px 0 20px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;}
 .module-complete-text{font-size:13px;color:var(--ink2);line-height:1.5;}
+.module-task-title{font-size:14px;font-weight:800;color:var(--ink);margin-bottom:8px;}
+.module-task-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 14px;margin:0 0 8px;padding:0;list-style:none;font-size:12.5px;color:var(--ink2);}
+.module-task-list li::before{content:"✓";color:var(--green);font-weight:800;margin-right:6px;}
+.module-task-meta{font-size:12px;color:var(--ink3);}
 .module-complete-btn{border:none;background:var(--teal);color:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .module-complete-btn.done{background:var(--green);}
+.module-next-panel{border-top:1px solid var(--border);margin-top:26px;padding-top:16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;}
+.module-next-group{display:flex;flex-wrap:wrap;gap:8px;}
+.module-next-btn{border:1px solid var(--border);background:var(--surface);color:var(--ink2);border-radius:8px;padding:8px 11px;font-size:12.5px;font-weight:700;cursor:pointer;}
+.module-next-btn.primary{background:var(--teal);border-color:var(--teal);color:#fff;}
+.module-next-btn.quiz{background:var(--purple);border-color:var(--purple);color:#fff;}
 
 /* Quiz module card special */
 .home-module-quiz{
@@ -346,7 +377,8 @@ button,
 .nav-item,
 .home-module,
 .bottom-nav-btn,
-.lang-btn,
+.lang-current,
+.lang-option,
 .checklist li,
 .pill,
 .menu-toggle {
@@ -451,7 +483,6 @@ input, select, textarea {
 
   /* ── Typography – min 14px body for legibility ── */
   .page-title{font-size:20px;line-height:1.28;}
-  #home .page-title{font-size:18px!important;} /* override inline style on home hero */
   .page-desc{font-size:13px;line-height:1.55;}
   .eyebrow{font-size:10px;}
   .sec-title{font-size:15px;margin:22px 0 10px;}
@@ -468,7 +499,7 @@ input, select, textarea {
 
   /* ── Home overview ── */
   .overview-grid{grid-template-columns:repeat(2,1fr);gap:9px;}
-  .overview-card-wide{grid-column:span 2;}
+  .overview-grid .overview-card[style*="span 4"]{grid-column:span 2;}
   .overview-card{padding:13px 10px;}
   .overview-num{font-size:27px;}
   .overview-label{font-size:11px;}
@@ -544,13 +575,8 @@ input, select, textarea {
   .bottom-nav-btn .bn-lbl{font-size:9.5px;}
 
   /* ── Language switcher ── */
-  .lang-btn .lb-label{display:none;}
-  .lang-btn{padding:5px 7px;min-width:32px;min-height:36px;font-size:13px;}
-  .lang-switcher{gap:2px;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
-  .lang-switcher::-webkit-scrollbar{display:none;}
-
-  /* ── Topbar overflow guard ── */
-  .topbar-text{min-width:0;flex:1 1 0%;}
+  .lang-current{padding:6px 9px;max-width:112px;}
+  .lang-menu{right:-4px;min-width:142px;}
 
   /* ── Nav items in sidebar ── */
   .nav-item{
@@ -567,7 +593,10 @@ input, select, textarea {
   .vital-row td:first-child{width:110px;}
 
   /* ── Module complete panel ── */
-  .module-complete-panel{flex-direction:column;align-items:flex-start;gap:8px;}
+  .progress-hero-main{grid-template-columns:1fr;}
+  .path-grid{grid-template-columns:1fr;}
+  .module-complete-panel{grid-template-columns:1fr;}
+  .module-task-list{grid-template-columns:1fr;}
 }
 
 /* ── SMALL PHONE (≤374px) ── */
@@ -575,14 +604,11 @@ input, select, textarea {
   .topbar{padding:0 10px;gap:6px;}
   .topbar-icon{width:30px;height:30px;font-size:16px;}
   .menu-toggle{width:34px;height:34px;}
-  .lang-btn{padding:4px 5px;min-width:26px;min-height:30px;font-size:12px;}
-  .lang-switcher{gap:1px;}
+  .lang-current{padding:5px 7px;max-width:92px;font-size:11px;}
   .main{padding:12px 12px calc(76px + max(8px,var(--safe-bottom)));}
   .page-title{font-size:18px;}
-  #home .page-title{font-size:16px!important;}
   .home-module-grid{grid-template-columns:1fr;}
   .overview-grid{grid-template-columns:repeat(2,1fr);gap:7px;}
-  .overview-card-wide{grid-column:span 2;}
   .hm-icon{font-size:22px;}
   .hm-title{font-size:12px;}
   .info-table{min-width:360px;font-size:11px;}
@@ -601,7 +627,7 @@ input, select, textarea {
   .home-module-grid{grid-template-columns:repeat(3,1fr);}
   .card-grid-3{grid-template-columns:repeat(3,1fr);}
   .overview-grid{grid-template-columns:repeat(4,1fr);}
-  .overview-card-wide{grid-column:span 4;}
+  .overview-grid .overview-card[style*="span 4"]{grid-column:span 4;}
   .sidebar{overflow-y:auto;scrollbar-width:thin;}
 }
 
@@ -670,11 +696,15 @@ button:focus-visible{outline:2px solid var(--teal-mid);outline-offset:2px;}
 }
 
 /* ── LANG SWITCHER ── */
-.lang-switcher{display:flex;align-items:center;gap:3px;margin-left:auto;flex-shrink:0;}
-.lang-btn{display:flex;align-items:center;gap:4px;padding:5px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);color:rgba(255,255,255,.82);font-size:12px;font-family:inherit;cursor:pointer;transition:background var(--t);white-space:nowrap;font-weight:500;-webkit-tap-highlight-color:transparent;}
-.lang-btn:hover{background:rgba(255,255,255,.2);color:white;}
-.lang-btn.active{background:rgba(255,255,255,.22);color:white;border-color:rgba(255,255,255,.5);font-weight:700;}
-.lang-btn .lf{font-size:14px;line-height:1;}
+.lang-switcher{display:flex;align-items:center;margin-left:auto;flex-shrink:0;position:relative;}
+.lang-current{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:20px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.12);color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;-webkit-tap-highlight-color:transparent;}
+.lang-current .lf{font-size:14px;line-height:1;}
+.lang-caret{font-size:10px;opacity:.8;}
+.lang-menu{display:none;position:absolute;right:0;top:calc(100% + 8px);min-width:150px;background:var(--surface);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow-lg);padding:6px;z-index:240;}
+.lang-switcher.open .lang-menu{display:block;}
+.lang-option{display:block;width:100%;border:none;background:transparent;color:var(--ink2);font-family:inherit;font-size:12.5px;font-weight:700;text-align:left;border-radius:7px;padding:8px 10px;cursor:pointer;}
+.lang-option:hover{background:var(--surface2);color:var(--ink);}
+.lang-option.active{background:var(--teal-light);color:var(--teal);}
 
 /* ══════════════════════════════════
    MULTILINGUAL SYSTEM
@@ -767,9 +797,9 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
 @media(min-width:600px) and (max-width:899px){
   .card-grid{grid-template-columns:repeat(2,1fr);}
   .card-grid-3{grid-template-columns:repeat(2,1fr);}
-  .home-module-grid{grid-template-columns:repeat(2,1fr);}
+  .home-module-grid{grid-template-columns:repeat(3,1fr);}
   .overview-grid{grid-template-columns:repeat(2,1fr);}
-  .overview-card-wide{grid-column:span 2;}
+  .overview-grid .overview-card[style*="span 4"]{grid-column:span 2;}
   .do-dont-grid{grid-template-columns:1fr 1fr;}
   .page-title{font-size:21px;}
 }
@@ -837,19 +867,16 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
     <div class="topbar-sub" id="topbarSub">外籍看護認知症照顧訓練平台</div>
   </div>
   <!-- Language Switcher -->
-  <div class="lang-switcher">
-    <button class="lang-btn active" id="btn-zh" onclick="setLang('zh')" title="純中文">
-      <span class="lf">🇹🇼</span><span class="lb-label">中文</span>
+  <div class="lang-switcher lang-dropdown" id="langSwitcher">
+    <button class="lang-current" id="langCurrent" onclick="toggleLangMenu()" aria-expanded="false" aria-controls="langMenu" title="切換語言">
+      <span class="lf">🌐</span><span id="langCurrentLabel">中文</span><span class="lang-caret">▾</span>
     </button>
-    <button class="lang-btn" id="btn-en" onclick="setLang('en')" title="Chinese + English">
-      <span class="lf">🇬🇧</span><span class="lb-label">中+EN</span>
-    </button>
-    <button class="lang-btn" id="btn-vi" onclick="setLang('vi')" title="Chinese + Tiếng Việt">
-      <span class="lf">🇻🇳</span><span class="lb-label">中+Việt</span>
-    </button>
-    <button class="lang-btn" id="btn-id" onclick="setLang('id')" title="Chinese + Bahasa Indonesia">
-      <span class="lf">🇮🇩</span><span class="lb-label">中+Indo</span>
-    </button>
+    <div class="lang-menu" id="langMenu" role="menu">
+      <button class="lang-option active" id="btn-zh" onclick="setLang('zh');closeLangMenu()" role="menuitem" data-short="中文">純中文</button>
+      <button class="lang-option" id="btn-en" onclick="setLang('en');closeLangMenu()" role="menuitem" data-short="中+EN">中文＋英文</button>
+      <button class="lang-option" id="btn-vi" onclick="setLang('vi');closeLangMenu()" role="menuitem" data-short="中+Việt">中文＋越南文</button>
+      <button class="lang-option" id="btn-id" onclick="setLang('id');closeLangMenu()" role="menuitem" data-short="中+Indo">中文＋印尼文</button>
+    </div>
   </div>
 </div>
 
@@ -862,10 +889,46 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar" aria-label="訓練模組導覽">
   <div class="sidebar-section">
-    <div class="sidebar-label" data-key="menu">主選單 <span style="font-weight:400;font-size:9px;letter-spacing:.5px">v41</span></div>
+    <div class="sidebar-label" data-key="menu">主選單 <span style="font-weight:400;font-size:9px;letter-spacing:.5px">v40</span></div>
     <button class="nav-item active" onclick="showSection('home')">
       <span class="nav-ico">🏠</span> 訓練首頁
     </button>
+  </div>
+
+  <div class="sidebar-section priority-section" data-default-open="true">
+    <div class="sidebar-label" data-key="starter">新手必修</div>
+    <button class="nav-item" onclick="showSection('dementia-basics')">
+      <span class="nav-ico">1</span> 認識認知症
+    </button>
+    <button class="nav-item" onclick="showSection('communication')">
+      <span class="nav-ico">2</span> 溝通技巧
+    </button>
+    <button class="nav-item" onclick="showSection('swallowing')">
+      <span class="nav-ico">3</span> 吞嚥照護
+      <span class="tag tag-red">高風險</span>
+    </button>
+    <button class="nav-item" onclick="showSection('fall-prevention')">
+      <span class="nav-ico">4</span> 跌倒預防
+    </button>
+    <button class="nav-item" onclick="showSection('emergency')">
+      <span class="nav-ico">5</span> 緊急處理
+      <span class="tag tag-red">重要</span>
+    </button>
+    <button class="nav-item" onclick="showSection('legal-prohibited')">
+      <span class="nav-ico">6</span> 高風險行為禁止
+      <span class="tag tag-red">重要</span>
+    </button>
+  </div>
+
+  <div class="sidebar-section priority-section" data-default-open="true">
+    <div class="sidebar-label" data-key="risk">高風險模組</div>
+    <button class="nav-item" onclick="showSection('swallowing')"><span class="nav-ico">🥄</span> 吞嚥照護</button>
+    <button class="nav-item" onclick="showSection('delirium')"><span class="nav-ico">⚡</span> 譫妄辨識</button>
+    <button class="nav-item" onclick="showSection('geriatric-emergency')"><span class="nav-ico">🏥</span> 高齡急症辨識</button>
+    <button class="nav-item" onclick="showSection('legal-emergency')"><span class="nav-ico">🚑</span> 緊急送醫流程</button>
+    <button class="nav-item" onclick="showSection('legal-restraint')"><span class="nav-ico">🔒</span> 保護約束原則</button>
+    <button class="nav-item" onclick="showSection('infection-control')"><span class="nav-ico">🧤</span> 感染控制</button>
+    <button class="nav-item" onclick="showSection('bpsd-aggression')"><span class="nav-ico">🥊</span> 攻擊行為處理</button>
   </div>
 
   <div class="sidebar-section">
@@ -1062,89 +1125,58 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
     <div class="page-desc">41 個訓練模組 ＋ 測驗系統 ＋ 首頁導覽 · 情境演練 · 四語言對照<span class="L2 en"> · 41 Training Modules + Quiz System + Home · Scenario Practice · 4 Languages</span><span class="L2 vi"> · 41 Mô-đun Đào Tạo + Hệ Thống Kiểm Tra + Trang Chủ · Luyện Tập Tình Huống · 4 Ngôn Ngữ</span><span class="L2 id"> · 41 Modul Pelatihan + Sistem Kuis + Beranda · Latihan Skenario · 4 Bahasa</span></div>
   </div>
 
-  <div id="homeProgress" class="learning-progress" aria-live="polite"></div>
+  <div id="homeProgress" class="learning-progress progress-hero" aria-live="polite"></div>
 
   <div class="overview-grid">
     <div class="overview-card">
-      <div class="overview-num" style="color:var(--teal)">8</div>
-      <div class="overview-label">日常照顧模組<span class="L2 en"><br>Daily Care Modules</span><span class="L2 vi"><br>Mô-đun Chăm Sóc Hàng Ngày</span><span class="L2 id"><br>Modul Perawatan Harian</span></div>
+      <div class="overview-num" style="color:var(--teal)">41</div>
+      <div class="overview-label">訓練模組<span class="L2 en"><br>Modules</span><span class="L2 vi"><br>Mô-đun</span><span class="L2 id"><br>Modul</span></div>
     </div>
     <div class="overview-card">
-      <div class="overview-num" style="color:var(--purple)">12</div>
-      <div class="overview-label">行為管理模組<span class="L2 en"><br>Behaviour Modules</span><span class="L2 vi"><br>Mô-đun Quản Lý Hành Vi</span><span class="L2 id"><br>Modul Manajemen Perilaku</span></div>
+      <div class="overview-num" style="color:var(--blue)">4</div>
+      <div class="overview-label">語言模式<span class="L2 en"><br>Languages</span><span class="L2 vi"><br>Ngôn Ngữ</span><span class="L2 id"><br>Bahasa</span></div>
     </div>
     <div class="overview-card">
-      <div class="overview-num" style="color:var(--amber)">3</div>
-      <div class="overview-label">健康監測模組<span class="L2 en"><br>Health Monitoring</span><span class="L2 vi"><br>Mô-đun Theo Dõi Sức Khỏe</span><span class="L2 id"><br>Modul Pemantauan Kesehatan</span></div>
+      <div class="overview-num" style="color:var(--purple)">🎯</div>
+      <div class="overview-label">測驗中心<span class="L2 en"><br>Quiz Center</span><span class="L2 vi"><br>Kiểm Tra</span><span class="L2 id"><br>Kuis</span></div>
     </div>
     <div class="overview-card">
-      <div class="overview-num" style="color:var(--red)">2</div>
-      <div class="overview-label">安全緊急模組<span class="L2 en"><br>Safety &amp; Emergency</span><span class="L2 vi"><br>Mô-đun An Toàn &amp; Khẩn Cấp</span><span class="L2 id"><br>Modul Keselamatan &amp; Darurat</span></div>
-    </div>
-    <div class="overview-card overview-card-wide" style="text-align:center">
-      <div style="display:flex;align-items:center;justify-content:center;gap:10px">
-        <div class="overview-num" style="color:var(--blue)">5</div>
-        <div class="overview-label" style="text-align:left">法規與雇主規定模組<span class="L2 en"><br>Legal &amp; Employer Regulations</span><span class="L2 vi"><br>Mô-đun Pháp Lý &amp; Quy Định Chủ Lao Động</span><span class="L2 id"><br>Modul Hukum &amp; Peraturan Pemberi Kerja</span></div>
-      </div>
-    </div>
-    <div class="overview-card overview-card-wide" style="text-align:center">
-      <div style="display:flex;align-items:center;justify-content:center;gap:10px">
-        <div class="overview-num" style="color:var(--green)">6</div>
-        <div class="overview-label" style="text-align:left">進階照護模組<span class="L2 en"><br>Advanced Care Modules</span><span class="L2 vi"><br>Mô-đun Chăm Sóc Nâng Cao</span><span class="L2 id"><br>Modul Perawatan Lanjutan</span></div>
-      </div>
-    </div>
-    <div class="overview-card">
-      <div class="overview-num" style="color:var(--blue)">3</div>
-      <div class="overview-label">認知症基礎模組<span class="L2 en"><br>Dementia Basics</span><span class="L2 vi"><br>Mô-đun Cơ Bản</span><span class="L2 id"><br>Modul Dasar</span></div>
-    </div>
-    <div class="overview-card">
-      <div class="overview-num" style="color:var(--teal)">2</div>
-      <div class="overview-label">自我照顧與記錄<span class="L2 en"><br>Self-Care &amp; Records</span><span class="L2 vi"><br>Tự Chăm Sóc &amp; Ghi Chép</span><span class="L2 id"><br>Perawatan Diri &amp; Catatan</span></div>
+      <div class="overview-num" style="color:var(--green)">✓</div>
+      <div class="overview-label">學習進度<span class="L2 en"><br>Progress</span><span class="L2 vi"><br>Tiến Độ</span><span class="L2 id"><br>Progres</span></div>
     </div>
   </div>
 
-  <div class="alert alert-amber">
-    <div class="alert-ico">⭐</div>
-    <div class="alert-body">
-      <div class="alert-title">訓練使用說明<span class="tx" data-en="How to Use This Platform" data-vi="Hướng Dẫn Sử Dụng Nền Tảng" data-id="Cara Menggunakan Platform Ini"> · How to Use This Platform</span></div>
-      <div class="alert-text">使用左側選單瀏覽各訓練模組。每個模組包含：照顧技巧、注意事項、正確／錯誤示範，以及多語言對照（中文＋英／越／印）。建議按順序完成所有模組。</div>
-      <div class="alert-en">Use the left menu to navigate each module. Each module includes: care techniques, cautions, do/don't examples, and bilingual content (Chinese + English). Complete all modules in order.</div>
-      <div class="alert-vi">Dùng menu bên trái để điều hướng từng mô-đun. Mỗi mô-đun gồm: kỹ thuật chăm sóc, lưu ý, ví dụ đúng/sai và nội dung song ngữ (Tiếng Trung + Tiếng Việt). Hoàn thành tất cả mô-đun theo thứ tự.</div>
-      <div class="alert-id">Gunakan menu kiri untuk menavigasi setiap modul. Setiap modul mencakup: teknik perawatan, perhatian, contoh do/don't, dan konten dwibahasa (Mandarin + Bahasa Indonesia). Selesaikan semua modul secara berurutan.</div>
+  <div class="path-section" id="starterPath">
+    <div class="sec-title"><span>🧭</span> 新手看護必修路線<span class="tx" data-en="New Caregiver Essentials" data-vi="Lộ Trình Bắt Buộc Cho Người Mới" data-id="Jalur Wajib Pengasuh Baru"> · New Caregiver Essentials</span></div>
+    <div class="path-grid">
+      <div class="path-card" onclick="showSection('dementia-basics')"><div class="path-order">01</div><div class="path-title">認識認知症</div><div class="path-desc">先理解疾病與照顧目標</div><span class="path-tag">必修</span></div>
+      <div class="path-card" onclick="showSection('communication')"><div class="path-order">02</div><div class="path-title">溝通技巧</div><div class="path-desc">用短句、眼神與安撫降低衝突</div><span class="path-tag">必修</span></div>
+      <div class="path-card danger" onclick="showSection('swallowing')"><div class="path-order">03</div><div class="path-title">吞嚥照護</div><div class="path-desc">避免嗆咳與吸入性肺炎</div><span class="path-tag">高風險</span></div>
+      <div class="path-card" onclick="showSection('fall-prevention')"><div class="path-order">04</div><div class="path-title">跌倒預防</div><div class="path-desc">夜間如廁與移位是重點</div><span class="path-tag">必修</span></div>
+      <div class="path-card danger" onclick="showSection('emergency')"><div class="path-order">05</div><div class="path-title">緊急處理</div><div class="path-desc">判斷何時通知家屬或送醫</div><span class="path-tag">緊急</span></div>
+      <div class="path-card danger" onclick="showSection('legal-prohibited')"><div class="path-order">06</div><div class="path-title">高風險禁止</div><div class="path-desc">不能自行給藥、約束或隱瞞</div><span class="path-tag">禁止</span></div>
     </div>
   </div>
 
-  <div class="sec-title"><span>🔥</span> 最常使用<span class="tx" data-en="Most Used" data-vi="Thường Dùng Nhất" data-id="Paling Sering Dipakai"> · Most Used</span></div>
-  <div class="home-module-grid" style="margin-bottom:24px">
-    <div class="home-module" onclick="showSection('swallowing')">
-      <div class="hm-icon">🥄</div>
-      <div class="hm-title">吞嚥照護</div>
-      <div class="hm-en L2 en">Swallowing Care</div><div class="hm-vi L2 vi">Chăm Sóc Nuốt</div><div class="hm-id L2 id">Perawatan Menelan</div>
-      <div class="hm-count"><span class="badge badge-red">高風險<span class="L2 en"> High Risk</span><span class="L2 vi"> Nguy Cơ Cao</span><span class="L2 id"> Risiko Tinggi</span></span></div>
+  <div class="path-section" id="riskPath">
+    <div class="sec-title"><span>🚨</span> 高風險優先學習<span class="tx" data-en="High-Risk Priority Modules" data-vi="Mô-đun Nguy Cơ Cao Cần Học Trước" data-id="Modul Risiko Tinggi Prioritas"> · High-Risk Priority Modules</span></div>
+    <div class="path-grid">
+      <div class="path-card danger" onclick="showSection('swallowing')"><div class="path-title">🥄 吞嚥照護</div><div class="path-desc">避免嗆咳與吸入性肺炎</div><span class="path-tag">高風險</span></div>
+      <div class="path-card danger" onclick="showSection('delirium')"><div class="path-title">⚡ 譫妄辨識</div><div class="path-desc">突然變差要立即通報</div><span class="path-tag">緊急</span></div>
+      <div class="path-card danger" onclick="showSection('geriatric-emergency')"><div class="path-title">🏥 高齡急症</div><div class="path-desc">辨識不尋常的急性變化</div><span class="path-tag">緊急</span></div>
+      <div class="path-card danger" onclick="showSection('legal-emergency')"><div class="path-title">🚑 送醫流程</div><div class="path-desc">119 與家屬通知順序</div><span class="path-tag">流程</span></div>
+      <div class="path-card danger" onclick="showSection('legal-restraint')"><div class="path-title">🔒 保護約束</div><div class="path-desc">知道何時不能約束</div><span class="path-tag">法規</span></div>
+      <div class="path-card danger" onclick="showSection('infection-control')"><div class="path-title">🧤 感染控制</div><div class="path-desc">發燒、咳嗽、腹瀉要警覺</div><span class="path-tag">安全</span></div>
+      <div class="path-card danger" onclick="showSection('bpsd-aggression')"><div class="path-title">🥊 攻擊行為</div><div class="path-desc">先保護安全，不硬碰硬</div><span class="path-tag">高風險</span></div>
     </div>
-    <div class="home-module" onclick="showSection('delirium')">
-      <div class="hm-icon">⚡</div>
-      <div class="hm-title">譫妄辨識</div>
-      <div class="hm-en L2 en">Delirium</div><div class="hm-vi L2 vi">Mê Sảng</div><div class="hm-id L2 id">Delirium</div>
-      <div class="hm-count"><span class="badge badge-red">立即通報<span class="L2 en"> Report Now</span><span class="L2 vi"> Báo Ngay</span><span class="L2 id"> Laporkan</span></span></div>
-    </div>
-    <div class="home-module" onclick="showSection('fall-prevention')">
-      <div class="hm-icon">🛡️</div>
-      <div class="hm-title">跌倒預防</div>
-      <div class="hm-en L2 en">Fall Prevention</div><div class="hm-vi L2 vi">Phòng Ngừa Té Ngã</div><div class="hm-id L2 id">Pencegahan Jatuh</div>
-      <div class="hm-count"><span class="badge badge-amber">安全<span class="L2 en"> Safety</span><span class="L2 vi"> An Toàn</span><span class="L2 id"> Keselamatan</span></span></div>
-    </div>
-    <div class="home-module" onclick="showSection('emergency')">
-      <div class="hm-icon">🚨</div>
-      <div class="hm-title">緊急送醫</div>
-      <div class="hm-en L2 en">Emergency Transfer</div><div class="hm-vi L2 vi">Cấp Cứu</div><div class="hm-id L2 id">Darurat</div>
-      <div class="hm-count"><span class="badge badge-red">119</span></div>
-    </div>
-    <div class="home-module" onclick="showSection('bpsd')">
-      <div class="hm-icon">💬</div>
-      <div class="hm-title">BPSD</div>
-      <div class="hm-en L2 en">Behaviour Symptoms</div><div class="hm-vi L2 vi">Hành Vi BPSD</div><div class="hm-id L2 id">Gejala Perilaku</div>
-      <div class="hm-count"><span class="badge badge-amber">常見<span class="L2 en"> Common</span><span class="L2 vi"> Phổ Biến</span><span class="L2 id"> Umum</span></span></div>
+  </div>
+
+  <div class="path-section">
+    <div class="sec-title"><span>🎯</span> 測驗中心<span class="tx" data-en="Assessment Center" data-vi="Trung Tâm Kiểm Tra" data-id="Pusat Asesmen"> · Assessment Center</span></div>
+    <div class="path-grid">
+      <div class="path-card quiz" onclick="startQuiz('dementia-basics')"><div class="path-title">開始新手測驗</div><div class="path-desc">先檢查基礎觀念是否理解</div><span class="path-tag">測驗</span></div>
+      <div class="path-card quiz" onclick="startQuiz('swallowing')"><div class="path-title">高風險情境測驗</div><div class="path-desc">練習嗆咳、急症與通報判斷</div><span class="path-tag">情境</span></div>
+      <div class="path-card quiz" onclick="showSection('quiz')"><div class="path-title">查看錯題紀錄</div><div class="path-desc">從測驗中心反覆複習弱點</div><span class="path-tag">複習</span></div>
     </div>
   </div>
 
@@ -8550,17 +8582,14 @@ html[data-lang="id"] .flow-desc-sec.id{display:block;}
     <button class="bottom-nav-btn active" id="bn-home" onclick="showSection('home');setBottomNav('bn-home')">
       <span class="bn-ico">🏠</span><span class="bn-lbl" data-zh="首頁" data-en="Home" data-vi="Trang Chủ" data-id="Beranda">首頁</span>
     </button>
-    <button class="bottom-nav-btn" id="bn-basics" onclick="showSection('dementia-basics');setBottomNav('bn-basics')">
-      <span class="bn-ico">📖</span><span class="bn-lbl" data-zh="基礎" data-en="Basics" data-vi="Cơ Bản" data-id="Dasar">基礎</span>
+    <button class="bottom-nav-btn" id="bn-starter" onclick="showSection('dementia-basics');setBottomNav('bn-starter')">
+      <span class="bn-ico">🧭</span><span class="bn-lbl" data-zh="必修" data-en="Essentials" data-vi="Bắt Buộc" data-id="Wajib">必修</span>
     </button>
-    <button class="bottom-nav-btn" id="bn-daily" onclick="showSection('morning-care');setBottomNav('bn-daily')">
-      <span class="bn-ico">🌅</span><span class="bn-lbl" data-zh="照顧" data-en="Care" data-vi="Chăm Sóc" data-id="Perawatan">照顧</span>
+    <button class="bottom-nav-btn" id="bn-risk" onclick="showSection('swallowing');setBottomNav('bn-risk')">
+      <span class="bn-ico">🚨</span><span class="bn-lbl" data-zh="緊急" data-en="Urgent" data-vi="Khẩn Cấp" data-id="Darurat">緊急</span>
     </button>
-    <button class="bottom-nav-btn" id="bn-safety" onclick="showSection('emergency');setBottomNav('bn-safety')">
-      <span class="bn-ico">🚨</span><span class="bn-lbl" data-zh="緊急" data-en="Emergency" data-vi="Khẩn Cấp" data-id="Darurat">緊急</span>
-    </button>
-    <button class="bottom-nav-btn" id="bn-legal" onclick="showSection('legal-emergency');setBottomNav('bn-legal')">
-      <span class="bn-ico">⚖️</span><span class="bn-lbl" data-zh="法規" data-en="Legal" data-vi="Pháp Lý" data-id="Hukum">法規</span>
+    <button class="bottom-nav-btn" id="bn-quiz" onclick="showSection('quiz');setBottomNav('bn-quiz')">
+      <span class="bn-ico">🎯</span><span class="bn-lbl" data-zh="測驗" data-en="Quiz" data-vi="Kiểm Tra" data-id="Kuis">測驗</span>
     </button>
     <button class="bottom-nav-btn" id="bn-menu" onclick="toggleSidebar()" aria-label="開啟選單">
       <span class="bn-ico">☰</span><span class="bn-lbl" data-zh="選單" data-en="Menu" data-vi="Menu" data-id="Menu">選單</span>
@@ -8603,6 +8632,16 @@ const UI_STRINGS = {
     lastRead: (t) => `最後閱讀：${t}`,
     completion: (pct) => `完成率 ${pct}%`,
     resume: '繼續學習',
+    todayGoal: '今日建議完成：3 個模組',
+    nextRecommended: '下一個建議',
+    startStarter: '開始新手必修',
+    taskTitle: '本章你要學會：',
+    taskItems: ['如何觀察', '什麼狀況要通知家屬', '哪些行為不能做', '什麼情況要送醫'],
+    timeHint: '預估學習時間：5–8 分鐘｜完成後可進行小測驗',
+    prevLesson: '上一堂',
+    nextLesson: '下一堂',
+    finishChapter: '完成本章',
+    enterQuiz: '進入測驗',
     notStarted: '尚未開始',
     moduleHint: '讀完本頁後，可標記完成；系統會記住完成率與最後閱讀模組。',
     markDone: '標記完成',
@@ -8614,6 +8653,16 @@ const UI_STRINGS = {
     lastRead: (t) => `Last read: ${t}`,
     completion: (pct) => `Completion ${pct}%`,
     resume: 'Resume',
+    todayGoal: 'Recommended today: 3 modules',
+    nextRecommended: 'Next recommended',
+    startStarter: 'Start Essentials',
+    taskTitle: 'In this chapter you will learn:',
+    taskItems: ['How to observe', 'When to notify family', 'What not to do', 'When to seek medical help'],
+    timeHint: 'Estimated learning time: 5–8 minutes | Quiz available after completion',
+    prevLesson: 'Previous',
+    nextLesson: 'Next',
+    finishChapter: 'Complete Chapter',
+    enterQuiz: 'Take Quiz',
     notStarted: 'Not started yet',
     moduleHint: 'After reading this page, you can mark it as complete. The system will remember your progress.',
     markDone: 'Mark Complete',
@@ -8625,6 +8674,16 @@ const UI_STRINGS = {
     lastRead: (t) => `Đọc lần cuối: ${t}`,
     completion: (pct) => `Tỉ lệ hoàn thành ${pct}%`,
     resume: 'Tiếp tục học',
+    todayGoal: 'Hôm nay nên hoàn thành: 3 mô-đun',
+    nextRecommended: 'Đề xuất tiếp theo',
+    startStarter: 'Bắt đầu bài bắt buộc',
+    taskTitle: 'Trong chương này bạn sẽ học:',
+    taskItems: ['Cách quan sát', 'Khi nào báo gia đình', 'Việc không được làm', 'Khi nào cần đi viện'],
+    timeHint: 'Thời gian học: 5–8 phút | Có thể làm bài kiểm tra sau khi hoàn thành',
+    prevLesson: 'Bài trước',
+    nextLesson: 'Bài tiếp',
+    finishChapter: 'Hoàn thành chương',
+    enterQuiz: 'Làm kiểm tra',
     notStarted: 'Chưa bắt đầu',
     moduleHint: 'Sau khi đọc xong trang này, bạn có thể đánh dấu là đã hoàn thành.',
     markDone: 'Đánh Dấu Hoàn Thành',
@@ -8636,6 +8695,16 @@ const UI_STRINGS = {
     lastRead: (t) => `Terakhir dibaca: ${t}`,
     completion: (pct) => `Penyelesaian ${pct}%`,
     resume: 'Lanjutkan Belajar',
+    todayGoal: 'Disarankan hari ini: 3 modul',
+    nextRecommended: 'Rekomendasi berikutnya',
+    startStarter: 'Mulai Materi Wajib',
+    taskTitle: 'Dalam bab ini Anda akan belajar:',
+    taskItems: ['Cara mengamati', 'Kapan memberi tahu keluarga', 'Tindakan yang tidak boleh dilakukan', 'Kapan perlu ke rumah sakit'],
+    timeHint: 'Perkiraan waktu belajar: 5–8 menit | Kuis tersedia setelah selesai',
+    prevLesson: 'Sebelumnya',
+    nextLesson: 'Berikutnya',
+    finishChapter: 'Selesaikan Bab',
+    enterQuiz: 'Masuk Kuis',
     notStarted: 'Belum dimulai',
     moduleHint: 'Setelah membaca halaman ini, Anda dapat menandainya sebagai selesai.',
     markDone: 'Tandai Selesai',
@@ -8857,7 +8926,7 @@ const PAGE_TITLES = {
 /* ── Sidebar labels per mode ── */
 const SIDEBAR_LABELS = {
   zh: {
-    'menu': '主選單', 'basics': '認知症基礎',
+    'menu': '主選單', 'starter': '新手必修', 'risk': '高風險模組', 'basics': '認知症基礎',
     'daily': '日常照顧技巧', 'behaviour': '行為症狀管理',
     'health': '健康監測', 'safety': '安全管理', 'advanced': '進階照護', 'self': '自我照顧',
     'home': '訓練首頁', 'dementia-basics': '認識認知症',
@@ -8889,7 +8958,7 @@ const SIDEBAR_LABELS = {
     'care': '照顧記錄',
   },
   en: {
-    'menu': '主選單 · Menu', 'basics': '認知症基礎 · Basics',
+    'menu': '主選單 · Menu', 'starter': '新手必修 · Essentials', 'risk': '高風險模組 · High Risk', 'basics': '認知症基礎 · Basics',
     'daily': '日常照顧 · Daily Care', 'behaviour': '行為管理 · Behaviour',
     'health': '健康監測 · Health', 'safety': '安全管理 · Safety', 'advanced': '進階照護 · Advanced', 'self': '自我照顧 · Self-Care',
     'home': '訓練首頁 · Home', 'dementia-basics': '認識認知症 · What is Dementia',
@@ -8921,7 +8990,7 @@ const SIDEBAR_LABELS = {
     'care': '照顧記錄 · Care Record',
   },
   vi: {
-    'menu': '主選單 · Menu Chính', 'basics': '認知症基礎 · Cơ Bản',
+    'menu': '主選單 · Menu Chính', 'starter': '新手必修 · Bắt Buộc', 'risk': '高風險模組 · Nguy Cơ Cao', 'basics': '認知症基礎 · Cơ Bản',
     'daily': '日常照顧 · Chăm Sóc Hàng Ngày', 'behaviour': '行為管理 · Hành Vi',
     'health': '健康監測 · Sức Khỏe', 'safety': '安全管理 · An Toàn', 'advanced': '進階照護 · Nâng Cao', 'self': '自我照顧 · Bản Thân',
     'home': '訓練首頁 · Trang Chủ', 'dementia-basics': '認識認知症 · Sa Sút Trí Tuệ',
@@ -8953,7 +9022,7 @@ const SIDEBAR_LABELS = {
     'quiz': '測驗中心 · Trung Tâm Kiểm Tra',
   },
   id: {
-    'menu': '主選單 · Menu Utama', 'basics': '認知症基礎 · Dasar Demensia',
+    'menu': '主選單 · Menu Utama', 'starter': '新手必修 · Wajib', 'risk': '高風險模組 · Risiko Tinggi', 'basics': '認知症基礎 · Dasar Demensia',
     'daily': '日常照顧 · Perawatan Harian', 'behaviour': '行為管理 · Perilaku',
     'health': '健康監測 · Kesehatan', 'safety': '安全管理 · Keselamatan', 'advanced': '進階照護 · Lanjutan', 'self': '自我照顧 · Diri Sendiri',
     'home': '訓練首頁 · Beranda', 'dementia-basics': '認識認知症 · Demensia',
@@ -9008,6 +9077,50 @@ function closeSidebar() {
 document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
 document.getElementById('sidebarOverlay').addEventListener('click', closeSidebar);
 
+function setupSidebarAccordion(){
+  document.querySelectorAll('.sidebar-section').forEach((section, index) => {
+    const label = section.querySelector('.sidebar-label');
+    const items = section.querySelectorAll('.nav-item');
+    if (!label || items.length === 0 || index === 0) return;
+    section.classList.add('collapsible');
+    const shouldOpen = section.dataset.defaultOpen === 'true';
+    section.classList.toggle('is-collapsed', !shouldOpen);
+    label.setAttribute('role', 'button');
+    label.setAttribute('tabindex', '0');
+    label.addEventListener('click', () => section.classList.toggle('is-collapsed'));
+    label.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        section.classList.toggle('is-collapsed');
+      }
+    });
+  });
+}
+
+function toggleLangMenu(){
+  const switcher = document.getElementById('langSwitcher');
+  const current = document.getElementById('langCurrent');
+  const isOpen = switcher.classList.toggle('open');
+  current.setAttribute('aria-expanded', String(isOpen));
+}
+
+function closeLangMenu(){
+  const switcher = document.getElementById('langSwitcher');
+  const current = document.getElementById('langCurrent');
+  if (switcher) switcher.classList.remove('open');
+  if (current) current.setAttribute('aria-expanded', 'false');
+}
+
+document.addEventListener('click', (e) => {
+  const switcher = document.getElementById('langSwitcher');
+  if (switcher && !switcher.contains(e.target)) closeLangMenu();
+});
+
+function startQuiz(id){
+  showSection('quiz');
+  if (typeof window.__qstart === 'function') window.__qstart(id);
+}
+
 /* Auto-close sidebar on resize to desktop */
 window.addEventListener('resize', () => {
   if (window.innerWidth > 899) closeSidebar();
@@ -9018,23 +9131,26 @@ let currentSection = 'home';
 /* Bottom nav section → button mapping */
 const BOTTOM_NAV_MAP = {
   'home': 'bn-home',
-  'dementia-basics': 'bn-basics', 'symptoms': 'bn-basics', 'stages': 'bn-basics',
-  'morning-care': 'bn-daily', 'personal-hygiene': 'bn-daily', 'nutrition': 'bn-daily',
-  'mobility': 'bn-daily', 'activity': 'bn-daily', 'sleep': 'bn-daily', 'incontinence': 'bn-daily',
-  'bpsd': 'bn-daily', 'bpsd-delusion': 'bn-daily', 'bpsd-hallucination': 'bn-daily',
-  'bpsd-sundowning': 'bn-daily', 'bpsd-repetition': 'bn-daily', 'bpsd-hiding': 'bn-daily',
-  'wandering': 'bn-daily', 'refusal': 'bn-daily',
-  'communication': 'bn-daily', 'quiz': 'bn-home', 'vitals': 'bn-daily', 'skin-care': 'bn-daily',
-  'medication': 'bn-daily',
+  'dementia-basics': 'bn-starter', 'communication': 'bn-starter', 'fall-prevention': 'bn-starter',
+  'legal-prohibited': 'bn-starter',
+  'quiz': 'bn-quiz',
+  'swallowing': 'bn-risk', 'emergency': 'bn-risk', 'delirium': 'bn-risk', 'geriatric-emergency': 'bn-risk',
+  'legal-emergency': 'bn-risk', 'legal-restraint': 'bn-risk', 'infection-control': 'bn-risk',
+  'bpsd-aggression': 'bn-risk',
+  'symptoms': 'bn-menu', 'stages': 'bn-menu',
+  'morning-care': 'bn-menu', 'personal-hygiene': 'bn-menu', 'nutrition': 'bn-menu',
+  'mobility': 'bn-menu', 'activity': 'bn-menu', 'sleep': 'bn-menu', 'incontinence': 'bn-menu',
+  'bpsd': 'bn-menu', 'bpsd-delusion': 'bn-menu', 'bpsd-hallucination': 'bn-menu',
+  'bpsd-sundowning': 'bn-menu', 'bpsd-repetition': 'bn-menu', 'bpsd-hiding': 'bn-menu',
+  'wandering': 'bn-menu', 'refusal': 'bn-menu',
+  'vitals': 'bn-menu', 'skin-care': 'bn-menu',
+  'medication': 'bn-menu',
   'caregiver-wellbeing': 'bn-menu',
-  'delirium': 'bn-daily', 'swallowing': 'bn-daily',
-  'pain-assessment': 'bn-daily', 'bpsd-aggression': 'bn-daily',
-  'legal-prohibited': 'bn-legal', 'care-record': 'bn-menu',
-  'end-stage-care': 'bn-daily', 'family-communication-skills': 'bn-daily', 'restorative-care': 'bn-daily',
-  'palliative-care': 'bn-daily', 'infection-control': 'bn-daily', 'geriatric-emergency': 'bn-daily',
-  'fall-prevention': 'bn-safety', 'emergency': 'bn-safety',
-  'legal-emergency': 'bn-legal', 'legal-restraint': 'bn-legal',
-  'legal-privacy': 'bn-legal', 'legal-family': 'bn-legal',
+  'pain-assessment': 'bn-menu',
+  'care-record': 'bn-menu',
+  'end-stage-care': 'bn-menu', 'family-communication-skills': 'bn-menu', 'restorative-care': 'bn-menu',
+  'palliative-care': 'bn-menu',
+  'legal-privacy': 'bn-menu', 'legal-family': 'bn-menu',
 };
 
 const TRACKED_MODULES = [
@@ -9048,6 +9164,10 @@ const TRACKED_MODULES = [
   'legal-emergency','legal-restraint','legal-privacy','legal-family','legal-prohibited',
   'caregiver-wellbeing','care-record'
 ];
+
+const STARTER_MODULES = ['dementia-basics','communication','swallowing','fall-prevention','emergency','legal-prohibited'];
+const HIGH_RISK_MODULES = ['swallowing','delirium','geriatric-emergency','legal-emergency','legal-restraint','infection-control','bpsd-aggression'];
+const MODULE_SEQUENCE = STARTER_MODULES.concat(TRACKED_MODULES.filter(id => !STARTER_MODULES.includes(id)));
 
 function readProgress(){
   try {
@@ -9079,15 +9199,22 @@ function renderHomeProgress(){
   const pct = Math.round(done * 100 / total);
   const S = UI_STRINGS[currentLang] || UI_STRINGS.zh;
   const lastTitle = progress.last ? getModuleTitle(progress.last) : S.notStarted;
+  const nextId = STARTER_MODULES.find(id => !progress.completed.includes(id)) || TRACKED_MODULES.find(id => !progress.completed.includes(id)) || 'quiz';
+  const nextTitle = getModuleTitle(nextId);
   const resume = progress.last ? '<button class="module-complete-btn" onclick="showSection(\''+progress.last+'\')">'+S.resume+'</button>' : '';
   box.innerHTML = ''
-    + '<div class="progress-head"><div class="progress-title">'+S.progressTitle+'</div><div class="progress-rate">'+S.progressDone(done,total,pct)+'</div></div>'
-    + '<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div>'
-    + '<div class="progress-meta"><span class="progress-chip">'+S.lastRead(lastTitle)+'</span><span class="progress-chip">'+S.completion(pct)+'</span>'+resume+'</div>';
+    + '<div class="progress-hero-main">'
+    + '<div><div class="progress-kicker">'+S.progressTitle+'</div><div class="progress-big">'+S.todayGoal+'</div>'
+    + '<div class="progress-meta"><span class="progress-chip">'+S.progressDone(done,total,pct)+'</span><span class="progress-chip">'+S.lastRead(lastTitle)+'</span></div>'
+    + '<div class="progress-actions">'+resume+'<button class="module-complete-btn" onclick="showSection(\''+STARTER_MODULES[0]+'\')">'+S.startStarter+'</button></div></div>'
+    + '<div class="progress-next"><div class="progress-title">'+S.nextRecommended+'</div><div class="progress-rate" style="margin:4px 0 10px">'+nextTitle+'</div>'
+    + '<div class="progress-bar"><div class="progress-fill" style="width:'+pct+'%"></div></div><div class="progress-meta"><span class="progress-chip">'+S.completion(pct)+'</span></div></div>'
+    + '</div>';
 }
 
 function renderModuleProgressPanel(id){
   document.querySelectorAll('.module-complete-panel').forEach(el => el.remove());
+  document.querySelectorAll('.module-next-panel').forEach(el => el.remove());
   if (!TRACKED_MODULES.includes(id)) return;
   const target = document.getElementById(id);
   const header = target ? target.querySelector('.page-header') : null;
@@ -9097,9 +9224,32 @@ function renderModuleProgressPanel(id){
   const panel = document.createElement('div');
   const S = UI_STRINGS[currentLang] || UI_STRINGS.zh;
   panel.className = 'module-complete-panel';
-  panel.innerHTML = '<div class="module-complete-text"><strong>'+getModuleTitle(id)+'</strong><br>'+S.moduleHint+'</div>'
-    + '<button class="module-complete-btn '+(done?'done':'')+'" onclick="toggleModuleComplete(\''+id+'\')">'+( done ? S.done : S.markDone )+'</button>';
+  panel.innerHTML = '<div class="module-complete-text"><div class="module-task-title">'+S.taskTitle+'</div>'
+    + '<ul class="module-task-list">'+S.taskItems.map(item => '<li>'+item+'</li>').join('')+'</ul>'
+    + '<div class="module-task-meta">'+S.timeHint+'</div></div>'
+    + '<button class="module-complete-btn '+(done?'done':'')+'" onclick="toggleModuleComplete(\''+id+'\')">'+( done ? S.done : S.finishChapter )+'</button>';
   header.insertAdjacentElement('afterend', panel);
+  renderModuleNextPanel(id);
+}
+
+function renderModuleNextPanel(id){
+  const target = document.getElementById(id);
+  if (!target) return;
+  const S = UI_STRINGS[currentLang] || UI_STRINGS.zh;
+  const idx = MODULE_SEQUENCE.indexOf(id);
+  const prevId = idx > 0 ? MODULE_SEQUENCE[idx - 1] : null;
+  const nextId = idx >= 0 && idx < MODULE_SEQUENCE.length - 1 ? MODULE_SEQUENCE[idx + 1] : null;
+  const done = readProgress().completed.includes(id);
+  const panel = document.createElement('div');
+  panel.className = 'module-next-panel';
+  panel.innerHTML = '<div class="module-next-group">'
+    + (prevId ? '<button class="module-next-btn" onclick="showSection(\''+prevId+'\')">← '+S.prevLesson+'：'+getModuleTitle(prevId)+'</button>' : '')
+    + (nextId ? '<button class="module-next-btn primary" onclick="showSection(\''+nextId+'\')">'+S.nextLesson+'：'+getModuleTitle(nextId)+' →</button>' : '')
+    + '</div><div class="module-next-group">'
+    + '<button class="module-next-btn '+(done?'primary':'')+'" onclick="toggleModuleComplete(\''+id+'\')">'+(done ? S.done : S.finishChapter)+'</button>'
+    + '<button class="module-next-btn quiz" onclick="startQuiz(\''+id+'\')">'+S.enterQuiz+'</button>'
+    + '</div>';
+  target.appendChild(panel);
 }
 
 function rememberLastModule(id){
@@ -9153,6 +9303,7 @@ function setBottomNav(activeId) {
 
 /* ── Wrap tables on DOMContentLoaded ── */
 document.addEventListener('DOMContentLoaded', () => {
+  setupSidebarAccordion();
   document.querySelectorAll('.checklist li').forEach(li => {
     li.addEventListener('click', () => li.classList.toggle('checked'));
   });
@@ -9178,10 +9329,12 @@ function setLang(lang) {
   if (!VALID_LANGS.includes(lang)) lang = 'zh';
   if (lang === currentLang && document.documentElement.getAttribute('data-lang') === lang) return;
 
-  // Update button states
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  // Update dropdown state
+  document.querySelectorAll('.lang-option').forEach(b => b.classList.remove('active'));
   const btnEl = document.getElementById(`btn-${lang}`);
   if (btnEl) btnEl.classList.add('active');
+  const currentLabel = document.getElementById('langCurrentLabel');
+  if (currentLabel && btnEl) currentLabel.textContent = btnEl.dataset.short || btnEl.textContent.trim();
 
   currentLang = lang;
   try { localStorage.setItem(LANG_STORAGE_KEY, lang); } catch(e) {}
