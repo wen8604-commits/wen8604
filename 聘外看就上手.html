@@ -1,0 +1,2630 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#080f1f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>聘外看就上手 · 聘雇評量系統 v20</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<!-- ══ SVG ICON SPRITE ══ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- home -->
+  <symbol id="ic-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/>
+  </symbol>
+  <!-- edit/form -->
+  <symbol id="ic-form" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+  </symbol>
+  <!-- warning/landmine -->
+  <symbol id="ic-warn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+  </symbol>
+  <!-- medal/rank -->
+  <symbol id="ic-rank" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/>
+  </symbol>
+  <!-- chart/dashboard -->
+  <symbol id="ic-dash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="3" width="7" height="9" rx="1"/><rect x="9" y="3" width="13" height="5" rx="1"/><rect x="9" y="12" width="13" height="9" rx="1"/><rect x="2" y="16" width="7" height="5" rx="1"/>
+  </symbol>
+  <!-- search/verify -->
+  <symbol id="ic-verify" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </symbol>
+  <!-- building/agency -->
+  <symbol id="ic-agency" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/><path d="M6 11h2m-2 4h2m8-4h2m-2 4h2"/>
+  </symbol>
+  <!-- person/nurse -->
+  <symbol id="ic-person" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+  </symbol>
+  <!-- lock/privacy -->
+  <symbol id="ic-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+  </symbol>
+  <!-- clipboard -->
+  <symbol id="ic-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/>
+  </symbol>
+  <!-- check/success -->
+  <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"/>
+  </symbol>
+  <!-- globe -->
+  <symbol id="ic-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+  </symbol>
+  <!-- refresh -->
+  <symbol id="ic-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+  </symbol>
+  <!-- download/export -->
+  <symbol id="ic-dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+  </symbol>
+  <!-- trash -->
+  <symbol id="ic-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6m4-6v6"/><path d="M9 6V4h6v2"/>
+  </symbol>
+  <!-- copy -->
+  <symbol id="ic-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+  </symbol>
+  <!-- arrow up -->
+  <symbol id="ic-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+  </symbol>
+  <!-- plus -->
+  <symbol id="ic-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+    <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+  </symbol>
+  <!-- x/close -->
+  <symbol id="ic-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+  </symbol>
+  <!-- cloud -->
+  <symbol id="ic-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/>
+  </symbol>
+  <!-- fire/firebase -->
+  <symbol id="ic-fire" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 2c0 6-6 7-6 13a6 6 0 0012 0c0-6-6-7-6-13z"/><path d="M12 12c0 3-2 4-2 6a2 2 0 004 0c0-2-2-3-2-6z"/>
+  </symbol>
+  <!-- hard drive/local -->
+  <symbol id="ic-hdd" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 18h.01M10 18h.01"/><path d="M2 14l2.5-8.5A2 2 0 016.4 4h11.2a2 2 0 011.9 1.5L22 14"/>
+  </symbol>
+  <!-- wifi-off -->
+  <symbol id="ic-offline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="1" y1="1" x2="23" y2="23"/><path d="M16.72 11.06A10.94 10.94 0 0119 12.55"/><path d="M5 12.55a10.94 10.94 0 015.17-2.39"/><path d="M10.71 5.05A16 16 0 0122.56 9"/><path d="M1.42 9a15.91 15.91 0 014.7-2.88"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1"/>
+  </symbol>
+  <!-- save -->
+  <symbol id="ic-save" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/>
+  </symbol>
+</svg>
+<!-- Firebase SDK -->
+<script type="module">
+// ══════════════════════════════════════════════════════
+//  ⚙️  Firebase 設定區 — 請換成您的專案設定
+//  Firebase Console → 專案設定 → 您的應用程式 → firebaseConfig
+// ══════════════════════════════════════════════════════
+import{initializeApp}from'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import{getFirestore,doc,getDoc,setDoc,deleteDoc,collection,getDocs,query,where,orderBy,limit}
+  from'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const FIREBASE_CONFIG={
+  apiKey:            "YOUR_API_KEY",
+  authDomain:        "YOUR_PROJECT.firebaseapp.com",
+  projectId:         "YOUR_PROJECT_ID",
+  storageBucket:     "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId:             "YOUR_APP_ID"
+};
+
+// ── 初始化 ──
+let _db=null,_firebaseOK=false;
+try{
+  const app=initializeApp(FIREBASE_CONFIG);
+  _db=getFirestore(app);
+  // 用 projectId + apiKey 偵測是否已填設定（雙重確認，避免不完整設定觸發 Firestore）
+  _firebaseOK=!!(FIREBASE_CONFIG.projectId &&
+                 FIREBASE_CONFIG.projectId!=='YOUR_PROJECT_ID' &&
+                 FIREBASE_CONFIG.apiKey!=='YOUR_API_KEY');
+}catch(e){console.warn('[Firebase] 初始化失敗',e);}
+
+// ── Firestore CRUD helpers ──
+const COL='ams5';// Firestore collection 名稱
+
+async function fbGet(k){
+  if(!_firebaseOK||!_db)return null;
+  try{
+    const snap=await getDoc(doc(_db,COL,k.replace(/[\/]/g,'_')));
+    return snap.exists()?snap.data().v:null;
+  }catch(e){console.warn('[Firebase] get fail',k,e);return null;}
+}
+async function fbSet(k,v){
+  if(!_firebaseOK||!_db)return;
+  try{await setDoc(doc(_db,COL,k.replace(/[\/]/g,'_')),{v,_t:Date.now()});}
+  catch(e){console.warn('[Firebase] set fail',k,e);}
+}
+async function fbDel(k){
+  if(!_firebaseOK||!_db)return;
+  try{await deleteDoc(doc(_db,COL,k.replace(/[\/]/g,'_')));}
+  catch(e){console.warn('[Firebase] del fail',k,e);}
+}
+
+// ── 掛到 window 讓主程式使用 ──
+window._FB={get:fbGet,set:fbSet,del:fbDel,ok:()=>_firebaseOK};
+window.dispatchEvent(new Event('firebase-ready'));
+</script>
+<style>
+:root{
+  --bg:#080f1f; --bg2:#0c1628;
+  --navy:#0f1e3d; --navy2:#1a2f5e; --navy3:#253a72;
+  --card:#111e3a; --card2:#1a2f5c; --card3:#1f3568;
+  --gold:#c9a227; --gold2:#e8c547; --gold3:#f5d97a;
+  --border:rgba(201,162,39,0.22); --border2:rgba(255,255,255,0.07);
+  --text:#e4e0d4; --text2:#9a9688; --text3:#5a5850;
+  --green:#27ae60; --green2:#2ecc71;
+  --red:#c0392b; --red2:#e74c3c;
+  --orange:#d35400; --orange2:#e67e22;
+  --yellow:#f39c12; --yellow2:#f1c40f;
+  --blue:#2471a3; --blue2:#3498db;
+  --purple:#7d3c98; --purple2:#9b59b6; --purple3:#c39bd3;
+  --warn-bg:rgba(192,57,43,0.08); --warn-border:rgba(192,57,43,0.35);
+  --radius:12px; --radius-sm:8px;
+  --shadow:0 8px 32px rgba(0,0,0,0.5); --shadow-sm:0 2px 12px rgba(0,0,0,0.3);
+  --hdr-h:60px; --bot-h:0px; --pad:20px; --max-w:1040px; --touch:44px;
+}
+/* ── SVG ICONS ── */
+.ico{display:inline-block;width:1em;height:1em;vertical-align:middle;flex-shrink:0;}
+.ico-14{width:14px;height:14px;}
+.ico-15{width:15px;height:15px;}
+.ico-16{width:16px;height:16px;}
+.ico-18{width:18px;height:18px;}
+.ico-20{width:20px;height:20px;}
+.ico-22{width:22px;height:22px;}
+.ico-24{width:24px;height:24px;}
+.ico-28{width:28px;height:28px;}
+.ico-34{width:34px;height:34px;}
+.ico-44{width:44px;height:44px;}
+
+/* ── OFFLINE BAR ── */
+.offline-bar{display:none;position:fixed;top:var(--hdr-h);left:0;right:0;z-index:200;background:rgba(192,57,43,0.92);color:#fff;font-size:13px;font-weight:600;text-align:center;padding:9px 16px;backdrop-filter:blur(8px);}
+.offline-bar.show{display:block;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.65;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom);}
+img{max-width:100%;}button{font-family:inherit;cursor:pointer;}input,select,textarea{font-family:inherit;}
+::-webkit-scrollbar{width:4px;height:4px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:var(--navy3);border-radius:4px;}
+
+/* ── HEADER ── */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:300;height:var(--hdr-h);background:rgba(8,15,31,0.97);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:14px;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;text-decoration:none;-webkit-tap-highlight-color:transparent;}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif TC',serif;font-size:15px;font-weight:900;color:var(--navy);flex-shrink:0;}
+.logo-wrap{line-height:1.2;}
+.logo-name{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--gold2);}
+.logo-sub{font-size:10px;color:var(--text3);}
+.hdr-nav{display:flex;gap:3px;flex:1;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.hdr-nav::-webkit-scrollbar{display:none;}
+.nb{background:transparent;border:1px solid transparent;color:var(--text2);padding:7px 13px;border-radius:7px;font-size:13px;font-weight:500;white-space:nowrap;transition:all .2s;min-height:var(--touch);display:flex;align-items:center;gap:5px;-webkit-tap-highlight-color:transparent;}
+.nb:hover{color:var(--gold2);border-color:var(--border);}
+.nb.active{background:var(--card2);color:var(--gold2);border-color:var(--border);}
+.nb .nb-icon{font-size:15px;display:flex;align-items:center;}
+.nb.warn-nb{color:#e87070;}
+.nb.warn-nb.active{background:rgba(192,57,43,0.18);border-color:rgba(192,57,43,0.45);color:#ff7070;}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.db-chip{font-size:11px;padding:4px 11px;border-radius:20px;border:1px solid var(--border);color:var(--text2);display:flex;align-items:center;gap:5px;}
+.db-chip.cloud{border-color:rgba(46,204,113,0.4);color:var(--green2);}
+.db-chip.local{border-color:rgba(52,152,219,0.4);color:var(--blue2);}
+.loading{display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── MOBILE BOTTOM NAV ── */
+.bot-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(8,15,31,0.98);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom);}
+.bot-nav-inner{display:flex;align-items:stretch;height:56px;}
+.bnb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:none;color:var(--text3);font-size:10px;font-weight:500;font-family:'Noto Sans TC',sans-serif;transition:all .2s;padding:6px 2px;-webkit-tap-highlight-color:transparent;cursor:pointer;}
+.bnb .bicon{font-size:20px;line-height:1;transition:transform .2s;display:flex;align-items:center;justify-content:center;}
+.bnb.active{color:var(--gold2);}
+.bnb.active .bicon{transform:scale(1.15);}
+.bnb.warn-bnb.active{color:#ff7070;}
+.bnb-label{font-size:9.5px;letter-spacing:.3px;white-space:nowrap;}
+
+@media(min-width:640px)and(max-width:1023px){
+  .hdr-nav{gap:2px;}.nb{padding:6px 10px;font-size:12px;}.nb .nb-label{display:none;}.nb .nb-icon{font-size:18px;}.logo-sub{display:none;}
+}
+@media(max-width:639px){
+  :root{--hdr-h:52px;--pad:14px;}
+  .hdr{padding:0 14px;height:var(--hdr-h);}
+  .hdr-nav{display:none;}.hdr-right{margin-left:auto;}.logo-sub{display:none;}
+  .bot-nav{display:block;}
+}
+
+/* ── MAIN ── */
+.main{margin-top:var(--hdr-h);padding:24px var(--pad) 40px;max-width:var(--max-w);margin-left:auto;margin-right:auto;min-height:calc(100vh - var(--hdr-h));}
+@media(max-width:639px){.main{padding:16px var(--pad) calc(56px + env(safe-area-inset-bottom) + 20px);}}
+.view{display:none;}.view.active{display:block;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+@media(max-width:1023px){.g4{grid-template-columns:repeat(2,1fr);}.g3{grid-template-columns:1fr 1fr;}}
+@media(max-width:639px){.g2,.g3,.g4{grid-template-columns:1fr;gap:12px;}.g2.keep2{grid-template-columns:1fr 1fr;gap:10px;}}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'Noto Sans TC',sans-serif;cursor:pointer;border:none;transition:all .22s;white-space:nowrap;text-decoration:none;min-height:var(--touch);-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+.btn-p{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(201,162,39,0.4);}
+.btn-s{background:var(--card2);color:var(--text);border:1px solid var(--border2);}
+.btn-s:hover{border-color:var(--border);color:var(--gold2);}
+.btn-g{background:transparent;color:var(--text2);border:1px solid var(--border2);}
+.btn-g:hover{background:var(--card);color:var(--text);}
+.btn-d{background:rgba(192,57,43,0.15);color:#e87070;border:1px solid rgba(192,57,43,0.3);}
+.btn-w{background:linear-gradient(135deg,#6b1010,#c0392b);color:#fff;}
+.btn-w:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(192,57,43,0.4);}
+.btn-purple{background:linear-gradient(135deg,#5b2c6f,#8e44ad);color:#fff;}
+.btn-purple:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(142,68,173,0.4);}
+.btn-sm{padding:8px 15px;font-size:12.5px;min-height:38px;}
+.btn-lg{padding:14px 30px;font-size:15px;}
+.btn-full{width:100%;}
+@media(max-width:639px){.btn{min-height:48px;font-size:15px;padding:12px 20px;border-radius:10px;}.btn-sm{min-height:40px;font-size:13px;padding:8px 14px;}.btn-lg{min-height:52px;}}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:20px;margin-bottom:16px;}
+@media(max-width:639px){.card{padding:16px;margin-bottom:14px;border-radius:14px;}}
+.card-hdr{display:flex;align-items:center;gap:11px;margin-bottom:16px;padding-bottom:13px;border-bottom:1px solid var(--border2);}
+.card-icon{width:38px;height:38px;min-width:38px;background:linear-gradient(135deg,var(--navy3),var(--card2));border:1px solid var(--border);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;color:var(--gold2);}
+.card-title{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:#fff;}
+.card-sub{font-size:11.5px;color:var(--text2);margin-top:2px;}
+
+/* ── HERO ── */
+.hero{text-align:center;padding:36px 0 24px;}
+.hero-badge{display:inline-block;background:rgba(201,162,39,0.1);border:1px solid var(--border);color:var(--gold2);font-size:11px;letter-spacing:3px;padding:5px 18px;border-radius:20px;margin-bottom:16px;}
+.hero h1{font-family:'Noto Serif TC',serif;font-size:clamp(22px,4vw,36px);font-weight:900;color:#fff;line-height:1.3;margin-bottom:10px;}
+.hero h1 .g{color:var(--gold2);}.hero h1 .r{color:#ff7070;}.hero h1 .pu{color:#c39bd3;}
+.hero p{font-size:clamp(13px,2vw,15px);color:var(--text2);max-width:520px;margin:0 auto 24px;line-height:1.8;}
+.hero-acts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+@media(max-width:639px){.hero{padding:20px 0 18px;}.hero-badge{font-size:10px;letter-spacing:2px;}.hero-acts{flex-direction:column;align-items:stretch;}.hero-acts .btn{width:100%;justify-content:center;}}
+
+/* ── STAT CARDS ── */
+.stat-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:18px 16px;text-align:center;transition:all .25s;cursor:default;}
+.stat-card:hover{border-color:var(--border);transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.45);}
+.stat-num{font-family:'Noto Serif TC',serif;font-size:32px;font-weight:900;color:var(--gold2);line-height:1;}
+.stat-lbl{font-size:12px;color:var(--text2);margin-top:7px;letter-spacing:.5px;}
+.stat-sub{font-size:10.5px;color:var(--text3);margin-top:3px;}
+.stat-icon{font-size:22px;margin-bottom:8px;display:flex;align-items:center;justify-content:center;}
+
+/* ── WIZARD PROGRESS BAR ── */
+.wiz-bar-wrap{margin-bottom:14px;}
+.wiz-bar-track{height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;margin-top:6px;}
+.wiz-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px;transition:width .5s ease;}
+.wiz-bar-fill.nurse-bar{background:linear-gradient(90deg,var(--purple),var(--purple2));}
+.wiz-bar-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+.wiz-bar-label{font-size:11px;color:var(--text3);}
+.wiz-bar-pct{font-size:11px;font-weight:700;color:var(--gold2);}
+.wiz-bar-pct.nurse-pct{color:var(--purple3);}
+
+/* ── AUTOSAVE BADGE ── */
+.autosave-badge{display:none;align-items:center;gap:6px;font-size:11px;color:var(--green2);background:rgba(39,174,96,0.1);border:1px solid rgba(39,174,96,0.25);border-radius:20px;padding:4px 10px;position:fixed;top:calc(var(--hdr-h)+10px);right:16px;z-index:200;transition:opacity .4s;}
+.autosave-badge.show{display:flex;}
+
+/* ── BACK TO TOP ── */
+.back-top{position:fixed;bottom:80px;right:18px;z-index:250;width:42px;height:42px;border-radius:50%;background:rgba(17,30,58,0.92);border:1px solid var(--border);color:var(--gold2);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;box-shadow:var(--shadow-sm);}
+.back-top.show{opacity:1;pointer-events:auto;}
+.back-top:hover{transform:translateY(-3px);}
+@media(max-width:639px){.back-top{bottom:calc(56px + env(safe-area-inset-bottom) + 14px);right:14px;}}
+
+/* ── EVAL TYPE CHOOSER ── */
+.type-chooser{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+@media(max-width:639px){.type-chooser{grid-template-columns:1fr;gap:12px;}}
+.type-card{background:var(--card);border:2px solid var(--border2);border-radius:14px;padding:24px 20px;text-align:center;cursor:pointer;transition:all .25s;-webkit-tap-highlight-color:transparent;position:relative;overflow:hidden;}
+.type-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .25s;}
+.type-card.broker::before{background:radial-gradient(circle at 50% 0%,rgba(201,162,39,0.12),transparent 70%);}
+.type-card.nurse::before{background:radial-gradient(circle at 50% 0%,rgba(155,89,182,0.12),transparent 70%);}
+.type-card:hover{transform:translateY(-3px);}.type-card:hover::before{opacity:1;}
+.type-card.broker:hover,.type-card.broker.sel{border-color:var(--gold);}
+.type-card.nurse:hover,.type-card.nurse.sel{border-color:var(--purple2);}
+.type-card.sel{transform:translateY(-3px);}
+.type-card.sel::before{opacity:1;}
+.type-icon{font-size:44px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;height:52px;}
+.type-title{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;margin-bottom:6px;}
+.type-card.broker .type-title{color:var(--gold2);}
+.type-card.nurse .type-title{color:var(--purple3);}
+.type-desc{font-size:12.5px;color:var(--text2);line-height:1.6;}
+.type-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 9px;border-radius:20px;margin-top:8px;}
+.type-card.broker .type-badge{background:rgba(201,162,39,0.15);border:1px solid var(--border);color:var(--gold2);}
+.type-card.nurse .type-badge{background:rgba(155,89,182,0.15);border:1px solid rgba(155,89,182,0.3);color:var(--purple3);}
+
+/* ── WIZARD PROGRESS ── */
+.wiz{display:flex;align-items:center;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;}
+.wiz::-webkit-scrollbar{display:none;}
+.ws{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.wc{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text3);transition:all .3s;}
+.ws.done .wc{background:var(--green);border-color:var(--green);color:#fff;}
+.ws.active .wc{background:var(--gold);border-color:var(--gold);color:var(--navy);transform:scale(1.12);}
+.ws.active-p .wc{background:var(--purple2);border-color:var(--purple2);color:#fff;transform:scale(1.12);}
+.wlabel{font-size:10.5px;color:var(--text3);white-space:nowrap;}
+.ws.active .wlabel{color:var(--gold2);}
+.ws.active-p .wlabel{color:var(--purple3);}
+.ws.done .wlabel{color:var(--green2);}
+.wline{flex:1;height:2px;background:var(--border2);min-width:8px;transition:.3s;}
+.wline.done{background:var(--green);}
+@media(max-width:639px){.wlabel{display:none;}.wc{width:26px;height:26px;font-size:10px;}}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--navy2),var(--navy3));border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:13px;}
+.sec-num{width:34px;height:34px;min-width:34px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Noto Serif TC',serif;font-size:13px;font-weight:900;color:var(--navy);}
+.sec-num-p{background:linear-gradient(135deg,var(--purple),var(--purple2));}
+.sec-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:#fff;}
+.sec-sub{font-size:10.5px;color:var(--text2);margin-top:1px;}
+.sec-weight{margin-left:auto;flex-shrink:0;background:rgba(201,162,39,0.14);border:1px solid var(--border);color:var(--gold2);font-size:11.5px;font-weight:700;padding:3px 11px;border-radius:20px;}
+.sec-weight-p{background:rgba(155,89,182,0.14);border-color:rgba(155,89,182,0.28);color:var(--purple3);}
+
+/* ── EVAL ITEM ── */
+.eval-item{background:rgba(255,255,255,0.018);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:14px;margin-bottom:9px;transition:border-color .2s;}
+.eval-item:hover{border-color:rgba(201,162,39,0.2);}
+.eval-item.scored{border-color:rgba(201,162,39,0.3);background:rgba(201,162,39,0.025);}
+.eval-item.scored-p{border-color:rgba(155,89,182,0.3);background:rgba(155,89,182,0.025);}
+.eval-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;}
+.eval-idx{width:22px;height:22px;min-width:22px;background:var(--navy3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:var(--gold2);margin-top:2px;}
+.eval-idx-p{color:var(--purple3);}
+.eval-label{font-size:13.5px;font-weight:600;color:#fff;margin-bottom:3px;}
+.eval-desc{font-size:12px;color:var(--text2);line-height:1.6;}
+.tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;vertical-align:middle;margin-left:5px;}
+.tag-req{background:rgba(231,76,60,0.2);color:#e87070;border:1px solid rgba(231,76,60,0.3);}
+.tag-key{background:rgba(52,152,219,0.2);color:#5dade2;border:1px solid rgba(52,152,219,0.3);}
+
+/* ── SCORE BUTTONS ── */
+.stars{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px;}
+.stars-grp{display:flex;gap:7px;}
+.sbtn{width:56px;height:62px;border-radius:10px;border:1.5px solid var(--border2);background:var(--card);color:var(--text3);font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1.1;font-family:'Noto Serif TC',serif;transition:all .18s;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent;gap:3px;}
+.sbtn:active{transform:scale(0.92);}
+.sbtn.s1{--c:#e74c3c}.sbtn.s2{--c:#e67e22}.sbtn.s3{--c:#f1c40f}.sbtn.s4{--c:#2ecc71}.sbtn.s5{--c:#3498db}
+.sbtn.sel{background:var(--c);border-color:var(--c);color:#fff;transform:scale(1.12);box-shadow:0 5px 18px rgba(0,0,0,0.45);}
+.sbtn:hover:not(.sel){background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.15);}
+.sbtn .slb{font-size:9px;margin-top:1px;line-height:1;font-family:'Noto Sans TC',sans-serif;opacity:.75;}
+.sbtn.sel .slb{opacity:1;}
+.sdisplay{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:900;color:var(--text3);min-width:32px;text-align:center;transition:color .2s;}
+.sdisplay.s1{color:#e74c3c}.sdisplay.s2{color:#e67e22}.sdisplay.s3{color:#f1c40f}.sdisplay.s4{color:#2ecc71}.sdisplay.s5{color:#3498db}
+.slabel{font-size:11px;color:var(--text3);min-width:44px;}
+@media(max-width:639px){.sbtn{width:54px;height:60px;font-size:20px;}.sbtn .slb{font-size:8.5px;}.stars-grp{gap:6px;}}
+
+/* ── SUBTOTAL ── */
+.subtotal{display:flex;align-items:center;gap:12px;background:rgba(26,47,94,0.55);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 15px;margin-top:10px;}
+.sub-label{font-size:12.5px;font-weight:700;color:var(--text2);flex:1;}
+.sub-score{font-family:'Noto Serif TC',serif;font-size:22px;font-weight:900;color:var(--gold2);}
+.sub-score-p{color:var(--purple3);}
+.sub-max{font-size:12px;color:var(--text3);}
+.sub-pct{font-size:12px;color:var(--text2);background:var(--navy2);padding:3px 10px;border-radius:20px;}
+
+/* ── FORM ELEMENTS ── */
+.fg{margin-bottom:15px;}
+.fl{display:block;font-size:12.5px;font-weight:600;color:var(--text2);margin-bottom:7px;letter-spacing:.3px;}
+.fi,.fs,.fta{width:100%;background:rgba(255,255,255,0.04);border:1.5px solid var(--border2);border-radius:var(--radius-sm);padding:11px 13px;color:var(--text);font-size:15px;transition:border-color .2s,background .2s;outline:none;-webkit-appearance:none;appearance:none;}
+.fi:focus,.fs:focus,.fta:focus{border-color:var(--gold);background:rgba(201,162,39,0.04);}
+.fi::placeholder{color:var(--text3);}
+.fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a5850' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+.fs option{background:var(--navy2);}
+.fta{resize:vertical;min-height:80px;}
+@media(max-width:639px){.fi,.fs,.fta{font-size:16px;padding:12px 13px;min-height:48px;border-radius:10px;}}
+
+/* ── MASK PREVIEW ── */
+.mask-preview{margin-top:7px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;}
+.mask-lbl{font-size:11px;color:var(--text3);}
+.mask-val{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--gold2);}
+.mask-val-p{color:var(--purple3);}
+.mask-note{font-size:10px;color:var(--text3);background:var(--navy2);padding:2px 8px;border-radius:10px;}
+
+/* ── RADIO BUTTONS ── */
+.radio-row{display:flex;gap:8px;flex-wrap:wrap;}
+.rbtn{display:flex;align-items:center;gap:6px;padding:9px 13px;border:1.5px solid var(--border2);border-radius:7px;cursor:pointer;font-size:13px;color:var(--text2);transition:all .2s;background:rgba(255,255,255,0.02);min-height:var(--touch);-webkit-tap-highlight-color:transparent;}
+.rbtn input{display:none;}
+.rbtn.sel{background:rgba(201,162,39,0.1);border-color:var(--gold);color:var(--gold2);}
+@media(max-width:639px){.rbtn{min-height:48px;font-size:14px;flex:1;justify-content:center;}}
+
+/* ── NOTICE BOXES ── */
+.notice{border-radius:var(--radius-sm);padding:12px 15px;font-size:13px;line-height:1.7;margin-bottom:13px;}
+.n-info{background:rgba(52,152,219,0.09);border:1px solid rgba(52,152,219,0.28);color:#7fb9e0;}
+.n-warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:#e87070;}
+.n-ok{background:rgba(39,174,96,0.09);border:1px solid rgba(39,174,96,0.28);color:#72c98a;}
+.n-gold{background:rgba(201,162,39,0.09);border:1px solid var(--border);color:var(--gold2);}
+.n-purple{background:rgba(155,89,182,0.09);border:1px solid rgba(155,89,182,0.28);color:var(--purple3);}
+
+/* ── PRIVACY ── */
+.plist{list-style:none;margin:13px 0;}
+.plist li{display:flex;gap:9px;padding:8px 0;font-size:13px;color:var(--text2);border-bottom:1px solid var(--border2);line-height:1.6;}
+.plist li:last-child{border-bottom:none;}
+.plist li::before{content:'✓';color:var(--green2);font-weight:700;flex-shrink:0;margin-top:2px;}
+.consent{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:14px;color:var(--text);padding:13px;background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:var(--radius-sm);margin-top:14px;transition:border-color .2s;min-height:var(--touch);line-height:1.5;}
+.consent:hover{border-color:var(--border);}
+.consent input{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;flex-shrink:0;margin-top:2px;}
+
+/* ── AGENCY BLOCK ── */
+.agency-block{background:rgba(201,162,39,0.05);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.agency-block-title{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--gold2);margin-bottom:5px;}
+.agency-block-sub{font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.6;}
+
+/* ── NURSE BLOCK ── */
+.nurse-block{background:rgba(155,89,182,0.05);border:1px solid rgba(155,89,182,0.25);border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.nurse-block-title{font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--purple3);margin-bottom:5px;}
+.nurse-block-sub{font-size:12.5px;color:var(--text2);margin-bottom:16px;line-height:1.6;}
+
+/* ── ISSUE GRID ── */
+.issue-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:7px;}
+.icheck{display:flex;align-items:center;gap:7px;padding:9px 11px;border:1.5px solid var(--border2);border-radius:7px;cursor:pointer;font-size:12.5px;color:var(--text2);transition:all .2s;min-height:40px;-webkit-tap-highlight-color:transparent;}
+.icheck input{width:15px;height:15px;accent-color:var(--red2);cursor:pointer;flex-shrink:0;}
+.icheck:hover{border-color:rgba(192,57,43,0.35);color:#e87070;}
+.icheck.ck{border-color:rgba(192,57,43,0.5);color:#e87070;background:rgba(192,57,43,0.08);}
+
+/* ── TYPE PILLS (nurse type) ── */
+.ntype-grp{display:flex;gap:9px;flex-wrap:wrap;margin-top:6px;}
+.ntype-btn{flex:1;min-width:90px;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border2);background:var(--card);color:var(--text2);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s;text-align:center;font-family:inherit;-webkit-tap-highlight-color:transparent;line-height:1.4;}
+.ntype-btn:hover{border-color:rgba(155,89,182,0.4);color:var(--purple3);}
+.ntype-btn.sel{background:rgba(155,89,182,0.12);border-color:var(--purple2);color:var(--purple3);}
+
+/* ── WARN BOX ── */
+.warn-box{background:rgba(192,57,43,0.1);border:1.5px solid rgba(192,57,43,0.45);border-radius:9px;padding:12px 15px;font-size:12.5px;color:#ff8c8c;display:flex;align-items:flex-start;gap:9px;animation:fadeUp .3s ease;line-height:1.6;margin-top:12px;}
+.warn-box-icon{font-size:20px;flex-shrink:0;}
+
+/* ── FORM NAV ── */
+.fnav{display:flex;justify-content:space-between;align-items:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border2);gap:10px;}
+.fnav-info{font-size:12px;color:var(--text3);}
+@media(max-width:639px){.fnav{flex-wrap:wrap;}.fnav .btn{flex:1;min-width:120px;justify-content:center;}.fnav-info{order:-1;width:100%;text-align:center;}}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;margin-bottom:18px;background:rgba(255,255,255,0.03);border:1px solid var(--border2);border-radius:10px;padding:4px;}
+.tab-btn{flex:1;padding:9px 12px;border-radius:7px;border:none;background:transparent;color:var(--text2);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:6px;}
+.tab-btn.active-broker{background:var(--card2);color:var(--gold2);}
+.tab-btn.active-nurse{background:rgba(155,89,182,0.2);color:var(--purple3);}
+
+/* ── CHARTS ── */
+.chart-card{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:20px;}
+@media(max-width:639px){.chart-card{padding:16px;}}
+.chart-title{font-size:13px;font-weight:700;color:var(--text2);letter-spacing:.8px;margin-bottom:15px;display:flex;align-items:center;gap:7px;}
+.bar-chart{display:flex;flex-direction:column;gap:9px;}
+.bar-row{display:flex;align-items:center;gap:9px;}
+.bar-name{font-size:11.5px;color:var(--text2);width:82px;flex-shrink:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+@media(max-width:639px){.bar-name{width:62px;font-size:11px;}}
+.bar-track{flex:1;height:20px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;padding-right:7px;justify-content:flex-end;transition:width .8s ease;}
+.bar-val{font-size:10px;font-weight:700;color:#fff;}
+
+/* ── LANDMINE ── */
+.lm-header{background:linear-gradient(135deg,#150404,#250808);border:1px solid rgba(192,57,43,0.45);border-radius:var(--radius);padding:18px 20px;margin-bottom:18px;position:relative;overflow:hidden;}
+.lm-header::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(192,57,43,0.03) 0,rgba(192,57,43,0.03) 1px,transparent 1px,transparent 8px);}
+.lm-title{font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;color:#ff6060;display:flex;align-items:center;gap:10px;position:relative;flex-wrap:wrap;}
+.lm-sub{font-size:12.5px;color:#c08080;margin-top:6px;line-height:1.7;position:relative;}
+.lm-badge{background:rgba(192,57,43,0.28);border:1px solid rgba(192,57,43,0.55);color:#ff8080;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+.lm-card{background:rgba(139,26,26,0.08);border:1.5px solid rgba(192,57,43,0.3);border-radius:var(--radius);padding:16px;margin-bottom:11px;transition:border-color .2s;}
+.lm-card:hover{border-color:rgba(192,57,43,0.55);}
+.lm-card-nurse{background:rgba(100,20,140,0.08);border-color:rgba(142,68,173,0.3);}
+.lm-card-nurse:hover{border-color:rgba(142,68,173,0.55);}
+.lm-card-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:11px;}
+.lm-rank{width:40px;height:40px;min-width:40px;border-radius:50%;background:linear-gradient(135deg,#6b1010,#c0392b);color:#fff;font-family:'Noto Serif TC',serif;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;}
+.lm-rank-nurse{background:linear-gradient(135deg,#4a1070,#8e44ad);}
+.lm-company{font-size:15px;font-weight:700;color:#ff9090;font-family:'Noto Serif TC',serif;}
+.lm-nurse-name{color:#c39bd3;}
+.lm-chip{display:inline-flex;align-items:center;gap:4px;background:rgba(255,80,80,0.1);border:1px solid rgba(255,80,80,0.22);border-radius:20px;padding:3px 9px;font-size:11.5px;color:#ff8080;margin:2px;}
+.lm-chip-nurse{background:rgba(155,89,182,0.1);border-color:rgba(155,89,182,0.28);color:var(--purple3);}
+.lm-score-num{font-family:'Noto Serif TC',serif;font-size:32px;font-weight:900;line-height:1;}
+.lm-reasons{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px;padding-top:9px;border-top:1px solid rgba(192,57,43,0.18);}
+.lm-rtag{font-size:11px;padding:3px 9px;border-radius:20px;background:rgba(192,57,43,0.13);border:1px solid rgba(192,57,43,0.28);color:#e87070;}
+.lm-rtag-nurse{background:rgba(155,89,182,0.13);border-color:rgba(155,89,182,0.28);color:var(--purple3);}
+.lm-meta{font-size:11.5px;color:var(--text3);margin-top:7px;line-height:1.6;}
+@media(max-width:639px){.lm-card-top{gap:10px;}.lm-rank{width:36px;height:36px;min-width:36px;font-size:13px;}.lm-score-num{font-size:26px;}}
+
+/* ── FAB QUICK ACTION ── */
+.fab{position:fixed;bottom:80px;right:18px;z-index:260;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+.fab-main{width:54px;height:54px;border-radius:27px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:var(--navy);font-size:24px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 24px rgba(201,162,39,0.4);transition:all .25s;-webkit-tap-highlight-color:transparent;}
+.fab-main:hover{transform:scale(1.08);}
+.fab-menu{display:flex;flex-direction:column;align-items:flex-end;gap:8px;opacity:0;pointer-events:none;transform:translateY(10px);transition:all .25s;}
+.fab-menu.open{opacity:1;pointer-events:auto;transform:translateY(0);}
+.fab-item{display:flex;align-items:center;gap:9px;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+.fab-item-label{background:rgba(17,30,58,0.95);border:1px solid var(--border);color:var(--text);font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:8px;white-space:nowrap;backdrop-filter:blur(8px);}
+.fab-item-btn{width:42px;height:42px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--gold2);font-size:18px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm);transition:all .18s;}
+.fab-item-btn:hover{background:var(--card3);border-color:var(--border);}
+@media(max-width:639px){.fab{bottom:calc(56px + env(safe-area-inset-bottom) + 14px);right:14px;}.fab-main{width:50px;height:50px;font-size:22px;}}
+
+/* ── RISK LEVEL BADGE (landmine) ── */
+.risk-level{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:700;margin-left:8px;}
+.risk-extreme{background:rgba(139,0,0,0.25);border:1px solid rgba(200,0,0,0.5);color:#ff5555;}
+.risk-high{background:rgba(180,80,0,0.22);border:1px solid rgba(200,100,0,0.45);color:#ff9944;}
+.risk-medium{background:rgba(180,160,0,0.18);border:1px solid rgba(200,180,0,0.38);color:#f1c40f;}
+.risk-low{background:rgba(0,100,50,0.18);border:1px solid rgba(0,150,80,0.35);color:#72c98a;}
+.rank-table-wrap{overflow-x:auto;}
+.rank-table{width:100%;border-collapse:collapse;font-size:13px;min-width:580px;}
+.rank-table th{background:var(--navy2);color:var(--text2);padding:10px 11px;text-align:left;font-size:11.5px;font-weight:700;border-bottom:1px solid var(--border2);white-space:nowrap;}
+.rank-table td{padding:10px 11px;border-bottom:1px solid var(--border2);color:var(--text);}
+.rank-table tr:hover td{background:rgba(255,255,255,0.02);}
+.rank-num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font-weight:900;font-size:12px;}
+.rk1{background:linear-gradient(135deg,#b8860b,#ffd700);color:#000}.rk2{background:#a8a9ad;color:#000}.rk3{background:#cd7f32;color:#fff}.rk4{background:var(--navy3);color:var(--text2)}
+.rank-mobile-cards{display:none;}
+@media(max-width:639px){.rank-table-wrap{display:none;}.rank-mobile-cards{display:flex;flex-direction:column;gap:11px;}}
+.rmcard{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:15px;transition:border-color .2s;}
+.rmcard:hover{border-color:var(--border);}
+.rmcard.danger-card{background:rgba(139,26,26,0.08);border-color:rgba(192,57,43,0.3);}
+.rmcard-top{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
+.rmcard-info{flex:1;min-width:0;}
+.rmcard-name{font-family:'Noto Serif TC',serif;font-weight:700;color:var(--gold2);font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rmcard-name.purple{color:var(--purple3);}
+.rmcard-name.danger{color:#e87070;}
+.rmcard-meta{font-size:11.5px;color:var(--text2);margin-top:3px;}
+.rmcard-score{text-align:right;flex-shrink:0;}
+.rmcard-num{font-family:'Noto Serif TC',serif;font-size:26px;font-weight:900;line-height:1;}
+
+/* ── GRADE BADGE ── */
+.gr{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;font-family:'Noto Serif TC',serif;font-weight:900;}
+.gA{background:#1a4a8b;color:#fff}.gB{background:#1a5c3a;color:#fff}.gC{background:#7d6608;color:#fff}.gD{background:#8b3a00;color:#fff}.gE{background:#8b1a1a;color:#fff}
+
+/* ── SUCCESS ── */
+.success-wrap{max-width:520px;margin:0 auto;text-align:center;padding:40px 0;}
+.success-icon{width:76px;height:76px;background:linear-gradient(135deg,var(--green),var(--green2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 20px;box-shadow:0 0 40px rgba(39,174,96,0.3);color:#fff;}
+.token-box{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin:18px 0;text-align:left;}
+.token-lbl{font-size:11px;color:var(--text2);letter-spacing:2px;margin-bottom:7px;}
+.token-val{font-family:monospace;font-size:12px;color:var(--gold2);letter-spacing:1px;word-break:break-all;line-height:1.9;}
+.token-copy{display:flex;align-items:center;gap:7px;margin-top:9px;cursor:pointer;font-size:12.5px;color:var(--text3);transition:.2s;min-height:36px;-webkit-tap-highlight-color:transparent;}
+.token-copy:hover{color:var(--gold2);}
+.rsummary{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:16px;margin:13px 0;text-align:left;}
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border2);font-size:13.5px;}
+.rrow:last-child{border-bottom:none;}
+.rname{color:var(--text2);}.rval{font-weight:700;}
+
+/* ── SEARCH BAR ── */
+.search-bar{display:flex;gap:9px;margin-bottom:16px;flex-wrap:wrap;}
+.search-input{flex:1;min-width:160px;background:rgba(255,255,255,0.04);border:1.5px solid var(--border2);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-size:14px;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--gold);}
+.search-input::placeholder{color:var(--text3);}
+@media(max-width:639px){.search-bar{flex-direction:column;}.search-input{min-height:48px;font-size:15px;}}
+
+/* ── VERIFY ── */
+.verify-wrap{max-width:500px;margin:0 auto;padding-top:24px;}
+.verify-result{display:none;margin-top:14px;}
+.verify-result.show{display:block;}
+
+/* ── PILLS ── */
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:600;}
+.p-gold{background:rgba(201,162,39,0.14);color:var(--gold2);border:1px solid var(--border);}
+.p-green{background:rgba(39,174,96,0.12);color:#72c98a;border:1px solid rgba(39,174,96,0.25);}
+.p-blue{background:rgba(52,152,219,0.12);color:#5dade2;border:1px solid rgba(52,152,219,0.25);}
+.p-red{background:rgba(192,57,43,0.14);color:#e87070;border:1px solid rgba(192,57,43,0.28);}
+.p-purple{background:rgba(155,89,182,0.14);color:var(--purple3);border:1px solid rgba(155,89,182,0.28);}
+
+/* ── TOAST ── */
+.toast{position:fixed;z-index:999;max-width:300px;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:13.5px;color:var(--text);box-shadow:var(--shadow);transform:translateY(70px);opacity:0;transition:all .32s;}
+@media(min-width:640px){.toast{bottom:24px;right:24px;}}
+@media(max-width:639px){.toast{bottom:calc(56px + env(safe-area-inset-bottom) + 12px);left:50%;right:auto;max-width:calc(100vw - 32px);transform:translateX(-50%) translateY(50px);}.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.ok{border-color:rgba(39,174,96,0.4);color:var(--green2);}
+.toast.err{border-color:rgba(192,57,43,0.4);color:#e87070;}
+.toast.warn{border-color:rgba(243,156,18,0.4);color:var(--yellow2);}
+
+/* ── MISC ── */
+.empty{text-align:center;padding:48px 16px;color:var(--text3);}
+.empty-ic{font-size:44px;margin-bottom:10px;opacity:.4;}
+.mono{font-family:monospace;font-size:11.5px;color:var(--text3);}
+.divider{height:1px;background:var(--border2);margin:16px 0;}
+.ft{text-align:center;padding:28px var(--pad) calc(28px + env(safe-area-inset-bottom));color:var(--text3);font-size:11.5px;border-top:1px solid var(--border2);max-width:var(--max-w);margin:36px auto 0;line-height:1.9;}
+@media(max-width:639px){.ft{padding-bottom:calc(56px + env(safe-area-inset-bottom) + 20px);}}
+.page-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.page-hdr h2{font-family:'Noto Serif TC',serif;font-size:20px;font-weight:900;color:#fff;}
+.page-hdr p{font-size:12px;color:var(--text2);margin-top:3px;}
+.page-hdr-btns{display:flex;gap:8px;flex-wrap:wrap;}
+@media(max-width:639px){.page-hdr{flex-direction:column;align-items:flex-start;}}
+.ex-table{width:100%;border-collapse:collapse;font-size:13px;}
+.ex-table th{background:var(--navy2);padding:9px 11px;text-align:left;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2);}
+.ex-table td{padding:9px 11px;border-bottom:1px solid var(--border2);}
+.ex-table tr:last-child td{border-bottom:none;}
+.donut-wrap{position:relative;width:150px;height:150px;margin:0 auto;}
+.donut-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.donut-num{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:900;color:var(--gold2);line-height:1;}
+.pulse{animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+@media(min-width:640px){.card,.lm-card,.rmcard,.stat-card{animation:fadeUp .35s ease both;}}
+
+/* ── DASHBOARD ── */
+.dash-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
+@media(max-width:1023px){.dash-kpi-row{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:639px){.dash-kpi-row{grid-template-columns:repeat(2,1fr);gap:10px;}}
+.dash-kpi{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:16px 14px;display:flex;align-items:center;gap:12px;transition:all .2s;}
+.dash-kpi:hover{border-color:var(--border);transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.35);}
+.dash-kpi-icon{width:42px;height:42px;min-width:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;color:#fff;}
+.dash-kpi-body{min-width:0;}
+.dash-kpi-num{font-family:'Noto Serif TC',serif;font-size:24px;font-weight:900;color:var(--gold2);line-height:1;}
+.dash-kpi-lbl{font-size:11px;color:var(--text3);margin-top:4px;letter-spacing:.3px;}
+.dash-panel{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:18px;transition:border-color .2s;}
+.dash-panel:hover{border-color:rgba(255,255,255,.1);}
+.dash-panel-hdr{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--text2);letter-spacing:.5px;margin-bottom:14px;}
+.dash-panel-dot{width:8px;height:8px;min-width:8px;border-radius:50%;flex-shrink:0;}
+.dash-section-title{font-family:'Noto Serif TC',serif;font-size:14px;font-weight:700;color:var(--text);margin:18px 0 10px;padding-left:12px;border-left:3px solid var(--gold);display:flex;align-items:center;gap:8px;}
+@media(max-width:639px){
+  .dash-kpi{padding:13px 11px;gap:9px;}
+  .dash-kpi-icon{width:36px;height:36px;min-width:36px;font-size:16px;}
+  .dash-kpi-num{font-size:20px;}
+  .dash-section-title{font-size:13px;}
+}
+@media(max-width:1023px){
+  #dash-content>[style*="grid-template-columns:1fr 1fr 1fr"]{grid-template-columns:1fr 1fr!important;}
+}
+@media(max-width:639px){
+  #dash-content>[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important;}
+  #dash-content>[style*="grid-template-columns:1fr 1fr 1fr"]{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="offline-bar" id="offline-bar"><svg class="ico ico-14" style="vertical-align:-2px;margin-right:6px"><use href="#ic-offline"/></svg> 目前離線 · 資料已暫存，待網路恢復後將自動同步</div>
+
+<!-- ══ DESKTOP HEADER ══ -->
+<header class="hdr">
+  <div class="logo" onclick="nav('home')">
+    <div class="logo-mark">聘</div>
+    <div class="logo-wrap">
+      <div class="logo-name">聘外看就上手</div>
+      <div class="logo-sub">聘雇評量系統</div>
+    </div>
+  </div>
+  <nav class="hdr-nav">
+    <button class="nb active" id="nb-home"      onclick="nav('home')">      <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-home"/></svg></span><span class="nb-label">首頁</span></button>
+    <button class="nb"        id="nb-form"      onclick="nav('form')">      <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-form"/></svg></span><span class="nb-label">填寫評量</span></button>
+    <button class="nb warn-nb"id="nb-landmine"  onclick="nav('landmine')">  <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-warn"/></svg></span><span class="nb-label">踩雷警示</span></button>
+    <button class="nb"        id="nb-rank"      onclick="nav('rank')">      <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-rank"/></svg></span><span class="nb-label">排名榜</span></button>
+    <button class="nb"        id="nb-dashboard" onclick="nav('dashboard')"> <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-dash"/></svg></span><span class="nb-label">統計儀表板</span></button>
+    <button class="nb"        id="nb-verify"    onclick="nav('verify')">    <span class="nb-icon"><svg class="ico ico-18"><use href="#ic-verify"/></svg></span><span class="nb-label">查驗令牌</span></button>
+  </nav>
+  <div class="hdr-right">
+    <div class="db-chip" id="db-status"><span class="loading"></span></div>
+  </div>
+</header>
+
+<!-- ══ MOBILE BOTTOM NAV ══ -->
+<nav class="bot-nav">
+  <div class="bot-nav-inner">
+    <button class="bnb active"   id="bnb-home"      onclick="nav('home')">      <span class="bicon"><svg class="ico ico-22"><use href="#ic-home"/></svg></span><span class="bnb-label">首頁</span></button>
+    <button class="bnb"          id="bnb-form"      onclick="nav('form')">      <span class="bicon"><svg class="ico ico-22"><use href="#ic-form"/></svg></span><span class="bnb-label">評量</span></button>
+    <button class="bnb warn-bnb" id="bnb-landmine"  onclick="nav('landmine')">  <span class="bicon"><svg class="ico ico-22"><use href="#ic-warn"/></svg></span><span class="bnb-label">踩雷</span></button>
+    <button class="bnb"          id="bnb-rank"      onclick="nav('rank')">      <span class="bicon"><svg class="ico ico-22"><use href="#ic-rank"/></svg></span><span class="bnb-label">排名</span></button>
+    <button class="bnb"          id="bnb-dashboard" onclick="nav('dashboard')"> <span class="bicon"><svg class="ico ico-22"><use href="#ic-dash"/></svg></span><span class="bnb-label">統計</span></button>
+    <button class="bnb"          id="bnb-verify"    onclick="nav('verify')">    <span class="bicon"><svg class="ico ico-22"><use href="#ic-verify"/></svg></span><span class="bnb-label">查驗</span></button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ══════ HOME ══════ -->
+<div class="view active" id="view-home">
+  <div class="hero">
+    <div class="hero-badge">✦ 聘外看就上手 · 匿名評量 · 踩雷保護 · 雙軌評量</div>
+    <h1>聘雇評量<span class="g">保護</span>每位<br>在台灣的<span class="pu">雇主</span></h1>
+    <p>匿名評量仲介公司與外籍看護，低分自動踩雷警示，個資局部遮罩揭露。</p>
+    <div class="hero-acts">
+      <button class="btn btn-p btn-lg" onclick="nav('form')"><svg class="ico ico-16"><use href="#ic-form"/></svg> 開始評量</button>
+      <button class="btn btn-w"        onclick="nav('rank')"><svg class="ico ico-16"><use href="#ic-rank"/></svg> 查看排名</button>
+    </div>
+  </div>
+
+  <div class="g4" id="home-stats" style="margin-bottom:20px">
+    <div class="stat-card"><span class="stat-icon"><svg class="ico ico-22"><use href="#ic-clip"/></svg></span><div class="stat-num" id="s-broker-total">—</div><div class="stat-lbl">仲介評量</div></div>
+    <div class="stat-card"><span class="stat-icon"><svg class="ico ico-22"><use href="#ic-person"/></svg></span><div class="stat-num" id="s-nurse-total">—</div><div class="stat-lbl">看護評量</div></div>
+    <div class="stat-card"><span class="stat-icon"><svg class="ico ico-22" style="color:#e87070"><use href="#ic-warn"/></svg></span><div class="stat-num" id="s-warn" style="color:#e87070">—</div><div class="stat-lbl">踩雷警示</div><div class="stat-sub">均分 &lt; 60</div></div>
+    <div class="stat-card"><span class="stat-icon"><svg class="ico ico-22"><use href="#ic-agency"/></svg></span><div class="stat-num" id="s-agencies">—</div><div class="stat-lbl">已評仲介家數</div></div>
+  </div>
+
+  <div class="g2" style="margin-top:4px">
+    <div class="card" style="border-color:rgba(201,162,39,0.3)">
+      <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-agency"/></svg></div><div>
+        <div class="card-title" style="color:var(--gold2)">仲介評量</div>
+        <div class="card-sub">針對仲介公司及業務員服務品質</div>
+      </div></div>
+      <ul class="plist" style="margin:0">
+        <li>誠信操守、溝通服務、行政法規、爭議應變、關懷服務 5大面向</li>
+        <li>公司名稱：第1字＋○＋第3字＋○○，業務員姓氏＋○＋名字末字保留</li>
+        <li>均分 &lt;60 且 ≥2份評量 → 自動列入踩雷警示</li>
+      </ul>
+      <button class="btn btn-p btn-full" style="margin-top:14px" onclick="startForm('broker')"><svg class="ico ico-16"><use href="#ic-agency"/></svg> 評量仲介</button>
+    </div>
+    <div class="card" style="border-color:rgba(155,89,182,0.35)">
+      <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-person"/></svg></div><div>
+        <div class="card-title" style="color:var(--purple3)">看護 / 幫傭評量</div>
+        <div class="card-sub">針對外籍看護本人工作表現</div>
+      </div></div>
+      <ul class="plist" style="margin:0">
+        <li>工作態度、照護技能、溝通能力、生活品行、整體服務 5大面向</li>
+        <li>英文姓名：每字首末字母保留，中段遮蔽；證件號碼首3末3保留</li>
+        <li>均分 &lt;60 且 ≥2份評量 → 自動列入看護踩雷名單</li>
+      </ul>
+      <button class="btn btn-purple btn-full" style="margin-top:14px" onclick="startForm('nurse')"><svg class="ico ico-16"><use href="#ic-person"/></svg> 評量看護/幫傭</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-lock"/></svg></div><div>
+      <div class="card-title">遮罩揭露設計</div>
+      <div class="card-sub">Privacy by Design · 保護個資同時提供足夠辨識資訊</div>
+    </div></div>
+    <div style="overflow-x:auto">
+    <table class="ex-table">
+      <thead><tr><th>對象</th><th>資料類型</th><th>原始資料（加密儲存）</th><th>公開顯示（遮罩後）</th><th>規則</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2" style="font-weight:700;color:var(--gold2)">仲介</td><td>公司名稱</td><td style="color:var(--text2)">南山人力仲介有限公司</td><td style="font-family:'Noto Serif TC',serif;font-weight:700;color:var(--gold2)">南○人○○仲介</td><td style="font-size:11px;color:var(--text3)">第1字＋○＋第3字＋○○</td></tr>
+        <tr><td>業務員姓名</td><td style="color:var(--text2)">吳小明</td><td style="font-family:'Noto Serif TC',serif;font-weight:700;color:var(--gold2)">吳○明（業務員）</td><td style="font-size:11px;color:var(--text3)">姓氏＋○＋名字末字</td></tr>
+        <tr><td rowspan="2" style="font-weight:700;color:var(--purple3)">看護</td><td>英文姓名</td><td style="color:var(--text2)">Siti Rahayu</td><td style="font-family:'Noto Serif TC',serif;font-weight:700;color:var(--purple3)">S**i R****u</td><td style="font-size:11px;color:var(--text3)">每字首末保留，中段*</td></tr>
+        <tr><td>證件號碼</td><td style="color:var(--text2)">A123456789</td><td style="font-family:monospace;font-weight:700;color:var(--purple3)">A12****789</td><td style="font-size:11px;color:var(--text3)">首3末3保留，中段****</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(192,57,43,0.07);border:1px solid rgba(192,57,43,0.22);border-radius:8px;font-size:12px;color:#e87070;display:flex;align-items:center;gap:8px">
+      <svg class="ico ico-16" style="flex-shrink:0"><use href="#ic-globe"/></svg>
+      <span>本系統後台將記錄每筆評量之<strong>網路 IP 位址</strong>，以防止惡意刷評及爭議查核。個人身份資料仍依保護聲明處理。</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ FORM ══════ -->
+<div class="view" id="view-form">
+  <div id="fs0"></div><div id="fs1" style="display:none"></div><div id="fs2" style="display:none"></div>
+  <div id="fs3" style="display:none"></div><div id="fs4" style="display:none"></div>
+  <div id="fs5" style="display:none"></div><div id="fs6" style="display:none"></div>
+  <div id="fs7" style="display:none"></div><div id="fs8" style="display:none"></div>
+  <div id="fs9" style="display:none"></div>
+</div>
+
+<!-- ══════ SUCCESS ══════ -->
+<div class="view" id="view-success">
+  <div class="success-wrap">
+    <div class="success-icon"><svg class="ico ico-34"><use href="#ic-check"/></svg></div>
+    <div id="suc-type-badge"></div>
+    <div style="font-family:'Noto Serif TC',serif;font-size:22px;font-weight:900;color:#fff;margin-bottom:8px">評量提交成功！</div>
+    <p style="color:var(--text2);font-size:13.5px;line-height:1.8">感謝您的寶貴評量。請保存以下匿名令牌。</p>
+    <div class="token-box">
+      <div class="token-lbl">匿名驗證令牌 ANONYMOUS TOKEN</div>
+      <div class="token-val" id="suc-token">—</div>
+      <div class="token-copy" onclick="copyToken()"><svg class="ico ico-16"><use href="#ic-copy"/></svg> 點擊複製令牌</div>
+    </div>
+    <div class="rsummary" id="suc-summary"></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px">
+      <button class="btn btn-w btn-sm"      onclick="nav('landmine')"><svg class="ico ico-16"><use href="#ic-warn"/></svg> 踩雷警示</button>
+      <button class="btn btn-p btn-sm"      onclick="resetForm()"><svg class="ico ico-16"><use href="#ic-form"/></svg> 再填一份</button>
+      <button class="btn btn-purple btn-sm" onclick="nav('rank')"><svg class="ico ico-16"><use href="#ic-rank"/></svg> 排名榜</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════ LANDMINE ══════ -->
+<div class="view" id="view-landmine">
+  <div class="lm-header">
+    <div class="lm-title"><svg class="ico ico-20" style="vertical-align:-3px;margin-right:6px"><use href="#ic-warn"/></svg>踩雷警示名單 <span class="lm-badge pulse" id="lm-badge-total">載入中…</span></div>
+    <div class="lm-sub">評量件數 ≥ 2 份且加權平均分數低於 <strong style="color:#ff7070">60 分</strong> 者自動列入。資訊局部遮罩，僅供辨識參考。</div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active-broker" id="lm-tab-broker" onclick="switchLMTab('broker')"><svg class="ico ico-15" style="vertical-align:-2px;margin-right:4px"><use href="#ic-agency"/></svg>仲介踩雷 <span id="lm-cnt-broker" style="font-size:11px;opacity:.7"></span></button>
+    <button class="tab-btn" id="lm-tab-nurse" onclick="switchLMTab('nurse')"><svg class="ico ico-15" style="vertical-align:-2px;margin-right:4px"><use href="#ic-person"/></svg>看護踩雷 <span id="lm-cnt-nurse" style="font-size:11px;opacity:.7"></span></button>
+  </div>
+  <div id="lm-broker-panel">
+    <div class="search-bar">
+      <input class="search-input" id="lm-q" placeholder="搜尋公司關鍵字…" oninput="filterLM()">
+      <select class="fi" style="width:150px;flex-shrink:0;min-height:44px" id="lm-grade" onchange="filterLM()">
+        <option value="">全部評等</option><option value="E">E 級（最嚴重）</option><option value="D">D 級</option>
+      </select>
+    </div>
+    <div id="lm-list"><div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div></div>
+  </div>
+  <div id="lm-nurse-panel" style="display:none">
+    <div class="search-bar">
+      <input class="search-input" id="lm-nq" placeholder="搜尋看護名稱（遮罩）…" oninput="filterNurseLM()">
+      <select class="fi" style="width:150px;flex-shrink:0;min-height:44px" id="lm-ngrade" onchange="filterNurseLM()">
+        <option value="">全部評等</option><option value="E">E 級（最嚴重）</option><option value="D">D 級</option>
+      </select>
+    </div>
+    <div id="lm-nurse-list"><div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div></div>
+  </div>
+</div>
+
+<!-- ══════ RANK ══════ -->
+<div class="view" id="view-rank">
+  <div class="page-hdr">
+    <div><h2><svg class="ico ico-22" style="vertical-align:-3px;margin-right:8px"><use href="#ic-rank"/></svg>排名榜</h2><p>依加權平均分數排列 · 遮罩顯示</p></div>
+    <div class="page-hdr-btns"><button class="btn btn-s btn-sm" onclick="loadRank()"><svg class="ico ico-15"><use href="#ic-refresh"/></svg> 重新整理</button></div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active-broker" id="rank-tab-broker" onclick="switchRankTab('broker')"><svg class="ico ico-15" style="vertical-align:-2px;margin-right:4px"><use href="#ic-agency"/></svg>仲介排名</button>
+    <button class="tab-btn" id="rank-tab-nurse" onclick="switchRankTab('nurse')"><svg class="ico ico-15" style="vertical-align:-2px;margin-right:4px"><use href="#ic-person"/></svg>看護排名</button>
+  </div>
+  <div id="rank-broker-panel">
+    <div class="search-bar">
+      <input class="search-input" id="rank-q" placeholder="搜尋仲介公司…" oninput="filterRank()">
+      <select class="fi" style="width:140px;flex-shrink:0;min-height:44px" id="rank-region" onchange="filterRank()">
+        <option value="">全部縣市</option>
+        <option>台北市</option><option>新北市</option><option>桃園市</option><option>台中市</option><option>台南市</option><option>高雄市</option><option>其他</option>
+      </select>
+    </div>
+    <div id="rank-content"><div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div></div>
+  </div>
+  <div id="rank-nurse-panel" style="display:none">
+    <div class="search-bar">
+      <input class="search-input" id="rank-nq" placeholder="搜尋看護（遮罩名稱）…" oninput="filterNurseRank()">
+      <select class="fi" style="width:150px;flex-shrink:0;min-height:44px" id="rank-nat" onchange="filterNurseRank()">
+        <option value="">全部國籍</option>
+        <option value="印尼">🇮🇩 印尼</option><option value="菲律賓">🇵🇭 菲律賓</option><option value="越南">🇻🇳 越南</option><option value="泰國">🇹🇭 泰國</option><option value="其他">🌐 其他</option>
+      </select>
+    </div>
+    <div id="rank-nurse-content"><div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div></div>
+  </div>
+</div>
+
+<!-- ══════ DASHBOARD ══════ -->
+<div class="view" id="view-dashboard">
+  <div class="page-hdr">
+    <div><h2><svg class="ico ico-22" style="vertical-align:-3px;margin-right:8px"><use href="#ic-dash"/></svg>統計儀表板</h2><p>Analytics Dashboard · 即時更新</p></div>
+    <div class="page-hdr-btns">
+      <button class="btn btn-s btn-sm" onclick="loadDash()"><svg class="ico ico-15"><use href="#ic-refresh"/></svg> 重新整理</button>
+      <button class="btn btn-g btn-sm" onclick="exportData()"><svg class="ico ico-15"><use href="#ic-dl"/></svg> 匯出</button>
+      <button class="btn btn-d btn-sm" onclick="confirmClear()"><svg class="ico ico-15"><use href="#ic-trash"/></svg> 清除</button>
+    </div>
+  </div>
+  <div id="dash-content"><div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div></div>
+</div>
+
+<!-- ══════ VERIFY ══════ -->
+<div class="view" id="view-verify">
+  <div class="verify-wrap">
+    <div class="card">
+      <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-verify"/></svg></div><div>
+        <div class="card-title">查驗匿名令牌</div>
+        <div class="card-sub">Verify Anonymous Token</div>
+      </div></div>
+      <div class="notice n-info">輸入提交後收到的匿名令牌，系統將確認評量是否已受理，並顯示基本資訊（不顯示個人識別資料）。</div>
+      <div class="fg">
+        <label class="fl">令牌編號</label>
+        <input class="fi" id="verify-input" placeholder="請貼上 UUID 格式令牌" style="font-family:monospace;letter-spacing:1px" onkeydown="if(event.key==='Enter')verifyToken()">
+      </div>
+      <button class="btn btn-p btn-full" onclick="verifyToken()"><svg class="ico ico-16"><use href="#ic-verify"/></svg> 查驗令牌</button>
+    </div>
+    <div class="verify-result" id="verify-result"></div>
+  </div>
+</div>
+
+</main>
+
+<div class="ft">
+  <div style="font-family:'Noto Serif TC',serif;font-size:15px;font-weight:700;color:var(--gold2);margin-bottom:6px">聘外看就上手</div>
+  聘雇評量系統<br>
+  依《就業服務法》及《個人資料保護法》設計 · 資訊局部遮罩 · 個資完全匿名<br>
+  後台將記錄評量人網路 IP 位址，以防止惡意刷評及爭議查核<br>
+  <span style="font-size:10.5px;color:var(--text3);margin-top:4px;display:block">Copyright © 2025 聘外看就上手 · All Rights Reserved · 版權所有，翻製必究</span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ── AUTOSAVE BADGE ── -->
+<div class="autosave-badge" id="autosave-badge"><svg class="ico ico-14"><use href="#ic-save"/></svg> 已自動儲存</div>
+
+<!-- ── BACK TO TOP ── -->
+<button class="back-top" id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部"><svg class="ico ico-18"><use href="#ic-up"/></svg></button>
+
+<!-- ── FAB QUICK ACTION ── -->
+<div class="fab" id="fab-wrap">
+  <div class="fab-menu" id="fab-menu">
+    <div class="fab-item" onclick="nav('form');closeFab()">
+      <span class="fab-item-label">填寫評量</span>
+      <span class="fab-item-btn"><svg class="ico ico-18"><use href="#ic-form"/></svg></span>
+    </div>
+    <div class="fab-item" onclick="nav('rank');closeFab()">
+      <span class="fab-item-label">排名榜</span>
+      <span class="fab-item-btn"><svg class="ico ico-18"><use href="#ic-rank"/></svg></span>
+    </div>
+    <div class="fab-item" onclick="nav('landmine');closeFab()">
+      <span class="fab-item-label">踩雷警示</span>
+      <span class="fab-item-btn"><svg class="ico ico-18"><use href="#ic-warn"/></svg></span>
+    </div>
+    <div class="fab-item" onclick="nav('home');closeFab()">
+      <span class="fab-item-label">回首頁</span>
+      <span class="fab-item-btn"><svg class="ico ico-18"><use href="#ic-home"/></svg></span>
+    </div>
+  </div>
+  <button class="fab-main" id="fab-btn" onclick="toggleFab()" title="快速操作"><svg class="ico ico-22" id="fab-icon"><use href="#ic-plus"/></svg></button>
+</div>
+
+<script>
+'use strict';
+
+// ─── XSS 防護：HTML 轉義函數 ───
+function esc(str){
+  if(!str)return'';
+  return String(str).replace(/[&<>'"]/g,tag=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[tag]));
+}
+
+// ─── NETWORK ───
+const offBar = document.getElementById('offline-bar');
+function updateOnline(){if(navigator.onLine){offBar.classList.remove('show');updateDBStatus();}else{offBar.classList.add('show');}}
+window.addEventListener('online',updateOnline);window.addEventListener('offline',updateOnline);updateOnline();
+
+// ─── DB LAYER（三層：Firebase → window.storage → localStorage）───
+// 優先序：Firebase Firestore（跨裝置共享）→ Claude storage → localStorage（本地備援）
+const DB={
+  async get(k){
+    // 1️⃣ Firebase（已設定且在線）
+    if(window._FB?.ok()&&navigator.onLine){
+      try{const v=await window._FB.get(k);if(v!==null&&v!==undefined)return v;}catch{}
+    }
+    // 2️⃣ Claude artifact storage
+    if(window.storage){
+      try{const r=await window.storage.get('ams5:'+k,true);if(r)return JSON.parse(r.value);}catch{}
+    }
+    // 3️⃣ localStorage 備援
+    try{const v=localStorage.getItem('ams5:'+k);if(v)return JSON.parse(v);}catch{}
+    return null;
+  },
+  async set(k,v){
+    // 同時寫入所有可用層，確保資料一致
+    if(window._FB?.ok()&&navigator.onLine){
+      try{await window._FB.set(k,v);}catch(e){console.warn('[DB] Firebase set fail',e);}
+    }
+    if(window.storage){
+      try{await window.storage.set('ams5:'+k,JSON.stringify(v),true);}catch{}
+    }
+    try{localStorage.setItem('ams5:'+k,JSON.stringify(v));}catch{}
+  },
+  async del(k){
+    if(window._FB?.ok()&&navigator.onLine){
+      try{await window._FB.del(k);}catch{}
+    }
+    if(window.storage){
+      try{await window.storage.delete('ams5:'+k,true);}catch{}
+    }
+    try{localStorage.removeItem('ams5:'+k);}catch{}
+  }
+};
+
+async function updateDBStatus(){
+  const b=document.getElementById('db-status');
+  if(!navigator.onLine){b.innerHTML='<svg class="ico ico-14"><use href="#ic-offline"/></svg> 離線模式';b.className='db-chip local';return;}
+  if(window._FB?.ok()){
+    // Firebase 可用：做一次 ping 確認連線
+    try{
+      await window._FB.set('_ping','ok');
+      b.innerHTML='<svg class="ico ico-14"><use href="#ic-fire"/></svg> Firebase 雲端';b.className='db-chip cloud';return;
+    }catch{}
+  }
+  if(window.storage){
+    try{
+      await window.storage.set('ams5:_ping','"ok"',false);
+      b.innerHTML='<svg class="ico ico-14"><use href="#ic-cloud"/></svg> 雲端同步';b.className='db-chip cloud';return;
+    }catch{}
+  }
+  b.innerHTML='<svg class="ico ico-14"><use href="#ic-hdd"/></svg> 本地儲存';b.className='db-chip local';
+}
+function uuid(){return crypto?.randomUUID?.()||'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16);});}
+
+// ─── MASKING ───
+/* 公司名稱遮罩規則（v20 修正：原 v19 程式碼實際輸出與下方範例不符，已重新核對並修正邏輯）：
+   1) 先比對「法定組織型態」尾詞（股份有限公司／有限公司／企業社）：若有，剝除後固定正規化顯示「仲介」字樣
+      （不論原本登記的是公司、企業社或其他型態，本系統情境下一律以「仲介」標示，避免尾詞不一致造成混淆）
+   2) 再比對剩餘字串是否以常見產業用詞（人力資源／仲介／人力）結尾，若有則再剝除一次（僅剝一層，避免過度剝除）
+   3) 剩餘「品牌核心」依字數遮罩：
+        0字：僅顯示尾詞（無尾詞則顯示「未填」）
+        1字：該字＋○○
+        ≥2字：第1字＋○＋（2字時取第2字／≥3字時取第3字）＋○○
+      最後接上步驟1判斷出的尾詞（無則不接）
+   例：南山人力仲介有限公司 → 南○人○○仲介
+       台灣人力有限公司     → 台○灣○○仲介
+       AB人力               → A○B○○
+       金介（無可辨識尾詞） → 金○介○○             */
+function maskCompany(n){
+  if(!n?.trim())return'（未填）';
+  n=n.trim();
+  // Step1：法定組織型態尾詞 → 正規化為「仲介」標示
+  const legalSuffixes=['股份有限公司','有限公司','企業社'];
+  let label='';
+  for(const s of legalSuffixes){if(n.endsWith(s)){n=n.slice(0,-s.length);label='仲介';break;}}
+  // Step2：常見產業用詞尾詞（只再剝一層，避免把品牌核心也吃掉）
+  const genericSuffixes=['人力資源','仲介','人力'];
+  for(const s of genericSuffixes){if(n.endsWith(s)){n=n.slice(0,-s.length);break;}}
+  // Step3：依品牌核心字數遮罩（2字與≥3字統一規則，修正v19版本2字時漏掉○○的不一致問題）
+  if(n.length===0)return label||'（未填）';
+  if(n.length===1)return n+'○○'+label;
+  const c2=n.length===2?n[1]:n[2];
+  return n[0]+'○'+c2+'○○'+label;
+}
+
+/* 業務員：姓氏（第1字）＋○＋名字最後1字
+   例：吳小明 → 吳○明（業務員）
+       陳偉   → 陳○偉（業務員）
+       王一   → 王○一（業務員）  */
+function maskStaff(n){
+  if(!n?.trim())return'（未填）';n=n.trim();
+  if(n.length===1)return n+'○○（業務員）';
+  const surname=n[0];
+  const last=n[n.length-1];
+  return surname+'○'+last+'（業務員）';
+}
+
+/* 看護英文姓名：每個單字保留首字母＋末字母，中間以*遮蔽
+   字長≤2：僅保留首字母＋*
+   例：Siti   → S**i
+       Rahayu → R****u
+       Ana    → A*a
+       中文姓名：首字 + ○ + 末字  */
+function maskNurseName(n){
+  if(!n?.trim())return'（未填）';n=n.trim();
+  // Detect Chinese (has CJK chars)
+  if(/[\u4e00-\u9fff]/.test(n)){
+    if(n.length===1)return n+'○';
+    return n[0]+'○'.repeat(Math.max(1,n.length-2))+n[n.length-1];
+  }
+  // English: process each word
+  return n.split(/\s+/).map(w=>{
+    if(!w)return'';
+    if(w.length<=1)return w[0]+'*';
+    if(w.length===2)return w[0]+'*'+w[1];
+    const stars='*'.repeat(w.length-2);
+    return w[0]+stars+w[w.length-1];
+  }).join(' ');
+}
+
+/* 證件號碼：首3字＋****＋末3字
+   例：A123456789 → A12****789
+       短於7碼：首2＋**＋末2  */
+function maskIDNumber(id){
+  if(!id?.trim())return'（未填）';id=id.trim().toUpperCase();
+  if(id.length<=6)return id.slice(0,2)+'**'+id.slice(-2);
+  return id.slice(0,3)+'****'+id.slice(-3);
+}
+
+function normKey(n){return(n||'').trim().replace(/\s/g,'').replace(/有限公司|股份有限公司|企業社|人力資源|人力仲介|仲介/g,'').toLowerCase();}
+function normNurseKey(name,id){
+  const nm=(name||'').trim().replace(/\s/g,'').toLowerCase();
+  const di=(id||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  return(nm.slice(0,4)+'_'+di.slice(0,4)+'_'+di.slice(-3)).toLowerCase();
+}
+
+// ─── ROUTING ───
+const VIEWS=['home','form','success','landmine','rank','dashboard','verify'];
+let pendingType=null;
+function nav(v){
+  VIEWS.forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
+  document.querySelectorAll('.nb,.bnb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+v)?.classList.add('active');
+  document.getElementById('nb-'+v)?.classList.add('active');
+  document.getElementById('bnb-'+v)?.classList.add('active');
+  // 填寫表單：若有 pendingType 才重新初始化；否則保留進行中的表單
+  if(v==='form'){
+    if(pendingType!==null) initForm(pendingType);
+    else if(!FD.evalType) initForm(null);  // 從未初始化時才初始化
+    else renderStep(cStep);                // 恢復目前進度
+  }
+  if(v==='dashboard')loadDash();
+  if(v==='landmine') loadLandmine();
+  if(v==='rank')     loadRank();
+  window.scrollTo({top:0,behavior:'smooth'});
+  pendingType=null;
+}
+function startForm(type){pendingType=type;nav('form');}
+function resetForm(){
+  // 強制初始化並跳到「選擇評量類型」步驟（跳過已同意的隱私聲明）
+  FD={id:uuid(),ts:new Date().toISOString(),
+    evalType:'',
+    cRaw:'',sRaw:'',cMask:'',sMask:'',region:'',issues:[],
+    nationality:'',duration:'',phase:'',nurseType:'',transferReason:'',
+    s1:Array(6).fill(0),s2:Array(6).fill(0),s3:Array(5).fill(0),s4:Array(5).fill(0),s5:Array(4).fill(0),
+    nNameRaw:'',nIDRaw:'',nNameMask:'',nIDMask:'',nNationality:'',nHireType:'',nWorkCity:'',nWorkType:'',nTransferReason:'',nIssues:[],
+    n1:Array(6).fill(0),n2:Array(6).fill(0),n3:Array(5).fill(0),n4:Array(5).fill(0),n5:Array(4).fill(0)
+  };
+  evalType='';
+  cStep=1; // 直接到「選擇評量類型」
+  clearDraft(); // 重新開始填表，清除先前殘留的草稿
+  VIEWS.forEach(x=>{const el=document.getElementById('view-'+x);if(el)el.classList.remove('active');});
+  document.querySelectorAll('.nb,.bnb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-form')?.classList.add('active');
+  document.getElementById('nb-form')?.classList.add('active');
+  document.getElementById('bnb-form')?.classList.add('active');
+  renderStep(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── FORM STATE ───
+let FD={},cStep=0,evalType=''; // evalType = 'broker' | 'nurse'
+
+function initForm(type){
+  FD={id:uuid(),ts:new Date().toISOString(),
+    evalType:type||'',
+    // broker fields
+    cRaw:'',sRaw:'',cMask:'',sMask:'',region:'',issues:[],
+    nationality:'',duration:'',phase:'',nurseType:'',transferReason:'',
+    s1:Array(6).fill(0),s2:Array(6).fill(0),s3:Array(5).fill(0),s4:Array(5).fill(0),s5:Array(4).fill(0),
+    // nurse fields
+    nNameRaw:'',nIDRaw:'',nNameMask:'',nIDMask:'',nNationality:'',nHireType:'',nWorkCity:'',nWorkType:'',nTransferReason:'',nIssues:[],
+    n1:Array(6).fill(0),n2:Array(6).fill(0),n3:Array(5).fill(0),n4:Array(5).fill(0),n5:Array(4).fill(0)
+  };
+  evalType=type||'';
+  cStep=0;clearDraft();renderStep(0);
+}
+
+// ─── PROGRESS BARS ───
+function buildProg(s,type){
+  const brokerSteps=['個資聲明','選擇類型','仲介資訊','基本資訊','誠信操守','溝通服務','行政法規','爭議應變','確認提交'];
+  const nurseSteps=['個資聲明','選擇類型','看護資訊','工作態度','照護技能','溝通能力','生活品行','整體服務','確認提交'];
+  const steps=type==='nurse'?nurseSteps:brokerSteps;
+  const isP=type==='nurse';
+  const pct=Math.round((s/(steps.length-1))*100);
+  const curLabel=steps[s]||'';
+  let h=`<div class="wiz-bar-wrap">
+    <div class="wiz-bar-info">
+      <span class="wiz-bar-label">步驟 ${s+1} / ${steps.length} · ${curLabel}</span>
+      <span class="wiz-bar-pct ${isP?'nurse-pct':''}">${pct}%</span>
+    </div>
+    <div class="wiz-bar-track"><div class="wiz-bar-fill ${isP?'nurse-bar':''}" style="width:${pct}%"></div></div>
+  </div><div class="wiz">`;
+  steps.forEach((st,i)=>{
+    const c=i<s?'done':i===s?(isP?'active-p':'active'):'';
+    h+=`<div class="ws ${c}"><div class="wc">${i<s?'✓':i+1}</div><div class="wlabel">${st}</div></div>`;
+    if(i<steps.length-1)h+=`<div class="wline ${i<s?'done':''}"></div>`;
+  });
+  return h+'</div>';
+}
+
+function buildStep(s){
+  const p=buildProg(s,FD.evalType||evalType);
+  if(s===0)return buildPrivacy(p);
+  if(s===1)return buildTypeChoice(p);
+  const et=FD.evalType;
+  if(et==='broker'){
+    if(s===2)return buildAgency(p);
+    if(s===3)return buildBrokerInfo(p);
+    if(s>=4&&s<=8)return buildBrokerSec(p,s-4);
+    if(s===9)return buildBrokerReview(p);
+  }
+  if(et==='nurse'){
+    if(s===2)return buildNurseProfile(p);
+    if(s>=3&&s<=7)return buildNurseSec(p,s-3);
+    if(s===8)return buildNurseReview(p);
+  }
+  return '';
+}
+
+function renderStep(s){
+  for(let i=0;i<=9;i++){const e=document.getElementById('fs'+i);if(e)e.style.display='none';}
+  const el=document.getElementById('fs'+s);
+  if(el){el.style.display='block';el.innerHTML=buildStep(s);}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ─── STEP 0: PRIVACY ───
+function buildPrivacy(p){
+  return`${p}<div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-lock"/></svg></div><div>
+      <div class="card-title">個人資料保護聲明</div><div class="card-sub">Personal Data Protection Statement</div>
+    </div></div>
+    <ul class="plist">
+      <li>本系統不採集雇主姓名、電話、住址、身分證字號等可識別個人身份之資料</li>
+      <li>仲介公司、業務員姓名，以及看護姓名、證件號碼，僅以局部遮罩方式公開顯示；<strong>系統不會儲存未遮罩之原始姓名或證件號碼</strong>，亦不蒐集您的網路 IP 位址</li>
+      <li>提交後系統自動產生唯一 UUID 匿名令牌，僅作查驗用途，不對應任何個人</li>
+      <li>低分對象在累積至少 2 份評量且均分低於 60 分後，將自動列入踩雷警示；個別評量內容不會被單獨公開點名，僅以彙總統計呈現</li>
+      <li>請妥善保管您的查驗令牌；本系統目前尚未提供自助刪除功能，如對已提交內容有疑義，請另行與網站管理者聯繫處理</li>
+      <li>評量內容應屬實陳述，不得用於商業用途或惡意詆毀</li>
+      <li>本系統參考《個人資料保護法》及《就業服務法》相關精神設計，版權所有 © 聘外看就上手 2025</li>
+    </ul>
+    <label class="consent">
+      <input type="checkbox" id="cb" onchange="document.getElementById('btn-ok').disabled=!this.checked">
+      我已詳閱並同意上述個人資料保護聲明，並確認評量內容屬實，非出於惡意詆毀
+    </label>
+  </div>
+  <div class="fnav">
+    <div class="fnav-info">步驟 1 / 9</div>
+    <button class="btn btn-p" id="btn-ok" disabled onclick="nxt(0)">同意並繼續 →</button>
+  </div>`;
+}
+
+// ─── STEP 1: TYPE CHOICE ───
+function buildTypeChoice(p){
+  const et=FD.evalType;
+  return`${p}<div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-form"/></svg></div><div>
+      <div class="card-title">選擇評量對象</div>
+      <div class="card-sub">請選擇您想評量的對象類型</div>
+    </div></div>
+    <div class="type-chooser">
+      <div class="type-card broker ${et==='broker'?'sel':''}" onclick="selType('broker')">
+        <span class="type-icon"><svg class="ico ico-44" style="color:var(--gold2)"><use href="#ic-agency"/></svg></span>
+        <div class="type-title">仲介評量</div>
+        <div class="type-desc">評量仲介公司及業務員的服務品質、誠信操守、行政效率等</div>
+        <div class="type-badge">服務品質 5大面向</div>
+      </div>
+      <div class="type-card nurse ${et==='nurse'?'sel':''}" onclick="selType('nurse')">
+        <span class="type-icon"><svg class="ico ico-44" style="color:var(--purple3)"><use href="#ic-person"/></svg></span>
+        <div class="type-title">看護 / 幫傭評量</div>
+        <div class="type-desc">評量外籍看護或幫傭的工作態度、照護技能、溝通能力等個人表現</div>
+        <div class="type-badge">個人表現 5大面向</div>
+      </div>
+    </div>
+    ${et?`<div class="notice ${et==='broker'?'n-gold':'n-purple'}">
+      ${et==='broker'?'已選擇：仲介評量 · 共 9 步驟':'已選擇：看護/幫傭評量 · 共 9 步驟'}
+    </div>`:`<div class="notice n-info">請先選擇評量對象，再點擊下一步繼續。</div>`}
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(1)">← 上一步</button>
+    <div class="fnav-info">步驟 2 / 9</div>
+    <button class="btn ${et==='broker'?'btn-p':'btn-purple'}" onclick="nxt(1)" ${et?'':'disabled'}>下一步 →</button>
+  </div>`;
+}
+function selType(t){
+  FD.evalType=t;evalType=t;
+  renderStep(1);
+}
+
+// ─── STEP 2 (BROKER): AGENCY INFO ───
+function buildAgency(p){
+  return`${p}
+  <div class="agency-block">
+    <div class="agency-block-title">仲介公司及業務員資訊</div>
+    <div class="agency-block-sub">強烈建議填寫，以協助其他雇主辨識問題仲介。以<strong style="color:var(--gold2)">局部遮罩</strong>公開顯示。評分低於門檻將自動列入「踩雷警示名單」。</div>
+    <div class="g2">
+      <div class="fg">
+        <label class="fl">仲介公司名稱</label>
+        <input class="fi" id="inp-c" placeholder="例：南山人力仲介有限公司" value="${esc(FD.cRaw||'')}" oninput="upMaskBroker()">
+        <div class="mask-preview"><span class="mask-lbl">公開顯示：</span><span class="mask-val" id="prev-c">${FD.cMask||'（請輸入）'}</span><span class="mask-note">第1字○第3字○○</span></div>
+      </div>
+      <div class="fg">
+        <label class="fl">業務員姓名</label>
+        <input class="fi" id="inp-s" placeholder="例：吳小明" value="${esc(FD.sRaw||'')}" oninput="upMaskBroker()">
+        <div class="mask-preview"><span class="mask-lbl">公開顯示：</span><span class="mask-val" id="prev-s">${FD.sMask||'（請輸入）'}</span><span class="mask-note">姓＋○＋名末字</span></div>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">仲介公司所在縣市</label>
+      <select class="fs" id="inp-r" onchange="FD.region=this.value">
+        <option value="">不填</option>
+        ${['台北市','新北市','桃園市','台中市','台南市','高雄市','基隆市','新竹市','新竹縣','苗栗縣','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','屏東縣','宜蘭縣','花蓮縣','台東縣'].map(r=>`<option ${FD.region===r?'selected':''}>${r}</option>`).join('')}
+      </select>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-warn"/></svg></div><div>
+      <div class="card-title">問題類型標記（選填）</div>
+      <div class="card-sub">有助於統計常見踩雷類型</div>
+    </div></div>
+    <div class="issue-grid">
+      ${['隱藏費用/亂收費','合約不透明','文件延遲/疏失','態度傲慢/敷衍','緊急狀況失聯','換人困難/刁難','虛假宣稱看護背景','違反勞動法規','誘導簽不平等合約','事後追加費用'].map(t=>`
+        <label class="icheck ${FD.issues.includes(t)?'ck':''}" onchange="togIssue('${t}',this)">
+          <input type="checkbox" ${FD.issues.includes(t)?'checked':''}>${t}
+        </label>`).join('')}
+    </div>
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(2)">← 上一步</button>
+    <div class="fnav-info">步驟 3 / 9</div>
+    <button class="btn btn-p" onclick="saveAgency();nxt(2)">下一步 →</button>
+  </div>`;
+}
+function upMaskBroker(){
+  const c=document.getElementById('inp-c')?.value||'';
+  const s=document.getElementById('inp-s')?.value||'';
+  const pc=document.getElementById('prev-c');const ps=document.getElementById('prev-s');
+  if(pc)pc.textContent=c?maskCompany(c):'（請輸入）';
+  if(ps)ps.textContent=s?maskStaff(s):'（請輸入）';
+}
+function saveAgency(){
+  FD.cRaw=document.getElementById('inp-c')?.value?.trim()||'';
+  FD.sRaw=document.getElementById('inp-s')?.value?.trim()||'';
+  FD.cMask=FD.cRaw?maskCompany(FD.cRaw):'';
+  FD.sMask=FD.sRaw?maskStaff(FD.sRaw):'';
+  FD.region=document.getElementById('inp-r')?.value||'';
+  // Issues already maintained via togIssue; only re-sync from DOM as fallback
+  if(!FD.issues||FD.issues.length===0){
+    FD.issues=[...document.querySelectorAll('.icheck input:checked')].map(el=>el.closest('.icheck').textContent.trim());
+  }
+}
+function togIssue(t,el){
+  el.classList.toggle('ck',el.querySelector('input').checked);
+  if(!FD.issues)FD.issues=[];
+  const idx=FD.issues.indexOf(t);
+  if(el.querySelector('input').checked){if(idx===-1)FD.issues.push(t);}
+  else{if(idx>-1)FD.issues.splice(idx,1);}
+}
+function togNurseIssue(t,el){
+  el.classList.toggle('ck',el.querySelector('input').checked);
+  if(!FD.nIssues)FD.nIssues=[];
+  const idx=FD.nIssues.indexOf(t);
+  if(el.querySelector('input').checked){if(idx===-1)FD.nIssues.push(t);}
+  else{if(idx>-1)FD.nIssues.splice(idx,1);}
+}
+
+// ─── STEP 3 (BROKER): BASIC INFO ───
+function buildBrokerInfo(p){
+  return`${p}<div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-clip"/></svg></div><div>
+      <div class="card-title">基本資訊（全選填）</div>
+      <div class="card-sub">有助統計分析，不用於識別評量人</div>
+    </div></div>
+    <div class="notice n-gold">以下欄位全部選填，可直接點擊「下一步」繼續。</div>
+    <div class="g3">
+      <div class="fg"><label class="fl">外籍看護國籍</label>
+        <select class="fs" onchange="FD.nationality=this.value">
+          <option value="">不填</option>
+          ${[['印尼','🇮🇩'],['菲律賓','🇵🇭'],['越南','🇻🇳'],['泰國','🇹🇭'],['其他','🌐']].map(([v,f])=>`<option value="${v}" ${FD.nationality===v?'selected':''}>${f} ${v}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">合約期間</label>
+        <select class="fs" onchange="FD.duration=this.value">
+          <option value="">不填</option>
+          ${['未滿1年','1年','2年','3年'].map(v=>`<option ${FD.duration===v?'selected':''}>${v}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">評量時間點</label>
+        <select class="fs" onchange="FD.phase=this.value">
+          <option value="">不填</option>
+          ${['服務開始3個月內','服務滿6個月','服務滿1年','服務滿2年','合約到期後','中途換人後'].map(v=>`<option ${FD.phase===v?'selected':''}>${v}</option>`).join('')}
+        </select></div>
+    </div>
+    <div class="fg">
+      <label class="fl">看護引進類型</label>
+      <div class="ntype-grp">
+        ${[['母國引進','從原籍國直接引進'],['承接','承接前一雇主的看護'],['直聘','雇主自行直接聘僱']].map(([v,tip])=>`
+          <button class="ntype-btn ${FD.nurseType===v?'sel':''}" onclick="FD.nurseType=FD.nurseType==='${v}'?'':'${v}';renderStep(3)">
+            ${v}<br><span style="font-size:10px;opacity:.7">${tip}</span>
+          </button>`).join('')}
+      </div>
+    </div>
+
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(3)">← 上一步</button>
+    <div class="fnav-info">步驟 4 / 9</div>
+    <button class="btn btn-p" onclick="nxt(3)">下一步 →</button>
+  </div>`;
+}
+
+// ─── BROKER SECTIONS (steps 4-8) ───
+const BROKER_SECS=[
+  {id:'s1',num:'一',title:'專業誠信與職業操守',sub:'Professional Integrity',w:.25,items:[
+    {l:'誠實透明度',req:1,key:0,d:'是否如實告知外籍看護的背景、技能、健康狀況及可能限制，無隱瞞或誇大'},
+    {l:'合約內容說明',req:1,key:0,d:'是否詳細清楚解說合約各條款，確保雇主完全理解各項義務、費用及權益'},
+    {l:'費用收取透明度',req:0,key:1,d:'費用項目是否逐一列明，無隱藏費用或事後追加不合理收費'},
+    {l:'文件完整性',req:0,key:0,d:'相關法律文件（勞動合約、入境許可、健康檢查等）是否完整正確且於期限內辦妥'},
+    {l:'利益迴避原則',req:0,key:0,d:'是否公正處理雇主與看護雙方事務，無偏袒特定一方或謀取不當利益'},
+    {l:'守約能力',req:0,key:1,d:'是否確實履行仲介服務合約中所承諾的各項服務內容，無無故違約或推卸責任'},
+  ]},
+  {id:'s2',num:'二',title:'溝通服務品質',sub:'Communication & Service Quality',w:.25,items:[
+    {l:'回應及時性',req:1,key:0,d:'接獲電話、訊息或問題後，是否能在合理時間內（工作日2小時內）給予明確回應'},
+    {l:'語言溝通能力',req:0,key:0,d:'是否具備足夠中文溝通能力，並扮演雇主與外籍看護間有效溝通橋樑'},
+    {l:'需求理解與配合度',req:0,key:0,d:'是否充分了解雇主家庭特殊需求，並主動提供適切解決方案'},
+    {l:'問題解決能力',req:0,key:1,d:'面對突發狀況（如看護請假、健康問題、行為爭議），是否能積極協助處理'},
+    {l:'服務態度',req:1,key:0,d:'與雇主溝通時是否態度親切、謙遜有禮，無輕蔑、敷衍或態度傲慢之情形'},
+    {l:'主動關懷頻率',req:0,key:0,d:'合約履行期間，是否定期主動追蹤關懷，而非等待雇主求助才有反應'},
+  ]},
+  {id:'s3',num:'三',title:'行政作業效率與法規遵循',sub:'Administrative Efficiency',w:.20,items:[
+    {l:'入境前作業時效',req:0,key:1,d:'引進申請、簽證核發、體檢、健保投保等前置作業，是否均在承諾時程內完成'},
+    {l:'在台證件管理',req:0,key:0,d:'居留證、工作許可等證件之換發、延期是否提前告知並妥善辦理，無過期疏失'},
+    {l:'勞動法規遵守',req:1,key:0,d:'是否確實依據《就業服務法》辦理，充分告知雇主法定義務'},
+    {l:'辦理轉換/展延',req:0,key:0,d:'如需辦理換雇主、展延合約等程序，是否流程清晰、說明充分'},
+    {l:'行政錯誤處理',req:0,key:0,d:'若發生文件錯誤或行政疏失，是否能迅速認責、積極補救'},
+  ]},
+  {id:'s4',num:'四',title:'爭議處理與危機應變',sub:'Conflict Resolution & Crisis',w:.20,items:[
+    {l:'勞資糾紛調解',req:0,key:1,d:'遇到雇主與看護糾紛時，是否能保持中立、有效協調雙方達成合理解決'},
+    {l:'緊急事件應變',req:1,key:0,d:'看護突發傷病、逃逸失蹤等，是否能於24小時內提供即時支援與後續方案'},
+    {l:'換人保障服務',req:0,key:0,d:'看護無法勝任時，是否依約提供重新媒合服務，且不額外收取不合理更換費用'},
+    {l:'申訴管道完善性',req:0,key:0,d:'是否明確告知雇主申訴、投訴管道，並確實受理'},
+    {l:'危機後追蹤輔導',req:0,key:0,d:'事件解決後是否持續追蹤，確認雙方關係回復正常'},
+  ]},
+  {id:'s5',num:'五',title:'後續關懷與整體服務價值',sub:'After-Service Care',w:.10,items:[
+    {l:'定期探視/訪問',req:0,key:0,d:'合約有效期間，是否定期安排家訪或關懷電訪，確保服務品質穩定'},
+    {l:'在職訓練提供',req:0,key:0,d:'是否主動提供看護在職訓練（急救、照護技能），協助提升專業能力'},
+    {l:'整體服務性價比',req:0,key:0,d:'綜合評估所收取費用與實際服務水準，是否物有所值'},
+    {l:'再次委託意願',req:0,key:1,d:'以整體服務體驗為基礎，是否願意再次委託同一仲介公司或業務員'},
+  ]},
+];
+const SL=['','非常差','偏差','普通','良好','非常優秀'];
+const SC=['','#e74c3c','#e67e22','#f1c40f','#2ecc71','#3498db'];
+
+const EMOJI_SCORE=['','①','②','③','④','⑤'];
+const EMOJI_LBL=['','非常差','偏差','普通','良好','非常優秀'];
+
+function buildBrokerSec(p,si){
+  // si=0-4 → steps 4-8
+  if(si>=BROKER_SECS.length){return buildBrokerReview(p);}
+  const sec=BROKER_SECS[si],scores=FD[sec.id];
+  const cur=scores.reduce((a,b)=>a+b,0),max=sec.items.length*5,pct=max>0?Math.round(cur/max*100):0;
+  const filled=scores.filter(s=>s>0).length;
+  let items='';
+  sec.items.forEach((it,i)=>{
+    const sc=scores[i];
+    items+=`<div class="eval-item ${sc>0?'scored':''}" id="bei-${si}-${i}">
+      <div class="eval-top">
+        <div class="eval-idx">${i+1}</div>
+        <div style="flex:1">
+          <div class="eval-label">${it.l}${it.req?'<span class="tag tag-req">必填</span>':''}${it.key?'<span class="tag tag-key">關鍵</span>':''}</div>
+          <div class="eval-desc">${it.d}</div>
+        </div>
+      </div>
+      <div class="stars">
+        <div class="stars-grp">
+          ${[1,2,3,4,5].map(n=>`<button class="sbtn s${n} ${sc===n?'sel':''}" onclick="setBrokerScore(${si},${i},${n})">${EMOJI_SCORE[n]}<span class="slb">${EMOJI_LBL[n]}</span></button>`).join('')}
+        </div>
+        <div class="sdisplay ${sc>0?'s'+sc:''}">${sc>0?EMOJI_SCORE[sc]:'—'}</div>
+        <div class="slabel">${sc>0?EMOJI_LBL[sc]:''}</div>
+      </div>
+    </div>`;
+  });
+  const step=si+4;
+  return`${p}
+  <div class="sec-hdr">
+    <div class="sec-num">${sec.num}</div>
+    <div><div class="sec-title">${sec.title}</div><div class="sec-sub">${sec.sub}</div></div>
+    <div class="sec-weight">${Math.round(sec.w*100)}%</div>
+  </div>
+  ${items}
+  <div class="subtotal">
+    <div class="sub-label">本大項小計 · 已填 ${filled}/${sec.items.length} 題</div>
+    <div class="sub-score">${cur}</div>
+    <div class="sub-max">/ ${max} 分</div>
+    <div class="sub-pct">${pct}%</div>
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(${step})">← 上一頁</button>
+    <div class="fnav-info">${filled}/${sec.items.length} 已填</div>
+    <button class="btn btn-p" onclick="nxt(${step})">下一頁 →</button>
+  </div>`;
+}
+function setBrokerScore(si,ii,val){FD[BROKER_SECS[si].id][ii]=val;renderStep(si+4);triggerAutosave();}
+
+// ─── BROKER REVIEW (step 9) ───
+function buildBrokerReview(p){
+  const sc=calcBrokerScores(),g=getGrade(sc.total);
+  const rows=BROKER_SECS.map((sec,i)=>{
+    const arr=FD[sec.id],t=arr.reduce((a,b)=>a+b,0),max=sec.items.length*5,bar=max>0?Math.round(t/max*100):0;
+    return`<tr>
+      <td style="font-weight:600;font-size:13px">${sec.num}、${sec.title}</td>
+      <td style="text-align:center;font-family:'Noto Serif TC',serif;font-size:17px;font-weight:900;color:var(--gold2)">${t}</td>
+      <td style="text-align:center;color:var(--text3);font-size:12px">/${max}</td>
+      <td style="text-align:center"><span class="pill p-gold">${Math.round(sec.w*100)}%</span></td>
+      <td><div style="height:7px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden"><div style="width:${bar}%;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:4px"></div></div></td>
+    </tr>`;
+  }).join('');
+  const agInfo=FD.cRaw?`<div style="background:rgba(201,162,39,0.06);border:1px solid var(--border);border-radius:9px;padding:14px;margin-bottom:14px">
+    <div style="font-size:11px;color:var(--text2);letter-spacing:1px;margin-bottom:8px">仲介資訊（遮罩後公開顯示）</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:12px;color:var(--text3)">公司：</span><strong style="font-family:'Noto Serif TC',serif;color:var(--gold2)">${esc(FD.cMask)}</strong>
+      ${FD.sMask?`<span style="font-size:12px;color:var(--text3)">業務員：</span><strong style="font-family:'Noto Serif TC',serif;color:var(--gold2)">${esc(FD.sMask)}</strong>`:''}
+      ${FD.region?`<span class="pill p-blue">${esc(FD.region)}</span>`:''}
+    </div>
+    ${FD.issues.length?`<div style="margin-top:9px;display:flex;gap:5px;flex-wrap:wrap">${FD.issues.map(t=>`<span class="lm-rtag">${esc(t)}</span>`).join('')}</div>`:''}
+  </div>`:`<div class="notice n-gold" style="margin-bottom:14px">ℹ️ 未填寫仲介資訊，此評量不列入踩雷及排名（仍計入整體統計）。</div>`;
+  return`${p}<div class="card">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-verify"/></svg></div><div>
+      <div class="card-title">仲介評量確認預覽</div><div class="card-sub">確認無誤後提交</div>
+    </div></div>
+    ${agInfo}
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:420px">
+      <thead><tr>
+        <th style="background:var(--navy2);padding:9px 11px;text-align:left;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">評量面向</th>
+        <th style="background:var(--navy2);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">小計</th>
+        <th style="background:var(--navy2);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">滿分</th>
+        <th style="background:var(--navy2);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">權重</th>
+        <th style="background:var(--navy2);padding:9px 11px;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2);width:28%">進度</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(26,47,94,0.8),rgba(37,58,114,0.6));border:1px solid var(--border);border-radius:10px;padding:20px;text-align:center;margin-top:14px">
+      <div style="font-size:11.5px;color:var(--text2);letter-spacing:2px;margin-bottom:6px">加權總分</div>
+      <div style="font-family:'Noto Serif TC',serif;font-size:clamp(36px,8vw,52px);font-weight:900;color:${g.color};line-height:1">${sc.total}</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:3px">/ 100 分</div>
+      <div style="margin-top:12px;display:inline-flex;align-items:center;gap:12px">
+        <span class="gr g${g.letter}" style="width:44px;height:44px;font-size:19px">${g.letter}</span>
+        <span style="font-size:16px;color:${g.color};font-weight:700">${g.label}</span>
+      </div>
+      ${sc.total<60?`<div class="notice n-warn" style="margin-top:12px;font-size:12.5px">分數低於60分，${FD.cRaw?'提交後將自動列入踩雷警示名單。':'若填寫仲介資訊則列入踩雷警示。'}</div>`:''}
+    </div>
+    <div class="notice n-warn" style="margin-top:14px;font-size:12px">提交後即記入資料庫，如需修改請重新填寫新表單。</div>
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(9)">← 返回修改</button>
+    <div class="fnav-info">確認無誤再提交</div>
+    <button class="btn btn-p btn-lg" onclick="doSubmit()" id="btn-sub">提交仲介評量</button>
+  </div>`;
+}
+
+// ─── STEP 2 (NURSE): NURSE PROFILE ───
+function buildNurseProfile(p){
+  return`${p}
+  <div class="nurse-block">
+    <div class="nurse-block-title">外籍看護 / 幫傭基本資料</div>
+    <div class="nurse-block-sub">填寫後以<strong style="color:var(--purple3)">局部遮罩</strong>方式公開顯示。評分低於門檻將自動列入「看護踩雷警示名單」。</div>
+    <div class="g2">
+      <div class="fg">
+        <label class="fl">看護姓名 <span style="font-size:10.5px;color:var(--text3);margin-left:4px">（中文或英文均可）</span></label>
+        <input class="fi" id="inp-nname" placeholder="例：Siti Rahayu 或 王小美" value="${esc(FD.nNameRaw||'')}" oninput="upMaskNurse()">
+        <div class="mask-preview">
+          <span class="mask-lbl">公開顯示：</span>
+          <span class="mask-val mask-val-p" id="prev-nname">${FD.nNameMask||'（請輸入）'}</span>
+          <span class="mask-note">部分遮罩</span>
+        </div>
+      </div>
+      <div class="fg">
+        <label class="fl">證件號碼 <span style="font-size:10.5px;color:var(--text3);margin-left:4px">（居留證 / 護照 / 工作許可）</span></label>
+        <input class="fi" id="inp-nid" placeholder="例：A123456789" value="${esc(FD.nIDRaw||'')}" oninput="upMaskNurse()" style="font-family:monospace;letter-spacing:1px">
+        <div class="mask-preview">
+          <span class="mask-lbl">公開顯示：</span>
+          <span class="mask-val mask-val-p" id="prev-nid">${FD.nIDMask||'（請輸入）'}</span>
+          <span class="mask-note">首尾保留</span>
+        </div>
+      </div>
+    </div>
+    <div class="g4">
+      <div class="fg"><label class="fl">國籍</label>
+        <select class="fs" onchange="FD.nNationality=this.value">
+          <option value="">不填</option>
+          ${[['印尼','🇮🇩'],['菲律賓','🇵🇭'],['越南','🇻🇳'],['泰國','🇹🇭'],['其他','🌐']].map(([v,f])=>`<option value="${v}" ${FD.nNationality===v?'selected':''}>${f} ${v}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">工作縣市</label>
+        <select class="fs" onchange="FD.nWorkCity=this.value">
+          <option value="">不填</option>
+          ${['台北市','新北市','基隆市','桃園市','新竹市','新竹縣','苗栗縣','台中市','彰化縣','南投縣','雲林縣','嘉義市','嘉義縣','台南市','高雄市','屏東縣','宜蘭縣','花蓮縣','台東縣','澎湖縣','金門縣','連江縣'].map(v=>`<option value="${v}" ${FD.nWorkCity===v?'selected':''}>${v}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">工作類型</label>
+        <select class="fs" onchange="FD.nWorkType=this.value">
+          <option value="">不填</option>
+          ${[['幫傭','幫傭'],['小孩照護','小孩照護'],['老人照護','老人照護'],['身障照護','身障照護']].map(([v,l])=>`<option value="${v}" ${FD.nWorkType===v?'selected':''}>${l}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">轉出理由 <span style="font-size:10px;color:var(--text3)">(選填)</span></label>
+        <select class="fs" onchange="FD.nTransferReason=this.value">
+          <option value="">不填</option>
+          ${[['合約期滿','合約期滿'],['受照顧者病故','受照顧者病故'],['其它','其它']].map(([v,l])=>`<option value="${v}" ${FD.nTransferReason===v?'selected':''}>${l}</option>`).join('')}
+        </select></div>
+      <div class="fg"><label class="fl">引進類型 <span style="font-size:10px;color:var(--text3)">(選填)</span></label>
+        <select class="fs" onchange="FD.nHireType=this.value">
+          <option value="">不填</option>
+          ${['母國引進','承接','直聘'].map(v=>`<option value="${v}" ${FD.nHireType===v?'selected':''}>${v}</option>`).join('')}
+        </select></div>
+    </div>
+  </div>
+  <div class="card" style="border-color:rgba(155,89,182,0.3);margin-top:0">
+    <div class="card-hdr"><div class="card-icon"><svg class="ico ico-20"><use href="#ic-clip"/></svg></div><div>
+      <div class="card-title" style="color:var(--purple3)">問題類型標記（選填）</div>
+      <div class="card-sub">勾選本次主要問題，有助於統計常見問題類型</div>
+    </div></div>
+    <div class="issue-grid">
+      ${['態度消極/怠工','拒絕學習技能','語言溝通障礙','私自外出/失聯','偷竊或財物糾紛','對被照顧者不友善','衛生習慣差','飲食宗教規定衝突','照護技術不足','隱瞞健康狀況'].map(t=>`
+        <label class="icheck ${(FD.nIssues||[]).includes(t)?'ck':''}" onchange="togNurseIssue('${t}',this)">
+          <input type="checkbox" ${(FD.nIssues||[]).includes(t)?'checked':''}>${t}
+        </label>`).join('')}
+    </div>
+  </div>
+  <div class="notice n-purple">看護姓名及證件號碼為選填，有填寫才能列入排名及踩雷警示。留空仍可完成評量，分數計入整體統計。</div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(2)">← 上一步</button>
+    <div class="fnav-info">步驟 3 / 9</div>
+    <button class="btn btn-purple" onclick="saveNurseProfile();nxt(2)">下一步 →</button>
+  </div>`;
+}
+function upMaskNurse(){
+  const nn=document.getElementById('inp-nname')?.value||'';
+  const ni=document.getElementById('inp-nid')?.value||'';
+  const pn=document.getElementById('prev-nname');const pi=document.getElementById('prev-nid');
+  if(pn)pn.textContent=nn?maskNurseName(nn):'（請輸入）';
+  if(pi)pi.textContent=ni?maskIDNumber(ni):'（請輸入）';
+}
+function saveNurseProfile(){
+  FD.nNameRaw=document.getElementById('inp-nname')?.value?.trim()||'';
+  FD.nIDRaw=document.getElementById('inp-nid')?.value?.trim()||'';
+  FD.nNameMask=FD.nNameRaw?maskNurseName(FD.nNameRaw):'';
+  FD.nIDMask=FD.nIDRaw?maskIDNumber(FD.nIDRaw):'';
+  // nIssues already maintained via togNurseIssue
+  if(!FD.nIssues)FD.nIssues=[];
+}
+
+// ─── NURSE SECTIONS (steps 3-7) ───
+const NURSE_SECS=[
+  {id:'n1',num:'一',title:'工作態度與積極度',sub:'Work Attitude & Initiative',w:.25,items:[
+    {l:'工作主動性',req:1,key:0,d:'是否主動投入照護工作，不需反覆提醒，積極完成日常照護任務'},
+    {l:'責任感與可靠度',req:1,key:0,d:'能否準時到崗、履行承諾，對交辦事項有始有終、負責到底'},
+    {l:'配合度與彈性',req:0,key:0,d:'面對家庭特殊需求或臨時調整，是否能彈性配合，不推諉抱怨'},
+    {l:'工作紀律',req:0,key:1,d:'是否遵守家庭規則與作息安排，手機使用、睡眠時間等自律狀況'},
+    {l:'學習與成長意願',req:0,key:0,d:'是否願意學習新照護技能或配合家庭方式調整，展現正向學習態度'},
+    {l:'整體工作積極性',req:0,key:0,d:'綜合評估看護工作的投入程度與對被照護者的用心程度'},
+  ]},
+  {id:'n2',num:'二',title:'照護專業技能',sub:'Care Skills & Competency',w:.25,items:[
+    {l:'基本照護能力',req:1,key:1,d:'翻身、沐浴、更衣、餵食、如廁協助等基本照護是否熟練正確'},
+    {l:'身體狀況觀察',req:0,key:0,d:'是否能察覺被照護者的身體異狀，並及時通報家屬或就醫'},
+    {l:'藥物管理與給藥',req:0,key:1,d:'是否能按時按量協助服藥，正確記錄用藥狀況，無疏失'},
+    {l:'急救與緊急應變',req:0,key:0,d:'是否具備基本急救概念（CPR、哽塞處理），緊急狀況能否冷靜應對'},
+    {l:'照護設備使用',req:0,key:0,d:'輪椅、助行器、氣墊床等輔具是否能正確操作使用'},
+    {l:'個人衛生與環境整潔',req:0,key:0,d:'照護對象的個人衛生及居家環境整潔維護是否達到合理標準'},
+  ]},
+  {id:'n3',num:'三',title:'溝通與語言能力',sub:'Communication & Language',w:.20,items:[
+    {l:'中文/溝通理解能力',req:1,key:0,d:'是否能理解基本指示、表達自身狀況，中文（或通用語言）溝通是否足夠'},
+    {l:'與被照護者互動',req:1,key:0,d:'是否能以耐心、溫和的方式與被照護者互動，建立良好情感連結'},
+    {l:'家屬溝通回報',req:0,key:1,d:'是否主動且清楚地向家屬回報被照護者的狀況，重要事項不遺漏'},
+    {l:'情緒表達與管理',req:0,key:0,d:'在工作壓力下是否能控制情緒，無不當情緒宣洩或消極抵抗'},
+    {l:'問題反映能力',req:0,key:0,d:'遇到困難或不清楚的事項，是否能主動詢問而非自行決定或忽略'},
+  ]},
+  {id:'n4',num:'四',title:'生活自律與個人品行',sub:'Discipline & Character',w:.20,items:[
+    {l:'個人衛生整潔',req:0,key:0,d:'個人穿著整潔、衛生習慣是否符合家庭環境要求'},
+    {l:'作息規律性',req:0,key:0,d:'是否遵守家庭設定的作息時間，夜班看護能否妥善安排休息'},
+    {l:'誠實與信任度',req:1,key:1,d:'是否誠實守信，無偷竊、欺騙、隱瞞重要資訊等違規行為'},
+    {l:'隱私尊重',req:0,key:0,d:'是否能尊重家庭成員隱私，不竊聽、窺探或傳播家庭內部資訊'},
+    {l:'手機/3C使用自律',req:0,key:0,d:'工作時間手機使用是否節制，不影響照護品質及工作專注度'},
+  ]},
+  {id:'n5',num:'五',title:'整體服務滿意度',sub:'Overall Service Satisfaction',w:.10,items:[
+    {l:'被照護者接受程度',req:0,key:0,d:'被照護者本人是否接受此看護，整體相處關係是否和諧穩定'},
+    {l:'家屬整體滿意度',req:0,key:1,d:'家屬對看護整體表現的滿意程度，是否達到聘用預期'},
+    {l:'超預期服務',req:0,key:0,d:'是否曾主動提供超出工作範圍的暖心服務，讓家屬特別感動'},
+    {l:'再次聘用意願',req:0,key:0,d:'若有機會，是否願意再次聘用此看護，或推薦給其他有需要的家庭'},
+  ]},
+];
+
+function buildNurseSec(p,si){
+  if(si>=NURSE_SECS.length){return buildNurseReview(p);}
+  const sec=NURSE_SECS[si],scores=FD[sec.id];
+  const cur=scores.reduce((a,b)=>a+b,0),max=sec.items.length*5,pct=max>0?Math.round(cur/max*100):0;
+  const filled=scores.filter(s=>s>0).length;
+  let items='';
+  sec.items.forEach((it,i)=>{
+    const sc=scores[i];
+    items+=`<div class="eval-item ${sc>0?'scored-p':''}" id="nei-${si}-${i}">
+      <div class="eval-top">
+        <div class="eval-idx eval-idx-p">${i+1}</div>
+        <div style="flex:1">
+          <div class="eval-label">${it.l}${it.req?'<span class="tag tag-req">必填</span>':''}${it.key?'<span class="tag tag-key">關鍵</span>':''}</div>
+          <div class="eval-desc">${it.d}</div>
+        </div>
+      </div>
+      <div class="stars">
+        <div class="stars-grp">
+          ${[1,2,3,4,5].map(n=>`<button class="sbtn s${n} ${sc===n?'sel':''}" onclick="setNurseScore(${si},${i},${n})">${EMOJI_SCORE[n]}<span class="slb">${EMOJI_LBL[n]}</span></button>`).join('')}
+        </div>
+        <div class="sdisplay ${sc>0?'s'+sc:''}">${sc>0?EMOJI_SCORE[sc]:'—'}</div>
+        <div class="slabel">${sc>0?EMOJI_LBL[sc]:''}</div>
+      </div>
+    </div>`;
+  });
+  const step=si+3;
+  const allFilled=scores.reduce((a,b)=>a+b,0);
+  const avgScore=allFilled>0?(scores.filter(x=>x>0).length>0?scores.reduce((a,b)=>a+b,0)/scores.filter(x=>x>0).length:0):0;
+  const showWarn=scores.filter(x=>x>0).length>=3&&avgScore<2.5;
+  return`${p}
+  <div class="sec-hdr">
+    <div class="sec-num sec-num-p">${sec.num}</div>
+    <div><div class="sec-title">${sec.title}</div><div class="sec-sub">${sec.sub}</div></div>
+    <div class="sec-weight sec-weight-p">${Math.round(sec.w*100)}%</div>
+  </div>
+  ${items}
+  ${showWarn?`<div class="warn-box"><span class="warn-box-icon"><svg class="ico ico-16"><use href="#ic-warn"/></svg></span><div>此面向評分偏低（平均 ${avgScore.toFixed(1)} 分），系統將在確認頁顯示<strong>踩雷提醒</strong>。</div></div>`:''}
+  <div class="subtotal">
+    <div class="sub-label">本大項小計 · 已填 ${filled}/${sec.items.length} 題</div>
+    <div class="sub-score sub-score-p">${cur}</div>
+    <div class="sub-max">/ ${max} 分</div>
+    <div class="sub-pct">${pct}%</div>
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(${step})">← 上一頁</button>
+    <div class="fnav-info">${filled}/${sec.items.length} 已填</div>
+    <button class="btn btn-purple" onclick="nxt(${step})">下一頁 →</button>
+  </div>`;
+}
+function setNurseScore(si,ii,val){FD[NURSE_SECS[si].id][ii]=val;renderStep(si+3);triggerAutosave();}
+
+// ─── NURSE REVIEW (step 8) ───
+function buildNurseReview(p){
+  const sc=calcNurseScores(),g=getGrade(sc.total);
+  const rows=NURSE_SECS.map((sec,i)=>{
+    const arr=FD[sec.id],t=arr.reduce((a,b)=>a+b,0),max=sec.items.length*5,bar=max>0?Math.round(t/max*100):0;
+    return`<tr>
+      <td style="font-weight:600;font-size:13px">${sec.num}、${sec.title}</td>
+      <td style="text-align:center;font-family:'Noto Serif TC',serif;font-size:17px;font-weight:900;color:var(--purple3)">${t}</td>
+      <td style="text-align:center;color:var(--text3);font-size:12px">/${max}</td>
+      <td style="text-align:center"><span class="pill p-purple">${Math.round(sec.w*100)}%</span></td>
+      <td><div style="height:7px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden"><div style="width:${bar}%;height:100%;background:linear-gradient(90deg,var(--purple),var(--purple2));border-radius:4px"></div></div></td>
+    </tr>`;
+  }).join('');
+  const hasID=FD.nNameRaw||FD.nIDRaw;
+  const nurseInfo=hasID?`<div style="background:rgba(155,89,182,0.07);border:1px solid rgba(155,89,182,0.28);border-radius:9px;padding:14px;margin-bottom:14px">
+    <div style="font-size:11px;color:var(--purple3);letter-spacing:1px;margin-bottom:8px">看護資料（遮罩後公開顯示）</div>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+      ${FD.nNameMask?`<div><span style="font-size:11px;color:var(--text3)">姓名：</span><strong style="font-family:'Noto Serif TC',serif;color:var(--purple3)">${esc(FD.nNameMask)}</strong></div>`:''}
+      ${FD.nIDMask?`<div><span style="font-size:11px;color:var(--text3)">證件：</span><strong style="font-family:monospace;color:var(--purple3)">${esc(FD.nIDMask)}</strong></div>`:''}
+      ${FD.nNationality?`<span class="pill p-blue">${esc(FD.nNationality)}</span>`:''}
+      ${FD.nHireType?`<span class="pill p-purple">${esc(FD.nHireType)}</span>`:''}
+      ${FD.nWorkCity?`<span class="pill p-blue">${esc(FD.nWorkCity)}</span>`:''}
+      ${FD.nWorkType?`<span class="pill p-green">${esc(FD.nWorkType)}</span>`:''}
+      ${FD.nTransferReason?`<span class="pill p-red">${esc(FD.nTransferReason)}</span>`:''}
+    </div>
+  </div>`:`<div class="notice n-purple" style="margin-bottom:14px">ℹ️ 未填寫看護姓名/證件，此評量不列入踩雷及排名（仍計入整體統計）。</div>`;
+
+  // Check if overall score is low
+  const allFilledScores=[...FD.n1,...FD.n2,...FD.n3,...FD.n4,...FD.n5].filter(x=>x>0);
+  const overallAvg=allFilledScores.length>0?allFilledScores.reduce((a,b)=>a+b,0)/allFilledScores.length:0;
+  const isWarn=overallAvg>0&&overallAvg<2.5&&allFilledScores.length>=5;
+
+  return`${p}<div class="card">
+    <div class="card-hdr"><div class="card-icon" style="background:linear-gradient(135deg,var(--purple),var(--purple2))"><svg class="ico ico-20"><use href="#ic-verify"/></svg></div><div>
+      <div class="card-title">看護評量確認預覽</div><div class="card-sub">確認無誤後提交</div>
+    </div></div>
+    ${nurseInfo}
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:420px">
+      <thead><tr>
+        <th style="background:rgba(125,60,152,0.3);padding:9px 11px;text-align:left;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">評量面向</th>
+        <th style="background:rgba(125,60,152,0.3);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">小計</th>
+        <th style="background:rgba(125,60,152,0.3);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">滿分</th>
+        <th style="background:rgba(125,60,152,0.3);padding:9px 11px;text-align:center;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2)">權重</th>
+        <th style="background:rgba(125,60,152,0.3);padding:9px 11px;font-size:11.5px;color:var(--text2);border-bottom:1px solid var(--border2);width:28%">進度</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    </div>
+    <div style="background:linear-gradient(135deg,rgba(90,30,120,0.6),rgba(125,60,152,0.4));border:1px solid rgba(155,89,182,0.35);border-radius:10px;padding:20px;text-align:center;margin-top:14px">
+      <div style="font-size:11.5px;color:var(--text2);letter-spacing:2px;margin-bottom:6px">加權總分</div>
+      <div style="font-family:'Noto Serif TC',serif;font-size:clamp(36px,8vw,52px);font-weight:900;color:${g.color};line-height:1">${sc.total}</div>
+      <div style="font-size:12px;color:var(--text3);margin-top:3px">/ 100 分</div>
+      <div style="margin-top:12px;display:inline-flex;align-items:center;gap:12px">
+        <span class="gr g${g.letter}" style="width:44px;height:44px;font-size:19px">${g.letter}</span>
+        <span style="font-size:16px;color:${g.color};font-weight:700">${g.label}</span>
+      </div>
+      ${isWarn?`<div class="warn-box" style="margin-top:12px;text-align:left"><span class="warn-box-icon"><svg class="ico ico-16"><use href="#ic-warn"/></svg></span><div>踩雷警示：此看護整體表現評分偏低（平均 ${overallAvg.toFixed(1)}/5 分），系統將發出踩雷提醒。${hasID?'提交後將自動列入看護踩雷名單。':'若填寫身份資料則列入名單。'}</div></div>`:''}
+      ${sc.total<60&&!isWarn?`<div class="notice n-warn" style="margin-top:12px;font-size:12.5px">分數低於60分，${hasID?'提交後將自動列入踩雷警示名單。':'若填寫身份資料則列入踩雷名單。'}</div>`:''}
+    </div>
+    <div class="notice n-warn" style="margin-top:14px;font-size:12px">提交後即記入資料庫，如需修改請重新填寫新表單。</div>
+  </div>
+  <div class="fnav">
+    <button class="btn btn-g" onclick="prv(8)">← 返回修改</button>
+    <div class="fnav-info">確認無誤再提交</div>
+    <button class="btn btn-purple btn-lg" onclick="doSubmit()" id="btn-sub">提交看護評量</button>
+  </div>`;
+}
+
+// ─── STEP NAV ───
+function nxt(s){
+  if(s===0&&!document.getElementById('cb')?.checked){toast('請勾選同意聲明','err');return;}
+  if(s===1&&!FD.evalType){toast('請選擇評量對象','err');return;}
+  if(s===2&&FD.evalType==='broker')saveAgency();
+  if(s===2&&FD.evalType==='nurse')saveNurseProfile();
+  // Validate required broker fields
+  if(FD.evalType==='broker'&&s>=4&&s<=8){
+    const si=s-4;if(si<BROKER_SECS.length){
+      const sec=BROKER_SECS[si];
+      const miss=sec.items.filter((it,i)=>it.req&&FD[sec.id][i]===0);
+      if(miss.length){toast(`請填寫必填項目：${miss.map(m=>m.l).join('、')}`,'err');return;}
+    }
+  }
+  // Validate required nurse fields
+  if(FD.evalType==='nurse'&&s>=3&&s<=7){
+    const si=s-3;if(si<NURSE_SECS.length){
+      const sec=NURSE_SECS[si];
+      const miss=sec.items.filter((it,i)=>it.req&&FD[sec.id][i]===0);
+      if(miss.length){toast(`請填寫必填項目：${miss.map(m=>m.l).join('、')}`,'err');return;}
+    }
+  }
+  cStep=s+1;renderStep(cStep);
+  triggerAutosave();
+}
+function prv(s){cStep=s-1;renderStep(cStep);}
+
+// ─── SCORE CALC ───
+function calcBrokerScores(){
+  let total=0;
+  BROKER_SECS.forEach(sec=>{
+    const arr=FD[sec.id],t=arr.reduce((a,b)=>a+b,0),max=sec.items.length*5;
+    total+=max>0?(t/max)*100*sec.w:0;
+  });
+  return{total:Math.round(total*10)/10};
+}
+function calcNurseScores(){
+  let total=0;
+  NURSE_SECS.forEach(sec=>{
+    const arr=FD[sec.id],t=arr.reduce((a,b)=>a+b,0),max=sec.items.length*5;
+    total+=max>0?(t/max)*100*sec.w:0;
+  });
+  return{total:Math.round(total*10)/10};
+}
+function getGrade(t){
+  if(t>=90)return{letter:'A',label:'卓越優秀',color:'#3498db',bg:'#1a4a8b'};
+  if(t>=75)return{letter:'B',label:'良好稱職',color:'#2ecc71',bg:'#1a5c3a'};
+  if(t>=60)return{letter:'C',label:'尚可待改',color:'#f1c40f',bg:'#7d6608'};
+  if(t>=45)return{letter:'D',label:'明顯不足',color:'#e67e22',bg:'#8b3a00'};
+  return{letter:'E',label:'嚴重不合格',color:'#e74c3c',bg:'#8b1a1a'};
+}
+
+// ─── SUBMIT ───
+// 安全性修復說明（v20）：
+// 1）移除前端對外呼叫 ipify/ip.sb 取得使用者 IP 並寫入資料庫的機制。
+//    本系統並無真正具備存取控管的後端，DB 寫入層（window.storage shared=true /
+//    Firebase 預設規則）等同公開可讀，記錄 IP 反而造成使用者隱私曝險，且無法被
+//    妥善保護，故直接停止蒐集，不再有「看似匿名、實則可被任何人讀出 IP」的落差。
+// 2）原始姓名／公司／證件號碼僅用於本機計算去識別化比對鍵與遮罩字串，一律不寫入
+//    任何儲存層（含彙總文件 agg-b-*/agg-n-*），避免外籍看護真實身份資料外洩。
+// 3）新增 60 秒內限制重複提交（純前端節流，防止誤觸雙重送出；不能防止刻意以
+//    開發者工具繞過的灌票行為——這需要具備驗證能力的後端才能真正解決，詳見頁尾說明）。
+let _isSubmitting=false;
+async function doSubmit(){
+  if(_isSubmitting)return;
+  const isBroker=FD.evalType==='broker';
+  const lastSub=Number(localStorage.getItem('ams5:_lastSubmitAt')||0);
+  if(Date.now()-lastSub<60000){
+    toast('提交過於頻繁，請稍候 1 分鐘再試','err');
+    return;
+  }
+  _isSubmitting=true;
+  const btn=document.getElementById('btn-sub');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="loading"></span> 提交中…';}
+  const sc=isBroker?calcBrokerScores():calcNurseScores();
+  const g=getGrade(sc.total);
+  // ⚠️ 個資最小化：原始欄位僅留在區域變數中計算比對鍵，rec 內絕不含原始姓名/證件
+  const {cRaw,sRaw,nNameRaw,nIDRaw,...safeFD}=FD;
+  const rec={...safeFD,total:sc.total,grade:g.letter,createdAt:new Date().toISOString()};
+  let isLandmine=false;
+  try{
+    if(isBroker){
+      // Save broker eval（已去識別化，不含原始公司/業務員姓名與 IP/UA）
+      let idx=await DB.get('eval-b-idx')||[];
+      idx.push(rec.id);
+      await DB.set('eval-b-'+rec.id,rec);
+      await DB.set('eval-b-idx',idx);
+      // Aggregate broker（彙總文件同樣只存遮罩後欄位）
+      if(cRaw){
+        const k=normKey(cRaw);
+        let a=await DB.get('agg-b-'+k)||{key:k,cMask:rec.cMask,region:rec.region,count:0,totalScore:0,grades:{A:0,B:0,C:0,D:0,E:0},issues:{},staffs:[]};
+        a.count++;a.totalScore+=rec.total;
+        if(a.grades[g.letter]!==undefined)a.grades[g.letter]++;
+        if(rec.sMask&&!a.staffs.includes(rec.sMask))a.staffs.push(rec.sMask);
+        (rec.issues||[]).forEach(is=>{a.issues[is]=(a.issues[is]||0)+1;});
+        a.avgScore=Math.round(a.totalScore/a.count*10)/10;
+        a.lastUpdated=new Date().toISOString();
+        await DB.set('agg-b-'+k,a);
+        let ai=await DB.get('agg-b-idx')||[];
+        if(!ai.includes(k))ai.push(k);
+        await DB.set('agg-b-idx',ai);
+        isLandmine=a.count>=2&&a.avgScore<60;
+      }
+    } else {
+      // Save nurse eval（已去識別化，不含原始姓名/證件號碼與 IP/UA）
+      let idx=await DB.get('eval-n-idx')||[];
+      idx.push(rec.id);
+      await DB.set('eval-n-'+rec.id,rec);
+      await DB.set('eval-n-idx',idx);
+      // Aggregate nurse
+      const hasID=nNameRaw||nIDRaw;
+      if(hasID){
+        const k=normNurseKey(nNameRaw,nIDRaw);
+        let a=await DB.get('agg-n-'+k)||{key:k,nNameMask:rec.nNameMask,nIDMask:rec.nIDMask,nNationality:rec.nNationality,nHireType:rec.nHireType,nWorkCity:rec.nWorkCity,nWorkType:rec.nWorkType,count:0,totalScore:0,grades:{A:0,B:0,C:0,D:0,E:0},transferReasons:[],nIssues:{}};
+        a.count++;a.totalScore+=rec.total;
+        if(a.grades[g.letter]!==undefined)a.grades[g.letter]++;
+        a.avgScore=Math.round(a.totalScore/a.count*10)/10;
+        if(rec.nTransferReason&&!a.transferReasons.includes(rec.nTransferReason))a.transferReasons.push(rec.nTransferReason);
+        (rec.nIssues||[]).forEach(is=>{a.nIssues[is]=(a.nIssues[is]||0)+1;});
+        a.lastUpdated=new Date().toISOString();
+        await DB.set('agg-n-'+k,a);
+        let ni=await DB.get('agg-n-idx')||[];
+        if(!ni.includes(k))ni.push(k);
+        await DB.set('agg-n-idx',ni);
+        isLandmine=a.count>=2&&a.avgScore<60;
+      }
+    }
+    // ── 寫入全域統計文件（N+1 最佳化核心）──
+    // 寫入時更新，讀取時只需 1 次 DB.get('system-dash-stats')，從 200 次降為 1 次
+    try{
+      let ds=await DB.get('system-dash-stats')||{
+        bCount:0,bTotal:0,nCount:0,nTotal:0,
+        bGrades:{A:0,B:0,C:0,D:0,E:0},nGrades:{A:0,B:0,C:0,D:0,E:0},
+        bIssueMap:{},nIssueMap:{},
+        natMap:{},wtMap:{},wcMap:{},
+        totalWarn:0,recentRecs:[]
+      };
+      if(isBroker){
+        ds.bCount++;ds.bTotal+=rec.total;
+        if(ds.bGrades[g.letter]!==undefined)ds.bGrades[g.letter]++;
+        (rec.issues||[]).forEach(is=>{ds.bIssueMap[is]=(ds.bIssueMap[is]||0)+1;});
+        // 偵測是否剛跨越踩雷門檻（count 從 1→2 且均分<60）
+        if(cRaw){const k=normKey(cRaw);const agg=await DB.get('agg-b-'+k);if(agg&&agg.count===2&&agg.avgScore<60)ds.totalWarn++;}
+      }else{
+        ds.nCount++;ds.nTotal+=rec.total;
+        if(ds.nGrades[g.letter]!==undefined)ds.nGrades[g.letter]++;
+        (rec.nIssues||[]).forEach(is=>{ds.nIssueMap[is]=(ds.nIssueMap[is]||0)+1;});
+        if(rec.nNationality)ds.natMap[rec.nNationality]=(ds.natMap[rec.nNationality]||0)+1;
+        if(rec.nWorkType)ds.wtMap[rec.nWorkType]=(ds.wtMap[rec.nWorkType]||0)+1;
+        if(rec.nWorkCity)ds.wcMap[rec.nWorkCity]=(ds.wcMap[rec.nWorkCity]||0)+1;
+        if(nNameRaw||nIDRaw){const k=normNurseKey(nNameRaw,nIDRaw);const agg=await DB.get('agg-n-'+k);if(agg&&agg.count===2&&agg.avgScore<60)ds.totalWarn++;}
+      }
+      // 近期記錄：精簡版，最多保留 20 筆（超過則移除最舊一筆）
+      const slim={evalType:rec.evalType,createdAt:rec.createdAt,
+        cMask:rec.cMask||'',nNameMask:rec.nNameMask||'',
+        issues:rec.issues||[],nIssues:rec.nIssues||[],
+        total:rec.total,grade:g.letter};
+      ds.recentRecs=[...(ds.recentRecs||[]),slim];
+      if(ds.recentRecs.length>20)ds.recentRecs.shift();
+      await DB.set('system-dash-stats',ds);
+    }catch(e){console.warn('[dash-stats] 更新失敗',e);}
+    localStorage.setItem('ams5:_lastSubmitAt',String(Date.now()));
+    clearDraft();
+    await showSuccess(rec,sc,g,isLandmine);
+    _isSubmitting=false;
+    if(btn){btn.disabled=false;btn.innerHTML=isBroker?'提交仲介評量':'提交看護評量';}
+  }catch(e){
+    _isSubmitting=false;
+    toast('提交失敗：'+e.message,'err');
+    if(btn){btn.disabled=false;btn.innerHTML=isBroker?'提交仲介評量':'提交看護評量';}
+  }
+}
+
+async function showSuccess(rec,sc,g,isLandmine){
+  VIEWS.forEach(v=>document.getElementById('view-'+v)?.classList.remove('active'));
+  document.querySelectorAll('.nb,.bnb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-success').classList.add('active');
+  document.getElementById('suc-token').textContent=rec.id;
+  const isBroker=rec.evalType==='broker';
+  const tb=document.getElementById('suc-type-badge');
+  if(tb)tb.innerHTML=`<div style="display:inline-block;padding:5px 18px;border-radius:20px;font-size:12px;font-weight:700;margin-bottom:12px;background:${isBroker?'rgba(201,162,39,0.15)':'rgba(155,89,182,0.15)'};border:1px solid ${isBroker?'var(--border)':'rgba(155,89,182,0.3)'};color:${isBroker?'var(--gold2)':'var(--purple3)'}">${isBroker?'仲介評量':'看護/幫傭評量'}</div>`;
+
+  // ── 踩雷狀態說明文字（isLandmine 已由 doSubmit 依當下彙總資料判斷後傳入，
+  //    本函式不再持有原始姓名/證件，故改用遮罩欄位是否存在來判斷是否填寫了身份資訊）
+  const hasIdentity=isBroker?!!rec.cMask:!!(rec.nNameMask||rec.nIDMask);
+  let lmHtml='';
+  if(hasIdentity){
+    if(isLandmine){
+      lmHtml=`<div class="rrow"><span class="rname">踩雷狀態</span><span class="rval" style="color:#e87070">已列入踩雷警示</span></div>`;
+    } else if(sc.total<60){
+      // 分數低但尚未達門檻（評量數不足2份）
+      lmHtml=`<div class="rrow"><span class="rname">踩雷狀態</span><span class="rval" style="color:var(--yellow2)">分數偏低，累積 2 份評量後將自動列入警示</span></div>`;
+    }
+  }
+
+  document.getElementById('suc-summary').innerHTML=`
+    <div style="font-size:11px;color:var(--text2);letter-spacing:1.5px;margin-bottom:10px">評量結果摘要</div>
+    ${isBroker?(
+      (rec.cMask?`<div class="rrow"><span class="rname">仲介公司（遮罩）</span><span class="rval" style="color:var(--gold2)">${esc(rec.cMask)}</span></div>`:'')+
+      (rec.sMask?`<div class="rrow"><span class="rname">業務員（遮罩）</span><span class="rval" style="color:var(--gold2)">${esc(rec.sMask)}</span></div>`:'')
+    ):(
+      (rec.nNameMask?`<div class="rrow"><span class="rname">看護姓名（遮罩）</span><span class="rval" style="color:var(--purple3)">${esc(rec.nNameMask)}</span></div>`:'')+
+      (rec.nIDMask?`<div class="rrow"><span class="rname">證件號碼（遮罩）</span><span class="rval" style="font-family:monospace;color:var(--purple3)">${esc(rec.nIDMask)}</span></div>`:'')+
+      (rec.nNationality?`<div class="rrow"><span class="rname">國籍</span><span class="rval">${esc(rec.nNationality)}</span></div>`:'')+
+      (rec.nHireType?`<div class="rrow"><span class="rname">引進類型</span><span class="rval"><span class="pill p-purple">${esc(rec.nHireType)}</span></span></div>`:'')+
+      (rec.nWorkCity?`<div class="rrow"><span class="rname">工作縣市</span><span class="rval">${esc(rec.nWorkCity)}</span></div>`:'')+
+      (rec.nWorkType?`<div class="rrow"><span class="rname">工作類型</span><span class="rval">${esc(rec.nWorkType)}</span></div>`:'')+
+      (rec.nTransferReason?`<div class="rrow"><span class="rname">轉出理由</span><span class="rval">${esc(rec.nTransferReason)}</span></div>`:'')
+    )}
+    <div class="rrow"><span class="rname">加權總分</span><span class="rval" style="font-family:'Noto Serif TC',serif;font-size:18px;color:${g.color}">${sc.total} 分</span></div>
+    <div class="rrow"><span class="rname">評等</span><span class="rval"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span>&nbsp;${g.label}</span></div>
+    ${lmHtml}
+  `;
+  toast('評量提交成功！','ok');
+  loadHomeStats();
+}
+
+// ─── LANDMINE ───
+let lmTab='broker',allLM=[],allNurseLM=[];
+function switchLMTab(t){
+  lmTab=t;
+  document.getElementById('lm-broker-panel').style.display=t==='broker'?'':'none';
+  document.getElementById('lm-nurse-panel').style.display=t==='nurse'?'':'none';
+  const bb=document.getElementById('lm-tab-broker'),nb=document.getElementById('lm-tab-nurse');
+  bb.className='tab-btn '+(t==='broker'?'active-broker':'');
+  nb.className='tab-btn '+(t==='nurse'?'active-nurse':'');
+}
+async function loadLandmine(){
+  // Broker LM
+  const ai=await DB.get('agg-b-idx')||[];
+  allLM=[];
+  for(const k of ai){const a=await DB.get('agg-b-'+k);if(a&&a.count>=2&&a.avgScore<60)allLM.push(a);}
+  allLM.sort((a,b)=>a.avgScore-b.avgScore);
+  // Nurse LM
+  const ni=await DB.get('agg-n-idx')||[];
+  allNurseLM=[];
+  for(const k of ni){const a=await DB.get('agg-n-'+k);if(a&&a.count>=2&&a.avgScore<60)allNurseLM.push(a);}
+  allNurseLM.sort((a,b)=>a.avgScore-b.avgScore);
+  // Update badges
+  const bt=document.getElementById('lm-badge-total');
+  const total=allLM.length+allNurseLM.length;
+  if(bt)bt.textContent=total>0?`${total} 筆警示`:'目前無警示';
+  document.getElementById('lm-cnt-broker').textContent=allLM.length?`(${allLM.length})`:'' ;
+  document.getElementById('lm-cnt-nurse').textContent=allNurseLM.length?`(${allNurseLM.length})`:'';
+  renderLM(allLM);renderNurseLM(allNurseLM);
+}
+function filterLM(){
+  const q=(document.getElementById('lm-q')?.value||'').toLowerCase();
+  const g=document.getElementById('lm-grade')?.value||'';
+  renderLM(allLM.filter(a=>{
+    if(q&&!a.cMask?.toLowerCase().includes(q))return false;
+    if(g&&getGrade(a.avgScore).letter!==g)return false;
+    return true;
+  }));
+}
+function filterNurseLM(){
+  const q=(document.getElementById('lm-nq')?.value||'').toLowerCase();
+  const g=document.getElementById('lm-ngrade')?.value||'';
+  renderNurseLM(allNurseLM.filter(a=>{
+    if(q&&!a.nNameMask?.toLowerCase().includes(q))return false;
+    if(g&&getGrade(a.avgScore).letter!==g)return false;
+    return true;
+  }));
+}
+function getRiskLevel(score){
+  if(score<30)return{cls:'risk-extreme',icon:'▪',label:'極高風險'};
+  if(score<45)return{cls:'risk-high',icon:'▪',label:'高風險'};
+  if(score<55)return{cls:'risk-medium',icon:'▪',label:'注意'};
+  return{cls:'risk-low',icon:'▪',label:'邊緣'};
+}
+function renderLM(data){
+  const el=document.getElementById('lm-list');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg class="ico ico-44" style="opacity:.35;color:var(--green2)"><use href="#ic-check"/></svg></div><div style="color:var(--green2)">目前無仲介踩雷警示</div><div style="margin-top:6px">評量件數不足或均分≥60分的仲介不列入警示</div></div>`;return;}
+  el.innerHTML=data.map((a,i)=>{
+    const g=getGrade(a.avgScore);
+    const risk=getRiskLevel(a.avgScore);
+    const topIssues=Object.entries(a.issues||{}).sort((x,y)=>y[1]-x[1]).slice(0,4);
+    return`<div class="lm-card">
+      <div class="lm-card-top">
+        <div class="lm-rank">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="lm-company" style="display:flex;align-items:center;flex-wrap:wrap;gap:5px">${esc(a.cMask)||'（未命名）'}<span class="risk-level ${risk.cls}">${risk.icon} ${risk.label}</span></div>
+          <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">
+            ${(a.staffs||[]).map(s=>`<span class="lm-chip">${esc(s)}</span>`).join('')}
+            ${a.region?`<span class="lm-chip">${esc(a.region)}</span>`:''}
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="lm-score-num" style="color:${g.color}">${a.avgScore}</div>
+          <div style="margin-top:3px"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${g.label}</div>
+        </div>
+      </div>
+      ${topIssues.length?`<div class="lm-reasons">${topIssues.map(([t,c])=>`<span class="lm-rtag">${esc(t)}（${c}次）</span>`).join('')}</div>`:''}
+      <div class="lm-meta">共 ${a.count} 份評量 · 評等分布：${Object.entries(a.grades).filter(([,v])=>v>0).map(([g,v])=>`${g}(${v})`).join(' ')}${a.lastUpdated?` · 更新 ${new Date(a.lastUpdated).toLocaleDateString('zh-TW')}`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderNurseLM(data){
+  const el=document.getElementById('lm-nurse-list');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg class="ico ico-44" style="opacity:.35;color:var(--green2)"><use href="#ic-check"/></svg></div><div style="color:var(--green2)">目前無看護踩雷警示</div><div style="margin-top:6px">評量件數不足或均分≥60分者不列入警示</div></div>`;return;}
+  el.innerHTML=data.map((a,i)=>{
+    const g=getGrade(a.avgScore);
+    const risk=getRiskLevel(a.avgScore);
+    const topNIssues=Object.entries(a.nIssues||{}).sort((x,y)=>y[1]-x[1]).slice(0,4);
+    return`<div class="lm-card lm-card-nurse">
+      <div class="lm-card-top">
+        <div class="lm-rank lm-rank-nurse">${i+1}</div>
+        <div style="flex:1;min-width:0">
+          <div class="lm-company lm-nurse-name" style="display:flex;align-items:center;flex-wrap:wrap;gap:5px">${esc(a.nNameMask)||'（未命名）'}<span class="risk-level ${risk.cls}">${risk.icon} ${risk.label}</span></div>
+          <div style="margin-top:5px;display:flex;flex-wrap:wrap;gap:4px;align-items:center">
+            ${a.nIDMask?`<span class="lm-chip lm-chip-nurse">${esc(a.nIDMask)}</span>`:''}
+            ${a.nNationality?`<span class="lm-chip lm-chip-nurse">${esc(a.nNationality)}</span>`:''}
+            ${a.nHireType?`<span class="lm-chip lm-chip-nurse">${esc(a.nHireType)}</span>`:''}
+            ${a.nWorkCity?`<span class="lm-chip lm-chip-nurse">${esc(a.nWorkCity)}</span>`:''}
+            ${a.nWorkType?`<span class="lm-chip lm-chip-nurse">${esc(a.nWorkType)}</span>`:''}
+            ${(a.transferReasons||[]).map(r=>`<span class="lm-chip" style="background:rgba(192,57,43,0.1);border-color:rgba(192,57,43,0.25);color:#e87070">${esc(r)}</span>`).join('')}
+          </div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="lm-score-num" style="color:${g.color}">${a.avgScore}</div>
+          <div style="margin-top:3px"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span></div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${g.label}</div>
+        </div>
+      </div>
+      ${topNIssues.length?`<div class="lm-reasons">${topNIssues.map(([t,c])=>`<span class="lm-rtag lm-rtag-nurse">${esc(t)}（${c}次）</span>`).join('')}</div>`:''}
+      <div class="lm-meta">共 ${a.count} 份評量 · 評等分布：${Object.entries(a.grades).filter(([,v])=>v>0).map(([g,v])=>`${g}(${v})`).join(' ')}${a.lastUpdated?` · 更新 ${new Date(a.lastUpdated).toLocaleDateString('zh-TW')}`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── RANK ───
+let rankTab='broker',allRank=[],allNurseRank=[];
+function switchRankTab(t){
+  rankTab=t;
+  document.getElementById('rank-broker-panel').style.display=t==='broker'?'':'none';
+  document.getElementById('rank-nurse-panel').style.display=t==='nurse'?'':'none';
+  const bb=document.getElementById('rank-tab-broker'),nb=document.getElementById('rank-tab-nurse');
+  bb.className='tab-btn '+(t==='broker'?'active-broker':'');
+  nb.className='tab-btn '+(t==='nurse'?'active-nurse':'');
+}
+async function loadRank(){
+  document.getElementById('rank-content').innerHTML='<div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div>';
+  document.getElementById('rank-nurse-content').innerHTML='<div class="empty"><span class="loading" style="width:26px;height:26px;border-width:3px"></span></div>';
+  // Broker
+  const ai=await DB.get('agg-b-idx')||[];allRank=[];
+  for(const k of ai){const a=await DB.get('agg-b-'+k);if(a)allRank.push(a);}
+  allRank.sort((a,b)=>b.avgScore-a.avgScore);
+  // Nurse
+  const ni=await DB.get('agg-n-idx')||[];allNurseRank=[];
+  for(const k of ni){const a=await DB.get('agg-n-'+k);if(a)allNurseRank.push(a);}
+  allNurseRank.sort((a,b)=>b.avgScore-a.avgScore);
+  renderRank(allRank);renderNurseRank(allNurseRank);
+}
+function filterRank(){
+  const q=(document.getElementById('rank-q')?.value||'').toLowerCase();
+  const r=document.getElementById('rank-region')?.value||'';
+  renderRank(allRank.filter(a=>{
+    if(q&&!a.cMask?.toLowerCase().includes(q))return false;
+    if(r&&a.region!==r)return false;
+    return true;
+  }));
+}
+function filterNurseRank(){
+  const q=(document.getElementById('rank-nq')?.value||'').toLowerCase();
+  const nat=document.getElementById('rank-nat')?.value||'';
+  renderNurseRank(allNurseRank.filter(a=>{
+    if(q&&!a.nNameMask?.toLowerCase().includes(q))return false;
+    if(nat&&a.nNationality!==nat)return false;
+    return true;
+  }));
+}
+function renderRank(data){
+  const el=document.getElementById('rank-content');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg class="ico ico-44" style="opacity:.3"><use href="#ic-clip"/></svg></div><div>尚無仲介評量資料</div><br><button class="btn btn-p btn-sm" onclick="startForm('broker')">填寫仲介評量</button></div>`;return;}
+  const MEDALS=['🥇','🥈','🥉'];
+  const mkRn=(i)=>i<3?`<span style="font-size:22px;line-height:1">${MEDALS[i]}</span>`:`<span class="rank-num rk4">NO.${i+1}</span>`;
+  el.innerHTML=`
+  <div class="rank-table-wrap">
+  <table class="rank-table">
+    <thead><tr><th>排名</th><th>仲介公司（遮罩）</th><th>業務員</th><th>地區</th><th>評量數</th><th style="text-align:center">平均分</th><th style="text-align:center">評等</th></tr></thead>
+    <tbody>${data.map((a,i)=>{const g=getGrade(a.avgScore);const isDanger=a.avgScore<60;
+      return`<tr>
+        <td>${mkRn(i)}</td>
+        <td><strong style="font-family:'Noto Serif TC',serif;color:${isDanger?'#e87070':'var(--gold2)'}">${esc(a.cMask)||'—'}</strong></td>
+        <td style="font-size:12px;color:var(--text2)">${(a.staffs||[]).map(esc).join('，')||'—'}</td>
+        <td>${a.region?`<span class="pill p-blue">${esc(a.region)}</span>`:'—'}</td>
+        <td style="text-align:center;color:var(--text2)">${a.count}</td>
+        <td style="text-align:center;font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;color:${g.color}">${a.avgScore}</td>
+        <td style="text-align:center"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span></td>
+      </tr>`;}).join('')}
+    </tbody>
+  </table>
+  </div>
+  <div class="rank-mobile-cards">${data.map((a,i)=>{const g=getGrade(a.avgScore);const isDanger=a.avgScore<60;
+    return`<div class="rmcard ${isDanger?'danger-card':''}">
+      <div class="rmcard-top">
+        ${mkRn(i)}
+        <div class="rmcard-info">
+          <div class="rmcard-name ${isDanger?'danger':''}">${esc(a.cMask)||'—'}</div>
+          <div class="rmcard-meta">${esc(a.region)||''}${a.region&&a.count?' · ':''}${a.count}份評量</div>
+        </div>
+        <div class="rmcard-score"><div class="rmcard-num" style="color:${g.color}">${a.avgScore}</div><div style="margin-top:3px"><span class="gr g${g.letter}" style="width:24px;height:24px;font-size:11px">${g.letter}</span></div></div>
+      </div>
+    </div>`;}).join('')}
+  </div>`;
+}
+function renderNurseRank(data){
+  const el=document.getElementById('rank-nurse-content');
+  if(!data.length){el.innerHTML=`<div class="empty"><div class="empty-ic"><svg class="ico ico-44" style="opacity:.3"><use href="#ic-clip"/></svg></div><div>尚無看護評量資料</div><br><button class="btn btn-purple btn-sm" onclick="startForm('nurse')">填寫看護評量</button></div>`;return;}
+  const MEDALS=['🥇','🥈','🥉'];
+  const mkRn=(i)=>i<3?`<span style="font-size:22px;line-height:1">${MEDALS[i]}</span>`:`<span class="rank-num rk4">NO.${i+1}</span>`;
+  el.innerHTML=`
+  <div class="rank-table-wrap">
+  <table class="rank-table">
+    <thead><tr><th>排名</th><th>看護姓名（遮罩）</th><th>證件（遮罩）</th><th>國籍</th><th>工作類型</th><th>縣市</th><th>評量數</th><th style="text-align:center">平均分</th><th style="text-align:center">評等</th></tr></thead>
+    <tbody>${data.map((a,i)=>{const g=getGrade(a.avgScore);const isDanger=a.avgScore<60;
+      return`<tr>
+        <td>${mkRn(i)}</td>
+        <td><strong style="font-family:'Noto Serif TC',serif;color:${isDanger?'#e87070':'var(--purple3)'}">${esc(a.nNameMask)||'—'}</strong></td>
+        <td style="font-family:monospace;font-size:12px;color:var(--text2)">${esc(a.nIDMask)||'—'}</td>
+        <td>${a.nNationality?`<span class="pill p-blue">${esc(a.nNationality)}</span>`:'—'}</td>
+        <td>${esc(a.nWorkType)||'—'}</td>
+        <td>${esc(a.nWorkCity)||'—'}</td>
+        <td style="text-align:center;color:var(--text2)">${a.count}</td>
+        <td style="text-align:center;font-family:'Noto Serif TC',serif;font-size:18px;font-weight:900;color:${g.color}">${a.avgScore}</td>
+        <td style="text-align:center"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span></td>
+      </tr>`;}).join('')}
+    </tbody>
+  </table>
+  </div>
+  <div class="rank-mobile-cards">${data.map((a,i)=>{const g=getGrade(a.avgScore);const isDanger=a.avgScore<60;
+    return`<div class="rmcard ${isDanger?'danger-card':''}">
+      <div class="rmcard-top">
+        ${mkRn(i)}
+        <div class="rmcard-info">
+          <div class="rmcard-name purple ${isDanger?'danger':''}">${esc(a.nNameMask)||'—'}</div>
+          <div class="rmcard-meta">${esc(a.nNationality)||''}${a.nWorkType?' · '+esc(a.nWorkType):''}${a.nWorkCity?' · '+esc(a.nWorkCity):''}${a.nIDMask?' · '+esc(a.nIDMask):''}${a.count?' · '+a.count+'份':''}</div>
+        </div>
+        <div class="rmcard-score"><div class="rmcard-num" style="color:${g.color}">${a.avgScore}</div><div style="margin-top:3px"><span class="gr g${g.letter}" style="width:24px;height:24px;font-size:11px">${g.letter}</span></div></div>
+      </div>
+    </div>`;}).join('')}
+  </div>`;
+}
+
+// ─── DASHBOARD ───
+async function loadDash(){
+  const el=document.getElementById('dash-content');
+  el.innerHTML='<div class="empty"><span class="loading" style="width:30px;height:30px;border-width:3px"></span><div style="margin-top:12px;font-size:13px;color:var(--text3)">載入中…</div></div>';
+
+  // ── N+1 最佳化：單次讀取 system-dash-stats（從 200 次降為 1 次）──
+  // 統計數據在每次 doSubmit 時即時更新，此處只需 1 次讀取
+  const ds=await DB.get('system-dash-stats')||{
+    bCount:0,bTotal:0,nCount:0,nTotal:0,
+    bGrades:{A:0,B:0,C:0,D:0,E:0},nGrades:{A:0,B:0,C:0,D:0,E:0},
+    bIssueMap:{},nIssueMap:{},
+    natMap:{},wtMap:{},wcMap:{},
+    totalWarn:0,recentRecs:[]
+  };
+
+  const bAvg=ds.bCount?Math.round(ds.bTotal/ds.bCount*10)/10:0;
+  const nAvg=ds.nCount?Math.round(ds.nTotal/ds.nCount*10)/10:0;
+  const gcols={A:'#3498db',B:'#2ecc71',C:'#f1c40f',D:'#e67e22',E:'#e74c3c'};
+  const bGrades=Object.assign({A:0,B:0,C:0,D:0,E:0},ds.bGrades||{});
+  const nGrades=Object.assign({A:0,B:0,C:0,D:0,E:0},ds.nGrades||{});
+  const bTopIssues=Object.entries(ds.bIssueMap||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const nTopIssues=Object.entries(ds.nIssueMap||{}).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const totalWarn=ds.totalWarn||0;
+  const natMap=ds.natMap||{};
+  const natFlags={'印尼':'🇮🇩','菲律賓':'🇵🇭','越南':'🇻🇳','泰國':'🇹🇭','其他':'🌐'};
+  const wtMap=ds.wtMap||{};
+  const wcTop=Object.entries(ds.wcMap||{}).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  // 近期記錄：直接從 system-dash-stats 取最近 20 筆，依時間降序排列
+  const recentRecs=[...(ds.recentRecs||[])].reverse().slice(0,12);
+  // 提供兼容舊渲染邏輯的虛擬 bRecs/nRecs（僅供計數用）
+  const bRecs={length:ds.bCount||0};
+  const nRecs={length:ds.nCount||0};
+
+  function scoreColor(s){return s>=75?'var(--green2)':s>=60?'var(--yellow2)':'var(--red2)';}
+  function buildIssueBar(arr,total,color){
+    if(!arr.length)return'<div style="text-align:center;color:var(--text3);padding:20px 0;font-size:13px">暫無問題標記資料</div>';
+    const max=arr[0][1];
+    return arr.map(([name,cnt])=>{
+      const pct=total?Math.round(cnt/total*100):0;
+      const barW=max?Math.round(cnt/max*100):0;
+      return`<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px">
+        <div style="width:120px;font-size:11.5px;color:var(--text2);flex-shrink:0;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(name)}">${esc(name)}</div>
+        <div style="flex:1;height:22px;background:rgba(255,255,255,0.05);border-radius:5px;overflow:hidden;position:relative">
+          <div style="width:${barW}%;height:100%;background:linear-gradient(90deg,${color}88,${color});border-radius:5px;transition:width .8s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:7px">
+            <span style="font-size:10px;font-weight:700;color:#fff">${cnt}</span>
+          </div>
+        </div>
+        <div style="width:34px;text-align:right;font-size:11px;color:var(--text3);flex-shrink:0">${pct}%</div>
+      </div>`;
+    }).join('');
+  }
+  function buildMiniPie(map,flags){
+    if(!Object.keys(map).length)return'<div style="text-align:center;color:var(--text3);padding:16px;font-size:13px">暫無資料</div>';
+    const total=Object.values(map).reduce((a,b)=>a+b,0);
+    const pieCols=['#3498db','#e74c3c','#2ecc71','#f39c12','#9b59b6'];
+    return`<div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center">
+      ${Object.entries(map).map(([k,v],i)=>{
+        const pct=Math.round(v/total*100);
+        return`<div style="display:flex;flex-direction:column;align-items:center;gap:4px;min-width:60px">
+          <div style="width:44px;height:44px;border-radius:50%;background:conic-gradient(${pieCols[i%5]} 0% ${pct}%,rgba(255,255,255,.06) ${pct}% 100%);display:flex;align-items:center;justify-content:center;font-size:20px;position:relative">
+            <span style="position:absolute;bottom:-2px;right:-2px;width:18px;height:18px;background:var(--card);border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:${pieCols[i%5]}">${pct}%</span>
+            ${flags?flags[k]||'🌐':''}
+          </div>
+          <span style="font-size:10px;color:var(--text2)">${esc(k)}</span>
+          <span style="font-size:11px;font-weight:700;color:var(--text)">${v}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }
+
+  el.innerHTML=`
+  <!-- KPI 行 -->
+  <div class="dash-kpi-row">
+    <div class="dash-kpi">
+      <div class="dash-kpi-icon" style="background:linear-gradient(135deg,#1a3a6e,#2471a3)"><svg class="ico ico-20"><use href="#ic-agency"/></svg></div>
+      <div class="dash-kpi-body">
+        <div class="dash-kpi-num">${ds.bCount||0}</div>
+        <div class="dash-kpi-lbl">仲介評量總數</div>
+      </div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi-icon" style="background:linear-gradient(135deg,#4a1070,#8e44ad)"><svg class="ico ico-20"><use href="#ic-person"/></svg></div>
+      <div class="dash-kpi-body">
+        <div class="dash-kpi-num">${ds.nCount||0}</div>
+        <div class="dash-kpi-lbl">看護評量總數</div>
+      </div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi-icon" style="background:linear-gradient(135deg,#6b3a00,${bAvg>=75?'#2ecc71':bAvg>=60?'#f1c40f':'#e74c3c'})"><svg class="ico ico-20"><use href="#ic-dash"/></svg></div>
+      <div class="dash-kpi-body">
+        <div class="dash-kpi-num" style="color:${scoreColor(bAvg)}">${bAvg||'—'}</div>
+        <div class="dash-kpi-lbl">仲介平均分</div>
+      </div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi-icon" style="background:linear-gradient(135deg,#1a4a3a,${nAvg>=75?'#2ecc71':nAvg>=60?'#f1c40f':'#e74c3c'})"><svg class="ico ico-20"><use href="#ic-dash"/></svg></div>
+      <div class="dash-kpi-body">
+        <div class="dash-kpi-num" style="color:${scoreColor(nAvg)}">${nAvg||'—'}</div>
+        <div class="dash-kpi-lbl">看護平均分</div>
+      </div>
+    </div>
+    <div class="dash-kpi">
+      <div class="dash-kpi-icon" style="background:linear-gradient(135deg,#6b1010,#c0392b)"><svg class="ico ico-20"><use href="#ic-warn"/></svg></div>
+      <div class="dash-kpi-body">
+        <div class="dash-kpi-num" style="color:var(--red2)">${totalWarn}</div>
+        <div class="dash-kpi-lbl">踩雷警示數</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 評等分布 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:var(--gold2)"></span>仲介評等分布</div>
+      ${buildDonut(bGrades,gcols,bRecs.length)}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center">
+        ${Object.entries(bGrades).map(([g,c])=>`
+          <div style="display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 9px;background:${gcols[g]}18;border:1px solid ${gcols[g]}44;border-radius:20px;color:${gcols[g]}">
+            <span style="font-weight:900">${g}</span>
+            <span style="color:var(--text)">${c}件</span>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:var(--purple2)"></span>看護評等分布</div>
+      ${buildDonut(nGrades,gcols,nRecs.length)}
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center">
+        ${Object.entries(nGrades).map(([g,c])=>`
+          <div style="display:flex;align-items:center;gap:5px;font-size:12px;padding:4px 9px;background:${gcols[g]}18;border:1px solid ${gcols[g]}44;border-radius:20px;color:${gcols[g]}">
+            <span style="font-weight:900">${g}</span>
+            <span style="color:var(--text)">${c}件</span>
+          </div>`).join('')}
+      </div>
+    </div>
+  </div>
+
+  <!-- 問題類型統計 -->
+  <div class="dash-section-title">選填問題類型統計</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:var(--gold2)"></span>仲介常見問題 Top 8</div>
+      ${buildIssueBar(bTopIssues,bRecs.length,'#c9a227')}
+      ${bTopIssues.length?`<div style="text-align:right;font-size:11px;color:var(--text3);margin-top:6px">統計基數：${bRecs.length} 份評量</div>`:''}
+    </div>
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:var(--purple2)"></span>看護常見問題 Top 8</div>
+      ${buildIssueBar(nTopIssues,nRecs.length,'#9b59b6')}
+      ${nTopIssues.length?`<div style="text-align:right;font-size:11px;color:var(--text3);margin-top:6px">統計基數：${nRecs.length} 份評量</div>`:''}
+    </div>
+  </div>
+
+  <!-- 看護輔助統計 -->
+  <div class="dash-section-title">看護輔助統計</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:#3498db"></span>國籍分布</div>
+      ${buildMiniPie(natMap,natFlags)}
+    </div>
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:#2ecc71"></span>工作類型</div>
+      ${buildMiniPie(wtMap,null)}
+    </div>
+    <div class="dash-panel">
+      <div class="dash-panel-hdr"><span class="dash-panel-dot" style="background:#e67e22"></span>📍 工作縣市 Top5</div>
+      ${wcTop.length?`<div style="display:flex;flex-direction:column;gap:7px">${wcTop.map(([c,n],i)=>{const mx=wcTop[0][1];return`<div style="display:flex;align-items:center;gap:8px"><span style="width:18px;height:18px;border-radius:50%;background:${['#e74c3c','#e67e22','#f1c40f','#2ecc71','#3498db'][i]};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#fff;flex-shrink:0">${i+1}</span><div style="flex:1"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span style="color:var(--text)">${esc(c)}</span><span style="color:var(--text2)">${n}件</span></div><div style="height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden"><div style="width:${Math.round(n/mx*100)}%;height:100%;background:#e67e22;border-radius:3px"></div></div></div></div>`;}).join('')}</div>`:'<div style="text-align:center;color:var(--text3);padding:20px 0;font-size:13px">暫無資料</div>'}
+    </div>
+  </div>
+
+  <!-- 近期記錄 -->
+  <div class="dash-section-title">🕐 近期評量記錄</div>
+  <div class="dash-panel" style="padding:0;overflow:hidden">
+    <div style="overflow-x:auto">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;min-width:520px">
+      <thead><tr>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:left;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">類型</th>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:left;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">日期</th>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:left;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">對象（遮罩）</th>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:left;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">問題標記</th>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:center;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">分數</th>
+        <th style="background:var(--navy2);padding:10px 12px;text-align:center;color:var(--text2);font-size:11px;border-bottom:1px solid var(--border2);letter-spacing:.5px">評等</th>
+      </tr></thead>
+      <tbody>
+        ${recentRecs.map(r=>{const g=getGrade(r.total);const isB=r.evalType==='broker';
+            const issArr=isB?(r.issues||[]):(r.nIssues||[]);
+            return`<tr style="transition:background .15s" onmouseenter="this.style.background='rgba(255,255,255,.025)'" onmouseleave="this.style.background=''">
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2)"><span class="pill ${isB?'p-gold':'p-purple'}" style="font-size:11px">${isB?'仲介':'看護'}</span></td>
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2);color:var(--text2);font-size:12px">${new Date(r.createdAt||r.ts).toLocaleDateString('zh-TW')}</td>
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2);font-family:'Noto Serif TC',serif;font-weight:700;color:${isB?'var(--gold2)':'var(--purple3)'}">${isB?(esc(r.cMask)||'未填'):(esc(r.nNameMask)||'未填')}</td>
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2)">
+                ${issArr.length?issArr.slice(0,2).map(i=>`<span style="display:inline-block;font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.28);color:#e87070;margin:1px">${esc(i)}</span>`).join('')+(issArr.length>2?`<span style="font-size:10px;color:var(--text3)"> +${issArr.length-2}</span>`:''): '<span style="color:var(--text3);font-size:11px">—</span>'}
+              </td>
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2);text-align:center;font-family:'Noto Serif TC',serif;font-size:17px;font-weight:900;color:${g.color}">${r.total}</td>
+              <td style="padding:9px 12px;border-bottom:1px solid var(--border2);text-align:center"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span></td>
+            </tr>`;}).join('')}
+      </tbody>
+    </table>
+    </div>
+  </div>`;
+}
+function buildDonut(grades,colors,total){
+  if(!total)return'<div style="text-align:center;color:var(--text3);padding:16px">暫無資料</div>';
+  let angle=-90;const r=58,cx=75,cy=75;let paths='';
+  Object.entries(grades).forEach(([g,cnt])=>{
+    if(!cnt)return;
+    const sw=cnt/total*360;
+    // Handle 100% single-slice edge case (degenerate arc)
+    if(sw>=359.99){
+      paths+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="${colors[g]}" opacity=".82"/>`;
+      angle+=sw;return;
+    }
+    const r1=angle*Math.PI/180,r2=(angle+sw)*Math.PI/180;
+    const x1=cx+r*Math.cos(r1),y1=cy+r*Math.sin(r1);
+    const x2=cx+r*Math.cos(r2),y2=cy+r*Math.sin(r2);
+    paths+=`<path d="M${cx},${cy} L${x1.toFixed(1)},${y1.toFixed(1)} A${r},${r} 0 ${sw>180?1:0} 1 ${x2.toFixed(1)},${y2.toFixed(1)} Z" fill="${colors[g]}" opacity=".82"/>`;
+    angle+=sw;
+  });
+  return`<div class="donut-wrap"><svg width="150" height="150" viewBox="0 0 150 150">${paths}<circle cx="${cx}" cy="${cy}" r="32" fill="var(--card)"/></svg><div class="donut-center"><div class="donut-num">${total}</div><div style="font-size:10px;color:var(--text3)">總計</div></div></div>`;
+}
+
+// ─── VERIFY ───
+async function verifyToken(){
+  const t=document.getElementById('verify-input')?.value?.trim();
+  const el=document.getElementById('verify-result');
+  if(!t){toast('請輸入令牌','err');return;}
+  // Validate UUID format to prevent key injection
+  if(!/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(t)){
+    el.innerHTML=`<div class="notice n-warn">❌ 令牌格式不正確，請確認是否為完整的 UUID 格式。</div>`;
+    el.classList.add('show');return;
+  }
+  el.innerHTML='<div style="text-align:center;padding:16px"><span class="loading"></span> 查驗中…</div>';
+  el.classList.add('show');
+  // Try broker first, then nurse
+  let r=await DB.get('eval-b-'+t)||await DB.get('eval-n-'+t);
+  if(!r){el.innerHTML=`<div class="notice n-warn">❌ 查無此令牌。請確認令牌正確，或該評量未成功提交。</div>`;return;}
+  const g=getGrade(r.total);
+  const isB=r.evalType==='broker';
+  el.innerHTML=`<div class="notice n-ok">✅ 令牌查驗成功！此評量已確認受理。</div>
+  <div class="rsummary">
+    <div style="font-size:11px;color:var(--text2);letter-spacing:1.5px;margin-bottom:10px">評量資訊（匿名）</div>
+    <div class="rrow"><span class="rname">評量類型</span><span class="rval"><span class="pill ${isB?'p-gold':'p-purple'}">${isB?'仲介評量':'看護評量'}</span></span></div>
+    <div class="rrow"><span class="rname">提交日期</span><span class="rval">${new Date(r.createdAt||r.ts).toLocaleDateString('zh-TW')}</span></div>
+    ${isB&&r.cMask?`<div class="rrow"><span class="rname">仲介（遮罩）</span><span class="rval" style="color:var(--gold2)">${esc(r.cMask)}</span></div>`:''}
+    ${!isB&&r.nNameMask?`<div class="rrow"><span class="rname">看護姓名（遮罩）</span><span class="rval" style="color:var(--purple3)">${esc(r.nNameMask)}</span></div>`:''}
+    ${!isB&&r.nIDMask?`<div class="rrow"><span class="rname">證件（遮罩）</span><span class="rval" style="font-family:monospace;color:var(--purple3)">${esc(r.nIDMask)}</span></div>`:''}
+    <div class="rrow"><span class="rname">加權總分</span><span class="rval" style="font-family:'Noto Serif TC',serif;font-size:18px;color:${g.color}">${r.total}</span></div>
+    <div class="rrow"><span class="rname">評等</span><span class="rval"><span class="gr g${g.letter}" style="width:26px;height:26px;font-size:12px">${g.letter}</span>&nbsp;${g.label}</span></div>
+  </div>`;
+}
+
+// ─── UTILS ───
+function copyToken(){
+  const t=document.getElementById('suc-token')?.textContent;
+  if(!t||t==='—')return;
+  navigator.clipboard?.writeText(t).then(()=>toast('令牌已複製 ✓','ok')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);toast('已複製','ok');
+  });
+}
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  if(!el)return;
+  el.textContent=msg;el.className='toast show '+type;
+  clearTimeout(el._t);el._t=setTimeout(()=>{el.className='toast';},3200);
+}
+async function loadHomeStats(){
+  // 全域統計快取（1 次讀取）+ 3 個索引陣列 = 共 4 次 DB.get
+  // 舊版：對每間仲介/看護逐一讀取 → 可能數千次讀取，已優化消除
+  const ds=await DB.get('system-dash-stats')||{};
+  const bidx=await DB.get('eval-b-idx')||[];
+  const nidx=await DB.get('eval-n-idx')||[];
+  const ai=await DB.get('agg-b-idx')||[];
+  document.getElementById('s-broker-total').textContent=bidx.length||'0';
+  document.getElementById('s-nurse-total').textContent=nidx.length||'0';
+  document.getElementById('s-agencies').textContent=ai.length||'0';
+  document.getElementById('s-warn').textContent=ds.totalWarn||'0';
+}
+async function exportData(){
+  // 註：v20 起，個別評量紀錄已不再含有原始姓名/證件/IP/UA（個資最小化），
+  // 以下 [REDACTED] 覆寫保留作為日後若擴充欄位時的安全網，目前多為防禦性寫法。
+  const bidx=await DB.get('eval-b-idx')||[];
+  const nidx=await DB.get('eval-n-idx')||[];
+  const bRecs=[],nRecs=[];
+  for(const id of bidx){const r=await DB.get('eval-b-'+id);if(r)bRecs.push({...r,cRaw:'[REDACTED]',sRaw:'[REDACTED]',_ip:'[REDACTED]',_ua:'[REDACTED]'});}
+  for(const id of nidx){const r=await DB.get('eval-n-'+id);if(r)nRecs.push({...r,nNameRaw:'[REDACTED]',nIDRaw:'[REDACTED]',_ip:'[REDACTED]',_ua:'[REDACTED]'});}
+  const blob=new Blob([JSON.stringify({exported:new Date().toISOString(),broker:{count:bRecs.length,records:bRecs},nurse:{count:nRecs.length,records:nRecs}},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`ams-export-${new Date().toISOString().slice(0,10)}.json`;a.click();
+  URL.revokeObjectURL(a.href);
+  toast(`已匯出 仲介${bRecs.length}筆 + 看護${nRecs.length}筆`,'ok');
+}
+// ⚠️ 安全性說明（務必閱讀）：
+// 本系統是純前端網頁，沒有真正具備存取控管能力的後端，任何人只要打開瀏覽器
+// 開發者工具，理論上都能直接呼叫 JS 函式或改寫儲存內容——下方的「管理密語」
+// 只能防止一般訪客誤觸「清除」按鈕，並不是真正的資安防護。若要正式對外上線，
+// 強烈建議：
+//   1）將 ADMIN_PASSCODE 改成不公開、僅管理者知道的字串（仍非絕對安全）；
+//   2）若已啟用 Firebase，務必在 Firestore 安全規則中限制刪除/覆寫權限，
+//      不要只依賴這一層前端檢查；
+//   3）理想做法是改用具備伺服器驗證的後端（例如 Firebase Cloud Functions）
+//      來處理刪除、彙總等敏感操作。
+const ADMIN_PASSCODE=''; // 例：'my-secret-2026'。留空時僅要求輸入下方確認句。
+async function confirmClear(){
+  if(ADMIN_PASSCODE){
+    const input=prompt('此操作將清除全站所有評量資料，且不可復原。\n請輸入管理密語以繼續：');
+    if(input!==ADMIN_PASSCODE){toast(input===null?'已取消':'密語不正確，已取消清除','err');return;}
+  }else{
+    const input=prompt('⚠️ 此操作將清除全站所有評量資料，且不可復原！\n請輸入「清除全部資料」以確認：');
+    if(input!=='清除全部資料'){toast(input===null?'已取消':'輸入不符，已取消清除','err');return;}
+  }
+  if(!confirm('再次確認：真的要清除全部資料嗎？此動作無法復原！'))return;
+  const bidx=await DB.get('eval-b-idx')||[];for(const id of bidx)await DB.del('eval-b-'+id);await DB.del('eval-b-idx');
+  const nidx=await DB.get('eval-n-idx')||[];for(const id of nidx)await DB.del('eval-n-'+id);await DB.del('eval-n-idx');
+  const ai=await DB.get('agg-b-idx')||[];for(const k of ai)await DB.del('agg-b-'+k);await DB.del('agg-b-idx');
+  const ni=await DB.get('agg-n-idx')||[];for(const k of ni)await DB.del('agg-n-'+k);await DB.del('agg-n-idx');
+  await DB.del('system-dash-stats');// 同步清除全域統計快取
+  toast('已清除全部資料','warn');
+  loadDash();loadHomeStats();
+}
+
+// ─── FAB ───
+let _fabOpen=false;
+function toggleFab(){
+  _fabOpen=!_fabOpen;
+  const menu=document.getElementById('fab-menu');
+  const btn=document.getElementById('fab-btn');
+  const ico=document.getElementById('fab-icon');
+  if(menu){menu.classList.toggle('open',_fabOpen);}
+  if(ico){ico.querySelector('use').setAttribute('href',_fabOpen?'#ic-x':'#ic-plus');}
+  if(btn){btn.style.transform=_fabOpen?'rotate(45deg)':'';}
+}
+function closeFab(){
+  _fabOpen=false;
+  const menu=document.getElementById('fab-menu');
+  const btn=document.getElementById('fab-btn');
+  const ico=document.getElementById('fab-icon');
+  if(menu)menu.classList.remove('open');
+  if(ico)ico.querySelector('use').setAttribute('href','#ic-plus');
+  if(btn){btn.style.transform='';}
+}
+document.addEventListener('click',e=>{
+  const fab=document.getElementById('fab-wrap');
+  if(fab&&!fab.contains(e.target)&&_fabOpen)closeFab();
+});
+
+// ─── BACK TO TOP ───
+window.addEventListener('scroll',()=>{
+  const bt=document.getElementById('back-top');
+  if(bt)bt.classList.toggle('show',window.scrollY>300);
+},{passive:true});
+
+// ─── AUTOSAVE（草稿真正落地，修正 v19 僅有徽章特效、實際未儲存任何資料的問題）───
+// 草稿僅存於使用者本機 localStorage（非 DB 共享層），內容可能包含原始姓名/證件，
+// 但僅供使用者本人之瀏覽器讀取自己填寫到一半的表單，不會同步到任何雲端或共享儲存。
+const DRAFT_KEY='ams5:_draft';
+const DRAFT_MAX_AGE=24*60*60*1000; // 草稿保留 24 小時，避免恢復過舊、易造成混淆的殘留資料
+function saveDraftNow(){
+  if(!FD||!FD.evalType)return;
+  try{localStorage.setItem(DRAFT_KEY,JSON.stringify({FD,cStep,evalType,savedAt:Date.now()}));}
+  catch(e){console.warn('[draft] 草稿儲存失敗',e);}
+}
+function clearDraft(){
+  try{localStorage.removeItem(DRAFT_KEY);}catch{}
+}
+function restoreDraftIfAny(){
+  let d=null;
+  try{d=JSON.parse(localStorage.getItem(DRAFT_KEY)||'null');}catch{}
+  if(!d||!d.FD||!d.FD.evalType)return;
+  if(Date.now()-(d.savedAt||0)>DRAFT_MAX_AGE){clearDraft();return;}
+  FD=d.FD;cStep=d.cStep||0;evalType=d.evalType;
+  toast('已為您恢復上次未完成的填寫進度','ok');
+}
+function triggerAutosave(){
+  if(!(FD&&FD.evalType))return;
+  saveDraftNow(); // 立即真正寫入草稿
+  const badge=document.getElementById('autosave-badge');
+  if(badge){
+    clearTimeout(badge._t);
+    badge._t=setTimeout(()=>{
+      badge.classList.add('show');
+      setTimeout(()=>badge.classList.remove('show'),2500);
+    },1200);
+  }
+}
+
+// ─── INIT ───
+let _appInited=false;
+function _appInit(){
+  if(_appInited)return;_appInited=true;
+  restoreDraftIfAny();
+  updateDBStatus();loadHomeStats();
+  document.addEventListener('touchstart',()=>{},{passive:true});
+}
+// Firebase 模組為 type="module"，可能比 DOMContentLoaded 稍晚 ready
+if(window._FB){_appInit();}
+else{
+  window.addEventListener('firebase-ready',_appInit,{once:true});
+  // 最多等 3 秒，超過就直接用 localStorage 啟動（不依賴 DOMContentLoaded 時序）
+  setTimeout(()=>{if(!window._FB)_appInit();},3000);
+}
+</script>
+</body>
+</html>
