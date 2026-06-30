@@ -10,8 +10,9 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>外籍幫傭補充合約製作工具 v3.3</title>
+<title>外籍幫傭補充合約製作工具 v3.4</title>
 <!-- v3.3 UX全面強化：(1)移除看護殘留欄位(pat_name/pat_age/pat_health/mobility)，改為幫傭版家庭狀況 (2)手機版隱藏sidebar、精簡步驟條 (3)工作內容、福利、條款改為可收合群組 (4)新增右側/底部合約即時摘要 (5)頂部按鈕重排，重設改低權重 (6)必填欄位紅色標籤 (7)列印設定文案友善化 (8)章節標題放大 (9)help-box精簡 -->
+<!-- v3.4 修復：(1)v3.3聲稱已移除的pat_name/pat_age/pat_health/pat_illness/pat_special/mobility欄位實際仍殘留在 gatherData()、合約預覽產生、fillSample()，導致每次產生的合約都會多印出一段「被照顧者狀況」且夾帶fillSample的看護範例假資料（與幫傭合約主題不符）。本次徹底移除這些死碼與用來壓制報錯的 ghost-field 補丁 (2)印尼語版/越南語版第一章標題原本仍寫「被照顧者資訊」，與中文版/英文版已改成的「家庭基本狀況」不一致，已統一四語言版本標題 (3)已查證外籍家庭看護工/幫傭法定最低薪資 NT$20,000 於2026年現況正確，未調整 -->
 <style>
   /* ===== DESIGN SYSTEM ===== */
   :root {
@@ -815,7 +816,7 @@
 <div class="tool-wrapper">
 
   <nav class="top-nav">
-    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v3.3</span></div>
+    <div class="brand"><span class="icon">📋</span><span>外籍幫傭補充合約製作工具 v3.4</span></div>
     <div class="nav-actions">
       <button class="btn btn-gold btn-sm" onclick="safeCall('showSection', 'sec-preview')">👁 <span>產生預覽</span></button>
       <button class="btn btn-primary btn-sm" onclick="safeCall('exportPDF')">📥 <span>匯出 PDF</span></button>
@@ -1770,12 +1771,7 @@ const TRANSLATION_REGISTRY = {
     en: "Party A shall not restrict Party B from contacting their home country's representative office, migrant worker service centers, or licensed agencies. Party B has the right to seek legal assistance.",
     id: "Pihak A tidak boleh membatasi Pihak B untuk menghubungi kantor perwakilan negara asal, pusat layanan pekerja migran, atau agensi berlisensi. Pihak B berhak mencari bantuan hukum.",
     vi: "Bên A không được hạn chế Bên B liên lạc với văn phòng đại diện nước xuất xứ, trung tâm dịch vụ lao động di cư hoặc công ty môi giới có phép. Bên B có quyền tìm kiếm tư vấn pháp lý."
-  },
-
-  // 行動能力
-  mobility_1: { zh: "具備基本生活自理能力 / Independent", en: "Independent", id: "Mandiri", vi: "Có khả năng tự phục vụ cơ bản" },
-  mobility_2: { zh: "部分行動需人力及輔具協助 / Needs Assistance", en: "Needs Assistance", id: "Butuh Bantuan", vi: "Cần nhân lực và dụng cụ hỗ trợ một phần" },
-  mobility_3: { zh: "長期臥床，需完全由他人協助 / Bedridden", en: "Bedridden", id: "Hanya di Ranjang", vi: "Nằm liệt giường lâu ngày, cần người khác hỗ trợ hoàn toàn" }
+  }
 };
 
 // ===== UI STATE =====
@@ -1871,8 +1867,7 @@ const L = {
     partyA: '雇主（甲方）', partyB: '受僱幫傭（乙方）', id: '身分證字號', phone: '聯絡電話', addr: '工作地址',
     passport: '護照號碼', nation: '受僱國籍', arc: '居留證號',
     note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充，其法律效力與正式勞動主契約具同等地位。',
-    ch1: '一、家庭基本狀況', art1: '第1條 家庭環境說明',
-    patName:'被照顧者姓名', patAge:'實歲年齡', patHealth:'健康症狀', patIll:'主要確診疾病', patMob:'行動能力判定', patSpec:'醫囑與特殊需求說明',
+    ch1: '一、家庭基本狀況', art1: '第1條 家庭環境說明', householdTitle: '家庭基本環境',
     ch2: '二、工作範圍、具體內容與執行標準', art2: '第2條 照護及核准家務項目',
     ch3: '三、薪資標準、休假機制與福利特別約定', art3: '第3條 薪資待遇與發放管道', art3b: '第4條 休息與例假保障', art3c: '第5條 甲方提供之法定福利項目',
     ch4: '四、共同生活紀律規範與違約責任', art4: '第6條 工作生活嚴格禁止事項', art4b: '第7條 違規處置與違約責任',
@@ -1887,8 +1882,7 @@ const L = {
     partyA: '雇主（甲方）/ Employer (Party A)', partyB: '受僱幫傭（乙方）/ Domestic Worker (Party B)', id: '身分證字號 / ID No.', phone: '聯絡電話 / Phone', addr: '工作地址 / Work Address',
     passport: '護照號碼 / Passport No.', nation: '受僱國籍 / Nationality', arc: '居留證號 / ARC No.',
     note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nNote: This supplementary contract is an essential addition to the main contract and holds the same legal effect.',
-    ch1: '一、家庭基本狀況 / CHAPTER I: HOUSEHOLD BASIC INFORMATION', art1: '第1條 家庭環境說明 / Article 1: Household Description',
-    patName:'被照顧者姓名 / Patient Name', patAge:'實歲年齡 / Patient Age', patHealth:'健康症狀 / Symptoms', patIll:'主要確診疾病 / Diagnosed Illness', patMob:'行動能力判定 / Mobility Level', patSpec:'醫囑與特殊需求說明 / Special Medical Instructions',
+    ch1: '一、家庭基本狀況 / CHAPTER I: HOUSEHOLD BASIC INFORMATION', art1: '第1條 家庭環境說明 / Article 1: Household Description', householdTitle: '家庭基本環境 / Household Overview',
     ch2: '二、工作範圍、具體內容與執行標準 / CHAPTER II: SCOPE OF CARE WORK & DOMESTIC DUTIES', art2: '第2條 照護及核准家務項目 / Article 2: Authorized Care Items',
     ch3: '三、薪資標準、休假機制與福利特別約定 / CHAPTER III: SALARY, LEAVE SYSTEM AND BENEFITS', art3: '第3條 薪資待遇與發放管道 / Article 3: Salary Terms', art3b: '第4條 休息與例假保障 / Article 4: Rest and Weekly Holidays', art3c: '第5條 甲方提供之法定福利項目 / Article 5: Benefits Provided by Party A',
     ch4: '四、共同生活紀律規範與違約責任 / CHAPTER IV: LIVE-IN DISCIPLINE AND BREACH OF TERMS', art4: '第6條 工作生活嚴格禁止事項 / Article 6: Strict Prohibitions', art4b: '第7條 違規處置與違約責任 / Article 7: Handling of Violations',
@@ -1903,8 +1897,7 @@ const L = {
     partyA: '雇主（甲方）/ Majikan (Pihak A)', partyB: '受僱幫傭（乙方）/ Asisten Rumah Tangga (Pihak B)', id: '身分證字號 / No. KTP', phone: '聯絡電話 / No. Telepon', addr: '工作地址 / Alamat Bekerja',
     passport: '護照號碼 / No. Paspor', nation: '受僱國籍 / Kewarganegaraan', arc: '居留證號 / No. ARC',
     note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nKeterangan: Kontrak tambahan ini merupakan perpanjangan penting dari kontrak kerja utama dan memiliki kekuatan hukum yang sama.',
-    ch1: '一、被照顧者資訊 / BAB I: INFORMASI PASIEN & KONDISI KESEHATAN', art1: '第1條 被照顧者現況 / Pasal 1: Kondisi Pasien Saat Ini',
-    patName:'被照顧者姓名 / Nama Pasien', patAge:'實歲年齡 / Usia Pasien', patHealth:'健康症狀 / Kondisi Kesehatan', patIll:'主要確診疾病 / Penyakit Utama', patMob:'行動能力判定 / Kemampuan Bergerak', patSpec:'醫囑與特殊需求說明 / Kebutuhan Khusus',
+    ch1: '一、家庭基本狀況 / BAB I: INFORMASI DASAR RUMAH TANGGA', art1: '第1條 家庭環境說明 / Pasal 1: Keterangan Lingkungan Keluarga', householdTitle: '家庭基本環境 / Gambaran Umum Rumah Tangga',
     ch2: '二、工作內容 / BAB II: CAKUPAN PEKERJAAN PERAWATAN & RUMAH TANGGA', art2: '第2條 照護及核准家務項目 / Pasal 2: Item Pekerjaan Perawatan',
     ch3: '三、薪資、休假與福利 / BAB III: KETENTUAN GAJI, HARI LIBUR DAN TUNJANGAN', art3: '第3條 薪資待遇與發放管道 / Pasal 3: Gaji dan Metode Pembayaran', art3b: '第4條 休息與例假保障 / Pasal 4: Jaminan Istirahat dan Hari Libur', art3c: '第5條 甲方提供之法定福利項目 / Pasal 5: Tunjangan Terjamin Pihak A',
     ch4: '四、紀律規範 / BAB IV: PERATURAN DISIPLIN DAN TANGGUNG JAWAB PELANGGARAN', art4: '第6條 工作生活嚴格禁止事項 / Pasal 6: Hal-hal yang Sangat Dilarang', art4b: '第7條 違規處置與違約責任 / Pasal 7: Penanganan Pelanggaran',
@@ -1919,8 +1912,7 @@ const L = {
     partyA: '雇主（甲方）/ Chủ lao động (Bên A)', partyB: '受僱幫傭（乙方）/ Người giúp việc (Bên B)', id: '身分證字號 / Số CCCD/CMND', phone: '聯絡電話 / Số điện thoại', addr: '工作地址 / Địa chỉ làm việc',
     passport: '護照號碼 / Số hộ chiếu', nation: '受僱國籍 / Quốc tịch', arc: '居留證號 / Số thẻ cư trú (ARC)',
     note: '聲明：本補充契約書為勞動聘僱主契約之重要延伸補充。\nLưu ý: Hợp đồng bổ sung này là phần bổ sung quan trọng của hợp đồng lao động chính và có giá trị pháp lý tương đương.',
-    ch1: '一、被照顧者資訊 / CHƯƠNG I: THÔNG TIN VÀ TÌNH TRẠNG SỨC KHỎE NGƯỜI ĐƯỢC CHĂM SÓC', art1: '第1條 被照顧者現況 / Điều 1: Tình trạng thực tế của người được chăm sóc',
-    patName:'被照顧者姓名 / Họ tên người bệnh', patAge:'實歲年齡 / Tuổi thực tế', patHealth:'健康症狀 / Tình trạng sức khỏe', patIll:'主要確診疾病 / Bệnh lý chính', patMob:'行動能力判定 / Khả năng vận động', patSpec:'醫囑與特殊需求說明 / Hướng dẫn y tế đặc biệt',
+    ch1: '一、家庭基本狀況 / CHƯƠNG I: THÔNG TIN CƠ BẢN VỀ GIA ĐÌNH', art1: '第1條 家庭環境說明 / Điều 1: Mô tả môi trường gia đình', householdTitle: '家庭基本環境 / Tổng quan về gia đình',
     ch2: '二、工作內容 / CHƯƠNG II: PHẠM VI CÔNG VIỆC CHĂM SÓC & VIỆC NHÀ', art2: '第2條 照護及核准家務項目 / Điều 2: Các hạng mục công việc được phê duyệt',
     ch3: '三、薪資、休假與福利 / CHƯƠNG III: QUY ĐỊNH VỀ LƯƠNG, NGÀY NGHỈ VÀ PHÚC LỢI', art3: '第3條 薪資待遇與發放管道 / Điều 3: Mức lương và phương thức phát lương', art3b: '第4條 休息與例假保障 / Điều 4: Chế độ nghỉ ngơi và ngày nghỉ lễ', art3c: '第5條 甲方提供之法定福利項目 / Điều 5: Các hạng mục phúc lợi do Bên A cung cấp',
     ch4: '四、紀律規範 / CHƯƠNG IV: QUY ĐỊNH KỶ LUẬT VÀ TRÁCH NHIỆM VI PHẠM HỢP ĐỒNG', art4: '第6條 工作生活嚴格禁止事項 / Điều 6: Các điều khoản nghiêm cấm', art4b: '第7條 違規處置與違約責任 / Điều 7: Xử lý vi phạm và trách nhiệm',
@@ -2041,17 +2033,6 @@ function _doGeneratePreview(previewEl) {
   <div class="c-section-bar">${t.ch1}</div>
   <div class="c-article">
     <div class="c-article-num">${t.art1}</div>
-    <ul class="c-list">
-      <li><strong>${t.patName}：</strong>${fld(esc(d.pat_name), 160)} &nbsp;&nbsp; <strong>${t.patAge}：</strong>${fld(esc(d.pat_age), 60)}</li>
-      <li><strong>${t.patHealth}：</strong>${fld(esc(d.pat_health), 400)}</li>
-      <li><strong>${t.patIll}：</strong>${fld(esc(d.pat_illness), 400)}</li>
-      <li><strong>${t.patMob}：</strong><br>${d.mobility ? renderItemText(d.mobility, currentLang) : '<span class="c-zh" style="color:#aaa;">（未選擇 / Not specified）</span>'}</li>
-      ${d.pat_special ? `<li><strong>${t.patSpec}：</strong><br><span style="color:#222; font-weight:bold;">${esc(d.pat_special)}</span></li>` : ''}
-    </ul>
-  </div>
-
-  <div class="c-article">
-    <div class="c-article-num" style="color:var(--text-mid);">家庭基本環境 / Household Overview</div>
     <ul class="c-list">
       ${d.hh_members ? `<li>家庭成員人數：<strong>${esc(d.hh_members)} 人</strong></li>` : ''}
       ${d.hh_type ? `<li>住宅型態：<strong>${esc(hhTypeLabels[d.hh_type] || d.hh_type)}</strong>　住宅坪數：<strong>${esc(d.hh_size)}</strong></li>` : ''}
@@ -2256,10 +2237,6 @@ function gatherData() {
     hh_members: v('hh_members'), hh_type: v('hh_type'), hh_size: v('hh_size'),
     hh_baby: v('hh_baby'), hh_elderly: v('hh_elderly'), hh_pet: v('hh_pet'),
     hh_special: v('hh_special'),
-    // original fields
-    pat_name: v('pat_name'), pat_age: v('pat_age'), pat_health: v('pat_health'),
-    pat_illness: v('pat_illness'), pat_special: v('pat_special'),
-    mobility: radio('mobility'),
     duties: checks('duty'), duties_extra: v('duties_extra'),
     salary: v('salary'), pay_day: v('pay_day'), pay_method: v('pay_method'),
     days_off: v('days_off'), rest_hours: v('rest_hours'), overtime: v('overtime'),
@@ -2521,12 +2498,6 @@ function fillSample() {
   const end = new Date(); end.setFullYear(end.getFullYear() + 3);
   document.getElementById('end_date').value = end.toISOString().slice(0,10);
   
-  document.getElementById('pat_name').value = '王林阿嬤';
-  document.getElementById('pat_age').value = '85';
-  document.getElementById('pat_health').value = '中風後半癱、輕度認知障礙、需定時拍背';
-  document.getElementById('pat_illness').value = '缺血性腦中風、高血壓';
-  document.getElementById('pat_special').value = '有留置鼻胃管，每日灌食4次。注意防範下床跌倒。';
-  
   document.getElementById('salary').value = '20000';
   document.getElementById('rest_hours').value = '8';
   document.getElementById('pay_day').value = '每月5日 / Every 5th';
@@ -2567,10 +2538,8 @@ function clearAll() {
     document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
     // Uncheck all checkboxes
     document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false);
-    // Uncheck all radios, then restore default mobility
+    // Uncheck all radios
     document.querySelectorAll('input[type=radio]').forEach(el => el.checked = false);
-    const defaultMobility = document.querySelector('input[name="mobility"][value="mobility_3"]');
-    if (defaultMobility) defaultMobility.checked = true;
     // Remove checked visual state
     document.querySelectorAll('.checkbox-label').forEach(lbl => lbl.classList.remove('checked'));
     // Reset salary warning and date warning
@@ -2740,29 +2709,6 @@ function closeSummaryModal() {
   const overlay = document.getElementById('summary-modal-overlay');
   if (overlay) overlay.classList.remove('open');
 }
-
-// ===== v3.3: FIX pat_name GHOST FIELDS =====
-// Add hidden input placeholders so fillSample doesn't throw errors
-(function() {
-  const ghostFields = ['pat_name','pat_age','pat_health','pat_illness','pat_special'];
-  ghostFields.forEach(function(id) {
-    if (!document.getElementById(id)) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.id = id;
-      input.value = '';
-      document.body.appendChild(input);
-    }
-  });
-  // Also add hidden mobility radio placeholder
-  if (!document.querySelector('input[name="mobility"]')) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'mobility';
-    input.value = '';
-    document.body.appendChild(input);
-  }
-})();
 
 function resetForm() { clearAll(); }
 
