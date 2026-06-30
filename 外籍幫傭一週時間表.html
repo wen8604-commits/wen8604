@@ -175,6 +175,43 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 .wh-stat.wh-over .wh-stat-num{color:var(--danger);}
 #wh-bar-icon{font-size:18px;}
 
+/* ── WEEKLY STATS PANEL ── */
+#weekly-stats-panel{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:16px;overflow:hidden;transition:box-shadow .2s;}
+#weekly-stats-panel:hover{box-shadow:0 2px 12px rgba(0,0,0,.06);}
+.wsp-head{padding:11px 16px;background:linear-gradient(135deg,#1d4ed8,#0891b2);color:#fff;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;}
+.wsp-head-left{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;}
+.wsp-head-right{display:flex;align-items:center;gap:8px;}
+.wsp-toggle-icon{font-size:15px;opacity:.8;transition:transform .25s;}
+.wsp-head.collapsed .wsp-toggle-icon{transform:rotate(-90deg);}
+.wsp-body{padding:0;display:block;}
+.wsp-body.hidden{display:none;}
+.wsp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.wsp-table th{background:#1e40af;color:#fff;padding:7px 10px;text-align:left;font-weight:700;font-size:11px;white-space:nowrap;}
+.wsp-table th.num{text-align:right;}
+.wsp-table td{border-bottom:1px solid var(--border);padding:7px 10px;vertical-align:middle;}
+.wsp-table td.num{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;}
+.wsp-table tr:last-child td{border-bottom:none;}
+.wsp-table tr:nth-child(even) td{background:#f8fafc;}
+.wsp-table tr:hover td{background:#f0f4ff;}
+.wsp-slot-name{font-weight:600;color:#1e293b;}
+.wsp-slot-en{font-size:10px;color:#9ca3af;display:block;line-height:1.2;}
+.wsp-time{font-size:11px;color:#6b7280;font-variant-numeric:tabular-nums;}
+.wsp-days-badge{display:inline-flex;flex-wrap:wrap;gap:2px;}
+.wsp-day-pip{background:#dbeafe;color:#1d4ed8;border-radius:3px;padding:1px 5px;font-size:10px;font-weight:700;}
+.wsp-day-pip.all{background:#d1fae5;color:#065f46;}
+.wsp-mins{color:#1d4ed8;}
+.wsp-week-total{color:#059669;font-size:13px;}
+.wsp-footer{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;padding:12px 16px;background:#f8fafc;border-top:1px solid var(--border);}
+.wsp-footer-stat{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:9px 12px;text-align:center;}
+.wsp-footer-stat-num{font-size:17px;font-weight:900;}
+.wsp-footer-stat-label{font-size:10px;color:var(--muted);margin-top:1px;}
+.wsp-empty{padding:20px;text-align:center;color:var(--muted);font-size:12.5px;}
+@media(max-width:639px){
+  .wsp-table{font-size:11px;}
+  .wsp-table th,.wsp-table td{padding:5px 7px;}
+  .wsp-footer{grid-template-columns:repeat(2,1fr);}
+}
+
 /* ── OVERLAP WARNING BADGE ── */
 .overlap-badge{display:none;align-items:center;gap:5px;background:#fef3c7;border:1.5px solid #fde68a;color:#92400e;border-radius:8px;padding:4px 10px;font-size:11.5px;font-weight:600;}
 .overlap-badge.visible{display:flex;}
@@ -505,7 +542,7 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
 <div class="topbar">
   <div style="min-width:0;flex:1;">
     <div class="topbar-brand">📅 外籍幫傭一週工作時間表</div>
-    <div class="topbar-sub">v21</div>
+    <div class="topbar-sub">v24</div>
   </div>
   <div class="topbar-right">
     <button class="tlbtn" onclick="window.print()" style="background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px;">
@@ -762,6 +799,20 @@ body{font-family:'Noto Sans TC','Noto Sans',sans-serif;background:var(--bg);colo
     <div class="overlap-badge" id="overlap-badge">
       ⚠️ <span id="overlap-count">0</span> 組時段重疊
       <button onclick="scrollToFirstOverlap()" style="background:transparent;border:none;color:#d97706;font-size:11px;cursor:pointer;padding:0 4px;font-family:inherit;font-weight:700;">查看 ›</button>
+    </div>
+  </div>
+
+  <!-- ── 每週時段統計面板 ── -->
+  <div id="weekly-stats-panel">
+    <div class="wsp-head collapsed" id="wsp-head" onclick="toggleWspPanel()">
+      <div class="wsp-head-left">📊 每週時段統計 <span style="font-size:11px;font-weight:400;opacity:.8;">Weekly Slot Summary</span></div>
+      <div class="wsp-head-right">
+        <span id="wsp-badge" style="background:rgba(255,255,255,.2);border-radius:12px;padding:2px 9px;font-size:11px;font-weight:600;"></span>
+        <span class="wsp-toggle-icon">▾</span>
+      </div>
+    </div>
+    <div class="wsp-body hidden" id="wsp-body">
+      <div id="wsp-content"><div class="wsp-empty">尚未啟用任何時段</div></div>
     </div>
   </div>
 
@@ -2058,7 +2109,7 @@ function toggleSigPanel(cb) {
 function updateSigLabelInputs(count) {
   const wrap = document.getElementById('sig-label-inputs');
   if (!wrap) return;
-  const defaults = ['幫傭簽名','雇主確認','監督人員','見證人'];
+  const defaults = ['幫傭簽名','家屬確認','監督人員','見證人'];
   let html = '';
   for (let i = 1; i <= count; i++) {
     const existing = document.getElementById('sig-label-' + i);
@@ -2278,7 +2329,15 @@ function toggleRow(cb, sec) {
 let whTimer = null;
 function scheduleWorkHoursUpdate() {
   clearTimeout(whTimer);
-  whTimer = setTimeout(updateWorkHours, 300);
+  whTimer = setTimeout(() => {
+    updateWorkHours();
+    if (!wspCollapsed) updateWeeklyStats();
+    const badge = document.getElementById('wsp-badge');
+    if (badge) {
+      const activeCount = BUILT_IN_SLOTS_ALL.filter(k => getSecEnabled(k)).length + getCustomSlots().length;
+      badge.textContent = activeCount > 0 ? activeCount + ' 個時段' : '尚未設定';
+    }
+  }, 300);
 }
 
 function calcSlotMins(secId) {
@@ -2299,9 +2358,21 @@ function fmtHM(mins) {
 }
 
 function updateWorkHours() {
+  const activeDayVals = getChipVals('cfg-days').map(String);
+  const totalConfigDays = activeDayVals.length || 0;
   const activeSlots = BUILT_IN_SLOTS_ALL.filter(k => getSecEnabled(k) && !lockedSlots.has(k));
   let totalMins = 0;
-  activeSlots.forEach(k => { totalMins += calcSlotMins(k); });
+  let weekMinsAccurate = 0;
+  activeSlots.forEach(k => {
+    const m = calcSlotMins(k);
+    totalMins += m;
+    // Account for per-slot day restrictions
+    const slotDays = slotDayRestrictions[k] || [];
+    const effDays = slotDays.length === 0
+      ? totalConfigDays
+      : activeDayVals.filter(d => slotDays.includes(d)).length;
+    weekMinsAccurate += m * effDays;
+  });
   // Also count custom slots
   getCustomSlots().forEach(cs => {
     if (cs.s && cs.e) {
@@ -2309,12 +2380,17 @@ function updateWorkHours() {
       const [eh,em] = cs.e.split(':').map(Number);
       let m = (eh*60+em)-(sh*60+sm);
       if (m < 0) m += 1440;
-      totalMins += Math.max(0,m);
+      m = Math.max(0, m);
+      totalMins += m;
+      const slotDays = (cs.days && cs.days.length > 0) ? cs.days.map(String) : null;
+      const effDays = slotDays
+        ? activeDayVals.filter(d => slotDays.includes(d)).length
+        : totalConfigDays;
+      weekMinsAccurate += m * effDays;
     }
   });
 
-  const workDays = getChipVals('cfg-days').length || 6;
-  const weekMins = totalMins * workDays;
+  const weekMins = weekMinsAccurate;
   const restMins = Math.max(0, 1440 - totalMins);
 
   const totalEl = document.getElementById('wh-total-num');
@@ -2341,6 +2417,189 @@ function updateWorkHours() {
     else if (totalMins > 0) restStat.classList.add('wh-ok');
   }
   if (barIcon) barIcon.textContent = totalMins > 720 ? '⚠️' : '⏱️';
+}
+
+/* ══ WEEKLY STATS PANEL ══ */
+const WSP_SLOT_INFO = [
+  { key:'s-morning',      zh:'晨間整理',     en:'Morning Tidy',      cat:'home' },
+  { key:'s-breakfast',    zh:'早餐',          en:'Breakfast',          cat:'home' },
+  { key:'s-med-am',       zh:'早間家務',      en:'AM Chores',          cat:'home' },
+  { key:'s-vital-am',     zh:'上午打掃',      en:'AM Cleaning',        cat:'home' },
+  { key:'s-morning-act',  zh:'上午活動',      en:'Morning Activity',   cat:'care' },
+  { key:'s-rehab',        zh:'幼兒照護',      en:'Child Care',         cat:'care' },
+  { key:'s-walk',         zh:'戶外散步',      en:'Outdoor Walk',       cat:'care' },
+  { key:'s-hospital',     zh:'外出辦事',      en:'Errands',            cat:'care' },
+  { key:'s-lunch',        zh:'午餐',          en:'Lunch',              cat:'home' },
+  { key:'s-med-noon',     zh:'午間家務',      en:'Midday Chores',      cat:'home' },
+  { key:'s-nap',          zh:'午休整理',      en:'Midday Tidy',        cat:'home' },
+  { key:'s-vital-pm',     zh:'下午採買',      en:'PM Shopping',        cat:'home' },
+  { key:'s-afternoon-act',zh:'下午活動',      en:'Afternoon Activity', cat:'care' },
+  { key:'s-dinner',       zh:'晚餐',          en:'Dinner',             cat:'home' },
+  { key:'s-med-pm',       zh:'晚間家務',      en:'Evening Chores',     cat:'home' },
+  { key:'s-evening',      zh:'晚間活動',      en:'Evening Activity',   cat:'care' },
+  { key:'s-bedtime',      zh:'就寢整理',      en:'Bedtime Tidy',       cat:'home' },
+  { key:'s-night',        zh:'夜間待命',      en:'Night Standby',      cat:'home' },
+  { key:'s-clean-morning',zh:'早班打掃',      en:'Morning Clean',      cat:'clean' },
+  { key:'s-clean-noon',   zh:'午班打掃',      en:'Noon Clean',         cat:'clean' },
+  { key:'s-clean-evening',zh:'晚班打掃',      en:'Evening Clean',      cat:'clean' },
+  { key:'s-clean-weekly', zh:'週間大掃除',    en:'Weekly Deep Clean',  cat:'clean' },
+  { key:'s-tv',           zh:'看電視',        en:'TV',                 cat:'leisure' },
+  { key:'s-music',        zh:'聽音樂',        en:'Music',              cat:'leisure' },
+  { key:'s-reading',      zh:'閱讀/報紙',     en:'Reading',            cat:'leisure' },
+  { key:'s-craft',        zh:'手工藝/益智',   en:'Craft',              cat:'leisure' },
+  { key:'s-social',       zh:'家人/社交互動', en:'Social',             cat:'leisure' },
+];
+const CAT_COLORS = {
+  home:    { bg:'#dbeafe', fg:'#1d4ed8', dot:'#2563eb' },
+  care:    { bg:'#d1fae5', fg:'#065f46', dot:'#059669' },
+  clean:   { bg:'#fef3c7', fg:'#92400e', dot:'#d97706' },
+  leisure: { bg:'#f3e8ff', fg:'#6b21a8', dot:'#7c3aed' },
+  custom:  { bg:'#fce7f3', fg:'#9d174d', dot:'#be185d' },
+};
+const CAT_LABEL = { home:'家務', care:'照護/外出', clean:'打掃', leisure:'休閒陪伴', custom:'自訂時段' };
+const DAY_NAMES  = { '0':'日','1':'一','2':'二','3':'三','4':'四','5':'五','6':'六' };
+
+function updateWeeklyStats() {
+  const content = document.getElementById('wsp-content');
+  const badge   = document.getElementById('wsp-badge');
+  if (!content) return;
+
+  const activeDayVals = getChipVals('cfg-days').map(String);  // e.g. ['1','2','3','4','5','6']
+  const totalConfigDays = activeDayVals.length || 0;
+
+  // Collect active built-in slots
+  const rows = [];
+  WSP_SLOT_INFO.forEach(si => {
+    if (!getSecEnabled(si.key)) return;
+    const slotDays = slotDayRestrictions[si.key] || [];    // [] = every configured day
+    const effDays = slotDays.length === 0
+      ? activeDayVals
+      : activeDayVals.filter(d => slotDays.includes(d));
+    const mins = calcSlotMins(si.key);
+    rows.push({ ...si, effDays, mins, weekMins: mins * effDays.length, isCustom: false });
+  });
+
+  // Collect custom slots
+  getCustomSlots().forEach(cs => {
+    if (!cs.name) return;
+    const slotDays = (cs.days && cs.days.length > 0) ? cs.days.map(String) : null;
+    const effDays = slotDays
+      ? activeDayVals.filter(d => slotDays.includes(d))
+      : activeDayVals;
+    let mins = 0;
+    if (cs.s && cs.e) {
+      const [sh,sm] = cs.s.split(':').map(Number);
+      const [eh,em] = cs.e.split(':').map(Number);
+      let m = (eh*60+em)-(sh*60+sm);
+      if (m < 0) m += 1440;
+      mins = Math.max(0, m);
+    }
+    rows.push({ key:'custom', zh:cs.name, en:'', cat:'custom',
+      effDays, mins, weekMins: mins * effDays.length,
+      timeStr: (cs.s && cs.e) ? cs.s + '–' + cs.e : '',
+      isCustom: true });
+  });
+
+  if (badge) badge.textContent = rows.length > 0 ? rows.length + ' 個時段' : '尚未設定';
+
+  if (rows.length === 0) {
+    content.innerHTML = '<div class="wsp-empty">尚未啟用任何時段，請在下方開啟需要的工作項目</div>';
+    return;
+  }
+
+  // Group by category
+  const catOrder = ['home','care','clean','leisure','custom'];
+  const grouped = {};
+  catOrder.forEach(c => { grouped[c] = []; });
+  rows.forEach(r => {
+    if (!grouped[r.cat]) grouped[r.cat] = [];
+    grouped[r.cat].push(r);
+  });
+
+  // Grand totals
+  let grandWeekMins = 0;
+  rows.forEach(r => { grandWeekMins += r.weekMins; });
+
+  function fmtM(m) {
+    if (m <= 0) return '—';
+    const h = Math.floor(m/60), rm = m%60;
+    return h > 0 ? (rm > 0 ? `${h}h ${rm}m` : `${h}h`) : `${rm}m`;
+  }
+  function dayBadges(effDays) {
+    if (effDays.length === 0) return '<span style="font-size:10px;color:#9ca3af;">無</span>';
+    if (totalConfigDays > 0 && effDays.length === totalConfigDays)
+      return '<span class="wsp-day-pip all">全' + totalConfigDays + '天</span>';
+    return effDays.map(d => `<span class="wsp-day-pip">週${DAY_NAMES[d]||d}</span>`).join('');
+  }
+
+  let html = `<table class="wsp-table">
+    <thead><tr>
+      <th>時段</th><th>時間段</th><th class="num">每次</th><th>執行日</th><th class="num">週累計</th>
+    </tr></thead><tbody>`;
+
+  catOrder.forEach(cat => {
+    const g = grouped[cat];
+    if (g.length === 0) return;
+    const cc = CAT_COLORS[cat];
+    // Category sub-header row
+    const catWeekMins = g.reduce((s,r) => s+r.weekMins, 0);
+    html += `<tr><td colspan="5" style="background:${cc.bg};padding:5px 10px;">
+      <span style="font-size:11px;font-weight:700;color:${cc.fg};">
+        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${cc.dot};margin-right:4px;vertical-align:middle;"></span>
+        ${CAT_LABEL[cat]} · ${g.length}個時段 · 週計 ${fmtM(catWeekMins)}
+      </span></td></tr>`;
+    g.forEach(r => {
+      const timeStr = r.timeStr || getTimeRange(r.key);
+      html += `<tr>
+        <td><span class="wsp-slot-name">${r.zh}${r.isCustom ? ' ★' : ''}</span>${r.en ? `<span class="wsp-slot-en">${r.en}</span>` : ''}</td>
+        <td><span class="wsp-time">${timeStr || '—'}</span></td>
+        <td class="num wsp-mins">${fmtM(r.mins)}</td>
+        <td><div class="wsp-days-badge">${dayBadges(r.effDays)}</div></td>
+        <td class="num wsp-week-total">${fmtM(r.weekMins)}</td>
+      </tr>`;
+    });
+  });
+
+  html += `</tbody></table>`;
+
+  // Footer summary
+  const catTotals = catOrder.filter(c => grouped[c].length > 0).map(c => {
+    const cc = CAT_COLORS[c];
+    const wm = grouped[c].reduce((s,r) => s+r.weekMins, 0);
+    return `<div class="wsp-footer-stat">
+      <div class="wsp-footer-stat-num" style="color:${cc.dot};">${fmtM(wm)}</div>
+      <div class="wsp-footer-stat-label">${CAT_LABEL[c]}</div>
+    </div>`;
+  }).join('');
+
+  html += `<div class="wsp-footer">
+    <div class="wsp-footer-stat">
+      <div class="wsp-footer-stat-num" style="color:#1d4ed8;">${fmtM(grandWeekMins)}</div>
+      <div class="wsp-footer-stat-label">週總工時</div>
+    </div>
+    <div class="wsp-footer-stat">
+      <div class="wsp-footer-stat-num" style="color:#059669;">${totalConfigDays} 天</div>
+      <div class="wsp-footer-stat-label">工作天數</div>
+    </div>
+    <div class="wsp-footer-stat">
+      <div class="wsp-footer-stat-num" style="color:#7c3aed;">${rows.length}</div>
+      <div class="wsp-footer-stat-label">總時段數</div>
+    </div>
+    ${catTotals}
+  </div>`;
+
+  content.innerHTML = html;
+}
+
+let wspCollapsed = true;
+function toggleWspPanel() {
+  const body = document.getElementById('wsp-body');
+  const head = document.getElementById('wsp-head');
+  if (!body || !head) return;
+  wspCollapsed = !wspCollapsed;
+  body.classList.toggle('hidden', wspCollapsed);
+  head.classList.toggle('collapsed', wspCollapsed);
+  if (!wspCollapsed) updateWeeklyStats();
 }
 
 /* ══ FEATURE 2: 時段重疊檢查 ══ */
@@ -2416,9 +2675,9 @@ function runOverlapCheck() {
       's-hospital':'外出辦事','s-vital-am':'上午打掃','s-lunch':'午餐',
       's-med-noon':'午間家務','s-nap':'午休整理','s-vital-pm':'下午採買',
       's-afternoon-act':'下午活動','s-dinner':'晚餐','s-med-pm':'晚間家務',
-      's-evening':'晚間活動','s-bedtime':'就寢整理','s-night':'夜間留守',
-      's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
-      's-craft':'手工藝','s-social':'家人互動',
+      's-evening':'晚間活動','s-bedtime':'就寢整理','s-night':'夜間待命',
+      's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
+      's-craft':'手工藝/益智','s-social':'家人/社交互動',
       's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
       's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
     };
@@ -2805,7 +3064,7 @@ function buildWorkHoursStats() {
     '戶外散步':'Outdoor Walk','外出辦事':'Errands','午餐':'Lunch',
     '午間家務':'Afternoon Chores','午休整理':'Midday Tidy','下午採買':'PM Shopping',
     '下午活動':'Afternoon Activity','晚餐':'Dinner','晚間家務':'Evening Chores',
-    '晚間活動':'Evening Activity','就寢整理':'Bedtime Tidy','夜間留守':'Night Standby',
+    '晚間活動':'Evening Activity','就寢整理':'Bedtime Tidy','夜間待命':'Night Standby',
     '早班打掃':'Morning Clean','午班打掃':'Noon Clean','晚班打掃':'Evening Clean',
     '週間大掃除':'Weekly Deep Clean','看電視':'TV Viewing','聽音樂':'Music',
     '閱讀/報紙':'Reading','手工藝/益智':'Craft','家人/社交互動':'Social',
@@ -2828,7 +3087,7 @@ function buildWorkHoursStats() {
     { key:'s-med-pm', label:'晚間家務' },
     { key:'s-evening', label:'晚間活動' },
     { key:'s-bedtime', label:'就寢整理' },
-    { key:'s-night', label:'夜間留守' },
+    { key:'s-night', label:'夜間待命' },
     { key:'s-clean-morning', label:'早班打掃', cat:'clean' },
     { key:'s-clean-noon', label:'午班打掃', cat:'clean' },
     { key:'s-clean-evening', label:'晚班打掃', cat:'clean' },
@@ -3365,7 +3624,7 @@ function buildScheduleHTML() {
     { key:'s-med-pm',       zh:'晚間家務',   desc:'洗衣、晾衣、掃地',                 tasks:getSlotTasks('s-med-pm'),       subKey:'med_pm',       days:getSlotDays('s-med-pm') },
     { key:'s-evening',      zh:'晚間活動',   desc:'收衣、摺衣、整理家居',                  tasks:getSlotTasks('s-evening'),      subKey:'evening',      days:getSlotDays('s-evening') },
     { key:'s-bedtime',      zh:'就寢整理',   desc:'關燈、鎖門、安置就寢',              tasks:getSlotTasks('s-bedtime'),      subKey:'bedtime',      days:getSlotDays('s-bedtime') },
-    { key:'s-night',        zh:'夜間留守',   desc:'環境安全確認、緊急待命',                  tasks:getSlotTasks('s-night'),        subKey:'night',        days:getSlotDays('s-night') },
+    { key:'s-night',        zh:'夜間待命',   desc:'環境安全確認、緊急待命',                  tasks:getSlotTasks('s-night'),        subKey:'night',        days:getSlotDays('s-night') },
   ];
 
   // Cleaning slots
@@ -3578,7 +3837,7 @@ function buildScheduleHTML() {
     { key:'s-nap', label:'午休整理', cat:'care' }, { key:'s-vital-pm', label:'下午採買', cat:'care' },
     { key:'s-afternoon-act', label:'下午活動', cat:'care' }, { key:'s-dinner', label:'晚餐', cat:'care' },
     { key:'s-med-pm', label:'晚間家務', cat:'care' }, { key:'s-evening', label:'晚間活動', cat:'care' },
-    { key:'s-bedtime', label:'就寢整理', cat:'care' }, { key:'s-night', label:'夜間留守', cat:'care' },
+    { key:'s-bedtime', label:'就寢整理', cat:'care' }, { key:'s-night', label:'夜間待命', cat:'care' },
     { key:'s-clean-morning', label:'🧹 早班打掃', cat:'clean' }, { key:'s-clean-noon', label:'🧹 午班打掃', cat:'clean' },
     { key:'s-clean-evening', label:'🧹 晚班打掃', cat:'clean' }, { key:'s-clean-weekly', label:'🧹 週間大掃除', cat:'clean' },
     { key:'s-tv', label:'看電視', cat:'leisure' }, { key:'s-music', label:'聽音樂', cat:'leisure' },
@@ -3775,7 +4034,7 @@ ${statsHtml}
 
 ${buildDCReportHTML()}
 
-<!-- v22 | 2025 | schedule wizard -->
+<!-- v24 | 2025 | schedule wizard -->
 </body>
 </html>`;
 }
@@ -4537,7 +4796,10 @@ let previewTimer = null;
 
 function schedulePreviewUpdate() {
   clearTimeout(previewTimer);
-  previewTimer = setTimeout(updateLivePreview, 350);
+  previewTimer = setTimeout(() => {
+    updateLivePreview();
+    if (!wspCollapsed) updateWeeklyStats();
+  }, 350);
 }
 
 function updateLivePreview() {
@@ -4563,9 +4825,9 @@ function updateLivePreview() {
     's-lunch':'午餐','s-med-noon':'午間家務','s-nap':'午休整理',
     's-vital-pm':'下午採買','s-afternoon-act':'下午活動',
     's-dinner':'晚餐','s-med-pm':'晚間家務','s-evening':'晚間活動',
-    's-bedtime':'就寢整理','s-night':'夜間留守',
-    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀',
-    's-craft':'手工藝','s-social':'家人互動',
+    's-bedtime':'就寢整理','s-night':'夜間待命',
+    's-tv':'看電視','s-music':'聽音樂','s-reading':'閱讀/報紙',
+    's-craft':'手工藝/益智','s-social':'家人/社交互動',
     's-clean-morning':'早班打掃','s-clean-noon':'午班打掃',
     's-clean-evening':'晚班打掃','s-clean-weekly':'週間大掃除'
   };
@@ -4664,6 +4926,9 @@ document.addEventListener('DOMContentLoaded', () => {
   schedulePreviewUpdate();
   scheduleWorkHoursUpdate();
   scheduleOverlapCheck();
+  // Init weekly stats badge
+  const wspBadge = document.getElementById('wsp-badge');
+  if (wspBadge) wspBadge.textContent = '尚未設定';
 });
 </script>
 
@@ -4679,6 +4944,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 <button id="btn-show-preview" class="visible" onclick="showPreviewPanel()">📋 時段預覽</button>
 
-<!-- v22 | 2025 | schedule wizard -->
+<!-- v24 | 2025 | schedule wizard -->
 </body>
 </html>
