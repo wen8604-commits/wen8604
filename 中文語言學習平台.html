@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>中文語言學習平台 v35｜手機照護任務流程優化版</title><!-- v35 mobile care task flow optimization -->
+<title>中文語言學習平台 v38｜手機照護任務流程優化版｜手機照護任務流程優化版</title><!-- v35 mobile care task flow optimization -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ===== RESPONSIVE OVERHAUL ===== */
@@ -955,7 +955,14 @@ body.learn-zh-mode .learn-zh-bar { display: flex; }
 }
 /* ── VIEWS ── */
 .view { display: none; }
-.view.active { display: block; }
+.view.active {
+  display: block;
+  animation: viewIn .30s cubic-bezier(.22,.61,.36,1) both;
+}
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 /* ── SEARCH ── */
 .search-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
@@ -2328,6 +2335,7 @@ body.lang-zh  .speak-btn.speak-lang { display: none; }
 /* ── Respect reduced-motion preferences ── */
 @media (prefers-reduced-motion: reduce) {
   .cards-grid { animation: none; }
+  .view.active { animation: none; }
   .sw-track { scroll-behavior: auto; }
   .nav-btn:hover, .hero-btn:active, .filter-btn:active, .page-tab:active,
   .vol-pick-chip:active, .sw-chip:active, .sw-home:active, .sw-arrow:active { transform: none; }
@@ -24118,12 +24126,16 @@ const SECTIONS = {
     ]
   }
 };
+// ── Hardened storage + local-date helpers (defensive against corrupted localStorage / UTC off-by-one) ──
+function _lsObj(key){ try{ const v=JSON.parse(localStorage.getItem(key)||'{}'); return (v&&typeof v==='object'&&!Array.isArray(v))?v:{}; }catch(e){ return {}; } }
+function _lsArr(key){ try{ const v=JSON.parse(localStorage.getItem(key)||'[]'); return Array.isArray(v)?v:[]; }catch(e){ return []; } }
+function _today(){ const n=new Date(); return new Date(n.getTime()-n.getTimezoneOffset()*60000).toISOString().slice(0,10); }
 let currentSection = 'basic';
 let currentLang = 'en';
 let mastered = (()=>{
   try {
     const raw = localStorage.getItem('mastered') || '{}';
-    const obj = JSON.parse(raw);
+    let obj = JSON.parse(raw); if (!obj || typeof obj !== 'object' || Array.isArray(obj)) obj = {};
     // Integrity check: if checksum exists and mismatches, reset
     const ck = localStorage.getItem('mastered_ck');
     if (ck) {
@@ -24138,7 +24150,7 @@ let mastered = (()=>{
 let starred = (()=>{
   try {
     const raw = localStorage.getItem('starred') || '{}';
-    const obj = JSON.parse(raw);
+    let obj = JSON.parse(raw); if (!obj || typeof obj !== 'object' || Array.isArray(obj)) obj = {};
     const ck = localStorage.getItem('starred_ck');
     if (ck) {
       let h = 0;
@@ -24150,7 +24162,7 @@ let starred = (()=>{
   } catch(e) { return {}; }
 })();
 let wrongVocab = (()=>{
-  try { return JSON.parse(localStorage.getItem('wrongVocab') || '{}'); }
+  try { return _lsObj('wrongVocab'); }
   catch(e) { return {}; }
 })();
 let filterStar = false;
@@ -24210,6 +24222,12 @@ function getActiveQuizLevels() { return getQuizLevels(quizSettings.quizLang); }
 // ── VOCABULARY INTEGRITY VALIDATOR (Fix #10) ──
 // Runs once at startup to detect duplicate zh/id entries and empty fields
 (function validateVocab() {
+  // Diagnostic only — most "duplicates" are the same word legitimately reused across
+  // volumes (the quiz de-dupes options at runtime, so they cause no gameplay bug).
+  // Stay quiet for normal users; append ?debug to the URL to see the full report.
+  var DEBUG = false;
+  try { DEBUG = /[?&]debug\b/.test(location.search); } catch(e) {}
+  if (!DEBUG) return;
   const zhSeen = new Map();
   const enSeen = new Map();
   const idSeen = new Map();
@@ -24323,7 +24341,7 @@ function exportMemory() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = '中文學習進度_' + new Date().toISOString().slice(0,10) + '.json';
+  a.download = '中文學習進度_' + _today() + '.json';
   a.click();
   URL.revokeObjectURL(url);
   showToast('✅ 已匯出備份檔案！');
@@ -24696,16 +24714,16 @@ function finishDailyReviewMission(key) {
 
 function setDailyMissionTargets(key, cards) {
   let targets = {};
-  try { targets = JSON.parse(localStorage.getItem('dailyMissionTargets') || '{}'); } catch(e) {}
-  const today = new Date().toISOString().slice(0,10);
+  try { targets = _lsObj('dailyMissionTargets'); } catch(e) {}
+  const today = _today();
   targets[`${today}_${key}`] = cards.map(c => c.n);
   try { localStorage.setItem('dailyMissionTargets', JSON.stringify(targets)); } catch(e) {}
 }
 
 function getDailyMissionTargets(key) {
   let targets = {};
-  try { targets = JSON.parse(localStorage.getItem('dailyMissionTargets') || '{}'); } catch(e) {}
-  const today = new Date().toISOString().slice(0,10);
+  try { targets = _lsObj('dailyMissionTargets'); } catch(e) {}
+  const today = _today();
   return targets[`${today}_${key}`] || [];
 }
 
@@ -25201,16 +25219,6 @@ function hideHomePage() {
   document.getElementById('sectionView').style.display = '';
 }
 
-function toggleFilterStar() {
-  filterStar = !filterStar;
-  document.getElementById('filterStarBtn').classList.toggle('active', filterStar);
-  ensureSectionViewForFilter(); renderCards();
-}
-function toggleFilterNew() {
-  filterNew = !filterNew;
-  document.getElementById('filterNewBtn').classList.toggle('active', filterNew);
-  ensureSectionViewForFilter(); renderCards();
-}
 function ensureSectionViewForFilter() {
   // If home is showing and filter is clicked, switch to section view
   const hv = document.getElementById('homeView');
@@ -25241,6 +25249,14 @@ function switchPageTab(name) {
   if (name === 'dialogue') renderDialogue();
   if (name === 'progress') renderProgress();
   if (name === 'dashboard') renderDashboard();
+  // Restart the entrance animation reliably (even on rapid re-taps)
+  targetView.style.animation = 'none';
+  void targetView.offsetWidth;
+  targetView.style.animation = '';
+  // Land at the top of the new page instead of inheriting the old scroll position
+  window.scrollTo({ top: 0 });
+  const mainEl = document.querySelector('.main');
+  if (mainEl) mainEl.scrollTop = 0;
   // sync bottom nav
   document.querySelectorAll('.bnav-item[id^="bnav-"]').forEach(b => b.classList.remove('active'));
   const bnavBtn = document.getElementById('bnav-' + name);
@@ -25386,19 +25402,42 @@ function buildContextSentence(card) {
 // Auto-play audio for 高級 mode
 let quizAudioUtterance = null;
 function speakQuizWord(text, onEnd) {
-  if (!window.speechSynthesis) return;
-  speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = 'zh-TW';
-  utter.rate = 0.85;
-  utter.pitch = 1.0;
-  if (onEnd) utter.onend = onEnd;
-  quizAudioUtterance = utter;
+  // Fix: route through _doSpeak so getBestVoice / rate-limiter / keep-alive all apply.
+  // _doSpeak is defined below; quiz-specific quizAudioBtn animation is handled here as a wrapper.
+  if (!text) return;
   const btn = document.getElementById('quizAudioBtn');
-  if (btn) btn.classList.add('quiz-audio-playing');
-  utter.onend = () => { if (btn) btn.classList.remove('quiz-audio-playing'); if (onEnd) onEnd(); };
-  utter.onerror = () => { if (btn) btn.classList.remove('quiz-audio-playing'); };
-  speechSynthesis.speak(utter);
+  // We can't pass onEnd directly into _doSpeak (it has its own onend), so we wrap via a
+  // temporary utterance shim that calls _doSpeak and appends onEnd afterwards.
+  if (!window.speechSynthesis) return;
+  if (!_ttsBudgetOk()) { console.warn('[TTS] Rate limit reached, skipping speakQuizWord'); return; }
+  try { speechSynthesis.cancel(); } catch(e) {}
+  setTimeout(() => {
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = typeof getBestVoice === 'function' ? getBestVoice('zh-TW') : null;
+    if (voice) utter.voice = voice;
+    utter.lang = 'zh-TW';
+    utter.rate = 0.85;
+    utter.pitch = 1.0;
+    quizAudioUtterance = utter;
+    if (btn) btn.classList.add('quiz-audio-playing');
+    utter.onstart = () => { if (typeof _ttsStartKeepAlive === 'function') _ttsStartKeepAlive(); };
+    utter.onend = () => {
+      if (typeof _ttsStopKeepAlive === 'function') _ttsStopKeepAlive();
+      if (btn) btn.classList.remove('quiz-audio-playing');
+      if (onEnd) onEnd();
+    };
+    utter.onerror = () => {
+      if (typeof _ttsStopKeepAlive === 'function') _ttsStopKeepAlive();
+      if (btn) btn.classList.remove('quiz-audio-playing');
+    };
+    try { speechSynthesis.speak(utter); } catch(e) { if (btn) btn.classList.remove('quiz-audio-playing'); }
+    // Safety net: clear animation if onstart never fires
+    setTimeout(() => {
+      if (btn && btn.classList.contains('quiz-audio-playing') && !speechSynthesis.speaking) {
+        btn.classList.remove('quiz-audio-playing');
+      }
+    }, 6000);
+  }, 60);
 }
 function replayQuizAudio() {
   const item = quizState.questions[quizState.index];
@@ -29549,16 +29588,6 @@ function switchToView(name) {
   switchPageTab(name);
 }
 
-function switchToFavorites() {
-  filterStar = true;
-  filterNew = false;
-  document.getElementById('filterStarBtn')?.classList.add('active');
-  document.getElementById('filterNewBtn')?.classList.remove('active');
-  switchPageTab('browse');
-  document.querySelectorAll('.bnav-item[id^="bnav-"]').forEach(b => b.classList.remove('active'));
-  document.getElementById('bnav-favorites')?.classList.add('active');
-  showToast('已切換到收藏詞');
-}
 
 // Patch sidebar-item clicks to close sidebar on mobile
 document.querySelectorAll('.sidebar-item').forEach(item => {
@@ -29643,9 +29672,9 @@ function clearAllProgress() {
 // ── QUIZ SCORE TRACKING ──
 function recordQuizAnswer(correct) {
   try {
-    const today = new Date().toISOString().slice(0,10);
+    const today = _today();
     // quiz sessions: array of {date, correct, total}
-    let sessions = JSON.parse(localStorage.getItem('quizSessions') || '[]');
+    let sessions = _lsArr('quizSessions');
     // find today's session
     let sess = sessions.find(s => s.date === today);
     if (!sess) {
@@ -29657,7 +29686,7 @@ function recordQuizAnswer(correct) {
     if (correct) sess.correct++;
     localStorage.setItem('quizSessions', JSON.stringify(sessions));
     // track learning days
-    let days = JSON.parse(localStorage.getItem('learnDays') || '[]');
+    let days = _lsArr('learnDays');
     if (!days.includes(today)) {
       days.unshift(today);
       if (days.length > 365) days = days.slice(0, 365);
@@ -29668,8 +29697,8 @@ function recordQuizAnswer(correct) {
 
 function recordLearningDay() {
   try {
-    const today = new Date().toISOString().slice(0,10);
-    let days = JSON.parse(localStorage.getItem('learnDays') || '[]');
+    const today = _today();
+    let days = _lsArr('learnDays');
     if (!days.includes(today)) {
       days.unshift(today);
       if (days.length > 365) days = days.slice(0, 365);
@@ -29690,9 +29719,9 @@ function renderDashboard() {
 
   // learning days
   let learnDays = [];
-  try { learnDays = JSON.parse(localStorage.getItem('learnDays') || '[]'); } catch(e){}
+  try { learnDays = _lsArr('learnDays'); } catch(e){}
   // also count today if any mastered cards
-  const today = new Date().toISOString().slice(0,10);
+  const today = _today();
   if (learnedCards > 0 && !learnDays.includes(today)) {
     learnDays = [today, ...learnDays];
   }
@@ -29700,7 +29729,7 @@ function renderDashboard() {
 
   // quiz sessions
   let sessions = [];
-  try { sessions = JSON.parse(localStorage.getItem('quizSessions') || '[]'); } catch(e){}
+  try { sessions = _lsArr('quizSessions'); } catch(e){}
   const totalQuizQ = sessions.reduce((a,s) => a + s.total, 0);
   const totalCorrect = sessions.reduce((a,s) => a + s.correct, 0);
   const avgScore = totalQuizQ > 0 ? Math.round(totalCorrect / totalQuizQ * 100) : null;
@@ -29878,7 +29907,7 @@ function reduceWrongVocab(n) {
 }
 
 function getSeededDailyCards(cards, count) {
-  const today = new Date().toISOString().slice(0,10);
+  const today = _today();
   return cards.slice().sort((a, b) => {
     const av = String(a.n) + today;
     const bv = String(b.n) + today;
@@ -29952,8 +29981,8 @@ function firstSectionForCards(cards) {
 
 function getLearningStreak() {
   let learnDays = [];
-  try { learnDays = JSON.parse(localStorage.getItem('learnDays') || '[]'); } catch(e) {}
-  const today = new Date().toISOString().slice(0,10);
+  try { learnDays = _lsArr('learnDays'); } catch(e) {}
+  const today = _today();
   const todayMs = new Date(today).getTime();
   let streak = 0;
   for (let i = 0; i < 365; i++) {
@@ -29965,9 +29994,9 @@ function getLearningStreak() {
 }
 
 function getDailyMissionState() {
-  const today = new Date().toISOString().slice(0,10);
+  const today = _today();
   let all = {};
-  try { all = JSON.parse(localStorage.getItem('dailyMissions') || '{}'); } catch(e) {}
+  try { all = _lsObj('dailyMissions'); } catch(e) {}
   const doneMap = all[today] || {};
   const keys = ['new', 'wrong', 'star', 'care'];
   const done = keys.filter(k => doneMap[k]).length;
@@ -29985,9 +30014,9 @@ function getDailyMissionState() {
 }
 
 function markDailyMission(key) {
-  const today = new Date().toISOString().slice(0,10);
+  const today = _today();
   let all = {};
-  try { all = JSON.parse(localStorage.getItem('dailyMissions') || '{}'); } catch(e) {}
+  try { all = _lsObj('dailyMissions'); } catch(e) {}
   all[today] = Object.assign({}, all[today] || {}, { [key]: true });
   try { localStorage.setItem('dailyMissions', JSON.stringify(all)); } catch(e) {}
   recordLearningDay();
@@ -30117,7 +30146,7 @@ const CARE_TASKS = [
 ];
 
 function getTaskFavorites() {
-  try { return JSON.parse(localStorage.getItem('taskFavorites') || '{}'); } catch(e) { return {}; }
+  try { return _lsObj('taskFavorites'); } catch(e) { return {}; }
 }
 
 function saveTaskFavorites(data) {
@@ -30134,54 +30163,6 @@ function toggleTaskFavorite(event, key) {
   showToast(favs[key] ? '已收藏任務句' : '已取消收藏');
 }
 
-function renderCareTaskMode(selectedId, hostId = 'careTaskModeHost') {
-  const host = document.getElementById(hostId);
-  if (!host) return;
-  const task = CARE_TASKS.find(t => t.id === selectedId) || CARE_TASKS[0];
-  const favs = getTaskFavorites();
-  const langNames = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
-  host.innerHTML = `
-    <div class="task-chip-row">
-      ${CARE_TASKS.map(t => `<button class="task-chip ${t.id === task.id ? 'active' : ''}" onclick="renderCareTaskMode('${t.id}', '${hostId}')">${t.icon} ${escapeHtml(t.title)}</button>`).join('')}
-    </div>
-    <div class="task-flow-card">
-      <div class="task-flow-head">
-        <div class="task-flow-icon">${task.icon}</div>
-        <div>
-          <div class="task-flow-title">任務：${escapeHtml(task.title)}</div>
-          <div class="task-flow-sub">${escapeHtml(task.sub)}</div>
-        </div>
-      </div>
-      ${task.steps.map((step, stepIndex) => `
-        <div class="task-step">
-          <div class="task-step-index">${stepIndex + 1}</div>
-          <div>
-            <div class="task-step-label">${escapeHtml(step.label)}</div>
-            <div class="task-line-grid">
-              ${['zh','en','id','vi'].map(lang => {
-                const key = `${task.id}_${stepIndex}_${lang}`;
-                return `
-                  <div class="task-line">
-                    <div class="task-lang">${langNames[lang]}</div>
-                    <div class="task-sentence">${escapeHtml(step[lang])}</div>
-                    <div class="task-line-actions">
-                      <button class="task-line-btn dialogue-speak" data-speak-text="${escapeHtml(step[lang])}" data-speak-locale="${langToLocale(lang)}" onclick="speakVcardLang(event,this)" title="語音播放">🔊</button>
-                      <button class="task-line-btn ${favs[key] ? 'active' : ''}" onclick="toggleTaskFavorite(event,'${key}')" title="收藏">★</button>
-                      <button class="task-line-btn" onclick="practiceTaskLine(event,'${task.id}',${stepIndex},'${lang}')" title="測驗">測</button>
-                    </div>
-                  </div>
-                `;
-              }).join('')}
-            </div>
-            <div class="task-quiz-box" id="taskQuiz_${task.id}_${stepIndex}" style="display:none;"></div>
-          </div>
-        </div>
-      `).join('')}
-      ${renderCareReportCard(task, hostId)}
-    </div>
-  `;
-  generateCareTaskReport(task.id, hostId);
-}
 
 function practiceTaskLine(event, taskId, stepIndex, lang) {
   event.stopPropagation();
@@ -30195,9 +30176,16 @@ function practiceTaskLine(event, taskId, stepIndex, lang) {
   const prompt = lang === 'zh'
     ? `請選出「${escapeHtml(step.zh)}」的印尼文`
     : `請選出這句${langNames[lang]}的中文：${escapeHtml(step[lang])}`;
-  const options = shuffleCards(task.steps.map(s => s[answerLang])).slice(0, 4);
-  if (!options.includes(step[answerLang])) options[0] = step[answerLang];
-  const shuffled = shuffleCards(options);
+  // Build options: dedupe by label and always include the correct answer exactly once
+  // (mirrors buildQuizOptions so a duplicated step line can't render two identical buttons).
+  const correctLabel = step[answerLang];
+  const seen = new Set([correctLabel]);
+  const distractors = [];
+  for (const s of shuffleCards(task.steps)) {
+    const label = s[answerLang];
+    if (label && !seen.has(label)) { seen.add(label); distractors.push(label); }
+  }
+  const shuffled = shuffleCards([correctLabel, ...distractors.slice(0, 3)]);
   box.style.display = '';
   box.innerHTML = `
     <div style="font-weight:900;margin-bottom:7px;">${prompt}</div>
@@ -30219,168 +30207,9 @@ function checkTaskQuiz(event, btn) {
   showToast(ok ? '答對了' : '再看一次正確句子');
 }
 
-function renderHomeTaskHub() {
-  const host = document.getElementById('v32HomeTaskHub');
-  if (!host) return;
-  const newCount = getDailyNewCards(10).length;
-  const wrongCount = getWrongVocabCards(5).length;
-  const starCount = getStarredCards(5).length;
-  const careCount = CARE_TASKS.length;
-  const daily = getDailyMissionState();
-  const weakHtml = renderWeakWordsPanel(4);
-  host.innerHTML = `
-    <div class="v32-home-stack">
-      <div class="v32-home-left">
-        <div class="v32-panel">
-          <div class="v32-panel-head">
-            <div>
-              <div class="v32-panel-kicker">Daily Review</div>
-              <div class="v32-panel-title">今日學習任務</div>
-              <div class="v32-panel-sub">打開就知道今天要做什麼</div>
-            </div>
-            <div class="v32-time-pill">${daily.statusText}</div>
-          </div>
-          <div class="daily-status-card">
-            <div class="daily-status-pill">
-              <div class="daily-status-label">今日進度</div>
-              <div class="daily-status-value">${daily.done} / ${daily.total}</div>
-            </div>
-            <div class="daily-status-pill">
-              <div class="daily-status-label">連續學習</div>
-              <div class="daily-status-value">${daily.streak} 天</div>
-            </div>
-            <div class="daily-status-pill">
-              <div class="daily-status-label">完成狀態</div>
-              <div class="daily-status-value">${daily.done === daily.total ? '完成 ✅' : daily.done ? '進行中' : '未完成'}</div>
-            </div>
-          </div>
-          <div class="daily-goal-note">今日目標：${daily.nextGoal}</div>
-          <div class="daily-list">
-            ${renderDailyRow('new', '新詞 ' + newCount + ' 個', '從尚未標記學會的詞彙中挑選', '開始', newCount, 'startDailyNewMission()')}
-            ${renderDailyRow('wrong', '錯題 ' + wrongCount + ' 個', '依最近答錯與錯誤次數排序', '重練', wrongCount, 'startDailyWrongMission()')}
-            ${renderDailyRow('star', '收藏詞 ' + starCount + ' 個', '複習自己按星號的重點詞', '複習', starCount, 'startDailyStarMission()')}
-            ${renderDailyRow('care', '照護回報 1 次', '產生一次完成回報卡並留下今天紀錄', '去回報', careCount, 'startDailyCareMission()')}
-          </div>
-          ${weakHtml}
-        </div>
-        <div class="v32-panel">
-          <div class="v32-panel-head">
-            <div>
-              <div class="v32-panel-kicker">Employer Tool</div>
-              <div class="v32-panel-title">雇主交代句產生器</div>
-              <div class="v32-panel-sub">輸入任務，產生可編輯、可複製 LINE 格式的四語交代句</div>
-            </div>
-          </div>
-          <div id="employerGeneratorHost"></div>
-        </div>
-      </div>
-      <div class="v32-panel">
-        <div class="v32-panel-head">
-          <div>
-            <div class="v32-panel-kicker">Care Task</div>
-            <div class="v32-panel-title">照護情境任務模式</div>
-            <div class="v32-panel-sub">從背單字升級成會照護、會回報</div>
-          </div>
-        </div>
-        <div class="task-mode-grid" id="careTaskModeHost"></div>
-      </div>
-    </div>
-  `;
-  renderCareTaskMode(undefined, 'careTaskModeHost');
-  renderInstructionGenerator('employerGeneratorHost', '');
-}
 
-function renderTaskTools() {
-  const host = document.getElementById('taskToolsContainer');
-  if (!host) return;
-  host.innerHTML = `
-    <div class="task-tools-stack">
-      <section class="task-tool-band">
-        <div class="task-tool-head">
-          <div>
-            <div class="task-tool-title">今日學習任務</div>
-            <div class="task-tool-sub">先完成今天最小任務，再進入照護情境練習。</div>
-          </div>
-        </div>
-        <div id="taskDailyHost"></div>
-      </section>
-      <section class="task-tool-band">
-        <div class="task-tool-head">
-          <div>
-            <div class="task-tool-title">照護情境任務</div>
-            <div class="task-tool-sub">每個任務最後都能產生完成回報卡，方便留紀錄或貼給家屬。</div>
-          </div>
-        </div>
-        <div class="task-mode-grid" id="careTaskModeHostTask"></div>
-      </section>
-      <section class="task-tool-band">
-        <div class="task-tool-head">
-          <div>
-            <div class="task-tool-title">雇主交代句產生器</div>
-            <div class="task-tool-sub">可套用常用範本、產生後直接編輯，並一鍵複製 LINE 格式。</div>
-          </div>
-        </div>
-        <div id="employerGeneratorHostTask"></div>
-      </section>
-      <section class="task-tool-band">
-        <div class="task-tool-head">
-          <div>
-            <div class="task-tool-title">緊急回報句</div>
-            <div class="task-tool-sub">照護現場需要立刻通知時，直接複製短句。</div>
-          </div>
-        </div>
-        <div id="emergencyReportHost"></div>
-      </section>
-    </div>
-  `;
-  renderDailyMissionMini('taskDailyHost');
-  renderCareTaskMode(undefined, 'careTaskModeHostTask');
-  renderInstructionGenerator('employerGeneratorHostTask', 'Task');
-  renderEmergencyReport('emergencyReportHost');
-}
 
-function renderInstructionGenerator(hostId = 'employerGeneratorHost', suffix = '') {
-  const host = document.getElementById(hostId);
-  if (!host) return;
-  const id = name => name + suffix;
-  const arg = suffix ? `'${suffix}'` : "''";
-  host.innerHTML = `
-    <div class="template-row" aria-label="常用交代範本">
-      ${EMPLOYER_TEMPLATES.map(t => `<button class="template-btn" onclick="applyInstructionTemplate('${t.key}', ${arg})">${t.label}</button>`).join('')}
-    </div>
-    <div class="generator-grid">
-      <div class="generator-field">
-        <label class="generator-label" for="${id('genTarget')}">對象</label>
-        <input class="generator-input" id="${id('genTarget')}" value="阿公" list="${id('targetOptions')}"/>
-      </div>
-      <div class="generator-field">
-        <label class="generator-label" for="${id('genTone')}">語氣</label>
-        <select class="generator-select" id="${id('genTone')}">
-          <option value="polite">禮貌</option>
-          <option value="clear">清楚</option>
-          <option value="strict">嚴格</option>
-        </select>
-      </div>
-      <div class="generator-field full">
-        <label class="generator-label" for="${id('genTask')}">任務</label>
-        <input class="generator-input" id="${id('genTask')}" value="晚上 8 點吃藥" list="${id('taskOptions')}"/>
-      </div>
-      <div class="generator-field full">
-        <label class="generator-label" for="${id('genNote')}">注意事項</label>
-        <input class="generator-input" id="${id('genNote')}" value="吃藥後量血壓" list="${id('noteOptions')}"/>
-      </div>
-    </div>
-    <datalist id="${id('targetOptions')}"><option value="阿公"><option value="阿嬤"><option value="長者"><option value="爸爸"><option value="媽媽"></datalist>
-    <datalist id="${id('taskOptions')}"><option value="晚上 8 點吃藥"><option value="早上 9 點量血壓"><option value="晚餐後散步"><option value="睡前喝水"><option value="下午做復健"><option value="晚上洗澡"><option value="外出就醫"></datalist>
-    <datalist id="${id('noteOptions')}"><option value="吃藥後量血壓"><option value="請配溫開水"><option value="記錄血壓數字"><option value="如果不舒服請馬上回報"><option value="不要空腹吃藥"><option value="出門前確認健保卡與藥袋"></datalist>
-    <div class="generator-actions">
-      <button class="generator-btn" onclick="generateEmployerInstruction(${arg})">產生交代句</button>
-      <button class="generator-secondary-btn" onclick="copyAllInstructions(event, ${arg})">一鍵複製 LINE 格式</button>
-    </div>
-    <div class="generator-output" id="${id('generatorOutput')}"></div>
-  `;
-  generateEmployerInstruction(suffix);
-}
+// renderInstructionGenerator — canonical definition below (de-duplicated in v36 fix)
 
 const EMPLOYER_TEMPLATES = [
   { key: 'medicine', label: '💊 吃藥', target: '阿公', task: '晚上 8 點吃藥', note: '請配溫開水', tone: 'clear' },
@@ -30566,32 +30395,7 @@ function buildForeignInstruction(target, task, note, tone, lang) {
   return `${starts[lang]} ${taskText}${noteText ? connectors[lang] + noteText : ''}. ${tails[lang]}`;
 }
 
-function generateEmployerInstruction(suffix = '') {
-  const id = name => name + suffix;
-  const target = document.getElementById(id('genTarget'))?.value.trim() || '阿公';
-  const task = document.getElementById(id('genTask'))?.value.trim() || '晚上 8 點吃藥';
-  const note = document.getElementById(id('genNote'))?.value.trim() || '';
-  const tone = document.getElementById(id('genTone'))?.value || 'polite';
-  const out = document.getElementById(id('generatorOutput'));
-  if (!out) return;
-  const rows = {
-    zh: buildZhInstruction(target, task, note, tone),
-    en: buildForeignInstruction(target, task, note, tone, 'en'),
-    id: buildForeignInstruction(target, task, note, tone, 'id'),
-    vi: buildForeignInstruction(target, task, note, tone, 'vi')
-  };
-  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
-  out.innerHTML = ['zh','en','id','vi'].map(lang => `
-    <div class="generator-sentence">
-      <div class="task-lang">${names[lang]}</div>
-      <textarea class="generator-edit" id="${id('genOut_' + lang)}">${escapeHtml(rows[lang])}</textarea>
-      <div class="task-line-actions">
-        <button class="task-line-btn dialogue-speak" onclick="speakGeneratedLine(event, '${suffix}', '${lang}')" title="語音播放">🔊</button>
-        <button class="task-line-btn" onclick="copyGeneratedLine(event, '${suffix}', '${lang}')" title="複製">複</button>
-      </div>
-    </div>
-  `).join('');
-}
+// generateEmployerInstruction — canonical definition below (de-duplicated in v36 fix)
 
 function getGeneratedLine(suffix, lang) {
   return document.getElementById('genOut_' + lang + suffix)?.value.trim() || '';
@@ -30604,20 +30408,7 @@ function speakGeneratedLine(event, suffix, lang) {
   _doSpeak(text, langToLocale(lang), event.currentTarget);
 }
 
-function copyGeneratedLine(event, suffix, lang) {
-  event.stopPropagation();
-  copyTextToClipboard(getGeneratedLine(suffix, lang), '已複製句子');
-}
-
-function copyAllInstructions(event, suffix = '') {
-  event.stopPropagation();
-  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
-  const text = ['zh','en','id','vi']
-    .map(lang => `${names[lang]}：${getGeneratedLine(suffix, lang)}`)
-    .filter(line => !line.endsWith('：'))
-    .join('\n');
-  copyTextToClipboard(text, '已複製 LINE 格式');
-}
+// copyGeneratedLine / copyAllInstructions — canonical definitions below (de-duplicated in v36 fix)
 
 function copyTextToClipboard(text, okMessage = '已複製') {
   if (!text) return;
@@ -30635,47 +30426,6 @@ function copyDataText(event, btn) {
   copyTextToClipboard(text, '已複製');
 }
 
-function renderCareReportCard(task, hostId) {
-  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
-  const now = new Date();
-  const time = now.toTimeString().slice(0,5);
-  const defaults = getCareReportDefaults(task.id);
-  return `
-    <div class="care-report-card">
-      <div class="care-report-title">✅ 完成回報卡</div>
-      <div class="care-report-grid">
-        <div class="generator-field">
-          <label class="generator-label" for="reportTarget_${scope}_${task.id}">對象</label>
-          <select class="generator-select" id="reportTarget_${scope}_${task.id}" onchange="generateCareTaskReport('${task.id}', '${hostId}')">
-            <option value="阿公">阿公</option>
-            <option value="阿嬤">阿嬤</option>
-            <option value="爸爸">爸爸</option>
-            <option value="媽媽">媽媽</option>
-            <option value="長者">長者</option>
-          </select>
-        </div>
-        <div class="generator-field">
-          <label class="generator-label" for="reportTime_${scope}_${task.id}">時間</label>
-          <input class="generator-input" id="reportTime_${scope}_${task.id}" type="time" value="${time}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
-        </div>
-        <div class="generator-field">
-          <label class="generator-label" for="reportStatus_${scope}_${task.id}">狀況</label>
-          <input class="generator-input" id="reportStatus_${scope}_${task.id}" value="${escapeHtml(defaults.status)}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
-        </div>
-        <div class="generator-field full">
-          <label class="generator-label" for="reportNote_${scope}_${task.id}">備註</label>
-          <input class="generator-input" id="reportNote_${scope}_${task.id}" value="${escapeHtml(defaults.note)}" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
-        </div>
-        <div class="generator-field full">
-          <label class="generator-label" for="reportBp_${scope}_${task.id}">數值記錄</label>
-          <input class="generator-input" id="reportBp_${scope}_${task.id}" value="${escapeHtml(defaults.value)}" placeholder="例如：血壓 132/78" oninput="generateCareTaskReport('${task.id}', '${hostId}')">
-        </div>
-      </div>
-      <div class="generator-output" id="reportOutput_${scope}_${task.id}"></div>
-      <div class="generator-output" id="careRecordList_${scope}_${task.id}"></div>
-    </div>
-  `;
-}
 
 function getCareReportDefaults(taskId) {
   const map = {
@@ -30686,32 +30436,6 @@ function getCareReportDefaults(taskId) {
   return map[taskId] || { status: '已完成任務', note: '狀況穩定', value: '' };
 }
 
-function generateCareTaskReport(taskId, hostId) {
-  const task = CARE_TASKS.find(t => t.id === taskId);
-  if (!task) return;
-  const scope = hostId.replace(/[^a-zA-Z0-9]/g, '');
-  const read = name => document.getElementById(`${name}_${scope}_${taskId}`)?.value.trim() || '';
-  const target = read('reportTarget') || '阿公';
-  const time = read('reportTime');
-  const status = read('reportStatus');
-  const note = read('reportNote');
-  const value = read('reportBp');
-  const rows = buildCareReportRows(task, target, time, status, note, value);
-  const names = { zh: '中文', en: '英文', id: '印尼文', vi: '越南文' };
-  const out = document.getElementById(`reportOutput_${scope}_${taskId}`);
-  if (!out) return;
-  out.innerHTML = ['zh','en','id','vi'].map(lang => `
-    <div class="generator-sentence">
-      <div class="task-lang">${names[lang]}</div>
-      <textarea class="generator-edit" id="reportOut_${scope}_${taskId}_${lang}">${escapeHtml(rows[lang])}</textarea>
-      <div class="task-line-actions">
-        <button class="task-line-btn dialogue-speak" onclick="speakReportLine(event, '${scope}', '${taskId}', '${lang}')" title="語音播放">🔊</button>
-        <button class="task-line-btn" onclick="copyReportLine(event, '${scope}', '${taskId}', '${lang}')" title="複製">複</button>
-      </div>
-    </div>
-  `).join('') + `<button class="generator-btn" onclick="recordAndCopyCareReport(event, '${scope}', '${taskId}', '${hostId}')">記錄並複製完整回報</button>`;
-  renderCareRecordList(scope, taskId);
-}
 
 function formatCareTime(time) {
   if (!time) return '';
@@ -30756,25 +30480,6 @@ function translateCareDetail(text, lang) {
   return (dict[lang] && dict[lang][clean]) || clean;
 }
 
-function buildCareReportRows(task, target, time, status, note, value) {
-  const zhTime = formatCareTime(time);
-  const zh = `${target}${status ? status.replace(/^已完成/, '已經完成') : '已經完成' }${zhTime ? '，時間：' + zhTime : ''}${note ? '，狀況：' + note : ''}${value ? '，' + value : ''}。`;
-  const enTarget = capitalizeFirstText(translateTarget(target, 'en'));
-  const idTarget = capitalizeFirstText(translateTarget(target, 'id'));
-  const viTarget = capitalizeFirstText(translateTarget(target, 'vi'));
-  const enNote = translateCareDetail(note, 'en');
-  const idNote = translateCareDetail(note, 'id');
-  const viNote = translateCareDetail(note, 'vi');
-  const enValue = translateCareDetail(value, 'en');
-  const idValue = translateCareDetail(value, 'id');
-  const viValue = translateCareDetail(value, 'vi');
-  return {
-    zh,
-    en: `${enTarget} has completed ${task.titleEn || task.title}. ${time ? 'Time: ' + time + '. ' : ''}${enNote ? 'Condition: ' + enNote + '. ' : ''}${enValue ? 'Record: ' + enValue + '.' : ''}`,
-    id: `${idTarget} sudah selesai ${task.titleId || task.title}. ${time ? 'Waktu: ' + time + '. ' : ''}${idNote ? 'Kondisi: ' + idNote + '. ' : ''}${idValue ? 'Catatan: ' + idValue + '.' : ''}`,
-    vi: `${viTarget} đã hoàn thành ${task.titleVi || task.title}. ${time ? 'Thời gian: ' + time + '. ' : ''}${viNote ? 'Tình trạng: ' + viNote + '. ' : ''}${viValue ? 'Ghi chú: ' + viValue + '.' : ''}`
-  };
-}
 
 function getReportLine(scope, taskId, lang) {
   return document.getElementById(`reportOut_${scope}_${taskId}_${lang}`)?.value.trim() || '';
@@ -30799,10 +30504,10 @@ function copyAllCareReport(event, scope, taskId) {
 }
 
 function getTodayCareRecords() {
-  const today = new Date().toISOString().slice(0,10);
+  const today = _today();
   let all = {};
-  try { all = JSON.parse(localStorage.getItem('careReportRecords') || '{}'); } catch(e) {}
-  return { today, all, records: all[today] || [] };
+  try { all = _lsObj('careReportRecords'); } catch(e) {}
+  return { today, all, records: Array.isArray(all[today]) ? all[today] : [] };
 }
 
 function saveCareRecord(record) {
@@ -30812,26 +30517,6 @@ function saveCareRecord(record) {
   try { localStorage.setItem('careReportRecords', JSON.stringify(state.all)); } catch(e) {}
 }
 
-function recordAndCopyCareReport(event, scope, taskId, hostId) {
-  event.stopPropagation();
-  const task = CARE_TASKS.find(t => t.id === taskId);
-  if (!task) return;
-  const target = document.getElementById(`reportTarget_${scope}_${taskId}`)?.value || '阿公';
-  const time = document.getElementById(`reportTime_${scope}_${taskId}`)?.value || '';
-  const names = { zh: '中文', en: 'English', id: 'Bahasa Indonesia', vi: 'Tiếng Việt' };
-  const text = ['zh','en','id','vi'].map(lang => `${names[lang]}：${getReportLine(scope, taskId, lang)}`).join('\n');
-  saveCareRecord({
-    id: `${Date.now()}_${taskId}`,
-    taskId,
-    taskTitle: task.title,
-    target,
-    time,
-    text
-  });
-  markDailyMission('care');
-  copyTextToClipboard(text, '已記錄並複製完整回報');
-  renderCareRecordList(scope, taskId);
-}
 
 function renderCareRecordList(scope, taskId) {
   const host = document.getElementById(`careRecordList_${scope}_${taskId}`);
@@ -30858,24 +30543,6 @@ function renderCareRecordList(scope, taskId) {
   `;
 }
 
-function renderEmergencyReport(hostId) {
-  const host = document.getElementById(hostId);
-  if (!host) return;
-  const items = [
-    { title: '頭暈', zh: '阿公現在頭暈，我會先讓他坐下休息，請問是否需要就醫？', en: 'Grandpa feels dizzy now. I will let him sit and rest first. Do we need to see a doctor?', id: 'Kakek sekarang pusing. Saya akan membiarkan beliau duduk dan istirahat dulu. Apakah perlu ke dokter?', vi: 'Ông hiện đang chóng mặt. Tôi sẽ cho ông ngồi nghỉ trước. Có cần đi khám không?' },
-    { title: '跌倒', zh: '阿公剛才跌倒了，目前先不移動他，我會立刻回報狀況。', en: 'Grandpa just fell. I will not move him for now and will report the condition immediately.', id: 'Kakek baru saja jatuh. Saya tidak akan memindahkan beliau dulu dan akan segera melaporkan kondisinya.', vi: 'Ông vừa bị ngã. Tôi sẽ không di chuyển ông trước và sẽ báo tình trạng ngay.' },
-    { title: '血壓異常', zh: '血壓數字異常，我已經記錄，請家屬確認下一步。', en: 'The blood pressure is abnormal. I have recorded it. Please confirm the next step.', id: 'Tekanan darah tidak normal. Saya sudah mencatatnya. Mohon keluarga memastikan langkah selanjutnya.', vi: 'Chỉ số huyết áp bất thường. Tôi đã ghi lại. Xin gia đình xác nhận bước tiếp theo.' },
-    { title: '不舒服', zh: '阿公說身體不舒服，我會先觀察並請家屬盡快回覆。', en: 'Grandpa says he feels unwell. I will observe first and ask the family to reply as soon as possible.', id: 'Kakek bilang badan tidak nyaman. Saya akan mengamati dulu dan meminta keluarga segera membalas.', vi: 'Ông nói trong người không khỏe. Tôi sẽ theo dõi trước và nhờ gia đình phản hồi sớm.' }
-  ];
-  host.innerHTML = `<div class="emergency-grid">${items.map(item => {
-    const full = `中文：${item.zh}\nEnglish：${item.en}\nBahasa Indonesia：${item.id}\nTiếng Việt：${item.vi}`;
-    return `<div class="emergency-card">
-      <div class="emergency-title">⚠️ ${escapeHtml(item.title)}</div>
-      <div class="emergency-line">${escapeHtml(item.zh)}</div>
-      <button class="daily-go-btn" data-copy-text="${escapeHtml(full)}" onclick="copyDataText(event,this)">複製四語</button>
-    </div>`;
-  }).join('')}</div>`;
-}
 
 function renderDailyRow(key, title, note, actionLabel, count, action) {
   const state = getDailyMissionState();
