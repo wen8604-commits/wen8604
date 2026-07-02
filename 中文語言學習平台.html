@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>中文語言學習平台 v38｜手機照護任務流程優化版｜手機照護任務流程優化版</title><!-- v35 mobile care task flow optimization -->
+<title>中文語言學習平台 v39｜核對修復優化版</title><!-- v39 data audit + bug fixes: quiz ambiguity, care report i18n, backup scope -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Sans:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
 <style>
 /* ===== RESPONSIVE OVERHAUL ===== */
@@ -24331,11 +24331,20 @@ function updateMemoryPanel() {
 
 // ── 匯出備份 ──
 function exportMemory() {
+  // v39: 備份擴充 — 除已學/收藏外,一併備份錯題、學習天數、測驗紀錄、每日任務與照護紀錄。
+  // 版本升為 v39;importMemory 仍相容舊版 v12 檔案。
+  const _safe = (fn, fb) => { try { return fn() || fb; } catch(e) { return fb; } };
   const data = {
-    version: 'v12',
+    version: 'v39',
     exportedAt: new Date().toISOString(),
     mastered,
-    starred
+    starred,
+    wrongVocab: _safe(() => _lsObj('wrongVocab'), {}),
+    learnDays: _safe(() => _lsArr('learnDays'), []),
+    quizSessions: _safe(() => _lsArr('quizSessions'), []),
+    dailyMissions: _safe(() => _lsObj('dailyMissions'), {}),
+    taskFavorites: _safe(() => _lsObj('taskFavorites'), {}),
+    careReportRecords: _safe(() => _lsObj('careReportRecords'), {})
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
@@ -24359,6 +24368,15 @@ function importMemory(event) {
       if (!confirm(`確定要載入備份？\n已學：${Object.values(data.mastered||{}).filter(Boolean).length} 詞\n收藏：${Object.values(data.starred||{}).filter(Boolean).length} 詞\n\n（將覆蓋現有進度）`)) return;
       mastered = data.mastered || {};
       starred  = data.starred  || {};
+      // v39: 還原擴充欄位(舊版 v12 備份檔沒有這些欄位,略過即可)
+      try {
+        if (data.wrongVocab)        { wrongVocab = data.wrongVocab; localStorage.setItem('wrongVocab', JSON.stringify(wrongVocab)); }
+        if (data.learnDays)         localStorage.setItem('learnDays', JSON.stringify(data.learnDays));
+        if (data.quizSessions)      localStorage.setItem('quizSessions', JSON.stringify(data.quizSessions));
+        if (data.dailyMissions)     localStorage.setItem('dailyMissions', JSON.stringify(data.dailyMissions));
+        if (data.taskFavorites)     localStorage.setItem('taskFavorites', JSON.stringify(data.taskFavorites));
+        if (data.careReportRecords) localStorage.setItem('careReportRecords', JSON.stringify(data.careReportRecords));
+      } catch(e) {}
       save();
       renderCards(); updateStats(); renderProgress();
       showToast('✅ 備份已成功載入！');
@@ -25269,8 +25287,13 @@ function getAllCards() {
 }
 
 function openFlashcard(idx) {
-  fcCards = SECTIONS[currentSection].cards;
-  fcIndex = idx;
+  // v39 Fix: 開啟時套用與畫面一致的篩選(收藏/新詞),避免練到未顯示的卡片;
+  // 若篩選後為空則退回整個單元。
+  let cards = SECTIONS[currentSection].cards;
+  if (filterStar) cards = cards.filter(c => starred[c.n]);
+  if (filterNew)  cards = cards.filter(c => !mastered[c.n]);
+  fcCards = cards.length ? cards : SECTIONS[currentSection].cards;
+  fcIndex = Math.min(idx, fcCards.length - 1);
   document.getElementById('flashcardModal').classList.add('open');
   updateFlashcard();
 }
@@ -25381,10 +25404,18 @@ function getQuizCountValue(poolSize) {
 }
 
 function buildQuizOptions(correct, pool, prop) {
+  // v39 Fix: 除了答案文字去重,也排除「題目面文字相同」的干擾項。
+  // 例如題目顯示 "Pain" 時,「疼痛感」與「疼痛位置」的英文都是 Pain,
+  // 兩者同時出現會變成雙正解的歧義題;例句(專業級)重複亦同。
+  const lv = (typeof getCurrentLevel === 'function') ? getCurrentLevel() : null;
+  let qProp = lv ? lv.questionProp : null;
+  if (qProp === 'audio') qProp = 'zh';
+  const correctQ = qProp ? String(correct[qProp] || '').trim().toLowerCase() : '';
   const usedLabels = new Set([String(correct[prop]).trim()]);
   const others = shuffleCards(pool).filter(c => {
     const label = String(c[prop] || '').trim();
     if (c.n === correct.n || !label || usedLabels.has(label)) return false;
+    if (correctQ && String(c[qProp] || '').trim().toLowerCase() === correctQ) return false;
     usedLabels.add(label);
     return true;
   });
@@ -29657,6 +29688,10 @@ function clearAllProgress() {
     localStorage.removeItem('wrongVocab');
     localStorage.removeItem('gameHighScore');
     localStorage.removeItem('gameBestCombo');
+    // v39 Fix: 每日任務也屬於學習進度,一併清除(照護紀錄與任務收藏為使用者資料,保留)
+    localStorage.removeItem('dailyMissions');
+    localStorage.removeItem('dailyMissionTargets');
+    localStorage.removeItem('activeDailyMission');
   } catch(e) {}
   mastered = {};
   starred  = {};
@@ -30078,6 +30113,7 @@ const CARE_TASKS = [
     id: 'medicine',
     icon: '💊',
     title: '協助長者吃藥',
+    reportZh: '吃藥',  // v39: 回報句用的簡稱
     titleEn: 'taking medicine',
     titleId: 'minum obat',
     titleVi: 'uống thuốc',
@@ -30117,6 +30153,7 @@ const CARE_TASKS = [
     id: 'blood_pressure',
     icon: '🩺',
     title: '量血壓並回報',
+    reportZh: '量血壓',  // v39: 回報句用的簡稱
     titleEn: 'checking blood pressure',
     titleId: 'mengukur tekanan darah',
     titleVi: 'đo huyết áp',
@@ -30132,6 +30169,7 @@ const CARE_TASKS = [
     id: 'meal_help',
     icon: '🥣',
     title: '協助用餐',
+    reportZh: '用餐',  // v39: 回報句用的簡稱
     titleEn: 'eating a meal',
     titleId: 'makan',
     titleVi: 'ăn cơm',
@@ -30454,6 +30492,34 @@ function capitalizeFirstText(text) {
 function translateCareDetail(text, lang) {
   const clean = String(text || '').trim();
   if (!clean) return '';
+  // v39 Fix: 常見數值型內容用樣式比對翻譯,不再只靠完全相同的字典鍵
+  // 例:「血壓 150/95」「體溫 36.8」「吃了半碗飯」都能翻,而非只有預設範例值
+  const bpMatch = clean.match(/^血壓\s*(\d{2,3})\s*\/\s*(\d{2,3})$/);
+  if (bpMatch) {
+    const v = bpMatch[1] + '/' + bpMatch[2];
+    if (lang === 'en') return 'blood pressure ' + v;
+    if (lang === 'id') return 'tekanan darah ' + v;
+    if (lang === 'vi') return 'huyết áp ' + v;
+  }
+  const tempMatch = clean.match(/^體溫\s*([\d.]+)\s*(?:度|°C)?$/);
+  if (tempMatch) {
+    if (lang === 'en') return 'body temperature ' + tempMatch[1] + '°C';
+    if (lang === 'id') return 'suhu tubuh ' + tempMatch[1] + '°C';
+    if (lang === 'vi') return 'nhiệt độ cơ thể ' + tempMatch[1] + '°C';
+  }
+  const riceMatch = clean.match(/^吃了(半|一|兩|三)?碗(飯|粥|麵)$/);
+  if (riceMatch) {
+    const amt = { '半': 'half a', '一': 'one', '兩': 'two', '三': 'three', undefined: 'a' }[riceMatch[1]];
+    const food = { '飯': 'rice', '粥': 'porridge', '麵': 'noodles' }[riceMatch[2]];
+    const amtId = { '半': 'setengah', '一': 'satu', '兩': 'dua', '三': 'tiga', undefined: 'satu' }[riceMatch[1]];
+    const foodId = { '飯': 'nasi', '粥': 'bubur', '麵': 'mie' }[riceMatch[2]];
+    const amtVi = { '半': 'nửa', '一': 'một', '兩': 'hai', '三': 'ba', undefined: 'một' }[riceMatch[1]];
+    const foodVi = { '飯': 'cơm', '粥': 'cháo', '麵': 'mì' }[riceMatch[2]];
+    const bowlEn = riceMatch[1] === '兩' || riceMatch[1] === '三' ? 'bowls' : 'bowl';
+    if (lang === 'en') return 'ate ' + amt + ' ' + bowlEn + ' of ' + food;
+    if (lang === 'id') return 'makan ' + amtId + ' mangkuk ' + foodId;
+    if (lang === 'vi') return 'ăn ' + amtVi + ' chén ' + foodVi;
+  }
   const dict = {
     en: {
       '有配溫開水': 'used warm water',
@@ -30907,9 +30973,45 @@ function generateCareTaskReport(taskId, hostId) {
   renderCareRecordList(scope, taskId);
 }
 
+// v39 Fix: 完成狀態與時段的外語對照表,避免英/印/越回報句夾雜中文
+const CARE_STATUS_I18N = {
+  '已完成':   { en: 'Completed',           id: 'Selesai',           vi: 'Đã hoàn thành' },
+  '部分完成': { en: 'Partially completed', id: 'Selesai sebagian',  vi: 'Hoàn thành một phần' },
+  '異常':     { en: 'Abnormal',            id: 'Tidak normal',      vi: 'Bất thường' }
+};
+const CARE_SLOT_I18N = {
+  '上午': { en: 'Morning',   id: 'Pagi',  vi: 'Buổi sáng' },
+  '下午': { en: 'Afternoon', id: 'Sore',  vi: 'Buổi chiều' },
+  '晚上': { en: 'Evening',   id: 'Malam', vi: 'Buổi tối' }
+};
+function translateCareStatus(status, lang) {
+  return (CARE_STATUS_I18N[status] && CARE_STATUS_I18N[status][lang]) || status;
+}
+function translateCareTime(time, timeSlot, lang) {
+  // 選了固定時段(上午/下午/晚上)直接查表;選「實際時間」則轉成 12 小時制外語寫法
+  if (timeSlot !== '實際時間') {
+    return (CARE_SLOT_I18N[timeSlot] && CARE_SLOT_I18N[timeSlot][lang]) || timeSlot;
+  }
+  if (!time) return '';
+  const [h, m] = String(time).split(':').map(Number);
+  if (!Number.isFinite(h) || !Number.isFinite(m)) return time;
+  const mm = String(m).padStart(2, '0');
+  if (lang === 'en') {
+    const suffix = h >= 12 ? 'PM' : 'AM';
+    const display = h % 12 === 0 ? 12 : h % 12;
+    return `${display}:${mm} ${suffix}`;
+  }
+  const slotZh = h < 12 ? '上午' : h < 18 ? '下午' : '晚上';
+  const slotWord = (CARE_SLOT_I18N[slotZh] && CARE_SLOT_I18N[slotZh][lang]) || '';
+  if (lang === 'id') return `pukul ${h}.${mm}${slotWord ? ' (' + slotWord.toLowerCase() + ')' : ''}`;
+  if (lang === 'vi') return `${h} giờ ${mm !== '00' ? mm + ' phút ' : ''}${slotWord ? slotWord.toLowerCase() : ''}`.trim();
+  return time;
+}
 function buildCareReportRows(task, target, time, status, note, value, timeSlot = '實際時間', version = '家屬版') {
   const zhTime = timeSlot === '實際時間' ? formatCareTime(time) : timeSlot;
-  const statusText = status === '已完成' ? `已完成${task.title}` : `${status}：${task.title}`;
+  // v39 Fix: 中文句改用任務簡稱(reportZh),避免出現「阿公已完成協助長者吃藥」的彆扭語意
+  const zhAction = task.reportZh || task.title;
+  const statusText = status === '已完成' ? `已完成${zhAction}` : `${status}：${zhAction}`;
   const learningNote = version === '看護學習版' ? '（此版本可用來練習照護中文與回報句。）' : '';
   const zh = `${target}${zhTime ? '在' + zhTime : ''}${statusText}${note ? '，備註：' + note : ''}${value ? '，記錄：' + value : ''}。${learningNote}`;
   const enTarget = capitalizeFirstText(translateTarget(target, 'en'));
@@ -30921,11 +31023,14 @@ function buildCareReportRows(task, target, time, status, note, value, timeSlot =
   const enValue = translateCareDetail(value, 'en');
   const idValue = translateCareDetail(value, 'id');
   const viValue = translateCareDetail(value, 'vi');
+  const enTime = translateCareTime(time, timeSlot, 'en');
+  const idTime = translateCareTime(time, timeSlot, 'id');
+  const viTime = translateCareTime(time, timeSlot, 'vi');
   return {
     zh,
-    en: `${enTarget}: ${status} - ${task.titleEn || task.title}. ${zhTime ? 'Time: ' + zhTime + '. ' : ''}${enNote ? 'Note: ' + enNote + '. ' : ''}${enValue ? 'Record: ' + enValue + '.' : ''}`,
-    id: `${idTarget}: ${status} - ${task.titleId || task.title}. ${zhTime ? 'Waktu: ' + zhTime + '. ' : ''}${idNote ? 'Catatan: ' + idNote + '. ' : ''}${idValue ? 'Rekam: ' + idValue + '.' : ''}`,
-    vi: `${viTarget}: ${status} - ${task.titleVi || task.title}. ${zhTime ? 'Thời gian: ' + zhTime + '. ' : ''}${viNote ? 'Ghi chú: ' + viNote + '. ' : ''}${viValue ? 'Ghi nhận: ' + viValue + '.' : ''}`
+    en: `${enTarget}: ${translateCareStatus(status, 'en')} - ${task.titleEn || task.title}. ${enTime ? 'Time: ' + enTime + '. ' : ''}${enNote ? 'Note: ' + enNote + '. ' : ''}${enValue ? 'Record: ' + enValue + '.' : ''}`,
+    id: `${idTarget}: ${translateCareStatus(status, 'id')} - ${task.titleId || task.title}. ${idTime ? 'Waktu: ' + idTime + '. ' : ''}${idNote ? 'Catatan: ' + idNote + '. ' : ''}${idValue ? 'Rekam: ' + idValue + '.' : ''}`,
+    vi: `${viTarget}: ${translateCareStatus(status, 'vi')} - ${task.titleVi || task.title}. ${viTime ? 'Thời gian: ' + viTime + '. ' : ''}${viNote ? 'Ghi chú: ' + viNote + '. ' : ''}${viValue ? 'Ghi nhận: ' + viValue + '.' : ''}`
   };
 }
 
