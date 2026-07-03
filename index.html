@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>外籍看護幫傭 能力評測系統 v26.0｜聘外看就上手</title>
+<title>外籍看護幫傭 能力評測系統 v26.1｜聘外看就上手</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Noto+Serif+TC:wght@400;600;700;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
@@ -225,6 +225,7 @@ body::after {
   font-family: 'Noto Serif TC', serif;
   font-size: clamp(26px, 5.5vw, 46px);
   font-weight: 900; line-height: 1.12;
+  white-space: pre-line; /* v26.1: applyLang 以 textContent 寫入 \n，需 pre-line 才能維持雙行標題 */
   margin-bottom: 14px; letter-spacing: -0.3px;
   background: linear-gradient(145deg, #ffffff 15%, #c8daf5 45%, var(--accent) 80%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -1880,7 +1881,7 @@ const L = {
   },
   en:{
     hSub:'ASSESSMENT SYSTEM', hTag:'Foreign Caregiver & Helper',
-    hTitle:'Assessment System', hDesc:'Interview · Performance · Crisis · 動態 Questions · 4 Languages',
+    hTitle:'Assessment System', hDesc:'Interview · Performance · Crisis · Dynamic Questions · 4 Languages',
     stQ:'Question Bank', stR:'Random Questions', stC:'Ability Dimensions', stL:'Languages',
     lblJob:'Step 1 · Job Type', lblMode:'Step 2 · What ability do you want to assess?',
     jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nForeign Caregiver',
@@ -1948,7 +1949,7 @@ const L = {
   },
   vi:{
     hSub:'HỆ THỐNG ĐÁNH GIÁ', hTag:'Người chăm sóc & Giúp việc',
-    hTitle:'Hệ Thống Đánh Giá', hDesc:'Phỏng vấn · Hiệu suất · Khủng hoảng · 動態 câu · 4 ngôn ngữ',
+    hTitle:'Hệ Thống Đánh Giá', hDesc:'Phỏng vấn · Hiệu suất · Khủng hoảng · Câu hỏi động · 4 ngôn ngữ',
     stQ:'Ngân hàng đề', stR:'Câu ngẫu nhiên', stC:'Chiều năng lực', stL:'Ngôn ngữ',
     lblJob:'Step 1 · Loại công việc', lblMode:'Step 2 · Muốn đánh giá năng lực nào?',
     jTCare:'外籍看護', jSTCare:'適合：照顧長者、病人、失能者\nNgười chăm sóc nước ngoài',
@@ -4544,7 +4545,19 @@ const SCENARIO_QS = {
 // ✅ V25-12: exportReport fallback toast 加入「允許彈出視窗」引導文字，改善 iOS/LINE 場景
 // ✅ V25-13: footer 動態注入補上 role="contentinfo"，強化無障礙語意（A11y）
 // ============================================================
-const APP_VERSION = 'v26.0'; // v26.0：三步驟首頁、手機友善流程與結果結論卡
+// ============================================================
+// v26.1 PATCH LOG（本次修正 9 項）:
+// ✅ V26.1-1: L.en.hDesc / L.vi.hDesc 夾雜未翻譯中文「動態」→ 修正為 Dynamic Questions / Câu hỏi động
+// ✅ V26.1-2: .hero h1 補 white-space:pre-line — applyLang 以 textContent 寫入 \n 後雙行標題失效（載入即觸發）
+// ✅ V26.1-3: applyLang 對 jSTCare/jSTHelp 改用雙行渲染，保留第二行外語的 teal 樣式（原被 textContent 抹除）
+// ✅ V26.1-4: sanitizeHistoryRecord pct 一律由 correct/total 推導，杜絕 total=0 髒紀錄顯示 100%
+// ✅ V26.1-5: nextQ 最後一題改走 confirmEarlySubmit 確認 Modal，避免未作答題目被直接判錯交卷
+// ✅ V26.1-6: startQuiz 重置 reviewOpen 與答題詳情 UI（goHome→再測路徑先前殘留展開狀態）
+// ✅ V26.1-7: startQuizFromLearn 改呼叫 selectMode()，同步首頁模式卡片視覺
+// ✅ V26.1-8: exportReport 檔名改用本地日期（原 toISOString 為 UTC，深夜匯出差一天）
+// ✅ V26.1-9: APP_VERSION 升至 v26.1，migrateRecords 補入 records_v26.0，title 同步
+// ============================================================
+const APP_VERSION = 'v26.1'; // v26.1：資料核對與漏洞修復（翻譯殘留、標題換行、交卷確認、紀錄淨化）
 // Fix 4: 答題紀錄綁定版本號（升版自動隔離），書籤 key 固定（跨版本保留）
 const STORAGE_KEY_RECORDS   = `records_${APP_VERSION}`; // 升版後自動隔離舊版紀錄（v25.4）
 const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
@@ -4584,7 +4597,7 @@ const STORAGE_KEY_BOOKMARKS = 'bookmarks_persistent';
 (function migrateRecords() {
   try {
     if (localStorage.getItem(STORAGE_KEY_RECORDS)) return; // 新版已有資料，不需遷移
-    const prevVersions = ['records_v25.5','records_v25.4','records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
+    const prevVersions = ['records_v26.0','records_v25.5','records_v25.4','records_v25.3','records_v25.2','records_v25.0','records_v24.0','records_v23.0','records_v22.0','records_v21.0','records_v20.0','records_v19.0','records_v18.0','records_v17.0','records_v16.9','records_v16.2','records_v16.1','records_v16','records_v9'];
     for (const oldKey of prevVersions) {
       const old = localStorage.getItem(oldKey);
       if (old) {
@@ -4679,7 +4692,17 @@ function applyLang() {
     'mTLearn','mSTLearn','mTagLearn1','mTagLearn2','mTagLearn3',
     'qbInfoTitle','qmapLbl','lblCatResult','reviewTglTxt','btnHome','btnRetry',
     'rTitle','rsCL','rsWL','rsPL','learnModeLabel'];
-  ids.forEach(id => { const el=document.getElementById(id); if(el && t[id]) el.textContent=t[id]; });
+  // v26.1: jSTCare/jSTHelp 第二行為外語標示，需保留 teal 樣式（textContent 會抹掉原 <span>）
+  const styledSubIds = new Set(['jSTCare','jSTHelp']);
+  ids.forEach(id => {
+    const el=document.getElementById(id); if(!el || !t[id]) return;
+    if (styledSubIds.has(id) && String(t[id]).includes('\n')) {
+      const [line1, ...rest] = String(t[id]).split('\n');
+      el.innerHTML = `${escapeHTML(line1)}<br><span style="color:var(--teal);font-style:normal;">${escapeHTML(rest.join(' '))}</span>`;
+    } else {
+      el.textContent=t[id];
+    }
+  });
   if(document.getElementById('startBtnTxt')) {
     const btnTxt = document.getElementById('startBtnTxt');
     if (selMode === 'learn') {
@@ -4886,6 +4909,12 @@ function startQuiz() {
   if (qmapArr) qmapArr.textContent = '展開';
   questions = buildPool();
   curQ = 0; answers = {};
+  // v26.1: 重置答題詳情展開狀態（goHome → 再測 路徑先前未重置，會殘留上一輪的展開狀態）
+  reviewOpen = false;
+  const rl = document.getElementById('reviewList');
+  if (rl) rl.className = 'review-list';
+  const ra = document.getElementById('reviewArr');
+  if (ra) ra.textContent = '▼';
   // v9: mode-based timer
   timerSec = MODE_TIMERS[selMode] || 1500;
   showScreen('quizScreen');
@@ -5037,8 +5066,10 @@ function selectAnswer(i) {
 
 function prevQ() { if(curQ>0){curQ--;renderQ();} }
 function nextQ() {
-  // V24-7: 最後一題直接提交時先停計時器，與 modalConfirmSubmit 路徑保持一致
-  if(curQ===questions.length-1){clearInterval(timerInt); timerInt = null; showResult();}
+  // v26.1: 最後一題按「提交」改走確認 Modal（confirmEarlySubmit），
+  // 顯示已答/未答統計後才交卷，避免尚有未作答題目時被直接判錯。
+  // 計時器停止統一交由 modalConfirmSubmit 處理，路徑一致。
+  if(curQ===questions.length-1){confirmEarlySubmit();}
   else{curQ++;renderQ();}
 }
 
@@ -5378,7 +5409,8 @@ function sanitizeHistoryRecord(record) {
   if (!record || typeof record !== 'object') return null;
   const total = clampNumber(record.total, 0, 200, 0);
   const correct = clampNumber(record.correct, 0, total > 0 ? total : 0, 0);
-  const pct = clampNumber(record.pct, 0, 100, total ? Math.round(correct / total * 100) : 0);
+  // v26.1: pct 一律由已淨化的 correct/total 重新推導，不信任儲存值（防止 total=0 卻顯示 100% 的髒資料）
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
   const allowedLevelClasses = new Set(['level-pro', 'level-mid', 'level-basic']);
   const safeLevelCls = allowedLevelClasses.has(record.levelCls) ? record.levelCls : getLevel(pct).cls;
   const fallbackLevel = getLevel(pct).label;
@@ -5484,7 +5516,10 @@ function exportReport() {
   const jobNames = {caregiver:'外籍看護', helper:'外籍幫傭'};
   const modeNames = {interview:'面試情境評估', performance:'工作績效考核', crisis:'危機應變測驗', specialty:'專項能力測驗'};
   const reportDate = new Date().toLocaleString('zh-TW');
-  const fileName = `評測報告_${new Date().toISOString().slice(0,10)}.pdf`;
+  // v26.1: 檔名改用本地日期（toISOString 為 UTC，台灣時間深夜匯出會差一天）
+  const d = new Date();
+  const localDate = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const fileName = `評測報告_${localDate}.pdf`;
 
   const levelColor = level.cls==='level-pro'?'#e09830':level.cls==='level-mid'?'#1fb5cc':'#e8602e';
   const levelBg    = level.cls==='level-pro'?'#fff8e1':level.cls==='level-mid'?'#e0f7fa':'#fff3e0';
@@ -5716,7 +5751,8 @@ function startLearn() {
 
 function startQuizFromLearn() {
   // B5: 保留使用者原選擇，僅在 learn 時 fallback 至 interview，不覆蓋其他模式
-  if (selMode === 'learn' || !selMode) selMode = 'interview';
+  // v26.1: 改呼叫 selectMode()，同步首頁模式卡片選取狀態與開始按鈕樣式（原先直接賦值造成 UI 不同步）
+  if (selMode === 'learn' || !selMode) selectMode('interview');
   startQuiz();
 }
 
