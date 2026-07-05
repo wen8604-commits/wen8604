@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://og-image.vercel.app; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://og-image.vercel.app;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="料理基礎學習平台 v0.52 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
+<meta name="description" content="料理基礎學習平台 v0.53 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
 <meta name="keywords" content="料理,廚房安全,刀工,火候,食品衛生,烹調,學習平台,多語言,家庭幫傭">
 <meta name="author" content="Culinary Basics Learning Platform">
 <meta name="theme-color" content="#5a1800">
 
 <!-- Open Graph / Social sharing -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="料理基礎學習平台 v0.52">
+<meta property="og:title" content="料理基礎學習平台 v0.53">
 <meta property="og:description" content="多語言廚藝入門：廚房安全・刀工基礎・火候控制・食品衛生 — 200 題測驗，自由學習，無關卡無證書">
 <meta property="og:image" content="https://og-image.vercel.app/料理基礎學習平台.png?theme=light&md=1&fontSize=100px&images=🍜">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="料理基礎學習平台 v0.52">
+<meta name="twitter:title" content="料理基礎學習平台 v0.53">
 <meta name="twitter:description" content="繁中・EN・ID・VI 四語言廚藝入門，200 題測驗，自由學習">
 
-<title>料理基礎學習平台 v0.52</title>
+<title>料理基礎學習平台 v0.53</title>
 
 <!-- Favicon (emoji) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
@@ -87,7 +87,7 @@ body{display:flex;flex-direction:column;align-items:stretch}
 </head>
 <body>
 <div class="platform-wrapper">
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.49 — 自由點選課程，無關卡無證書</h2>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.53 — 自由點選課程，無關卡無證書</h2>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
@@ -649,9 +649,9 @@ body{font-size:14.5px}
         </div>
       </div>
       <div class="hero-cta">
-        <button class="hero-cta-pri" onclick="loadModule(curMod)" id="hero-cta-continue">▶ 繼續學習</button>
-        <button class="hero-cta-sec" onclick="showView('quizcenter')">練習測驗</button>
-        <button class="hero-cta-sec" onclick="showView('cert')">學習總覽</button>
+        <button class="hero-cta-pri" onclick="loadModule(curMod)" id="hero-cta-continue" data-i="hero.continue">▶ 繼續學習</button>
+        <button class="hero-cta-sec" onclick="showView('quizcenter')" data-i="hero.quiz">練習測驗</button>
+        <button class="hero-cta-sec" onclick="showView('cert')" data-i="hero.cert">學習總覽</button>
       </div>
     </div>
   </div>
@@ -686,14 +686,14 @@ body{font-size:14.5px}
 <div class="footer">
   <span id="footer-version"></span>
   <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
-  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.52</span>
+  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.53</span>
 </div>
 
 </div>
 </div>
 
 <script>
-var APP_VERSION='0.52';
+var APP_VERSION='0.53';
 function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
 function escHTML(v){
   return String(v==null?'':v).replace(/[&<>"']/g,function(ch){
@@ -759,6 +759,8 @@ zh:{
   'lesson.topic':'主題','lesson.do':'✅ 正確做法','lesson.dont':'❌ 常見錯誤',
   'lesson.progress':'學習進度','lesson.progress.sub':'Progress Checklist',
   'lesson.next':'下一個主題：','lesson.prev':'← 上一個主題：',
+  'sidebar.path':'學習路徑','sidebar.tools':'工具',
+  'hero.continue':'▶ 繼續學習','hero.quiz':'練習測驗','hero.cert':'學習總覽',
 },
 en:{
   'nav.home':'Home','nav.lessons':'Lessons','nav.quiz':'Quiz','nav.cert':'Progress','nav.settings':'Settings',
@@ -795,6 +797,8 @@ en:{
   'lesson.topic':'Module','lesson.do':'✅ Correct Practices','lesson.dont':'❌ Common Mistakes',
   'lesson.progress':'Learning Progress','lesson.progress.sub':'進度清單',
   'lesson.next':'Next: ','lesson.prev':'← Prev: ',
+  'sidebar.path':'Learning Path','sidebar.tools':'Tools',
+  'hero.continue':'▶ Continue Learning','hero.quiz':'Practice Quiz','hero.cert':'Progress Overview',
 },
 id:{
   'nav.home':'Beranda','nav.lessons':'Pelajaran','nav.quiz':'Kuis','nav.cert':'Kemajuan','nav.settings':'Pengaturan',
@@ -831,6 +835,8 @@ id:{
   'lesson.topic':'Modul','lesson.do':'✅ Cara Benar','lesson.dont':'❌ Kesalahan Umum',
   'lesson.progress':'Kemajuan Belajar','lesson.progress.sub':'進度清單',
   'lesson.next':'Berikutnya: ','lesson.prev':'← Sebelumnya: ',
+  'sidebar.path':'Jalur Belajar','sidebar.tools':'Alat',
+  'hero.continue':'▶ Lanjut Belajar','hero.quiz':'Latihan Kuis','hero.cert':'Ringkasan Kemajuan',
 },
 vi:{
   'nav.home':'Trang chủ','nav.lessons':'Bài học','nav.quiz':'Kiểm tra','nav.cert':'Tiến độ','nav.settings':'Cài đặt',
@@ -867,6 +873,8 @@ vi:{
   'lesson.topic':'Mô-đun','lesson.do':'✅ Cách đúng','lesson.dont':'❌ Lỗi thường gặp',
   'lesson.progress':'Tiến độ học','lesson.progress.sub':'進度清單',
   'lesson.next':'Tiếp theo: ','lesson.prev':'← Trước đó: ',
+  'sidebar.path':'Lộ trình học','sidebar.tools':'Công cụ',
+  'hero.continue':'▶ Tiếp tục học','hero.quiz':'Luyện kiểm tra','hero.cert':'Tổng quan tiến độ',
 }};
 
 function t(key){
@@ -900,10 +908,10 @@ function qTotal(total){
 var MODS=[
   {lv:1,emoji:'🛡️',
    titles:{zh:'廚房安全',en:'Kitchen Safety',id:'Keamanan Dapur',vi:'An toàn bếp'},
-   topics:[{zh:'瓦斯安全',en:'Gas Safety',id:'Keamanan Gas',vi:'An toàn khí gas',s:2},{zh:'油炸安全',en:'Deep-frying Safety',id:'Keamanan Menggoreng',vi:'An toàn chiên ngập dầu',s:2},{zh:'火候控制圖解',en:'Heat Control Guide',id:'Panduan Kontrol Api',vi:'Hướng dẫn kiểm soát lửa',s:1},{zh:'每日安全檢查表',en:'Daily Safety Checklist',id:'Daftar Periksa Keamanan Harian',vi:'Danh sách kiểm tra an toàn hàng ngày',s:0}]},
+   topics:[{zh:'瓦斯安全',en:'Gas Safety',id:'Keamanan Gas',vi:'An toàn khí gas',s:0},{zh:'油炸安全',en:'Deep-frying Safety',id:'Keamanan Menggoreng',vi:'An toàn chiên ngập dầu',s:0},{zh:'火候控制圖解',en:'Heat Control Guide',id:'Panduan Kontrol Api',vi:'Hướng dẫn kiểm soát lửa',s:0},{zh:'每日安全檢查表',en:'Daily Safety Checklist',id:'Daftar Periksa Keamanan Harian',vi:'Danh sách kiểm tra an toàn hàng ngày',s:0}]},
   {lv:2,emoji:'🔪',
    titles:{zh:'刀工基礎',en:'Knife Skills',id:'Teknik Pisau',vi:'Kỹ thuật dao'},
-   topics:[{zh:'握刀方式',en:'Grip Technique',id:'Teknik Genggaman',vi:'Kỹ thuật cầm dao',s:2},{zh:'切丁／切片',en:'Dice & Slice',id:'Potong Dadu & Iris',vi:'Thái hạt lựu & Thái lát',s:1},{zh:'剁碎技巧',en:'Mincing',id:'Teknik Mencincang',vi:'Kỹ thuật băm nhỏ',s:0},{zh:'去皮去骨',en:'Peeling & Deboning',id:'Mengupas & Membuang Tulang',vi:'Gọt vỏ & Lọc xương',s:0},{zh:'砧板管理',en:'Board Management',id:'Manajemen Talenan',vi:'Quản lý thớt',s:0}]},
+   topics:[{zh:'握刀方式',en:'Grip Technique',id:'Teknik Genggaman',vi:'Kỹ thuật cầm dao',s:0},{zh:'切丁／切片',en:'Dice & Slice',id:'Potong Dadu & Iris',vi:'Thái hạt lựu & Thái lát',s:0},{zh:'剁碎技巧',en:'Mincing',id:'Teknik Mencincang',vi:'Kỹ thuật băm nhỏ',s:0},{zh:'去皮去骨',en:'Peeling & Deboning',id:'Mengupas & Membuang Tulang',vi:'Gọt vỏ & Lọc xương',s:0},{zh:'砧板管理',en:'Board Management',id:'Manajemen Talenan',vi:'Quản lý thớt',s:0}]},
   {lv:3,emoji:'🔥',
    titles:{zh:'火候控制',en:'Heat Control',id:'Kontrol Api',vi:'Kiểm soát lửa'},
    topics:[{zh:'大火（約180°C以上）',en:'High heat — ~180°C+',id:'Api Besar (~180°C+)',vi:'Lửa lớn (~180°C+)',s:0},{zh:'中火（約140–180°C）',en:'Medium heat',id:'Api Sedang (~140–180°C)',vi:'Lửa vừa (~140–180°C)',s:0},{zh:'小火（約100–140°C）',en:'Low heat',id:'Api Kecil (~100–140°C)',vi:'Lửa nhỏ (~100–140°C)',s:0},{zh:'保溫/微火（60–100°C）',en:'Keep warm',id:'Pemanas / Api Mikro (60–100°C)',vi:'Giữ ấm / Lửa vi (60–100°C)',s:0},{zh:'竹筷測油溫',en:'Chopstick oil test',id:'Tes Suhu Minyak dengan Sumpit',vi:'Kiểm tra nhiệt dầu bằng đũa',s:0},{zh:'各烹調法火候對應',en:'Method-heat reference',id:'Referensi Api per Metode Masak',vi:'Nhiệt độ theo phương pháp nấu',s:0}]},
@@ -1621,26 +1629,26 @@ var QUIZZES=[
           {zh:'產生二氧化碳氣泡，使成品膨脹鬆軟',en:'Generate CO₂ bubbles to make the product rise and become light',id:'Menghasilkan gelembung CO₂ agar produk mengembang dan ringan',vi:'Tạo bong bóng CO₂ làm sản phẩm nở và nhẹ xốp',ok:true},
           {zh:'防止麵糊變色',en:'Prevent the batter from discoloring',id:'Mencegah adonan berubah warna',vi:'Ngăn bột biến màu',ok:false}],
     fb:{zh:'正確！泡打粉在接觸液體與熱能時會釋放二氧化碳，形成無數小氣泡，使成品在烤箱中膨脹並產生鬆軟的組織。',en:'Correct! Baking powder releases CO₂ when it contacts liquid and heat, creating countless tiny bubbles that make the product rise in the oven and produce a light, airy texture.',id:'Benar! Baking powder melepaskan CO₂ saat bersentuhan dengan cairan dan panas, menciptakan gelembung kecil yang membuat produk mengembang di oven.',vi:'Đúng! Bột nở giải phóng CO₂ khi tiếp xúc với chất lỏng và nhiệt, tạo bong bóng nhỏ làm sản phẩm nở trong lò và có kết cấu nhẹ, xốp.'}},
-   {q:{zh:'奶油「打發」（cream）的正確描述是？',en:'What best describes "creaming" butter?',id:'Apa deskripsi yang tepat untuk "mengocok" mentega?',vi:'Mo ta dung ve ky thuat danh bong bo la gi?'},
-    opts:[{zh:'將奶油加熱融化後混合糖',en:'Melt butter then mix with sugar',id:'Lelehkan mentega lalu campur gula',vi:'Dun chay bo roi tron duong',ok:false},
-          {zh:'將室溫軟化的奶油與糖一起攪打至蓬鬆泛白',en:'Beat softened butter with sugar until light and fluffy',id:'Kocok mentega lunak suhu ruang dengan gula hingga mengembang',vi:'Danh bo mem cung duong cho den khi bong nhe va trang',ok:true},
-          {zh:'將冷藏奶油切小塊後直接使用',en:'Cut cold butter into small cubes and use directly',id:'Potong mentega dingin menjadi dadu kecil dan gunakan langsung',vi:'Cat bo lanh thanh khoi nho roi dung truc tiep',ok:false}],
-    fb:{zh:'正確！打發奶油需使用室溫軟化的奶油，與糖一起攪打讓空氣進入，形成蓬鬆質地，是製作奶油蛋糕的關鍵步驟。',en:'Correct! Creaming requires softened butter at room temperature — beating it with sugar incorporates air, creating a light texture essential for butter cakes.',id:'Benar! Mengocok mentega memerlukan mentega lunak suhu ruang untuk menciptakan tekstur ringan yang penting untuk kue.',vi:'Dung! Danh bong bo can dung bo mem o nhiet do phong de khong khi vao, tao ket cau bong xop, la buoc then chot cho banh bo.'}},
-   {q:{zh:'烘焙時，雞蛋的主要功能不包括下列哪項？',en:'Which is NOT a main function of eggs in baking?',id:'Fungsi utama telur dalam memanggang yang bukan termasuk berikut?',vi:'Dau KHONG phai chuc nang chinh cua trung trong nuong banh?'},
-    opts:[{zh:'提供結構與凝固力',en:'Provide structure and coagulation',id:'Memberikan struktur dan koagulasi',vi:'Cung cap cau truc va kha nang dong dac',ok:false},
-          {zh:'增加色澤與風味',en:'Add color and flavor',id:'Menambah warna dan rasa',vi:'Tang mau sac va huong vi',ok:false},
-          {zh:'取代所有麵粉的功能',en:'Replace all the functions of flour',id:'Menggantikan semua fungsi tepung',vi:'Thay the toan bo chuc nang cua bot mi',ok:true}],
-    fb:{zh:'正確！雞蛋能提供結構、乳化、色澤與風味，但無法取代麵粉形成麵筋網絡、支撐整體骨架的主要功能。',en:'Correct! Eggs provide structure, emulsification, color, and flavor, but cannot replace the main role of flour — forming gluten networks that support the overall structure.',id:'Benar! Telur memberikan struktur, emulsifikasi, warna, dan rasa, tetapi tidak dapat menggantikan peran utama tepung dalam membentuk jaringan gluten.',vi:'Dung! Trung cung cap cau truc, nhu hoa, mau sac va huong vi, nhung khong the thay the chuc nang chinh cua bot mi la tao mang gluten.'}},
-   {q:{zh:'下列哪種油脂最適合製作層次分明的酥皮麵糰（如可頌）？',en:'Which fat is best for making laminated dough with distinct layers (e.g. croissants)?',id:'Lemak mana yang paling cocok untuk membuat adonan berlapis?',vi:'Loai chat beo nao phu hop nhat de lam bot nhieu lop (nhu banh sung bo)?'},
-    opts:[{zh:'橄欖油',en:'Olive oil',id:'Minyak zaitun',vi:'Dau o liu',ok:false},
-          {zh:'豬油',en:'Lard',id:'Lemak babi',vi:'Mo lon',ok:false},
-          {zh:'片狀奶油（乾式奶油）',en:'Sheet butter (dry butter)',id:'Mentega lembaran (mentega kering)',vi:'Bo tam (bo kho)',ok:true}],
-    fb:{zh:'正確！製作可頌等千層酥皮需使用含水量低、可塑性高的片狀奶油，才能在折疊時形成清晰的油脂與麵糰層次，烤後呈現蓬鬆酥脆的效果。',en:'Correct! Laminated pastry like croissants needs low-moisture, pliable sheet butter so fat layers stay distinct during folding and create flaky results after baking.',id:'Benar! Pastri berlapis seperti croissant memerlukan mentega lembaran berkadar air rendah agar lapisan lemak tetap jelas saat dilipat.',vi:'Dung! Banh nhieu lop nhu croissant can dung bo tam it nuoc de lop chat beo giu nguyen khi gap va tao ket cau xop gion sau khi nuong.'}},
-   {q:{zh:'烘焙成品出爐後，應如何處理才能避免底部受潮？',en:'After baking, what should you do to prevent the bottom from getting soggy?',id:'Setelah memanggang, apa yang harus dilakukan untuk mencegah bagian bawah menjadi lembek?',vi:'Sau khi nuong xong, can lam gi de day banh khong bi am?'},
-    opts:[{zh:'立刻放入密封容器保存',en:'Immediately seal in an airtight container',id:'Segera simpan dalam wadah kedap udara',vi:'Day kin ngay vao hop bao quan',ok:false},
-          {zh:'移至冷卻架上散熱，讓底部蒸氣散發',en:'Transfer to a cooling rack so steam can escape from the bottom',id:'Pindahkan ke rak pendingin agar uap di bagian bawah bisa keluar',vi:'Chuyen sang gia lam nguoi de hoi nuoc thoat ra khoi day banh',ok:true},
-          {zh:'繼續放在烤盤上靜置即可',en:'Leave it on the baking tray to rest',id:'Biarkan saja di atas loyang',vi:'De nguyen tren khay nuong la duoc',ok:false}],
-    fb:{zh:'正確！剛出爐的烘焙品底部有殘餘蒸氣，若直接留在烤盤上會使底部變濕軟；放在鐵網冷卻架上能讓空氣從四面流通，保持酥脆。',en:'Correct! Freshly baked goods have residual steam on the bottom; leaving them on the tray traps moisture. A cooling rack allows air to circulate on all sides, keeping the crust crisp.',id:'Benar! Produk yang baru dipanggang memiliki uap sisa di bagian bawah; membiarkannya di loyang akan menjebak kelembapan. Rak pendingin memungkinkan sirkulasi udara dari semua sisi.',vi:'Dung! Banh vua ra lo co hoi nuoc con dong o day; de tren khay se giu am lam day uot. Gia lam nguoi cho khong khi luu thong bon phia, giu banh gion.'}},
+   {q:{zh:'奶油「打發」（cream）的正確描述是？',en:'What best describes "creaming" butter?',id:'Apa deskripsi yang tepat untuk "mengocok" mentega?',vi:'Mô tả đúng về kỹ thuật đánh bông bơ là gì?'},
+    opts:[{zh:'將奶油加熱融化後混合糖',en:'Melt butter then mix with sugar',id:'Lelehkan mentega lalu campur gula',vi:'Đun chảy bơ rồi trộn đường',ok:false},
+          {zh:'將室溫軟化的奶油與糖一起攪打至蓬鬆泛白',en:'Beat softened butter with sugar until light and fluffy',id:'Kocok mentega lunak suhu ruang dengan gula hingga mengembang',vi:'Đánh bơ mềm cùng đường cho đến khi bông nhẹ và trắng',ok:true},
+          {zh:'將冷藏奶油切小塊後直接使用',en:'Cut cold butter into small cubes and use directly',id:'Potong mentega dingin menjadi dadu kecil dan gunakan langsung',vi:'Cắt bơ lạnh thành khối nhỏ rồi dùng trực tiếp',ok:false}],
+    fb:{zh:'正確！打發奶油需使用室溫軟化的奶油，與糖一起攪打讓空氣進入，形成蓬鬆質地，是製作奶油蛋糕的關鍵步驟。',en:'Correct! Creaming requires softened butter at room temperature — beating it with sugar incorporates air, creating a light texture essential for butter cakes.',id:'Benar! Mengocok mentega memerlukan mentega lunak suhu ruang untuk menciptakan tekstur ringan yang penting untuk kue.',vi:'Đúng! Đánh bông bơ cần dùng bơ mềm ở nhiệt độ phòng để không khí vào, tạo kết cấu bông xốp, là bước then chốt cho bánh bơ.'}},
+   {q:{zh:'烘焙時，雞蛋的主要功能不包括下列哪項？',en:'Which is NOT a main function of eggs in baking?',id:'Fungsi utama telur dalam memanggang yang bukan termasuk berikut?',vi:'Đâu KHÔNG phải chức năng chính của trứng trong nướng bánh?'},
+    opts:[{zh:'提供結構與凝固力',en:'Provide structure and coagulation',id:'Memberikan struktur dan koagulasi',vi:'Cung cấp cấu trúc và khả năng đông đặc',ok:false},
+          {zh:'增加色澤與風味',en:'Add color and flavor',id:'Menambah warna dan rasa',vi:'Tăng màu sắc và hương vị',ok:false},
+          {zh:'取代所有麵粉的功能',en:'Replace all the functions of flour',id:'Menggantikan semua fungsi tepung',vi:'Thay thế toàn bộ chức năng của bột mì',ok:true}],
+    fb:{zh:'正確！雞蛋能提供結構、乳化、色澤與風味，但無法取代麵粉形成麵筋網絡、支撐整體骨架的主要功能。',en:'Correct! Eggs provide structure, emulsification, color, and flavor, but cannot replace the main role of flour — forming gluten networks that support the overall structure.',id:'Benar! Telur memberikan struktur, emulsifikasi, warna, dan rasa, tetapi tidak dapat menggantikan peran utama tepung dalam membentuk jaringan gluten.',vi:'Đúng! Trứng cung cấp cấu trúc, nhũ hóa, màu sắc và hương vị, nhưng không thể thay thế chức năng chính của bột mì là tạo màng gluten.'}},
+   {q:{zh:'下列哪種油脂最適合製作層次分明的酥皮麵糰（如可頌）？',en:'Which fat is best for making laminated dough with distinct layers (e.g. croissants)?',id:'Lemak mana yang paling cocok untuk membuat adonan berlapis?',vi:'Loại chất béo nào phù hợp nhất để làm bột nhiều lớp (như bánh sừng bò)?'},
+    opts:[{zh:'橄欖油',en:'Olive oil',id:'Minyak zaitun',vi:'Dầu ô liu',ok:false},
+          {zh:'豬油',en:'Lard',id:'Lemak babi',vi:'Mỡ lợn',ok:false},
+          {zh:'片狀奶油（乾式奶油）',en:'Sheet butter (dry butter)',id:'Mentega lembaran (mentega kering)',vi:'Bơ tấm (bơ khô)',ok:true}],
+    fb:{zh:'正確！製作可頌等千層酥皮需使用含水量低、可塑性高的片狀奶油，才能在折疊時形成清晰的油脂與麵糰層次，烤後呈現蓬鬆酥脆的效果。',en:'Correct! Laminated pastry like croissants needs low-moisture, pliable sheet butter so fat layers stay distinct during folding and create flaky results after baking.',id:'Benar! Pastri berlapis seperti croissant memerlukan mentega lembaran berkadar air rendah agar lapisan lemak tetap jelas saat dilipat.',vi:'Đúng! Bánh nhiều lớp như croissant cần dùng bơ tấm ít nước để lớp chất béo giữ nguyên khi gấp và tạo kết cấu xốp giòn sau khi nướng.'}},
+   {q:{zh:'烘焙成品出爐後，應如何處理才能避免底部受潮？',en:'After baking, what should you do to prevent the bottom from getting soggy?',id:'Setelah memanggang, apa yang harus dilakukan untuk mencegah bagian bawah menjadi lembek?',vi:'Sau khi nướng xong, cần làm gì để đáy bánh không bị ẩm?'},
+    opts:[{zh:'立刻放入密封容器保存',en:'Immediately seal in an airtight container',id:'Segera simpan dalam wadah kedap udara',vi:'Đậy kín ngay vào hộp bảo quản',ok:false},
+          {zh:'移至冷卻架上散熱，讓底部蒸氣散發',en:'Transfer to a cooling rack so steam can escape from the bottom',id:'Pindahkan ke rak pendingin agar uap di bagian bawah bisa keluar',vi:'Chuyển sang giá làm nguội để hơi nước thoát ra khỏi đáy bánh',ok:true},
+          {zh:'繼續放在烤盤上靜置即可',en:'Leave it on the baking tray to rest',id:'Biarkan saja di atas loyang',vi:'Để nguyên trên khay nướng là được',ok:false}],
+    fb:{zh:'正確！剛出爐的烘焙品底部有殘餘蒸氣，若直接留在烤盤上會使底部變濕軟；放在鐵網冷卻架上能讓空氣從四面流通，保持酥脆。',en:'Correct! Freshly baked goods have residual steam on the bottom; leaving them on the tray traps moisture. A cooling rack allows air to circulate on all sides, keeping the crust crisp.',id:'Benar! Produk yang baru dipanggang memiliki uap sisa di bagian bawah; membiarkannya di loyang akan menjebak kelembapan. Rak pendingin memungkinkan sirkulasi udara dari semua sisi.',vi:'Đúng! Bánh vừa ra lò có hơi nước còn đọng ở đáy; để trên khay sẽ giữ ẩm làm đáy ướt. Giá làm nguội cho không khí lưu thông bốn phía, giữ bánh giòn.'}},
    {q:{zh:'烘焙中，加入糖的功能除了甜味外還有？',en:'In baking, besides sweetness, what else does sugar provide?',id:'Dalam memanggang, selain rasa manis, apa lagi yang diberikan gula?',vi:'Trong làm bánh, ngoài vị ngọt, đường còn cung cấp gì?'},
     opts:[{zh:'只提供甜味，沒有其他功能',en:'Only sweetness, no other functions',id:'Hanya rasa manis, tidak ada fungsi lain',vi:'Chỉ vị ngọt, không có chức năng khác',ok:false},
           {zh:'幫助上色（焦糖化）、保濕、軟化麵筋，延長保存期限',en:'Aids browning (caramelization), retains moisture, softens gluten, and extends shelf life',id:'Membantu pencoklatan (karamelisasi), mempertahankan kelembapan, melunakkan gluten, dan memperpanjang umur simpan',vi:'Giúp tạo màu (caramel hóa), giữ ẩm, làm mềm gluten và kéo dài thời hạn sử dụng',ok:true},
@@ -5856,6 +5864,16 @@ function buildSidebar(){
   el.innerHTML=html;
 }
 function getIcon(i){return['ti-shield','ti-cut','ti-flame','ti-snowflake','ti-soup','ti-wash','ti-clipboard-list','ti-award'][i]||'ti-book'}
+// ── v0.53: 單一單元完成切換（點選課程「學習進度」清單列）──
+function topicToggleRow(modIdx,topicIdx){
+  var m=MODS[modIdx];if(!m||!m.topics[topicIdx])return;
+  var tp=m.topics[topicIdx];
+  tp.s=(tp.s===2)?0:2;
+  saveProgress();
+  updateProgressUI();buildSidebar();
+  var c=document.getElementById('content');
+  if(c&&curView==='levels')c.innerHTML=renderLesson(modIdx);
+}
 function markAllTopics(modIdx){
   var m=MODS[modIdx];
   var allDone=m.topics.every(function(tp){return tp.s===2;});
@@ -6132,7 +6150,7 @@ function renderLesson(idx){
   html+='<div class=\"safebody\">';
   m.topics.forEach(function(tp,ti){
     var checked=tp.s===2;
-    html+='<div class=\"saferow '+(checked?'ok':'no')+'\">';
+    html+='<div class=\"saferow '+(checked?'ok':'no')+'\" role=\"button\" tabindex=\"0\" style=\"cursor:pointer\" title=\"'+escAttr(checked?t('topic.unmark'):t('topic.mark'))+'\" onclick=\"topicToggleRow('+idx+','+ti+')\" onkeydown=\"if(event.key===\'Enter\')topicToggleRow('+idx+','+ti+')\">';
     html+='<i class=\"ti ti-'+(checked?'circle-check':'circle')+'\" aria-hidden=\"true\"></i>';
     html+='<div><div class=\"stxt\">'+escHTML(pick(tp))+'</div><div class=\"sen\">'+escHTML(lang2(tp))+'</div></div>';
     html+='</div>';
@@ -6238,13 +6256,14 @@ function renderQuiz(){
     var cls='qopt';
     var extra='';
     if(quizState.answered){
-      // 重繪時還原已作答外觀：被選的選項標 correct/wrong，全部停用
+      // 重繪時還原已作答外觀：被選的選項標 correct/wrong，全部停用；答錯時同時標示正解
       if(oi===quizState.picked) cls+=(o.ok?' correct':' wrong');
+      else if(o.ok && q.opts[quizState.picked] && !q.opts[quizState.picked].ok) cls+=' correct';
       extra=' disabled style=\"cursor:default\"';
     }
-    html+='<button class=\"'+cls+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+escHTML(o[curLang]||o.zh)+'</button>';
+    html+='<button class=\"'+cls+'\" data-ok=\"'+(o.ok?1:0)+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+escHTML(o[curLang]||o.zh)+'</button>';
   });
-  var fbText=quizState.answered?(q.fb[curLang]||q.fb.zh):'';
+  var fbText=quizState.answered?fmtFeedback(q.fb[curLang]||q.fb.zh,!!(q.opts[quizState.picked]&&q.opts[quizState.picked].ok)):'';
   html+='</div><div class=\"quiz-fb\" id=\"quiz-fb\">'+escHTML(fbText)+'</div></div>';
   var nextStyle=quizState.answered?'':'display:none';
   html+='<div class=\"quick\"><button class=\"qbtn pri\" id=\"quiz-next-btn\" style=\"'+nextStyle+'\" onclick=\"nextQ()\">'+t('quiz.next')+'</button></div>';
@@ -6365,6 +6384,14 @@ function markProgress(idx){
   }
 }
 
+
+// ── v0.53: 回饋文字依對錯加前綴（原本答錯也顯示「正確！」造成誤導）──
+function fmtFeedback(raw,isOk){
+  if(isOk) return '\u2705 '+raw;
+  var stripped=raw.replace(/^(正確！|正確!|Correct!|Benar!|Đúng!|Chính xác!)\s*/,'');
+  var pre={zh:'\u274c 答錯了。',en:'\u274c Not quite. ',id:'\u274c Belum tepat. ',vi:'\u274c Chưa đúng. '};
+  return (pre[curLang]||pre.zh)+stripped;
+}
 function answerQ(btn,isOk,oi,fbEnc){
   if(quizState.answered)return;
   quizState.answered=true;
@@ -6372,8 +6399,9 @@ function answerQ(btn,isOk,oi,fbEnc){
   btn.classList.add(isOk?'correct':'wrong');
   if(isOk)quizState.score++;
   btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(function(b){b.setAttribute('disabled','');b.style.cursor='default'});
+  if(!isOk){var okBtn=btn.closest('.quiz-opts').querySelector('.qopt[data-ok="1"]');if(okBtn)okBtn.classList.add('correct');}
   var fb=document.getElementById('quiz-fb');
-  if(fb)fb.textContent=decodeURIComponent(fbEnc);
+  if(fb)fb.textContent=fmtFeedback(decodeURIComponent(fbEnc),isOk);
   var nb=document.getElementById('quiz-next-btn');
   if(nb)nb.style.display='';
 }
@@ -6755,11 +6783,12 @@ function renderQCQuiz(){
     var cls='qopt';var extra='';
     if(qcState.answered){
       if(oi===qcState.picked) cls+=(o.ok?' correct':' wrong');
+      else if(o.ok && q.opts[qcState.picked] && !q.opts[qcState.picked].ok) cls+=' correct';
       extra=' disabled style="cursor:default"';
     }
-    html+='<button class="'+cls+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+escHTML(o[curLang]||o.zh)+'</button>';
+    html+='<button class="'+cls+'" data-ok="'+(o.ok?1:0)+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+escHTML(o[curLang]||o.zh)+'</button>';
   });
-  var fbText=qcState.answered?(q.fb[curLang]||q.fb.zh):'';
+  var fbText=qcState.answered?fmtFeedback(q.fb[curLang]||q.fb.zh,!!(q.opts[qcState.picked]&&q.opts[qcState.picked].ok)):'';
   html+='</div><div class="quiz-fb" id="quiz-fb">'+escHTML(fbText)+'</div></div>';
   var nextStyle=qcState.answered?'':'display:none';
   html+='<div class="quick"><button class="qbtn pri" id="quiz-next-btn" style="'+nextStyle+'" onclick="qcNextQ()">'+t('quiz.next')+'</button></div>';
@@ -6783,7 +6812,8 @@ function qcAnswerQ(btn,isOk,mi,qi,oi,fbEnc){
   if(!isOk)qcState.weakData[mi][qi].wrong++;
   qcSaveData();
   btn.closest('.quiz-opts').querySelectorAll('.qopt').forEach(function(b){b.setAttribute('disabled','');b.style.cursor='default';});
-  var fb=document.getElementById('quiz-fb');if(fb)fb.textContent=decodeURIComponent(fbEnc);
+  if(!isOk){var okBtn=btn.closest('.quiz-opts').querySelector('.qopt[data-ok="1"]');if(okBtn)okBtn.classList.add('correct');}
+  var fb=document.getElementById('quiz-fb');if(fb)fb.textContent=fmtFeedback(decodeURIComponent(fbEnc),isOk);
   var nb=document.getElementById('quiz-next-btn');if(nb)nb.style.display='';
 }
 
