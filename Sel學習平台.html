@@ -1983,6 +1983,16 @@
     .unit-section::before { width: 3px; }
   }
 
+  /* ── 尊重使用者的減少動態偏好（無障礙） ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
 </style>
 </head>
 <body data-active-lang="zh">
@@ -16288,6 +16298,8 @@ function setLang(lang) {
   if (!allowed.includes(lang)) return;
   currentLang = lang;
   document.body.setAttribute('data-active-lang', lang);
+  // 同步 <html lang> 讓螢幕閱讀器與瀏覽器翻譯功能使用正確語言
+  document.documentElement.lang = ({zh:'zh-TW', en:'en', id:'id', vi:'vi'})[lang] || 'zh-TW';
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.remove('active');
     if (b.getAttribute('data-lang') === lang) b.classList.add('active');
@@ -16314,7 +16326,13 @@ function toggleSidebar() {
   const overlay = document.getElementById('sidebar-overlay');
   const btn = document.getElementById('hamburger-btn');
   const mainLayout = document.getElementById('main-layout');
-  if (!sidebar || !mainLayout || mainLayout.style.display === 'none') return;
+  // 首頁模式：漢堡鍵捲動到模組選單區
+  if (!mainLayout || mainLayout.style.display === 'none') {
+    const welcomeEl = document.getElementById('welcome');
+    if (welcomeEl) welcomeEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (!sidebar) return;
   const isCompact = window.matchMedia('(max-width: 768px)').matches;
   if (isCompact) {
     const willOpen = !sidebar.classList.contains('open');
@@ -17367,6 +17385,21 @@ function shuffleQuestions(items) {
   return copy;
 }
 
+// 每次抽題時隨機打亂選項順序，並重新對映正解索引
+// （避免正解過度集中於特定選項位置，防止使用者靠猜測位置得分）
+function shuffleQuestionOptions(q) {
+  const order = q.opts.map((_, i) => i);
+  for (let i = order.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return {
+    ...q,
+    opts: order.map(idx => q.opts[idx]),
+    correct: order.indexOf(q.correct)
+  };
+}
+
 function renderQuizBank() {
   const content = document.getElementById('module-content');
   if (!content) return;
@@ -17441,7 +17474,7 @@ function renderQuizBank() {
         <div class="quiz-bank-field">
           <label>${safeT(labels.count)}</label>
           <select id="quiz-bank-count" onchange="previewQuizBank()">
-            ${[10,20,40,60].map(c => '<option value="' + c + '"' + (Number(filters.count) === c ? ' selected' : '') + '>' + c + '</option>').join('')}
+            ${[10,20,40,60,240].map(c => '<option value="' + c + '"' + (Number(filters.count) === c ? ' selected' : '') + '>' + (c === 240 ? safeT({zh:'全部', en:'All', id:'Semua', vi:'Tất cả'}) : c) + '</option>').join('')}
           </select>
         </div>
       </div>
@@ -17486,7 +17519,7 @@ function startQuizBank() {
   quizBankState.filters = readQuizBankFilters();
   const available = getQuizBankQuestions(quizBankState.filters);
   const count = Math.min(quizBankState.filters.count, available.length);
-  quizBankState.pool = shuffleQuestions(available).slice(0, count);
+  quizBankState.pool = shuffleQuestions(available).slice(0, count).map(shuffleQuestionOptions);
   quizBankState.current = 0;
   quizBankState.score = 0;
   quizBankState.answered = new Array(quizBankState.pool.length).fill(null);
@@ -17505,7 +17538,7 @@ function retryQuizBankWithFilters() {
   // Re-draw new random set with the same saved filters (DOM selects may be gone)
   const available = getQuizBankQuestions(quizBankState.filters);
   const count = Math.min(quizBankState.filters.count, available.length);
-  quizBankState.pool = shuffleQuestions(available).slice(0, count);
+  quizBankState.pool = shuffleQuestions(available).slice(0, count).map(shuffleQuestionOptions);
   quizBankState.current = 0;
   quizBankState.score = 0;
   quizBankState.answered = new Array(quizBankState.pool.length).fill(null);
