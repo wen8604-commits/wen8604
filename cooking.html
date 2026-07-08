@@ -4,23 +4,23 @@
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob: https://cdnjs.cloudflare.com https://og-image.vercel.app; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: blob: https://og-image.vercel.app;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="料理基礎學習平台 v0.53 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
+<meta name="description" content="料理基礎學習平台 v0.54 — 多語言廚藝入門（繁中・英・印尼・越南），200題測驗，自由學習無關卡無證書">
 <meta name="keywords" content="料理,廚房安全,刀工,火候,食品衛生,烹調,學習平台,多語言,家庭幫傭">
 <meta name="author" content="Culinary Basics Learning Platform">
 <meta name="theme-color" content="#5a1800">
 
 <!-- Open Graph / Social sharing -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="料理基礎學習平台 v0.53">
+<meta property="og:title" content="料理基礎學習平台 v0.54">
 <meta property="og:description" content="多語言廚藝入門：廚房安全・刀工基礎・火候控制・食品衛生 — 200 題測驗，自由學習，無關卡無證書">
 <meta property="og:image" content="https://og-image.vercel.app/料理基礎學習平台.png?theme=light&md=1&fontSize=100px&images=🍜">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="料理基礎學習平台 v0.53">
+<meta name="twitter:title" content="料理基礎學習平台 v0.54">
 <meta name="twitter:description" content="繁中・EN・ID・VI 四語言廚藝入門，200 題測驗，自由學習">
 
-<title>料理基礎學習平台 v0.53</title>
+<title>料理基礎學習平台 v0.54</title>
 
 <!-- Favicon (emoji) -->
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍜</text></svg>">
@@ -87,7 +87,7 @@ body{display:flex;flex-direction:column;align-items:stretch}
 </head>
 <body>
 <div class="platform-wrapper">
-<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.53 — 自由點選課程，無關卡無證書</h2>
+<h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)">料理基礎學習平台 v0.54 — 自由點選課程，無關卡無證書</h2>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
@@ -555,6 +555,11 @@ body{font-size:14.5px}
 .lang-chip{background:var(--color-background-primary);border:1.5px solid var(--color-border-secondary);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:500;color:var(--color-text-secondary);cursor:pointer;font-family:var(--font-sans);transition:all .18s;display:flex;align-items:center;gap:6px}
 .lang-chip.on{background:#5a1800;border-color:#5a1800;color:#fff}
 .lang-chip:hover:not(.on){border-color:var(--color-border-primary);color:var(--color-text-primary)}
+/* ── v0.54 雙語並陳：次要語言列 ── */
+.bi2{display:block;font-size:.86em;color:var(--color-text-tertiary);font-weight:400;margin-top:3px;line-height:1.45}
+.qopt .bi2{font-size:.84em}
+.quiz-q .bi2{font-size:.8em;margin-top:5px}
+.quiz-fb{white-space:pre-line}
 /* ── v0.50 新增：Hero 繼續學習主按鈕 ── */
 .hero-cta{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .hero-cta-pri{background:#fff;border:none;color:#5a1800;border-radius:20px;padding:9px 20px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font-sans);display:flex;align-items:center;gap:7px;box-shadow:0 3px 12px rgba(0,0,0,.2);transition:all .18s;white-space:nowrap}
@@ -686,14 +691,14 @@ body{font-size:14.5px}
 <div class="footer">
   <span id="footer-version"></span>
   <span class="fc" data-i="footer.langs">繁中 · 中英 · 中印尼 · 中越</span>
-  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.53</span>
+  <span class="fr" id="footer-stats" style="font-size:10px;color:var(--color-text-tertiary)">200 題 · 20 模組 · 4 語言 · v0.54</span>
 </div>
 
 </div>
 </div>
 
 <script>
-var APP_VERSION='0.53';
+var APP_VERSION='0.54';
 function sendPrompt(msg){try{var f=window.parent||window;if(f.sendPrompt&&f.sendPrompt!==sendPrompt)f.sendPrompt(msg)}catch(e){}console.log('[sendPrompt]',msg)}
 function escHTML(v){
   return String(v==null?'':v).replace(/[&<>"']/g,function(ch){
@@ -5851,7 +5856,7 @@ function buildSidebar(){
   if(!el)return;
   var html='';
   MODS.forEach(function(m,i){
-    var label=m.titles[curLang]||m.titles.zh;
+    var label=biTxt(m.titles);
     var isDone=isModDone(m);
     var isAct=(i===curMod && curView==='levels');
     var pct=getModPct(m);
@@ -5974,7 +5979,7 @@ function renderHome(){
     html+='<div class="'+cls+'" onclick="loadModule('+i+')" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\')loadModule('+i+')">';
     html+='<div class="memoji-wrap"><span class="memoji">'+escHTML(m.emoji)+'</span></div>';
     html+='<div class="mtitle">'+escHTML(label)+'</div>';
-    html+='<div class="men">'+escHTML(m.titles.en)+'</div>';
+    html+='<div class="men">'+escHTML(lang2(m.titles))+'</div>';
     html+='<div class="mcnt"><span class="mcnt-badge">'+done+'/'+tot+'</span></div>';
     html+='<div class="mbar"><div class="mfill" style="width:'+pct+'%"></div></div>';
     if(isDone) html+='<div class="mcheck"><i class="ti ti-circle-check" aria-hidden="true"></i></div>';
@@ -5995,12 +6000,26 @@ function lang2(obj){
   return obj.zh || obj.en || '';
 }
 
+// ── v0.54 雙語並陳 helpers ──
+// biTxt()：單行版「主語言｜次語言」，用於按鈕、側欄、標籤等窄空間
+function biTxt(obj){
+  var p=pick(obj),s=lang2(obj);
+  return (s&&s!==p)?(p+'｜'+s):p;
+}
+// biHTML()：兩行版，主語言在上、次語言（.bi2）在下，已做 HTML escape
+function biHTML(obj){
+  var p=pick(obj),s=lang2(obj);
+  var h=escHTML(p);
+  if(s&&s!==p)h+='<span class="bi2">'+escHTML(s)+'</span>';
+  return h;
+}
+
 function renderLesson(idx){
   var m=MODS[idx];
   var label=m.titles[curLang]||m.titles.zh;
   var tot=getTotal(m);
   var doneCnt=getDoneCount(m);
-  var html='<div class="sechd"><h2>'+escHTML(t('sec.cur')+' — '+t('lesson.topic')+m.lv+' '+label)+'</h2><div class="ln"></div></div>';
+  var html='<div class="sechd"><h2>'+escHTML(t('sec.cur')+' — '+t('lesson.topic')+m.lv+' '+biTxt(m.titles))+'</h2><div class="ln"></div></div>';
   html+='<div class="lesson"><div class="leshd"><div class="lesico">'+escHTML(m.emoji)+'</div><div>';
   html+='<h3>'+escHTML(t('lesson.topic')+m.lv+' '+label)+'</h3>';
   html+='<div class="lessub">'+escHTML(curLang==='zh'?m.titles.en:m.titles.zh)+'</div>';
@@ -6022,7 +6041,7 @@ function renderLesson(idx){
     // visual diagram if present
     if(kd.visual){
       html+='<div class=\"kdiagram\">';
-      html+='<div class=\"kdiagram-title\">'+escHTML(pick(kd.visual.title))+'</div>';
+      html+='<div class=\"kdiagram-title\">'+biHTML(kd.visual.title)+'</div>';
       var vHtml=kd.visual.html;
       if(typeof vHtml==='object'&&vHtml!==null){
         var langHtml=vHtml[curLang];
@@ -6057,8 +6076,8 @@ function renderLesson(idx){
     if(kd.sections){
       kd.sections.forEach(function(sec){
         html+='<div class="ksec">';
-        html+='<div class="ksec-hd">'+escHTML(pick(sec.heading))+'</div>';
-        html+='<div class="ksec-body">'+escHTML(pick(sec.body))+'</div>';
+        html+='<div class="ksec-hd">'+biHTML(sec.heading)+'</div>';
+        html+='<div class="ksec-body">'+biHTML(sec.body)+'</div>';
         html+='</div>';
       });
     }
@@ -6074,7 +6093,7 @@ function renderLesson(idx){
     if(kd.checklist){
       var cltitle=pick(kd.checklist.title);
       html+='<div class=\"safepanel\" style=\"margin-top:8px\">';
-      html+='<div class=\"safehd\"><i class=\"ti ti-checklist\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+escHTML(cltitle)+'</span></div>';
+      html+='<div class=\"safehd\"><i class=\"ti ti-checklist\" aria-hidden=\"true\"></i><span class=\"shtitle\">'+escHTML(biTxt(kd.checklist.title))+'</span></div>';
       html+='<div class=\"safebody\">';
       kd.checklist.items.forEach(function(r){
         html+='<div class=\"saferow '+(r.ok?'ok':'no')+'\"><i class=\"ti ti-'+(r.ok?'circle-check':'circle-x')+'\" aria-hidden=\"true\"></i><div><div class=\"stxt\">'+escHTML(pick(r))+'</div><div class=\"sen\">'+escHTML(lang2(r))+'</div></div></div>';
@@ -6084,13 +6103,13 @@ function renderLesson(idx){
     // table if present
     if(kd.table){
       html+='<div class=\"kdiagram\" style=\"margin-top:8px\">';
-      html+='<div class=\"kdiagram-title\">'+escHTML(pick(kd.table.title))+'</div>';
+      html+='<div class=\"kdiagram-title\">'+biHTML(kd.table.title)+'</div>';
       html+='<table class=\"kvtable\"><thead><tr>';
-      kd.table.cols.forEach(function(c){html+='<th>'+escHTML(pick(c))+'</th>';});
+      kd.table.cols.forEach(function(c){html+='<th>'+biHTML(c)+'</th>';});
       html+='</tr></thead><tbody>';
       kd.table.rows.forEach(function(row){
         html+='<tr>';
-        row.forEach(function(cell){html+='<td>'+escHTML(typeof cell==='object'?pick(cell):cell)+'</td>';});
+        row.forEach(function(cell){html+='<td>'+(typeof cell==='object'?biHTML(cell):escHTML(cell))+'</td>';});
         html+='</tr>';
       });
       html+='</tbody></table></div>';
@@ -6102,7 +6121,7 @@ function renderLesson(idx){
       var maxVal=0;
       ct.bars.forEach(function(b){if(b.value>maxVal)maxVal=b.value;});
       html+='<div class=\"kdiagram\" style=\"margin-top:8px\">';
-      html+='<div class=\"kdiagram-title\">📊 '+escHTML(ctitle)+'</div>';
+      html+='<div class=\"kdiagram-title\">📊 '+biHTML(ct.title)+'</div>';
       html+='<div style=\"display:flex;flex-direction:column;gap:6px;margin-top:6px\">';
       ct.bars.forEach(function(b){
         var pct2=maxVal>0?Math.round(b.value/maxVal*100):0;
@@ -6110,17 +6129,16 @@ function renderLesson(idx){
         var col=b.color||'#5a1800';
         var valLabel=b.unit?b.value+' '+b.unit:b.value;
         html+='<div style=\"display:flex;align-items:center;gap:8px\">';
-        html+='<div style=\"width:90px;flex-shrink:0;font-size:10.5px;color:var(--color-text-secondary);text-align:right;line-height:1.3\">'+escHTML((b.emoji||'')+' '+label)+'</div>';
+        html+='<div style=\"width:90px;flex-shrink:0;font-size:10.5px;color:var(--color-text-secondary);text-align:right;line-height:1.3\">'+escHTML((b.emoji||'')+' ')+biHTML(b)+'</div>';
         html+='<div style=\"flex:1;height:22px;background:var(--color-background-tertiary);border-radius:4px;overflow:hidden;position:relative\">';
         html+='<div style=\"height:100%;width:'+pct2+'%;background:'+col+';border-radius:4px;transition:width .5s cubic-bezier(.4,0,.2,1)\"></div>';
         html+='<span style=\"position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;color:var(--color-text-secondary);font-weight:500\">'+escHTML(valLabel)+'</span>';
         html+='</div></div>';
       });
-      if(ct.note){html+='<div style=\"margin-top:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 10px;font-size:10.5px;color:var(--color-text-secondary)\">'+escHTML(pick(ct.note))+'</div>';}
+      if(ct.note){html+='<div style=\"margin-top:6px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:6px 10px;font-size:10.5px;color:var(--color-text-secondary)\">'+biHTML(ct.note)+'</div>';}
       html+='</div></div>';
     }
-    var tip=pick(kd.tip);
-    html+='<div class=\"ktip\">'+escHTML(tip)+'</div></div></div>';
+    html+='<div class=\"ktip\">'+biHTML(kd.tip)+'</div></div></div>';
   }
   html+='</div>';
   
@@ -6158,8 +6176,8 @@ function renderLesson(idx){
   html+='</div></div>';
   html+='<div class=\"quick\" style=\"justify-content:center\">';
   html+='<button class=\"qbtn pri\" onclick=\"showView(\'quizcenter\')\">'+t('btn.quiz')+'</button>';
-  if(idx<MODS.length-1)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx+1)+')\">'+t('lesson.next')+(MODS[idx+1] ? (MODS[idx+1].titles[curLang]||MODS[idx+1].titles.zh) : '')+' →</button>';
-  if(idx>0)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx-1)+')\">'+t('lesson.prev')+(MODS[idx-1] ? (MODS[idx-1].titles[curLang]||MODS[idx-1].titles.zh) : '')+'</button>';
+  if(idx<MODS.length-1)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx+1)+')\">'+t('lesson.next')+(MODS[idx+1] ? biTxt(MODS[idx+1].titles) : '')+' →</button>';
+  if(idx>0)html+='<button class=\"qbtn\" onclick=\"loadModule('+(idx-1)+')\">'+t('lesson.prev')+(MODS[idx-1] ? biTxt(MODS[idx-1].titles) : '')+'</button>';
   html+='</div></div></div>';
   // ── v0.50: 課程完成區 ──
   var allTopicsDone = m.topics.every(function(tp){return tp.s===2;});
@@ -6174,7 +6192,7 @@ function renderLesson(idx){
   html+='<button class="btn-mark-done'+(allTopicsDone?' marked':'')+'" onclick="markAllTopics('+idx+')">';
   html+= allTopicsDone ? '✅ '+(markAllLabels[curLang]||markAllLabels.zh) : '☐ '+(markAllLabels[curLang]||markAllLabels.zh);
   html+='</button>';
-  if(idx<MODS.length-1) html+='<button class="btn-next-mod" onclick="loadModule('+(idx+1)+')">'+escHTML((nextModLabels[curLang]||nextModLabels.zh)+' '+(MODS[idx+1].titles[curLang]||MODS[idx+1].titles.zh)+' →')+'</button>';
+  if(idx<MODS.length-1) html+='<button class="btn-next-mod" onclick="loadModule('+(idx+1)+')">'+escHTML((nextModLabels[curLang]||nextModLabels.zh)+' '+biTxt(MODS[idx+1].titles)+' →')+'</button>';
   html+='<button class="btn-next-mod" onclick="showView(\'home\')">'+escHTML(backLabels[curLang]||backLabels.zh)+'</button>';
   html+='</div></div>';
   html+='</div></div>';
@@ -6223,7 +6241,7 @@ function renderQuiz(){
   var curQNum=qi+1;
   var pct=Math.round(quizState.q/totalQ*100);
 
-  var html='<div class=\"sechd\"><h2>'+escHTML(t('quiz.title')+' — '+(MODS[curMod].titles[curLang]||MODS[curMod].titles.zh))+'</h2><div class=\"ln\"></div></div>';
+  var html='<div class=\"sechd\"><h2>'+escHTML(t('quiz.title')+' — '+biTxt(MODS[curMod].titles))+'</h2><div class=\"ln\"></div></div>';
 
   // 進度區塊
   html+='<div class=\"quiz-prog\">';
@@ -6249,9 +6267,9 @@ function renderQuiz(){
   html+='</div>';
   html+='</div>';
 
-  html+='<div class=\"quiz-wrap\"><div class=\"quiz-q\">'+escHTML(q.q[curLang]||q.q.zh)+'</div>';
+  html+='<div class=\"quiz-wrap\"><div class=\"quiz-q\">'+biHTML(q.q)+'</div>';
   html+='<div class=\"quiz-opts\">';
-  var fbEnc=encArg(q.fb[curLang]||q.fb.zh);
+  var fbP=q.fb[curLang]||q.fb.zh,fbS=lang2(q.fb);var fbFull=fbP+((fbS&&fbS!==fbP)?'\n'+fbS:'');var fbEnc=encArg(fbFull);
   q.opts.forEach(function(o,oi){
     var cls='qopt';
     var extra='';
@@ -6261,9 +6279,9 @@ function renderQuiz(){
       else if(o.ok && q.opts[quizState.picked] && !q.opts[quizState.picked].ok) cls+=' correct';
       extra=' disabled style=\"cursor:default\"';
     }
-    html+='<button class=\"'+cls+'\" data-ok=\"'+(o.ok?1:0)+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+escHTML(o[curLang]||o.zh)+'</button>';
+    html+='<button class=\"'+cls+'\" data-ok=\"'+(o.ok?1:0)+'\"'+extra+' onclick=\"answerQ(this,'+o.ok+','+oi+',\''+fbEnc+'\')\">'+biHTML(o)+'</button>';
   });
-  var fbText=quizState.answered?fmtFeedback(q.fb[curLang]||q.fb.zh,!!(q.opts[quizState.picked]&&q.opts[quizState.picked].ok)):'';
+  var fbText=quizState.answered?fmtFeedback(fbFull,!!(q.opts[quizState.picked]&&q.opts[quizState.picked].ok)):'';
   html+='</div><div class=\"quiz-fb\" id=\"quiz-fb\">'+escHTML(fbText)+'</div></div>';
   var nextStyle=quizState.answered?'':'display:none';
   html+='<div class=\"quick\"><button class=\"qbtn pri\" id=\"quiz-next-btn\" style=\"'+nextStyle+'\" onclick=\"nextQ()\">'+t('quiz.next')+'</button></div>';
@@ -6313,7 +6331,7 @@ function renderCert(){
   html+='<div class="sechd"><h2>'+t('cert.progress')+'</h2><div class="ln"></div></div>';
   html+='<div class="cert-mod-grid">';
   MODS.forEach(function(m,i){
-    var label=m.titles[curLang]||m.titles.zh;
+    var label=biTxt(m.titles);
     var mDone=getDoneCount(m);var mTot=getTotal(m);
     var pct=mTot>0?Math.round(mDone/mTot*100):0;
     var isDone=isModDone(m);
@@ -6388,7 +6406,7 @@ function markProgress(idx){
 // ── v0.53: 回饋文字依對錯加前綴（原本答錯也顯示「正確！」造成誤導）──
 function fmtFeedback(raw,isOk){
   if(isOk) return '\u2705 '+raw;
-  var stripped=raw.replace(/^(正確！|正確!|Correct!|Benar!|Đúng!|Chính xác!)\s*/,'');
+  var stripped=raw.replace(/(^|\n)(正確！|正確!|Correct!|Benar!|Đúng!|Chính xác!)\s*/g,'$1');
   var pre={zh:'\u274c 答錯了。',en:'\u274c Not quite. ',id:'\u274c Belum tepat. ',vi:'\u274c Chưa đúng. '};
   return (pre[curLang]||pre.zh)+stripped;
 }
@@ -6417,7 +6435,7 @@ function nextQ(){
     var scoreHtml='<div style=\"background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:24px 20px;text-align:center;margin-bottom:14px\">';
     scoreHtml+='<div style=\"font-size:40px;margin-bottom:10px\">'+scoreEmoji+'</div>';
     scoreHtml+='<div style=\"font-size:15px;font-weight:600;margin-bottom:4px\">'+escHTML(scoreMsg)+'</div>';
-    scoreHtml+='<div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:16px\">'+escHTML((MODS[curMod].titles[curLang]||MODS[curMod].titles.zh)+' · '+t('quiz.completed'))+'</div>';
+    scoreHtml+='<div style=\"font-size:12px;color:var(--color-text-secondary);margin-bottom:16px\">'+escHTML(biTxt(MODS[curMod].titles)+' · '+t('quiz.completed'))+'</div>';
     scoreHtml+='<div style=\"display:flex;justify-content:center;gap:12px;margin-bottom:16px\">';
     scoreHtml+='<div style=\"background:var(--color-background-secondary);border-radius:8px;padding:10px 18px\">';
     scoreHtml+='<div style=\"font-size:26px;font-weight:700;color:#8a2800;line-height:1\">'+quizState.score+'</div>';
@@ -6669,7 +6687,7 @@ function renderQuizCenter(){
       var hasQ=QUIZZES[i]&&QUIZZES[i].length>0;
       html+='<div class="qc-mp-item'+picked+'" onclick="qcPickMod('+i+')">';
       html+='<span class="qcpi-emoji">'+escHTML(m.emoji||'📚')+'</span>';
-      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHTML(biTxt(m.titles))+'</span>';
       if(hasQ)html+='<span class="qcpi-tick">✓</span>';
       else html+='<span style="font-size:10px;color:var(--color-text-tertiary)">—</span>';
       html+='</div>';
@@ -6691,7 +6709,7 @@ function renderQuizCenter(){
       var pct=Math.round(totalWrong/Math.max(1,totalAttempts)*100);
       var col=pct>60?'#c0392b':pct>30?'#e67e22':'#1a7248';
       html+='<div class="qc-weak-row"><span style="font-size:12px">'+escHTML(m.emoji||'📚')+'</span>';
-      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px">'+escHTML(biTxt(m.titles))+'</span>';
       html+='<div class="qc-weak-bar-wrap"><div class="qc-weak-bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>';
       html+='<span class="qc-weak-pct">'+weakQs.length+' '+t('qc.count.unit')+'</span></div>';
     });
@@ -6761,7 +6779,7 @@ function renderQCQuiz(){
   var totalQ=qcState.pool.length;var pct=Math.round(pi/totalQ*100);
   var html='<div class="qc-session-hd">';
   html+='<span class="qcs-mode-badge" style="background:rgba(138,40,0,.1);color:#8a2800">'+escHTML(t('qc.mode.'+qcState.mode))+'</span>';
-  html+='<span class="qcs-src">'+escHTML(MODS[mi].titles[curLang]||MODS[mi].titles.zh)+'</span>';
+  html+='<span class="qcs-src">'+escHTML(biTxt(MODS[mi].titles))+'</span>';
   html+='<button class="qcs-exit" onclick="qcExit()">'+escHTML(t('qc.exit'))+'</button></div>';
   html+='<div class="quiz-prog"><div class="quiz-prog-row">';
   html+='<span class="quiz-q-counter">'+qCounter(pi+1)+'</span><span class="quiz-q-total">'+qTotal(totalQ)+'</span>';
@@ -6775,10 +6793,10 @@ function renderQCQuiz(){
     html+='<div class="'+dotCls+'"></div>';
   }
   html+='</div></div>';
-  html+='<span class="q-src-tag">'+escHTML((MODS[mi].emoji||'📚')+' '+(MODS[mi].titles[curLang]||MODS[mi].titles.zh))+'</span>';
-  html+='<div class="quiz-wrap"><div class="quiz-q">'+escHTML(q.q[curLang]||q.q.zh)+'</div>';
+  html+='<span class="q-src-tag">'+escHTML((MODS[mi].emoji||'📚')+' '+biTxt(MODS[mi].titles))+'</span>';
+  html+='<div class="quiz-wrap"><div class="quiz-q">'+biHTML(q.q)+'</div>';
   html+='<div class="quiz-opts">';
-  var fbEnc=encArg(q.fb[curLang]||q.fb.zh);
+  var fbP=q.fb[curLang]||q.fb.zh,fbS=lang2(q.fb);var fbFull=fbP+((fbS&&fbS!==fbP)?'\n'+fbS:'');var fbEnc=encArg(fbFull);
   q.opts.forEach(function(o,oi){
     var cls='qopt';var extra='';
     if(qcState.answered){
@@ -6786,9 +6804,9 @@ function renderQCQuiz(){
       else if(o.ok && q.opts[qcState.picked] && !q.opts[qcState.picked].ok) cls+=' correct';
       extra=' disabled style="cursor:default"';
     }
-    html+='<button class="'+cls+'" data-ok="'+(o.ok?1:0)+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+escHTML(o[curLang]||o.zh)+'</button>';
+    html+='<button class="'+cls+'" data-ok="'+(o.ok?1:0)+'"'+extra+' onclick="qcAnswerQ(this,'+o.ok+','+item.mi+','+item.qi+','+oi+',\''+fbEnc+'\')">'+biHTML(o)+'</button>';
   });
-  var fbText=qcState.answered?fmtFeedback(q.fb[curLang]||q.fb.zh,!!(q.opts[qcState.picked]&&q.opts[qcState.picked].ok)):'';
+  var fbText=qcState.answered?fmtFeedback(fbFull,!!(q.opts[qcState.picked]&&q.opts[qcState.picked].ok)):'';
   html+='</div><div class="quiz-fb" id="quiz-fb">'+escHTML(fbText)+'</div></div>';
   var nextStyle=qcState.answered?'':'display:none';
   html+='<div class="quick"><button class="qbtn pri" id="quiz-next-btn" style="'+nextStyle+'" onclick="qcNextQ()">'+t('quiz.next')+'</button></div>';
@@ -6851,7 +6869,7 @@ function qcShowResult(){
       var s=qcState.modScores[k];var mp=Math.round(s.correct/Math.max(1,s.total)*100);
       var col=mp>=70?'#1a7248':'#c0392b';var m=MODS[parseInt(k)];
       html+='<div class="qr-br-row"><span class="qr-br-emoji">'+escHTML(m.emoji||'📚')+'</span>';
-      html+='<span class="qr-br-label">'+escHTML(m.titles[curLang]||m.titles.zh)+'</span>';
+      html+='<span class="qr-br-label">'+escHTML(biTxt(m.titles))+'</span>';
       html+='<div class="qr-br-bar"><div class="qr-br-fill" style="width:'+mp+'%;background:'+col+'"></div></div>';
       html+='<span class="qr-br-val">'+s.correct+'/'+s.total+'</span></div>';
     });
