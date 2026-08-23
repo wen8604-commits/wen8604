@@ -4,18 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0C2A1E">
-<!-- 部署後請將下列 canonical 與 og:url 替換為正式網址 -->
-<link rel="canonical" href="https://example.com/employment-stability-fund-dossier/">
+<!-- 正式發布網址與分享圖片尚未確定；canonical、og:url、og:image 暫不輸出，避免搜尋引擎收錄占位網址。 -->
 <meta property="og:type" content="article">
 <meta property="og:locale" content="zh_TW">
 <meta property="og:site_name" content="就業安定基金爭議檔案">
 <meta property="og:title" content="就業安定基金爭議檔案（1994–2026）｜審計卷宗版">
-<meta property="og:description" content="雇主依法繳納就業安定費，但部分基金支出遭審計部查核認定不符法定用途，因而引發多年爭議。法源、財務、案件、改革——逐條可查證的公開資訊彙編。">
-<meta property="og:url" content="https://example.com/employment-stability-fund-dossier/">
-<meta property="og:image" content="https://example.com/og-image.png">
+<meta property="og:description" content="在臺移工已逾90萬人，基金財源主要來自雇主繳納的就業安定費。部分支出經審計認定與法定用途關聯性不高，監督與資訊公開因此成為核心爭點。">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="就業安定基金爭議檔案（1994–2026）">
-<meta name="twitter:description" content="雇主為逾90萬移工按月繳費的三百億資金池，如何出現咖啡豆、裝潢與音樂會支出爭議——逐條可查證。">
+<meta name="twitter:description" content="在臺移工已逾90萬人，基金財源主要來自依法負有繳費義務的雇主；實際繳費人數須排除聘僱許可失效及依法免繳者。逐條查證基金支用與改革。">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%230C2A1E'/%3E%3Crect x='3' y='3' width='58' height='58' fill='none' stroke='%23C9A84C' stroke-width='3'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23F0EAD8' font-family='Noto Serif TC,serif' font-weight='900'%3E%E5%AE%89%3C/text%3E%3C/svg%3E">
 <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
 <script type="application/ld+json">
@@ -31,7 +28,7 @@
   "about": ["就業安定基金", "就業服務法第55條", "審計部查核", "移工政策"]
 }
 </script>
-<meta name="description" content="就業安定基金爭議檔案（1994–2026）：法源條文、財務軌跡、支出爭議與改革進程之公開資訊彙編。雇主為逾90萬移工按月繳費的三百億資金池，如何出現咖啡豆、裝潢與音樂會支出爭議——逐條可查證。">
+<meta name="description" content="在臺移工已逾90萬人，基金財源主要來自雇主繳納的就業安定費。部分支出經審計認定與法定用途關聯性不高，監督與資訊公開因此成為核心爭點。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <title>就業安定基金爭議檔案（1994–2026）｜審計卷宗版</title>
@@ -405,6 +402,7 @@ a.cite:hover{border-color:var(--gold);color:var(--gold)}
 .srcitem .sid{font-family:var(--mono);font-weight:600;color:var(--red);font-size:.76rem}
 .srcitem .styp{font-family:var(--mono);font-size:.62rem;color:var(--ink-faint);letter-spacing:.06em}
 .srcitem p{margin:0;color:var(--ink-soft)}
+.srcitem p a{color:var(--green);font-weight:700;text-decoration:underline;text-underline-offset:2px}
 .srcitem.flash{background:var(--gold-soft)}
 @media(max-width:640px){.srcitem{grid-template-columns:48px 1fr;gap:6px 10px}.srcitem .styp{grid-column:2;margin-top:-6px}}
 /* ---- 時間軸展開 ---- */
@@ -830,10 +828,10 @@ a.ref{transition:background .15s,color .15s}
     <div class="stamp">監督進行中</div>
     <h1>就業安定基金爭議檔案<span class="yr">1994–2026</span></h1>
     <div class="sub">法源條文 · 財務軌跡 · 支用爭議 · 改革進程 —— 逐條可查證之公開資訊彙編</div>
-    <p class="thesis">爭議不在基金<em>存在</em>，而在監督是否<em>足夠</em>。<br>雇主為逾九十萬移工按月繳費，這筆錢卻出現咖啡豆採購、辦公裝潢與音樂會等支出爭議。</p>
+    <p class="thesis">在臺移工已逾90萬人，基金財源主要來自雇主繳納的就業安定費。<br>部分支出經審計認定與法定用途關聯性不高，監督與資訊公開因此成為核心爭點。</p>
     <div class="hero-meta">
       <div><b>1994</b><span>基金成立（民國83年）</span></div>
-      <div><b>90.4萬人</b><span>在臺移工（2026年7月底）</span></div>
+      <div><b>903,674人</b><span>在臺移工；有效許可804,896人（2026年7月底）</span></div>
       <div><b>325.5億元</b><span>111年度用途決算規模</span></div>
       <div><b>7,224萬元</b><span>審計部查核認定近5年不符用途</span></div>
     </div>
@@ -878,13 +876,14 @@ a.ref{transition:background .15s,color .15s}
       <div><span class="tag">案件狀態</span><span class="seal red">監督進行中</span></div>
       <div><span class="tag">改革追蹤（8項）</span><b>部分完成2・進行5・未完1</b></div>
       <div><span class="tag">資料更新至</span><b>2026.08.23</b></div>
-      <div><span class="tag">版次</span><b>v20</b>　<a class="ref" data-src="changelog" href="#faq">▸更新紀錄</a></div>
+      <div><span class="tag">版次</span><b>v21</b>　<a class="ref" data-src="changelog" href="#faq">▸更新紀錄</a></div>
     </div>
 
     <details class="recent-update">
-      <summary>📌 最近更新（2026.08.23・v20）</summary>
+      <summary>📌 最近更新（2026.08.23・v21）</summary>
       <ul>
-        <li><b>移工統計更新</b>：勞動部勞動統計查詢網顯示，2026年7月底在臺移工903,674人；同月國籍別為印尼338,504人、越南303,437人、菲律賓188,578人、泰國73,146人。</li>
+        <li><b>移工統計口徑修正</b>：2026年7月底在臺移工903,674人，其中有效聘僱許可804,896人；總數不得直接視為就業安定費繳費人數。四大來源國合計903,665人，另有其他國籍9人。</li>
+        <li><b>114年度審核報告</b>：新增約241.5億元業務實際數、58.3億元本期賸餘、449.1億元期末現金，以及113年度六項審核意見追蹤結果與114年度新增問題。</li>
         <li><b>失聯統計更新</b>：2026年6月底失聯移工92,816人，占同月底在臺移工895,115人的約10.4%；國籍別改採勞動部官方查詢結果。</li>
         <li><b>委員資料揭露</b>：勞動力發展署「管理會委員簡介」專區目前僅列第13～17屆；截至本版查核日，未見第1～12屆委員主要學、經歷官方資料，明確列為資料缺口。</li>
         <li><b>修法日期補正</b>：「就業安定基金收支保管及運用辦法」第5條已於2026年1月2日以院授主基營字第1140202422A號令修正發布。</li>
@@ -893,7 +892,7 @@ a.ref{transition:background .15s,color .15s}
     </details>
 
     <div class="kpi-grid">
-      <div class="kpi"><span class="tag">財源基礎</span><b>90.4 萬人</b><small>2026年7月底在臺移工總數，雇主按人頭月繳就業安定費。</small><span class="src">勞動統計查詢網 <a class="ref" data-src="src-04" href="#faq">▸S04</a>｜<span class="grade a">A級</span></span></div>
+      <div class="kpi"><span class="tag">在臺移工（非繳費人數）</span><b>903,674 人</b><small>2026年7月底有效聘僱許可804,896人；實際就安費繳費人數尚須扣除依法免繳及轉任中階技術人力者。</small><span class="src">勞動統計查詢網 <a class="ref" data-src="src-04" href="#faq">▸S04</a>｜<span class="grade a">A級</span></span></div>
       <div class="kpi"><span class="tag">基金規模</span><b>約 325.5 億元</b><small>111年度用途決算，五年間自135億元翻倍成長。</small><span class="src">立委質詢揭露 <a class="ref" data-src="src-08" href="#faq">▸S08</a>｜<span class="grade b">B級</span></span></div>
       <div class="kpi"><span class="tag">財務警訊</span><b class="neg">約 200 億元</b><small>審計長答詢揭露「連續3年」收支短絀累計（2024年12月答詢時點）；基金仍有累積餘額。</small><span class="src">審計長答詢 <a class="ref" data-src="src-05" href="#faq">▸S05</a>｜<span class="grade a">A級</span></span></div>
       <div class="kpi"><span class="tag">爭議核心</span><b class="neg">約 7,224 萬元</b><small>審計部查核認定近5年不符基金用途之支出。</small><span class="src">審計部查核 <a class="ref" data-src="src-06" href="#faq">▸S06</a>｜<span class="grade a">A級</span></span></div>
@@ -906,7 +905,7 @@ a.ref{transition:background .15s,color .15s}
       <a class="toc-card" data-jump="basics" href="#basics"><span class="tno">卷〇三</span><b><i class="nico">🏦</i>基金是什麼</b><small>誰繳錢、誰管錢、金流哪一關失守</small></a>
       <a class="toc-card" data-jump="law" href="#law"><span class="tno">卷〇四</span><b><i class="nico">⚖️</i>法源解析</b><small>§55 七項逐條拆解與費額級距</small></a>
       <a class="toc-card" data-jump="finance" href="#finance"><span class="tno">卷〇五</span><b><i class="nico">💰</i>財務規模</b><small>決算五年翻倍與資料缺口誠實揭露</small></a>
-      <a class="toc-card" data-jump="workers" href="#workers"><span class="tno">卷〇六</span><b><i class="nico">👷</i>財源基礎</b><small>移工90.4萬人、國籍結構與失聯缺口</small></a>
+      <a class="toc-card" data-jump="workers" href="#workers"><span class="tno">卷〇六</span><b><i class="nico">👷</i>移工統計與財源</b><small>總數、有效許可、免繳情形與失聯缺口</small></a>
       <a class="toc-card" data-jump="cases" href="#cases"><span class="tno">卷〇七</span><b><i class="nico">🔍</i>爭議案件</b><small>本輪八案總表＋歷史前科盤點</small></a>
       <a class="toc-card" data-jump="timeline" href="#timeline"><span class="tno">卷〇八</span><b><i class="nico">📅</i>歷史軌跡</b><small>1992–2026 十三個關鍵節點（可展開）</small></a>
       <a class="toc-card" data-jump="structure" href="#structure"><span class="tno">卷〇九</span><b><i class="nico">🧩</i>結構問題</b><small>球員兼裁判的三層制度矛盾</small></a>
@@ -928,9 +927,9 @@ a.ref{transition:background .15s,color .15s}
     <div class="card">
       <p style="font-size:.87rem;margin-bottom:8px"><strong>2026.06</strong>｜勞動部6月5日於公共政策平臺正式回應印度移工連署（附議4萬4,623人）：重申「企業端有需求＋來源國方案符合我方要求」兩前提，無引進時間表 <a class="ref" data-src="src-16" href="#faq">▸S16</a></p>
       <p style="font-size:.87rem;margin-bottom:8px"><strong>2026.04</strong>｜勞動部長4月9日立院答詢稱首批印度移工「最快年底引進」，48小時內公共政策平臺反對連署突破成案門檻、最終逾4.4萬人附議 <a class="ref" data-src="src-16" href="#faq">▸S16</a></p>
-      <p style="font-size:.87rem;margin-bottom:8px"><strong>2026.06</strong>｜失聯移工官方統計更新為92,816人，越南籍58,598人居首 <a class="ref" data-src="src-17" href="#faq">▸S17</a>；同年2月立院另揭露基金墊付2.41億、追收率僅4.76% <a class="ref" data-src="src-09" href="#faq">▸S09</a></p>
+      <p style="font-size:.87rem;margin-bottom:8px"><strong>2026.06</strong>｜失聯移工官方統計更新為92,816人，越南籍58,598人居首 <a class="ref" data-src="src-17" href="#faq">▸S17</a>；媒體轉述的墊付與追繳數字直接相除約9.1%，與另述追收率的分母口徑不一致，待原始統計表釐清 <a class="ref" data-src="src-09" href="#faq">▸S09</a></p>
       <p style="font-size:.87rem;margin-bottom:8px"><strong>2026.01 起</strong>｜策進作為①上路年：非直接服務據點行政費、無關廣宣費改編公務預算 <a class="ref" data-src="src-13" href="#faq">▸S13</a></p>
-      <p style="font-size:.87rem;margin:0"><strong>待公布</strong>｜113年度決算審計報告——改革後第一份完整年度的正式體檢，是下一個重大觀察點</p>
+      <p style="font-size:.87rem;margin:0"><strong>2026.08 已公布</strong>｜114年度審核報告：業務計畫實際數約241.5億元、本期賸餘約58.3億元、期末現金約449.1億元；113年度六項審核意見均已研謀改善或持續辦理，惟仍新增宣導效益、重複職訓與政策影響評估等問題 <a class="ref" data-src="src-26" href="#faq">▸S26</a></p>
     </div>
   </div>
 </section>
@@ -941,7 +940,7 @@ a.ref{transition:background .15s,color .15s}
     <div class="sec-head"><span class="sec-no">卷〇一</span><h2>30秒摘要：問題核心在哪？</h2></div>
     <p class="sec-lede">如果只有半分鐘，這四筆「帳目」就是整起爭議的骨架。</p>
     <div class="kpi-grid">
-      <div class="kpi"><span class="tag">貸方 · 錢從哪來</span><b>2,000–11,000<small style="font-size:.5em">元/月</small></b><small>聘僱外籍移工的雇主，依行業別按月繳納「就業安定費」，特殊製造業最高月繳1.1萬元。移工本人與政府均不出資。</small></div>
+      <div class="kpi"><span class="tag">貸方 · 錢從哪來</span><b>主要來自雇主</b><small>依法負有繳費義務的雇主依類別定期繳納就業安定費；弱勢家庭與轉任中階技術人力等依法免繳，不能用在臺移工總數直接推算繳費人數。</small></div>
       <div class="kpi"><span class="tag">借方 · 錢該花哪</span><b>3 大用途</b><small>法定限用於：促進國民就業、提升勞工福祉、外國人聘僱管理——但條文長期只有原則性宣示。</small></div>
       <div class="kpi"><span class="tag">異常 · 問題在哪</span><b class="neg">用途爭議</b><small>咖啡豆採購、辦公裝潢、音樂會、粉專經營等多筆支出，經<b>審計部查核認定</b>或媒體揭露，與法定用途關聯不足。各案處理層級不同（審計認定／行政檢討／立委質詢），<b>均非法院判決</b>。</small></div>
       <div class="kpi"><span class="tag">處置 · 現在做什麼</span><b>6 項策進</b><small>2025年起勞動部從用途、管理、資訊公開三面向修法補洞，多數項目截至2026年8月23日仍在進行。</small></div>
@@ -956,14 +955,14 @@ a.ref{transition:background .15s,color .15s}
     <div class="sec-head"><span class="sec-no">卷〇二</span><h2>關鍵數據儀表板（更新至2026年）</h2></div>
     <p class="sec-lede">八個數字，掌握基金規模與爭議量級。標紅者為爭議面數字，標綠者為規模面數字。</p>
     <div class="kpi-grid">
-      <div class="kpi"><span class="tag">移工人數</span><b>903,674 人</b><small>2026年7月底在臺移工總數，較4月底880,130人增加23,544人。</small><span class="src">資料來源：勞動部勞動統計查詢網，115年7月底 <a class="ref" data-src="src-04" href="#faq">▸S04</a></span></div>
+      <div class="kpi"><span class="tag">在臺總數（非繳費人數）</span><b>903,674 人</b><small>2026年7月底有效聘僱許可804,896人；實際繳費人數還須扣除依法免繳者。</small><span class="src">資料來源：勞動部勞動統計查詢網，115年7月底 <a class="ref" data-src="src-04" href="#faq">▸S04</a></span></div>
       <div class="kpi"><span class="tag">基金用途決算</span><b>約 325.5 億元</b><small>111年度（2022）決算數，較106年度的135億餘元<b>翻倍成長</b>。</small><span class="src">立委質詢揭露 <a class="ref" data-src="src-08" href="#faq">▸S08</a></span></div>
       <div class="kpi"><span class="tag">近3年收支短絀</span><b class="neg">約 200 億元</b><small>審計長陳瑞敏2024年12月立院答詢揭露「連續3年」收支短絀累計約200億元（當年度支出大於收入；答詢未明示起訖年度）。<b>基金仍有累積餘額，並非瀕臨枯竭</b>。</small><span class="src">審計部，2024.12 <a class="ref" data-src="src-05" href="#faq">▸S05</a></span></div>
       <div class="kpi"><span class="tag">近5年不符用途・審計部查核認定</span><b class="neg">約 7,224 萬元</b><small>審計部查核109–113年度（2020–2024）認定與基金用途不符之支出共7,224萬6,254元，涵蓋勞動節影片、粉專經營、喬遷活動、春節紅包袋及三節禮品等，函請收回並修正113年度決算。</small><span class="src">審計部，2025.03 <a class="ref" data-src="src-06" href="#faq">▸S06</a></span></div>
       <div class="kpi"><span class="tag">112年度不符用途</span><b class="neg">約 5,174 萬元</b><small>列入應收回；其中<b>媒體宣傳費即達3,784萬、占73%</b>。</small><span class="src">審計部初步查核 <a class="ref" data-src="src-05" href="#faq">▸S05</a></span></div>
       <div class="kpi"><span class="tag">近2年已追回</span><b>逾 3 億元</b><small>審計部針對歷年違反規定支出之追討總額（<b>截至2024年12月</b>審計長立院答詢時點）。</small><span class="src">資料來源：審計長立院答詢，2024.12 <a class="ref" data-src="src-05" href="#faq">▸S05</a></span></div>
       <div class="kpi"><span class="tag">媒體宣傳費（預算數）</span><b class="neg">1.19 → 2.17 億元</b><small>2022至2025年度<b>預算數</b>成長逾8成。宣傳費編列本身並不違法，爭點在於是否符合基金法定用途及支出效益。</small><span class="src">立委黃國昌質詢 <a class="ref" data-src="src-07" href="#faq">▸S07</a></span></div>
-      <div class="kpi"><span class="tag">墊付款追收率</span><b class="neg">僅 4.76%</b><small>2022–2024年基金墊付失聯移工收容遣返費2.41億，截至2025年2月僅追回2,188萬（4.76%為勞動部公布數，分母口徑見卷〇六）。</small><span class="src">勞動部統計 <a class="ref" data-src="src-09" href="#faq">▸S09</a></span></div>
+      <div class="kpi"><span class="tag">114年度審核結果</span><b>賸餘約 58.3 億元</b><small>114年度主要業務計畫實際數合計約241.5億元；期末現金及約當現金約449.1億元。</small><span class="src">審計部114年度審核報告 <a class="ref" data-src="src-26" href="#faq">▸S26</a></span></div>
     </div>
   </div>
 </section>
@@ -972,9 +971,9 @@ a.ref{transition:background .15s,color .15s}
 <section id="basics" class="page">
   <div class="wrap ledger">
     <div class="sec-head"><span class="sec-no">卷〇三</span><h2>這筆基金，是什麼？</h2></div>
-    <p class="sec-lede">就業安定基金是雇主聘僱外籍移工時，依《就業服務法》第55條按月繳納「就業安定費」累積而成的<strong>特種基金</strong>，由勞動部管理運用。設立初衷：開放移工來臺難免排擠本國勞工就業，因此向雇主收費，作為照顧本國勞工、強化移工管理的財源。</p>
+    <p class="sec-lede">就業安定基金的財源主要來自依法負有繳費義務的雇主依《就業服務法》第55條繳納之就業安定費，屬由勞動部管理運用的<strong>特種基金</strong>。在臺移工總數還包含聘僱許可失效者，且弱勢家庭與轉任中階技術人力等依法免繳，因此不能直接把移工總數視為繳費人數。</p>
     <div class="grid4">
-      <div class="card"><h3 style="margin-top:0">誰繳錢？</h3><p style="font-size:.87rem;margin:0">聘僱外籍移工的雇主，依行業別每月繳2,000元至11,000元；家庭看護雇主若為中低收、低收入戶等可免繳。</p></div>
+      <div class="card"><h3 style="margin-top:0">誰繳錢？</h3><p style="font-size:.87rem;margin:0">依法負有繳費義務的移工雇主依工作類別與身分適用不同費額；低收入戶、中低收入戶等弱勢家庭及轉任中階技術人力等情形依法免繳。</p></div>
       <div class="card"><h3 style="margin-top:0">誰管錢？</h3><p style="font-size:.87rem;margin:0">就業安定基金管理會，置委員19至29人（現況29人）、任期2年、每3個月開會一次，<strong>召集人由勞動部部長兼任</strong>。</p></div>
       <div class="card"><h3 style="margin-top:0">法定用途？</h3><p style="font-size:.87rem;margin:0">促進國民就業、提升勞工福祉、外國人聘僱管理三大類——但邊界長期模糊，成為歷次爭議根源。</p></div>
       <div class="card"><h3 style="margin-top:0">爭議起點？</h3><p style="font-size:.87rem;margin:0">2024年底一起公務員職場霸凌輕生案的案外案，媒體追查時意外調出多筆基金支出明細，引發外界高度關注。</p></div>
@@ -982,7 +981,7 @@ a.ref{transition:background .15s,color .15s}
 
     <h3>資金流向：一筆錢怎麼「不見」的</h3>
     <div class="flow">
-      <div class="fstep"><div class="fdot">壹</div><div class="fbody"><b>雇主按月繳費</b><p>聘僱移工的公司或家庭，依行業別每月繳2,000～11,000元就業安定費。</p></div></div>
+      <div class="fstep"><div class="fdot">壹</div><div class="fbody"><b>依法負有義務的雇主繳費</b><p>費額依工作類別與雇主身分而異；部分弱勢家庭與轉任中階技術人力等情形免繳，實際繳費人數低於在臺移工總數。</p></div></div>
       <div class="fstep"><div class="fdot">貳</div><div class="fbody"><b>匯入基金專戶</b><p>勞動部設置之特種基金，隨移工人數成長累積成年決算逾三百億元的資金池。</p></div></div>
       <div class="fstep"><div class="fdot">參</div><div class="fbody"><b>管理會事前審議</b><p>29名委員（勞資代表、政府代表、學者）在錢花出去「之前」把關計畫。</p></div></div>
       <div class="fstep alert"><div class="fdot">！</div><div class="fbody"><b>爭議常從這一關失守</b><p>外界質疑審議多流於形式——「促進就業」「提升福祉」的用途範圍較廣、容易產生不同解讀，事前把關功能未充分發揮。</p></div></div>
@@ -1047,11 +1046,11 @@ a.ref{transition:background .15s,color .15s}
 <!-- ============ 財務規模 ============ -->
 <section id="finance" class="page">
   <div class="wrap ledger">
-    <div class="sec-head"><span class="sec-no">卷〇五</span><h2>財務規模：翻倍成長的資金池</h2></div>
-    <p class="sec-lede">就安基金屬「非營業特種基金」，立法院逐筆審查不易，官方迄未公布單一完整的逐年收支結餘總表。但從立委質詢與審計部查核揭露的片段數字，仍能拼出量級輪廓——而且規模正在快速膨脹。</p>
+    <div class="sec-head"><span class="sec-no">卷〇五</span><h2>財務規模：疫情期間擴張、其後回落</h2></div>
+    <p class="sec-lede">就安基金屬「非營業特種基金」，立法院逐筆審查不易。基金用途規模曾於疫情期間顯著擴張，之後有所回落，但仍維持每年數百億元量級；114年度審核報告已提供最新決算與現金資訊。</p>
 
     <div class="chart">
-      <h4>基金用途決算規模：五年間大幅膨脹</h4>
+      <h4>基金用途決算規模：疫情期間升至高峰</h4>
       <span class="unit">單位：新臺幣億元 ｜ 立委質詢與立法院預算中心報告揭露之年度數字</span>
       <div class="brow"><div class="lb">106年度（2017）</div><div class="bar"><i style="width:37.5%"></i></div><div class="vl">約 135 億元</div></div>
       <div class="brow"><div class="lb">109年度（2020）</div><div class="bar"><i style="width:57.7%"></i></div><div class="vl">約 207.7 億元</div></div>
@@ -1069,6 +1068,7 @@ a.ref{transition:background .15s,color .15s}
           <tr><td>基金用途決算數（109年度）</td><td class="num">約207.7億元</td><td>2021.08</td><td>立法院預算中心報告：207億6,964萬5千元，含疫情措施56.07億元（部分併決算）</td></tr>
           <tr><td>基金用途決算數（110年度）</td><td class="num">約360.1億元</td><td>2022</td><td>依立法院預算中心112年度預算評估報告換算（112年度預算數352.9億元較110年度決算數減少7.17億元）</td></tr>
           <tr><td>基金用途決算數（111年度）</td><td class="num">約325.5億元</td><td>2023.04</td><td>五年間翻倍成長；較110年度高峰回落</td></tr>
+          <tr><td>主要業務計畫實際數合計（114年度）</td><td class="num">約241.5億元</td><td>2026.08</td><td>審計部114年度審核報告四項業務計畫實際數加總；本期賸餘約58.3億元、期末現金及約當現金約449.1億元 <a class="ref" data-src="src-26" href="#faq">▸S26</a></td></tr>
           <tr><td>連續3年收支短絀累計</td><td class="num neg">約200億元</td><td>2024.12</td><td>審計長陳瑞敏立院答詢；係當年度收支差短之累計（答詢未明示起訖年度），基金仍有累積餘額</td></tr>
           <tr><td>媒體宣傳費預算（2022年度）</td><td class="num">約1.19億元</td><td>2024.12</td><td>立委黃國昌質詢數據</td></tr>
           <tr><td>媒體宣傳費預算（2025年度）</td><td class="num neg">約2.17億元</td><td>2024.12</td><td>係預算數（非決算數），較2022年成長逾8成；編列本身不違法，爭點在用途相符性</td></tr>
@@ -1112,8 +1112,8 @@ a.ref{transition:background .15s,color .15s}
 <!-- ============ 移工人數 ============ -->
 <section id="workers" class="page">
   <div class="wrap ledger">
-    <div class="sec-head"><span class="sec-no">卷〇六</span><h2>財源基礎：移工人數突破90萬</h2></div>
-    <p class="sec-lede">基金財源規模與移工人數同步成長——人數越多，就業安定費收入基礎越大，用途監督的急迫性也越高。2026年7月底，在臺移工達903,674人，十二年間成長逾40萬人。</p>
+    <div class="sec-head"><span class="sec-no">卷〇六</span><h2>移工統計與財源：總數不等於繳費人數</h2></div>
+    <p class="sec-lede">2026年7月底在臺移工903,674人，其中有效聘僱許可804,896人；其餘為聘僱許可失效者。實際就業安定費繳費人數還須扣除弱勢家庭、轉任中階技術人力等依法免繳情形，不能直接以90.4萬人推算基金收入。</p>
 
     <div class="chart">
       <h4>在臺移工人數趨勢（2014–2026）</h4>
@@ -1127,7 +1127,7 @@ a.ref{transition:background .15s,color .15s}
         <div class="vc"><span class="v">81.8</span><div class="col" style="height:94%"></div><span class="y">2025.1</span></div>
         <div class="vc"><span class="v">90.4</span><div class="col now" style="height:100%"></div><span class="y">2026.7</span></div>
       </div>
-      <div class="chart-note">2026年7月底移工總數903,674人；來源國以印尼338,504人（37.5%）居首，越南303,437人（33.6%）次之，菲律賓188,578人（20.9%）、泰國73,146人（8.1%）。國籍數與總數採同一查詢時點，可直接比較。</div>
+      <div class="chart-note">2026年7月底移工總數903,674人，其中有效聘僱許可804,896人。四大來源國為印尼338,504人、越南303,437人、菲律賓188,578人、泰國73,146人，合計903,665人；另有其他國籍9人。這9人的差額是國籍分類，不是四捨五入。</div>
     </div>
 
     <div class="tbl-wrap">
@@ -1140,10 +1140,10 @@ a.ref{transition:background .15s,color .15s}
           <tr><td>2021年底</td><td class="num">約67萬人</td><td>疫情影響年減3.9萬人，史上最大減幅</td></tr>
           <tr><td>2024年9月</td><td class="num">突破80萬人</td><td>10年間增加逾27萬人</td></tr>
           <tr><td>2026年1月底</td><td class="num">突破87萬人</td><td>有效聘僱許可約77.1萬；產業移工54.3萬（製造業48.5萬）、社福移工22.8萬（家庭看護近21萬）</td></tr>
-          <tr><td>2026年3月底</td><td class="num">873,347人</td><td>有效聘僱許可約77.4萬；產業移工約54.6萬（62.5%）、社福移工約22.8萬（37.5%）</td></tr>
+          <tr><td>2026年3月底</td><td class="num">873,347人</td><td>有效聘僱許可773,324人；產業移工545,523人、社福移工227,801人。以總數為分母約62.5%與26.1%，依呈現比例回推其餘約11.4%為聘僱許可失效等類別；若僅以有效許可為分母，約70.5%與29.5%</td></tr>
           <tr><td>2026年4月底</td><td class="num">880,130人</td><td>首次接近88萬人</td></tr>
           <tr><td>2026年6月底</td><td class="num">895,115人</td><td>與同月底失聯移工92,816人的統計時點一致</td></tr>
-          <tr><td>2026年7月底</td><td class="num">903,674人</td><td>官方最新統計，首度突破90萬人<br><small style="color:var(--ink-faint)">資料來源：勞動部勞動統計查詢網（statdb.mol.gov.tw），115年7月底</small></td></tr>
+          <tr><td>2026年7月底</td><td class="num">903,674人</td><td>有效聘僱許可804,896人；總數首度突破90萬，但不等於實際就安費繳費人數<br><small style="color:var(--ink-faint)">資料來源：勞動部勞動統計查詢網（statdb.mol.gov.tw），115年7月底</small></td></tr>
         </tbody>
       </table>
       <div class="tbl-cap">資料來源：勞動部勞動統計查詢網「引進移工在臺人數－按開放項目及國籍分」。本版於2026年8月23日直接查詢115年7月底資料，總數903,674人；網站顯示該表最新公布月份為115年7月。 <a class="ref" data-src="src-04" href="#faq">▸S04</a></div>
@@ -1162,7 +1162,7 @@ a.ref{transition:background .15s,color .15s}
           <tr><td>泰國</td><td class="num">73,146 人</td><td class="num">8.1%</td><td>營造業傳統主力</td></tr>
         </tbody>
       </table>
-      <div class="tbl-cap"><strong>口徑已統一：</strong>四國人數與總數均取自勞動部同一張115年7月底官方查詢表；四國合計即為903,674人。占比以未四捨五入的人數計算，分項加總可能因四捨五入呈現100.1%。印尼與越南合計占71.0%，來源高度集中——見卷一二「來源國集中風險」。 <a class="ref" data-src="src-04" href="#faq">▸S04</a></div>
+      <div class="tbl-cap"><strong>口徑已統一：</strong>四國人數與總數均取自勞動部同一張115年7月底官方查詢表；四大來源國合計903,665人，另有其他國籍9人，總計903,674人。這9人是國籍分類差額，不能用四捨五入解釋。印尼與越南合計占71.0%，來源高度集中——見卷一二「來源國集中風險」。 <a class="ref" data-src="src-04" href="#faq">▸S04</a></div>
     </div>
 
     <h3>失聯移工結構（2026年6月底92,816人，占同期移工約10.4%）</h3>
@@ -1182,9 +1182,9 @@ a.ref{transition:background .15s,color .15s}
         <p style="font-size:.74rem;color:var(--ink-faint);margin:10px 0 0">本欄仍為2026年2月公開整理資料，未與上方2026年6月國籍統計混算；營造業失聯人數當時已超越漁工居第3。</p>
       </div>
     </div>
-    <div class="note"><b>與基金的三重連結：</b>①移工失聯經通報後雇主免繳就安費（§55第4項），失聯率上升直接侵蝕收入；②失聯者查獲後之收容遣返費由基金墊付，追收率僅4.76%（見上）；③移工轉任中階技術人力後免繳（已逾5萬人）——三股力量同時擠壓基金收支。</div>
+    <div class="note"><b>與基金的三重連結：</b>①移工失聯經通報後雇主免繳就安費（§55第4項）；②失聯者查獲後之收容遣返費由基金墊付，公開的墊付與追繳數字直接相除約9.1%，但媒體另述較低追收率，原始分母待核；③移工轉任中階技術人力後免繳（已逾5萬人）——因此移工總數不能直接視為繳費基礎。</div>
 
-    <h3>新揭露：失聯移工墊付款，追收率僅4.76%</h3>
+    <h3>失聯移工墊付款：公開數字口徑待釐清</h3>
     <div class="card">
       <p style="font-size:.9rem">除了個案支出爭議，2026年立院監督還揭出一條「制度性缺口」：勞動部勞動統計查詢網顯示，2026年6月底全臺<strong>失聯移工92,816人</strong>，占同月底在臺移工895,115人的約10.4%（勞動部「聘僱許可失效」累計數屬不同口徑，不宜直接互換）<a class="cite" data-src="src-17" href="#faq">勞動部統計，2026.06 ▸S17</a>。失聯移工遭查獲後的收容與遣返費用，先由就安基金墊付——</p>
       <div class="chart" style="margin:18px 0 8px">
@@ -1192,7 +1192,7 @@ a.ref{transition:background .15s,color .15s}
         <span class="unit">單位：新臺幣 ｜ 勞動部統計，追繳數截至2025年2月底</span>
         <div class="brow"><div class="lb">基金累計墊付</div><div class="bar"><i class="g" style="width:100%"></i></div><div class="vl">2億4,121萬元</div></div>
         <div class="brow"><div class="lb">實際追繳回收</div><div class="bar"><i class="r" style="width:9%"></i></div><div class="vl r">2,188萬元</div></div>
-        <div class="chart-note">依規定80%墊付款應由失聯移工自行負擔，但因無力償還或已出國，勞動部公布追收比率僅約4.76%<a class="cite" data-src="src-09" href="#faq">勞動部統計，截至2025.02 ▸S09</a>。<b>口徑提醒：</b>若逕以上列2022–2024墊付總額為分母計算，追繳比約9.1%——4.76%為官方公布數，其分母基準（可能含歷年累計墊付）官方未明示，兩數字不宜互相換算。勞動部規劃要求來源國仲介公司申請認可時，須同意墊付失聯移工收容遣送費用。</div>
+        <div class="chart-note">2022至2024年累計墊付約2.41億元，截至2025年2月底追繳約2,188萬元；若直接以兩項公開數字計算約為9.1%。媒體另轉述官方追收率為4.76%，惟分母口徑未明，待取得原始統計表後確認。確認前不把該比率作為績效基準。 <a class="cite" data-src="src-09" href="#faq">媒體轉述資料，截至2025.02 ▸S09</a></div>
       </div>
     </div>
   </div>
@@ -1327,7 +1327,7 @@ a.ref{transition:background .15s,color .15s}
       <div class="tl-item"><span class="yr">2025.03</span><b>近5年不符用途數字揭露</b><p>審計部查核109–113年度（2020–2024），認定不符基金用途之支出合計7,224萬6,254元，函請勞動部收回並修正113年度決算。</p></div>
       <div class="tl-item"><span class="yr">2025.04</span><b>司法與監察程序展開</b><p>新北地檢4月2日依洩密、圖利等罪起訴謝宜容（霸凌部分不起訴）；立院專題報告中藍綠立委要求7,224萬元改「剔除追繳」而非預算歸墊，監察院就基金案立案調查。 <a class="ref" data-src="src-20" href="#faq">▸S20</a></p></div>
       <div class="tl-item"><span class="yr">2025–26</span><b>配套規範陸續建置</b><p>新訂「預算支用原則」「審議要點」「宣導品採購及贈發管理規範」，修正運用辦法與「管理會委員遴聘要點」（檢討代表性、利益迴避、出席率、任期）。</p></div>
-      <div class="tl-item hot"><span class="yr">2026 進行中</span><b>監督未止：墊付款缺口與人事結構問題</b><p>失聯移工墊付款追收率僅4.76%遭檢視；雇主團體持續要求逐筆公開支出、質疑管理會由勞動部主導的結構未根本解決。自2026年（民國115年）起，非直接服務據點行政費用與無關廣宣費應改編公務預算，實際執行成效待113年度決算審計報告驗證。</p></div>
+      <div class="tl-item hot"><span class="yr">2026 進行中</span><b>114年度審核報告公布，監督仍未止</b><p>114年度審核報告顯示113年度六項重要審核意見均已研謀改善或持續辦理，但仍提出宣導活動實質效益有限、部分失業者重複參訓且未穩定就業、外籍家庭幫傭新制政策影響評估未臻周妥等新問題。墊付款公開數字的分母口徑與管理會人事結構也仍待釐清。 <a class="ref" data-src="src-26" href="#faq">▸S26</a></p></div>
     </div>
   </div>
 </section>
@@ -1390,7 +1390,7 @@ a.ref{transition:background .15s,color .15s}
     </div>
     <div class="card">
       <h3 style="margin-top:0">實例二：NGO安置補助之審核與迴避機制　<span class="seal gray">背景可查證・指控待查證</span></h3>
-      <p style="font-size:.9rem">可查證的制度背景：移工因雇主無法照顧、勞資爭議或重大傷病等特殊情況，得安置於<strong>經政府核准之安置單位</strong>（多為民間團體／NGO），就安基金支付每日<strong>500元</strong>安置費，安置期間原則2個月、必要時得延長1次；失聯移工無力繳納罰鍰與返國機票時，亦由基金代墊（追收率僅4.76%，詳見卷〇六）。 <a class="ref" data-src="src-24" href="#faq">▸S24</a></p>
+      <p style="font-size:.9rem">可查證的制度背景：移工因雇主無法照顧、勞資爭議或重大傷病等特殊情況，得安置於<strong>經政府核准之安置單位</strong>（多為民間團體／NGO），就安基金支付每日<strong>500元</strong>安置費，安置期間原則2個月、必要時得延長1次；失聯移工無力繳納罰鍰與返國機票時，亦由基金代墊，惟目前公開的墊付與追繳數字口徑尚待核對。 <a class="ref" data-src="src-24" href="#faq">▸S24</a></p>
       <p style="font-size:.9rem;margin-bottom:0">外界質疑方向與上例同構：安置單位之核准與補助均由勞動部決定，受補助團體與決策圈之間的利益迴避是否完備、安置費審核與金流是否公開可查。惟針對特定NGO安置補助之<strong>具體弊案指控，截至2026年7月尚未檢索到可查證之公開報導</strong>，如實標註為待查證項目，俟有具名報導或審計資料再行補充。</p>
     </div>
 
@@ -1427,7 +1427,7 @@ a.ref{transition:background .15s,color .15s}
     <p class="sec-lede">依勞動部2025年1月函送立法院之「精進規劃報告」，從用途面、管理面、資訊公開面提出六項策進作為。以下依公開資訊標註截至2026年6月之進度（非官方正式評等）。 <a class="ref" data-src="src-13" href="#faq">▸S13</a></p>
 
     <div class="pstrip">
-      <div class="phead"><b>八項追蹤進度總覽</b><span class="plg">最後盤點 2026.06 ｜ 下次驗證點：113年度決算審計報告</span></div>
+      <div class="phead"><b>八項追蹤進度總覽</b><span class="plg">最後盤點 2026.08 ｜ 最新驗證：114年度審核報告已公布</span></div>
       <div class="pbar" role="img" aria-label="部分完成1項、進行中6項、未完成1項"><i class="ok" style="width:12.5%"></i><i class="go" style="width:75%"></i><i class="no" style="width:12.5%"></i></div>
       <div class="plg"><b style="color:var(--green)">■ 部分完成 2</b>　<b style="color:var(--gold)">■ 進行中 5</b>　<b style="color:var(--red)">■ 未完成 1</b>　——唯一「未完成」即管理會人事結構此一根本問題</div>
     </div>
@@ -1447,7 +1447,7 @@ a.ref{transition:background .15s,color .15s}
     <p style="font-size:.85rem;color:var(--ink-soft);max-width:760px;margin-bottom:14px">六項策進作為中，法制面的核心是修正「就業安定基金收支保管及運用辦法」第5條（明確用途範圍、刪除「其他有關支出」概括條款）。以下依政府公報、新聞稿與法規資料庫可查證之時間點整理，呈現「宣布即改革」與「法規正式生效」之間的實際時間差。 <a class="ref" data-src="src-22" href="#faq">▸S22</a></p>
     <div class="tl">
       <div class="tl-item"><span class="yr">2024.03.11</span><b>爭議發生前之現行版本</b><p>「運用辦法」歷來最近一次正式修正發布，即本輪爭議爆發前之基準版本（第5條當時仍為概括式12款用途，含「其他有關支出」條款）。</p></div>
-      <div class="tl-item hot"><span class="yr">2025.01.02</span><b>勞動部公布6項策進作為</b><p>宣布將修正「運用辦法」第5條，明定用途範圍與支用原則；並稱非直接服務據點行政費用、與基金用途無關廣宣費「自115年起」得回編公務預算。</p></div>
+      <div class="tl-item hot"><span class="yr">2025.01.03</span><b>勞動部提出6項策進作為</b><p>完整「就業安定基金管理運用精進規劃報告」於1月3日提送立法院並對外公開，提出修正用途範圍、支用原則與資訊公開等措施；官方1月22日管理會新聞稿再次確認此日期。 <a class="ref" data-src="src-13" href="#faq">▸S13</a></p></div>
       <div class="tl-item"><span class="yr">2025.01.22</span><b>管理會臨時會提案修法</b><p>勞動部長洪申翰主持基金管理會臨時會，正式提案修正第5條；媒體報導稱「預計今年（114年）上半年完成修訂」。</p></div>
       <div class="tl-item hot"><span class="yr">2025.08.05</span><b>第5條修正草案正式預告</b><p>勞動部以勞動發綜字第1140511821A號公告預告修正草案，刊登行政院公報，預告期至2025年10月7日——較「上半年完成」的原定目標已延後。</p></div>
       <div class="tl-item"><span class="yr">2025.10.15</span><b>立委批評「改革跳票」</b><p>立委廖偉翔質詢指出基金人事費逆勢增加；洪申翰答詢坦言，因《財政收支劃分法》修正後中央財政餘裕受影響，公務預算回編目標未如期達成——媒體以「就安基金改革跳票」為題報導。</p></div>
@@ -1526,7 +1526,7 @@ a.ref{transition:background .15s,color .15s}
       <p style="font-size:.9rem;margin-bottom:0">依特別公課法理觀察：職業訓練、就業服務、移工管理支出，與「雇主聘僱移工→可能排擠本國就業」的課徵理由具實質關聯；<strong>咖啡豆、部長演唱會、辦公室裝潢等支出，則與此一關聯較難連結</strong>。換言之，這些支出引發的疑慮，不只是「觀感不佳」或「行政不當」層次，<strong>若基金支出與繳費群體缺乏明確關聯，將產生正當性疑慮</strong>——這也是雇主團體「拒繳」主張並非全然無稽的原因。<strong>惟以上僅為本檔案依公開法理框架所作之分析，是否構成用途逸脫、是否違憲或違法，仍須由司法或審計機關就具體個案判斷，本檔案不作司法結論。</strong></p>
     </div>
 
-    <h3>貳、政治經濟學三視角：為什麼「一定」會走到這一步</h3>
+    <h3>貳、政治經濟學三視角：為什麼制度容易反覆出現支用爭議</h3>
     <div class="tbl-wrap">
       <div class="tbl-hint">← 表格可左右滑動 →</div>
       <table>
@@ -1534,7 +1534,7 @@ a.ref{transition:background .15s,color .15s}
         <tbody>
           <tr><td><strong>委託代理斷裂</strong><br><small style="color:var(--ink-faint)">principal–agent</small></td><td>出資者（雇主）、決策者（勞動部）、受益者（本國勞工／移工）、監督者（勞動部遴聘之管理會）<strong>四方完全分離</strong>，且出資者對決策者幾乎沒有課責工具——不能罷免、不能退出、席次由對方遴選</td><td>代理人偏離委託目的的成本趨近於零，偏離是理性結果而非道德意外</td></tr>
           <tr><td><strong>預算最大化官僚</strong><br><small style="color:var(--ink-faint)">Niskanen模型</small></td><td>勞動部公務預算長期不足，基金成為「彈性財源」；其他部會亦循「公務預算不足→提案就安基金」路徑尋租（機車行轉型、25淑女活動皆為適例，管理會委員李健鴻證言可佐）</td><td>只要基金存在寬鬆的概括條款，各機關就有制度性誘因把行政成本外部化到基金</td></tr>
-          <tr><td><strong>火警器 vs 巡邏監督</strong><br><small style="color:var(--ink-faint)">McCubbins &amp; Schwartz</small></td><td>本案的揭發鏈是：職場霸凌案（偶然）→ 媒體調採購網（火警器）→ 立委質詢 → 審計部擴大查核。<strong>全程沒有任何「巡邏式」機制主動攔截</strong>；管理會事前審議與內部審查兩道巡邏哨形同虛設</td><td>倚賴火警器監督的體系，不當支出的「存活期」等於下一次醜聞之間的間隔——2012到2024年即是十二年</td></tr>
+          <tr><td><strong>火警器 vs 巡邏監督</strong><br><small style="color:var(--ink-faint)">McCubbins &amp; Schwartz</small></td><td>本案的揭發鏈是：職場霸凌案（偶然）→ 媒體調採購網（火警器）→ 立委質詢 → 審計部擴大查核。113年度審核報告認定管理會及內部管控審核小組未充分發揮功能，顯示<strong>現有事前審議未能有效攔截部分爭議支出</strong>，管理會與內控機制的實質把關功能不足</td><td>當主動審議與內控效果不足時，制度會更倚賴媒體、國會或審計的事後揭露；這不代表完全沒有監督，而是事前監督強度仍需提升</td></tr>
         </tbody>
       </table>
       <div class="tbl-cap">理論標籤為分析框架之引用，非指涉任何個人動機；「四方分離矩陣」詳見卷〇九管理會結構表。</div>
@@ -1556,10 +1556,10 @@ a.ref{transition:background .15s,color .15s}
 
     <h3>肆、前瞻監測：五個可驗證的觀察指標</h3>
     <div class="dash">
-      <div class="ditem"><div><b>① 113年度決算審計報告</b><small>改革後第一份完整年度的正式體檢。觀察不符用途金額是否顯著下降、外部稽核報告是否公開。</small></div><span class="seal gold">待公布</span></div>
+      <div class="ditem"><div><b>① 114年度審核報告</b><small>六項精進措施提出後第一個較完整觀察年度：113年度六項意見均已研謀改善或持續辦理，但114年度仍出現宣導效益、重複職訓與政策影響評估等新問題。</small></div><span class="seal green">已公布</span></div>
       <div class="ditem"><div><b>② 廣宣費占比走勢</b><small>媒體宣傳費預算數曾三年成長逾8成（1.19→2.17億）。改革是否有感，看2026年度以後編列數是否實質回落、而非科目改名。</small></div><span class="seal gold">追蹤中</span></div>
       <div class="ditem"><div><b>③ 委員遴聘要點修正結果</b><small>關鍵不是「有沒有修」，而是聘任權是否仍完整保留在勞動部——這是路徑一與路徑二的分水嶺。</small></div><span class="seal red">關鍵指標</span></div>
-      <div class="ditem"><div><b>④ 墊付款追收率</b><small>基準值4.76%（2025.2）。仲介連帶負擔機制上路後能否突破一成，檢驗制度性缺口是否真正縫合。</small></div><span class="seal gold">追蹤中</span></div>
+      <div class="ditem"><div><b>④ 支出與審議資料公開</b><small>觀察逐筆支出、管理會議案附件、利益迴避與外部稽核結果能否以可下載、可比對格式穩定公開。</small></div><span class="seal gold">追蹤中</span></div>
       <div class="ditem"><div><b>⑤ 收入端三變數</b><small>中階留才免繳人數、失聯率、來源國政策（印尼零付費／印度引進）。收入若進入平台期，支出紀律的壓力測試才真正開始。</small></div><span class="seal gold">追蹤中</span></div>
     </div>
 
@@ -1595,9 +1595,9 @@ a.ref{transition:background .15s,color .15s}
     <details data-cat="law ref"><summary>法律不是早就要求公開基金運用情形嗎？</summary><div class="ans">是。《就業服務法》第55條第7項明定主管機關「應定期上網公告基金運用之情形及相關會議紀錄」，勞動部也確有公告收支報表。爭議在於公開「深度」：過去僅公布彙總報表，未逐筆揭露標案與科目明細，外界只能靠政府電子採購網自行拼湊——這正是2025年改革將決標資料、會議資料（含科目支用明細）納入公告的原因。</div></details>
     <details data-cat="law mig"><summary>為什麼中階技術人力、弱勢家庭可以免繳？</summary><div class="ans">兩種免繳邏輯不同：弱勢家庭（低收、中低收、領身障補助或中低收老人津貼者聘僱家庭看護）免繳是社會衡平設計，寫在§55第3項；中階技術人力免繳則是留才政策工具，鼓勵雇主把資深移工升任中階職務。後者已逾5萬人且持續擴大，長期將結構性縮減基金收入。</div></details>
     <details data-cat="fund"><summary>臺灣的做法跟其他國家比起來特別嗎？</summary><div class="ans">特別。新加坡也向雇主收外勞稅（Levy），重點在以價制量調控聘僱成本，但並未如臺灣另設由主管機關自管之特種基金；是否直接歸入一般歲入，本文暫不作強斷。南韓採政府對政府直接招募，無大額月費；日本無類似專款。臺灣是少數把移工收費導入「主管機關自行管理的專款基金」的制度——財源穩定專用是優點，但也把監督壓力全數集中在勞動部的自律上（詳見卷一二）。</div></details>
-    <details data-cat="mig ref"><summary>2026年還有什麼新爭點？</summary><div class="ans">兩項：一是失聯移工收容遣返墊付款——基金2022至2024年墊付2.41億、追收率僅4.76%，制度性缺口遭立院檢視；二是管理會人事結構——委員遴聘權仍在勞動部，「誰來監督監督者」的根本問題尚無具體改革方案。</div></details>
+    <details data-cat="mig ref"><summary>2026年還有什麼新爭點？</summary><div class="ans">三項：一是失聯移工收容遣返墊付款的公開數字口徑不一致；二是管理會委員遴聘權仍在勞動部，人事結構改革程度待觀察；三是114年度審核報告新提出宣導效益、重複職訓與外籍家庭幫傭新制政策影響評估等問題。</div></details>
 
-    <h3 style="margin-top:40px">證據鏈總表（S01–S25）</h3>
+    <h3 style="margin-top:40px">證據鏈總表（S01–S26）</h3>
     <p style="font-size:.85rem;color:var(--ink-soft);max-width:760px">全站各數據旁的金色 ▸S 編號皆對應下表，點按即跳回本表並標亮該筆。證據層級由高至低排列：<strong>法規・司法解釋 → 官方統計・新聞稿 → 審計查核 → 國會紀錄 → 媒體調查</strong>；媒體報導僅作「揭露時點」佐證，金額與條文一律以官方文件為準。</p>
     <div class="cred-legend">
       <span><span class="grade a">A級 官方</span>　勞動部・審計部・行政院・司法院・全國法規資料庫・官方統計</span>
@@ -1606,31 +1606,32 @@ a.ref{transition:background .15s,color .15s}
       <span>星等＝查證強度：官方文件與審計查核 ★★★★★、議事紀錄／媒體整理 ★★★★☆、立委質詢數字 ★★★☆☆</span>
     </div>
     <div class="srcbook">
-      <div class="srcitem" id="src-01"><span class="sid">S01</span><span class="styp">法規</span><p>《就業服務法》第42、46、55條全文——全國法規資料庫（law.moj.gov.tw）</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-02"><span class="sid">S02</span><span class="styp">法規</span><p>《就業安定基金收支保管及運用辦法》現行條文（民國115年1月2日修正）——勞動部勞動法令查詢系統、行政院公報</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-03"><span class="sid">S03</span><span class="styp">司法</span><p>司法院釋字第426號解釋（空氣污染防制費案）——特別公課合憲要件與「群體關聯性原則」之框架依據</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-04"><span class="sid">S04</span><span class="styp">統計</span><p>勞動部勞動統計查詢網（statdb.mol.gov.tw）「引進移工在臺人數－按開放項目及國籍分」——115年7月底總數903,674人；印尼338,504、越南303,437、菲律賓188,578、泰國73,146。本版查詢時間：115年8月23日</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-05"><span class="sid">S05</span><span class="styp">審計</span><p>審計長陳瑞敏2024年12月立法院衛環委員會答詢：近3年收支短絀約200億、112年度不符用途約5,174萬、近2年追回逾3億——經公視新聞網、聯合新聞網報導</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-06"><span class="sid">S06</span><span class="styp">審計</span><p>審計部查核109–113年度就安基金支用：認定不符用途支出7,224萬6,254元（勞動節影片、粉專經營、喬遷活動、春節紅包袋及三節禮品），函請收回並修正113年度決算——勞動部2025.3.31新聞稿（mol.gov.tw）</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-07"><span class="sid">S07</span><span class="styp">國會</span><p>立委黃國昌質詢（2024.12）：媒體宣傳費預算由2022年1.19億增至2025年2.17億</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
-      <div class="srcitem" id="src-08"><span class="sid">S08</span><span class="styp">國會</span><p>立委質詢揭露（2023.04）：基金用途決算106年度約135億 → 111年度約325.5億</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
-      <div class="srcitem" id="src-09"><span class="sid">S09</span><span class="styp">官方</span><p>勞動部失聯移工收容遣返墊付款統計：2022–2024墊付2億4,121萬、追繳2,188萬（截至2025年2月底）——數字來源為官方統計，惟本檔案係經2026年媒體報導轉引，尚未核對勞動部原始統計表，建議讀者另行查證官方原始發布版本</p><span class="smeta"><span class="grade a">A級 官方（經媒體轉引）</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-10"><span class="sid">S10</span><span class="styp">官方</span><p>勞動力發展署就業安定費數額公告與查詢平臺（feeqry.wda.gov.tw）——費額級距、季繳期程、滯納金規定</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-11"><span class="sid">S11</span><span class="styp">官方</span><p>政府電子採購網（web.pcc.gov.tw）逐筆決標紀錄——咖啡豆採購、裝潢、粉專經營等標案之原始查證入口</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-12"><span class="sid">S12</span><span class="styp">媒體</span><p>2024.11–2026調查報導：中央社、聯合新聞網、自由時報、ETtoday財經雲、公視、外勞社——音樂會與沙龍照（356萬）、13件疑似不符標案（逾8,000萬）等揭露</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-13"><span class="sid">S13</span><span class="styp">官方</span><p>勞動部2025年1月新聞稿「提出3面向6項策進作為健全就安基金管理」與「就業安定基金管理運用精進規劃報告」（mol.gov.tw）</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-14"><span class="sid">S14</span><span class="styp">國會</span><p>立法院議事及發言系統（ppg.ly.gov.tw）——2024.12朝野協商刪減3億、衛環委員會暫緩基金預算審查之決議紀錄</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-15"><span class="sid">S15</span><span class="styp">國際</span><p>各國制度官方說明：新加坡人力部外籍勞工稅（Levy）、南韓雇用許可制（EPS）、日本特定技能制度、香港僱員再培訓局（ERB）徵款沿革（2008寬免、2013廢除）</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-16"><span class="sid">S16</span><span class="styp">媒體</span><p>印度移工引進：公共政策平臺提案（2026.4.10成案、附議4萬4,623人）、勞動部三點聲明與2026.6.5平臺正式回應「兩前提」、關鍵評論網／遠見／天下2026.4–5整理報導</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-17"><span class="sid">S17</span><span class="styp">統計</span><p>勞動部勞動統計查詢網「失聯移工人數－按國籍及性別分」——115年6月底總數92,816人；越南58,598、印尼29,658、菲律賓2,609、泰國1,950、其他1。本版直接查詢官方資料；工作類別分布仍保留2026年2月舊口徑並另行標示。官方失聯發生率：112年4.20%、113年3.16%、114年3.00%</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-18"><span class="sid">S18</span><span class="styp">國會</span><p>歷史案件質詢：立委王婉諭等（關廠工人訴訟、機車行轉型、25淑女活動）；管理會委員李健鴻（文化大學教授）公開發言</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
-      <div class="srcitem" id="src-19"><span class="sid">S19</span><span class="styp">國會</span><p>立法院預算中心：就業安定基金112年度預算評估報告（112年度預算數352億9,465萬5千元、較110年度決算數減少7億1,689萬9千元）、110年8月專題研究（109年度決算207億6,964萬5千元、疫情措施56.07億元）——ly.gov.tw</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-20"><span class="sid">S20</span><span class="styp">司法</span><p>司法與監察進展：北檢分他字案將許銘春列貪污罪被告、與羅景壬團隊補助案併案（聯合新聞網2025.8）；新北地檢2025.4.2依洩密、圖利等罪起訴謝宜容、霸凌部分不起訴（公視）；監察院立案調查（2025.4立院專題報告）。均未經判決確定，應推定無罪</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
-      <div class="srcitem" id="src-21"><span class="sid">S21</span><span class="styp">官方</span><p>行政院主計總處主管法規共用系統（law.dgbas.gov.tw）：「就業安定基金收支保管及運用辦法」法規內容；另主計總處「中央政府總決算附屬單位決算及綜計表（非營業部分）」逐年彙編就業安定基金餘絀表、平衡表、收支表、查核意見，供讀者逐年原始核對（本檔案尚未逐年調閱核對，列為後續更新項目）</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-22"><span class="sid">S22</span><span class="styp">法規</span><p>「就業安定基金收支保管及運用辦法」第5條修法：2025.8.5預告草案；2026.1.2行政院以院授主基營字第1140202422A號令修正發布（行政院公報第32卷第1期）。現行條文依三大法定用途列出細項、刪除「其他有關支出」、明定基金管理及行政管理支出4.5%編列上限</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
-      <div class="srcitem" id="src-23"><span class="sid">S23</span><span class="styp">媒體</span><p>中天新聞2024.12.12報導（PChome新聞轉載）：就安基金管理會委員辛炳隆長期兼任委員與勞動部顧問，所屬單位經勞動部標案自就安基金取得約6,000萬元研究經費、累計報導稱上億元，遭質疑球員兼裁判。單一媒體來源，金額未經官方文件核對，當事人與勞動部回應待查證</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 2/5" aria-label="可信度2顆星"><span class="on">★★</span><span class="off">☆☆☆</span></span></span></div>
-      <div class="srcitem" id="src-24"><span class="sid">S24</span><span class="styp">制度</span><p>移工安置制度背景：經政府核准之安置單位每日500元安置費、原則2個月得延長1次（勞動部相關規定之業界彙整）；失聯移工罰鍰與機票由基金代墊（立法院及媒體報導）。特定NGO安置補助之具體弊案指控，截至2026.7查無可查證公開報導，列為待查證項目</p><span class="smeta"><span class="grade b">B級 制度彙整</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
-      <div class="srcitem" id="src-25"><span class="sid">S25</span><span class="styp">官方</span><p>勞動部勞動力發展署「管理會委員簡介」專區——截至2026.8.23，頁面列有第13、14、15、16、17屆委員主要學、經歷；未列第1～12屆。第17屆官方名冊載明任期114.07～116.06，PDF更新內容含115.05.26人事異動</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-01"><span class="sid">S01</span><span class="styp">法規</span><p>文件：就業服務法第55條｜發布機關：勞動部｜日期：2025-01-20修正｜<a href="https://laws.mol.gov.tw/flaw/FLAWDOC01.aspx?flno=55&amp;id=FL015128" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-02"><span class="sid">S02</span><span class="styp">法規</span><p>文件：就業安定基金收支保管及運用辦法｜發布機關：行政院／勞動部｜日期：2026-01-02修正｜<a href="https://laws.mol.gov.tw/news.aspx?msgid=6789" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-03"><span class="sid">S03</span><span class="styp">司法</span><p>文件：司法院釋字第426號解釋｜發布機關：司法院｜日期：1997-05-09｜<a href="https://cons.judicial.gov.tw/docdata.aspx?fid=100&amp;id=310607" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-04"><span class="sid">S04</span><span class="styp">統計</span><p>文件：引進移工在臺人數－按國籍分（表12-3）｜發布機關：勞動部勞動力發展署｜日期：2026-07月底資料｜<a href="https://statdb.mol.gov.tw/html/mon/212030.pdf" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。總數903,674人；有效許可804,896人；四大來源國合計903,665人，其他國籍9人。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-05"><span class="sid">S05</span><span class="styp">媒體</span><p>文件：就安基金5千萬元使用不符規定 立院拍板暫不審查基金預算｜發布機關：公視新聞網｜日期：2024-12-18｜<a href="https://news.pts.org.tw/article/729386" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。內容為媒體轉述審計長答詢，非審計部原始統計表。</p><span class="smeta"><span class="grade b">B級 媒體轉述答詢</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-06"><span class="sid">S06</span><span class="styp">審計</span><p>文件：審計部審核修正就業安定基金113年度決算7,224萬餘元｜發布機關：勞動部｜日期：2025-03-31｜<a href="https://www.mol.gov.tw/1607/1632/1633/79699/" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-07"><span class="sid">S07</span><span class="styp">國會</span><p>文件：就業安定基金媒體宣傳費立法院質詢資料｜發布機關：立法院／質詢委員｜日期：2024-12｜<a href="https://ivod.ly.gov.tw/" target="_blank" rel="noopener noreferrer">影音檢索入口</a>｜查核日期：2026-08-23。1.19億至2.17億元為質詢揭露數字，待原始預決算表逐筆核對。</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
+      <div class="srcitem" id="src-08"><span class="sid">S08</span><span class="styp">國會</span><p>文件：就業安定基金用途決算質詢與預算評估資料｜發布機關：立法院｜日期：2023-04起｜<a href="https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=55824&amp;pid=246188" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。106與111年度錨點仍屬質詢揭露，疫情後回落趨勢另由預算中心報告佐證。</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
+      <div class="srcitem" id="src-09"><span class="sid">S09</span><span class="styp">待核</span><p>文件：失聯移工收容遣返墊付款統計（媒體轉述）｜發布機關：媒體轉述勞動部統計｜日期：2026-05-01報導；統計至2025-02｜<a href="https://www.epochtimes.com/b5/26/5/1/n14754408.htm" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。未取得官方原始表；2.41億元與2,188萬元直接相除約9.1%，所稱追收率分母待核。</p><span class="smeta"><span class="grade c">C級 待核</span><span class="cred" title="可信度 2/5" aria-label="可信度2顆星"><span class="on">★★</span><span class="off">☆☆☆</span></span></span></div>
+      <div class="srcitem" id="src-10"><span class="sid">S10</span><span class="styp">法規</span><p>文件：雇主聘僱外國人應繳納就業安定費數額表｜發布機關：勞動部｜日期：2025-12-31最新修正、2026-01-01生效｜<a href="https://laws.mol.gov.tw/FINT/results.aspx?edate=99991231&amp;etype=%2A%2C+002%2C+007&amp;lnabndn=1&amp;now=1&amp;sdate=20180000&amp;title=out&amp;type=etype%2C002" target="_blank" rel="noopener noreferrer">官方檢索結果</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-11"><span class="sid">S11</span><span class="styp">採購</span><p>文件：政府電子採購網逐筆決標紀錄｜發布機關：行政院公共工程委員會｜日期：各案公告日｜<a href="https://web.pcc.gov.tw/prkms/tender/common/basic/indexTenderBasic" target="_blank" rel="noopener noreferrer">採購資料查詢</a>｜查核日期：2026-08-23。須以案名或機關逐筆檢索。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-12"><span class="sid">S12</span><span class="styp">媒體</span><p>文件：失能雇主團體盼查就安基金濫用等系列報導｜發布機關：公視新聞網等｜日期：2024-12-12起｜<a href="https://news.pts.org.tw/article/728495" target="_blank" rel="noopener noreferrer">代表性直接網址</a>｜查核日期：2026-08-23。媒體彙整僅佐證揭露時點，個別金額以官方文件為準。</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-13"><span class="sid">S13</span><span class="styp">官方</span><p>文件：就業安定基金管理運用精進規劃報告｜發布機關：勞動部｜日期：2025-01-03｜<a href="https://www.mol.gov.tw/media/c02azo34/%E9%99%84%E4%BB%B6_%E5%B0%B1%E6%A5%AD%E5%AE%89%E5%AE%9A%E5%9F%BA%E9%87%91%E7%AE%A1%E7%90%86%E9%81%8B%E7%94%A8%E7%B2%BE%E9%80%B2%E5%A0%B1%E5%91%8A.pdf?mediaDL=true" target="_blank" rel="noopener noreferrer">報告PDF</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-14"><span class="sid">S14</span><span class="styp">國會</span><p>文件：就業安定基金預算審查與協商紀錄｜發布機關：立法院｜日期：2024-12｜<a href="https://ppg.ly.gov.tw/ppg/" target="_blank" rel="noopener noreferrer">議事暨公報資訊網</a>｜查核日期：2026-08-23。以會議日期及「就業安定基金」檢索原始紀錄。</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-15"><span class="sid">S15</span><span class="styp">國際</span><p>文件：Foreign worker levy／EPS／Specified Skilled Worker／ERB制度頁｜發布機關：新加坡人力部等｜日期：持續更新｜<a href="https://www.mom.gov.sg/passes-and-permits/work-permit-for-foreign-worker/foreign-worker-levy" target="_blank" rel="noopener noreferrer">新加坡官方頁</a>｜查核日期：2026-08-23。跨國比較須留意制度與年度差異。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-16"><span class="sid">S16</span><span class="styp">官方</span><p>文件：建請中止引進印度勞工計畫提案及主管機關回應｜發布機關：公共政策網路參與平臺／勞動部｜日期：2026-04至06｜<a href="https://join.gov.tw/idea/detail/65428426-305e-4edf-9f17-53926fc33c97" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方平臺</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-17"><span class="sid">S17</span><span class="styp">統計</span><p>文件：失聯移工人數－按國籍及性別分｜發布機關：勞動部；資料源為內政部移民署｜日期：2026-06月底資料｜<a href="https://statdb.mol.gov.tw/statiscla/webMain.aspx?funid=q1366&amp;kind=10&amp;sys=100&amp;type=1" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-18"><span class="sid">S18</span><span class="styp">國會</span><p>文件：就業安定基金歷史案件質詢與管理會發言｜發布機關：立法院／基金管理會｜日期：各案年度｜<a href="https://ppg.ly.gov.tw/ppg/" target="_blank" rel="noopener noreferrer">國會原始紀錄入口</a>｜查核日期：2026-08-23。屬多筆紀錄彙整，應依事件名稱分別檢索。</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
+      <div class="srcitem" id="src-19"><span class="sid">S19</span><span class="styp">國會</span><p>文件：勞動部主管非營業特種基金及財團法人114年度預算評估報告｜發布機關：立法院預算中心｜日期：2024-11｜<a href="https://www.ly.gov.tw/Pages/Detail.aspx?nodeid=55824&amp;pid=246188" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23</p><span class="smeta"><span class="grade b">B級 國會</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-20"><span class="sid">S20</span><span class="styp">司法</span><p>文件：謝宜容涉貪遭起訴、霸凌部分不起訴｜發布機關：公視新聞網（轉述新北地檢署）｜日期：2025-04-03｜<a href="https://news.pts.org.tw/article/745204" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。司法程序後續另須查最新裁判狀態。</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 4/5" aria-label="可信度4顆星"><span class="on">★★★★</span><span class="off">☆</span></span></span></div>
+      <div class="srcitem" id="src-21"><span class="sid">S21</span><span class="styp">官方</span><p>文件：就業安定基金收支保管及運用辦法／中央政府總決算附屬單位決算｜發布機關：行政院主計總處｜日期：逐年更新｜<a href="https://law.dgbas.gov.tw/LawContent.aspx?id=FL015134" target="_blank" rel="noopener noreferrer">法規直接網址</a>｜查核日期：2026-08-23。逐年財表仍須另自決算專區調閱。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-22"><span class="sid">S22</span><span class="styp">法規</span><p>文件：就業安定基金收支保管及運用辦法第5條修正｜發布機關：行政院｜日期：2026-01-02｜<a href="https://laws.mol.gov.tw/news.aspx?msgid=6789" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。文號：院授主基營字第1140202422A號。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-23"><span class="sid">S23</span><span class="styp">媒體</span><p>文件：就安委員取得就安基金6000萬經費之報導｜發布機關：中天新聞｜日期：2024-12-12｜<a href="https://ctinews.com/news/items/M9n6ZqpNnR" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。單一媒體來源；金額、標案關係與當事人回應均待官方文件核對。</p><span class="smeta"><span class="grade c">C級 媒體</span><span class="cred" title="可信度 2/5" aria-label="可信度2顆星"><span class="on">★★</span><span class="off">☆☆☆</span></span></span></div>
+      <div class="srcitem" id="src-24"><span class="sid">S24</span><span class="styp">彙整</span><p>文件：移工臨時安置制度業界／媒體彙整｜發布機關：非單一官方發布｜日期：截至2026-07｜<a href="https://laws.mol.gov.tw/FLAW/FLAWDOC01.aspx?flno=7&amp;id=FL045535" target="_blank" rel="noopener noreferrer">官方作業要點交叉查核</a>｜查核日期：2026-08-23。因既有敘述混合二手彙整與媒體資料，暫列C級；特定NGO弊案指控仍無可核實資料。</p><span class="smeta"><span class="grade c">C級 二手彙整</span><span class="cred" title="可信度 3/5" aria-label="可信度3顆星"><span class="on">★★★</span><span class="off">☆☆</span></span></span></div>
+      <div class="srcitem" id="src-25"><span class="sid">S25</span><span class="styp">官方</span><p>文件：管理會委員簡介｜發布機關：勞動部勞動力發展署｜日期：第17屆2025-07-08發布、2026-05-27更新｜<a href="https://www.wda.gov.tw/News.aspx?n=52&amp;sms=10322" target="_blank" rel="noopener noreferrer">直接網址</a>｜查核日期：2026-08-23。官方專區目前列第13至17屆。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
+      <div class="srcitem" id="src-26"><span class="sid">S26</span><span class="styp">審計</span><p>文件：中華民國114年度中央政府總決算審核報告—就業安定基金｜發布機關：審計部｜日期：2026年公布｜<a href="https://auditreport.audit.gov.tw/ServerFile/Get/63919727140999831182cead8db31044d69aa501c1fea6d9bf" target="_blank" rel="noopener noreferrer">報告PDF</a>｜查核日期：2026-08-23。業務實際數約241.5億元、賸餘約58.3億元、期末現金約449.1億元；113年度六項意見均已研謀改善或持續辦理。</p><span class="smeta"><span class="grade a">A級 官方</span><span class="cred" title="可信度 5/5" aria-label="可信度5顆星"><span class="on">★★★★★</span><span class="off"></span></span></span></div>
     </div>
 
     <h3>版本更新紀錄</h3>
@@ -1648,9 +1649,11 @@ a.ref{transition:background .15s,color .15s}
       <div class="vstop"><div class="dot"></div><b>v17.5</b><small>2026.07.06</small><span class="vtag">補充查證</span></div>
       <div class="vstop"><div class="dot"></div><b>v18</b><small>2026.07.07</small><span class="vtag">核校＋修法落地</span></div>
       <div class="vstop"><div class="dot"></div><b>v19</b><small>2026.07.10</small><span class="vtag">長者友善</span></div>
-      <div class="vstop now"><div class="dot"></div><b>v20</b><small>2026.08.23</small><span class="vtag">最新數據＋委員揭露（本版）</span></div>
+      <div class="vstop"><div class="dot"></div><b>v20</b><small>2026.08.23</small><span class="vtag">最新數據＋委員揭露</span></div>
+      <div class="vstop now"><div class="dot"></div><b>v21</b><small>2026.08.23</small><span class="vtag">事實核校＋官方連結（本版）</span></div>
     </div>
     <div class="vlog" id="changelog">
+      <div><span class="vv">v21</span><span class="vd">2026.08.23</span><p><strong>事實核校＋官方連結：</strong>①將在臺移工總數與有效聘僱許可、實際就安費繳費人數分開；②補正四大來源國合計差9人與2026年3月產業／社福比例；③將分母不明的媒體轉述追收率移出首頁KPI與改革指標；④納入114年度審核報告數據及新審核問題；⑤策進報告日期統一為2025.1.3；⑥調整過度確定的制度論述；⑦S01–S26補齊可點擊網址與查核日期，並調整S05、S09、S24來源等級；⑧移除SEO占位網址。</p></div>
       <div><span class="vv">v20</span><span class="vd">2026.08.23</span><p><strong>最新數據＋委員資料揭露：</strong>①在臺移工更新至115年7月底903,674人，四大來源國改為同一時點官方精確數；②失聯移工更新至115年6月底92,816人，國籍別改採勞動部官方查詢結果；③卷〇九新增歷屆委員學經歷公開範圍，第13～17屆有官方資料，第1～12屆截至查核日未見官方專區公布，不自行補推；④補正「運用辦法」第5條正式修正發布日2026.1.2及令號；⑤證據鏈新增S25。</p></div>
       <div><span class="vv">v19</span><span class="vd">2026.07.10</span><p><strong>長者友善介面＋卷〇九增補：</strong>①桌機字級全面放大（根字級16→21px，約+31%）、行距加寬、次要文字對比提高，右下角新增Ａ＋／Ａ－字級調整鈕（小／標準／大／特大四級，選擇自動記憶）；②卷〇九新增「利益衝突實例」小節——學者委員兼領基金標案研究經費（辛炳隆案，單一媒體C級來源、關鍵事實待查證）、NGO安置補助之審核與迴避機制（制度背景可查證、具體弊案指控查無報導）；③證據鏈新增S23、S24，總表更名S01–S24；④站內搜尋新增「辛炳隆」「安置」等關鍵字直達。</p></div>
       <div><span class="vv">v18</span><span class="vd">2026.07.07</span><p><strong>全站核校＋修法落地更新（逐項網路複查）：</strong>【重大更新】①卷一一修法時間軸新增2026.07.07複查節點：勞動法令查詢系統與全國法規資料庫顯示之現行「運用辦法」第5條已為三大類結構、刪除「其他有關支出」概括款、明定行政管理支出4.5%編列上限——2025.8.5預告草案之核心內容應已完成法制程序正式發布生效（正式令號與發布日期本版尚未自法規沿革逐字核對，如實標註待補）；②改革追蹤：策進②升為「部分完成」，總覽同步改為部分完成2・進行5・未完1；修法小結改寫，強調修法生效不等於支用紀律自動改善。【複查確認無誤之關鍵數字】移工880,130人（115年4月底，勞動統計查詢網）；審計部7,224萬6,254元（109–113年度、修正113年度決算）；音樂會356萬（另有365萬餘報導）、2022.9.3、另203萬製作7支花絮影片；印度移工連署逾4.4萬附議、勞動部2026.6正式回應「兩前提、無時間表」；失聯移工約9.4萬（2026.2移民署）、官方失聯發生率111年5.96%→114年3.00%（勞動部公共政策平臺回應原文逐字相符）；2026年度預算書未見7,224萬歸墊編列（工商時報2025.9報導相符）。【補充】③卷〇六國籍表加註2026年1月底菲律賓已近18萬人之較新口徑。【技術修復】④證據鏈標題更正S01–S20→S01–S22；⑤S20／S21／S22及S02、S14補上站內▸S掛鏈（原僅有出處目標、無點按入口）；⑥頁碼總數（/15）改由程式依卷數自動計算；⑦版次全站統一為v18（原檔名v18與內文v17.5不一致）。</p></div>
@@ -1658,7 +1661,7 @@ a.ref{transition:background .15s,color .15s}
       <div><span class="vv">v17.5</span><span class="vd">2026.07.06</span><p><strong>補充查證（依讀者建議）：</strong>①卷〇五新增「行政院主計總處原始決算文件」查證說明，補入主計總處「中央政府總決算附屬單位決算及綜計表（非營業部分）」與勞動力發展署決算原始PDF兩處官方入口，並明確標示現版決算數字仍以立委質詢與立法院預算中心報告為主、尚未逐年核對主計總處原始餘絀表；②卷一一新增「修法時間軸」，逐項列出「運用辦法」第5條修法進度之可查證時間點（2024.3.11現行版本→2025.1.2策進作為公布→2025.1.22管理會臨時會提案→2025.8.5正式預告草案→2025.10.15立委批評「改革跳票」、洪申翰坦言受財劃法影響→2025.10.31法規資料庫查證時點顯示尚未見正式發布公告），並如實註記「本檔案撰寫時未查得修正案正式發布施行之公告」，避免給讀者「宣布即等於已完成修法」的錯誤印象。【新增來源】S21行政院主計總處決算法規系統、S22勞動部「運用辦法」修法歷程（含中央社、聯合報、中國時報報導）。</p></div>
       <div><span class="vv">v17.4</span><span class="vd">2026.07.06</span><p><strong>口徑保守化修訂（根據外部審閱意見）：</strong>①家庭幫傭就安費改為分級說明（本國籍雇主2,000/5,000元、外國籍雇主10,000元），不再呈現單一「5,000元」數字；②880,130人移工統計補充查證說明，註明現版尚未附CSV或截圖，列為待補項目；③卷〇六國籍結構表拆解混用之統計時點（印尼、越南為2025年8月底，菲、泰為2024年底），並於表格說明加註口徑提醒；④爭議案件表格與FAQ監督段落統一補上「均尚未判決確定，應推定無罪」聲明；⑤新加坡「資金去向」「監督爭點」欄位與FAQ改採保守用語，不再逕稱「直接歸入一般歲入」；⑥特別公課法理段落改寫為分析語氣，明確標示「是否違憲或違法仍須由司法或審計機關判斷」；⑦S09、S17來源等級加註「經媒體轉引、尚未核對官方原始表」；⑧頁尾定位聲明強化為「非政府機關正式報告，亦非司法定論」。</p></div>
       <div><span class="vv">v17.2</span><span class="vd">2026.07.06</span><p><strong>體驗強化改版：</strong>【新增內容】①Hero下方「一句話摘要」；②總覽頁案件流程圖（六節點可點按跳卷）；③站內搜尋（章節級索引＋熱門關鍵字）；④手機浮動目錄（左下 ≡ 展開全部章節）；⑤卷〇七「爭議案件地圖」八案可展開；⑥FAQ七類快速篩選；⑦證據鏈A/B/C來源分級與可信度星等；⑧本版本演進時間軸。【格式修正】數字單位全站一致化（88.0萬人／325.5億元／7,224萬元／200億元）；三條閱讀路徑改為「30秒快速了解／10分鐘重點閱讀／40分鐘完整閱讀」；導覽與章節卡加入圖示。【技術強化】KPI數字遞增動畫（尊重減少動態設定）；補齊Open Graph、Twitter Card、JSON-LD、canonical、favicon與Apple Touch Icon。</p></div>
-      <div><span class="vv">v17.1</span><span class="vd">2026.07.05</span><p><strong>核校修訂：</strong>①墊付款追收率4.76%補口徑說明（與2022–24墊付額直接相除為9.1%，官方分母未明示）；②失聯人數改依移民署2026.3統計94,271人、與聘僱許可失效數分列口徑；③卷〇六標題更新為88萬；④補記7,224萬「公務預算歸墊」未編列之後續爭議；⑤導航列補卷〇六連結、修復桌機方向鍵提示、時間軸鍵盤操作等介面問題。</p></div>
+      <div><span class="vv">v17.1</span><span class="vd">2026.07.05</span><p><strong>核校修訂：</strong>①墊付款媒體轉述追收率補口徑說明（與2022–24墊付額直接相除為9.1%，原始分母未明示）；②失聯人數改依移民署2026.3統計94,271人、與聘僱許可失效數分列口徑；③卷〇六標題更新為88萬；④補記7,224萬「公務預算歸墊」未編列之後續爭議；⑤導航列補卷〇六連結、修復桌機方向鍵提示、時間軸鍵盤操作等介面問題。</p></div>
       <div><span class="vv">v17.0</span><span class="vd">2026.07.05</span><p><strong>平台化改版：</strong>新增卷〇〇總覽、證據鏈編號系統（S01–S18全站掛鏈）、桌機左側卷次導航、時間軸事件展開與圖表互動、改革進度總覽條、本版本紀錄。</p></div>
       <div><span class="vv">v16.0</span><span class="vd">2026.07.05</span><p><strong>審稿修訂：</strong>用語精確化（「非法院判決」聲明、中性化表述）、數據更新至115年4月（移工880,130人）、新增香港ERB比較與「資料缺口與研究限制」誠實揭露。</p></div>
       <div><span class="vv">v15</span><span class="vd">2026.07</span><p><strong>內容深化：</strong>新增卷〇四法源逐項解析與費額級距、卷〇六國籍別與失聯結構、卷一三深度分析（特別公課法理、三理論視角、三路徑推演、五監測指標）。</p></div>
@@ -1666,7 +1669,7 @@ a.ref{transition:background .15s,color .15s}
       <div><span class="vv">v10.1</span><span class="vd">2026.06</span><p><strong>一致性修正：</strong>版本標示統一、基金成立年份說明、措辭中性化、財務表加註來源編號。</p></div>
       <div><span class="vv">v1–v9</span><span class="vd">2024.12–2026.05</span><p><strong>初版建置期：</strong>自2024年底爭議爆發起持續增補案件、數據與立場資料（單頁長文時期）。</p></div>
     </div>
-    <p style="font-size:.78rem;color:var(--ink-faint)">本檔案為可持續更新之研究彙編；重大資料更新（如113年度決算審計報告公布）將以新版次釋出並記錄於此。</p>
+    <p style="font-size:.78rem;color:var(--ink-faint)">本檔案為可持續更新之研究彙編；重大資料更新（如後續年度審核報告、外部稽核與原始統計表公布）將以新版次釋出並記錄於此。</p>
   </div>
 </section>
 
@@ -1989,7 +1992,7 @@ a.ref{transition:background .15s,color .15s}
       {kw:['黃國昌'], page:'voices', label:'黃國昌質詢（媒體宣傳費1.19→2.17億元）'},
       {kw:['勞動部','洪申翰'], page:'reform', label:'勞動部改革進程（六項策進作為）'},
       {kw:['印度移工','印度'], page:'intl', label:'印度移工引進（2026三大新變數）'},
-      {kw:['失聯','墊付'], page:'workers', label:'失聯移工與墊付款（追收率僅4.76%）'},
+      {kw:['失聯','墊付'], page:'workers', label:'失聯移工與墊付款（公開數字口徑待核）'},
       {kw:['55條','§55','就業服務法'], page:'law', label:'《就業服務法》§55 逐項解析'},
       {kw:['管理會','球員兼裁判'], page:'structure', label:'管理會結構問題（球員兼裁判）'},
       {kw:['第1屆','第12屆','歷屆委員','委員學經歷','委員簡介'], page:'structure', label:'歷屆委員學經歷公開範圍（第1～12屆官方未見公布）'},
