@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#245b8f">
+  <meta name="description" content="全台灣獎助學金智慧媒合與備件助手，支援離線使用。">
+  <link rel="manifest" href="manifest.webmanifest">
+  <title>全台灣獎助學金智慧媒合與備件助手</title>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --surface: #ffffff;
+      --background: #f8fafc;
+      --border: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-sub: #334155;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --radius: 12px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px -2px rgba(0, 0, 0, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", sans-serif; }
+    body { background: var(--background); color: var(--text-main); padding: 24px 16px 64px; line-height: 1.5; }
+    .container { max-width: 1280px; margin: 0 auto; }
+
+    /* Header */
+    .header { margin-bottom: 20px; }
+    .header-badge { display: inline-block; padding: 4px 12px; background: var(--primary-light); color: var(--primary); font-size: 0.8rem; font-weight: 700; border-radius: 999px; margin-bottom: 8px; }
+    .header-title { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.5px; }
+    .header-subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 4px; }
+
+    /* 30秒條件速配橫幅 (Wizard Banner) */
+    .wizard-card {
+      background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+      color: #ffffff;
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .wizard-top { display: flex; justify-content: space-between; align-items: center; }
+    .wizard-title { font-size: 1.15rem; font-weight: 700; }
+    .wizard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 14px;
+      border-radius: 8px;
+    }
+    .wizard-field label { display: block; font-size: 0.8rem; margin-bottom: 4px; opacity: 0.9; }
+    .wizard-select { width: 100%; padding: 8px; border-radius: 6px; border: none; font-size: 0.88rem; outline: none; background: #fff; color: #333; }
+
+    /* 頂層國中以下 vs 國中以上切換列 */
+    .stage-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stage-btn { background: #fff; border: 2px solid var(--border); border-radius: var(--radius); padding: 12px; cursor: pointer; text-align: left; transition: all 0.2s; }
+    .stage-btn.active { border-color: var(--primary); background: var(--primary-light); }
+    .stage-btn-title { font-weight: 700; font-size: 0.95rem; display: block; color: var(--text-main); }
+    .stage-btn-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+    /* 主雙欄佈局 */
+    .layout { display: flex; flex-direction: column; gap: 24px; }
+    @media (min-width: 960px) { .layout { flex-direction: row; align-items: flex-start; } }
+
+    /* 左側進階篩選 */
+    .sidebar { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; width: 100%; box-shadow: var(--shadow-sm); }
+    @media (min-width: 960px) { .sidebar { width: 320px; position: sticky; top: 20px; max-height: 88vh; overflow-y: auto; } }
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .btn-text { background: none; border: none; color: var(--primary); font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .filter-group { margin-bottom: 18px; }
+    .filter-title { font-size: 0.82rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; }
+    .custom-check { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 0.88rem; cursor: pointer; }
+    .custom-check input { accent-color: var(--primary); width: 16px; height: 16px; }
+
+    /* 右側主視圖 */
+    .content { flex: 1; min-width: 0; }
+    .view-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 16px; gap: 8px; }
+    .tab-btn { background: none; border: none; padding: 10px 14px; font-size: 0.92rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .badge { font-size: 0.75rem; background: #f1f5f9; padding: 2px 6px; border-radius: 999px; }
+
+    /* 清單控制與匯出按鈕 */
+    .action-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .btn-export { background: #047857; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-export:hover { background: #065f46; }
+
+    /* 卡片設計 */
+    .card-list { display: flex; flex-direction: column; gap: 14px; }
+    .card { background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; gap: 10px; }
+    .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .card-title { font-size: 1.15rem; font-weight: 700; color: #0f172a; }
+    .card-sub { font-size: 0.85rem; color: var(--text-muted); }
+    .card-pill { font-size: 0.75rem; padding: 3px 8px; border-radius: 999px; font-weight: 700; }
+    .pill-urgent { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .pill-normal { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+
+    .card-box { background: #f8fafc; border-radius: 6px; padding: 10px 12px; font-size: 0.86rem; display: flex; flex-direction: column; gap: 4px; }
+    .warning-school { color: #b45309; font-size: 0.8rem; font-weight: 600; }
+
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag { font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; font-weight: 600; }
+    .tag-stage { background: #e0f2fe; color: #0369a1; }
+    .tag-src { background: #f1f5f9; color: #475569; }
+
+    .card-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px dashed var(--border); }
+    .btn-fav { background: #fff; border: 1px solid var(--border); padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; cursor: pointer; }
+    .btn-fav.active { background: #fffbeb; border-color: #fde68a; color: #b45309; font-weight: 700; }
+    .btn-link { background: var(--primary); color: #fff; text-decoration: none; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 600; }
+
+    /* 列印與查核清單 Modal */
+    .checklist-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 16px; }
+    .checklist-modal.active { display: flex; }
+    .checklist-window { background: #fff; border-radius: var(--radius); max-width: 650px; width: 100%; padding: 24px; max-height: 90vh; overflow-y: auto; }
+    .check-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
+
+    @media print {
+      body * { visibility: hidden; }
+      .printable-area, .printable-area * { visibility: visible; }
+      .printable-area { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+    /* 響應式與溫暖化視覺優化：不改變原有功能與資料結構 */
+    :root {
+      --primary: #245b8f;
+      --primary-hover: #1d4b76;
+      --primary-light: #eaf3f8;
+      --background: #f7f5f1;
+      --border: #d9e1e5;
+      --border-subtle: #c8d3d9;
+      --text-main: #20313d;
+      --text-muted: #667984;
+      --text-sub: #3d505b;
+      --radius: 14px;
+      --shadow-sm: 0 2px 8px rgba(35, 55, 66, 0.06);
+      --shadow-md: 0 10px 26px rgba(35, 55, 66, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      padding: clamp(16px, 3vw, 34px) clamp(12px, 3vw, 28px) 64px;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(226, 188, 117, 0.16), transparent 28rem),
+        var(--background);
+    }
+    .container { max-width: 1320px; }
+    .header { margin-bottom: clamp(18px, 3vw, 28px); }
+    .header-badge { background: #fff4d9; color: #8a5a16; border: 1px solid #f1d99f; }
+    .header-title { font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 1.25; letter-spacing: -0.3px; }
+    .header-subtitle { max-width: 760px; line-height: 1.7; }
+    .pwa-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+    .pwa-btn { min-height: 40px; padding: 8px 13px; border: 1px solid #c8d3d9; border-radius: 8px; background: #fff; color: #245b8f; font-weight: 700; cursor: pointer; }
+    .pwa-btn:hover { background: #eaf3f8; }
+    .pwa-btn[hidden] { display: none; }
+    .connection-status { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 5px 10px; border-radius: 999px; background: #e9f7ef; color: #27734a; font-size: 0.8rem; font-weight: 700; }
+    .connection-status.offline { background: #fff4d9; color: #8a5a16; }
+    .update-frequency { min-height: 32px; padding: 5px 9px; border: 1px solid #c8d3d9; border-radius: 8px; background: #fff; color: #3d505b; font-size: 0.8rem; }
+
+    .wizard-card {
+      background: linear-gradient(135deg, #245b8f 0%, #3c7ea2 100%);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: clamp(16px, 3vw, 24px);
+      box-shadow: var(--shadow-md);
+    }
+    .wizard-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: clamp(12px, 2vw, 16px); }
+    .wizard-select, #kwInput, #sortSel { min-height: 42px; }
+    .wizard-select:focus, #kwInput:focus, #sortSel:focus { box-shadow: 0 0 0 3px rgba(255,255,255,0.35); }
+
+    .stage-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .stage-btn { min-height: 78px; padding: 15px; box-shadow: var(--shadow-sm); }
+    .stage-btn:hover, .stage-btn:focus-visible { border-color: #8db5ca; transform: translateY(-1px); }
+    .stage-btn:focus-visible, .btn-text:focus-visible, .tab-btn:focus-visible, button:focus-visible, .btn-link:focus-visible {
+      outline: 3px solid rgba(214, 157, 54, 0.45); outline-offset: 2px;
+    }
+
+    .layout { gap: clamp(16px, 2.5vw, 28px); }
+    .sidebar, .card { box-shadow: var(--shadow-sm); }
+    .sidebar { padding: clamp(16px, 2.5vw, 22px); }
+    .custom-check { min-height: 32px; margin-bottom: 3px; }
+    .custom-check input { flex: 0 0 auto; }
+    .card { padding: clamp(15px, 2.2vw, 21px); gap: 12px; }
+    .card-title { font-size: clamp(1.02rem, 1.8vw, 1.2rem); line-height: 1.45; }
+    .card-box { background: #fbfaf7; border: 1px solid #eee8dc; padding: 12px 14px; line-height: 1.65; }
+    .warning-school { background: #fff7e7; border-radius: 8px; padding: 7px 9px; line-height: 1.55; }
+    .btn-fav, .btn-link, .btn-export { min-height: 40px; }
+    .btn-fav { padding-inline: 12px; }
+    .btn-link { display: inline-flex; align-items: center; justify-content: center; }
+    .btn-export { background: #8b641f; }
+    .btn-export:hover { background: #704f18; }
+    .card-foot { gap: 12px; line-height: 1.5; }
+
+    @media (min-width: 960px) {
+      .layout { flex-direction: row; }
+      .sidebar { width: 310px; }
+    }
+
+    @media (max-width: 959px) {
+      .wizard-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .sidebar { position: static; }
+    }
+
+    @media (max-width: 700px) {
+      body { padding-inline: 12px; }
+      .wizard-top { align-items: flex-start; gap: 12px; }
+      .wizard-title { line-height: 1.4; }
+      .wizard-grid, .stage-tabs { grid-template-columns: 1fr; }
+      .stage-btn { min-height: 0; }
+      .action-bar { align-items: stretch; }
+      .action-bar > div:last-child { width: 100%; flex-direction: column; align-items: stretch !important; }
+      #sortSel, .btn-export { width: 100%; }
+      .view-tabs { overflow-x: auto; }
+      .tab-btn { white-space: nowrap; min-height: 44px; }
+      .card-head, .card-foot { flex-direction: column; align-items: stretch; }
+      .card-head > div:last-child { justify-content: space-between; }
+      .btn-fav, .btn-link { width: 100%; }
+      .checklist-window { padding: 18px; }
+    }
+
+    @media (min-width: 701px) and (max-width: 1100px) {
+      .stage-tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .stage-btn { padding: 12px; }
+      .stage-btn-desc { line-height: 1.45; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <span class="header-badge">資深產品架構優化版</span>
+      <h1 class="header-title">全台灣獎助學金智慧媒合與備件助手</h1>
+      <p class="header-subtitle">消除資訊落差、精準分流配對，並支援一鍵匯出個人化申請應備文件檢核清單。</p>
+      <div class="pwa-tools" aria-live="polite">
+        <span class="connection-status" id="connectionStatus">● 線上模式</span>
+        <label style="display:inline-flex; align-items:center; gap:6px; color:var(--text-muted); font-size:0.8rem;">
+          更新頻率
+          <select class="update-frequency" id="updateFrequency" aria-label="資料更新頻率">
+            <option value="21600000">每 6 小時</option>
+            <option value="86400000" selected>每天</option>
+            <option value="604800000">每週</option>
+            <option value="0">手動</option>
+          </select>
+        </label>
+        <button class="pwa-btn" id="installAppBtn" type="button" hidden>⬇ 安裝到裝置</button>
+        <button class="pwa-btn" id="refreshAppBtn" type="button" hidden>↻ 更新版本</button>
+      </div>
+    </header>
+
+    <!-- 頂端 30 秒速配精靈 (Wizard) -->
+    <div class="wizard-card">
+      <div class="wizard-top">
+        <span class="wizard-title">⚡ 30 秒快速條件速配精靈</span>
+        <button class="btn-text" style="color: #fff; opacity: 0.8;" id="wizardClear">重設條件</button>
+      </div>
+      <div class="wizard-grid">
+        <div class="wizard-field">
+          <label>目前就學階段</label>
+          <select id="wStage" class="wizard-select">
+            <option value="all">不限階段 (全部顯示)</option>
+            <option value="國小">國民小學</option>
+            <option value="國中">國民中學</option>
+            <option value="高中職">高級中等學校 (高中/高職)</option>
+            <option value="大學">大專校院 (大學/科大/二技)</option>
+            <option value="研究所">研究所 (碩士/博士)</option>
+          </select>
+        </div>
+        <div class="wizard-field">
+          <label>個人或家庭身分</label>
+          <select id="wIdentity" class="wizard-select">
+            <option value="all">一般家庭 / 無特定身分</option>
+            <option value="低收中低收">低收 / 中低收入戶</option>
+            <option value="急難變故">家庭近半年突遭急難傷病</option>
+            <option value="癌症家庭">癌症病友或罹癌家庭子女</option>
+            <option value="身心障礙">身心障礙證明 (本人或子女)</option>
+            <option value="技藝競賽">具全國技藝或體育優良殊榮</option>
+            <option value="農漁民子女">農漁民子女</option>
+          </select>
+        </div>
+        <div class="wizard-field">
+          <label>學期平均成績</label>
+          <select id="wScore" class="wizard-select">
+            <option value="any">不論成績高低</option>
+            <option value="none">無成績硬性門檻 (清寒優先)</option>
+            <option value="60">60 分以上</option>
+            <option value="70">70 分以上</option>
+            <option value="80">80 分以上 (績優評比)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- 頂層階段分軌 Switcher -->
+    <div class="stage-tabs">
+      <div class="stage-btn active" data-stage="all" id="btnSAll">
+        <span class="stage-btn-title">全部階段 (不限)</span>
+        <span class="stage-btn-desc">檢視全台所有獎助項目</span>
+      </div>
+      <div class="stage-btn" data-stage="under" id="btnSUnder">
+        <span class="stage-btn-title">🌱 國中以下專屬</span>
+        <span class="stage-btn-desc">國小、國中生專屬扶助</span>
+      </div>
+      <div class="stage-btn" data-stage="above" id="btnSAbove">
+        <span class="stage-btn-title">🎓 國中以上專屬</span>
+        <span class="stage-btn-desc">高中職、大專院校、碩博</span>
+      </div>
+    </div>
+
+    <div class="layout">
+      <!-- 左側側欄 (微調檢索) -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <strong style="font-size: 0.95rem;">進階條件微調</strong>
+          <button class="btn-text" id="btnResetAll">全部重設</button>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">關鍵字快速檢索</div>
+          <input type="text" id="kwInput" style="width:100%; padding:8px; border:1px solid var(--border-subtle); border-radius:6px; font-size:0.88rem;" placeholder="輸入機構或項目名稱...">
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">送件管道模式</div>
+          <label class="custom-check"><input type="checkbox" name="fChannel" value="學生自行送件"> 學生自行線上/郵寄申請</label>
+          <label class="custom-check"><input type="checkbox" name="fChannel" value="學校統一彙送"> 經就讀學校彙送 (需提早準備)</label>
+          <label class="custom-check"><input type="checkbox" name="fChannel" value="社工推薦"> 社工或基金會訪視推薦</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">機構體系來源</div>
+          <label class="custom-check"><input type="checkbox" name="fSrc" value="宗教慈善"> 宗教慈善體系 (如慈濟)</label>
+          <label class="custom-check"><input type="checkbox" name="fSrc" value="金融保險業"> 金控與保險業專案</label>
+          <label class="custom-check"><input type="checkbox" name="fSrc" value="民間公益"> 一般民間企業與基金會</label>
+          <label class="custom-check"><input type="checkbox" name="fSrc" value="政府公部門"> 中央部會及縣市政府</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">申請時效</div>
+          <label class="custom-check"><input type="checkbox" id="filterHideExpired" checked> 隱藏已截止項目</label>
+        </div>
+      </aside>
+
+      <!-- 右側主內容區 -->
+      <main class="content">
+        <div class="view-tabs">
+          <button class="tab-btn active" id="vAll">全部項目 <span class="badge" id="bAll">0</span></button>
+          <button class="tab-btn" id="vFav">★ 我的收藏清單 <span class="badge" id="bFav">0</span></button>
+        </div>
+
+        <div class="action-bar">
+          <div style="font-weight: 700; font-size: 0.95rem;" id="resultCount">正在媒合...</div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn-export" id="btnOpenChecklist">📋 產生收藏備件檢核表</button>
+            <select id="sortSel" style="padding:6px 10px; border-radius:6px; border:1px solid var(--border-subtle); font-size:0.85rem;">
+              <option value="urgency">即將截止優先</option>
+              <option value="amount">獎勵金額由高至低</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="card-list" id="cardList"></div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 備件清單 Modal -->
+  <div class="checklist-modal" id="modalChecklist">
+    <div class="checklist-window printable-area">
+      <h2 style="font-size: 1.3rem; margin-bottom: 8px;">📑 我的獎學金申請應備文件檢核清單</h2>
+      <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px;">
+        由系統自動去重整合您目前收藏的所有獎助學金項目所需的證明文件：
+      </p>
+      <div id="checklistItems"></div>
+      <div style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;" class="no-print">
+        <button class="btn-text" id="btnCloseModal">關閉</button>
+        <button class="btn-export" onclick="window.print()">🖨️ 列印此檢核表</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 產品級豐富且完整的結構化資料集 (附帶應備文件 docs 與 校內收件提醒)
+    const fallbackData = [
+      {
+        id: 1,
+        name: "慈濟新芽獎學金",
+        sponsor: "中華民國佛教慈濟慈善事業基金會",
+        stage: "both",
+        grades: ["國小", "國中", "高中職", "大學", "研究所"],
+        amountStr: "NT$ 2,000 ~ 12,000 (依組別分發)",
+        maxAmount: 12000,
+        sourceType: "宗教慈善",
+        channel: "社工推薦",
+        identities: ["低收中低收"],
+        minScore: "none",
+        scoreNote: "無學業分數硬性限制；分五大領域，重視品德行誼與求學態度",
+        schoolNotice: "",
+        deadline: "115-08-31",
+        url: "https://www.tzuchi.org.tw/",
+        docs: ["慈濟新芽專用申請書", "全戶戶籍謄本或戶口名簿", "在學證明影本", "自傳與生活近況分享表"]
+      },
+      {
+        id: 2,
+        name: "大專校院弱勢學生助學金",
+        sponsor: "教育部高等教育司 / 技術及職業教育司",
+        stage: "above",
+        grades: ["大學"],
+        amountStr: "每年 NT$ 15,000 ~ 20,000 (學雜費註冊單直接扣減)",
+        maxAmount: 20000,
+        sourceType: "政府公部門",
+        channel: "學校統一彙送",
+        identities: ["低收中低收"],
+        minScore: "60",
+        scoreNote: "前學期在校成績達 60 分以上，全家年所得低於 70~90 萬元",
+        schoolNotice: "⚠️ 請注意：此為學校彙辦，各大專校內截止通常為 10 月 10 日前！",
+        deadline: "115-10-20",
+        url: "https://www.edu.tw/helpdreams/",
+        docs: ["學雜費減免/助學金申請表", "新式戶口名簿(含詳細記事)", "前學期正式成績單正本"]
+      },
+      {
+        id: 3,
+        name: "鴻海獎學鯨 (大專青年圓夢助學專案)",
+        sponsor: "鴻海教育基金會",
+        stage: "above",
+        grades: ["大學", "研究所"],
+        amountStr: "NT$ 10,000 ~ 100,000 (單筆最高十萬)",
+        maxAmount: 100000,
+        sourceType: "民間公益",
+        channel: "學生自行送件",
+        identities: ["低收中低收"],
+        minScore: "none",
+        scoreNote: "不設學業門檻，審查核心為自傳影音、逆境求學歷程之堅毅表現",
+        schoolNotice: "",
+        deadline: "115-10-15",
+        url: "https://www.foxconnfoundation.org/",
+        docs: ["線上報名表", "全戶所得清單", "歷年成績單(參考用)", "個人自傳與求學心路影音影片"]
+      },
+      {
+        id: 4,
+        name: "行天宮助學金 / 急難濟助",
+        sponsor: "財團法人台北行天宮",
+        stage: "both",
+        grades: ["國小", "國中", "高中職", "大學"],
+        amountStr: "國小中 NT$ 8,000 / 高中大專每季最高 NT$ 32,000",
+        maxAmount: 32000,
+        sourceType: "民間公益",
+        channel: "學校統一彙送",
+        identities: ["低收中低收", "急難變故"],
+        minScore: "none",
+        scoreNote: "家庭遭遇重病傷亡意外或急難變故，經導師與學校社工審查推薦",
+        schoolNotice: "⚠️ 請注意：需由學校生輔組向行天宮函送，請提早兩週洽詢學校。",
+        deadline: "115-12-31",
+        url: "https://www.ht.org.tw/",
+        docs: ["行天宮專用申請書", "突遭變故證明(醫療診斷書或除戶謄本)", "3個月內戶籍謄本", "在學證明"]
+      },
+      {
+        id: 5,
+        name: "國泰卓越獎助計劃 (卓越學子類)",
+        sponsor: "國泰慈善基金會 / 國泰人壽",
+        stage: "above",
+        grades: ["高中職", "大學", "研究所"],
+        amountStr: "每人 NT$ 50,000 ~ 200,000",
+        maxAmount: 200000,
+        sourceType: "金融保險業",
+        channel: "學生自行送件",
+        identities: ["低收中低收"],
+        minScore: "80",
+        scoreNote: "家境清寒且前學年平均達 80 分以上 (或班排名前 20%)",
+        schoolNotice: "",
+        deadline: "115-09-30",
+        url: "https://patronc.cathaylife.com.tw/",
+        docs: ["前學年正式成績單正本", "低收/中低收或戶稅所得證明", "師長推薦信", "未來公益回饋企劃書"]
+      },
+      {
+        id: 6,
+        name: "台癌 × 遠雄人壽「癌症家庭子女獎助學金」",
+        sponsor: "遠雄人壽 / 台灣癌症基金會",
+        stage: "above",
+        grades: ["高中職", "大學"],
+        amountStr: "每人 NT$ 10,000 ~ 20,000",
+        maxAmount: 20000,
+        sourceType: "金融保險業",
+        channel: "學生自行送件",
+        identities: ["癌症家庭"],
+        minScore: "70",
+        scoreNote: "父母或本人罹癌治療中或治療完成2年內，學期平均達 70 分以上",
+        schoolNotice: "",
+        deadline: "115-05-31",
+        url: "https://scholarship.canceraway.org.tw/",
+        docs: ["罹癌診斷證明書影本", "全戶戶籍謄本", "前學期在校成績單", "自傳心得分享"]
+      },
+      {
+        id: 7,
+        name: "普仁青年關懷「大手拉小手」助學計畫",
+        sponsor: "財團法人普仁青年關懷基金會",
+        stage: "under",
+        grades: ["國中"],
+        amountStr: "每月 NT$ 2,000 助學生活津貼 (一年累計 NT$ 24,000)",
+        maxAmount: 24000,
+        sourceType: "民間公益",
+        channel: "學校統一彙送",
+        identities: ["低收中低收"],
+        minScore: "none",
+        scoreNote: "國中清寒學子，免學業成績限制，重視在校學習與生活常規態度",
+        schoolNotice: "⚠️ 請由學校輔導室或導師向普仁專案人員提報推薦。",
+        deadline: "115-10-31",
+        url: "https://www.you-care.org.tw/",
+        docs: ["學校導師評估訪查表", "家庭狀況說明書", "學生在學身分確認書"]
+      },
+      {
+        id: 8,
+        name: "教育部學產基金低收入戶助學金",
+        sponsor: "教育部國民及學前教育署",
+        stage: "both",
+        grades: ["國小", "國中", "高中職", "大學", "研究所"],
+        amountStr: "國小中 NT$ 5,000 / 高中職 NT$ 10,000 / 大專 NT$ 15,000",
+        maxAmount: 15000,
+        sourceType: "政府公部門",
+        channel: "學校統一彙送",
+        identities: ["低收中低收"],
+        minScore: "60",
+        scoreNote: "持法定低收入戶證明，前學期在校學業平均達 60 分以上且操行無記過",
+        schoolNotice: "⚠️ 請洽就讀學校註冊組申請，各校彙整時間通常在開學後兩週內截止。",
+        deadline: "115-10-15",
+        url: "https://www.edu.tw/helpdreams/",
+        docs: ["法定低收入戶證明書正本", "前學期正式成績單正本", "戶口名簿詳細記事影本"]
+      },
+      {
+        id: 9,
+        name: "獎勵農漁民子女就學金",
+        sponsor: "農業部",
+        stage: "above",
+        grades: ["高中職", "大學"],
+        amountStr: "高中職公立 NT$ 4,000／私立 NT$ 6,500；大專公立 NT$ 6,500／私立 NT$ 13,000",
+        maxAmount: 13000,
+        sourceType: "政府公部門",
+        channel: "學生自行送件",
+        identities: ["農漁民子女"],
+        minScore: "70",
+        scoreNote: "申請人須符合農保、農會或漁會身分；父母所得合計不超過120萬元；前一學期操行70分以上",
+        schoolNotice: "⚠️ 請向學生戶籍所在地的基層農會或漁會提出申請。",
+        deadline: "115-10-15",
+        url: "https://m.moa.gov.tw/Subsidy/Detail/8",
+        docs: ["申請表", "已註冊學生證影本或在學證明", "前一學期操行成績證明", "身分或戶籍證明文件", "申請人存摺影本"],
+        lastVerifiedAt: "115-09-05",
+        sourceStatus: "已核對官方頁面",
+        applicationStatus: "即將開始"
+      }
+    ];
+    let masterData = [];
+
+    const requiredScholarshipFields = [
+      'id', 'name', 'sponsor', 'stage', 'grades', 'amountStr', 'maxAmount',
+      'sourceType', 'channel', 'identities', 'minScore', 'scoreNote',
+        'deadline', 'url', 'docs', 'lastVerifiedAt', 'sourceStatus', 'applicationStatus'
+    ];
+    function validateScholarshipData(data) {
+      if (!Array.isArray(data) || data.length === 0) return false;
+      const ids = new Set();
+      return data.every(item => {
+        const hasFields = requiredScholarshipFields.every(key => item[key] !== undefined);
+        const validId = Number.isInteger(item.id) && !ids.has(item.id);
+        if (validId) ids.add(item.id);
+        return hasFields &&
+          validId &&
+          ['under', 'above', 'both'].includes(item.stage) &&
+          Array.isArray(item.grades) &&
+          ['none', '60', '70', '80'].includes(item.minScore) &&
+          /^[0-9]{3}-[0-9]{2}-[0-9]{2}$/.test(item.deadline) &&
+          Array.isArray(item.identities) &&
+          Array.isArray(item.docs);
+      });
+    }
+    async function loadScholarshipData() {
+      try {
+        const response = await fetch('./scholarships.json', { cache: 'no-store' });
+        const remoteData = await response.json();
+        if (!validateScholarshipData(remoteData)) throw new Error('資料格式驗證失敗');
+        masterData = remoteData;
+      } catch (error) {
+      masterData = fallbackData.map(item => ({
+        ...item,
+        lastVerifiedAt: item.lastVerifiedAt || '115-09-05',
+        sourceStatus: item.sourceStatus || '待複核',
+        applicationStatus: item.applicationStatus || '待確認'
+      }));
+      }
+      updateBadges();
+      render();
+    }
+
+    // 狀態持久化
+    const STORAGE_KEY = 'cpo_scholarship_favs';
+    let currentView = 'all'; // 'all' or 'fav'
+    let currentStage = 'all'; // 'all', 'under', 'above'
+
+    function getFavs() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+      } catch(e) { return []; }
+    }
+
+    function toggleFav(id) {
+      let favs = getFavs();
+      if (favs.includes(id)) {
+        favs = favs.filter(i => i !== id);
+      } else {
+        favs.push(id);
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(favs));
+      updateBadges();
+      render();
+    }
+
+    function parseROCDate(dateStr) {
+      const p = dateStr.split('-');
+      return new Date(parseInt(p[0], 10) + 1911, parseInt(p[1], 10) - 1, parseInt(p[2], 10), 23, 59, 59);
+    }
+
+    function getDeadlineStatus(dateStr) {
+      const target = parseROCDate(dateStr);
+      const days = Math.ceil((target - new Date()) / (1000 * 60 * 60 * 24));
+      if (days < 0) return { text: "已截止", cls: "pill-urgent", isExpired: true, days };
+      if (days <= 30) return { text: `剩餘 ${days} 天`, cls: "pill-urgent", isExpired: false, days };
+      return { text: `剩餘 ${days} 天`, cls: "pill-normal", isExpired: false, days };
+    }
+
+    function updateBadges() {
+      const favs = getFavs();
+      document.getElementById('bAll').textContent = masterData.length;
+      document.getElementById('bFav').textContent = favs.length;
+    }
+
+    function getChecked(name) {
+      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).map(el => el.value);
+    }
+
+    // 渲染清單
+    function render() {
+      const favs = getFavs();
+      const kw = document.getElementById('kwInput').value.trim().toLowerCase();
+      const wStage = document.getElementById('wStage').value;
+      const wIdentity = document.getElementById('wIdentity').value;
+      const wScore = document.getElementById('wScore').value;
+      const selChannels = getChecked('fChannel');
+      const selSrcs = getChecked('fSrc');
+      const hideExpired = document.getElementById('filterHideExpired').checked;
+      const sortBy = document.getElementById('sortSel').value;
+
+      let list = currentView === 'fav' ? masterData.filter(i => favs.includes(i.id)) : [...masterData];
+
+      // 複合多重篩選
+      const filtered = list.filter(item => {
+        // 頂層階段分流
+        if (currentStage === 'under' && item.stage !== 'under' && item.stage !== 'both') return false;
+        if (currentStage === 'above' && item.stage !== 'above' && item.stage !== 'both') return false;
+
+        // 速配精靈：學制
+        if (wStage !== 'all' && !item.grades.includes(wStage)) return false;
+
+        // 速配精靈：身分
+        if (wIdentity !== 'all' && !item.identities.includes(wIdentity)) return false;
+
+        // 速配精靈：成績（使用者成績需達到項目最低門檻）
+        if (wScore === 'none' && item.minScore !== 'none') return false;
+        if (['60', '70', '80'].includes(wScore)) {
+          const userScore = Number(wScore);
+          const requiredScore = item.minScore === 'none' ? 0 : Number(item.minScore);
+          if (userScore < requiredScore) return false;
+        }
+
+        // 申請時效
+        if (hideExpired && getDeadlineStatus(item.deadline).isExpired) return false;
+
+        // 關鍵字
+        if (kw && !item.name.toLowerCase().includes(kw) && !item.sponsor.toLowerCase().includes(kw)) return false;
+
+        // 送件管道
+        if (selChannels.length > 0 && !selChannels.includes(item.channel)) return false;
+
+        // 機構體系
+        if (selSrcs.length > 0 && !selSrcs.includes(item.sourceType)) return false;
+
+        return true;
+      });
+
+      // 排序
+      filtered.sort((a, b) => {
+        const dA = getDeadlineStatus(a.deadline);
+        const dB = getDeadlineStatus(b.deadline);
+        if (sortBy === 'amount') return b.maxAmount - a.maxAmount;
+        if (dA.isExpired && !dB.isExpired) return 1;
+        if (!dA.isExpired && dB.isExpired) return -1;
+        return dA.days - dB.days;
+      });
+
+      document.getElementById('resultCount').textContent = `共媒合出 ${filtered.length} 筆項目`;
+      const cardListEl = document.getElementById('cardList');
+
+      if (filtered.length === 0) {
+        cardListEl.innerHTML = `
+          <div style="text-align:center; padding:50px; background:#fff; border-radius:12px; border:1px dashed #cbd5e1; color:#64748b;">
+            <div style="font-size:2rem; margin-bottom:8px;">🔍</div>
+            <strong>查無完全符合的獎助學金</strong>
+            <p style="font-size:0.85rem; margin-top:4px;">建議放寬「速配精靈」的成績或身分條件重新嘗試。</p>
+            <button class="btn-export" type="button" onclick="resetAllFilters()" style="margin-top:12px;">清除條件並顯示全部</button>
+          </div>
+        `;
+        return;
+      }
+
+      cardListEl.innerHTML = filtered.map(item => {
+        const isFav = favs.includes(item.id);
+        const dInfo = getDeadlineStatus(item.deadline);
+
+        return `
+          <div class="card">
+            <div class="card-head">
+              <div>
+                <h3 class="card-title">${item.name}</h3>
+                <div class="card-sub">${item.sponsor}</div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="btn-fav ${isFav ? 'active' : ''}" onclick="toggleFav(${item.id})">
+                  ${isFav ? '★ 已收藏' : '☆ 收藏'}
+                </button>
+                <span class="card-pill ${dInfo.cls}">${dInfo.text}</span>
+              </div>
+            </div>
+
+            <div class="card-box">
+              <div>補助額度：<strong style="color:#047857;">${item.amountStr}</strong></div>
+              <div>申請門檻：${item.scoreNote}</div>
+              ${item.schoolNotice ? `<div class="warning-school">${item.schoolNotice}</div>` : ''}
+            </div>
+
+            <div class="card-tags">
+              <span class="tag tag-stage">${item.stage === 'under' ? '國中以下' : (item.stage === 'above' ? '國中以上' : '全階段通用')}</span>
+              <span class="tag tag-src">${item.sourceType}</span>
+              <span class="tag" style="background:#fef3c7; color:#92400e;">途徑：${item.channel}</span>
+              ${item.grades.map(g => `<span class="tag" style="background:#fff; border:1px solid #e2e8f0; color:#475569;">${g}</span>`).join('')}
+            </div>
+
+            <div class="card-foot">
+              <span style="font-size:0.82rem; color:var(--text-muted);">官方截止：民國 ${item.deadline}</span>
+              <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="btn-link">查看官方簡章 ↗</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 備件清單產生器
+    document.getElementById('btnOpenChecklist').addEventListener('click', () => {
+      const favs = getFavs();
+      const favItems = masterData.filter(i => favs.includes(i.id));
+      const modalEl = document.getElementById('modalChecklist');
+      const itemsContainer = document.getElementById('checklistItems');
+
+      if (favItems.length === 0) {
+        alert('請先在清單中點擊「★ 收藏」至少一項獎助學金，系統才能為您匯出專屬備件檢核表！');
+        return;
+      }
+
+      // 自動將多個項目的必備文件彙整、統計
+      const docCounter = {};
+      favItems.forEach(item => {
+        item.docs.forEach(d => {
+          docCounter[d] = docCounter[d] ? [...docCounter[d], item.name] : [item.name];
+        });
+      });
+
+      itemsContainer.innerHTML = Object.entries(docCounter).map(([docName, reqProjects], index) => `
+        <div class="check-item">
+          <input type="checkbox" id="chk_${index}" style="width:18px; height:18px; accent-color:var(--primary);">
+          <label for="chk_${index}" style="flex:1; cursor:pointer;">
+            <strong style="font-size:0.95rem; color:#0f172a;">${docName}</strong>
+            <div style="font-size:0.8rem; color:#64748b; margin-top:2px;">
+              適用項目：${reqProjects.join('、')}
+            </div>
+          </label>
+        </div>
+      `).join('');
+
+      modalEl.classList.add('active');
+    });
+
+    document.getElementById('btnCloseModal').addEventListener('click', () => {
+      document.getElementById('modalChecklist').classList.remove('active');
+    });
+
+    // 頂部分流切換
+    ['btnSAll', 'btnSUnder', 'btnSAbove'].forEach(id => {
+      document.getElementById(id).addEventListener('click', (e) => {
+        document.querySelectorAll('.stage-btn').forEach(b => b.classList.remove('active'));
+        const targetBtn = e.currentTarget;
+        targetBtn.classList.add('active');
+        currentStage = targetBtn.dataset.stage;
+        render();
+      });
+    });
+
+    // 分頁切換
+    document.getElementById('vAll').addEventListener('click', () => {
+      currentView = 'all';
+      document.getElementById('vAll').classList.add('active');
+      document.getElementById('vFav').classList.remove('active');
+      render();
+    });
+
+    document.getElementById('vFav').addEventListener('click', () => {
+      currentView = 'fav';
+      document.getElementById('vFav').classList.add('active');
+      document.getElementById('vAll').classList.remove('active');
+      render();
+    });
+
+    // 監聽所有表單輸入
+    document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', render));
+
+    // 重設事件
+    function resetAllFilters() {
+      document.getElementById('kwInput').value = '';
+      document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+      document.getElementById('filterHideExpired').checked = true;
+      document.getElementById('wStage').value = 'all';
+      document.getElementById('wIdentity').value = 'all';
+      document.getElementById('wScore').value = 'any';
+      document.getElementById('sortSel').value = 'urgency';
+      currentStage = 'all';
+      currentView = 'all';
+      document.querySelectorAll('.stage-btn').forEach(b => b.classList.toggle('active', b.dataset.stage === 'all'));
+      document.getElementById('vAll').classList.add('active');
+      document.getElementById('vFav').classList.remove('active');
+      render();
+    }
+    document.getElementById('btnResetAll').addEventListener('click', resetAllFilters);
+
+    document.getElementById('wizardClear').addEventListener('click', () => {
+      document.getElementById('wStage').value = 'all';
+      document.getElementById('wIdentity').value = 'all';
+      document.getElementById('wScore').value = 'any';
+      render();
+    });
+
+    // 初始化：優先載入獨立 JSON，失敗時使用內嵌備援資料
+    loadScholarshipData();
+  </script>
+  <script>
+    (() => {
+      const status = document.getElementById('connectionStatus');
+      const installBtn = document.getElementById('installAppBtn');
+      const refreshBtn = document.getElementById('refreshAppBtn');
+      const frequencySelect = document.getElementById('updateFrequency');
+      const LAST_CHECK_KEY = 'scholarship_last_data_check';
+      const FREQUENCY_KEY = 'scholarship_update_frequency';
+      let deferredInstallPrompt = null;
+      let activeRegistration = null;
+      let updateTimer = null;
+
+      const updateConnectionStatus = () => {
+        const online = navigator.onLine;
+        status.textContent = online ? '● 線上模式' : '● 離線模式';
+        status.classList.toggle('offline', !online);
+      };
+      window.addEventListener('online', () => {
+        updateConnectionStatus();
+        checkForDataUpdate(true);
+      });
+      window.addEventListener('offline', updateConnectionStatus);
+      updateConnectionStatus();
+
+      window.addEventListener('beforeinstallprompt', event => {
+        event.preventDefault();
+        deferredInstallPrompt = event;
+        installBtn.hidden = false;
+      });
+      installBtn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installBtn.hidden = true;
+      });
+      window.addEventListener('appinstalled', () => {
+        installBtn.hidden = true;
+      });
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            activeRegistration = await navigator.serviceWorker.register('./sw.js');
+            scheduleDataChecks();
+            checkForDataUpdate(false);
+            if (navigator.onLine) activeRegistration.update().catch(() => {});
+            activeRegistration.addEventListener('updatefound', () => {
+              const worker = activeRegistration.installing;
+              if (!worker) return;
+              worker.addEventListener('statechange', () => {
+                if (worker.state === 'installed' && navigator.serviceWorker.controller) {
+                  refreshBtn.hidden = false;
+                }
+              });
+            });
+          } catch (error) {
+            // 直接以 file:// 開啟時，瀏覽器會停用 Service Worker；一般離線 HTML 仍可使用。
+          }
+        });
+      }
+
+      refreshBtn.addEventListener('click', () => {
+        refreshBtn.disabled = true;
+        window.location.reload();
+      });
+
+      const getUpdateFrequency = () => Number(localStorage.getItem(FREQUENCY_KEY) || frequencySelect.value);
+      const scheduleDataChecks = () => {
+        if (updateTimer) clearInterval(updateTimer);
+        const frequency = getUpdateFrequency();
+        if (frequency > 0) updateTimer = setInterval(() => checkForDataUpdate(false), frequency);
+      };
+      frequencySelect.value = localStorage.getItem(FREQUENCY_KEY) || frequencySelect.value;
+      frequencySelect.addEventListener('change', () => {
+        localStorage.setItem(FREQUENCY_KEY, frequencySelect.value);
+        localStorage.removeItem(LAST_CHECK_KEY);
+        scheduleDataChecks();
+        checkForDataUpdate(true);
+      });
+      const checkForDataUpdate = force => {
+        if (!activeRegistration || !navigator.onLine) return;
+        const frequency = getUpdateFrequency();
+        const lastCheck = Number(localStorage.getItem(LAST_CHECK_KEY) || 0);
+        if (!force && frequency === 0) return;
+        if (!force && Date.now() - lastCheck < frequency) return;
+        localStorage.setItem(LAST_CHECK_KEY, String(Date.now()));
+        activeRegistration.active?.postMessage({ type: 'CHECK_FOR_UPDATE' });
+      };
+      navigator.serviceWorker?.addEventListener('message', event => {
+        if (event.data?.type === 'APP_UPDATE_READY') {
+          refreshBtn.hidden = false;
+          refreshBtn.textContent = '↻ 有新資料，立即更新';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
